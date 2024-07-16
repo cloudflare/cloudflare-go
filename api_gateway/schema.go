@@ -37,8 +37,8 @@ func NewSchemaService(opts ...option.RequestOption) (r *SchemaService) {
 
 // Retrieve operations and features as OpenAPI schemas
 func (r *SchemaService) List(ctx context.Context, params SchemaListParams, opts ...option.RequestOption) (res *SchemaListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SchemaListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -90,7 +90,7 @@ type SchemaListParams struct {
 func (r SchemaListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -111,14 +111,21 @@ func (r SchemaListParamsFeature) IsKnown() bool {
 }
 
 type SchemaListResponseEnvelope struct {
-	Result SchemaListResponse             `json:"result,required"`
-	JSON   schemaListResponseEnvelopeJSON `json:"-"`
+	Errors   Message            `json:"errors,required"`
+	Messages Message            `json:"messages,required"`
+	Result   SchemaListResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success SchemaListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    schemaListResponseEnvelopeJSON    `json:"-"`
 }
 
 // schemaListResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SchemaListResponseEnvelope]
 type schemaListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -129,4 +136,19 @@ func (r *SchemaListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r schemaListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type SchemaListResponseEnvelopeSuccess bool
+
+const (
+	SchemaListResponseEnvelopeSuccessTrue SchemaListResponseEnvelopeSuccess = true
+)
+
+func (r SchemaListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SchemaListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

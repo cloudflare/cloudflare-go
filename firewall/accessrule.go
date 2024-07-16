@@ -45,8 +45,8 @@ func NewAccessRuleService(opts ...option.RequestOption) (r *AccessRuleService) {
 // Note: To create an IP Access rule that applies to a single zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
 func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *AccessRuleNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessRuleNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -79,7 +79,7 @@ func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams,
 // parameters.
 func (r *AccessRuleService) List(ctx context.Context, params AccessRuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessRuleListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -123,8 +123,8 @@ func (r *AccessRuleService) ListAutoPaging(ctx context.Context, params AccessRul
 //
 // Note: This operation will affect all zones in the account or zone.
 func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, body AccessRuleDeleteParams, opts ...option.RequestOption) (res *AccessRuleDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessRuleDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -156,8 +156,8 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, 
 //
 // Note: This operation will affect all zones in the account or zone.
 func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *AccessRuleEditResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessRuleEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -187,8 +187,8 @@ func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, pa
 
 // Fetches the details of an IP Access rule defined.
 func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, query AccessRuleGetParams, opts ...option.RequestOption) (res *AccessRuleGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessRuleGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -601,7 +601,7 @@ type AccessRuleListParams struct {
 func (r AccessRuleListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -630,7 +630,7 @@ type AccessRuleListParamsEgsPagination struct {
 func (r AccessRuleListParamsEgsPagination) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -647,7 +647,7 @@ type AccessRuleListParamsEgsPaginationJson struct {
 func (r AccessRuleListParamsEgsPaginationJson) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -675,7 +675,7 @@ type AccessRuleListParamsFilters struct {
 func (r AccessRuleListParamsFilters) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

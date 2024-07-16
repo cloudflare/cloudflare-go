@@ -38,8 +38,8 @@ func NewAttackLayer7TopAseService(opts ...option.RequestOption) (r *AttackLayer7
 // percentage out of the total layer 7 attacks. The origin Autonomous Systems is
 // determined by the client IP.
 func (r *AttackLayer7TopAseService) Origin(ctx context.Context, query AttackLayer7TopAseOriginParams, opts ...option.RequestOption) (res *AttackLayer7TopAseOriginResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TopAseOriginResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/top/ases/origin"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -149,7 +149,7 @@ type AttackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                           `json:"dataSource,required"`
 	Description     string                                                           `json:"description,required"`
 	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                           `json:"linkedUrl"`
 	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
@@ -216,17 +216,25 @@ type AttackLayer7TopAseOriginParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TopAseOriginParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AttackLayer7TopAseOriginParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TopAseOriginParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TopAseOriginParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TopAseOriginParamsIPVersion] `query:"ipVersion"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TopAseOriginParamsMitigationProduct] `query:"mitigationProduct"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 }
@@ -236,36 +244,8 @@ type AttackLayer7TopAseOriginParams struct {
 func (r AttackLayer7TopAseOriginParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer7TopAseOriginParamsDateRange string
-
-const (
-	AttackLayer7TopAseOriginParamsDateRange1d         AttackLayer7TopAseOriginParamsDateRange = "1d"
-	AttackLayer7TopAseOriginParamsDateRange2d         AttackLayer7TopAseOriginParamsDateRange = "2d"
-	AttackLayer7TopAseOriginParamsDateRange7d         AttackLayer7TopAseOriginParamsDateRange = "7d"
-	AttackLayer7TopAseOriginParamsDateRange14d        AttackLayer7TopAseOriginParamsDateRange = "14d"
-	AttackLayer7TopAseOriginParamsDateRange28d        AttackLayer7TopAseOriginParamsDateRange = "28d"
-	AttackLayer7TopAseOriginParamsDateRange12w        AttackLayer7TopAseOriginParamsDateRange = "12w"
-	AttackLayer7TopAseOriginParamsDateRange24w        AttackLayer7TopAseOriginParamsDateRange = "24w"
-	AttackLayer7TopAseOriginParamsDateRange52w        AttackLayer7TopAseOriginParamsDateRange = "52w"
-	AttackLayer7TopAseOriginParamsDateRange1dControl  AttackLayer7TopAseOriginParamsDateRange = "1dControl"
-	AttackLayer7TopAseOriginParamsDateRange2dControl  AttackLayer7TopAseOriginParamsDateRange = "2dControl"
-	AttackLayer7TopAseOriginParamsDateRange7dControl  AttackLayer7TopAseOriginParamsDateRange = "7dControl"
-	AttackLayer7TopAseOriginParamsDateRange14dControl AttackLayer7TopAseOriginParamsDateRange = "14dControl"
-	AttackLayer7TopAseOriginParamsDateRange28dControl AttackLayer7TopAseOriginParamsDateRange = "28dControl"
-	AttackLayer7TopAseOriginParamsDateRange12wControl AttackLayer7TopAseOriginParamsDateRange = "12wControl"
-	AttackLayer7TopAseOriginParamsDateRange24wControl AttackLayer7TopAseOriginParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TopAseOriginParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TopAseOriginParamsDateRange1d, AttackLayer7TopAseOriginParamsDateRange2d, AttackLayer7TopAseOriginParamsDateRange7d, AttackLayer7TopAseOriginParamsDateRange14d, AttackLayer7TopAseOriginParamsDateRange28d, AttackLayer7TopAseOriginParamsDateRange12w, AttackLayer7TopAseOriginParamsDateRange24w, AttackLayer7TopAseOriginParamsDateRange52w, AttackLayer7TopAseOriginParamsDateRange1dControl, AttackLayer7TopAseOriginParamsDateRange2dControl, AttackLayer7TopAseOriginParamsDateRange7dControl, AttackLayer7TopAseOriginParamsDateRange14dControl, AttackLayer7TopAseOriginParamsDateRange28dControl, AttackLayer7TopAseOriginParamsDateRange12wControl, AttackLayer7TopAseOriginParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -279,6 +259,116 @@ const (
 func (r AttackLayer7TopAseOriginParamsFormat) IsKnown() bool {
 	switch r {
 	case AttackLayer7TopAseOriginParamsFormatJson, AttackLayer7TopAseOriginParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopAseOriginParamsHTTPMethod string
+
+const (
+	AttackLayer7TopAseOriginParamsHTTPMethodGet             AttackLayer7TopAseOriginParamsHTTPMethod = "GET"
+	AttackLayer7TopAseOriginParamsHTTPMethodPost            AttackLayer7TopAseOriginParamsHTTPMethod = "POST"
+	AttackLayer7TopAseOriginParamsHTTPMethodDelete          AttackLayer7TopAseOriginParamsHTTPMethod = "DELETE"
+	AttackLayer7TopAseOriginParamsHTTPMethodPut             AttackLayer7TopAseOriginParamsHTTPMethod = "PUT"
+	AttackLayer7TopAseOriginParamsHTTPMethodHead            AttackLayer7TopAseOriginParamsHTTPMethod = "HEAD"
+	AttackLayer7TopAseOriginParamsHTTPMethodPurge           AttackLayer7TopAseOriginParamsHTTPMethod = "PURGE"
+	AttackLayer7TopAseOriginParamsHTTPMethodOptions         AttackLayer7TopAseOriginParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TopAseOriginParamsHTTPMethodPropfind        AttackLayer7TopAseOriginParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TopAseOriginParamsHTTPMethodMkcol           AttackLayer7TopAseOriginParamsHTTPMethod = "MKCOL"
+	AttackLayer7TopAseOriginParamsHTTPMethodPatch           AttackLayer7TopAseOriginParamsHTTPMethod = "PATCH"
+	AttackLayer7TopAseOriginParamsHTTPMethodACL             AttackLayer7TopAseOriginParamsHTTPMethod = "ACL"
+	AttackLayer7TopAseOriginParamsHTTPMethodBcopy           AttackLayer7TopAseOriginParamsHTTPMethod = "BCOPY"
+	AttackLayer7TopAseOriginParamsHTTPMethodBdelete         AttackLayer7TopAseOriginParamsHTTPMethod = "BDELETE"
+	AttackLayer7TopAseOriginParamsHTTPMethodBmove           AttackLayer7TopAseOriginParamsHTTPMethod = "BMOVE"
+	AttackLayer7TopAseOriginParamsHTTPMethodBpropfind       AttackLayer7TopAseOriginParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TopAseOriginParamsHTTPMethodBproppatch      AttackLayer7TopAseOriginParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TopAseOriginParamsHTTPMethodCheckin         AttackLayer7TopAseOriginParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TopAseOriginParamsHTTPMethodCheckout        AttackLayer7TopAseOriginParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TopAseOriginParamsHTTPMethodConnect         AttackLayer7TopAseOriginParamsHTTPMethod = "CONNECT"
+	AttackLayer7TopAseOriginParamsHTTPMethodCopy            AttackLayer7TopAseOriginParamsHTTPMethod = "COPY"
+	AttackLayer7TopAseOriginParamsHTTPMethodLabel           AttackLayer7TopAseOriginParamsHTTPMethod = "LABEL"
+	AttackLayer7TopAseOriginParamsHTTPMethodLock            AttackLayer7TopAseOriginParamsHTTPMethod = "LOCK"
+	AttackLayer7TopAseOriginParamsHTTPMethodMerge           AttackLayer7TopAseOriginParamsHTTPMethod = "MERGE"
+	AttackLayer7TopAseOriginParamsHTTPMethodMkactivity      AttackLayer7TopAseOriginParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TopAseOriginParamsHTTPMethodMkworkspace     AttackLayer7TopAseOriginParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TopAseOriginParamsHTTPMethodMove            AttackLayer7TopAseOriginParamsHTTPMethod = "MOVE"
+	AttackLayer7TopAseOriginParamsHTTPMethodNotify          AttackLayer7TopAseOriginParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TopAseOriginParamsHTTPMethodOrderpatch      AttackLayer7TopAseOriginParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TopAseOriginParamsHTTPMethodPoll            AttackLayer7TopAseOriginParamsHTTPMethod = "POLL"
+	AttackLayer7TopAseOriginParamsHTTPMethodProppatch       AttackLayer7TopAseOriginParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TopAseOriginParamsHTTPMethodReport          AttackLayer7TopAseOriginParamsHTTPMethod = "REPORT"
+	AttackLayer7TopAseOriginParamsHTTPMethodSearch          AttackLayer7TopAseOriginParamsHTTPMethod = "SEARCH"
+	AttackLayer7TopAseOriginParamsHTTPMethodSubscribe       AttackLayer7TopAseOriginParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TopAseOriginParamsHTTPMethodTrace           AttackLayer7TopAseOriginParamsHTTPMethod = "TRACE"
+	AttackLayer7TopAseOriginParamsHTTPMethodUncheckout      AttackLayer7TopAseOriginParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TopAseOriginParamsHTTPMethodUnlock          AttackLayer7TopAseOriginParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TopAseOriginParamsHTTPMethodUnsubscribe     AttackLayer7TopAseOriginParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TopAseOriginParamsHTTPMethodUpdate          AttackLayer7TopAseOriginParamsHTTPMethod = "UPDATE"
+	AttackLayer7TopAseOriginParamsHTTPMethodVersioncontrol  AttackLayer7TopAseOriginParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TopAseOriginParamsHTTPMethodBaselinecontrol AttackLayer7TopAseOriginParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TopAseOriginParamsHTTPMethodXmsenumatts     AttackLayer7TopAseOriginParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TopAseOriginParamsHTTPMethodRpcOutData      AttackLayer7TopAseOriginParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TopAseOriginParamsHTTPMethodRpcInData       AttackLayer7TopAseOriginParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TopAseOriginParamsHTTPMethodJson            AttackLayer7TopAseOriginParamsHTTPMethod = "JSON"
+	AttackLayer7TopAseOriginParamsHTTPMethodCook            AttackLayer7TopAseOriginParamsHTTPMethod = "COOK"
+	AttackLayer7TopAseOriginParamsHTTPMethodTrack           AttackLayer7TopAseOriginParamsHTTPMethod = "TRACK"
+)
+
+func (r AttackLayer7TopAseOriginParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAseOriginParamsHTTPMethodGet, AttackLayer7TopAseOriginParamsHTTPMethodPost, AttackLayer7TopAseOriginParamsHTTPMethodDelete, AttackLayer7TopAseOriginParamsHTTPMethodPut, AttackLayer7TopAseOriginParamsHTTPMethodHead, AttackLayer7TopAseOriginParamsHTTPMethodPurge, AttackLayer7TopAseOriginParamsHTTPMethodOptions, AttackLayer7TopAseOriginParamsHTTPMethodPropfind, AttackLayer7TopAseOriginParamsHTTPMethodMkcol, AttackLayer7TopAseOriginParamsHTTPMethodPatch, AttackLayer7TopAseOriginParamsHTTPMethodACL, AttackLayer7TopAseOriginParamsHTTPMethodBcopy, AttackLayer7TopAseOriginParamsHTTPMethodBdelete, AttackLayer7TopAseOriginParamsHTTPMethodBmove, AttackLayer7TopAseOriginParamsHTTPMethodBpropfind, AttackLayer7TopAseOriginParamsHTTPMethodBproppatch, AttackLayer7TopAseOriginParamsHTTPMethodCheckin, AttackLayer7TopAseOriginParamsHTTPMethodCheckout, AttackLayer7TopAseOriginParamsHTTPMethodConnect, AttackLayer7TopAseOriginParamsHTTPMethodCopy, AttackLayer7TopAseOriginParamsHTTPMethodLabel, AttackLayer7TopAseOriginParamsHTTPMethodLock, AttackLayer7TopAseOriginParamsHTTPMethodMerge, AttackLayer7TopAseOriginParamsHTTPMethodMkactivity, AttackLayer7TopAseOriginParamsHTTPMethodMkworkspace, AttackLayer7TopAseOriginParamsHTTPMethodMove, AttackLayer7TopAseOriginParamsHTTPMethodNotify, AttackLayer7TopAseOriginParamsHTTPMethodOrderpatch, AttackLayer7TopAseOriginParamsHTTPMethodPoll, AttackLayer7TopAseOriginParamsHTTPMethodProppatch, AttackLayer7TopAseOriginParamsHTTPMethodReport, AttackLayer7TopAseOriginParamsHTTPMethodSearch, AttackLayer7TopAseOriginParamsHTTPMethodSubscribe, AttackLayer7TopAseOriginParamsHTTPMethodTrace, AttackLayer7TopAseOriginParamsHTTPMethodUncheckout, AttackLayer7TopAseOriginParamsHTTPMethodUnlock, AttackLayer7TopAseOriginParamsHTTPMethodUnsubscribe, AttackLayer7TopAseOriginParamsHTTPMethodUpdate, AttackLayer7TopAseOriginParamsHTTPMethodVersioncontrol, AttackLayer7TopAseOriginParamsHTTPMethodBaselinecontrol, AttackLayer7TopAseOriginParamsHTTPMethodXmsenumatts, AttackLayer7TopAseOriginParamsHTTPMethodRpcOutData, AttackLayer7TopAseOriginParamsHTTPMethodRpcInData, AttackLayer7TopAseOriginParamsHTTPMethodJson, AttackLayer7TopAseOriginParamsHTTPMethodCook, AttackLayer7TopAseOriginParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopAseOriginParamsHTTPVersion string
+
+const (
+	AttackLayer7TopAseOriginParamsHTTPVersionHttPv1 AttackLayer7TopAseOriginParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TopAseOriginParamsHTTPVersionHttPv2 AttackLayer7TopAseOriginParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TopAseOriginParamsHTTPVersionHttPv3 AttackLayer7TopAseOriginParamsHTTPVersion = "HTTPv3"
+)
+
+func (r AttackLayer7TopAseOriginParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAseOriginParamsHTTPVersionHttPv1, AttackLayer7TopAseOriginParamsHTTPVersionHttPv2, AttackLayer7TopAseOriginParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopAseOriginParamsIPVersion string
+
+const (
+	AttackLayer7TopAseOriginParamsIPVersionIPv4 AttackLayer7TopAseOriginParamsIPVersion = "IPv4"
+	AttackLayer7TopAseOriginParamsIPVersionIPv6 AttackLayer7TopAseOriginParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer7TopAseOriginParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAseOriginParamsIPVersionIPv4, AttackLayer7TopAseOriginParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TopAseOriginParamsMitigationProduct string
+
+const (
+	AttackLayer7TopAseOriginParamsMitigationProductDDoS               AttackLayer7TopAseOriginParamsMitigationProduct = "DDOS"
+	AttackLayer7TopAseOriginParamsMitigationProductWAF                AttackLayer7TopAseOriginParamsMitigationProduct = "WAF"
+	AttackLayer7TopAseOriginParamsMitigationProductBotManagement      AttackLayer7TopAseOriginParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TopAseOriginParamsMitigationProductAccessRules        AttackLayer7TopAseOriginParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TopAseOriginParamsMitigationProductIPReputation       AttackLayer7TopAseOriginParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TopAseOriginParamsMitigationProductAPIShield          AttackLayer7TopAseOriginParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TopAseOriginParamsMitigationProductDataLossPrevention AttackLayer7TopAseOriginParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+func (r AttackLayer7TopAseOriginParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TopAseOriginParamsMitigationProductDDoS, AttackLayer7TopAseOriginParamsMitigationProductWAF, AttackLayer7TopAseOriginParamsMitigationProductBotManagement, AttackLayer7TopAseOriginParamsMitigationProductAccessRules, AttackLayer7TopAseOriginParamsMitigationProductIPReputation, AttackLayer7TopAseOriginParamsMitigationProductAPIShield, AttackLayer7TopAseOriginParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false

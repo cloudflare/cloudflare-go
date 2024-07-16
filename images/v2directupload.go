@@ -3,12 +3,15 @@
 package images
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"mime/multipart"
 	"net/http"
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -43,8 +46,8 @@ func NewV2DirectUploadService(opts ...option.RequestOption) (r *V2DirectUploadSe
 // (accounts/:account_identifier/images/v1/:identifier), and check that the
 // `draft: true` property is not present.
 func (r *V2DirectUploadService) New(ctx context.Context, params V2DirectUploadNewParams, opts ...option.RequestOption) (res *V2DirectUploadNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env V2DirectUploadNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -101,8 +104,19 @@ type V2DirectUploadNewParams struct {
 	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
 }
 
-func (r V2DirectUploadNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r V2DirectUploadNewParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 type V2DirectUploadNewResponseEnvelope struct {

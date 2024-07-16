@@ -47,8 +47,8 @@ func NewBotManagementService(opts ...option.RequestOption) (r *BotManagementServ
 // See [Bot Plans](https://developers.cloudflare.com/bots/plans/) for more
 // information on the different plans
 func (r *BotManagementService) Update(ctx context.Context, params BotManagementUpdateParams, opts ...option.RequestOption) (res *BotManagementUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BotManagementUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -64,8 +64,8 @@ func (r *BotManagementService) Update(ctx context.Context, params BotManagementU
 
 // Retrieve a zone's Bot Management Config
 func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetParams, opts ...option.RequestOption) (res *BotManagementGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BotManagementGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -465,6 +465,7 @@ func (r botManagementUpdateResponseJSON) RawJSON() string {
 }
 
 func (r *BotManagementUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = BotManagementUpdateResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -472,6 +473,14 @@ func (r *BotManagementUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [BotManagementUpdateResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [bot_management.BotFightModeConfiguration],
+// [bot_management.SuperBotFightModeDefinitelyConfiguration],
+// [bot_management.SuperBotFightModeLikelyConfiguration],
+// [bot_management.SubscriptionConfiguration].
 func (r BotManagementUpdateResponse) AsUnion() BotManagementUpdateResponseUnion {
 	return r.union
 }
@@ -611,6 +620,7 @@ func (r botManagementGetResponseJSON) RawJSON() string {
 }
 
 func (r *BotManagementGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = BotManagementGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -618,6 +628,14 @@ func (r *BotManagementGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [BotManagementGetResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [bot_management.BotFightModeConfiguration],
+// [bot_management.SuperBotFightModeDefinitelyConfiguration],
+// [bot_management.SuperBotFightModeLikelyConfiguration],
+// [bot_management.SubscriptionConfiguration].
 func (r BotManagementGetResponse) AsUnion() BotManagementGetResponseUnion {
 	return r.union
 }

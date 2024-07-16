@@ -44,8 +44,8 @@ func NewOriginCACertificateService(opts ...option.RequestOption) (r *OriginCACer
 // Create an Origin CA certificate. Use your Origin CA Key as your User Service Key
 // when calling this endpoint ([see above](#requests)).
 func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACertificateNewParams, opts ...option.RequestOption) (res *OriginCACertificateNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "certificates"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -60,7 +60,7 @@ func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACerti
 // ([see above](#requests)).
 func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACertificateListParams, opts ...option.RequestOption) (res *pagination.SinglePage[OriginCACertificate], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "certificates"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
@@ -86,8 +86,8 @@ func (r *OriginCACertificateService) ListAutoPaging(ctx context.Context, query O
 // CA Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
 func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
 		return
@@ -105,8 +105,8 @@ func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID s
 // Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
 func (r *OriginCACertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if certificateID == "" {
 		err = errors.New("missing required certificate_id parameter")
 		return
@@ -290,7 +290,7 @@ type OriginCACertificateListParams struct {
 func (r OriginCACertificateListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

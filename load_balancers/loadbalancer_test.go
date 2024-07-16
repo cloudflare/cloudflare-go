@@ -47,7 +47,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 		Description: cloudflare.F("Load Balancer for www.example.com"),
 		LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 			Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-			PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+			PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 		}),
 		PopPools: cloudflare.F[any](map[string]interface{}{
 			"LAX": map[string]interface{}{
@@ -106,7 +106,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-					PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
 				PopPools: cloudflare.F[any](map[string]interface{}{
 					"LAX": map[string]interface{}{
@@ -179,7 +179,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-					PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
 				PopPools: cloudflare.F[any](map[string]interface{}{
 					"LAX": map[string]interface{}{
@@ -252,7 +252,7 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-					PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
 				PopPools: cloudflare.F[any](map[string]interface{}{
 					"LAX": map[string]interface{}{
@@ -358,7 +358,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 			Enabled:     cloudflare.F(true),
 			LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 				Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-				PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+				PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 			}),
 			PopPools: cloudflare.F[any](map[string]interface{}{
 				"LAX": map[string]interface{}{
@@ -417,7 +417,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-						PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
 					PopPools: cloudflare.F[any](map[string]interface{}{
 						"LAX": map[string]interface{}{
@@ -490,7 +490,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-						PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
 					PopPools: cloudflare.F[any](map[string]interface{}{
 						"LAX": map[string]interface{}{
@@ -563,7 +563,7 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-						PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
 					PopPools: cloudflare.F[any](map[string]interface{}{
 						"LAX": map[string]interface{}{
@@ -723,7 +723,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 			FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 			LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 				Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-				PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+				PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 			}),
 			Name: cloudflare.F("www.example.com"),
 			PopPools: cloudflare.F[any](map[string]interface{}{
@@ -783,7 +783,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-						PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
 					PopPools: cloudflare.F[any](map[string]interface{}{
 						"LAX": map[string]interface{}{
@@ -856,7 +856,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-						PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
 					PopPools: cloudflare.F[any](map[string]interface{}{
 						"LAX": map[string]interface{}{
@@ -929,7 +929,7 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
 						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
-						PreferEcs: cloudflare.F(load_balancers.LocationStrategyPreferEcsAlways),
+						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
 					PopPools: cloudflare.F[any](map[string]interface{}{
 						"LAX": map[string]interface{}{

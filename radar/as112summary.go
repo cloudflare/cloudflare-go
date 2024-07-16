@@ -36,8 +36,8 @@ func NewAS112SummaryService(opts ...option.RequestOption) (r *AS112SummaryServic
 
 // Percentage distribution of DNS queries to AS112 by DNSSEC support.
 func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSSECParams, opts ...option.RequestOption) (res *AS112SummaryDNSSECResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryDNSSECResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/dnssec"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSS
 
 // Percentage distribution of DNS queries, to AS112, by EDNS support.
 func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsParams, opts ...option.RequestOption) (res *AS112SummaryEdnsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryEdnsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/edns"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsPa
 
 // Percentage distribution of DNS queries to AS112 per IP Version.
 func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryIPVersionParams, opts ...option.RequestOption) (res *AS112SummaryIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *AS112SummaryService) IPVersion(ctx context.Context, query AS112SummaryI
 
 // Percentage distribution of DNS queries to AS112 per protocol.
 func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryProtocolParams, opts ...option.RequestOption) (res *AS112SummaryProtocolResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryProtocolResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryPr
 
 // Percentage distribution of DNS queries to AS112 by Query Type.
 func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQueryTypeParams, opts ...option.RequestOption) (res *AS112SummaryQueryTypeResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryQueryTypeResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/query_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQ
 
 // Percentage distribution of AS112 dns requests classified per Response Codes.
 func (r *AS112SummaryService) ResponseCodes(ctx context.Context, query AS112SummaryResponseCodesParams, opts ...option.RequestOption) (res *AS112SummaryResponseCodesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112SummaryResponseCodesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/summary/response_codes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -214,7 +214,7 @@ type AS112SummaryDNSSECResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                     `json:"dataSource,required"`
 	Description     string                                                     `json:"description,required"`
 	EventType       string                                                     `json:"eventType,required"`
-	IsInstantaneous interface{}                                                `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                  `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                     `json:"linkedUrl"`
 	StartTime       time.Time                                                  `json:"startTime" format:"date-time"`
@@ -368,7 +368,7 @@ type AS112SummaryEdnsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                   `json:"dataSource,required"`
 	Description     string                                                   `json:"description,required"`
 	EventType       string                                                   `json:"eventType,required"`
-	IsInstantaneous interface{}                                              `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                     `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                   `json:"linkedUrl"`
 	StartTime       time.Time                                                `json:"startTime" format:"date-time"`
@@ -522,7 +522,7 @@ type AS112SummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                        `json:"dataSource,required"`
 	Description     string                                                        `json:"description,required"`
 	EventType       string                                                        `json:"eventType,required"`
-	IsInstantaneous interface{}                                                   `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                        `json:"linkedUrl"`
 	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
@@ -677,7 +677,7 @@ type AS112SummaryProtocolResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                       `json:"dataSource,required"`
 	Description     string                                                       `json:"description,required"`
 	EventType       string                                                       `json:"eventType,required"`
-	IsInstantaneous interface{}                                                  `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                    `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                       `json:"linkedUrl"`
 	StartTime       time.Time                                                    `json:"startTime" format:"date-time"`
@@ -832,7 +832,7 @@ type AS112SummaryQueryTypeResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                        `json:"dataSource,required"`
 	Description     string                                                        `json:"description,required"`
 	EventType       string                                                        `json:"eventType,required"`
-	IsInstantaneous interface{}                                                   `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                          `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                     `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                        `json:"linkedUrl"`
 	StartTime       time.Time                                                     `json:"startTime" format:"date-time"`
@@ -993,7 +993,7 @@ type AS112SummaryResponseCodesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                            `json:"dataSource,required"`
 	Description     string                                                            `json:"description,required"`
 	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous interface{}                                                       `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                            `json:"linkedUrl"`
 	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`
@@ -1060,7 +1060,7 @@ type AS112SummaryDNSSECParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112SummaryDNSSECParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1078,36 +1078,8 @@ type AS112SummaryDNSSECParams struct {
 func (r AS112SummaryDNSSECParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AS112SummaryDNSSECParamsDateRange string
-
-const (
-	AS112SummaryDNSSECParamsDateRange1d         AS112SummaryDNSSECParamsDateRange = "1d"
-	AS112SummaryDNSSECParamsDateRange2d         AS112SummaryDNSSECParamsDateRange = "2d"
-	AS112SummaryDNSSECParamsDateRange7d         AS112SummaryDNSSECParamsDateRange = "7d"
-	AS112SummaryDNSSECParamsDateRange14d        AS112SummaryDNSSECParamsDateRange = "14d"
-	AS112SummaryDNSSECParamsDateRange28d        AS112SummaryDNSSECParamsDateRange = "28d"
-	AS112SummaryDNSSECParamsDateRange12w        AS112SummaryDNSSECParamsDateRange = "12w"
-	AS112SummaryDNSSECParamsDateRange24w        AS112SummaryDNSSECParamsDateRange = "24w"
-	AS112SummaryDNSSECParamsDateRange52w        AS112SummaryDNSSECParamsDateRange = "52w"
-	AS112SummaryDNSSECParamsDateRange1dControl  AS112SummaryDNSSECParamsDateRange = "1dControl"
-	AS112SummaryDNSSECParamsDateRange2dControl  AS112SummaryDNSSECParamsDateRange = "2dControl"
-	AS112SummaryDNSSECParamsDateRange7dControl  AS112SummaryDNSSECParamsDateRange = "7dControl"
-	AS112SummaryDNSSECParamsDateRange14dControl AS112SummaryDNSSECParamsDateRange = "14dControl"
-	AS112SummaryDNSSECParamsDateRange28dControl AS112SummaryDNSSECParamsDateRange = "28dControl"
-	AS112SummaryDNSSECParamsDateRange12wControl AS112SummaryDNSSECParamsDateRange = "12wControl"
-	AS112SummaryDNSSECParamsDateRange24wControl AS112SummaryDNSSECParamsDateRange = "24wControl"
-)
-
-func (r AS112SummaryDNSSECParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112SummaryDNSSECParamsDateRange1d, AS112SummaryDNSSECParamsDateRange2d, AS112SummaryDNSSECParamsDateRange7d, AS112SummaryDNSSECParamsDateRange14d, AS112SummaryDNSSECParamsDateRange28d, AS112SummaryDNSSECParamsDateRange12w, AS112SummaryDNSSECParamsDateRange24w, AS112SummaryDNSSECParamsDateRange52w, AS112SummaryDNSSECParamsDateRange1dControl, AS112SummaryDNSSECParamsDateRange2dControl, AS112SummaryDNSSECParamsDateRange7dControl, AS112SummaryDNSSECParamsDateRange14dControl, AS112SummaryDNSSECParamsDateRange28dControl, AS112SummaryDNSSECParamsDateRange12wControl, AS112SummaryDNSSECParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -1163,7 +1135,7 @@ type AS112SummaryEdnsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112SummaryEdnsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1180,36 +1152,8 @@ type AS112SummaryEdnsParams struct {
 func (r AS112SummaryEdnsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AS112SummaryEdnsParamsDateRange string
-
-const (
-	AS112SummaryEdnsParamsDateRange1d         AS112SummaryEdnsParamsDateRange = "1d"
-	AS112SummaryEdnsParamsDateRange2d         AS112SummaryEdnsParamsDateRange = "2d"
-	AS112SummaryEdnsParamsDateRange7d         AS112SummaryEdnsParamsDateRange = "7d"
-	AS112SummaryEdnsParamsDateRange14d        AS112SummaryEdnsParamsDateRange = "14d"
-	AS112SummaryEdnsParamsDateRange28d        AS112SummaryEdnsParamsDateRange = "28d"
-	AS112SummaryEdnsParamsDateRange12w        AS112SummaryEdnsParamsDateRange = "12w"
-	AS112SummaryEdnsParamsDateRange24w        AS112SummaryEdnsParamsDateRange = "24w"
-	AS112SummaryEdnsParamsDateRange52w        AS112SummaryEdnsParamsDateRange = "52w"
-	AS112SummaryEdnsParamsDateRange1dControl  AS112SummaryEdnsParamsDateRange = "1dControl"
-	AS112SummaryEdnsParamsDateRange2dControl  AS112SummaryEdnsParamsDateRange = "2dControl"
-	AS112SummaryEdnsParamsDateRange7dControl  AS112SummaryEdnsParamsDateRange = "7dControl"
-	AS112SummaryEdnsParamsDateRange14dControl AS112SummaryEdnsParamsDateRange = "14dControl"
-	AS112SummaryEdnsParamsDateRange28dControl AS112SummaryEdnsParamsDateRange = "28dControl"
-	AS112SummaryEdnsParamsDateRange12wControl AS112SummaryEdnsParamsDateRange = "12wControl"
-	AS112SummaryEdnsParamsDateRange24wControl AS112SummaryEdnsParamsDateRange = "24wControl"
-)
-
-func (r AS112SummaryEdnsParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112SummaryEdnsParamsDateRange1d, AS112SummaryEdnsParamsDateRange2d, AS112SummaryEdnsParamsDateRange7d, AS112SummaryEdnsParamsDateRange14d, AS112SummaryEdnsParamsDateRange28d, AS112SummaryEdnsParamsDateRange12w, AS112SummaryEdnsParamsDateRange24w, AS112SummaryEdnsParamsDateRange52w, AS112SummaryEdnsParamsDateRange1dControl, AS112SummaryEdnsParamsDateRange2dControl, AS112SummaryEdnsParamsDateRange7dControl, AS112SummaryEdnsParamsDateRange14dControl, AS112SummaryEdnsParamsDateRange28dControl, AS112SummaryEdnsParamsDateRange12wControl, AS112SummaryEdnsParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -1265,7 +1209,7 @@ type AS112SummaryIPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112SummaryIPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1283,36 +1227,8 @@ type AS112SummaryIPVersionParams struct {
 func (r AS112SummaryIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AS112SummaryIPVersionParamsDateRange string
-
-const (
-	AS112SummaryIPVersionParamsDateRange1d         AS112SummaryIPVersionParamsDateRange = "1d"
-	AS112SummaryIPVersionParamsDateRange2d         AS112SummaryIPVersionParamsDateRange = "2d"
-	AS112SummaryIPVersionParamsDateRange7d         AS112SummaryIPVersionParamsDateRange = "7d"
-	AS112SummaryIPVersionParamsDateRange14d        AS112SummaryIPVersionParamsDateRange = "14d"
-	AS112SummaryIPVersionParamsDateRange28d        AS112SummaryIPVersionParamsDateRange = "28d"
-	AS112SummaryIPVersionParamsDateRange12w        AS112SummaryIPVersionParamsDateRange = "12w"
-	AS112SummaryIPVersionParamsDateRange24w        AS112SummaryIPVersionParamsDateRange = "24w"
-	AS112SummaryIPVersionParamsDateRange52w        AS112SummaryIPVersionParamsDateRange = "52w"
-	AS112SummaryIPVersionParamsDateRange1dControl  AS112SummaryIPVersionParamsDateRange = "1dControl"
-	AS112SummaryIPVersionParamsDateRange2dControl  AS112SummaryIPVersionParamsDateRange = "2dControl"
-	AS112SummaryIPVersionParamsDateRange7dControl  AS112SummaryIPVersionParamsDateRange = "7dControl"
-	AS112SummaryIPVersionParamsDateRange14dControl AS112SummaryIPVersionParamsDateRange = "14dControl"
-	AS112SummaryIPVersionParamsDateRange28dControl AS112SummaryIPVersionParamsDateRange = "28dControl"
-	AS112SummaryIPVersionParamsDateRange12wControl AS112SummaryIPVersionParamsDateRange = "12wControl"
-	AS112SummaryIPVersionParamsDateRange24wControl AS112SummaryIPVersionParamsDateRange = "24wControl"
-)
-
-func (r AS112SummaryIPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112SummaryIPVersionParamsDateRange1d, AS112SummaryIPVersionParamsDateRange2d, AS112SummaryIPVersionParamsDateRange7d, AS112SummaryIPVersionParamsDateRange14d, AS112SummaryIPVersionParamsDateRange28d, AS112SummaryIPVersionParamsDateRange12w, AS112SummaryIPVersionParamsDateRange24w, AS112SummaryIPVersionParamsDateRange52w, AS112SummaryIPVersionParamsDateRange1dControl, AS112SummaryIPVersionParamsDateRange2dControl, AS112SummaryIPVersionParamsDateRange7dControl, AS112SummaryIPVersionParamsDateRange14dControl, AS112SummaryIPVersionParamsDateRange28dControl, AS112SummaryIPVersionParamsDateRange12wControl, AS112SummaryIPVersionParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -1368,7 +1284,7 @@ type AS112SummaryProtocolParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112SummaryProtocolParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1386,36 +1302,8 @@ type AS112SummaryProtocolParams struct {
 func (r AS112SummaryProtocolParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AS112SummaryProtocolParamsDateRange string
-
-const (
-	AS112SummaryProtocolParamsDateRange1d         AS112SummaryProtocolParamsDateRange = "1d"
-	AS112SummaryProtocolParamsDateRange2d         AS112SummaryProtocolParamsDateRange = "2d"
-	AS112SummaryProtocolParamsDateRange7d         AS112SummaryProtocolParamsDateRange = "7d"
-	AS112SummaryProtocolParamsDateRange14d        AS112SummaryProtocolParamsDateRange = "14d"
-	AS112SummaryProtocolParamsDateRange28d        AS112SummaryProtocolParamsDateRange = "28d"
-	AS112SummaryProtocolParamsDateRange12w        AS112SummaryProtocolParamsDateRange = "12w"
-	AS112SummaryProtocolParamsDateRange24w        AS112SummaryProtocolParamsDateRange = "24w"
-	AS112SummaryProtocolParamsDateRange52w        AS112SummaryProtocolParamsDateRange = "52w"
-	AS112SummaryProtocolParamsDateRange1dControl  AS112SummaryProtocolParamsDateRange = "1dControl"
-	AS112SummaryProtocolParamsDateRange2dControl  AS112SummaryProtocolParamsDateRange = "2dControl"
-	AS112SummaryProtocolParamsDateRange7dControl  AS112SummaryProtocolParamsDateRange = "7dControl"
-	AS112SummaryProtocolParamsDateRange14dControl AS112SummaryProtocolParamsDateRange = "14dControl"
-	AS112SummaryProtocolParamsDateRange28dControl AS112SummaryProtocolParamsDateRange = "28dControl"
-	AS112SummaryProtocolParamsDateRange12wControl AS112SummaryProtocolParamsDateRange = "12wControl"
-	AS112SummaryProtocolParamsDateRange24wControl AS112SummaryProtocolParamsDateRange = "24wControl"
-)
-
-func (r AS112SummaryProtocolParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112SummaryProtocolParamsDateRange1d, AS112SummaryProtocolParamsDateRange2d, AS112SummaryProtocolParamsDateRange7d, AS112SummaryProtocolParamsDateRange14d, AS112SummaryProtocolParamsDateRange28d, AS112SummaryProtocolParamsDateRange12w, AS112SummaryProtocolParamsDateRange24w, AS112SummaryProtocolParamsDateRange52w, AS112SummaryProtocolParamsDateRange1dControl, AS112SummaryProtocolParamsDateRange2dControl, AS112SummaryProtocolParamsDateRange7dControl, AS112SummaryProtocolParamsDateRange14dControl, AS112SummaryProtocolParamsDateRange28dControl, AS112SummaryProtocolParamsDateRange12wControl, AS112SummaryProtocolParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -1471,7 +1359,7 @@ type AS112SummaryQueryTypeParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112SummaryQueryTypeParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1489,36 +1377,8 @@ type AS112SummaryQueryTypeParams struct {
 func (r AS112SummaryQueryTypeParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AS112SummaryQueryTypeParamsDateRange string
-
-const (
-	AS112SummaryQueryTypeParamsDateRange1d         AS112SummaryQueryTypeParamsDateRange = "1d"
-	AS112SummaryQueryTypeParamsDateRange2d         AS112SummaryQueryTypeParamsDateRange = "2d"
-	AS112SummaryQueryTypeParamsDateRange7d         AS112SummaryQueryTypeParamsDateRange = "7d"
-	AS112SummaryQueryTypeParamsDateRange14d        AS112SummaryQueryTypeParamsDateRange = "14d"
-	AS112SummaryQueryTypeParamsDateRange28d        AS112SummaryQueryTypeParamsDateRange = "28d"
-	AS112SummaryQueryTypeParamsDateRange12w        AS112SummaryQueryTypeParamsDateRange = "12w"
-	AS112SummaryQueryTypeParamsDateRange24w        AS112SummaryQueryTypeParamsDateRange = "24w"
-	AS112SummaryQueryTypeParamsDateRange52w        AS112SummaryQueryTypeParamsDateRange = "52w"
-	AS112SummaryQueryTypeParamsDateRange1dControl  AS112SummaryQueryTypeParamsDateRange = "1dControl"
-	AS112SummaryQueryTypeParamsDateRange2dControl  AS112SummaryQueryTypeParamsDateRange = "2dControl"
-	AS112SummaryQueryTypeParamsDateRange7dControl  AS112SummaryQueryTypeParamsDateRange = "7dControl"
-	AS112SummaryQueryTypeParamsDateRange14dControl AS112SummaryQueryTypeParamsDateRange = "14dControl"
-	AS112SummaryQueryTypeParamsDateRange28dControl AS112SummaryQueryTypeParamsDateRange = "28dControl"
-	AS112SummaryQueryTypeParamsDateRange12wControl AS112SummaryQueryTypeParamsDateRange = "12wControl"
-	AS112SummaryQueryTypeParamsDateRange24wControl AS112SummaryQueryTypeParamsDateRange = "24wControl"
-)
-
-func (r AS112SummaryQueryTypeParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112SummaryQueryTypeParamsDateRange1d, AS112SummaryQueryTypeParamsDateRange2d, AS112SummaryQueryTypeParamsDateRange7d, AS112SummaryQueryTypeParamsDateRange14d, AS112SummaryQueryTypeParamsDateRange28d, AS112SummaryQueryTypeParamsDateRange12w, AS112SummaryQueryTypeParamsDateRange24w, AS112SummaryQueryTypeParamsDateRange52w, AS112SummaryQueryTypeParamsDateRange1dControl, AS112SummaryQueryTypeParamsDateRange2dControl, AS112SummaryQueryTypeParamsDateRange7dControl, AS112SummaryQueryTypeParamsDateRange14dControl, AS112SummaryQueryTypeParamsDateRange28dControl, AS112SummaryQueryTypeParamsDateRange12wControl, AS112SummaryQueryTypeParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -1574,7 +1434,7 @@ type AS112SummaryResponseCodesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112SummaryResponseCodesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1592,36 +1452,8 @@ type AS112SummaryResponseCodesParams struct {
 func (r AS112SummaryResponseCodesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AS112SummaryResponseCodesParamsDateRange string
-
-const (
-	AS112SummaryResponseCodesParamsDateRange1d         AS112SummaryResponseCodesParamsDateRange = "1d"
-	AS112SummaryResponseCodesParamsDateRange2d         AS112SummaryResponseCodesParamsDateRange = "2d"
-	AS112SummaryResponseCodesParamsDateRange7d         AS112SummaryResponseCodesParamsDateRange = "7d"
-	AS112SummaryResponseCodesParamsDateRange14d        AS112SummaryResponseCodesParamsDateRange = "14d"
-	AS112SummaryResponseCodesParamsDateRange28d        AS112SummaryResponseCodesParamsDateRange = "28d"
-	AS112SummaryResponseCodesParamsDateRange12w        AS112SummaryResponseCodesParamsDateRange = "12w"
-	AS112SummaryResponseCodesParamsDateRange24w        AS112SummaryResponseCodesParamsDateRange = "24w"
-	AS112SummaryResponseCodesParamsDateRange52w        AS112SummaryResponseCodesParamsDateRange = "52w"
-	AS112SummaryResponseCodesParamsDateRange1dControl  AS112SummaryResponseCodesParamsDateRange = "1dControl"
-	AS112SummaryResponseCodesParamsDateRange2dControl  AS112SummaryResponseCodesParamsDateRange = "2dControl"
-	AS112SummaryResponseCodesParamsDateRange7dControl  AS112SummaryResponseCodesParamsDateRange = "7dControl"
-	AS112SummaryResponseCodesParamsDateRange14dControl AS112SummaryResponseCodesParamsDateRange = "14dControl"
-	AS112SummaryResponseCodesParamsDateRange28dControl AS112SummaryResponseCodesParamsDateRange = "28dControl"
-	AS112SummaryResponseCodesParamsDateRange12wControl AS112SummaryResponseCodesParamsDateRange = "12wControl"
-	AS112SummaryResponseCodesParamsDateRange24wControl AS112SummaryResponseCodesParamsDateRange = "24wControl"
-)
-
-func (r AS112SummaryResponseCodesParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112SummaryResponseCodesParamsDateRange1d, AS112SummaryResponseCodesParamsDateRange2d, AS112SummaryResponseCodesParamsDateRange7d, AS112SummaryResponseCodesParamsDateRange14d, AS112SummaryResponseCodesParamsDateRange28d, AS112SummaryResponseCodesParamsDateRange12w, AS112SummaryResponseCodesParamsDateRange24w, AS112SummaryResponseCodesParamsDateRange52w, AS112SummaryResponseCodesParamsDateRange1dControl, AS112SummaryResponseCodesParamsDateRange2dControl, AS112SummaryResponseCodesParamsDateRange7dControl, AS112SummaryResponseCodesParamsDateRange14dControl, AS112SummaryResponseCodesParamsDateRange28dControl, AS112SummaryResponseCodesParamsDateRange12wControl, AS112SummaryResponseCodesParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

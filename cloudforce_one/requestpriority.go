@@ -37,8 +37,8 @@ func NewRequestPriorityService(opts ...option.RequestOption) (r *RequestPriority
 
 // Create a New Priority Requirement
 func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier string, body RequestPriorityNewParams, opts ...option.RequestOption) (res *Priority, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestPriorityNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -54,8 +54,8 @@ func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier stri
 
 // Update a Priority Intelligence Requirement
 func (r *RequestPriorityService) Update(ctx context.Context, accountIdentifier string, priorityIdentifer string, body RequestPriorityUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestPriorityUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -91,8 +91,8 @@ func (r *RequestPriorityService) Delete(ctx context.Context, accountIdentifier s
 
 // Get a Priority Intelligence Requirement
 func (r *RequestPriorityService) Get(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *Item, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestPriorityGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -112,8 +112,8 @@ func (r *RequestPriorityService) Get(ctx context.Context, accountIdentifier stri
 
 // Get Priority Intelligence Requirement Quota
 func (r *RequestPriorityService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *Quota, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RequestPriorityQuotaResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return

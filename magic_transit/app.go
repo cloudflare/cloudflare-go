@@ -39,8 +39,8 @@ func NewAppService(opts ...option.RequestOption) (r *AppService) {
 
 // Creates a new App for an account
 func (r *AppService) New(ctx context.Context, params AppNewParams, opts ...option.RequestOption) (res *AppNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AppNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -56,8 +56,8 @@ func (r *AppService) New(ctx context.Context, params AppNewParams, opts ...optio
 
 // Updates an Account App
 func (r *AppService) Update(ctx context.Context, accountAppID string, params AppUpdateParams, opts ...option.RequestOption) (res *AppUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AppUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -78,8 +78,12 @@ func (r *AppService) Update(ctx context.Context, accountAppID string, params App
 // Lists Apps associated with an account.
 func (r *AppService) List(ctx context.Context, query AppListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AppListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/magic/apps", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -100,8 +104,8 @@ func (r *AppService) ListAutoPaging(ctx context.Context, query AppListParams, op
 
 // Deletes specific Account App.
 func (r *AppService) Delete(ctx context.Context, accountAppID string, body AppDeleteParams, opts ...option.RequestOption) (res *AppDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AppDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -191,9 +195,11 @@ func (r appUpdateResponseJSON) RawJSON() string {
 // Collection of Hostnames and/or IP Subnets to associate with traffic decisions.
 type AppListResponse struct {
 	// Magic account app ID.
-	AccountAppID string      `json:"account_app_id"`
-	Hostnames    interface{} `json:"hostnames,required"`
-	IPSubnets    interface{} `json:"ip_subnets,required"`
+	AccountAppID string `json:"account_app_id"`
+	// This field can have the runtime type of [[]string].
+	Hostnames interface{} `json:"hostnames,required"`
+	// This field can have the runtime type of [[]string].
+	IPSubnets interface{} `json:"ip_subnets,required"`
 	// Display name for the app.
 	Name string `json:"name"`
 	// Category of the app.
@@ -221,6 +227,7 @@ func (r appListResponseJSON) RawJSON() string {
 }
 
 func (r *AppListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = AppListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -228,6 +235,12 @@ func (r *AppListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AppListResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [magic_transit.AppListResponseMagicAccountApp],
+// [magic_transit.AppListResponseMagicManagedApp].
 func (r AppListResponse) AsUnion() AppListResponseUnion {
 	return r.union
 }

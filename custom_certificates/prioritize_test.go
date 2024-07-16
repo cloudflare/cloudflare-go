@@ -30,8 +30,10 @@ func TestPrioritizeUpdate(t *testing.T) {
 	_, err := client.CustomCertificates.Prioritize.Update(context.TODO(), custom_certificates.PrioritizeUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Certificates: cloudflare.F([]custom_certificates.PrioritizeUpdateParamsCertificate{{
+			ID:       cloudflare.F("5a7805061c76ada191ed06f989cc3dac"),
 			Priority: cloudflare.F(2.000000),
 		}, {
+			ID:       cloudflare.F("9a7806061c88ada191ed06f989cc3dac"),
 			Priority: cloudflare.F(1.000000),
 		}}),
 	})

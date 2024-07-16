@@ -65,8 +65,9 @@ type Binding struct {
 	// ID of the D1 database to bind to
 	ID string `json:"id"`
 	// Namespace to bind to
-	Namespace string      `json:"namespace"`
-	Outbound  interface{} `json:"outbound,required"`
+	Namespace string `json:"namespace"`
+	// This field can have the runtime type of [DispatchNamespaceBindingOutbound].
+	Outbound interface{} `json:"outbound,required"`
 	// ID of the certificate to bind to
 	CertificateID string      `json:"certificate_id"`
 	JSON          bindingJSON `json:"-"`
@@ -98,6 +99,7 @@ func (r bindingJSON) RawJSON() string {
 }
 
 func (r *Binding) UnmarshalJSON(data []byte) (err error) {
+	*r = Binding{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -105,6 +107,13 @@ func (r *Binding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [BindingUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [workers.KVNamespaceBinding],
+// [workers.ServiceBinding], [workers.DurableObjectBinding], [workers.R2Binding],
+// [workers.BindingWorkersQueueBinding], [workers.D1Binding],
+// [workers.DispatchNamespaceBinding], [workers.MTLSCERTBinding].
 func (r Binding) AsUnion() BindingUnion {
 	return r.union
 }

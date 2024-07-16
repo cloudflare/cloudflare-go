@@ -39,8 +39,8 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 
 // Updates a user's subscriptions.
 func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SubscriptionUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return
@@ -68,8 +68,8 @@ func (r *SubscriptionService) Delete(ctx context.Context, identifier string, opt
 
 // Updates zone subscriptions, either plan or add-ons.
 func (r *SubscriptionService) Edit(ctx context.Context, identifier string, body SubscriptionEditParams, opts ...option.RequestOption) (res *SubscriptionEditResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SubscriptionEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return
@@ -85,8 +85,8 @@ func (r *SubscriptionService) Edit(ctx context.Context, identifier string, body 
 
 // Lists all of a user's subscriptions.
 func (r *SubscriptionService) Get(ctx context.Context, opts ...option.RequestOption) (res *[]Subscription, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SubscriptionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "user/subscriptions"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {

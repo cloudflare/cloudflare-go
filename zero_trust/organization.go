@@ -37,8 +37,8 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 
 // Sets up a Zero Trust organization for your account or zone.
 func (r *OrganizationService) New(ctx context.Context, params OrganizationNewParams, opts ...option.RequestOption) (res *Organization, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OrganizationNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -68,8 +68,8 @@ func (r *OrganizationService) New(ctx context.Context, params OrganizationNewPar
 
 // Updates the configuration for your Zero Trust organization.
 func (r *OrganizationService) Update(ctx context.Context, params OrganizationUpdateParams, opts ...option.RequestOption) (res *Organization, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OrganizationUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -99,8 +99,8 @@ func (r *OrganizationService) Update(ctx context.Context, params OrganizationUpd
 
 // Returns the configuration for your Zero Trust organization.
 func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *Organization, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OrganizationListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -130,8 +130,8 @@ func (r *OrganizationService) List(ctx context.Context, query OrganizationListPa
 
 // Revokes a user's access across all applications.
 func (r *OrganizationService) RevokeUsers(ctx context.Context, params OrganizationRevokeUsersParams, opts ...option.RequestOption) (res *OrganizationRevokeUsersResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OrganizationRevokeUsersResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -222,7 +222,7 @@ type Organization struct {
 	CustomPages            OrganizationCustomPages `json:"custom_pages"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly bool        `json:"is_ui_read_only"`
+	IsUIReadOnly bool        `json:"is_ui_read_only"`
 	LoginDesign  LoginDesign `json:"login_design"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
@@ -231,7 +231,7 @@ type Organization struct {
 	// h.
 	SessionDuration string `json:"session_duration"`
 	// A description of the reason why the UI read only field is being toggled.
-	UiReadOnlyToggleReason string    `json:"ui_read_only_toggle_reason"`
+	UIReadOnlyToggleReason string    `json:"ui_read_only_toggle_reason"`
 	UpdatedAt              time.Time `json:"updated_at" format:"date-time"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
 	// exceeds the set time of inactivity, the user is removed as an active seat and no
@@ -251,11 +251,11 @@ type organizationJSON struct {
 	AutoRedirectToIdentity         apijson.Field
 	CreatedAt                      apijson.Field
 	CustomPages                    apijson.Field
-	IsUiReadOnly                   apijson.Field
+	IsUIReadOnly                   apijson.Field
 	LoginDesign                    apijson.Field
 	Name                           apijson.Field
 	SessionDuration                apijson.Field
-	UiReadOnlyToggleReason         apijson.Field
+	UIReadOnlyToggleReason         apijson.Field
 	UpdatedAt                      apijson.Field
 	UserSeatExpirationInactiveTime apijson.Field
 	WARPAuthSessionDuration        apijson.Field
@@ -329,14 +329,14 @@ type OrganizationNewParams struct {
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly param.Field[bool]             `json:"is_ui_read_only"`
+	IsUIReadOnly param.Field[bool]             `json:"is_ui_read_only"`
 	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
 	// h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// A description of the reason why the UI read only field is being toggled.
-	UiReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
+	UIReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
 	// exceeds the set time of inactivity, the user is removed as an active seat and no
 	// longer counts against your Teams seat count. Must be in the format `300ms` or
@@ -410,7 +410,7 @@ type OrganizationUpdateParams struct {
 	CustomPages            param.Field[OrganizationUpdateParamsCustomPages] `json:"custom_pages"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly param.Field[bool]             `json:"is_ui_read_only"`
+	IsUIReadOnly param.Field[bool]             `json:"is_ui_read_only"`
 	LoginDesign  param.Field[LoginDesignParam] `json:"login_design"`
 	// The name of your Zero Trust organization.
 	Name param.Field[string] `json:"name"`
@@ -419,7 +419,7 @@ type OrganizationUpdateParams struct {
 	// h.
 	SessionDuration param.Field[string] `json:"session_duration"`
 	// A description of the reason why the UI read only field is being toggled.
-	UiReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
+	UIReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
 	// exceeds the set time of inactivity, the user is removed as an active seat and no
 	// longer counts against your Teams seat count. Must be in the format `300ms` or

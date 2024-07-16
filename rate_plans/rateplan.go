@@ -35,8 +35,8 @@ func NewRatePlanService(opts ...option.RequestOption) (r *RatePlanService) {
 
 // Lists all rate plans the zone can subscribe to.
 func (r *RatePlanService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]RatePlan, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RatePlanGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

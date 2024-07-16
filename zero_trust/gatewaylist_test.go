@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
@@ -33,11 +34,17 @@ func TestGatewayListNewWithOptionalParams(t *testing.T) {
 		Type:        cloudflare.F(zero_trust.GatewayListNewParamsTypeSerial),
 		Description: cloudflare.F("The serial numbers for administrators"),
 		Items: cloudflare.F([]zero_trust.GatewayItemParam{{
-			Value: cloudflare.F("8GE8721REF"),
+			CreatedAt:   cloudflare.F(time.Now()),
+			Description: cloudflare.F("Austin office IP"),
+			Value:       cloudflare.F("8GE8721REF"),
 		}, {
-			Value: cloudflare.F("8GE8721REF"),
+			CreatedAt:   cloudflare.F(time.Now()),
+			Description: cloudflare.F("Austin office IP"),
+			Value:       cloudflare.F("8GE8721REF"),
 		}, {
-			Value: cloudflare.F("8GE8721REF"),
+			CreatedAt:   cloudflare.F(time.Now()),
+			Description: cloudflare.F("Austin office IP"),
+			Value:       cloudflare.F("8GE8721REF"),
 		}}),
 	})
 	if err != nil {
@@ -80,7 +87,7 @@ func TestGatewayListUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestGatewayListList(t *testing.T) {
+func TestGatewayListListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -95,6 +102,7 @@ func TestGatewayListList(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Lists.List(context.TODO(), zero_trust.GatewayListListParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		Type:      cloudflare.F(zero_trust.GatewayListListParamsTypeSerial),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -153,11 +161,17 @@ func TestGatewayListEditWithOptionalParams(t *testing.T) {
 		zero_trust.GatewayListEditParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Append: cloudflare.F([]zero_trust.GatewayItemParam{{
-				Value: cloudflare.F("8GE8721REF"),
+				CreatedAt:   cloudflare.F(time.Now()),
+				Description: cloudflare.F("Austin office IP"),
+				Value:       cloudflare.F("8GE8721REF"),
 			}, {
-				Value: cloudflare.F("8GE8721REF"),
+				CreatedAt:   cloudflare.F(time.Now()),
+				Description: cloudflare.F("Austin office IP"),
+				Value:       cloudflare.F("8GE8721REF"),
 			}, {
-				Value: cloudflare.F("8GE8721REF"),
+				CreatedAt:   cloudflare.F(time.Now()),
+				Description: cloudflare.F("Austin office IP"),
+				Value:       cloudflare.F("8GE8721REF"),
 			}}),
 			Remove: cloudflare.F([]string{"8GE8721REF", "8GE8721REF", "8GE8721REF"}),
 		},

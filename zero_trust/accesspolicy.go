@@ -38,8 +38,8 @@ func NewAccessPolicyService(opts ...option.RequestOption) (r *AccessPolicyServic
 
 // Creates a new Access reusable policy.
 func (r *AccessPolicyService) New(ctx context.Context, params AccessPolicyNewParams, opts ...option.RequestOption) (res *AccessPolicyNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessPolicyNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,8 +55,8 @@ func (r *AccessPolicyService) New(ctx context.Context, params AccessPolicyNewPar
 
 // Updates a Access reusable policy.
 func (r *AccessPolicyService) Update(ctx context.Context, policyID string, params AccessPolicyUpdateParams, opts ...option.RequestOption) (res *AccessPolicyUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessPolicyUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,8 +77,12 @@ func (r *AccessPolicyService) Update(ctx context.Context, policyID string, param
 // Lists Access reusable policies.
 func (r *AccessPolicyService) List(ctx context.Context, query AccessPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessPolicyListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/policies", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -99,8 +103,8 @@ func (r *AccessPolicyService) ListAutoPaging(ctx context.Context, query AccessPo
 
 // Deletes an Access reusable policy.
 func (r *AccessPolicyService) Delete(ctx context.Context, policyID string, body AccessPolicyDeleteParams, opts ...option.RequestOption) (res *AccessPolicyDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessPolicyDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -120,8 +124,8 @@ func (r *AccessPolicyService) Delete(ctx context.Context, policyID string, body 
 
 // Fetches a single Access reusable policy.
 func (r *AccessPolicyService) Get(ctx context.Context, policyID string, query AccessPolicyGetParams, opts ...option.RequestOption) (res *AccessPolicyGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessPolicyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -44,8 +44,8 @@ func NewNetworkRouteService(opts ...option.RequestOption) (r *NetworkRouteServic
 
 // Routes a private network through a Cloudflare Tunnel.
 func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewParams, opts ...option.RequestOption) (res *Route, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,8 +62,12 @@ func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewPar
 // Lists and filters private network routes in an account.
 func (r *NetworkRouteService) List(ctx context.Context, params NetworkRouteListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Teamnet], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/teamnet/routes", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -84,8 +88,8 @@ func (r *NetworkRouteService) ListAutoPaging(ctx context.Context, params Network
 
 // Deletes a private network route from an account.
 func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body NetworkRouteDeleteParams, opts ...option.RequestOption) (res *Route, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NetworkRouteDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -106,8 +110,8 @@ func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body N
 // Updates an existing private network route in an account. The fields that are
 // meant to be updated should be provided in the body of the request.
 func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params NetworkRouteEditParams, opts ...option.RequestOption) (res *Route, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NetworkRouteEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -238,6 +242,8 @@ type NetworkRouteNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network param.Field[string] `json:"network,required"`
+	// UUID of the tunnel.
+	TunnelID param.Field[string] `json:"tunnel_id,required" format:"uuid"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
 	// UUID of the virtual network.
@@ -324,7 +330,7 @@ type NetworkRouteListParams struct {
 func (r NetworkRouteListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -383,6 +389,8 @@ type NetworkRouteEditParams struct {
 	Comment param.Field[string] `json:"comment"`
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network param.Field[string] `json:"network"`
+	// UUID of the tunnel.
+	TunnelID param.Field[string] `json:"tunnel_id" format:"uuid"`
 	// UUID of the virtual network.
 	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }

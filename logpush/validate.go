@@ -36,8 +36,8 @@ func NewValidateService(opts ...option.RequestOption) (r *ValidateService) {
 
 // Checks if there is an existing job with a destination.
 func (r *ValidateService) Destination(ctx context.Context, params ValidateDestinationParams, opts ...option.RequestOption) (res *ValidateDestinationResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ValidateDestinationResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -67,8 +67,8 @@ func (r *ValidateService) Destination(ctx context.Context, params ValidateDestin
 
 // Validates logpull origin with logpull_options.
 func (r *ValidateService) Origin(ctx context.Context, params ValidateOriginParams, opts ...option.RequestOption) (res *ValidateOriginResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ValidateOriginResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {

@@ -39,12 +39,12 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 				FailClosed:           cloudflare.F(false),
 				NotificationSettings: cloudflare.F(zero_trust.NotificationSettingsParam{
 					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("string"),
-					SupportURL: cloudflare.F("string"),
+					Msg:        cloudflare.F("msg"),
+					SupportURL: cloudflare.F("support_url"),
 				}),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
-				BackgroundColor: cloudflare.F("string"),
+				BackgroundColor: cloudflare.F("background_color"),
 				Enabled:         cloudflare.F(true),
 				FooterText:      cloudflare.F("--footer--"),
 				HeaderText:      cloudflare.F("--header--"),
@@ -60,6 +60,9 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 			BrowserIsolation: cloudflare.F(zero_trust.BrowserIsolationSettingsParam{
 				NonIdentityEnabled:         cloudflare.F(true),
 				URLBrowserIsolationEnabled: cloudflare.F(true),
+			}),
+			Certificate: cloudflare.F(zero_trust.GatewayConfigurationSettingsCertificateParam{
+				ID: cloudflare.F("d1b364c5-1311-466e-a194-f0e943e0799f"),
 			}),
 			CustomCertificate: cloudflare.F(zero_trust.CustomCertificateSettingsParam{
 				Enabled: cloudflare.F(true),
@@ -113,12 +116,12 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 				FailClosed:           cloudflare.F(false),
 				NotificationSettings: cloudflare.F(zero_trust.NotificationSettingsParam{
 					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("string"),
-					SupportURL: cloudflare.F("string"),
+					Msg:        cloudflare.F("msg"),
+					SupportURL: cloudflare.F("support_url"),
 				}),
 			}),
 			BlockPage: cloudflare.F(zero_trust.BlockPageSettingsParam{
-				BackgroundColor: cloudflare.F("string"),
+				BackgroundColor: cloudflare.F("background_color"),
 				Enabled:         cloudflare.F(true),
 				FooterText:      cloudflare.F("--footer--"),
 				HeaderText:      cloudflare.F("--header--"),
@@ -134,6 +137,9 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 			BrowserIsolation: cloudflare.F(zero_trust.BrowserIsolationSettingsParam{
 				NonIdentityEnabled:         cloudflare.F(true),
 				URLBrowserIsolationEnabled: cloudflare.F(true),
+			}),
+			Certificate: cloudflare.F(zero_trust.GatewayConfigurationSettingsCertificateParam{
+				ID: cloudflare.F("d1b364c5-1311-466e-a194-f0e943e0799f"),
 			}),
 			CustomCertificate: cloudflare.F(zero_trust.CustomCertificateSettingsParam{
 				Enabled: cloudflare.F(true),

@@ -37,8 +37,8 @@ func NewHTTPTopService(opts ...option.RequestOption) (r *HTTPTopService) {
 // Get the top user agents aggregated in families by HTTP traffic. Values are a
 // percentage out of the total traffic.
 func (r *HTTPTopService) BrowserFamilies(ctx context.Context, query HTTPTopBrowserFamiliesParams, opts ...option.RequestOption) (res *HTTPTopBrowserFamiliesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTopBrowserFamiliesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/top/browser_families"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -51,8 +51,8 @@ func (r *HTTPTopService) BrowserFamilies(ctx context.Context, query HTTPTopBrows
 // Get the top user agents by HTTP traffic. Values are a percentage out of the
 // total traffic.
 func (r *HTTPTopService) Browsers(ctx context.Context, query HTTPTopBrowsersParams, opts ...option.RequestOption) (res *HTTPTopBrowsersResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTopBrowsersResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/top/browsers"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -184,7 +184,7 @@ type HTTPTopBrowserFamiliesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -314,7 +314,7 @@ type HTTPTopBrowsersResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                  `json:"dataSource,required"`
 	Description     string                                                  `json:"description,required"`
 	EventType       string                                                  `json:"eventType,required"`
-	IsInstantaneous interface{}                                             `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
 	EndTime         time.Time                                               `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                  `json:"linkedUrl"`
 	StartTime       time.Time                                               `json:"startTime" format:"date-time"`
@@ -362,7 +362,7 @@ type HTTPTopBrowserFamiliesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTopBrowserFamiliesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -394,7 +394,7 @@ type HTTPTopBrowserFamiliesParams struct {
 func (r HTTPTopBrowserFamiliesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -425,34 +425,6 @@ const (
 func (r HTTPTopBrowserFamiliesParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPTopBrowserFamiliesParamsBrowserFamilyChrome, HTTPTopBrowserFamiliesParamsBrowserFamilyEdge, HTTPTopBrowserFamiliesParamsBrowserFamilyFirefox, HTTPTopBrowserFamiliesParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPTopBrowserFamiliesParamsDateRange string
-
-const (
-	HTTPTopBrowserFamiliesParamsDateRange1d         HTTPTopBrowserFamiliesParamsDateRange = "1d"
-	HTTPTopBrowserFamiliesParamsDateRange2d         HTTPTopBrowserFamiliesParamsDateRange = "2d"
-	HTTPTopBrowserFamiliesParamsDateRange7d         HTTPTopBrowserFamiliesParamsDateRange = "7d"
-	HTTPTopBrowserFamiliesParamsDateRange14d        HTTPTopBrowserFamiliesParamsDateRange = "14d"
-	HTTPTopBrowserFamiliesParamsDateRange28d        HTTPTopBrowserFamiliesParamsDateRange = "28d"
-	HTTPTopBrowserFamiliesParamsDateRange12w        HTTPTopBrowserFamiliesParamsDateRange = "12w"
-	HTTPTopBrowserFamiliesParamsDateRange24w        HTTPTopBrowserFamiliesParamsDateRange = "24w"
-	HTTPTopBrowserFamiliesParamsDateRange52w        HTTPTopBrowserFamiliesParamsDateRange = "52w"
-	HTTPTopBrowserFamiliesParamsDateRange1dControl  HTTPTopBrowserFamiliesParamsDateRange = "1dControl"
-	HTTPTopBrowserFamiliesParamsDateRange2dControl  HTTPTopBrowserFamiliesParamsDateRange = "2dControl"
-	HTTPTopBrowserFamiliesParamsDateRange7dControl  HTTPTopBrowserFamiliesParamsDateRange = "7dControl"
-	HTTPTopBrowserFamiliesParamsDateRange14dControl HTTPTopBrowserFamiliesParamsDateRange = "14dControl"
-	HTTPTopBrowserFamiliesParamsDateRange28dControl HTTPTopBrowserFamiliesParamsDateRange = "28dControl"
-	HTTPTopBrowserFamiliesParamsDateRange12wControl HTTPTopBrowserFamiliesParamsDateRange = "12wControl"
-	HTTPTopBrowserFamiliesParamsDateRange24wControl HTTPTopBrowserFamiliesParamsDateRange = "24wControl"
-)
-
-func (r HTTPTopBrowserFamiliesParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTopBrowserFamiliesParamsDateRange1d, HTTPTopBrowserFamiliesParamsDateRange2d, HTTPTopBrowserFamiliesParamsDateRange7d, HTTPTopBrowserFamiliesParamsDateRange14d, HTTPTopBrowserFamiliesParamsDateRange28d, HTTPTopBrowserFamiliesParamsDateRange12w, HTTPTopBrowserFamiliesParamsDateRange24w, HTTPTopBrowserFamiliesParamsDateRange52w, HTTPTopBrowserFamiliesParamsDateRange1dControl, HTTPTopBrowserFamiliesParamsDateRange2dControl, HTTPTopBrowserFamiliesParamsDateRange7dControl, HTTPTopBrowserFamiliesParamsDateRange14dControl, HTTPTopBrowserFamiliesParamsDateRange28dControl, HTTPTopBrowserFamiliesParamsDateRange12wControl, HTTPTopBrowserFamiliesParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -616,7 +588,7 @@ type HTTPTopBrowsersParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTopBrowsersParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -647,7 +619,7 @@ type HTTPTopBrowsersParams struct {
 func (r HTTPTopBrowsersParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -678,34 +650,6 @@ const (
 func (r HTTPTopBrowsersParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPTopBrowsersParamsBrowserFamilyChrome, HTTPTopBrowsersParamsBrowserFamilyEdge, HTTPTopBrowsersParamsBrowserFamilyFirefox, HTTPTopBrowsersParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPTopBrowsersParamsDateRange string
-
-const (
-	HTTPTopBrowsersParamsDateRange1d         HTTPTopBrowsersParamsDateRange = "1d"
-	HTTPTopBrowsersParamsDateRange2d         HTTPTopBrowsersParamsDateRange = "2d"
-	HTTPTopBrowsersParamsDateRange7d         HTTPTopBrowsersParamsDateRange = "7d"
-	HTTPTopBrowsersParamsDateRange14d        HTTPTopBrowsersParamsDateRange = "14d"
-	HTTPTopBrowsersParamsDateRange28d        HTTPTopBrowsersParamsDateRange = "28d"
-	HTTPTopBrowsersParamsDateRange12w        HTTPTopBrowsersParamsDateRange = "12w"
-	HTTPTopBrowsersParamsDateRange24w        HTTPTopBrowsersParamsDateRange = "24w"
-	HTTPTopBrowsersParamsDateRange52w        HTTPTopBrowsersParamsDateRange = "52w"
-	HTTPTopBrowsersParamsDateRange1dControl  HTTPTopBrowsersParamsDateRange = "1dControl"
-	HTTPTopBrowsersParamsDateRange2dControl  HTTPTopBrowsersParamsDateRange = "2dControl"
-	HTTPTopBrowsersParamsDateRange7dControl  HTTPTopBrowsersParamsDateRange = "7dControl"
-	HTTPTopBrowsersParamsDateRange14dControl HTTPTopBrowsersParamsDateRange = "14dControl"
-	HTTPTopBrowsersParamsDateRange28dControl HTTPTopBrowsersParamsDateRange = "28dControl"
-	HTTPTopBrowsersParamsDateRange12wControl HTTPTopBrowsersParamsDateRange = "12wControl"
-	HTTPTopBrowsersParamsDateRange24wControl HTTPTopBrowsersParamsDateRange = "24wControl"
-)
-
-func (r HTTPTopBrowsersParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTopBrowsersParamsDateRange1d, HTTPTopBrowsersParamsDateRange2d, HTTPTopBrowsersParamsDateRange7d, HTTPTopBrowsersParamsDateRange14d, HTTPTopBrowsersParamsDateRange28d, HTTPTopBrowsersParamsDateRange12w, HTTPTopBrowsersParamsDateRange24w, HTTPTopBrowsersParamsDateRange52w, HTTPTopBrowsersParamsDateRange1dControl, HTTPTopBrowsersParamsDateRange2dControl, HTTPTopBrowsersParamsDateRange7dControl, HTTPTopBrowsersParamsDateRange14dControl, HTTPTopBrowsersParamsDateRange28dControl, HTTPTopBrowsersParamsDateRange12wControl, HTTPTopBrowsersParamsDateRange24wControl:
 		return true
 	}
 	return false

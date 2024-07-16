@@ -36,8 +36,8 @@ func NewMessageService(opts ...option.RequestOption) (r *MessageService) {
 
 // Acknowledge + Retry messages from a Queue.
 func (r *MessageService) Ack(ctx context.Context, queueID string, params MessageAckParams, opts ...option.RequestOption) (res *MessageAckResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MessageAckResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *MessageService) Ack(ctx context.Context, queueID string, params Message
 
 // Pull a batch of messages from a Queue.
 func (r *MessageService) Pull(ctx context.Context, queueID string, params MessagePullParams, opts ...option.RequestOption) (res *[]MessagePullResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MessagePullResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

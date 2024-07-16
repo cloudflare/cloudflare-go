@@ -37,8 +37,8 @@ func NewQualityIQIService(opts ...option.RequestOption) (r *QualityIQIService) {
 // Get a summary (percentiles) of bandwidth, latency or DNS response time from the
 // Radar Internet Quality Index (IQI).
 func (r *QualityIQIService) Summary(ctx context.Context, query QualityIQISummaryParams, opts ...option.RequestOption) (res *QualityIQISummaryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QualityIQISummaryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/quality/iqi/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -51,8 +51,8 @@ func (r *QualityIQIService) Summary(ctx context.Context, query QualityIQISummary
 // Get a time series (percentiles) of bandwidth, latency or DNS response time from
 // the Radar Internet Quality Index (IQI).
 func (r *QualityIQIService) TimeseriesGroups(ctx context.Context, query QualityIQITimeseriesGroupsParams, opts ...option.RequestOption) (res *QualityIQITimeseriesGroupsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QualityIQITimeseriesGroupsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/quality/iqi/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -164,7 +164,7 @@ type QualityIQISummaryResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                    `json:"dataSource,required"`
 	Description     string                                                    `json:"description,required"`
 	EventType       string                                                    `json:"eventType,required"`
-	IsInstantaneous interface{}                                               `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                    `json:"linkedUrl"`
 	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
@@ -284,7 +284,7 @@ type QualityIQISummaryParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]QualityIQISummaryParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -302,7 +302,7 @@ type QualityIQISummaryParams struct {
 func (r QualityIQISummaryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -318,34 +318,6 @@ const (
 func (r QualityIQISummaryParamsMetric) IsKnown() bool {
 	switch r {
 	case QualityIQISummaryParamsMetricBandwidth, QualityIQISummaryParamsMetricDNS, QualityIQISummaryParamsMetricLatency:
-		return true
-	}
-	return false
-}
-
-type QualityIQISummaryParamsDateRange string
-
-const (
-	QualityIQISummaryParamsDateRange1d         QualityIQISummaryParamsDateRange = "1d"
-	QualityIQISummaryParamsDateRange2d         QualityIQISummaryParamsDateRange = "2d"
-	QualityIQISummaryParamsDateRange7d         QualityIQISummaryParamsDateRange = "7d"
-	QualityIQISummaryParamsDateRange14d        QualityIQISummaryParamsDateRange = "14d"
-	QualityIQISummaryParamsDateRange28d        QualityIQISummaryParamsDateRange = "28d"
-	QualityIQISummaryParamsDateRange12w        QualityIQISummaryParamsDateRange = "12w"
-	QualityIQISummaryParamsDateRange24w        QualityIQISummaryParamsDateRange = "24w"
-	QualityIQISummaryParamsDateRange52w        QualityIQISummaryParamsDateRange = "52w"
-	QualityIQISummaryParamsDateRange1dControl  QualityIQISummaryParamsDateRange = "1dControl"
-	QualityIQISummaryParamsDateRange2dControl  QualityIQISummaryParamsDateRange = "2dControl"
-	QualityIQISummaryParamsDateRange7dControl  QualityIQISummaryParamsDateRange = "7dControl"
-	QualityIQISummaryParamsDateRange14dControl QualityIQISummaryParamsDateRange = "14dControl"
-	QualityIQISummaryParamsDateRange28dControl QualityIQISummaryParamsDateRange = "28dControl"
-	QualityIQISummaryParamsDateRange12wControl QualityIQISummaryParamsDateRange = "12wControl"
-	QualityIQISummaryParamsDateRange24wControl QualityIQISummaryParamsDateRange = "24wControl"
-)
-
-func (r QualityIQISummaryParamsDateRange) IsKnown() bool {
-	switch r {
-	case QualityIQISummaryParamsDateRange1d, QualityIQISummaryParamsDateRange2d, QualityIQISummaryParamsDateRange7d, QualityIQISummaryParamsDateRange14d, QualityIQISummaryParamsDateRange28d, QualityIQISummaryParamsDateRange12w, QualityIQISummaryParamsDateRange24w, QualityIQISummaryParamsDateRange52w, QualityIQISummaryParamsDateRange1dControl, QualityIQISummaryParamsDateRange2dControl, QualityIQISummaryParamsDateRange7dControl, QualityIQISummaryParamsDateRange14dControl, QualityIQISummaryParamsDateRange28dControl, QualityIQISummaryParamsDateRange12wControl, QualityIQISummaryParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -410,7 +382,7 @@ type QualityIQITimeseriesGroupsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]QualityIQITimeseriesGroupsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -430,7 +402,7 @@ type QualityIQITimeseriesGroupsParams struct {
 func (r QualityIQITimeseriesGroupsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -466,34 +438,6 @@ const (
 func (r QualityIQITimeseriesGroupsParamsAggInterval) IsKnown() bool {
 	switch r {
 	case QualityIQITimeseriesGroupsParamsAggInterval15m, QualityIQITimeseriesGroupsParamsAggInterval1h, QualityIQITimeseriesGroupsParamsAggInterval1d, QualityIQITimeseriesGroupsParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type QualityIQITimeseriesGroupsParamsDateRange string
-
-const (
-	QualityIQITimeseriesGroupsParamsDateRange1d         QualityIQITimeseriesGroupsParamsDateRange = "1d"
-	QualityIQITimeseriesGroupsParamsDateRange2d         QualityIQITimeseriesGroupsParamsDateRange = "2d"
-	QualityIQITimeseriesGroupsParamsDateRange7d         QualityIQITimeseriesGroupsParamsDateRange = "7d"
-	QualityIQITimeseriesGroupsParamsDateRange14d        QualityIQITimeseriesGroupsParamsDateRange = "14d"
-	QualityIQITimeseriesGroupsParamsDateRange28d        QualityIQITimeseriesGroupsParamsDateRange = "28d"
-	QualityIQITimeseriesGroupsParamsDateRange12w        QualityIQITimeseriesGroupsParamsDateRange = "12w"
-	QualityIQITimeseriesGroupsParamsDateRange24w        QualityIQITimeseriesGroupsParamsDateRange = "24w"
-	QualityIQITimeseriesGroupsParamsDateRange52w        QualityIQITimeseriesGroupsParamsDateRange = "52w"
-	QualityIQITimeseriesGroupsParamsDateRange1dControl  QualityIQITimeseriesGroupsParamsDateRange = "1dControl"
-	QualityIQITimeseriesGroupsParamsDateRange2dControl  QualityIQITimeseriesGroupsParamsDateRange = "2dControl"
-	QualityIQITimeseriesGroupsParamsDateRange7dControl  QualityIQITimeseriesGroupsParamsDateRange = "7dControl"
-	QualityIQITimeseriesGroupsParamsDateRange14dControl QualityIQITimeseriesGroupsParamsDateRange = "14dControl"
-	QualityIQITimeseriesGroupsParamsDateRange28dControl QualityIQITimeseriesGroupsParamsDateRange = "28dControl"
-	QualityIQITimeseriesGroupsParamsDateRange12wControl QualityIQITimeseriesGroupsParamsDateRange = "12wControl"
-	QualityIQITimeseriesGroupsParamsDateRange24wControl QualityIQITimeseriesGroupsParamsDateRange = "24wControl"
-)
-
-func (r QualityIQITimeseriesGroupsParamsDateRange) IsKnown() bool {
-	switch r {
-	case QualityIQITimeseriesGroupsParamsDateRange1d, QualityIQITimeseriesGroupsParamsDateRange2d, QualityIQITimeseriesGroupsParamsDateRange7d, QualityIQITimeseriesGroupsParamsDateRange14d, QualityIQITimeseriesGroupsParamsDateRange28d, QualityIQITimeseriesGroupsParamsDateRange12w, QualityIQITimeseriesGroupsParamsDateRange24w, QualityIQITimeseriesGroupsParamsDateRange52w, QualityIQITimeseriesGroupsParamsDateRange1dControl, QualityIQITimeseriesGroupsParamsDateRange2dControl, QualityIQITimeseriesGroupsParamsDateRange7dControl, QualityIQITimeseriesGroupsParamsDateRange14dControl, QualityIQITimeseriesGroupsParamsDateRange28dControl, QualityIQITimeseriesGroupsParamsDateRange12wControl, QualityIQITimeseriesGroupsParamsDateRange24wControl:
 		return true
 	}
 	return false

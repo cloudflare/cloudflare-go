@@ -39,8 +39,8 @@ func NewDiscoveryService(opts ...option.RequestOption) (r *DiscoveryService) {
 // Retrieve the most up to date view of discovered operations, rendered as OpenAPI
 // schemas
 func (r *DiscoveryService) Get(ctx context.Context, query DiscoveryGetParams, opts ...option.RequestOption) (res *DiscoveryGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DiscoveryGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -55,8 +55,8 @@ func (r *DiscoveryService) Get(ctx context.Context, query DiscoveryGetParams, op
 }
 
 type DiscoveryOperation struct {
-	// UUID identifier
-	ID string `json:"id,required" format:"uuid"`
+	// UUID
+	ID string `json:"id,required"`
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
@@ -213,8 +213,8 @@ func (r discoveryOperationFeaturesTrafficStatsJSON) RawJSON() string {
 }
 
 type DiscoveryGetResponse struct {
-	Schemas   []interface{}            `json:"schemas"`
-	Timestamp time.Time                `json:"timestamp" format:"date-time"`
+	Schemas   []interface{}            `json:"schemas,required"`
+	Timestamp time.Time                `json:"timestamp,required" format:"date-time"`
 	JSON      discoveryGetResponseJSON `json:"-"`
 }
 
@@ -245,8 +245,8 @@ type DiscoveryGetResponseEnvelope struct {
 	Messages Message              `json:"messages,required"`
 	Result   DiscoveryGetResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                             `json:"success,required"`
-	JSON    discoveryGetResponseEnvelopeJSON `json:"-"`
+	Success DiscoveryGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    discoveryGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // discoveryGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -266,4 +266,19 @@ func (r *DiscoveryGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r discoveryGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type DiscoveryGetResponseEnvelopeSuccess bool
+
+const (
+	DiscoveryGetResponseEnvelopeSuccessTrue DiscoveryGetResponseEnvelopeSuccess = true
+)
+
+func (r DiscoveryGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DiscoveryGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

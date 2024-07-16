@@ -47,8 +47,8 @@ func NewRateLimitService(opts ...option.RequestOption) (r *RateLimitService) {
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 // for full details.
 func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body RateLimitNewParams, opts ...option.RequestOption) (res *RateLimitNewResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RateLimitNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -70,8 +70,12 @@ func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body 
 // for full details.
 func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RateLimit], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
@@ -102,8 +106,8 @@ func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier st
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 // for full details.
 func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RateLimitDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -128,8 +132,8 @@ func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 // for full details.
 func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id string, body RateLimitEditParams, opts ...option.RequestOption) (res *RateLimitEditResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RateLimitEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -154,8 +158,8 @@ func (r *RateLimitService) Edit(ctx context.Context, zoneIdentifier string, id s
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#rate-limiting-api-previous-version
 // for full details.
 func (r *RateLimitService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RateLimitGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -656,7 +660,7 @@ type RateLimitListParams struct {
 func (r RateLimitListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

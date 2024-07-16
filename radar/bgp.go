@@ -48,8 +48,8 @@ func NewBGPService(opts ...option.RequestOption) (r *BGPService) {
 // updates of an autonomous system (AS), only BGP updates of type announcement are
 // returned.
 func (r *BGPService) Timeseries(ctx context.Context, query BGPTimeseriesParams, opts ...option.RequestOption) (res *BGPTimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPTimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -161,7 +161,7 @@ type BGPTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                `json:"dataSource,required"`
 	Description     string                                                `json:"description,required"`
 	EventType       string                                                `json:"eventType,required"`
-	IsInstantaneous interface{}                                           `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                  `json:"isInstantaneous,required"`
 	EndTime         time.Time                                             `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                `json:"linkedUrl"`
 	StartTime       time.Time                                             `json:"startTime" format:"date-time"`
@@ -227,7 +227,7 @@ type BGPTimeseriesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]BGPTimeseriesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -244,7 +244,7 @@ type BGPTimeseriesParams struct {
 func (r BGPTimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -268,34 +268,6 @@ func (r BGPTimeseriesParamsAggInterval) IsKnown() bool {
 	return false
 }
 
-type BGPTimeseriesParamsDateRange string
-
-const (
-	BGPTimeseriesParamsDateRange1d         BGPTimeseriesParamsDateRange = "1d"
-	BGPTimeseriesParamsDateRange2d         BGPTimeseriesParamsDateRange = "2d"
-	BGPTimeseriesParamsDateRange7d         BGPTimeseriesParamsDateRange = "7d"
-	BGPTimeseriesParamsDateRange14d        BGPTimeseriesParamsDateRange = "14d"
-	BGPTimeseriesParamsDateRange28d        BGPTimeseriesParamsDateRange = "28d"
-	BGPTimeseriesParamsDateRange12w        BGPTimeseriesParamsDateRange = "12w"
-	BGPTimeseriesParamsDateRange24w        BGPTimeseriesParamsDateRange = "24w"
-	BGPTimeseriesParamsDateRange52w        BGPTimeseriesParamsDateRange = "52w"
-	BGPTimeseriesParamsDateRange1dControl  BGPTimeseriesParamsDateRange = "1dControl"
-	BGPTimeseriesParamsDateRange2dControl  BGPTimeseriesParamsDateRange = "2dControl"
-	BGPTimeseriesParamsDateRange7dControl  BGPTimeseriesParamsDateRange = "7dControl"
-	BGPTimeseriesParamsDateRange14dControl BGPTimeseriesParamsDateRange = "14dControl"
-	BGPTimeseriesParamsDateRange28dControl BGPTimeseriesParamsDateRange = "28dControl"
-	BGPTimeseriesParamsDateRange12wControl BGPTimeseriesParamsDateRange = "12wControl"
-	BGPTimeseriesParamsDateRange24wControl BGPTimeseriesParamsDateRange = "24wControl"
-)
-
-func (r BGPTimeseriesParamsDateRange) IsKnown() bool {
-	switch r {
-	case BGPTimeseriesParamsDateRange1d, BGPTimeseriesParamsDateRange2d, BGPTimeseriesParamsDateRange7d, BGPTimeseriesParamsDateRange14d, BGPTimeseriesParamsDateRange28d, BGPTimeseriesParamsDateRange12w, BGPTimeseriesParamsDateRange24w, BGPTimeseriesParamsDateRange52w, BGPTimeseriesParamsDateRange1dControl, BGPTimeseriesParamsDateRange2dControl, BGPTimeseriesParamsDateRange7dControl, BGPTimeseriesParamsDateRange14dControl, BGPTimeseriesParamsDateRange28dControl, BGPTimeseriesParamsDateRange12wControl, BGPTimeseriesParamsDateRange24wControl:
-		return true
-	}
-	return false
-}
-
 // Format results are returned in.
 type BGPTimeseriesParamsFormat string
 
@@ -313,8 +285,9 @@ func (r BGPTimeseriesParamsFormat) IsKnown() bool {
 }
 
 type BGPTimeseriesParamsPrefix struct {
-	Location param.Field[string] `query:"location,required"`
-	Name     param.Field[string] `query:"name,required"`
+	In   param.Field[string]  `query:"in,required"`
+	Name param.Field[string]  `query:"name,required"`
+	Test param.Field[float64] `query:"test,required"`
 	// Network prefix, IPv4 or IPv6.
 	Type param.Field[string] `query:"type"`
 }
@@ -324,7 +297,7 @@ type BGPTimeseriesParamsPrefix struct {
 func (r BGPTimeseriesParamsPrefix) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

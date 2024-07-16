@@ -45,8 +45,8 @@ func NewListItemService(opts ...option.RequestOption) (r *ListItemService) {
 // [Get bulk operation status](/operations/lists-get-bulk-operation-status)
 // endpoint with the returned `operation_id`.
 func (r *ListItemService) New(ctx context.Context, listID string, params ListItemNewParams, opts ...option.RequestOption) (res *ListItemNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ListItemNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -71,8 +71,8 @@ func (r *ListItemService) New(ctx context.Context, listID string, params ListIte
 // [Get bulk operation status](/operations/lists-get-bulk-operation-status)
 // endpoint with the returned `operation_id`.
 func (r *ListItemService) Update(ctx context.Context, listID string, params ListItemUpdateParams, opts ...option.RequestOption) (res *ListItemUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ListItemUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -93,8 +93,16 @@ func (r *ListItemService) Update(ctx context.Context, listID string, params List
 // Fetches all the items in the list.
 func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[ListItemListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if listID == "" {
+		err = errors.New("missing required list_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -119,8 +127,8 @@ func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, par
 // [Get bulk operation status](/operations/lists-get-bulk-operation-status)
 // endpoint with the returned `operation_id`.
 func (r *ListItemService) Delete(ctx context.Context, listID string, body ListItemDeleteParams, opts ...option.RequestOption) (res *ListItemDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ListItemDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -140,8 +148,8 @@ func (r *ListItemService) Delete(ctx context.Context, listID string, body ListIt
 
 // Fetches a list item in the list.
 func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, listID string, itemID string, opts ...option.RequestOption) (res *ListItemGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ListItemGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -450,7 +458,7 @@ type ListItemListParams struct {
 func (r ListItemListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

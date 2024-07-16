@@ -41,8 +41,8 @@ func NewAnalyticsEventSummaryService(opts ...option.RequestOption) (r *Analytics
 
 // Retrieves a list of summarised aggregate metrics over a given time period.
 func (r *AnalyticsEventSummaryService) Get(ctx context.Context, zone string, query AnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *AnalyticsEventSummaryGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AnalyticsEventSummaryGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zone == "" {
 		err = errors.New("missing required zone parameter")
 		return
@@ -127,7 +127,7 @@ type AnalyticsEventSummaryGetParams struct {
 func (r AnalyticsEventSummaryGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

@@ -39,8 +39,8 @@ func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 
 // Creates a new R2 bucket.
 func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ...option.RequestOption) (res *Bucket, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BucketNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,12 @@ func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ..
 // Lists all R2 buckets on your account
 func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[Bucket], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/r2/buckets", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -79,8 +83,8 @@ func (r *BucketService) ListAutoPaging(ctx context.Context, params BucketListPar
 
 // Deletes an existing R2 bucket.
 func (r *BucketService) Delete(ctx context.Context, bucketName string, body BucketDeleteParams, opts ...option.RequestOption) (res *BucketDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BucketDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -100,8 +104,8 @@ func (r *BucketService) Delete(ctx context.Context, bucketName string, body Buck
 
 // Gets metadata for an existing R2 bucket.
 func (r *BucketService) Get(ctx context.Context, bucketName string, query BucketGetParams, opts ...option.RequestOption) (res *Bucket, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BucketGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -304,7 +308,7 @@ type BucketListParams struct {
 func (r BucketListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

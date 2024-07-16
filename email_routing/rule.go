@@ -43,8 +43,8 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // sent to a specific custom email address) plus a set of actions to take on the
 // email (like forwarding it to a specific destination address).
 func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -60,8 +60,8 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleN
 
 // Update actions and matches, or enable/disable specific routing rules.
 func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, ruleIdentifier string, body RuleUpdateParams, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -82,8 +82,12 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, ruleIde
 // Lists existing routing rules.
 func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[EmailRoutingRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/email/routing/rules", zoneIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
@@ -104,8 +108,8 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string,
 
 // Delete a specific routing rule.
 func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -125,8 +129,8 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, ruleIde
 
 // Get information for a specific routing rule already created.
 func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *EmailRoutingRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -489,7 +493,7 @@ type RuleListParams struct {
 func (r RuleListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

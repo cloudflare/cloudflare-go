@@ -30,12 +30,12 @@ func TestBGPLeakEventListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.BGP.Leaks.Events.List(context.TODO(), radar.BGPLeakEventListParams{
 		DateEnd:         cloudflare.F(time.Now()),
-		DateRange:       cloudflare.F(radar.BGPLeakEventListParamsDateRange7d),
+		DateRange:       cloudflare.F("7d"),
 		DateStart:       cloudflare.F(time.Now()),
 		EventID:         cloudflare.F(int64(0)),
 		Format:          cloudflare.F(radar.BGPLeakEventListParamsFormatJson),
 		InvolvedASN:     cloudflare.F(int64(0)),
-		InvolvedCountry: cloudflare.F("string"),
+		InvolvedCountry: cloudflare.F("involvedCountry"),
 		LeakASN:         cloudflare.F(int64(0)),
 		Page:            cloudflare.F(int64(0)),
 		PerPage:         cloudflare.F(int64(0)),

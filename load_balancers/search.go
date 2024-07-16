@@ -38,8 +38,8 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 
 // Search for Load Balancing resources.
 func (r *SearchService) Get(ctx context.Context, params SearchGetParams, opts ...option.RequestOption) (res *[]SearchGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SearchGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -67,7 +67,7 @@ type SearchGetParams struct {
 func (r SearchGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -83,7 +83,7 @@ type SearchGetParamsSearchParams struct {
 func (r SearchGetParamsSearchParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

@@ -56,8 +56,8 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 // example of the metadata on our docs:
 // https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/reference/metadata/
 func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *workers.Script, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -103,8 +103,8 @@ func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNam
 
 // Fetch information about a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptGetParams, opts ...option.RequestOption) (res *Script, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -360,7 +360,7 @@ type DispatchNamespaceScriptDeleteParams struct {
 func (r DispatchNamespaceScriptDeleteParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

@@ -30,7 +30,7 @@ func TestTrafficAnomalyLocationGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.TrafficAnomalies.Locations.Get(context.TODO(), radar.TrafficAnomalyLocationGetParams{
 		DateEnd:   cloudflare.F(time.Now()),
-		DateRange: cloudflare.F(radar.TrafficAnomalyLocationGetParamsDateRange7d),
+		DateRange: cloudflare.F("7d"),
 		DateStart: cloudflare.F(time.Now()),
 		Format:    cloudflare.F(radar.TrafficAnomalyLocationGetParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),

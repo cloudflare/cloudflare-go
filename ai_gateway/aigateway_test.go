@@ -28,7 +28,7 @@ func TestAIGatewayNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.AIGateway.New(context.TODO(), ai_gateway.AIGatewayNewParams{
-		AccountID:               cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
+		AccountID:               cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
 		ID:                      cloudflare.F("my-gateway"),
 		CacheInvalidateOnUpdate: cloudflare.F(true),
 		CacheTTL:                cloudflare.F(int64(0)),
@@ -63,7 +63,7 @@ func TestAIGatewayUpdate(t *testing.T) {
 		context.TODO(),
 		"my-gateway",
 		ai_gateway.AIGatewayUpdateParams{
-			AccountID:               cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
+			AccountID:               cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
 			CacheInvalidateOnUpdate: cloudflare.F(true),
 			CacheTTL:                cloudflare.F(int64(0)),
 			CollectLogs:             cloudflare.F(true),
@@ -95,9 +95,9 @@ func TestAIGatewayListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.AIGateway.List(context.TODO(), ai_gateway.AIGatewayListParams{
-		AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
+		AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
 		ID:        cloudflare.F("my-gateway"),
-		OrderBy:   cloudflare.F("string"),
+		OrderBy:   cloudflare.F("order_by"),
 		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(5)),
 	})
@@ -125,9 +125,9 @@ func TestAIGatewayDelete(t *testing.T) {
 	)
 	_, err := client.AIGateway.Delete(
 		context.TODO(),
-		"string",
+		"id",
 		ai_gateway.AIGatewayDeleteParams{
-			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
+			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
 		},
 	)
 	if err != nil {
@@ -156,7 +156,7 @@ func TestAIGatewayGet(t *testing.T) {
 		context.TODO(),
 		"my-gateway",
 		ai_gateway.AIGatewayGetParams{
-			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
+			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
 		},
 	)
 	if err != nil {

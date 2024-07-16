@@ -36,8 +36,8 @@ func NewEmailRoutingSummaryService(opts ...option.RequestOption) (r *EmailRoutin
 
 // Percentage distribution of emails classified per ARC validation.
 func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRoutingSummaryARCParams, opts ...option.RequestOption) (res *EmailRoutingSummaryARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummaryARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/arc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRouting
 
 // Percentage distribution of emails classified per DKIM validation.
 func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutingSummaryDKIMParams, opts ...option.RequestOption) (res *EmailRoutingSummaryDKIMResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummaryDKIMResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/dkim"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutin
 
 // Percentage distribution of emails classified per DMARC validation.
 func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRoutingSummaryDMARCParams, opts ...option.RequestOption) (res *EmailRoutingSummaryDMARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummaryDMARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/dmarc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRouti
 
 // Percentage distribution of emails by Encrypted
 func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailRoutingSummaryEncryptedParams, opts ...option.RequestOption) (res *EmailRoutingSummaryEncryptedResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummaryEncryptedResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/encrypted"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailR
 
 // Percentage distribution of emails by Ip Version.
 func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailRoutingSummaryIPVersionParams, opts ...option.RequestOption) (res *EmailRoutingSummaryIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummaryIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailR
 
 // Percentage distribution of emails classified per SPF validation.
 func (r *EmailRoutingSummaryService) SPF(ctx context.Context, query EmailRoutingSummarySPFParams, opts ...option.RequestOption) (res *EmailRoutingSummarySPFResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingSummarySPFResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/summary/spf"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -214,7 +214,7 @@ type EmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -346,7 +346,7 @@ type EmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -478,7 +478,7 @@ type EmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                           `json:"dataSource,required"`
 	Description     string                                                           `json:"description,required"`
 	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                           `json:"linkedUrl"`
 	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
@@ -610,7 +610,7 @@ type EmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                               `json:"dataSource,required"`
 	Description     string                                                               `json:"description,required"`
 	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                               `json:"linkedUrl"`
 	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
@@ -765,7 +765,7 @@ type EmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                               `json:"dataSource,required"`
 	Description     string                                                               `json:"description,required"`
 	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                               `json:"linkedUrl"`
 	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
@@ -920,7 +920,7 @@ type EmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -956,7 +956,7 @@ type EmailRoutingSummaryARCParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingSummaryARCParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -980,36 +980,8 @@ type EmailRoutingSummaryARCParams struct {
 func (r EmailRoutingSummaryARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type EmailRoutingSummaryARCParamsDateRange string
-
-const (
-	EmailRoutingSummaryARCParamsDateRange1d         EmailRoutingSummaryARCParamsDateRange = "1d"
-	EmailRoutingSummaryARCParamsDateRange2d         EmailRoutingSummaryARCParamsDateRange = "2d"
-	EmailRoutingSummaryARCParamsDateRange7d         EmailRoutingSummaryARCParamsDateRange = "7d"
-	EmailRoutingSummaryARCParamsDateRange14d        EmailRoutingSummaryARCParamsDateRange = "14d"
-	EmailRoutingSummaryARCParamsDateRange28d        EmailRoutingSummaryARCParamsDateRange = "28d"
-	EmailRoutingSummaryARCParamsDateRange12w        EmailRoutingSummaryARCParamsDateRange = "12w"
-	EmailRoutingSummaryARCParamsDateRange24w        EmailRoutingSummaryARCParamsDateRange = "24w"
-	EmailRoutingSummaryARCParamsDateRange52w        EmailRoutingSummaryARCParamsDateRange = "52w"
-	EmailRoutingSummaryARCParamsDateRange1dControl  EmailRoutingSummaryARCParamsDateRange = "1dControl"
-	EmailRoutingSummaryARCParamsDateRange2dControl  EmailRoutingSummaryARCParamsDateRange = "2dControl"
-	EmailRoutingSummaryARCParamsDateRange7dControl  EmailRoutingSummaryARCParamsDateRange = "7dControl"
-	EmailRoutingSummaryARCParamsDateRange14dControl EmailRoutingSummaryARCParamsDateRange = "14dControl"
-	EmailRoutingSummaryARCParamsDateRange28dControl EmailRoutingSummaryARCParamsDateRange = "28dControl"
-	EmailRoutingSummaryARCParamsDateRange12wControl EmailRoutingSummaryARCParamsDateRange = "12wControl"
-	EmailRoutingSummaryARCParamsDateRange24wControl EmailRoutingSummaryARCParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingSummaryARCParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingSummaryARCParamsDateRange1d, EmailRoutingSummaryARCParamsDateRange2d, EmailRoutingSummaryARCParamsDateRange7d, EmailRoutingSummaryARCParamsDateRange14d, EmailRoutingSummaryARCParamsDateRange28d, EmailRoutingSummaryARCParamsDateRange12w, EmailRoutingSummaryARCParamsDateRange24w, EmailRoutingSummaryARCParamsDateRange52w, EmailRoutingSummaryARCParamsDateRange1dControl, EmailRoutingSummaryARCParamsDateRange2dControl, EmailRoutingSummaryARCParamsDateRange7dControl, EmailRoutingSummaryARCParamsDateRange14dControl, EmailRoutingSummaryARCParamsDateRange28dControl, EmailRoutingSummaryARCParamsDateRange12wControl, EmailRoutingSummaryARCParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 type EmailRoutingSummaryARCParamsDKIM string
@@ -1137,7 +1109,7 @@ type EmailRoutingSummaryDKIMParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingSummaryDKIMParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dmarc.
@@ -1159,7 +1131,7 @@ type EmailRoutingSummaryDKIMParams struct {
 func (r EmailRoutingSummaryDKIMParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1174,34 +1146,6 @@ const (
 func (r EmailRoutingSummaryDKIMParamsARC) IsKnown() bool {
 	switch r {
 	case EmailRoutingSummaryDKIMParamsARCPass, EmailRoutingSummaryDKIMParamsARCNone, EmailRoutingSummaryDKIMParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingSummaryDKIMParamsDateRange string
-
-const (
-	EmailRoutingSummaryDKIMParamsDateRange1d         EmailRoutingSummaryDKIMParamsDateRange = "1d"
-	EmailRoutingSummaryDKIMParamsDateRange2d         EmailRoutingSummaryDKIMParamsDateRange = "2d"
-	EmailRoutingSummaryDKIMParamsDateRange7d         EmailRoutingSummaryDKIMParamsDateRange = "7d"
-	EmailRoutingSummaryDKIMParamsDateRange14d        EmailRoutingSummaryDKIMParamsDateRange = "14d"
-	EmailRoutingSummaryDKIMParamsDateRange28d        EmailRoutingSummaryDKIMParamsDateRange = "28d"
-	EmailRoutingSummaryDKIMParamsDateRange12w        EmailRoutingSummaryDKIMParamsDateRange = "12w"
-	EmailRoutingSummaryDKIMParamsDateRange24w        EmailRoutingSummaryDKIMParamsDateRange = "24w"
-	EmailRoutingSummaryDKIMParamsDateRange52w        EmailRoutingSummaryDKIMParamsDateRange = "52w"
-	EmailRoutingSummaryDKIMParamsDateRange1dControl  EmailRoutingSummaryDKIMParamsDateRange = "1dControl"
-	EmailRoutingSummaryDKIMParamsDateRange2dControl  EmailRoutingSummaryDKIMParamsDateRange = "2dControl"
-	EmailRoutingSummaryDKIMParamsDateRange7dControl  EmailRoutingSummaryDKIMParamsDateRange = "7dControl"
-	EmailRoutingSummaryDKIMParamsDateRange14dControl EmailRoutingSummaryDKIMParamsDateRange = "14dControl"
-	EmailRoutingSummaryDKIMParamsDateRange28dControl EmailRoutingSummaryDKIMParamsDateRange = "28dControl"
-	EmailRoutingSummaryDKIMParamsDateRange12wControl EmailRoutingSummaryDKIMParamsDateRange = "12wControl"
-	EmailRoutingSummaryDKIMParamsDateRange24wControl EmailRoutingSummaryDKIMParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingSummaryDKIMParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingSummaryDKIMParamsDateRange1d, EmailRoutingSummaryDKIMParamsDateRange2d, EmailRoutingSummaryDKIMParamsDateRange7d, EmailRoutingSummaryDKIMParamsDateRange14d, EmailRoutingSummaryDKIMParamsDateRange28d, EmailRoutingSummaryDKIMParamsDateRange12w, EmailRoutingSummaryDKIMParamsDateRange24w, EmailRoutingSummaryDKIMParamsDateRange52w, EmailRoutingSummaryDKIMParamsDateRange1dControl, EmailRoutingSummaryDKIMParamsDateRange2dControl, EmailRoutingSummaryDKIMParamsDateRange7dControl, EmailRoutingSummaryDKIMParamsDateRange14dControl, EmailRoutingSummaryDKIMParamsDateRange28dControl, EmailRoutingSummaryDKIMParamsDateRange12wControl, EmailRoutingSummaryDKIMParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1316,7 +1260,7 @@ type EmailRoutingSummaryDMARCParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingSummaryDMARCParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1338,7 +1282,7 @@ type EmailRoutingSummaryDMARCParams struct {
 func (r EmailRoutingSummaryDMARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1353,34 +1297,6 @@ const (
 func (r EmailRoutingSummaryDMARCParamsARC) IsKnown() bool {
 	switch r {
 	case EmailRoutingSummaryDMARCParamsARCPass, EmailRoutingSummaryDMARCParamsARCNone, EmailRoutingSummaryDMARCParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingSummaryDMARCParamsDateRange string
-
-const (
-	EmailRoutingSummaryDMARCParamsDateRange1d         EmailRoutingSummaryDMARCParamsDateRange = "1d"
-	EmailRoutingSummaryDMARCParamsDateRange2d         EmailRoutingSummaryDMARCParamsDateRange = "2d"
-	EmailRoutingSummaryDMARCParamsDateRange7d         EmailRoutingSummaryDMARCParamsDateRange = "7d"
-	EmailRoutingSummaryDMARCParamsDateRange14d        EmailRoutingSummaryDMARCParamsDateRange = "14d"
-	EmailRoutingSummaryDMARCParamsDateRange28d        EmailRoutingSummaryDMARCParamsDateRange = "28d"
-	EmailRoutingSummaryDMARCParamsDateRange12w        EmailRoutingSummaryDMARCParamsDateRange = "12w"
-	EmailRoutingSummaryDMARCParamsDateRange24w        EmailRoutingSummaryDMARCParamsDateRange = "24w"
-	EmailRoutingSummaryDMARCParamsDateRange52w        EmailRoutingSummaryDMARCParamsDateRange = "52w"
-	EmailRoutingSummaryDMARCParamsDateRange1dControl  EmailRoutingSummaryDMARCParamsDateRange = "1dControl"
-	EmailRoutingSummaryDMARCParamsDateRange2dControl  EmailRoutingSummaryDMARCParamsDateRange = "2dControl"
-	EmailRoutingSummaryDMARCParamsDateRange7dControl  EmailRoutingSummaryDMARCParamsDateRange = "7dControl"
-	EmailRoutingSummaryDMARCParamsDateRange14dControl EmailRoutingSummaryDMARCParamsDateRange = "14dControl"
-	EmailRoutingSummaryDMARCParamsDateRange28dControl EmailRoutingSummaryDMARCParamsDateRange = "28dControl"
-	EmailRoutingSummaryDMARCParamsDateRange12wControl EmailRoutingSummaryDMARCParamsDateRange = "12wControl"
-	EmailRoutingSummaryDMARCParamsDateRange24wControl EmailRoutingSummaryDMARCParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingSummaryDMARCParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingSummaryDMARCParamsDateRange1d, EmailRoutingSummaryDMARCParamsDateRange2d, EmailRoutingSummaryDMARCParamsDateRange7d, EmailRoutingSummaryDMARCParamsDateRange14d, EmailRoutingSummaryDMARCParamsDateRange28d, EmailRoutingSummaryDMARCParamsDateRange12w, EmailRoutingSummaryDMARCParamsDateRange24w, EmailRoutingSummaryDMARCParamsDateRange52w, EmailRoutingSummaryDMARCParamsDateRange1dControl, EmailRoutingSummaryDMARCParamsDateRange2dControl, EmailRoutingSummaryDMARCParamsDateRange7dControl, EmailRoutingSummaryDMARCParamsDateRange14dControl, EmailRoutingSummaryDMARCParamsDateRange28dControl, EmailRoutingSummaryDMARCParamsDateRange12wControl, EmailRoutingSummaryDMARCParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1495,7 +1411,7 @@ type EmailRoutingSummaryEncryptedParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingSummaryEncryptedParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1517,7 +1433,7 @@ type EmailRoutingSummaryEncryptedParams struct {
 func (r EmailRoutingSummaryEncryptedParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1532,34 +1448,6 @@ const (
 func (r EmailRoutingSummaryEncryptedParamsARC) IsKnown() bool {
 	switch r {
 	case EmailRoutingSummaryEncryptedParamsARCPass, EmailRoutingSummaryEncryptedParamsARCNone, EmailRoutingSummaryEncryptedParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingSummaryEncryptedParamsDateRange string
-
-const (
-	EmailRoutingSummaryEncryptedParamsDateRange1d         EmailRoutingSummaryEncryptedParamsDateRange = "1d"
-	EmailRoutingSummaryEncryptedParamsDateRange2d         EmailRoutingSummaryEncryptedParamsDateRange = "2d"
-	EmailRoutingSummaryEncryptedParamsDateRange7d         EmailRoutingSummaryEncryptedParamsDateRange = "7d"
-	EmailRoutingSummaryEncryptedParamsDateRange14d        EmailRoutingSummaryEncryptedParamsDateRange = "14d"
-	EmailRoutingSummaryEncryptedParamsDateRange28d        EmailRoutingSummaryEncryptedParamsDateRange = "28d"
-	EmailRoutingSummaryEncryptedParamsDateRange12w        EmailRoutingSummaryEncryptedParamsDateRange = "12w"
-	EmailRoutingSummaryEncryptedParamsDateRange24w        EmailRoutingSummaryEncryptedParamsDateRange = "24w"
-	EmailRoutingSummaryEncryptedParamsDateRange52w        EmailRoutingSummaryEncryptedParamsDateRange = "52w"
-	EmailRoutingSummaryEncryptedParamsDateRange1dControl  EmailRoutingSummaryEncryptedParamsDateRange = "1dControl"
-	EmailRoutingSummaryEncryptedParamsDateRange2dControl  EmailRoutingSummaryEncryptedParamsDateRange = "2dControl"
-	EmailRoutingSummaryEncryptedParamsDateRange7dControl  EmailRoutingSummaryEncryptedParamsDateRange = "7dControl"
-	EmailRoutingSummaryEncryptedParamsDateRange14dControl EmailRoutingSummaryEncryptedParamsDateRange = "14dControl"
-	EmailRoutingSummaryEncryptedParamsDateRange28dControl EmailRoutingSummaryEncryptedParamsDateRange = "28dControl"
-	EmailRoutingSummaryEncryptedParamsDateRange12wControl EmailRoutingSummaryEncryptedParamsDateRange = "12wControl"
-	EmailRoutingSummaryEncryptedParamsDateRange24wControl EmailRoutingSummaryEncryptedParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingSummaryEncryptedParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingSummaryEncryptedParamsDateRange1d, EmailRoutingSummaryEncryptedParamsDateRange2d, EmailRoutingSummaryEncryptedParamsDateRange7d, EmailRoutingSummaryEncryptedParamsDateRange14d, EmailRoutingSummaryEncryptedParamsDateRange28d, EmailRoutingSummaryEncryptedParamsDateRange12w, EmailRoutingSummaryEncryptedParamsDateRange24w, EmailRoutingSummaryEncryptedParamsDateRange52w, EmailRoutingSummaryEncryptedParamsDateRange1dControl, EmailRoutingSummaryEncryptedParamsDateRange2dControl, EmailRoutingSummaryEncryptedParamsDateRange7dControl, EmailRoutingSummaryEncryptedParamsDateRange14dControl, EmailRoutingSummaryEncryptedParamsDateRange28dControl, EmailRoutingSummaryEncryptedParamsDateRange12wControl, EmailRoutingSummaryEncryptedParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1675,7 +1563,7 @@ type EmailRoutingSummaryIPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingSummaryIPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1697,7 +1585,7 @@ type EmailRoutingSummaryIPVersionParams struct {
 func (r EmailRoutingSummaryIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1712,34 +1600,6 @@ const (
 func (r EmailRoutingSummaryIPVersionParamsARC) IsKnown() bool {
 	switch r {
 	case EmailRoutingSummaryIPVersionParamsARCPass, EmailRoutingSummaryIPVersionParamsARCNone, EmailRoutingSummaryIPVersionParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingSummaryIPVersionParamsDateRange string
-
-const (
-	EmailRoutingSummaryIPVersionParamsDateRange1d         EmailRoutingSummaryIPVersionParamsDateRange = "1d"
-	EmailRoutingSummaryIPVersionParamsDateRange2d         EmailRoutingSummaryIPVersionParamsDateRange = "2d"
-	EmailRoutingSummaryIPVersionParamsDateRange7d         EmailRoutingSummaryIPVersionParamsDateRange = "7d"
-	EmailRoutingSummaryIPVersionParamsDateRange14d        EmailRoutingSummaryIPVersionParamsDateRange = "14d"
-	EmailRoutingSummaryIPVersionParamsDateRange28d        EmailRoutingSummaryIPVersionParamsDateRange = "28d"
-	EmailRoutingSummaryIPVersionParamsDateRange12w        EmailRoutingSummaryIPVersionParamsDateRange = "12w"
-	EmailRoutingSummaryIPVersionParamsDateRange24w        EmailRoutingSummaryIPVersionParamsDateRange = "24w"
-	EmailRoutingSummaryIPVersionParamsDateRange52w        EmailRoutingSummaryIPVersionParamsDateRange = "52w"
-	EmailRoutingSummaryIPVersionParamsDateRange1dControl  EmailRoutingSummaryIPVersionParamsDateRange = "1dControl"
-	EmailRoutingSummaryIPVersionParamsDateRange2dControl  EmailRoutingSummaryIPVersionParamsDateRange = "2dControl"
-	EmailRoutingSummaryIPVersionParamsDateRange7dControl  EmailRoutingSummaryIPVersionParamsDateRange = "7dControl"
-	EmailRoutingSummaryIPVersionParamsDateRange14dControl EmailRoutingSummaryIPVersionParamsDateRange = "14dControl"
-	EmailRoutingSummaryIPVersionParamsDateRange28dControl EmailRoutingSummaryIPVersionParamsDateRange = "28dControl"
-	EmailRoutingSummaryIPVersionParamsDateRange12wControl EmailRoutingSummaryIPVersionParamsDateRange = "12wControl"
-	EmailRoutingSummaryIPVersionParamsDateRange24wControl EmailRoutingSummaryIPVersionParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingSummaryIPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingSummaryIPVersionParamsDateRange1d, EmailRoutingSummaryIPVersionParamsDateRange2d, EmailRoutingSummaryIPVersionParamsDateRange7d, EmailRoutingSummaryIPVersionParamsDateRange14d, EmailRoutingSummaryIPVersionParamsDateRange28d, EmailRoutingSummaryIPVersionParamsDateRange12w, EmailRoutingSummaryIPVersionParamsDateRange24w, EmailRoutingSummaryIPVersionParamsDateRange52w, EmailRoutingSummaryIPVersionParamsDateRange1dControl, EmailRoutingSummaryIPVersionParamsDateRange2dControl, EmailRoutingSummaryIPVersionParamsDateRange7dControl, EmailRoutingSummaryIPVersionParamsDateRange14dControl, EmailRoutingSummaryIPVersionParamsDateRange28dControl, EmailRoutingSummaryIPVersionParamsDateRange12wControl, EmailRoutingSummaryIPVersionParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1855,7 +1715,7 @@ type EmailRoutingSummarySPFParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingSummarySPFParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1877,7 +1737,7 @@ type EmailRoutingSummarySPFParams struct {
 func (r EmailRoutingSummarySPFParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1892,34 +1752,6 @@ const (
 func (r EmailRoutingSummarySPFParamsARC) IsKnown() bool {
 	switch r {
 	case EmailRoutingSummarySPFParamsARCPass, EmailRoutingSummarySPFParamsARCNone, EmailRoutingSummarySPFParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingSummarySPFParamsDateRange string
-
-const (
-	EmailRoutingSummarySPFParamsDateRange1d         EmailRoutingSummarySPFParamsDateRange = "1d"
-	EmailRoutingSummarySPFParamsDateRange2d         EmailRoutingSummarySPFParamsDateRange = "2d"
-	EmailRoutingSummarySPFParamsDateRange7d         EmailRoutingSummarySPFParamsDateRange = "7d"
-	EmailRoutingSummarySPFParamsDateRange14d        EmailRoutingSummarySPFParamsDateRange = "14d"
-	EmailRoutingSummarySPFParamsDateRange28d        EmailRoutingSummarySPFParamsDateRange = "28d"
-	EmailRoutingSummarySPFParamsDateRange12w        EmailRoutingSummarySPFParamsDateRange = "12w"
-	EmailRoutingSummarySPFParamsDateRange24w        EmailRoutingSummarySPFParamsDateRange = "24w"
-	EmailRoutingSummarySPFParamsDateRange52w        EmailRoutingSummarySPFParamsDateRange = "52w"
-	EmailRoutingSummarySPFParamsDateRange1dControl  EmailRoutingSummarySPFParamsDateRange = "1dControl"
-	EmailRoutingSummarySPFParamsDateRange2dControl  EmailRoutingSummarySPFParamsDateRange = "2dControl"
-	EmailRoutingSummarySPFParamsDateRange7dControl  EmailRoutingSummarySPFParamsDateRange = "7dControl"
-	EmailRoutingSummarySPFParamsDateRange14dControl EmailRoutingSummarySPFParamsDateRange = "14dControl"
-	EmailRoutingSummarySPFParamsDateRange28dControl EmailRoutingSummarySPFParamsDateRange = "28dControl"
-	EmailRoutingSummarySPFParamsDateRange12wControl EmailRoutingSummarySPFParamsDateRange = "12wControl"
-	EmailRoutingSummarySPFParamsDateRange24wControl EmailRoutingSummarySPFParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingSummarySPFParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingSummarySPFParamsDateRange1d, EmailRoutingSummarySPFParamsDateRange2d, EmailRoutingSummarySPFParamsDateRange7d, EmailRoutingSummarySPFParamsDateRange14d, EmailRoutingSummarySPFParamsDateRange28d, EmailRoutingSummarySPFParamsDateRange12w, EmailRoutingSummarySPFParamsDateRange24w, EmailRoutingSummarySPFParamsDateRange52w, EmailRoutingSummarySPFParamsDateRange1dControl, EmailRoutingSummarySPFParamsDateRange2dControl, EmailRoutingSummarySPFParamsDateRange7dControl, EmailRoutingSummarySPFParamsDateRange14dControl, EmailRoutingSummarySPFParamsDateRange28dControl, EmailRoutingSummarySPFParamsDateRange12wControl, EmailRoutingSummarySPFParamsDateRange24wControl:
 		return true
 	}
 	return false

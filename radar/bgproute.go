@@ -35,8 +35,8 @@ func NewBGPRouteService(opts ...option.RequestOption) (r *BGPRouteService) {
 
 // List all ASes on current global routing tables with routing statistics
 func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, opts ...option.RequestOption) (res *BGPRouteAsesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPRouteAsesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/routes/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -48,8 +48,8 @@ func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, op
 
 // List all Multi-origin AS (MOAS) prefixes on the global routing tables.
 func (r *BGPRouteService) Moas(ctx context.Context, query BGPRouteMoasParams, opts ...option.RequestOption) (res *BGPRouteMoasResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPRouteMoasResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/routes/moas"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -61,8 +61,8 @@ func (r *BGPRouteService) Moas(ctx context.Context, query BGPRouteMoasParams, op
 
 // Lookup prefix-to-ASN mapping on global routing tables.
 func (r *BGPRouteService) Pfx2as(ctx context.Context, query BGPRoutePfx2asParams, opts ...option.RequestOption) (res *BGPRoutePfx2asResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPRoutePfx2asResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/routes/pfx2as"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -74,8 +74,8 @@ func (r *BGPRouteService) Pfx2as(ctx context.Context, query BGPRoutePfx2asParams
 
 // Get the BGP routing table stats (Beta).
 func (r *BGPRouteService) Stats(ctx context.Context, query BGPRouteStatsParams, opts ...option.RequestOption) (res *BGPRouteStatsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPRouteStatsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/routes/stats"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -475,7 +475,7 @@ type BGPRouteAsesParams struct {
 func (r BGPRouteAsesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -570,7 +570,7 @@ type BGPRouteMoasParams struct {
 func (r BGPRouteMoasParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -631,7 +631,7 @@ type BGPRoutePfx2asParams struct {
 func (r BGPRoutePfx2asParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -704,7 +704,7 @@ type BGPRouteStatsParams struct {
 func (r BGPRouteStatsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

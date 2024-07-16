@@ -38,8 +38,8 @@ func NewSmartRoutingService(opts ...option.RequestOption) (r *SmartRoutingServic
 
 // Updates enablement of Argo Smart Routing.
 func (r *SmartRoutingService) Edit(ctx context.Context, params SmartRoutingEditParams, opts ...option.RequestOption) (res *SmartRoutingEditResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SmartRoutingEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -55,8 +55,8 @@ func (r *SmartRoutingService) Edit(ctx context.Context, params SmartRoutingEditP
 
 // Get Argo Smart Routing setting
 func (r *SmartRoutingService) Get(ctx context.Context, query SmartRoutingGetParams, opts ...option.RequestOption) (res *SmartRoutingGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SmartRoutingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

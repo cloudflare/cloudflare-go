@@ -43,8 +43,8 @@ func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 
 // Creates a new queue.
 func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...option.RequestOption) (res *QueueCreated, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QueueNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,8 +60,8 @@ func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...o
 
 // Updates a queue.
 func (r *QueueService) Update(ctx context.Context, queueID string, params QueueUpdateParams, opts ...option.RequestOption) (res *QueueUpdated, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QueueUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -82,8 +82,12 @@ func (r *QueueService) Update(ctx context.Context, queueID string, params QueueU
 // Returns the queues owned by an account.
 func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Queue], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/queues", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -104,8 +108,8 @@ func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams
 
 // Deletes a queue.
 func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QueueDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -125,8 +129,8 @@ func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDel
 
 // Get information about a specific queue.
 func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetParams, opts ...option.RequestOption) (res *Queue, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QueueGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -181,7 +185,7 @@ func (r queueJSON) RawJSON() string {
 type QueueCreated struct {
 	CreatedOn  interface{}      `json:"created_on"`
 	ModifiedOn interface{}      `json:"modified_on"`
-	QueueID    interface{}      `json:"queue_id"`
+	QueueID    string           `json:"queue_id"`
 	QueueName  string           `json:"queue_name"`
 	JSON       queueCreatedJSON `json:"-"`
 }
@@ -207,7 +211,7 @@ func (r queueCreatedJSON) RawJSON() string {
 type QueueUpdated struct {
 	CreatedOn  interface{}      `json:"created_on"`
 	ModifiedOn interface{}      `json:"modified_on"`
-	QueueID    interface{}      `json:"queue_id"`
+	QueueID    string           `json:"queue_id"`
 	QueueName  string           `json:"queue_name"`
 	JSON       queueUpdatedJSON `json:"-"`
 }

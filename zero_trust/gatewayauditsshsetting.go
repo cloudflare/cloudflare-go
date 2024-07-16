@@ -37,8 +37,8 @@ func NewGatewayAuditSSHSettingService(opts ...option.RequestOption) (r *GatewayA
 
 // Updates Zero Trust Audit SSH settings.
 func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params GatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayAuditSSHSettingUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -54,8 +54,8 @@ func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params Gatew
 
 // Get all Zero Trust Audit SSH settings for an account.
 func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayAuditSSHSettingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

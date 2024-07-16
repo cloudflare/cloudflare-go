@@ -37,8 +37,8 @@ func NewBGPTopAseService(opts ...option.RequestOption) (r *BGPTopAseService) {
 // Get the top autonomous systems (AS) by BGP updates (announcements only). Values
 // are a percentage out of the total updates.
 func (r *BGPTopAseService) Get(ctx context.Context, query BGPTopAseGetParams, opts ...option.RequestOption) (res *BGPTopAseGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPTopAseGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,8 +52,8 @@ func (r *BGPTopAseService) Get(ctx context.Context, query BGPTopAseGetParams, op
 // announced prefixes count. The data comes from public BGP MRT data archives and
 // updates every 2 hours.
 func (r *BGPTopAseService) Prefixes(ctx context.Context, query BGPTopAsePrefixesParams, opts ...option.RequestOption) (res *BGPTopAsePrefixesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPTopAsePrefixesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/top/ases/prefixes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -244,7 +244,7 @@ type BGPTopAseGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]BGPTopAseGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -263,36 +263,8 @@ type BGPTopAseGetParams struct {
 func (r BGPTopAseGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type BGPTopAseGetParamsDateRange string
-
-const (
-	BGPTopAseGetParamsDateRange1d         BGPTopAseGetParamsDateRange = "1d"
-	BGPTopAseGetParamsDateRange2d         BGPTopAseGetParamsDateRange = "2d"
-	BGPTopAseGetParamsDateRange7d         BGPTopAseGetParamsDateRange = "7d"
-	BGPTopAseGetParamsDateRange14d        BGPTopAseGetParamsDateRange = "14d"
-	BGPTopAseGetParamsDateRange28d        BGPTopAseGetParamsDateRange = "28d"
-	BGPTopAseGetParamsDateRange12w        BGPTopAseGetParamsDateRange = "12w"
-	BGPTopAseGetParamsDateRange24w        BGPTopAseGetParamsDateRange = "24w"
-	BGPTopAseGetParamsDateRange52w        BGPTopAseGetParamsDateRange = "52w"
-	BGPTopAseGetParamsDateRange1dControl  BGPTopAseGetParamsDateRange = "1dControl"
-	BGPTopAseGetParamsDateRange2dControl  BGPTopAseGetParamsDateRange = "2dControl"
-	BGPTopAseGetParamsDateRange7dControl  BGPTopAseGetParamsDateRange = "7dControl"
-	BGPTopAseGetParamsDateRange14dControl BGPTopAseGetParamsDateRange = "14dControl"
-	BGPTopAseGetParamsDateRange28dControl BGPTopAseGetParamsDateRange = "28dControl"
-	BGPTopAseGetParamsDateRange12wControl BGPTopAseGetParamsDateRange = "12wControl"
-	BGPTopAseGetParamsDateRange24wControl BGPTopAseGetParamsDateRange = "24wControl"
-)
-
-func (r BGPTopAseGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case BGPTopAseGetParamsDateRange1d, BGPTopAseGetParamsDateRange2d, BGPTopAseGetParamsDateRange7d, BGPTopAseGetParamsDateRange14d, BGPTopAseGetParamsDateRange28d, BGPTopAseGetParamsDateRange12w, BGPTopAseGetParamsDateRange24w, BGPTopAseGetParamsDateRange52w, BGPTopAseGetParamsDateRange1dControl, BGPTopAseGetParamsDateRange2dControl, BGPTopAseGetParamsDateRange7dControl, BGPTopAseGetParamsDateRange14dControl, BGPTopAseGetParamsDateRange28dControl, BGPTopAseGetParamsDateRange12wControl, BGPTopAseGetParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -312,8 +284,9 @@ func (r BGPTopAseGetParamsFormat) IsKnown() bool {
 }
 
 type BGPTopAseGetParamsPrefix struct {
-	Location param.Field[string] `query:"location,required"`
-	Name     param.Field[string] `query:"name,required"`
+	In   param.Field[string]  `query:"in,required"`
+	Name param.Field[string]  `query:"name,required"`
+	Test param.Field[float64] `query:"test,required"`
 	// Network prefix, IPv4 or IPv6.
 	Type param.Field[string] `query:"type"`
 }
@@ -323,7 +296,7 @@ type BGPTopAseGetParamsPrefix struct {
 func (r BGPTopAseGetParamsPrefix) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -379,7 +352,7 @@ type BGPTopAsePrefixesParams struct {
 func (r BGPTopAsePrefixesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

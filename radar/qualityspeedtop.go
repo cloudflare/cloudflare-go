@@ -37,8 +37,8 @@ func NewQualitySpeedTopService(opts ...option.RequestOption) (r *QualitySpeedTop
 // Get the top autonomous systems by bandwidth, latency, jitter or packet loss,
 // from the previous 90 days of Cloudflare Speed Test data.
 func (r *QualitySpeedTopService) Ases(ctx context.Context, query QualitySpeedTopAsesParams, opts ...option.RequestOption) (res *QualitySpeedTopAsesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QualitySpeedTopAsesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/quality/speed/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -51,8 +51,8 @@ func (r *QualitySpeedTopService) Ases(ctx context.Context, query QualitySpeedTop
 // Get the top locations by bandwidth, latency, jitter or packet loss, from the
 // previous 90 days of Cloudflare Speed Test data.
 func (r *QualitySpeedTopService) Locations(ctx context.Context, query QualitySpeedTopLocationsParams, opts ...option.RequestOption) (res *QualitySpeedTopLocationsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QualitySpeedTopLocationsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/quality/speed/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -162,7 +162,7 @@ type QualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                      `json:"dataSource,required"`
 	Description     string                                                      `json:"description,required"`
 	EventType       string                                                      `json:"eventType,required"`
-	IsInstantaneous interface{}                                                 `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                      `json:"linkedUrl"`
 	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
@@ -331,7 +331,7 @@ type QualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                           `json:"dataSource,required"`
 	Description     string                                                           `json:"description,required"`
 	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                           `json:"linkedUrl"`
 	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
@@ -432,7 +432,7 @@ type QualitySpeedTopAsesParams struct {
 func (r QualitySpeedTopAsesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -527,7 +527,7 @@ type QualitySpeedTopLocationsParams struct {
 func (r QualitySpeedTopLocationsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

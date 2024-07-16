@@ -38,8 +38,8 @@ func NewHTTPLocationDeviceTypeService(opts ...option.RequestOption) (r *HTTPLoca
 // Get the top locations, by HTTP traffic, of the requested device type. Values are
 // a percentage out of the total traffic.
 func (r *HTTPLocationDeviceTypeService) Get(ctx context.Context, deviceType HTTPLocationDeviceTypeGetParamsDeviceType, query HTTPLocationDeviceTypeGetParams, opts ...option.RequestOption) (res *HTTPLocationDeviceTypeGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationDeviceTypeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/locations/device_type/%v", deviceType)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -149,7 +149,7 @@ type HTTPLocationDeviceTypeGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                            `json:"dataSource,required"`
 	Description     string                                                            `json:"description,required"`
 	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous interface{}                                                       `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                            `json:"linkedUrl"`
 	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`
@@ -223,7 +223,7 @@ type HTTPLocationDeviceTypeGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPLocationDeviceTypeGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -253,7 +253,7 @@ type HTTPLocationDeviceTypeGetParams struct {
 func (r HTTPLocationDeviceTypeGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -301,34 +301,6 @@ const (
 func (r HTTPLocationDeviceTypeGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPLocationDeviceTypeGetParamsBrowserFamilyChrome, HTTPLocationDeviceTypeGetParamsBrowserFamilyEdge, HTTPLocationDeviceTypeGetParamsBrowserFamilyFirefox, HTTPLocationDeviceTypeGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPLocationDeviceTypeGetParamsDateRange string
-
-const (
-	HTTPLocationDeviceTypeGetParamsDateRange1d         HTTPLocationDeviceTypeGetParamsDateRange = "1d"
-	HTTPLocationDeviceTypeGetParamsDateRange2d         HTTPLocationDeviceTypeGetParamsDateRange = "2d"
-	HTTPLocationDeviceTypeGetParamsDateRange7d         HTTPLocationDeviceTypeGetParamsDateRange = "7d"
-	HTTPLocationDeviceTypeGetParamsDateRange14d        HTTPLocationDeviceTypeGetParamsDateRange = "14d"
-	HTTPLocationDeviceTypeGetParamsDateRange28d        HTTPLocationDeviceTypeGetParamsDateRange = "28d"
-	HTTPLocationDeviceTypeGetParamsDateRange12w        HTTPLocationDeviceTypeGetParamsDateRange = "12w"
-	HTTPLocationDeviceTypeGetParamsDateRange24w        HTTPLocationDeviceTypeGetParamsDateRange = "24w"
-	HTTPLocationDeviceTypeGetParamsDateRange52w        HTTPLocationDeviceTypeGetParamsDateRange = "52w"
-	HTTPLocationDeviceTypeGetParamsDateRange1dControl  HTTPLocationDeviceTypeGetParamsDateRange = "1dControl"
-	HTTPLocationDeviceTypeGetParamsDateRange2dControl  HTTPLocationDeviceTypeGetParamsDateRange = "2dControl"
-	HTTPLocationDeviceTypeGetParamsDateRange7dControl  HTTPLocationDeviceTypeGetParamsDateRange = "7dControl"
-	HTTPLocationDeviceTypeGetParamsDateRange14dControl HTTPLocationDeviceTypeGetParamsDateRange = "14dControl"
-	HTTPLocationDeviceTypeGetParamsDateRange28dControl HTTPLocationDeviceTypeGetParamsDateRange = "28dControl"
-	HTTPLocationDeviceTypeGetParamsDateRange12wControl HTTPLocationDeviceTypeGetParamsDateRange = "12wControl"
-	HTTPLocationDeviceTypeGetParamsDateRange24wControl HTTPLocationDeviceTypeGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPLocationDeviceTypeGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPLocationDeviceTypeGetParamsDateRange1d, HTTPLocationDeviceTypeGetParamsDateRange2d, HTTPLocationDeviceTypeGetParamsDateRange7d, HTTPLocationDeviceTypeGetParamsDateRange14d, HTTPLocationDeviceTypeGetParamsDateRange28d, HTTPLocationDeviceTypeGetParamsDateRange12w, HTTPLocationDeviceTypeGetParamsDateRange24w, HTTPLocationDeviceTypeGetParamsDateRange52w, HTTPLocationDeviceTypeGetParamsDateRange1dControl, HTTPLocationDeviceTypeGetParamsDateRange2dControl, HTTPLocationDeviceTypeGetParamsDateRange7dControl, HTTPLocationDeviceTypeGetParamsDateRange14dControl, HTTPLocationDeviceTypeGetParamsDateRange28dControl, HTTPLocationDeviceTypeGetParamsDateRange12wControl, HTTPLocationDeviceTypeGetParamsDateRange24wControl:
 		return true
 	}
 	return false

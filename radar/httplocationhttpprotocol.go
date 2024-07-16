@@ -38,8 +38,8 @@ func NewHTTPLocationHTTPProtocolService(opts ...option.RequestOption) (r *HTTPLo
 // Get the top locations, by HTTP traffic, of the requested HTTP protocol. Values
 // are a percentage out of the total traffic.
 func (r *HTTPLocationHTTPProtocolService) Get(ctx context.Context, httpProtocol HTTPLocationHTTPProtocolGetParamsHTTPProtocol, query HTTPLocationHTTPProtocolGetParams, opts ...option.RequestOption) (res *HTTPLocationHTTPProtocolGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationHTTPProtocolGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/locations/http_protocol/%v", httpProtocol)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -149,7 +149,7 @@ type HTTPLocationHTTPProtocolGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                              `json:"dataSource,required"`
 	Description     string                                                              `json:"description,required"`
 	EventType       string                                                              `json:"eventType,required"`
-	IsInstantaneous interface{}                                                         `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                              `json:"linkedUrl"`
 	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
@@ -223,7 +223,7 @@ type HTTPLocationHTTPProtocolGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPLocationHTTPProtocolGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -251,7 +251,7 @@ type HTTPLocationHTTPProtocolGetParams struct {
 func (r HTTPLocationHTTPProtocolGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -298,34 +298,6 @@ const (
 func (r HTTPLocationHTTPProtocolGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPLocationHTTPProtocolGetParamsBrowserFamilyChrome, HTTPLocationHTTPProtocolGetParamsBrowserFamilyEdge, HTTPLocationHTTPProtocolGetParamsBrowserFamilyFirefox, HTTPLocationHTTPProtocolGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPLocationHTTPProtocolGetParamsDateRange string
-
-const (
-	HTTPLocationHTTPProtocolGetParamsDateRange1d         HTTPLocationHTTPProtocolGetParamsDateRange = "1d"
-	HTTPLocationHTTPProtocolGetParamsDateRange2d         HTTPLocationHTTPProtocolGetParamsDateRange = "2d"
-	HTTPLocationHTTPProtocolGetParamsDateRange7d         HTTPLocationHTTPProtocolGetParamsDateRange = "7d"
-	HTTPLocationHTTPProtocolGetParamsDateRange14d        HTTPLocationHTTPProtocolGetParamsDateRange = "14d"
-	HTTPLocationHTTPProtocolGetParamsDateRange28d        HTTPLocationHTTPProtocolGetParamsDateRange = "28d"
-	HTTPLocationHTTPProtocolGetParamsDateRange12w        HTTPLocationHTTPProtocolGetParamsDateRange = "12w"
-	HTTPLocationHTTPProtocolGetParamsDateRange24w        HTTPLocationHTTPProtocolGetParamsDateRange = "24w"
-	HTTPLocationHTTPProtocolGetParamsDateRange52w        HTTPLocationHTTPProtocolGetParamsDateRange = "52w"
-	HTTPLocationHTTPProtocolGetParamsDateRange1dControl  HTTPLocationHTTPProtocolGetParamsDateRange = "1dControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange2dControl  HTTPLocationHTTPProtocolGetParamsDateRange = "2dControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange7dControl  HTTPLocationHTTPProtocolGetParamsDateRange = "7dControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange14dControl HTTPLocationHTTPProtocolGetParamsDateRange = "14dControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange28dControl HTTPLocationHTTPProtocolGetParamsDateRange = "28dControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange12wControl HTTPLocationHTTPProtocolGetParamsDateRange = "12wControl"
-	HTTPLocationHTTPProtocolGetParamsDateRange24wControl HTTPLocationHTTPProtocolGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPLocationHTTPProtocolGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPLocationHTTPProtocolGetParamsDateRange1d, HTTPLocationHTTPProtocolGetParamsDateRange2d, HTTPLocationHTTPProtocolGetParamsDateRange7d, HTTPLocationHTTPProtocolGetParamsDateRange14d, HTTPLocationHTTPProtocolGetParamsDateRange28d, HTTPLocationHTTPProtocolGetParamsDateRange12w, HTTPLocationHTTPProtocolGetParamsDateRange24w, HTTPLocationHTTPProtocolGetParamsDateRange52w, HTTPLocationHTTPProtocolGetParamsDateRange1dControl, HTTPLocationHTTPProtocolGetParamsDateRange2dControl, HTTPLocationHTTPProtocolGetParamsDateRange7dControl, HTTPLocationHTTPProtocolGetParamsDateRange14dControl, HTTPLocationHTTPProtocolGetParamsDateRange28dControl, HTTPLocationHTTPProtocolGetParamsDateRange12wControl, HTTPLocationHTTPProtocolGetParamsDateRange24wControl:
 		return true
 	}
 	return false

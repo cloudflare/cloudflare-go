@@ -36,8 +36,8 @@ func NewEmailSecurityTimeseriesGroupService(opts ...option.RequestOption) (r *Em
 
 // Percentage distribution of emails classified per Arc validation over time.
 func (r *EmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query EmailSecurityTimeseriesGroupARCParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/arc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *EmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query Ema
 
 // Percentage distribution of emails classified per DKIM validation over time.
 func (r *EmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, query EmailSecurityTimeseriesGroupDKIMParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupDKIMResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupDKIMResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/dkim"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *EmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, query Em
 
 // Percentage distribution of emails classified per DMARC validation over time.
 func (r *EmailSecurityTimeseriesGroupService) DMARC(ctx context.Context, query EmailSecurityTimeseriesGroupDMARCParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupDMARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupDMARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/dmarc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *EmailSecurityTimeseriesGroupService) DMARC(ctx context.Context, query E
 
 // Percentage distribution of emails classified as MALICIOUS over time.
 func (r *EmailSecurityTimeseriesGroupService) Malicious(ctx context.Context, query EmailSecurityTimeseriesGroupMaliciousParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupMaliciousResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupMaliciousResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/malicious"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *EmailSecurityTimeseriesGroupService) Malicious(ctx context.Context, que
 
 // Percentage distribution of emails classified as SPAM over time.
 func (r *EmailSecurityTimeseriesGroupService) Spam(ctx context.Context, query EmailSecurityTimeseriesGroupSpamParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSpamResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupSpamResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/spam"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *EmailSecurityTimeseriesGroupService) Spam(ctx context.Context, query Em
 
 // Percentage distribution of emails classified per SPF validation over time.
 func (r *EmailSecurityTimeseriesGroupService) SPF(ctx context.Context, query EmailSecurityTimeseriesGroupSPFParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSPFResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupSPFResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/spf"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -114,8 +114,8 @@ func (r *EmailSecurityTimeseriesGroupService) SPF(ctx context.Context, query Ema
 
 // Percentage distribution of emails classified as SPOOF over time.
 func (r *EmailSecurityTimeseriesGroupService) Spoof(ctx context.Context, query EmailSecurityTimeseriesGroupSpoofParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSpoofResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupSpoofResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/spoof"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -127,8 +127,8 @@ func (r *EmailSecurityTimeseriesGroupService) Spoof(ctx context.Context, query E
 
 // Percentage distribution of emails classified in Threat Categories over time.
 func (r *EmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context, query EmailSecurityTimeseriesGroupThreatCategoryParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupThreatCategoryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupThreatCategoryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/threat_category"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -140,8 +140,8 @@ func (r *EmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context
 
 // Percentage distribution of emails classified per TLS Version over time.
 func (r *EmailSecurityTimeseriesGroupService) TLSVersion(ctx context.Context, query EmailSecurityTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupTLSVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecurityTimeseriesGroupTLSVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/timeseries_groups/tls_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -492,7 +492,7 @@ type EmailSecurityTimeseriesGroupARCParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTimeseriesGroupARCParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -514,7 +514,7 @@ type EmailSecurityTimeseriesGroupARCParams struct {
 func (r EmailSecurityTimeseriesGroupARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -533,34 +533,6 @@ const (
 func (r EmailSecurityTimeseriesGroupARCParamsAggInterval) IsKnown() bool {
 	switch r {
 	case EmailSecurityTimeseriesGroupARCParamsAggInterval15m, EmailSecurityTimeseriesGroupARCParamsAggInterval1h, EmailSecurityTimeseriesGroupARCParamsAggInterval1d, EmailSecurityTimeseriesGroupARCParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTimeseriesGroupARCParamsDateRange string
-
-const (
-	EmailSecurityTimeseriesGroupARCParamsDateRange1d         EmailSecurityTimeseriesGroupARCParamsDateRange = "1d"
-	EmailSecurityTimeseriesGroupARCParamsDateRange2d         EmailSecurityTimeseriesGroupARCParamsDateRange = "2d"
-	EmailSecurityTimeseriesGroupARCParamsDateRange7d         EmailSecurityTimeseriesGroupARCParamsDateRange = "7d"
-	EmailSecurityTimeseriesGroupARCParamsDateRange14d        EmailSecurityTimeseriesGroupARCParamsDateRange = "14d"
-	EmailSecurityTimeseriesGroupARCParamsDateRange28d        EmailSecurityTimeseriesGroupARCParamsDateRange = "28d"
-	EmailSecurityTimeseriesGroupARCParamsDateRange12w        EmailSecurityTimeseriesGroupARCParamsDateRange = "12w"
-	EmailSecurityTimeseriesGroupARCParamsDateRange24w        EmailSecurityTimeseriesGroupARCParamsDateRange = "24w"
-	EmailSecurityTimeseriesGroupARCParamsDateRange52w        EmailSecurityTimeseriesGroupARCParamsDateRange = "52w"
-	EmailSecurityTimeseriesGroupARCParamsDateRange1dControl  EmailSecurityTimeseriesGroupARCParamsDateRange = "1dControl"
-	EmailSecurityTimeseriesGroupARCParamsDateRange2dControl  EmailSecurityTimeseriesGroupARCParamsDateRange = "2dControl"
-	EmailSecurityTimeseriesGroupARCParamsDateRange7dControl  EmailSecurityTimeseriesGroupARCParamsDateRange = "7dControl"
-	EmailSecurityTimeseriesGroupARCParamsDateRange14dControl EmailSecurityTimeseriesGroupARCParamsDateRange = "14dControl"
-	EmailSecurityTimeseriesGroupARCParamsDateRange28dControl EmailSecurityTimeseriesGroupARCParamsDateRange = "28dControl"
-	EmailSecurityTimeseriesGroupARCParamsDateRange12wControl EmailSecurityTimeseriesGroupARCParamsDateRange = "12wControl"
-	EmailSecurityTimeseriesGroupARCParamsDateRange24wControl EmailSecurityTimeseriesGroupARCParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTimeseriesGroupARCParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTimeseriesGroupARCParamsDateRange1d, EmailSecurityTimeseriesGroupARCParamsDateRange2d, EmailSecurityTimeseriesGroupARCParamsDateRange7d, EmailSecurityTimeseriesGroupARCParamsDateRange14d, EmailSecurityTimeseriesGroupARCParamsDateRange28d, EmailSecurityTimeseriesGroupARCParamsDateRange12w, EmailSecurityTimeseriesGroupARCParamsDateRange24w, EmailSecurityTimeseriesGroupARCParamsDateRange52w, EmailSecurityTimeseriesGroupARCParamsDateRange1dControl, EmailSecurityTimeseriesGroupARCParamsDateRange2dControl, EmailSecurityTimeseriesGroupARCParamsDateRange7dControl, EmailSecurityTimeseriesGroupARCParamsDateRange14dControl, EmailSecurityTimeseriesGroupARCParamsDateRange28dControl, EmailSecurityTimeseriesGroupARCParamsDateRange12wControl, EmailSecurityTimeseriesGroupARCParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -682,7 +654,7 @@ type EmailSecurityTimeseriesGroupDKIMParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTimeseriesGroupDKIMParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dmarc.
@@ -702,7 +674,7 @@ type EmailSecurityTimeseriesGroupDKIMParams struct {
 func (r EmailSecurityTimeseriesGroupDKIMParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -737,34 +709,6 @@ const (
 func (r EmailSecurityTimeseriesGroupDKIMParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecurityTimeseriesGroupDKIMParamsARCPass, EmailSecurityTimeseriesGroupDKIMParamsARCNone, EmailSecurityTimeseriesGroupDKIMParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTimeseriesGroupDKIMParamsDateRange string
-
-const (
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange1d         EmailSecurityTimeseriesGroupDKIMParamsDateRange = "1d"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange2d         EmailSecurityTimeseriesGroupDKIMParamsDateRange = "2d"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange7d         EmailSecurityTimeseriesGroupDKIMParamsDateRange = "7d"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange14d        EmailSecurityTimeseriesGroupDKIMParamsDateRange = "14d"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange28d        EmailSecurityTimeseriesGroupDKIMParamsDateRange = "28d"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange12w        EmailSecurityTimeseriesGroupDKIMParamsDateRange = "12w"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange24w        EmailSecurityTimeseriesGroupDKIMParamsDateRange = "24w"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange52w        EmailSecurityTimeseriesGroupDKIMParamsDateRange = "52w"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange1dControl  EmailSecurityTimeseriesGroupDKIMParamsDateRange = "1dControl"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange2dControl  EmailSecurityTimeseriesGroupDKIMParamsDateRange = "2dControl"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange7dControl  EmailSecurityTimeseriesGroupDKIMParamsDateRange = "7dControl"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange14dControl EmailSecurityTimeseriesGroupDKIMParamsDateRange = "14dControl"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange28dControl EmailSecurityTimeseriesGroupDKIMParamsDateRange = "28dControl"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange12wControl EmailSecurityTimeseriesGroupDKIMParamsDateRange = "12wControl"
-	EmailSecurityTimeseriesGroupDKIMParamsDateRange24wControl EmailSecurityTimeseriesGroupDKIMParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTimeseriesGroupDKIMParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTimeseriesGroupDKIMParamsDateRange1d, EmailSecurityTimeseriesGroupDKIMParamsDateRange2d, EmailSecurityTimeseriesGroupDKIMParamsDateRange7d, EmailSecurityTimeseriesGroupDKIMParamsDateRange14d, EmailSecurityTimeseriesGroupDKIMParamsDateRange28d, EmailSecurityTimeseriesGroupDKIMParamsDateRange12w, EmailSecurityTimeseriesGroupDKIMParamsDateRange24w, EmailSecurityTimeseriesGroupDKIMParamsDateRange52w, EmailSecurityTimeseriesGroupDKIMParamsDateRange1dControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange2dControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange7dControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange14dControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange28dControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange12wControl, EmailSecurityTimeseriesGroupDKIMParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -870,7 +814,7 @@ type EmailSecurityTimeseriesGroupDMARCParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTimeseriesGroupDMARCParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -890,7 +834,7 @@ type EmailSecurityTimeseriesGroupDMARCParams struct {
 func (r EmailSecurityTimeseriesGroupDMARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -925,34 +869,6 @@ const (
 func (r EmailSecurityTimeseriesGroupDMARCParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecurityTimeseriesGroupDMARCParamsARCPass, EmailSecurityTimeseriesGroupDMARCParamsARCNone, EmailSecurityTimeseriesGroupDMARCParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTimeseriesGroupDMARCParamsDateRange string
-
-const (
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange1d         EmailSecurityTimeseriesGroupDMARCParamsDateRange = "1d"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange2d         EmailSecurityTimeseriesGroupDMARCParamsDateRange = "2d"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange7d         EmailSecurityTimeseriesGroupDMARCParamsDateRange = "7d"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange14d        EmailSecurityTimeseriesGroupDMARCParamsDateRange = "14d"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange28d        EmailSecurityTimeseriesGroupDMARCParamsDateRange = "28d"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange12w        EmailSecurityTimeseriesGroupDMARCParamsDateRange = "12w"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange24w        EmailSecurityTimeseriesGroupDMARCParamsDateRange = "24w"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange52w        EmailSecurityTimeseriesGroupDMARCParamsDateRange = "52w"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange1dControl  EmailSecurityTimeseriesGroupDMARCParamsDateRange = "1dControl"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange2dControl  EmailSecurityTimeseriesGroupDMARCParamsDateRange = "2dControl"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange7dControl  EmailSecurityTimeseriesGroupDMARCParamsDateRange = "7dControl"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange14dControl EmailSecurityTimeseriesGroupDMARCParamsDateRange = "14dControl"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange28dControl EmailSecurityTimeseriesGroupDMARCParamsDateRange = "28dControl"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange12wControl EmailSecurityTimeseriesGroupDMARCParamsDateRange = "12wControl"
-	EmailSecurityTimeseriesGroupDMARCParamsDateRange24wControl EmailSecurityTimeseriesGroupDMARCParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTimeseriesGroupDMARCParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTimeseriesGroupDMARCParamsDateRange1d, EmailSecurityTimeseriesGroupDMARCParamsDateRange2d, EmailSecurityTimeseriesGroupDMARCParamsDateRange7d, EmailSecurityTimeseriesGroupDMARCParamsDateRange14d, EmailSecurityTimeseriesGroupDMARCParamsDateRange28d, EmailSecurityTimeseriesGroupDMARCParamsDateRange12w, EmailSecurityTimeseriesGroupDMARCParamsDateRange24w, EmailSecurityTimeseriesGroupDMARCParamsDateRange52w, EmailSecurityTimeseriesGroupDMARCParamsDateRange1dControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange2dControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange7dControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange14dControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange28dControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange12wControl, EmailSecurityTimeseriesGroupDMARCParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1058,7 +974,7 @@ type EmailSecurityTimeseriesGroupMaliciousParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTimeseriesGroupMaliciousParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1080,7 +996,7 @@ type EmailSecurityTimeseriesGroupMaliciousParams struct {
 func (r EmailSecurityTimeseriesGroupMaliciousParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1115,34 +1031,6 @@ const (
 func (r EmailSecurityTimeseriesGroupMaliciousParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecurityTimeseriesGroupMaliciousParamsARCPass, EmailSecurityTimeseriesGroupMaliciousParamsARCNone, EmailSecurityTimeseriesGroupMaliciousParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTimeseriesGroupMaliciousParamsDateRange string
-
-const (
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange1d         EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "1d"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange2d         EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "2d"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange7d         EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "7d"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange14d        EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "14d"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange28d        EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "28d"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange12w        EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "12w"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange24w        EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "24w"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange52w        EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "52w"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange1dControl  EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "1dControl"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange2dControl  EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "2dControl"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange7dControl  EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "7dControl"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange14dControl EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "14dControl"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange28dControl EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "28dControl"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange12wControl EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "12wControl"
-	EmailSecurityTimeseriesGroupMaliciousParamsDateRange24wControl EmailSecurityTimeseriesGroupMaliciousParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTimeseriesGroupMaliciousParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTimeseriesGroupMaliciousParamsDateRange1d, EmailSecurityTimeseriesGroupMaliciousParamsDateRange2d, EmailSecurityTimeseriesGroupMaliciousParamsDateRange7d, EmailSecurityTimeseriesGroupMaliciousParamsDateRange14d, EmailSecurityTimeseriesGroupMaliciousParamsDateRange28d, EmailSecurityTimeseriesGroupMaliciousParamsDateRange12w, EmailSecurityTimeseriesGroupMaliciousParamsDateRange24w, EmailSecurityTimeseriesGroupMaliciousParamsDateRange52w, EmailSecurityTimeseriesGroupMaliciousParamsDateRange1dControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange2dControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange7dControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange14dControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange28dControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange12wControl, EmailSecurityTimeseriesGroupMaliciousParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1264,7 +1152,7 @@ type EmailSecurityTimeseriesGroupSpamParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTimeseriesGroupSpamParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1286,7 +1174,7 @@ type EmailSecurityTimeseriesGroupSpamParams struct {
 func (r EmailSecurityTimeseriesGroupSpamParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1321,34 +1209,6 @@ const (
 func (r EmailSecurityTimeseriesGroupSpamParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecurityTimeseriesGroupSpamParamsARCPass, EmailSecurityTimeseriesGroupSpamParamsARCNone, EmailSecurityTimeseriesGroupSpamParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTimeseriesGroupSpamParamsDateRange string
-
-const (
-	EmailSecurityTimeseriesGroupSpamParamsDateRange1d         EmailSecurityTimeseriesGroupSpamParamsDateRange = "1d"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange2d         EmailSecurityTimeseriesGroupSpamParamsDateRange = "2d"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange7d         EmailSecurityTimeseriesGroupSpamParamsDateRange = "7d"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange14d        EmailSecurityTimeseriesGroupSpamParamsDateRange = "14d"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange28d        EmailSecurityTimeseriesGroupSpamParamsDateRange = "28d"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange12w        EmailSecurityTimeseriesGroupSpamParamsDateRange = "12w"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange24w        EmailSecurityTimeseriesGroupSpamParamsDateRange = "24w"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange52w        EmailSecurityTimeseriesGroupSpamParamsDateRange = "52w"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange1dControl  EmailSecurityTimeseriesGroupSpamParamsDateRange = "1dControl"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange2dControl  EmailSecurityTimeseriesGroupSpamParamsDateRange = "2dControl"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange7dControl  EmailSecurityTimeseriesGroupSpamParamsDateRange = "7dControl"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange14dControl EmailSecurityTimeseriesGroupSpamParamsDateRange = "14dControl"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange28dControl EmailSecurityTimeseriesGroupSpamParamsDateRange = "28dControl"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange12wControl EmailSecurityTimeseriesGroupSpamParamsDateRange = "12wControl"
-	EmailSecurityTimeseriesGroupSpamParamsDateRange24wControl EmailSecurityTimeseriesGroupSpamParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTimeseriesGroupSpamParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTimeseriesGroupSpamParamsDateRange1d, EmailSecurityTimeseriesGroupSpamParamsDateRange2d, EmailSecurityTimeseriesGroupSpamParamsDateRange7d, EmailSecurityTimeseriesGroupSpamParamsDateRange14d, EmailSecurityTimeseriesGroupSpamParamsDateRange28d, EmailSecurityTimeseriesGroupSpamParamsDateRange12w, EmailSecurityTimeseriesGroupSpamParamsDateRange24w, EmailSecurityTimeseriesGroupSpamParamsDateRange52w, EmailSecurityTimeseriesGroupSpamParamsDateRange1dControl, EmailSecurityTimeseriesGroupSpamParamsDateRange2dControl, EmailSecurityTimeseriesGroupSpamParamsDateRange7dControl, EmailSecurityTimeseriesGroupSpamParamsDateRange14dControl, EmailSecurityTimeseriesGroupSpamParamsDateRange28dControl, EmailSecurityTimeseriesGroupSpamParamsDateRange12wControl, EmailSecurityTimeseriesGroupSpamParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1470,7 +1330,7 @@ type EmailSecurityTimeseriesGroupSPFParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTimeseriesGroupSPFParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1490,7 +1350,7 @@ type EmailSecurityTimeseriesGroupSPFParams struct {
 func (r EmailSecurityTimeseriesGroupSPFParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1525,34 +1385,6 @@ const (
 func (r EmailSecurityTimeseriesGroupSPFParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecurityTimeseriesGroupSPFParamsARCPass, EmailSecurityTimeseriesGroupSPFParamsARCNone, EmailSecurityTimeseriesGroupSPFParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTimeseriesGroupSPFParamsDateRange string
-
-const (
-	EmailSecurityTimeseriesGroupSPFParamsDateRange1d         EmailSecurityTimeseriesGroupSPFParamsDateRange = "1d"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange2d         EmailSecurityTimeseriesGroupSPFParamsDateRange = "2d"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange7d         EmailSecurityTimeseriesGroupSPFParamsDateRange = "7d"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange14d        EmailSecurityTimeseriesGroupSPFParamsDateRange = "14d"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange28d        EmailSecurityTimeseriesGroupSPFParamsDateRange = "28d"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange12w        EmailSecurityTimeseriesGroupSPFParamsDateRange = "12w"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange24w        EmailSecurityTimeseriesGroupSPFParamsDateRange = "24w"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange52w        EmailSecurityTimeseriesGroupSPFParamsDateRange = "52w"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange1dControl  EmailSecurityTimeseriesGroupSPFParamsDateRange = "1dControl"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange2dControl  EmailSecurityTimeseriesGroupSPFParamsDateRange = "2dControl"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange7dControl  EmailSecurityTimeseriesGroupSPFParamsDateRange = "7dControl"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange14dControl EmailSecurityTimeseriesGroupSPFParamsDateRange = "14dControl"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange28dControl EmailSecurityTimeseriesGroupSPFParamsDateRange = "28dControl"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange12wControl EmailSecurityTimeseriesGroupSPFParamsDateRange = "12wControl"
-	EmailSecurityTimeseriesGroupSPFParamsDateRange24wControl EmailSecurityTimeseriesGroupSPFParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTimeseriesGroupSPFParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTimeseriesGroupSPFParamsDateRange1d, EmailSecurityTimeseriesGroupSPFParamsDateRange2d, EmailSecurityTimeseriesGroupSPFParamsDateRange7d, EmailSecurityTimeseriesGroupSPFParamsDateRange14d, EmailSecurityTimeseriesGroupSPFParamsDateRange28d, EmailSecurityTimeseriesGroupSPFParamsDateRange12w, EmailSecurityTimeseriesGroupSPFParamsDateRange24w, EmailSecurityTimeseriesGroupSPFParamsDateRange52w, EmailSecurityTimeseriesGroupSPFParamsDateRange1dControl, EmailSecurityTimeseriesGroupSPFParamsDateRange2dControl, EmailSecurityTimeseriesGroupSPFParamsDateRange7dControl, EmailSecurityTimeseriesGroupSPFParamsDateRange14dControl, EmailSecurityTimeseriesGroupSPFParamsDateRange28dControl, EmailSecurityTimeseriesGroupSPFParamsDateRange12wControl, EmailSecurityTimeseriesGroupSPFParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1658,7 +1490,7 @@ type EmailSecurityTimeseriesGroupSpoofParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTimeseriesGroupSpoofParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1680,7 +1512,7 @@ type EmailSecurityTimeseriesGroupSpoofParams struct {
 func (r EmailSecurityTimeseriesGroupSpoofParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1715,34 +1547,6 @@ const (
 func (r EmailSecurityTimeseriesGroupSpoofParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecurityTimeseriesGroupSpoofParamsARCPass, EmailSecurityTimeseriesGroupSpoofParamsARCNone, EmailSecurityTimeseriesGroupSpoofParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTimeseriesGroupSpoofParamsDateRange string
-
-const (
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange1d         EmailSecurityTimeseriesGroupSpoofParamsDateRange = "1d"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange2d         EmailSecurityTimeseriesGroupSpoofParamsDateRange = "2d"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange7d         EmailSecurityTimeseriesGroupSpoofParamsDateRange = "7d"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange14d        EmailSecurityTimeseriesGroupSpoofParamsDateRange = "14d"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange28d        EmailSecurityTimeseriesGroupSpoofParamsDateRange = "28d"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange12w        EmailSecurityTimeseriesGroupSpoofParamsDateRange = "12w"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange24w        EmailSecurityTimeseriesGroupSpoofParamsDateRange = "24w"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange52w        EmailSecurityTimeseriesGroupSpoofParamsDateRange = "52w"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange1dControl  EmailSecurityTimeseriesGroupSpoofParamsDateRange = "1dControl"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange2dControl  EmailSecurityTimeseriesGroupSpoofParamsDateRange = "2dControl"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange7dControl  EmailSecurityTimeseriesGroupSpoofParamsDateRange = "7dControl"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange14dControl EmailSecurityTimeseriesGroupSpoofParamsDateRange = "14dControl"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange28dControl EmailSecurityTimeseriesGroupSpoofParamsDateRange = "28dControl"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange12wControl EmailSecurityTimeseriesGroupSpoofParamsDateRange = "12wControl"
-	EmailSecurityTimeseriesGroupSpoofParamsDateRange24wControl EmailSecurityTimeseriesGroupSpoofParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTimeseriesGroupSpoofParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTimeseriesGroupSpoofParamsDateRange1d, EmailSecurityTimeseriesGroupSpoofParamsDateRange2d, EmailSecurityTimeseriesGroupSpoofParamsDateRange7d, EmailSecurityTimeseriesGroupSpoofParamsDateRange14d, EmailSecurityTimeseriesGroupSpoofParamsDateRange28d, EmailSecurityTimeseriesGroupSpoofParamsDateRange12w, EmailSecurityTimeseriesGroupSpoofParamsDateRange24w, EmailSecurityTimeseriesGroupSpoofParamsDateRange52w, EmailSecurityTimeseriesGroupSpoofParamsDateRange1dControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange2dControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange7dControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange14dControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange28dControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange12wControl, EmailSecurityTimeseriesGroupSpoofParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1864,7 +1668,7 @@ type EmailSecurityTimeseriesGroupThreatCategoryParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1886,7 +1690,7 @@ type EmailSecurityTimeseriesGroupThreatCategoryParams struct {
 func (r EmailSecurityTimeseriesGroupThreatCategoryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1921,34 +1725,6 @@ const (
 func (r EmailSecurityTimeseriesGroupThreatCategoryParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecurityTimeseriesGroupThreatCategoryParamsARCPass, EmailSecurityTimeseriesGroupThreatCategoryParamsARCNone, EmailSecurityTimeseriesGroupThreatCategoryParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange string
-
-const (
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange1d         EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "1d"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange2d         EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "2d"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange7d         EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "7d"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange14d        EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "14d"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange28d        EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "28d"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange12w        EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "12w"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange24w        EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "24w"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange52w        EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "52w"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange1dControl  EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "1dControl"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange2dControl  EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "2dControl"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange7dControl  EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "7dControl"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange14dControl EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "14dControl"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange28dControl EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "28dControl"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange12wControl EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "12wControl"
-	EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange24wControl EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange1d, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange2d, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange7d, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange14d, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange28d, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange12w, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange24w, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange52w, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange1dControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange2dControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange7dControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange14dControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange28dControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange12wControl, EmailSecurityTimeseriesGroupThreatCategoryParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2071,7 +1847,7 @@ type EmailSecurityTimeseriesGroupTLSVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecurityTimeseriesGroupTLSVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -2091,7 +1867,7 @@ type EmailSecurityTimeseriesGroupTLSVersionParams struct {
 func (r EmailSecurityTimeseriesGroupTLSVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2126,34 +1902,6 @@ const (
 func (r EmailSecurityTimeseriesGroupTLSVersionParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecurityTimeseriesGroupTLSVersionParamsARCPass, EmailSecurityTimeseriesGroupTLSVersionParamsARCNone, EmailSecurityTimeseriesGroupTLSVersionParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecurityTimeseriesGroupTLSVersionParamsDateRange string
-
-const (
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange1d         EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "1d"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange2d         EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "2d"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange7d         EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "7d"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange14d        EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "14d"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange28d        EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "28d"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange12w        EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "12w"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange24w        EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "24w"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange52w        EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "52w"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange1dControl  EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "1dControl"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange2dControl  EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "2dControl"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange7dControl  EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "7dControl"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange14dControl EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "14dControl"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange28dControl EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "28dControl"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange12wControl EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "12wControl"
-	EmailSecurityTimeseriesGroupTLSVersionParamsDateRange24wControl EmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "24wControl"
-)
-
-func (r EmailSecurityTimeseriesGroupTLSVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecurityTimeseriesGroupTLSVersionParamsDateRange1d, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange2d, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange7d, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange14d, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange28d, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange12w, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange24w, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange52w, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange1dControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange2dControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange7dControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange14dControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange28dControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange12wControl, EmailSecurityTimeseriesGroupTLSVersionParamsDateRange24wControl:
 		return true
 	}
 	return false

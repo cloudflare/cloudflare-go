@@ -3,14 +3,17 @@
 package images
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"reflect"
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -52,8 +55,8 @@ func NewV1Service(opts ...option.RequestOption) (r *V1Service) {
 // (multipart/form-data) request. An image can be uploaded by sending an image file
 // or passing an accessible to an API url.
 func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.RequestOption) (res *Image, err error) {
-	opts = append(r.Options[:], opts...)
 	var env V1NewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -71,8 +74,12 @@ func (r *V1Service) New(ctx context.Context, params V1NewParams, opts ...option.
 // a specific range of images.
 func (r *V1Service) List(ctx context.Context, params V1ListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[V1ListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/images/v1", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -95,8 +102,8 @@ func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opt
 // Delete an image on Cloudflare Images. On success, all copies of the image are
 // deleted and purged from cache.
 func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeleteParams, opts ...option.RequestOption) (res *V1DeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env V1DeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -117,8 +124,8 @@ func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeletePar
 // Update image access control. On access control change, all copies of the image
 // are purged from cache.
 func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParams, opts ...option.RequestOption) (res *Image, err error) {
-	opts = append(r.Options[:], opts...)
 	var env V1EditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -138,8 +145,8 @@ func (r *V1Service) Edit(ctx context.Context, imageID string, params V1EditParam
 
 // Fetch details for a single image.
 func (r *V1Service) Get(ctx context.Context, imageID string, query V1GetParams, opts ...option.RequestOption) (res *Image, err error) {
-	opts = append(r.Options[:], opts...)
 	var env V1GetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -316,8 +323,19 @@ type V1NewParams struct {
 	URL param.Field[string] `json:"url"`
 }
 
-func (r V1NewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r V1NewParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 type V1NewResponseEnvelope struct {
@@ -376,7 +394,7 @@ type V1ListParams struct {
 func (r V1ListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

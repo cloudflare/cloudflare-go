@@ -39,8 +39,8 @@ func NewListBulkOperationService(opts ...option.RequestOption) (r *ListBulkOpera
 // `running`, `completed`, or `failed`. If the status is `failed`, the `error`
 // property will contain a message describing the error.
 func (r *ListBulkOperationService) Get(ctx context.Context, accountIdentifier string, operationID string, opts ...option.RequestOption) (res *[]ListBulkOperationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ListBulkOperationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return

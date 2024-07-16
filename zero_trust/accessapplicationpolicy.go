@@ -41,8 +41,8 @@ func NewAccessApplicationPolicyService(opts ...option.RequestOption) (r *AccessA
 // instead and subsequently referencing its ID in the application's 'policies'
 // array.
 func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *AccessApplicationPolicyNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -77,8 +77,8 @@ func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, 
 // Updates an Access policy specific to an application. To update a reusable
 // policy, use the /account or zones/{account or zone_id}/policies/{uid} endpoint.
 func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID string, policyID string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *AccessApplicationPolicyUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
@@ -118,7 +118,7 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID strin
 // scoped and reusable policies used by the application.
 func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationPolicyListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -137,6 +137,10 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string,
 	if query.ZoneID.Value != "" {
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
+	}
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies", accountOrZone, accountOrZoneID, appID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -160,8 +164,8 @@ func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, app
 // Deletes an Access policy specific to an application. To delete a reusable
 // policy, use the /account or zones/{account or zone_id}/policies/{uid} endpoint.
 func (r *AccessApplicationPolicyService) Delete(ctx context.Context, appID string, policyID string, body AccessApplicationPolicyDeleteParams, opts ...option.RequestOption) (res *AccessApplicationPolicyDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
@@ -200,8 +204,8 @@ func (r *AccessApplicationPolicyService) Delete(ctx context.Context, appID strin
 // Fetches a single Access policy configured for an application. Returns both
 // exclusively owned and reusable policies used by the application.
 func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, policyID string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *AccessApplicationPolicyGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

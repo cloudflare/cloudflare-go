@@ -41,8 +41,8 @@ func NewDatabaseService(opts ...option.RequestOption) (r *DatabaseService) {
 
 // Returns the created D1 database.
 func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opts ...option.RequestOption) (res *DatabaseNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DatabaseNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,12 @@ func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opt
 // Returns a list of D1 databases.
 func (r *DatabaseService) List(ctx context.Context, params DatabaseListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DatabaseListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/d1/database", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -81,8 +85,8 @@ func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseLis
 
 // Deletes the specified D1 database.
 func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body DatabaseDeleteParams, opts ...option.RequestOption) (res *DatabaseDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DatabaseDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -102,8 +106,8 @@ func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body Da
 
 // Returns the specified D1 database.
 func (r *DatabaseService) Get(ctx context.Context, databaseID string, query DatabaseGetParams, opts ...option.RequestOption) (res *D1, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DatabaseGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -123,8 +127,8 @@ func (r *DatabaseService) Get(ctx context.Context, databaseID string, query Data
 
 // Returns the query result as an object.
 func (r *DatabaseService) Query(ctx context.Context, databaseID string, params DatabaseQueryParams, opts ...option.RequestOption) (res *[]QueryResult, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DatabaseQueryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -145,8 +149,8 @@ func (r *DatabaseService) Query(ctx context.Context, databaseID string, params D
 // Returns the query result rows as arrays rather than objects. This is a
 // performance-optimized version of the /query endpoint.
 func (r *DatabaseService) Raw(ctx context.Context, databaseID string, params DatabaseRawParams, opts ...option.RequestOption) (res *[]DatabaseRawResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DatabaseRawResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -398,10 +402,34 @@ type DatabaseNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Name      param.Field[string] `json:"name,required"`
+	// Specify the region to create the D1 primary, if available. If this option is
+	// omitted, the D1 will be created as close as possible to the current user.
+	PrimaryLocationHint param.Field[DatabaseNewParamsPrimaryLocationHint] `json:"primary_location_hint"`
 }
 
 func (r DatabaseNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Specify the region to create the D1 primary, if available. If this option is
+// omitted, the D1 will be created as close as possible to the current user.
+type DatabaseNewParamsPrimaryLocationHint string
+
+const (
+	DatabaseNewParamsPrimaryLocationHintWnam DatabaseNewParamsPrimaryLocationHint = "wnam"
+	DatabaseNewParamsPrimaryLocationHintEnam DatabaseNewParamsPrimaryLocationHint = "enam"
+	DatabaseNewParamsPrimaryLocationHintWeur DatabaseNewParamsPrimaryLocationHint = "weur"
+	DatabaseNewParamsPrimaryLocationHintEeur DatabaseNewParamsPrimaryLocationHint = "eeur"
+	DatabaseNewParamsPrimaryLocationHintApac DatabaseNewParamsPrimaryLocationHint = "apac"
+	DatabaseNewParamsPrimaryLocationHintOc   DatabaseNewParamsPrimaryLocationHint = "oc"
+)
+
+func (r DatabaseNewParamsPrimaryLocationHint) IsKnown() bool {
+	switch r {
+	case DatabaseNewParamsPrimaryLocationHintWnam, DatabaseNewParamsPrimaryLocationHintEnam, DatabaseNewParamsPrimaryLocationHintWeur, DatabaseNewParamsPrimaryLocationHintEeur, DatabaseNewParamsPrimaryLocationHintApac, DatabaseNewParamsPrimaryLocationHintOc:
+		return true
+	}
+	return false
 }
 
 type DatabaseNewResponseEnvelope struct {
@@ -462,7 +490,7 @@ type DatabaseListParams struct {
 func (r DatabaseListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -564,9 +592,11 @@ func (r DatabaseGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseQueryParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Sql       param.Field[string]   `json:"sql,required"`
-	Params    param.Field[[]string] `json:"params"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Your SQL query. Supports multiple statements, joined by semicolons, which will
+	// be executed as a batch.
+	Sql    param.Field[string]   `json:"sql,required"`
+	Params param.Field[[]string] `json:"params"`
 }
 
 func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
@@ -618,9 +648,11 @@ func (r DatabaseQueryResponseEnvelopeSuccess) IsKnown() bool {
 
 type DatabaseRawParams struct {
 	// Account identifier tag.
-	AccountID param.Field[string]   `path:"account_id,required"`
-	Sql       param.Field[string]   `json:"sql,required"`
-	Params    param.Field[[]string] `json:"params"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Your SQL query. Supports multiple statements, joined by semicolons, which will
+	// be executed as a batch.
+	Sql    param.Field[string]   `json:"sql,required"`
+	Params param.Field[[]string] `json:"params"`
 }
 
 func (r DatabaseRawParams) MarshalJSON() (data []byte, err error) {

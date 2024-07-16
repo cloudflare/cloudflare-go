@@ -38,8 +38,8 @@ func NewHTTPAseOSService(opts ...option.RequestOption) (r *HTTPAseOSService) {
 // Get the top autonomous systems, by HTTP traffic, of the requested operating
 // systems. Values are a percentage out of the total traffic.
 func (r *HTTPAseOSService) Get(ctx context.Context, os HTTPAseOSGetParamsOS, query HTTPAseOSGetParams, opts ...option.RequestOption) (res *HTTPAseOSGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseOSGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/os/%v", os)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -149,7 +149,7 @@ type HTTPAseOSGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                               `json:"dataSource,required"`
 	Description     string                                               `json:"description,required"`
 	EventType       string                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                          `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                 `json:"isInstantaneous,required"`
 	EndTime         time.Time                                            `json:"endTime" format:"date-time"`
 	LinkedURL       string                                               `json:"linkedUrl"`
 	StartTime       time.Time                                            `json:"startTime" format:"date-time"`
@@ -222,7 +222,7 @@ type HTTPAseOSGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPAseOSGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -251,7 +251,7 @@ type HTTPAseOSGetParams struct {
 func (r HTTPAseOSGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -303,34 +303,6 @@ const (
 func (r HTTPAseOSGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPAseOSGetParamsBrowserFamilyChrome, HTTPAseOSGetParamsBrowserFamilyEdge, HTTPAseOSGetParamsBrowserFamilyFirefox, HTTPAseOSGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPAseOSGetParamsDateRange string
-
-const (
-	HTTPAseOSGetParamsDateRange1d         HTTPAseOSGetParamsDateRange = "1d"
-	HTTPAseOSGetParamsDateRange2d         HTTPAseOSGetParamsDateRange = "2d"
-	HTTPAseOSGetParamsDateRange7d         HTTPAseOSGetParamsDateRange = "7d"
-	HTTPAseOSGetParamsDateRange14d        HTTPAseOSGetParamsDateRange = "14d"
-	HTTPAseOSGetParamsDateRange28d        HTTPAseOSGetParamsDateRange = "28d"
-	HTTPAseOSGetParamsDateRange12w        HTTPAseOSGetParamsDateRange = "12w"
-	HTTPAseOSGetParamsDateRange24w        HTTPAseOSGetParamsDateRange = "24w"
-	HTTPAseOSGetParamsDateRange52w        HTTPAseOSGetParamsDateRange = "52w"
-	HTTPAseOSGetParamsDateRange1dControl  HTTPAseOSGetParamsDateRange = "1dControl"
-	HTTPAseOSGetParamsDateRange2dControl  HTTPAseOSGetParamsDateRange = "2dControl"
-	HTTPAseOSGetParamsDateRange7dControl  HTTPAseOSGetParamsDateRange = "7dControl"
-	HTTPAseOSGetParamsDateRange14dControl HTTPAseOSGetParamsDateRange = "14dControl"
-	HTTPAseOSGetParamsDateRange28dControl HTTPAseOSGetParamsDateRange = "28dControl"
-	HTTPAseOSGetParamsDateRange12wControl HTTPAseOSGetParamsDateRange = "12wControl"
-	HTTPAseOSGetParamsDateRange24wControl HTTPAseOSGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPAseOSGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPAseOSGetParamsDateRange1d, HTTPAseOSGetParamsDateRange2d, HTTPAseOSGetParamsDateRange7d, HTTPAseOSGetParamsDateRange14d, HTTPAseOSGetParamsDateRange28d, HTTPAseOSGetParamsDateRange12w, HTTPAseOSGetParamsDateRange24w, HTTPAseOSGetParamsDateRange52w, HTTPAseOSGetParamsDateRange1dControl, HTTPAseOSGetParamsDateRange2dControl, HTTPAseOSGetParamsDateRange7dControl, HTTPAseOSGetParamsDateRange14dControl, HTTPAseOSGetParamsDateRange28dControl, HTTPAseOSGetParamsDateRange12wControl, HTTPAseOSGetParamsDateRange24wControl:
 		return true
 	}
 	return false

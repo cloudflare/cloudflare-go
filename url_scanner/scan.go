@@ -41,8 +41,8 @@ func NewScanService(opts ...option.RequestOption) (r *ScanService) {
 // and custom headers. Accounts are limited to 1 new scan every 10 seconds and 8000
 // per month. If you need more, please reach out.
 func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewParams, opts ...option.RequestOption) (res *ScanNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScanNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required accountId parameter")
 		return
@@ -57,9 +57,9 @@ func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewPar
 }
 
 // Get URL scan by uuid
-func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *ScanGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, query ScanGetParams, opts ...option.RequestOption) (res *ScanGetResponse, err error) {
 	var env ScanGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required accountId parameter")
 		return
@@ -69,7 +69,7 @@ func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, 
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan/%s", accountID, scanID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -80,8 +80,8 @@ func (r *ScanService) Get(ctx context.Context, accountID string, scanID string, 
 // Get a URL scan's HAR file. See HAR spec at
 // http://www.softwareishard.com/blog/har-12-spec/.
 func (r *ScanService) Har(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *ScanHarResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ScanHarResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required accountId parameter")
 		return
@@ -1747,6 +1747,19 @@ func (r scanNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
+type ScanGetParams struct {
+	// Whether to return full report (scan summary and network log).
+	Full param.Field[bool] `query:"full"`
+}
+
+// URLQuery serializes [ScanGetParams]'s query parameters as `url.Values`.
+func (r ScanGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
 type ScanGetResponseEnvelope struct {
 	Errors   []ScanGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScanGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1896,7 +1909,7 @@ type ScanScreenshotParams struct {
 func (r ScanScreenshotParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

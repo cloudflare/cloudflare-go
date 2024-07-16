@@ -13,23 +13,23 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewRadarService] method instead.
 type RadarService struct {
-	Options             []option.RequestOption
-	Annotations         *AnnotationService
-	BGP                 *BGPService
-	Datasets            *DatasetService
-	DNS                 *DNSService
-	Netflows            *NetflowService
-	Search              *SearchService
-	VerifiedBots        *VerifiedBotService
-	AS112               *AS112Service
-	ConnectionTampering *ConnectionTamperingService
-	Email               *EmailService
-	Attacks             *AttackService
-	Entities            *EntityService
-	HTTP                *HTTPService
-	Quality             *QualityService
-	Ranking             *RankingService
-	TrafficAnomalies    *TrafficAnomalyService
+	Options           []option.RequestOption
+	Annotations       *AnnotationService
+	BGP               *BGPService
+	Datasets          *DatasetService
+	DNS               *DNSService
+	Netflows          *NetflowService
+	Search            *SearchService
+	VerifiedBots      *VerifiedBotService
+	AS112             *AS112Service
+	Email             *EmailService
+	Attacks           *AttackService
+	Entities          *EntityService
+	HTTP              *HTTPService
+	Quality           *QualityService
+	Ranking           *RankingService
+	TrafficAnomalies  *TrafficAnomalyService
+	TCPResetsTimeouts *TCPResetsTimeoutService
 }
 
 // NewRadarService generates a new service that applies the given options to each
@@ -46,7 +46,6 @@ func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r.Search = NewSearchService(opts...)
 	r.VerifiedBots = NewVerifiedBotService(opts...)
 	r.AS112 = NewAS112Service(opts...)
-	r.ConnectionTampering = NewConnectionTamperingService(opts...)
 	r.Email = NewEmailService(opts...)
 	r.Attacks = NewAttackService(opts...)
 	r.Entities = NewEntityService(opts...)
@@ -54,5 +53,6 @@ func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r.Quality = NewQualityService(opts...)
 	r.Ranking = NewRankingService(opts...)
 	r.TrafficAnomalies = NewTrafficAnomalyService(opts...)
+	r.TCPResetsTimeouts = NewTCPResetsTimeoutService(opts...)
 	return
 }

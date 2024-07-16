@@ -35,7 +35,7 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 			Physport:  cloudflare.F(int64(1)),
 			VlanTag:   cloudflare.F(int64(0)),
 			HaLink:    cloudflare.F(true),
-			Name:      cloudflare.F("string"),
+			Name:      cloudflare.F("name"),
 			Nat: cloudflare.F(magic_transit.NatParam{
 				StaticPrefix: cloudflare.F("192.0.2.0/24"),
 			}),
@@ -105,7 +105,7 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteLANUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("string"),
+			Name:      cloudflare.F("name"),
 			Nat: cloudflare.F(magic_transit.NatParam{
 				StaticPrefix: cloudflare.F("192.0.2.0/24"),
 			}),
@@ -236,7 +236,7 @@ func TestSiteLANEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteLANEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("string"),
+			Name:      cloudflare.F("name"),
 			Nat: cloudflare.F(magic_transit.NatParam{
 				StaticPrefix: cloudflare.F("192.0.2.0/24"),
 			}),

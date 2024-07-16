@@ -31,10 +31,10 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Organizations.New(context.TODO(), zero_trust.OrganizationNewParams{
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		Name:                     cloudflare.F("Widget Corps Internal Applications"),
-		AccountID:                cloudflare.F("string"),
+		AccountID:                cloudflare.F("account_id"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AutoRedirectToIdentity:   cloudflare.F(true),
-		IsUiReadOnly:             cloudflare.F(true),
+		IsUIReadOnly:             cloudflare.F(true),
 		LoginDesign: cloudflare.F(zero_trust.LoginDesignParam{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
 			FooterText:      cloudflare.F("This is an example description."),
@@ -43,7 +43,7 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 			TextColor:       cloudflare.F("#c5ed1b"),
 		}),
 		SessionDuration:                cloudflare.F("24h"),
-		UiReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
+		UIReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
 		UserSeatExpirationInactiveTime: cloudflare.F("720h"),
 		WARPAuthSessionDuration:        cloudflare.F("24h"),
 	})
@@ -71,7 +71,7 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.Update(context.TODO(), zero_trust.OrganizationUpdateParams{
-		AccountID:                cloudflare.F("string"),
+		AccountID:                cloudflare.F("account_id"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		AutoRedirectToIdentity:   cloudflare.F(true),
@@ -79,7 +79,7 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 			Forbidden:      cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			IdentityDenied: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		}),
-		IsUiReadOnly: cloudflare.F(true),
+		IsUIReadOnly: cloudflare.F(true),
 		LoginDesign: cloudflare.F(zero_trust.LoginDesignParam{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
 			FooterText:      cloudflare.F("This is an example description."),
@@ -89,7 +89,7 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 		}),
 		Name:                           cloudflare.F("Widget Corps Internal Applications"),
 		SessionDuration:                cloudflare.F("24h"),
-		UiReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
+		UIReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
 		UserSeatExpirationInactiveTime: cloudflare.F("720h"),
 		WARPAuthSessionDuration:        cloudflare.F("24h"),
 	})
@@ -117,7 +117,7 @@ func TestOrganizationListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.List(context.TODO(), zero_trust.OrganizationListParams{
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -144,7 +144,7 @@ func TestOrganizationRevokeUsersWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Organizations.RevokeUsers(context.TODO(), zero_trust.OrganizationRevokeUsersParams{
 		Email:     cloudflare.F("test@example.com"),
-		AccountID: cloudflare.F("string"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

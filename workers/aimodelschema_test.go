@@ -29,7 +29,7 @@ func TestAIModelSchemaGet(t *testing.T) {
 	)
 	_, err := client.Workers.AI.Models.Schema.Get(context.TODO(), workers.AIModelSchemaGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Model:     cloudflare.F("string"),
+		Model:     cloudflare.F("model"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

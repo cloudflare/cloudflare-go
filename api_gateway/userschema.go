@@ -48,8 +48,8 @@ func NewUserSchemaService(opts ...option.RequestOption) (r *UserSchemaService) {
 
 // Upload a schema to a zone
 func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams, opts ...option.RequestOption) (res *SchemaUpload, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UserSchemaNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -64,10 +64,14 @@ func (r *UserSchemaService) New(ctx context.Context, params UserSchemaNewParams,
 }
 
 // Retrieve information about all schemas on a zone
-func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PublicSchema], err error) {
+func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PublicSchema], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/api_gateway/user_schemas", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -82,14 +86,14 @@ func (r *UserSchemaService) List(ctx context.Context, params UserSchemaListParam
 }
 
 // Retrieve information about all schemas on a zone
-func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[PublicSchema] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchemaListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PublicSchema] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a schema
 func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body UserSchemaDeleteParams, opts ...option.RequestOption) (res *UserSchemaDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UserSchemaDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -109,8 +113,8 @@ func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body Us
 
 // Enable validation for a schema
 func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params UserSchemaEditParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UserSchemaEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -130,8 +134,8 @@ func (r *UserSchemaService) Edit(ctx context.Context, schemaID string, params Us
 
 // Retrieve information about a specific schema on a zone
 func (r *UserSchemaService) Get(ctx context.Context, schemaID string, params UserSchemaGetParams, opts ...option.RequestOption) (res *PublicSchema, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UserSchemaGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -157,8 +161,8 @@ type PublicSchema struct {
 	Kind PublicSchemaKind `json:"kind,required"`
 	// Name of the schema
 	Name string `json:"name,required"`
-	// UUID identifier
-	SchemaID string `json:"schema_id,required" format:"uuid"`
+	// UUID
+	SchemaID string `json:"schema_id,required"`
 	// Source of the schema
 	Source string `json:"source"`
 	// Flag whether schema is enabled for validation.
@@ -357,8 +361,8 @@ type UserSchemaNewResponseEnvelope struct {
 	Messages Message      `json:"messages,required"`
 	Result   SchemaUpload `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                              `json:"success,required"`
-	JSON    userSchemaNewResponseEnvelopeJSON `json:"-"`
+	Success UserSchemaNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userSchemaNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // userSchemaNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -380,15 +384,30 @@ func (r userSchemaNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Whether the API call was successful
+type UserSchemaNewResponseEnvelopeSuccess bool
+
+const (
+	UserSchemaNewResponseEnvelopeSuccessTrue UserSchemaNewResponseEnvelopeSuccess = true
+)
+
+func (r UserSchemaNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UserSchemaNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type UserSchemaListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Omit the source-files of schemas and only retrieve their meta-data.
 	OmitSource param.Field[bool] `query:"omit_source"`
 	// Page number of paginated results.
-	Page param.Field[interface{}] `query:"page"`
+	Page param.Field[int64] `query:"page"`
 	// Maximum number of results per page.
-	PerPage param.Field[interface{}] `query:"per_page"`
+	PerPage param.Field[int64] `query:"per_page"`
 	// Flag whether schema is enabled for validation.
 	ValidationEnabled param.Field[bool] `query:"validation_enabled"`
 }
@@ -397,7 +416,7 @@ type UserSchemaListParams struct {
 func (r UserSchemaListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -407,12 +426,12 @@ type UserSchemaDeleteParams struct {
 }
 
 type UserSchemaDeleteResponseEnvelope struct {
-	Errors   Message                       `json:"errors,required"`
-	Messages Message                       `json:"messages,required"`
-	Result   UserSchemaDeleteResponseUnion `json:"result,required"`
+	Errors   Message `json:"errors,required"`
+	Messages Message `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                 `json:"success,required"`
-	JSON    userSchemaDeleteResponseEnvelopeJSON `json:"-"`
+	Success UserSchemaDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  UserSchemaDeleteResponseUnion           `json:"result"`
+	JSON    userSchemaDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
 // userSchemaDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -420,8 +439,8 @@ type UserSchemaDeleteResponseEnvelope struct {
 type userSchemaDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -432,6 +451,21 @@ func (r *UserSchemaDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error
 
 func (r userSchemaDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type UserSchemaDeleteResponseEnvelopeSuccess bool
+
+const (
+	UserSchemaDeleteResponseEnvelopeSuccessTrue UserSchemaDeleteResponseEnvelopeSuccess = true
+)
+
+func (r UserSchemaDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UserSchemaDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type UserSchemaEditParams struct {
@@ -465,8 +499,8 @@ type UserSchemaEditResponseEnvelope struct {
 	Messages Message      `json:"messages,required"`
 	Result   PublicSchema `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                               `json:"success,required"`
-	JSON    userSchemaEditResponseEnvelopeJSON `json:"-"`
+	Success UserSchemaEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userSchemaEditResponseEnvelopeJSON    `json:"-"`
 }
 
 // userSchemaEditResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -488,6 +522,21 @@ func (r userSchemaEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Whether the API call was successful
+type UserSchemaEditResponseEnvelopeSuccess bool
+
+const (
+	UserSchemaEditResponseEnvelopeSuccessTrue UserSchemaEditResponseEnvelopeSuccess = true
+)
+
+func (r UserSchemaEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UserSchemaEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type UserSchemaGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -499,7 +548,7 @@ type UserSchemaGetParams struct {
 func (r UserSchemaGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -508,8 +557,8 @@ type UserSchemaGetResponseEnvelope struct {
 	Messages Message      `json:"messages,required"`
 	Result   PublicSchema `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                              `json:"success,required"`
-	JSON    userSchemaGetResponseEnvelopeJSON `json:"-"`
+	Success UserSchemaGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userSchemaGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // userSchemaGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -529,4 +578,19 @@ func (r *UserSchemaGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r userSchemaGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type UserSchemaGetResponseEnvelopeSuccess bool
+
+const (
+	UserSchemaGetResponseEnvelopeSuccessTrue UserSchemaGetResponseEnvelopeSuccess = true
+)
+
+func (r UserSchemaGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UserSchemaGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

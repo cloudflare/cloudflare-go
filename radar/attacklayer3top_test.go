@@ -31,7 +31,7 @@ func TestAttackLayer3TopAttacksWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer3.Top.Attacks(context.TODO(), radar.AttackLayer3TopAttacksParams{
 		Continent:        cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:          cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:        cloudflare.F([]radar.AttackLayer3TopAttacksParamsDateRange{radar.AttackLayer3TopAttacksParamsDateRange1d, radar.AttackLayer3TopAttacksParamsDateRange2d, radar.AttackLayer3TopAttacksParamsDateRange7d}),
+		DateRange:        cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:        cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:           cloudflare.F(radar.AttackLayer3TopAttacksParamsFormatJson),
 		IPVersion:        cloudflare.F([]radar.AttackLayer3TopAttacksParamsIPVersion{radar.AttackLayer3TopAttacksParamsIPVersionIPv4, radar.AttackLayer3TopAttacksParamsIPVersionIPv6}),
@@ -40,6 +40,7 @@ func TestAttackLayer3TopAttacksWithOptionalParams(t *testing.T) {
 		LimitPerLocation: cloudflare.F(int64(10)),
 		Location:         cloudflare.F([]string{"string", "string", "string"}),
 		Name:             cloudflare.F([]string{"string", "string", "string"}),
+		Normalization:    cloudflare.F(radar.AttackLayer3TopAttacksParamsNormalizationPercentage),
 		Protocol:         cloudflare.F([]radar.AttackLayer3TopAttacksParamsProtocol{radar.AttackLayer3TopAttacksParamsProtocolUdp, radar.AttackLayer3TopAttacksParamsProtocolTCP, radar.AttackLayer3TopAttacksParamsProtocolIcmp}),
 	})
 	if err != nil {
@@ -67,7 +68,7 @@ func TestAttackLayer3TopIndustryWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer3.Top.Industry(context.TODO(), radar.AttackLayer3TopIndustryParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]radar.AttackLayer3TopIndustryParamsDateRange{radar.AttackLayer3TopIndustryParamsDateRange1d, radar.AttackLayer3TopIndustryParamsDateRange2d, radar.AttackLayer3TopIndustryParamsDateRange7d}),
+		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:    cloudflare.F(radar.AttackLayer3TopIndustryParamsFormatJson),
 		IPVersion: cloudflare.F([]radar.AttackLayer3TopIndustryParamsIPVersion{radar.AttackLayer3TopIndustryParamsIPVersionIPv4, radar.AttackLayer3TopIndustryParamsIPVersionIPv6}),
@@ -101,7 +102,7 @@ func TestAttackLayer3TopVerticalWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer3.Top.Vertical(context.TODO(), radar.AttackLayer3TopVerticalParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]radar.AttackLayer3TopVerticalParamsDateRange{radar.AttackLayer3TopVerticalParamsDateRange1d, radar.AttackLayer3TopVerticalParamsDateRange2d, radar.AttackLayer3TopVerticalParamsDateRange7d}),
+		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:    cloudflare.F(radar.AttackLayer3TopVerticalParamsFormatJson),
 		IPVersion: cloudflare.F([]radar.AttackLayer3TopVerticalParamsIPVersion{radar.AttackLayer3TopVerticalParamsIPVersionIPv4, radar.AttackLayer3TopVerticalParamsIPVersionIPv6}),

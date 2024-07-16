@@ -37,7 +37,7 @@ func TestHTTPAseOSGetWithOptionalParams(t *testing.T) {
 			BrowserFamily: cloudflare.F([]radar.HTTPAseOSGetParamsBrowserFamily{radar.HTTPAseOSGetParamsBrowserFamilyChrome, radar.HTTPAseOSGetParamsBrowserFamilyEdge, radar.HTTPAseOSGetParamsBrowserFamilyFirefox}),
 			Continent:     cloudflare.F([]string{"string", "string", "string"}),
 			DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange:     cloudflare.F([]radar.HTTPAseOSGetParamsDateRange{radar.HTTPAseOSGetParamsDateRange1d, radar.HTTPAseOSGetParamsDateRange2d, radar.HTTPAseOSGetParamsDateRange7d}),
+			DateRange:     cloudflare.F([]string{"7d", "7d", "7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DeviceType:    cloudflare.F([]radar.HTTPAseOSGetParamsDeviceType{radar.HTTPAseOSGetParamsDeviceTypeDesktop, radar.HTTPAseOSGetParamsDeviceTypeMobile, radar.HTTPAseOSGetParamsDeviceTypeOther}),
 			Format:        cloudflare.F(radar.HTTPAseOSGetParamsFormatJson),

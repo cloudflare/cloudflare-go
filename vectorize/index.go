@@ -43,8 +43,8 @@ func NewIndexService(opts ...option.RequestOption) (r *IndexService) {
 
 // Creates and returns a new Vectorize Index.
 func (r *IndexService) New(ctx context.Context, params IndexNewParams, opts ...option.RequestOption) (res *CreateIndex, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndexNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,8 +60,8 @@ func (r *IndexService) New(ctx context.Context, params IndexNewParams, opts ...o
 
 // Updates and returns the specified Vectorize Index.
 func (r *IndexService) Update(ctx context.Context, indexName string, params IndexUpdateParams, opts ...option.RequestOption) (res *CreateIndex, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndexUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -82,8 +82,12 @@ func (r *IndexService) Update(ctx context.Context, indexName string, params Inde
 // Returns a list of Vectorize Indexes
 func (r *IndexService) List(ctx context.Context, query IndexListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CreateIndex], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -104,8 +108,8 @@ func (r *IndexService) ListAutoPaging(ctx context.Context, query IndexListParams
 
 // Deletes the specified Vectorize Index.
 func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexDeleteParams, opts ...option.RequestOption) (res *IndexDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndexDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -125,8 +129,8 @@ func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexD
 
 // Delete a set of vectors from an index by their vector identifiers.
 func (r *IndexService) DeleteByIDs(ctx context.Context, indexName string, params IndexDeleteByIDsParams, opts ...option.RequestOption) (res *IndexDeleteVectorsByID, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndexDeleteByIDsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -146,8 +150,8 @@ func (r *IndexService) DeleteByIDs(ctx context.Context, indexName string, params
 
 // Returns the specified Vectorize Index.
 func (r *IndexService) Get(ctx context.Context, indexName string, query IndexGetParams, opts ...option.RequestOption) (res *CreateIndex, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndexGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -167,8 +171,8 @@ func (r *IndexService) Get(ctx context.Context, indexName string, query IndexGet
 
 // Get a set of vectors from an index by their vector identifiers.
 func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params IndexGetByIDsParams, opts ...option.RequestOption) (res *IndexGetByIDsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndexGetByIDsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -189,8 +193,8 @@ func (r *IndexService) GetByIDs(ctx context.Context, indexName string, params In
 // Inserts vectors into the specified index and returns the count of the vectors
 // successfully inserted.
 func (r *IndexService) Insert(ctx context.Context, indexName string, params IndexInsertParams, opts ...option.RequestOption) (res *IndexInsert, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndexInsertResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -210,8 +214,8 @@ func (r *IndexService) Insert(ctx context.Context, indexName string, params Inde
 
 // Finds vectors closest to a given vector in an index.
 func (r *IndexService) Query(ctx context.Context, indexName string, params IndexQueryParams, opts ...option.RequestOption) (res *IndexQuery, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndexQueryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -232,8 +236,8 @@ func (r *IndexService) Query(ctx context.Context, indexName string, params Index
 // Upserts vectors into the specified index, creating them if they do not exist and
 // returns the count of values and ids successfully inserted.
 func (r *IndexService) Upsert(ctx context.Context, indexName string, params IndexUpsertParams, opts ...option.RequestOption) (res *IndexUpsert, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IndexUpsertResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -339,12 +343,12 @@ type IndexDimensionConfigurationMetric string
 const (
 	IndexDimensionConfigurationMetricCosine     IndexDimensionConfigurationMetric = "cosine"
 	IndexDimensionConfigurationMetricEuclidean  IndexDimensionConfigurationMetric = "euclidean"
-	IndexDimensionConfigurationMetricDotProduct IndexDimensionConfigurationMetric = "dot-product"
+	IndexDimensionConfigurationMetricDOTProduct IndexDimensionConfigurationMetric = "dot-product"
 )
 
 func (r IndexDimensionConfigurationMetric) IsKnown() bool {
 	switch r {
-	case IndexDimensionConfigurationMetricCosine, IndexDimensionConfigurationMetricEuclidean, IndexDimensionConfigurationMetricDotProduct:
+	case IndexDimensionConfigurationMetricCosine, IndexDimensionConfigurationMetricEuclidean, IndexDimensionConfigurationMetricDOTProduct:
 		return true
 	}
 	return false
@@ -558,12 +562,12 @@ type IndexNewParamsConfigMetric string
 const (
 	IndexNewParamsConfigMetricCosine     IndexNewParamsConfigMetric = "cosine"
 	IndexNewParamsConfigMetricEuclidean  IndexNewParamsConfigMetric = "euclidean"
-	IndexNewParamsConfigMetricDotProduct IndexNewParamsConfigMetric = "dot-product"
+	IndexNewParamsConfigMetricDOTProduct IndexNewParamsConfigMetric = "dot-product"
 )
 
 func (r IndexNewParamsConfigMetric) IsKnown() bool {
 	switch r {
-	case IndexNewParamsConfigMetricCosine, IndexNewParamsConfigMetricEuclidean, IndexNewParamsConfigMetricDotProduct:
+	case IndexNewParamsConfigMetricCosine, IndexNewParamsConfigMetricEuclidean, IndexNewParamsConfigMetricDOTProduct:
 		return true
 	}
 	return false

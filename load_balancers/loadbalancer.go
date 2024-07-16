@@ -48,8 +48,8 @@ func NewLoadBalancerService(opts ...option.RequestOption) (r *LoadBalancerServic
 
 // Create a new load balancer.
 func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LoadBalancerNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -65,8 +65,8 @@ func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewPar
 
 // Update a configured load balancer.
 func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string, params LoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LoadBalancerUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -87,8 +87,12 @@ func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string,
 // List configured load balancers.
 func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[LoadBalancer], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/load_balancers", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -109,8 +113,8 @@ func (r *LoadBalancerService) ListAutoPaging(ctx context.Context, query LoadBala
 
 // Delete a configured load balancer.
 func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, body LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LoadBalancerDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -130,8 +134,8 @@ func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string,
 
 // Apply changes to an existing load balancer, overwriting the supplied properties.
 func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, params LoadBalancerEditParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LoadBalancerEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -151,8 +155,8 @@ func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, p
 
 // Fetch a single configured load balancer.
 func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, query LoadBalancerGetParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
-	opts = append(r.Options[:], opts...)
 	var env LoadBalancerGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -606,7 +610,7 @@ type LocationStrategy struct {
 	// - `"never"`: Never prefer ECS.
 	// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 	// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-	PreferEcs LocationStrategyPreferEcs `json:"prefer_ecs"`
+	PreferECS LocationStrategyPreferECS `json:"prefer_ecs"`
 	JSON      locationStrategyJSON      `json:"-"`
 }
 
@@ -614,7 +618,7 @@ type LocationStrategy struct {
 // [LocationStrategy]
 type locationStrategyJSON struct {
 	Mode        apijson.Field
-	PreferEcs   apijson.Field
+	PreferECS   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -655,18 +659,18 @@ func (r LocationStrategyMode) IsKnown() bool {
 // - `"never"`: Never prefer ECS.
 // - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 // - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-type LocationStrategyPreferEcs string
+type LocationStrategyPreferECS string
 
 const (
-	LocationStrategyPreferEcsAlways    LocationStrategyPreferEcs = "always"
-	LocationStrategyPreferEcsNever     LocationStrategyPreferEcs = "never"
-	LocationStrategyPreferEcsProximity LocationStrategyPreferEcs = "proximity"
-	LocationStrategyPreferEcsGeo       LocationStrategyPreferEcs = "geo"
+	LocationStrategyPreferECSAlways    LocationStrategyPreferECS = "always"
+	LocationStrategyPreferECSNever     LocationStrategyPreferECS = "never"
+	LocationStrategyPreferECSProximity LocationStrategyPreferECS = "proximity"
+	LocationStrategyPreferECSGeo       LocationStrategyPreferECS = "geo"
 )
 
-func (r LocationStrategyPreferEcs) IsKnown() bool {
+func (r LocationStrategyPreferECS) IsKnown() bool {
 	switch r {
-	case LocationStrategyPreferEcsAlways, LocationStrategyPreferEcsNever, LocationStrategyPreferEcsProximity, LocationStrategyPreferEcsGeo:
+	case LocationStrategyPreferECSAlways, LocationStrategyPreferECSNever, LocationStrategyPreferECSProximity, LocationStrategyPreferECSGeo:
 		return true
 	}
 	return false
@@ -689,7 +693,7 @@ type LocationStrategyParam struct {
 	// - `"never"`: Never prefer ECS.
 	// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 	// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-	PreferEcs param.Field[LocationStrategyPreferEcs] `json:"prefer_ecs"`
+	PreferECS param.Field[LocationStrategyPreferECS] `json:"prefer_ecs"`
 }
 
 func (r LocationStrategyParam) MarshalJSON() (data []byte, err error) {

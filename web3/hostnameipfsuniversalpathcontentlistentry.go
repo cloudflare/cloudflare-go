@@ -38,8 +38,8 @@ func NewHostnameIPFSUniversalPathContentListEntryService(opts ...option.RequestO
 
 // Create IPFS Universal Path Gateway Content List Entry
 func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Context, zoneIdentifier string, identifier string, body HostnameIPFSUniversalPathContentListEntryNewParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -59,8 +59,8 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Conte
 
 // Edit IPFS Universal Path Gateway Content List Entry
 func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, body HostnameIPFSUniversalPathContentListEntryUpdateParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -84,8 +84,8 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Co
 
 // List IPFS Universal Path Gateway Content List Entries
 func (r *HostnameIPFSUniversalPathContentListEntryService) List(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListEntryListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -105,8 +105,8 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) List(ctx context.Cont
 
 // Delete IPFS Universal Path Gateway Content List Entry
 func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -130,8 +130,8 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Co
 
 // IPFS Universal Path Gateway Content List Entry Details
 func (r *HostnameIPFSUniversalPathContentListEntryService) Get(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return

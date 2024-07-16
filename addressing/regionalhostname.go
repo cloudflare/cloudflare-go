@@ -43,8 +43,8 @@ func NewRegionalHostnameService(opts ...option.RequestOption) (r *RegionalHostna
 // traffic. Learn more about
 // [Regional Services](https://developers.cloudflare.com/data-localization/regional-services/get-started/).
 func (r *RegionalHostnameService) New(ctx context.Context, params RegionalHostnameNewParams, opts ...option.RequestOption) (res *RegionalHostnameNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RegionalHostnameNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -61,8 +61,12 @@ func (r *RegionalHostnameService) New(ctx context.Context, params RegionalHostna
 // List all Regional Hostnames within a zone.
 func (r *RegionalHostnameService) List(ctx context.Context, query RegionalHostnameListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RegionalHostnameListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/addressing/regional_hostnames", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -100,8 +104,8 @@ func (r *RegionalHostnameService) Delete(ctx context.Context, hostname string, b
 // Update the configuration for a specific Regional Hostname. Only the region_key
 // of a hostname is mutable.
 func (r *RegionalHostnameService) Edit(ctx context.Context, hostname string, params RegionalHostnameEditParams, opts ...option.RequestOption) (res *RegionalHostnameEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RegionalHostnameEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -121,8 +125,8 @@ func (r *RegionalHostnameService) Edit(ctx context.Context, hostname string, par
 
 // Fetch the configuration for a specific Regional Hostname, within a zone.
 func (r *RegionalHostnameService) Get(ctx context.Context, hostname string, query RegionalHostnameGetParams, opts ...option.RequestOption) (res *RegionalHostnameGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RegionalHostnameGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

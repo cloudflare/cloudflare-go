@@ -52,8 +52,8 @@ func NewTunnelService(opts ...option.RequestOption) (r *TunnelService) {
 
 // Creates a new Argo Tunnel in an account.
 func (r *TunnelService) New(ctx context.Context, params TunnelNewParams, opts ...option.RequestOption) (res *TunnelNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -70,8 +70,12 @@ func (r *TunnelService) New(ctx context.Context, params TunnelNewParams, opts ..
 // Lists and filters all types of Tunnels in an account.
 func (r *TunnelService) List(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[TunnelListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/tunnels", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -92,8 +96,8 @@ func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListPar
 
 // Deletes an Argo Tunnel from an account.
 func (r *TunnelService) Delete(ctx context.Context, tunnelID string, body TunnelDeleteParams, opts ...option.RequestOption) (res *TunnelDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -113,8 +117,8 @@ func (r *TunnelService) Delete(ctx context.Context, tunnelID string, body Tunnel
 
 // Updates an existing Cloudflare Tunnel.
 func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params TunnelEditParams, opts ...option.RequestOption) (res *TunnelEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -134,8 +138,8 @@ func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params Tunnel
 
 // Fetches a single Argo Tunnel.
 func (r *TunnelService) Get(ctx context.Context, tunnelID string, query TunnelGetParams, opts ...option.RequestOption) (res *TunnelGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -221,7 +225,9 @@ func (r tunnelNewResponseJSON) RawJSON() string {
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelListResponse struct {
 	// Cloudflare account ID
-	AccountTag  string      `json:"account_tag"`
+	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]TunnelListResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections,required"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -235,7 +241,8 @@ type TunnelListResponse struct {
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// UUID of the tunnel.
-	ID       string      `json:"id" format:"uuid"`
+	ID string `json:"id" format:"uuid"`
+	// This field can have the runtime type of [interface{}].
 	Metadata interface{} `json:"metadata,required"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
@@ -277,6 +284,7 @@ func (r tunnelListResponseJSON) RawJSON() string {
 }
 
 func (r *TunnelListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = TunnelListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -284,6 +292,11 @@ func (r *TunnelListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [TunnelListResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [shared.CloudflareTunnel],
+// [zero_trust.TunnelListResponseTunnelWARPConnectorTunnel].
 func (r TunnelListResponse) AsUnion() TunnelListResponseUnion {
 	return r.union
 }
@@ -536,7 +549,9 @@ func (r tunnelDeleteResponseJSON) RawJSON() string {
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelEditResponse struct {
 	// Cloudflare account ID
-	AccountTag  string      `json:"account_tag"`
+	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]TunnelEditResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections,required"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -550,7 +565,8 @@ type TunnelEditResponse struct {
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// UUID of the tunnel.
-	ID       string      `json:"id" format:"uuid"`
+	ID string `json:"id" format:"uuid"`
+	// This field can have the runtime type of [interface{}].
 	Metadata interface{} `json:"metadata,required"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
@@ -592,6 +608,7 @@ func (r tunnelEditResponseJSON) RawJSON() string {
 }
 
 func (r *TunnelEditResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = TunnelEditResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -599,6 +616,11 @@ func (r *TunnelEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [TunnelEditResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [shared.CloudflareTunnel],
+// [zero_trust.TunnelEditResponseTunnelWARPConnectorTunnel].
 func (r TunnelEditResponse) AsUnion() TunnelEditResponseUnion {
 	return r.union
 }
@@ -939,7 +961,7 @@ type TunnelListParams struct {
 func (r TunnelListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

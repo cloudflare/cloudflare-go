@@ -49,8 +49,8 @@ func NewWaitingRoomService(opts ...option.RequestOption) (r *WaitingRoomService)
 
 // Creates a new waiting room.
 func (r *WaitingRoomService) New(ctx context.Context, params WaitingRoomNewParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WaitingRoomNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -66,8 +66,8 @@ func (r *WaitingRoomService) New(ctx context.Context, params WaitingRoomNewParam
 
 // Updates a configured waiting room.
 func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, params WaitingRoomUpdateParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WaitingRoomUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -88,8 +88,12 @@ func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, p
 // Lists waiting rooms.
 func (r *WaitingRoomService) List(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoom], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/waiting_rooms", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -110,8 +114,8 @@ func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, params WaitingR
 
 // Deletes a waiting room.
 func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, body WaitingRoomDeleteParams, opts ...option.RequestOption) (res *WaitingRoomDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WaitingRoomDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -131,8 +135,8 @@ func (r *WaitingRoomService) Delete(ctx context.Context, waitingRoomID string, b
 
 // Patches a configured waiting room.
 func (r *WaitingRoomService) Edit(ctx context.Context, waitingRoomID string, params WaitingRoomEditParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WaitingRoomEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -152,8 +156,8 @@ func (r *WaitingRoomService) Edit(ctx context.Context, waitingRoomID string, par
 
 // Fetches a single configured waiting room.
 func (r *WaitingRoomService) Get(ctx context.Context, waitingRoomID string, query WaitingRoomGetParams, opts ...option.RequestOption) (res *WaitingRoom, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WaitingRoomGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -1159,7 +1163,7 @@ type WaitingRoomListParams struct {
 func (r WaitingRoomListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

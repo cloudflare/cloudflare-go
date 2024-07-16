@@ -38,8 +38,8 @@ func NewVideoService(opts ...option.RequestOption) (r *VideoService) {
 
 // Returns information about an account's storage use.
 func (r *VideoService) StorageUsage(ctx context.Context, params VideoStorageUsageParams, opts ...option.RequestOption) (res *VideoStorageUsageResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env VideoStorageUsageResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -96,7 +96,7 @@ type VideoStorageUsageParams struct {
 func (r VideoStorageUsageParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

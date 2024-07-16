@@ -37,8 +37,8 @@ func NewAttackLayer7TimeseriesGroupService(opts ...option.RequestOption) (r *Att
 // Get a time series of the percentual distribution of mitigation techniques, over
 // time.
 func (r *AttackLayer7TimeseriesGroupService) Get(ctx context.Context, query AttackLayer7TimeseriesGroupGetParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,8 +50,8 @@ func (r *AttackLayer7TimeseriesGroupService) Get(ctx context.Context, query Atta
 
 // Percentage distribution of attacks by http method used over time.
 func (r *AttackLayer7TimeseriesGroupService) HTTPMethod(ctx context.Context, query AttackLayer7TimeseriesGroupHTTPMethodParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupHTTPMethodResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupHTTPMethodResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/http_method"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -63,8 +63,8 @@ func (r *AttackLayer7TimeseriesGroupService) HTTPMethod(ctx context.Context, que
 
 // Percentage distribution of attacks by http version used over time.
 func (r *AttackLayer7TimeseriesGroupService) HTTPVersion(ctx context.Context, query AttackLayer7TimeseriesGroupHTTPVersionParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupHTTPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupHTTPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/http_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -76,8 +76,8 @@ func (r *AttackLayer7TimeseriesGroupService) HTTPVersion(ctx context.Context, qu
 
 // Percentage distribution of attacks by industry used over time.
 func (r *AttackLayer7TimeseriesGroupService) Industry(ctx context.Context, query AttackLayer7TimeseriesGroupIndustryParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupIndustryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupIndustryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/industry"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -89,8 +89,8 @@ func (r *AttackLayer7TimeseriesGroupService) Industry(ctx context.Context, query
 
 // Percentage distribution of attacks by ip version used over time.
 func (r *AttackLayer7TimeseriesGroupService) IPVersion(ctx context.Context, query AttackLayer7TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -102,8 +102,8 @@ func (r *AttackLayer7TimeseriesGroupService) IPVersion(ctx context.Context, quer
 
 // Percentage distribution of attacks by managed rules used over time.
 func (r *AttackLayer7TimeseriesGroupService) ManagedRules(ctx context.Context, query AttackLayer7TimeseriesGroupManagedRulesParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupManagedRulesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupManagedRulesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/managed_rules"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -115,8 +115,8 @@ func (r *AttackLayer7TimeseriesGroupService) ManagedRules(ctx context.Context, q
 
 // Percentage distribution of attacks by mitigation product used over time.
 func (r *AttackLayer7TimeseriesGroupService) MitigationProduct(ctx context.Context, query AttackLayer7TimeseriesGroupMitigationProductParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupMitigationProductResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupMitigationProductResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/mitigation_product"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -128,8 +128,8 @@ func (r *AttackLayer7TimeseriesGroupService) MitigationProduct(ctx context.Conte
 
 // Percentage distribution of attacks by vertical used over time.
 func (r *AttackLayer7TimeseriesGroupService) Vertical(ctx context.Context, query AttackLayer7TimeseriesGroupVerticalParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupVerticalResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesGroupVerticalResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries_groups/vertical"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -242,7 +242,7 @@ type AttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                                 `json:"dataSource,required"`
 	Description     string                                                                 `json:"description,required"`
 	EventType       string                                                                 `json:"eventType,required"`
-	IsInstantaneous interface{}                                                            `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                 `json:"linkedUrl"`
 	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
@@ -648,7 +648,7 @@ type AttackLayer7TimeseriesGroupGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TimeseriesGroupGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -666,7 +666,7 @@ type AttackLayer7TimeseriesGroupGetParams struct {
 func (r AttackLayer7TimeseriesGroupGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -685,34 +685,6 @@ const (
 func (r AttackLayer7TimeseriesGroupGetParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AttackLayer7TimeseriesGroupGetParamsAggInterval15m, AttackLayer7TimeseriesGroupGetParamsAggInterval1h, AttackLayer7TimeseriesGroupGetParamsAggInterval1d, AttackLayer7TimeseriesGroupGetParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TimeseriesGroupGetParamsDateRange string
-
-const (
-	AttackLayer7TimeseriesGroupGetParamsDateRange1d         AttackLayer7TimeseriesGroupGetParamsDateRange = "1d"
-	AttackLayer7TimeseriesGroupGetParamsDateRange2d         AttackLayer7TimeseriesGroupGetParamsDateRange = "2d"
-	AttackLayer7TimeseriesGroupGetParamsDateRange7d         AttackLayer7TimeseriesGroupGetParamsDateRange = "7d"
-	AttackLayer7TimeseriesGroupGetParamsDateRange14d        AttackLayer7TimeseriesGroupGetParamsDateRange = "14d"
-	AttackLayer7TimeseriesGroupGetParamsDateRange28d        AttackLayer7TimeseriesGroupGetParamsDateRange = "28d"
-	AttackLayer7TimeseriesGroupGetParamsDateRange12w        AttackLayer7TimeseriesGroupGetParamsDateRange = "12w"
-	AttackLayer7TimeseriesGroupGetParamsDateRange24w        AttackLayer7TimeseriesGroupGetParamsDateRange = "24w"
-	AttackLayer7TimeseriesGroupGetParamsDateRange52w        AttackLayer7TimeseriesGroupGetParamsDateRange = "52w"
-	AttackLayer7TimeseriesGroupGetParamsDateRange1dControl  AttackLayer7TimeseriesGroupGetParamsDateRange = "1dControl"
-	AttackLayer7TimeseriesGroupGetParamsDateRange2dControl  AttackLayer7TimeseriesGroupGetParamsDateRange = "2dControl"
-	AttackLayer7TimeseriesGroupGetParamsDateRange7dControl  AttackLayer7TimeseriesGroupGetParamsDateRange = "7dControl"
-	AttackLayer7TimeseriesGroupGetParamsDateRange14dControl AttackLayer7TimeseriesGroupGetParamsDateRange = "14dControl"
-	AttackLayer7TimeseriesGroupGetParamsDateRange28dControl AttackLayer7TimeseriesGroupGetParamsDateRange = "28dControl"
-	AttackLayer7TimeseriesGroupGetParamsDateRange12wControl AttackLayer7TimeseriesGroupGetParamsDateRange = "12wControl"
-	AttackLayer7TimeseriesGroupGetParamsDateRange24wControl AttackLayer7TimeseriesGroupGetParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TimeseriesGroupGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TimeseriesGroupGetParamsDateRange1d, AttackLayer7TimeseriesGroupGetParamsDateRange2d, AttackLayer7TimeseriesGroupGetParamsDateRange7d, AttackLayer7TimeseriesGroupGetParamsDateRange14d, AttackLayer7TimeseriesGroupGetParamsDateRange28d, AttackLayer7TimeseriesGroupGetParamsDateRange12w, AttackLayer7TimeseriesGroupGetParamsDateRange24w, AttackLayer7TimeseriesGroupGetParamsDateRange52w, AttackLayer7TimeseriesGroupGetParamsDateRange1dControl, AttackLayer7TimeseriesGroupGetParamsDateRange2dControl, AttackLayer7TimeseriesGroupGetParamsDateRange7dControl, AttackLayer7TimeseriesGroupGetParamsDateRange14dControl, AttackLayer7TimeseriesGroupGetParamsDateRange28dControl, AttackLayer7TimeseriesGroupGetParamsDateRange12wControl, AttackLayer7TimeseriesGroupGetParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -775,7 +747,7 @@ type AttackLayer7TimeseriesGroupHTTPMethodParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -802,7 +774,7 @@ type AttackLayer7TimeseriesGroupHTTPMethodParams struct {
 func (r AttackLayer7TimeseriesGroupHTTPMethodParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -821,34 +793,6 @@ const (
 func (r AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval15m, AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1h, AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1d, AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange string
-
-const (
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange1d         AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "1d"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange2d         AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "2d"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange7d         AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "7d"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange14d        AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "14d"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange28d        AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "28d"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange12w        AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "12w"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange24w        AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "24w"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange52w        AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "52w"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange1dControl  AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "1dControl"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange2dControl  AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "2dControl"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange7dControl  AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "7dControl"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange14dControl AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "14dControl"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange28dControl AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "28dControl"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange12wControl AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "12wControl"
-	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange24wControl AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange1d, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange2d, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange7d, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange14d, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange28d, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange12w, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange24w, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange52w, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange1dControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange2dControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange7dControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange14dControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange28dControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange12wControl, AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -979,7 +923,7 @@ type AttackLayer7TimeseriesGroupHTTPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1006,7 +950,7 @@ type AttackLayer7TimeseriesGroupHTTPVersionParams struct {
 func (r AttackLayer7TimeseriesGroupHTTPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1025,34 +969,6 @@ const (
 func (r AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval15m, AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1h, AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1d, AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange string
-
-const (
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange1d         AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "1d"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange2d         AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "2d"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange7d         AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "7d"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange14d        AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "14d"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange28d        AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "28d"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange12w        AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "12w"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange24w        AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "24w"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange52w        AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "52w"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange1dControl  AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "1dControl"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange2dControl  AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "2dControl"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange7dControl  AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "7dControl"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange14dControl AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "14dControl"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange28dControl AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "28dControl"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange12wControl AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "12wControl"
-	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange24wControl AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange1d, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange2d, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange7d, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange14d, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange28d, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange12w, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange24w, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange52w, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange1dControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange2dControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange7dControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange14dControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange28dControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange12wControl, AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1226,7 +1142,7 @@ type AttackLayer7TimeseriesGroupIndustryParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TimeseriesGroupIndustryParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1258,7 +1174,7 @@ type AttackLayer7TimeseriesGroupIndustryParams struct {
 func (r AttackLayer7TimeseriesGroupIndustryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1277,34 +1193,6 @@ const (
 func (r AttackLayer7TimeseriesGroupIndustryParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AttackLayer7TimeseriesGroupIndustryParamsAggInterval15m, AttackLayer7TimeseriesGroupIndustryParamsAggInterval1h, AttackLayer7TimeseriesGroupIndustryParamsAggInterval1d, AttackLayer7TimeseriesGroupIndustryParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TimeseriesGroupIndustryParamsDateRange string
-
-const (
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange1d         AttackLayer7TimeseriesGroupIndustryParamsDateRange = "1d"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange2d         AttackLayer7TimeseriesGroupIndustryParamsDateRange = "2d"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange7d         AttackLayer7TimeseriesGroupIndustryParamsDateRange = "7d"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange14d        AttackLayer7TimeseriesGroupIndustryParamsDateRange = "14d"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange28d        AttackLayer7TimeseriesGroupIndustryParamsDateRange = "28d"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange12w        AttackLayer7TimeseriesGroupIndustryParamsDateRange = "12w"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange24w        AttackLayer7TimeseriesGroupIndustryParamsDateRange = "24w"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange52w        AttackLayer7TimeseriesGroupIndustryParamsDateRange = "52w"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange1dControl  AttackLayer7TimeseriesGroupIndustryParamsDateRange = "1dControl"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange2dControl  AttackLayer7TimeseriesGroupIndustryParamsDateRange = "2dControl"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange7dControl  AttackLayer7TimeseriesGroupIndustryParamsDateRange = "7dControl"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange14dControl AttackLayer7TimeseriesGroupIndustryParamsDateRange = "14dControl"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange28dControl AttackLayer7TimeseriesGroupIndustryParamsDateRange = "28dControl"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange12wControl AttackLayer7TimeseriesGroupIndustryParamsDateRange = "12wControl"
-	AttackLayer7TimeseriesGroupIndustryParamsDateRange24wControl AttackLayer7TimeseriesGroupIndustryParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TimeseriesGroupIndustryParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TimeseriesGroupIndustryParamsDateRange1d, AttackLayer7TimeseriesGroupIndustryParamsDateRange2d, AttackLayer7TimeseriesGroupIndustryParamsDateRange7d, AttackLayer7TimeseriesGroupIndustryParamsDateRange14d, AttackLayer7TimeseriesGroupIndustryParamsDateRange28d, AttackLayer7TimeseriesGroupIndustryParamsDateRange12w, AttackLayer7TimeseriesGroupIndustryParamsDateRange24w, AttackLayer7TimeseriesGroupIndustryParamsDateRange52w, AttackLayer7TimeseriesGroupIndustryParamsDateRange1dControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange2dControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange7dControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange14dControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange28dControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange12wControl, AttackLayer7TimeseriesGroupIndustryParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1494,7 +1382,7 @@ type AttackLayer7TimeseriesGroupIPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TimeseriesGroupIPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1521,7 +1409,7 @@ type AttackLayer7TimeseriesGroupIPVersionParams struct {
 func (r AttackLayer7TimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1540,34 +1428,6 @@ const (
 func (r AttackLayer7TimeseriesGroupIPVersionParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AttackLayer7TimeseriesGroupIPVersionParamsAggInterval15m, AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1h, AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1d, AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TimeseriesGroupIPVersionParamsDateRange string
-
-const (
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange1d         AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "1d"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange2d         AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "2d"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange7d         AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "7d"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange14d        AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "14d"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange28d        AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "28d"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange12w        AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "12w"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange24w        AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "24w"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange52w        AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "52w"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange1dControl  AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "1dControl"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange2dControl  AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "2dControl"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange7dControl  AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "7dControl"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange14dControl AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "14dControl"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange28dControl AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "28dControl"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange12wControl AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "12wControl"
-	AttackLayer7TimeseriesGroupIPVersionParamsDateRange24wControl AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TimeseriesGroupIPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TimeseriesGroupIPVersionParamsDateRange1d, AttackLayer7TimeseriesGroupIPVersionParamsDateRange2d, AttackLayer7TimeseriesGroupIPVersionParamsDateRange7d, AttackLayer7TimeseriesGroupIPVersionParamsDateRange14d, AttackLayer7TimeseriesGroupIPVersionParamsDateRange28d, AttackLayer7TimeseriesGroupIPVersionParamsDateRange12w, AttackLayer7TimeseriesGroupIPVersionParamsDateRange24w, AttackLayer7TimeseriesGroupIPVersionParamsDateRange52w, AttackLayer7TimeseriesGroupIPVersionParamsDateRange1dControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange2dControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange7dControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange14dControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange28dControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange12wControl, AttackLayer7TimeseriesGroupIPVersionParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1742,7 +1602,7 @@ type AttackLayer7TimeseriesGroupManagedRulesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TimeseriesGroupManagedRulesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1771,7 +1631,7 @@ type AttackLayer7TimeseriesGroupManagedRulesParams struct {
 func (r AttackLayer7TimeseriesGroupManagedRulesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1790,34 +1650,6 @@ const (
 func (r AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval15m, AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1h, AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1d, AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TimeseriesGroupManagedRulesParamsDateRange string
-
-const (
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange1d         AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "1d"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange2d         AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "2d"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange7d         AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "7d"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange14d        AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "14d"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange28d        AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "28d"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange12w        AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "12w"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange24w        AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "24w"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange52w        AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "52w"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange1dControl  AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "1dControl"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange2dControl  AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "2dControl"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange7dControl  AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "7dControl"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange14dControl AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "14dControl"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange28dControl AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "28dControl"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange12wControl AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "12wControl"
-	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange24wControl AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TimeseriesGroupManagedRulesParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TimeseriesGroupManagedRulesParamsDateRange1d, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange2d, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange7d, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange14d, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange28d, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange12w, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange24w, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange52w, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange1dControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange2dControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange7dControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange14dControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange28dControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange12wControl, AttackLayer7TimeseriesGroupManagedRulesParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2008,7 +1840,7 @@ type AttackLayer7TimeseriesGroupMitigationProductParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TimeseriesGroupMitigationProductParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -2035,7 +1867,7 @@ type AttackLayer7TimeseriesGroupMitigationProductParams struct {
 func (r AttackLayer7TimeseriesGroupMitigationProductParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2054,34 +1886,6 @@ const (
 func (r AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval15m, AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1h, AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1d, AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TimeseriesGroupMitigationProductParamsDateRange string
-
-const (
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange1d         AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "1d"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange2d         AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "2d"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange7d         AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "7d"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange14d        AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "14d"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange28d        AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "28d"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange12w        AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "12w"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange24w        AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "24w"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange52w        AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "52w"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange1dControl  AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "1dControl"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange2dControl  AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "2dControl"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange7dControl  AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "7dControl"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange14dControl AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "14dControl"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange28dControl AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "28dControl"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange12wControl AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "12wControl"
-	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange24wControl AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TimeseriesGroupMitigationProductParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TimeseriesGroupMitigationProductParamsDateRange1d, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange2d, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange7d, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange14d, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange28d, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange12w, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange24w, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange52w, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange1dControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange2dControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange7dControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange14dControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange28dControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange12wControl, AttackLayer7TimeseriesGroupMitigationProductParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2252,7 +2056,7 @@ type AttackLayer7TimeseriesGroupVerticalParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TimeseriesGroupVerticalParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -2284,7 +2088,7 @@ type AttackLayer7TimeseriesGroupVerticalParams struct {
 func (r AttackLayer7TimeseriesGroupVerticalParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2303,34 +2107,6 @@ const (
 func (r AttackLayer7TimeseriesGroupVerticalParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AttackLayer7TimeseriesGroupVerticalParamsAggInterval15m, AttackLayer7TimeseriesGroupVerticalParamsAggInterval1h, AttackLayer7TimeseriesGroupVerticalParamsAggInterval1d, AttackLayer7TimeseriesGroupVerticalParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AttackLayer7TimeseriesGroupVerticalParamsDateRange string
-
-const (
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange1d         AttackLayer7TimeseriesGroupVerticalParamsDateRange = "1d"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange2d         AttackLayer7TimeseriesGroupVerticalParamsDateRange = "2d"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange7d         AttackLayer7TimeseriesGroupVerticalParamsDateRange = "7d"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange14d        AttackLayer7TimeseriesGroupVerticalParamsDateRange = "14d"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange28d        AttackLayer7TimeseriesGroupVerticalParamsDateRange = "28d"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange12w        AttackLayer7TimeseriesGroupVerticalParamsDateRange = "12w"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange24w        AttackLayer7TimeseriesGroupVerticalParamsDateRange = "24w"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange52w        AttackLayer7TimeseriesGroupVerticalParamsDateRange = "52w"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange1dControl  AttackLayer7TimeseriesGroupVerticalParamsDateRange = "1dControl"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange2dControl  AttackLayer7TimeseriesGroupVerticalParamsDateRange = "2dControl"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange7dControl  AttackLayer7TimeseriesGroupVerticalParamsDateRange = "7dControl"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange14dControl AttackLayer7TimeseriesGroupVerticalParamsDateRange = "14dControl"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange28dControl AttackLayer7TimeseriesGroupVerticalParamsDateRange = "28dControl"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange12wControl AttackLayer7TimeseriesGroupVerticalParamsDateRange = "12wControl"
-	AttackLayer7TimeseriesGroupVerticalParamsDateRange24wControl AttackLayer7TimeseriesGroupVerticalParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TimeseriesGroupVerticalParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TimeseriesGroupVerticalParamsDateRange1d, AttackLayer7TimeseriesGroupVerticalParamsDateRange2d, AttackLayer7TimeseriesGroupVerticalParamsDateRange7d, AttackLayer7TimeseriesGroupVerticalParamsDateRange14d, AttackLayer7TimeseriesGroupVerticalParamsDateRange28d, AttackLayer7TimeseriesGroupVerticalParamsDateRange12w, AttackLayer7TimeseriesGroupVerticalParamsDateRange24w, AttackLayer7TimeseriesGroupVerticalParamsDateRange52w, AttackLayer7TimeseriesGroupVerticalParamsDateRange1dControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange2dControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange7dControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange14dControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange28dControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange12wControl, AttackLayer7TimeseriesGroupVerticalParamsDateRange24wControl:
 		return true
 	}
 	return false

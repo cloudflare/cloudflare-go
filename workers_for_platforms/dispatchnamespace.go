@@ -40,8 +40,8 @@ func NewDispatchNamespaceService(opts ...option.RequestOption) (r *DispatchNames
 
 // Create a new Workers for Platforms namespace.
 func (r *DispatchNamespaceService) New(ctx context.Context, params DispatchNamespaceNewParams, opts ...option.RequestOption) (res *DispatchNamespaceNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,8 +58,12 @@ func (r *DispatchNamespaceService) New(ctx context.Context, params DispatchNames
 // Fetch a list of Workers for Platforms namespaces.
 func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNamespaceListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DispatchNamespaceListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -80,8 +84,8 @@ func (r *DispatchNamespaceService) ListAutoPaging(ctx context.Context, query Dis
 
 // Delete a Workers for Platforms namespace.
 func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace string, body DispatchNamespaceDeleteParams, opts ...option.RequestOption) (res *DispatchNamespaceDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -101,8 +105,8 @@ func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace
 
 // Get a Workers for Platforms namespace.
 func (r *DispatchNamespaceService) Get(ctx context.Context, dispatchNamespace string, query DispatchNamespaceGetParams, opts ...option.RequestOption) (res *DispatchNamespaceGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

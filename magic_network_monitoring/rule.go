@@ -40,8 +40,8 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // Create network monitoring rules for account. Currently only supports creating a
 // single rule per API request.
 func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 
 // Update network monitoring rules for account.
 func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -75,8 +75,12 @@ func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts 
 // Lists network monitoring rules for account.
 func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MagicNetworkMonitoringRule], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -97,8 +101,8 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, 
 
 // Delete a network monitoring rule for account.
 func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -118,8 +122,8 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 
 // Update a network monitoring rule for account.
 func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -139,8 +143,8 @@ func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditPa
 
 // List a single network monitoring rule for account.
 func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RuleGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

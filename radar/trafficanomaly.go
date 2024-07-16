@@ -40,8 +40,8 @@ func NewTrafficAnomalyService(opts ...option.RequestOption) (r *TrafficAnomalySe
 // alerts are automatically detected by Radar and then manually verified by our
 // team. This endpoint returns the latest alerts.
 func (r *TrafficAnomalyService) Get(ctx context.Context, query TrafficAnomalyGetParams, opts ...option.RequestOption) (res *TrafficAnomalyGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TrafficAnomalyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/traffic_anomalies"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -187,7 +187,7 @@ type TrafficAnomalyGetParams struct {
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific
 	// start and end dates.
-	DateRange param.Field[TrafficAnomalyGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -206,38 +206,8 @@ type TrafficAnomalyGetParams struct {
 func (r TrafficAnomalyGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Shorthand date ranges for the last X days - use when you don't need specific
-// start and end dates.
-type TrafficAnomalyGetParamsDateRange string
-
-const (
-	TrafficAnomalyGetParamsDateRange1d         TrafficAnomalyGetParamsDateRange = "1d"
-	TrafficAnomalyGetParamsDateRange2d         TrafficAnomalyGetParamsDateRange = "2d"
-	TrafficAnomalyGetParamsDateRange7d         TrafficAnomalyGetParamsDateRange = "7d"
-	TrafficAnomalyGetParamsDateRange14d        TrafficAnomalyGetParamsDateRange = "14d"
-	TrafficAnomalyGetParamsDateRange28d        TrafficAnomalyGetParamsDateRange = "28d"
-	TrafficAnomalyGetParamsDateRange12w        TrafficAnomalyGetParamsDateRange = "12w"
-	TrafficAnomalyGetParamsDateRange24w        TrafficAnomalyGetParamsDateRange = "24w"
-	TrafficAnomalyGetParamsDateRange52w        TrafficAnomalyGetParamsDateRange = "52w"
-	TrafficAnomalyGetParamsDateRange1dControl  TrafficAnomalyGetParamsDateRange = "1dControl"
-	TrafficAnomalyGetParamsDateRange2dControl  TrafficAnomalyGetParamsDateRange = "2dControl"
-	TrafficAnomalyGetParamsDateRange7dControl  TrafficAnomalyGetParamsDateRange = "7dControl"
-	TrafficAnomalyGetParamsDateRange14dControl TrafficAnomalyGetParamsDateRange = "14dControl"
-	TrafficAnomalyGetParamsDateRange28dControl TrafficAnomalyGetParamsDateRange = "28dControl"
-	TrafficAnomalyGetParamsDateRange12wControl TrafficAnomalyGetParamsDateRange = "12wControl"
-	TrafficAnomalyGetParamsDateRange24wControl TrafficAnomalyGetParamsDateRange = "24wControl"
-)
-
-func (r TrafficAnomalyGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case TrafficAnomalyGetParamsDateRange1d, TrafficAnomalyGetParamsDateRange2d, TrafficAnomalyGetParamsDateRange7d, TrafficAnomalyGetParamsDateRange14d, TrafficAnomalyGetParamsDateRange28d, TrafficAnomalyGetParamsDateRange12w, TrafficAnomalyGetParamsDateRange24w, TrafficAnomalyGetParamsDateRange52w, TrafficAnomalyGetParamsDateRange1dControl, TrafficAnomalyGetParamsDateRange2dControl, TrafficAnomalyGetParamsDateRange7dControl, TrafficAnomalyGetParamsDateRange14dControl, TrafficAnomalyGetParamsDateRange28dControl, TrafficAnomalyGetParamsDateRange12wControl, TrafficAnomalyGetParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

@@ -45,8 +45,16 @@ func NewWAFPackageRuleService(opts ...option.RequestOption) (r *WAFPackageRuleSe
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 func (r *WAFPackageRuleService) List(ctx context.Context, packageID string, params WAFPackageRuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFPackageRuleListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if packageID == "" {
+		err = errors.New("missing required package_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules", params.ZoneID, packageID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -73,8 +81,8 @@ func (r *WAFPackageRuleService) ListAutoPaging(ctx context.Context, packageID st
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, ruleID string, params WAFPackageRuleEditParams, opts ...option.RequestOption) (res *WAFPackageRuleEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WAFPackageRuleEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -101,8 +109,8 @@ func (r *WAFPackageRuleService) Edit(ctx context.Context, packageID string, rule
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query WAFPackageRuleGetParams, opts ...option.RequestOption) (res *WAFPackageRuleGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WAFPackageRuleGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -180,7 +188,10 @@ type WAFPackageRuleListResponse struct {
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
-	Priority     string      `json:"priority,required"`
+	Priority string `json:"priority,required"`
+	// This field can have the runtime type of [[]AllowedModesAnomaly],
+	// [[]WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode],
+	// [[]WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode].
 	AllowedModes interface{} `json:"allowed_modes"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
@@ -211,6 +222,7 @@ func (r wafPackageRuleListResponseJSON) RawJSON() string {
 }
 
 func (r *WAFPackageRuleListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WAFPackageRuleListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -218,6 +230,13 @@ func (r *WAFPackageRuleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WAFPackageRuleListResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [firewall.WAFPackageRuleListResponseWAFManagedRulesAnomalyRule],
+// [firewall.WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule],
+// [firewall.WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule].
 func (r WAFPackageRuleListResponse) AsUnion() WAFPackageRuleListResponseUnion {
 	return r.union
 }
@@ -527,7 +546,10 @@ type WAFPackageRuleEditResponse struct {
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
-	Priority     string      `json:"priority,required"`
+	Priority string `json:"priority,required"`
+	// This field can have the runtime type of [[]AllowedModesAnomaly],
+	// [[]WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedMode],
+	// [[]WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode].
 	AllowedModes interface{} `json:"allowed_modes"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
@@ -558,6 +580,7 @@ func (r wafPackageRuleEditResponseJSON) RawJSON() string {
 }
 
 func (r *WAFPackageRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WAFPackageRuleEditResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -565,6 +588,13 @@ func (r *WAFPackageRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WAFPackageRuleEditResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [firewall.WAFPackageRuleEditResponseWAFManagedRulesAnomalyRule],
+// [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule],
+// [firewall.WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule].
 func (r WAFPackageRuleEditResponse) AsUnion() WAFPackageRuleEditResponseUnion {
 	return r.union
 }
@@ -906,7 +936,7 @@ type WAFPackageRuleListParams struct {
 func (r WAFPackageRuleListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

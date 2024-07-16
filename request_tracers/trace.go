@@ -36,8 +36,8 @@ func NewTraceService(opts ...option.RequestOption) (r *TraceService) {
 
 // Request Trace
 func (r *TraceService) New(ctx context.Context, params TraceNewParams, opts ...option.RequestOption) (res *TraceNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TraceNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

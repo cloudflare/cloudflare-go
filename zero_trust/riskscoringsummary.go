@@ -39,8 +39,8 @@ func NewRiskScoringSummaryService(opts ...option.RequestOption) (r *RiskScoringS
 
 // Get risk score info for all users in the account
 func (r *RiskScoringSummaryService) Get(ctx context.Context, accountIdentifier string, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RiskScoringSummaryGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -135,7 +135,7 @@ type RiskScoringSummaryGetParams struct {
 func (r RiskScoringSummaryGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

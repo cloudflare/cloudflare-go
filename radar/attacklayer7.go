@@ -43,8 +43,8 @@ func NewAttackLayer7Service(opts ...option.RequestOption) (r *AttackLayer7Servic
 // Get a timeseries of Layer 7 attacks. Values represent HTTP requests and are
 // normalized using min-max by default.
 func (r *AttackLayer7Service) Timeseries(ctx context.Context, query AttackLayer7TimeseriesParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer7TimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer7/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -156,7 +156,7 @@ type AttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -218,7 +218,7 @@ type AttackLayer7TimeseriesParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of L7 attack types.
+	// This field is deprecated, please use the new `mitigationProduct`.
 	Attack param.Field[[]AttackLayer7TimeseriesParamsAttack] `query:"attack"`
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
@@ -229,15 +229,23 @@ type AttackLayer7TimeseriesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer7TimeseriesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AttackLayer7TimeseriesParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TimeseriesParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TimeseriesParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TimeseriesParamsIPVersion] `query:"ipVersion"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TimeseriesParamsMitigationProduct] `query:"mitigationProduct"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
@@ -250,7 +258,7 @@ type AttackLayer7TimeseriesParams struct {
 func (r AttackLayer7TimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -294,34 +302,6 @@ func (r AttackLayer7TimeseriesParamsAttack) IsKnown() bool {
 	return false
 }
 
-type AttackLayer7TimeseriesParamsDateRange string
-
-const (
-	AttackLayer7TimeseriesParamsDateRange1d         AttackLayer7TimeseriesParamsDateRange = "1d"
-	AttackLayer7TimeseriesParamsDateRange2d         AttackLayer7TimeseriesParamsDateRange = "2d"
-	AttackLayer7TimeseriesParamsDateRange7d         AttackLayer7TimeseriesParamsDateRange = "7d"
-	AttackLayer7TimeseriesParamsDateRange14d        AttackLayer7TimeseriesParamsDateRange = "14d"
-	AttackLayer7TimeseriesParamsDateRange28d        AttackLayer7TimeseriesParamsDateRange = "28d"
-	AttackLayer7TimeseriesParamsDateRange12w        AttackLayer7TimeseriesParamsDateRange = "12w"
-	AttackLayer7TimeseriesParamsDateRange24w        AttackLayer7TimeseriesParamsDateRange = "24w"
-	AttackLayer7TimeseriesParamsDateRange52w        AttackLayer7TimeseriesParamsDateRange = "52w"
-	AttackLayer7TimeseriesParamsDateRange1dControl  AttackLayer7TimeseriesParamsDateRange = "1dControl"
-	AttackLayer7TimeseriesParamsDateRange2dControl  AttackLayer7TimeseriesParamsDateRange = "2dControl"
-	AttackLayer7TimeseriesParamsDateRange7dControl  AttackLayer7TimeseriesParamsDateRange = "7dControl"
-	AttackLayer7TimeseriesParamsDateRange14dControl AttackLayer7TimeseriesParamsDateRange = "14dControl"
-	AttackLayer7TimeseriesParamsDateRange28dControl AttackLayer7TimeseriesParamsDateRange = "28dControl"
-	AttackLayer7TimeseriesParamsDateRange12wControl AttackLayer7TimeseriesParamsDateRange = "12wControl"
-	AttackLayer7TimeseriesParamsDateRange24wControl AttackLayer7TimeseriesParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer7TimeseriesParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer7TimeseriesParamsDateRange1d, AttackLayer7TimeseriesParamsDateRange2d, AttackLayer7TimeseriesParamsDateRange7d, AttackLayer7TimeseriesParamsDateRange14d, AttackLayer7TimeseriesParamsDateRange28d, AttackLayer7TimeseriesParamsDateRange12w, AttackLayer7TimeseriesParamsDateRange24w, AttackLayer7TimeseriesParamsDateRange52w, AttackLayer7TimeseriesParamsDateRange1dControl, AttackLayer7TimeseriesParamsDateRange2dControl, AttackLayer7TimeseriesParamsDateRange7dControl, AttackLayer7TimeseriesParamsDateRange14dControl, AttackLayer7TimeseriesParamsDateRange28dControl, AttackLayer7TimeseriesParamsDateRange12wControl, AttackLayer7TimeseriesParamsDateRange24wControl:
-		return true
-	}
-	return false
-}
-
 // Format results are returned in.
 type AttackLayer7TimeseriesParamsFormat string
 
@@ -333,6 +313,116 @@ const (
 func (r AttackLayer7TimeseriesParamsFormat) IsKnown() bool {
 	switch r {
 	case AttackLayer7TimeseriesParamsFormatJson, AttackLayer7TimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesParamsHTTPMethod string
+
+const (
+	AttackLayer7TimeseriesParamsHTTPMethodGet             AttackLayer7TimeseriesParamsHTTPMethod = "GET"
+	AttackLayer7TimeseriesParamsHTTPMethodPost            AttackLayer7TimeseriesParamsHTTPMethod = "POST"
+	AttackLayer7TimeseriesParamsHTTPMethodDelete          AttackLayer7TimeseriesParamsHTTPMethod = "DELETE"
+	AttackLayer7TimeseriesParamsHTTPMethodPut             AttackLayer7TimeseriesParamsHTTPMethod = "PUT"
+	AttackLayer7TimeseriesParamsHTTPMethodHead            AttackLayer7TimeseriesParamsHTTPMethod = "HEAD"
+	AttackLayer7TimeseriesParamsHTTPMethodPurge           AttackLayer7TimeseriesParamsHTTPMethod = "PURGE"
+	AttackLayer7TimeseriesParamsHTTPMethodOptions         AttackLayer7TimeseriesParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TimeseriesParamsHTTPMethodPropfind        AttackLayer7TimeseriesParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TimeseriesParamsHTTPMethodMkcol           AttackLayer7TimeseriesParamsHTTPMethod = "MKCOL"
+	AttackLayer7TimeseriesParamsHTTPMethodPatch           AttackLayer7TimeseriesParamsHTTPMethod = "PATCH"
+	AttackLayer7TimeseriesParamsHTTPMethodACL             AttackLayer7TimeseriesParamsHTTPMethod = "ACL"
+	AttackLayer7TimeseriesParamsHTTPMethodBcopy           AttackLayer7TimeseriesParamsHTTPMethod = "BCOPY"
+	AttackLayer7TimeseriesParamsHTTPMethodBdelete         AttackLayer7TimeseriesParamsHTTPMethod = "BDELETE"
+	AttackLayer7TimeseriesParamsHTTPMethodBmove           AttackLayer7TimeseriesParamsHTTPMethod = "BMOVE"
+	AttackLayer7TimeseriesParamsHTTPMethodBpropfind       AttackLayer7TimeseriesParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TimeseriesParamsHTTPMethodBproppatch      AttackLayer7TimeseriesParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TimeseriesParamsHTTPMethodCheckin         AttackLayer7TimeseriesParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TimeseriesParamsHTTPMethodCheckout        AttackLayer7TimeseriesParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TimeseriesParamsHTTPMethodConnect         AttackLayer7TimeseriesParamsHTTPMethod = "CONNECT"
+	AttackLayer7TimeseriesParamsHTTPMethodCopy            AttackLayer7TimeseriesParamsHTTPMethod = "COPY"
+	AttackLayer7TimeseriesParamsHTTPMethodLabel           AttackLayer7TimeseriesParamsHTTPMethod = "LABEL"
+	AttackLayer7TimeseriesParamsHTTPMethodLock            AttackLayer7TimeseriesParamsHTTPMethod = "LOCK"
+	AttackLayer7TimeseriesParamsHTTPMethodMerge           AttackLayer7TimeseriesParamsHTTPMethod = "MERGE"
+	AttackLayer7TimeseriesParamsHTTPMethodMkactivity      AttackLayer7TimeseriesParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TimeseriesParamsHTTPMethodMkworkspace     AttackLayer7TimeseriesParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TimeseriesParamsHTTPMethodMove            AttackLayer7TimeseriesParamsHTTPMethod = "MOVE"
+	AttackLayer7TimeseriesParamsHTTPMethodNotify          AttackLayer7TimeseriesParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TimeseriesParamsHTTPMethodOrderpatch      AttackLayer7TimeseriesParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TimeseriesParamsHTTPMethodPoll            AttackLayer7TimeseriesParamsHTTPMethod = "POLL"
+	AttackLayer7TimeseriesParamsHTTPMethodProppatch       AttackLayer7TimeseriesParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TimeseriesParamsHTTPMethodReport          AttackLayer7TimeseriesParamsHTTPMethod = "REPORT"
+	AttackLayer7TimeseriesParamsHTTPMethodSearch          AttackLayer7TimeseriesParamsHTTPMethod = "SEARCH"
+	AttackLayer7TimeseriesParamsHTTPMethodSubscribe       AttackLayer7TimeseriesParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TimeseriesParamsHTTPMethodTrace           AttackLayer7TimeseriesParamsHTTPMethod = "TRACE"
+	AttackLayer7TimeseriesParamsHTTPMethodUncheckout      AttackLayer7TimeseriesParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TimeseriesParamsHTTPMethodUnlock          AttackLayer7TimeseriesParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TimeseriesParamsHTTPMethodUnsubscribe     AttackLayer7TimeseriesParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TimeseriesParamsHTTPMethodUpdate          AttackLayer7TimeseriesParamsHTTPMethod = "UPDATE"
+	AttackLayer7TimeseriesParamsHTTPMethodVersioncontrol  AttackLayer7TimeseriesParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TimeseriesParamsHTTPMethodBaselinecontrol AttackLayer7TimeseriesParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TimeseriesParamsHTTPMethodXmsenumatts     AttackLayer7TimeseriesParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TimeseriesParamsHTTPMethodRpcOutData      AttackLayer7TimeseriesParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TimeseriesParamsHTTPMethodRpcInData       AttackLayer7TimeseriesParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TimeseriesParamsHTTPMethodJson            AttackLayer7TimeseriesParamsHTTPMethod = "JSON"
+	AttackLayer7TimeseriesParamsHTTPMethodCook            AttackLayer7TimeseriesParamsHTTPMethod = "COOK"
+	AttackLayer7TimeseriesParamsHTTPMethodTrack           AttackLayer7TimeseriesParamsHTTPMethod = "TRACK"
+)
+
+func (r AttackLayer7TimeseriesParamsHTTPMethod) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesParamsHTTPMethodGet, AttackLayer7TimeseriesParamsHTTPMethodPost, AttackLayer7TimeseriesParamsHTTPMethodDelete, AttackLayer7TimeseriesParamsHTTPMethodPut, AttackLayer7TimeseriesParamsHTTPMethodHead, AttackLayer7TimeseriesParamsHTTPMethodPurge, AttackLayer7TimeseriesParamsHTTPMethodOptions, AttackLayer7TimeseriesParamsHTTPMethodPropfind, AttackLayer7TimeseriesParamsHTTPMethodMkcol, AttackLayer7TimeseriesParamsHTTPMethodPatch, AttackLayer7TimeseriesParamsHTTPMethodACL, AttackLayer7TimeseriesParamsHTTPMethodBcopy, AttackLayer7TimeseriesParamsHTTPMethodBdelete, AttackLayer7TimeseriesParamsHTTPMethodBmove, AttackLayer7TimeseriesParamsHTTPMethodBpropfind, AttackLayer7TimeseriesParamsHTTPMethodBproppatch, AttackLayer7TimeseriesParamsHTTPMethodCheckin, AttackLayer7TimeseriesParamsHTTPMethodCheckout, AttackLayer7TimeseriesParamsHTTPMethodConnect, AttackLayer7TimeseriesParamsHTTPMethodCopy, AttackLayer7TimeseriesParamsHTTPMethodLabel, AttackLayer7TimeseriesParamsHTTPMethodLock, AttackLayer7TimeseriesParamsHTTPMethodMerge, AttackLayer7TimeseriesParamsHTTPMethodMkactivity, AttackLayer7TimeseriesParamsHTTPMethodMkworkspace, AttackLayer7TimeseriesParamsHTTPMethodMove, AttackLayer7TimeseriesParamsHTTPMethodNotify, AttackLayer7TimeseriesParamsHTTPMethodOrderpatch, AttackLayer7TimeseriesParamsHTTPMethodPoll, AttackLayer7TimeseriesParamsHTTPMethodProppatch, AttackLayer7TimeseriesParamsHTTPMethodReport, AttackLayer7TimeseriesParamsHTTPMethodSearch, AttackLayer7TimeseriesParamsHTTPMethodSubscribe, AttackLayer7TimeseriesParamsHTTPMethodTrace, AttackLayer7TimeseriesParamsHTTPMethodUncheckout, AttackLayer7TimeseriesParamsHTTPMethodUnlock, AttackLayer7TimeseriesParamsHTTPMethodUnsubscribe, AttackLayer7TimeseriesParamsHTTPMethodUpdate, AttackLayer7TimeseriesParamsHTTPMethodVersioncontrol, AttackLayer7TimeseriesParamsHTTPMethodBaselinecontrol, AttackLayer7TimeseriesParamsHTTPMethodXmsenumatts, AttackLayer7TimeseriesParamsHTTPMethodRpcOutData, AttackLayer7TimeseriesParamsHTTPMethodRpcInData, AttackLayer7TimeseriesParamsHTTPMethodJson, AttackLayer7TimeseriesParamsHTTPMethodCook, AttackLayer7TimeseriesParamsHTTPMethodTrack:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesParamsHTTPVersion string
+
+const (
+	AttackLayer7TimeseriesParamsHTTPVersionHttPv1 AttackLayer7TimeseriesParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TimeseriesParamsHTTPVersionHttPv2 AttackLayer7TimeseriesParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TimeseriesParamsHTTPVersionHttPv3 AttackLayer7TimeseriesParamsHTTPVersion = "HTTPv3"
+)
+
+func (r AttackLayer7TimeseriesParamsHTTPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesParamsHTTPVersionHttPv1, AttackLayer7TimeseriesParamsHTTPVersionHttPv2, AttackLayer7TimeseriesParamsHTTPVersionHttPv3:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesParamsIPVersion string
+
+const (
+	AttackLayer7TimeseriesParamsIPVersionIPv4 AttackLayer7TimeseriesParamsIPVersion = "IPv4"
+	AttackLayer7TimeseriesParamsIPVersionIPv6 AttackLayer7TimeseriesParamsIPVersion = "IPv6"
+)
+
+func (r AttackLayer7TimeseriesParamsIPVersion) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesParamsIPVersionIPv4, AttackLayer7TimeseriesParamsIPVersionIPv6:
+		return true
+	}
+	return false
+}
+
+type AttackLayer7TimeseriesParamsMitigationProduct string
+
+const (
+	AttackLayer7TimeseriesParamsMitigationProductDDoS               AttackLayer7TimeseriesParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesParamsMitigationProductWAF                AttackLayer7TimeseriesParamsMitigationProduct = "WAF"
+	AttackLayer7TimeseriesParamsMitigationProductBotManagement      AttackLayer7TimeseriesParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TimeseriesParamsMitigationProductAccessRules        AttackLayer7TimeseriesParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TimeseriesParamsMitigationProductIPReputation       AttackLayer7TimeseriesParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TimeseriesParamsMitigationProductAPIShield          AttackLayer7TimeseriesParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TimeseriesParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+func (r AttackLayer7TimeseriesParamsMitigationProduct) IsKnown() bool {
+	switch r {
+	case AttackLayer7TimeseriesParamsMitigationProductDDoS, AttackLayer7TimeseriesParamsMitigationProductWAF, AttackLayer7TimeseriesParamsMitigationProductBotManagement, AttackLayer7TimeseriesParamsMitigationProductAccessRules, AttackLayer7TimeseriesParamsMitigationProductIPReputation, AttackLayer7TimeseriesParamsMitigationProductAPIShield, AttackLayer7TimeseriesParamsMitigationProductDataLossPrevention:
 		return true
 	}
 	return false

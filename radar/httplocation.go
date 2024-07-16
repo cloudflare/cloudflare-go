@@ -53,8 +53,8 @@ func NewHTTPLocationService(opts ...option.RequestOption) (r *HTTPLocationServic
 // Get the top locations by HTTP traffic. Values are a percentage out of the total
 // traffic.
 func (r *HTTPLocationService) Get(ctx context.Context, query HTTPLocationGetParams, opts ...option.RequestOption) (res *HTTPLocationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -164,7 +164,7 @@ type HTTPLocationGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                  `json:"dataSource,required"`
 	Description     string                                                  `json:"description,required"`
 	EventType       string                                                  `json:"eventType,required"`
-	IsInstantaneous interface{}                                             `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
 	EndTime         time.Time                                               `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                  `json:"linkedUrl"`
 	StartTime       time.Time                                               `json:"startTime" format:"date-time"`
@@ -237,7 +237,7 @@ type HTTPLocationGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPLocationGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -268,7 +268,7 @@ type HTTPLocationGetParams struct {
 func (r HTTPLocationGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -299,34 +299,6 @@ const (
 func (r HTTPLocationGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPLocationGetParamsBrowserFamilyChrome, HTTPLocationGetParamsBrowserFamilyEdge, HTTPLocationGetParamsBrowserFamilyFirefox, HTTPLocationGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPLocationGetParamsDateRange string
-
-const (
-	HTTPLocationGetParamsDateRange1d         HTTPLocationGetParamsDateRange = "1d"
-	HTTPLocationGetParamsDateRange2d         HTTPLocationGetParamsDateRange = "2d"
-	HTTPLocationGetParamsDateRange7d         HTTPLocationGetParamsDateRange = "7d"
-	HTTPLocationGetParamsDateRange14d        HTTPLocationGetParamsDateRange = "14d"
-	HTTPLocationGetParamsDateRange28d        HTTPLocationGetParamsDateRange = "28d"
-	HTTPLocationGetParamsDateRange12w        HTTPLocationGetParamsDateRange = "12w"
-	HTTPLocationGetParamsDateRange24w        HTTPLocationGetParamsDateRange = "24w"
-	HTTPLocationGetParamsDateRange52w        HTTPLocationGetParamsDateRange = "52w"
-	HTTPLocationGetParamsDateRange1dControl  HTTPLocationGetParamsDateRange = "1dControl"
-	HTTPLocationGetParamsDateRange2dControl  HTTPLocationGetParamsDateRange = "2dControl"
-	HTTPLocationGetParamsDateRange7dControl  HTTPLocationGetParamsDateRange = "7dControl"
-	HTTPLocationGetParamsDateRange14dControl HTTPLocationGetParamsDateRange = "14dControl"
-	HTTPLocationGetParamsDateRange28dControl HTTPLocationGetParamsDateRange = "28dControl"
-	HTTPLocationGetParamsDateRange12wControl HTTPLocationGetParamsDateRange = "12wControl"
-	HTTPLocationGetParamsDateRange24wControl HTTPLocationGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPLocationGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPLocationGetParamsDateRange1d, HTTPLocationGetParamsDateRange2d, HTTPLocationGetParamsDateRange7d, HTTPLocationGetParamsDateRange14d, HTTPLocationGetParamsDateRange28d, HTTPLocationGetParamsDateRange12w, HTTPLocationGetParamsDateRange24w, HTTPLocationGetParamsDateRange52w, HTTPLocationGetParamsDateRange1dControl, HTTPLocationGetParamsDateRange2dControl, HTTPLocationGetParamsDateRange7dControl, HTTPLocationGetParamsDateRange14dControl, HTTPLocationGetParamsDateRange28dControl, HTTPLocationGetParamsDateRange12wControl, HTTPLocationGetParamsDateRange24wControl:
 		return true
 	}
 	return false

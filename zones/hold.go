@@ -39,8 +39,8 @@ func NewHoldService(opts ...option.RequestOption) (r *HoldService) {
 // Enforce a zone hold on the zone, blocking the creation and activation of zones
 // with this zone's hostname.
 func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HoldNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *HoldService) New(ctx context.Context, params HoldNewParams, opts ...opt
 // Stop enforcement of a zone hold on the zone, permanently or temporarily,
 // allowing the creation and activation of zones with this zone's hostname.
 func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HoldDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -75,8 +75,8 @@ func (r *HoldService) Delete(ctx context.Context, params HoldDeleteParams, opts 
 // Retrieve whether the zone is subject to a zone hold, and metadata about the
 // hold.
 func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...option.RequestOption) (res *ZoneHold, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HoldGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -128,7 +128,7 @@ type HoldNewParams struct {
 func (r HoldNewParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -188,7 +188,7 @@ type HoldDeleteParams struct {
 func (r HoldDeleteParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

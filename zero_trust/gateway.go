@@ -32,6 +32,7 @@ type GatewayService struct {
 	Logging          *GatewayLoggingService
 	ProxyEndpoints   *GatewayProxyEndpointService
 	Rules            *GatewayRuleService
+	Certificates     *GatewayCertificateService
 }
 
 // NewGatewayService generates a new service that applies the given options to each
@@ -49,13 +50,14 @@ func NewGatewayService(opts ...option.RequestOption) (r *GatewayService) {
 	r.Logging = NewGatewayLoggingService(opts...)
 	r.ProxyEndpoints = NewGatewayProxyEndpointService(opts...)
 	r.Rules = NewGatewayRuleService(opts...)
+	r.Certificates = NewGatewayCertificateService(opts...)
 	return
 }
 
 // Creates a Zero Trust account with an existing Cloudflare account.
 func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ...option.RequestOption) (res *GatewayNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -71,8 +73,8 @@ func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ..
 
 // Gets information about the current Zero Trust account.
 func (r *GatewayService) List(ctx context.Context, query GatewayListParams, opts ...option.RequestOption) (res *GatewayListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env GatewayListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -40,8 +40,8 @@ func NewRiskScoringIntegrationService(opts ...option.RequestOption) (r *RiskScor
 
 // Create new risk score integration.
 func (r *RiskScoringIntegrationService) New(ctx context.Context, params RiskScoringIntegrationNewParams, opts ...option.RequestOption) (res *RiskScoringIntegrationNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RiskScoringIntegrationNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,8 @@ func (r *RiskScoringIntegrationService) New(ctx context.Context, params RiskScor
 //
 // Overwrite the reference_id, tenant_url, and active values with the ones provided
 func (r *RiskScoringIntegrationService) Update(ctx context.Context, integrationID string, params RiskScoringIntegrationUpdateParams, opts ...option.RequestOption) (res *RiskScoringIntegrationUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RiskScoringIntegrationUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -81,8 +81,12 @@ func (r *RiskScoringIntegrationService) Update(ctx context.Context, integrationI
 // List all risk score integrations for the account.
 func (r *RiskScoringIntegrationService) List(ctx context.Context, query RiskScoringIntegrationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RiskScoringIntegrationListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/integrations", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -103,8 +107,8 @@ func (r *RiskScoringIntegrationService) ListAutoPaging(ctx context.Context, quer
 
 // Delete a risk score integration.
 func (r *RiskScoringIntegrationService) Delete(ctx context.Context, integrationID string, body RiskScoringIntegrationDeleteParams, opts ...option.RequestOption) (res *RiskScoringIntegrationDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RiskScoringIntegrationDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -124,8 +128,8 @@ func (r *RiskScoringIntegrationService) Delete(ctx context.Context, integrationI
 
 // Get risk score integration by id.
 func (r *RiskScoringIntegrationService) Get(ctx context.Context, integrationID string, query RiskScoringIntegrationGetParams, opts ...option.RequestOption) (res *RiskScoringIntegrationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RiskScoringIntegrationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

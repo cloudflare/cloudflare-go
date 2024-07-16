@@ -38,8 +38,8 @@ func NewAccessTagService(opts ...option.RequestOption) (r *AccessTagService) {
 
 // Create a tag
 func (r *AccessTagService) New(ctx context.Context, params AccessTagNewParams, opts ...option.RequestOption) (res *Tag, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessTagNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,8 +55,8 @@ func (r *AccessTagService) New(ctx context.Context, params AccessTagNewParams, o
 
 // Update a tag
 func (r *AccessTagService) Update(ctx context.Context, tagName string, params AccessTagUpdateParams, opts ...option.RequestOption) (res *Tag, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessTagUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -77,8 +77,12 @@ func (r *AccessTagService) Update(ctx context.Context, tagName string, params Ac
 // List tags
 func (r *AccessTagService) List(ctx context.Context, query AccessTagListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Tag], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/access/tags", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -99,8 +103,8 @@ func (r *AccessTagService) ListAutoPaging(ctx context.Context, query AccessTagLi
 
 // Delete a tag
 func (r *AccessTagService) Delete(ctx context.Context, tagName string, body AccessTagDeleteParams, opts ...option.RequestOption) (res *AccessTagDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessTagDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -120,8 +124,8 @@ func (r *AccessTagService) Delete(ctx context.Context, tagName string, body Acce
 
 // Get a tag
 func (r *AccessTagService) Get(ctx context.Context, tagName string, query AccessTagGetParams, opts ...option.RequestOption) (res *Tag, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AccessTagGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -194,7 +198,9 @@ type AccessTagNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
-	Name param.Field[string] `json:"name,required"`
+	Name      param.Field[string]    `json:"name,required"`
+	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
+	UpdatedAt param.Field[time.Time] `json:"updated_at" format:"date-time"`
 }
 
 func (r AccessTagNewParams) MarshalJSON() (data []byte, err error) {
@@ -249,7 +255,9 @@ type AccessTagUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
-	Name param.Field[string] `json:"name,required"`
+	Name      param.Field[string]    `json:"name,required"`
+	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
+	UpdatedAt param.Field[time.Time] `json:"updated_at" format:"date-time"`
 }
 
 func (r AccessTagUpdateParams) MarshalJSON() (data []byte, err error) {

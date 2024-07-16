@@ -55,7 +55,7 @@ func TestHoldDeleteWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Holds.Delete(context.TODO(), zones.HoldDeleteParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		HoldAfter: cloudflare.F("string"),
+		HoldAfter: cloudflare.F("hold_after"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -41,8 +41,8 @@ func NewIPService(opts ...option.RequestOption) (r *IPService) {
 // https://developers.cloudflare.com/china-network/reference/infrastructure/ for JD
 // Cloud IPs.
 func (r *IPService) List(ctx context.Context, query IPListParams, opts ...option.RequestOption) (res *IPListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IPListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "ips"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -115,9 +115,12 @@ func (r JDCloudIPs) implementsIPsIPListResponse() {}
 
 type IPListResponse struct {
 	// A digest of the IP data. Useful for determining if the data has changed.
-	Etag         string             `json:"etag"`
-	IPV4CIDRs    interface{}        `json:"ipv4_cidrs,required"`
-	IPV6CIDRs    interface{}        `json:"ipv6_cidrs,required"`
+	Etag string `json:"etag"`
+	// This field can have the runtime type of [[]string].
+	IPV4CIDRs interface{} `json:"ipv4_cidrs,required"`
+	// This field can have the runtime type of [[]string].
+	IPV6CIDRs interface{} `json:"ipv6_cidrs,required"`
+	// This field can have the runtime type of [[]string].
 	JDCloudCIDRs interface{}        `json:"jdcloud_cidrs,required"`
 	JSON         ipListResponseJSON `json:"-"`
 	union        IPListResponseUnion
@@ -138,6 +141,7 @@ func (r ipListResponseJSON) RawJSON() string {
 }
 
 func (r *IPListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = IPListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -145,6 +149,10 @@ func (r *IPListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [IPListResponseUnion] interface which you can cast to the
+// specific types for more type safety.
+//
+// Possible runtime types of the union are [ips.IPs], [ips.JDCloudIPs].
 func (r IPListResponse) AsUnion() IPListResponseUnion {
 	return r.union
 }
@@ -178,7 +186,7 @@ type IPListParams struct {
 func (r IPListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

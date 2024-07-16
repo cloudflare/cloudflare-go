@@ -41,7 +41,7 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 // Lists organizations the user is associated with.
 func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Organization], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/organizations"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
@@ -75,8 +75,8 @@ func (r *OrganizationService) Delete(ctx context.Context, organizationID string,
 
 // Gets a specific organization the user is associated with.
 func (r *OrganizationService) Get(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *OrganizationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env OrganizationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if organizationID == "" {
 		err = errors.New("missing required organization_id parameter")
 		return
@@ -168,7 +168,7 @@ type OrganizationListParams struct {
 func (r OrganizationListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

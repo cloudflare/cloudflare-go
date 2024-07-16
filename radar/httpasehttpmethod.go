@@ -38,8 +38,8 @@ func NewHTTPAseHTTPMethodService(opts ...option.RequestOption) (r *HTTPAseHTTPMe
 // Get the top autonomous systems (AS), by HTTP traffic, of the requested HTTP
 // protocol version. Values are a percentage out of the total traffic.
 func (r *HTTPAseHTTPMethodService) Get(ctx context.Context, httpVersion HTTPAseHTTPMethodGetParamsHTTPVersion, query HTTPAseHTTPMethodGetParams, opts ...option.RequestOption) (res *HTTPAseHTTPMethodGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseHTTPMethodGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/http_version/%v", httpVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -149,7 +149,7 @@ type HTTPAseHTTPMethodGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                       `json:"dataSource,required"`
 	Description     string                                                       `json:"description,required"`
 	EventType       string                                                       `json:"eventType,required"`
-	IsInstantaneous interface{}                                                  `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                    `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                       `json:"linkedUrl"`
 	StartTime       time.Time                                                    `json:"startTime" format:"date-time"`
@@ -223,7 +223,7 @@ type HTTPAseHTTPMethodGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPAseHTTPMethodGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -253,7 +253,7 @@ type HTTPAseHTTPMethodGetParams struct {
 func (r HTTPAseHTTPMethodGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -301,34 +301,6 @@ const (
 func (r HTTPAseHTTPMethodGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPAseHTTPMethodGetParamsBrowserFamilyChrome, HTTPAseHTTPMethodGetParamsBrowserFamilyEdge, HTTPAseHTTPMethodGetParamsBrowserFamilyFirefox, HTTPAseHTTPMethodGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPAseHTTPMethodGetParamsDateRange string
-
-const (
-	HTTPAseHTTPMethodGetParamsDateRange1d         HTTPAseHTTPMethodGetParamsDateRange = "1d"
-	HTTPAseHTTPMethodGetParamsDateRange2d         HTTPAseHTTPMethodGetParamsDateRange = "2d"
-	HTTPAseHTTPMethodGetParamsDateRange7d         HTTPAseHTTPMethodGetParamsDateRange = "7d"
-	HTTPAseHTTPMethodGetParamsDateRange14d        HTTPAseHTTPMethodGetParamsDateRange = "14d"
-	HTTPAseHTTPMethodGetParamsDateRange28d        HTTPAseHTTPMethodGetParamsDateRange = "28d"
-	HTTPAseHTTPMethodGetParamsDateRange12w        HTTPAseHTTPMethodGetParamsDateRange = "12w"
-	HTTPAseHTTPMethodGetParamsDateRange24w        HTTPAseHTTPMethodGetParamsDateRange = "24w"
-	HTTPAseHTTPMethodGetParamsDateRange52w        HTTPAseHTTPMethodGetParamsDateRange = "52w"
-	HTTPAseHTTPMethodGetParamsDateRange1dControl  HTTPAseHTTPMethodGetParamsDateRange = "1dControl"
-	HTTPAseHTTPMethodGetParamsDateRange2dControl  HTTPAseHTTPMethodGetParamsDateRange = "2dControl"
-	HTTPAseHTTPMethodGetParamsDateRange7dControl  HTTPAseHTTPMethodGetParamsDateRange = "7dControl"
-	HTTPAseHTTPMethodGetParamsDateRange14dControl HTTPAseHTTPMethodGetParamsDateRange = "14dControl"
-	HTTPAseHTTPMethodGetParamsDateRange28dControl HTTPAseHTTPMethodGetParamsDateRange = "28dControl"
-	HTTPAseHTTPMethodGetParamsDateRange12wControl HTTPAseHTTPMethodGetParamsDateRange = "12wControl"
-	HTTPAseHTTPMethodGetParamsDateRange24wControl HTTPAseHTTPMethodGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPAseHTTPMethodGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPAseHTTPMethodGetParamsDateRange1d, HTTPAseHTTPMethodGetParamsDateRange2d, HTTPAseHTTPMethodGetParamsDateRange7d, HTTPAseHTTPMethodGetParamsDateRange14d, HTTPAseHTTPMethodGetParamsDateRange28d, HTTPAseHTTPMethodGetParamsDateRange12w, HTTPAseHTTPMethodGetParamsDateRange24w, HTTPAseHTTPMethodGetParamsDateRange52w, HTTPAseHTTPMethodGetParamsDateRange1dControl, HTTPAseHTTPMethodGetParamsDateRange2dControl, HTTPAseHTTPMethodGetParamsDateRange7dControl, HTTPAseHTTPMethodGetParamsDateRange14dControl, HTTPAseHTTPMethodGetParamsDateRange28dControl, HTTPAseHTTPMethodGetParamsDateRange12wControl, HTTPAseHTTPMethodGetParamsDateRange24wControl:
 		return true
 	}
 	return false

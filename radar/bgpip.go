@@ -37,8 +37,8 @@ func NewBGPIPService(opts ...option.RequestOption) (r *BGPIPService) {
 // Gets time-series data for the announced IP space count, represented as the
 // number of IPv4 /24s and IPv6 /48s, for a given ASN.
 func (r *BGPIPService) Timeseries(ctx context.Context, query BGPIPTimeseriesParams, opts ...option.RequestOption) (res *BgpipTimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BgpipTimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/ips/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -176,7 +176,7 @@ type BGPIPTimeseriesParams struct {
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific
 	// start and end dates.
-	DateRange param.Field[BgpipTimeseriesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -193,38 +193,8 @@ type BGPIPTimeseriesParams struct {
 func (r BGPIPTimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Shorthand date ranges for the last X days - use when you don't need specific
-// start and end dates.
-type BgpipTimeseriesParamsDateRange string
-
-const (
-	BgpipTimeseriesParamsDateRange1d         BgpipTimeseriesParamsDateRange = "1d"
-	BgpipTimeseriesParamsDateRange2d         BgpipTimeseriesParamsDateRange = "2d"
-	BgpipTimeseriesParamsDateRange7d         BgpipTimeseriesParamsDateRange = "7d"
-	BgpipTimeseriesParamsDateRange14d        BgpipTimeseriesParamsDateRange = "14d"
-	BgpipTimeseriesParamsDateRange28d        BgpipTimeseriesParamsDateRange = "28d"
-	BgpipTimeseriesParamsDateRange12w        BgpipTimeseriesParamsDateRange = "12w"
-	BgpipTimeseriesParamsDateRange24w        BgpipTimeseriesParamsDateRange = "24w"
-	BgpipTimeseriesParamsDateRange52w        BgpipTimeseriesParamsDateRange = "52w"
-	BgpipTimeseriesParamsDateRange1dControl  BgpipTimeseriesParamsDateRange = "1dControl"
-	BgpipTimeseriesParamsDateRange2dControl  BgpipTimeseriesParamsDateRange = "2dControl"
-	BgpipTimeseriesParamsDateRange7dControl  BgpipTimeseriesParamsDateRange = "7dControl"
-	BgpipTimeseriesParamsDateRange14dControl BgpipTimeseriesParamsDateRange = "14dControl"
-	BgpipTimeseriesParamsDateRange28dControl BgpipTimeseriesParamsDateRange = "28dControl"
-	BgpipTimeseriesParamsDateRange12wControl BgpipTimeseriesParamsDateRange = "12wControl"
-	BgpipTimeseriesParamsDateRange24wControl BgpipTimeseriesParamsDateRange = "24wControl"
-)
-
-func (r BgpipTimeseriesParamsDateRange) IsKnown() bool {
-	switch r {
-	case BgpipTimeseriesParamsDateRange1d, BgpipTimeseriesParamsDateRange2d, BgpipTimeseriesParamsDateRange7d, BgpipTimeseriesParamsDateRange14d, BgpipTimeseriesParamsDateRange28d, BgpipTimeseriesParamsDateRange12w, BgpipTimeseriesParamsDateRange24w, BgpipTimeseriesParamsDateRange52w, BgpipTimeseriesParamsDateRange1dControl, BgpipTimeseriesParamsDateRange2dControl, BgpipTimeseriesParamsDateRange7dControl, BgpipTimeseriesParamsDateRange14dControl, BgpipTimeseriesParamsDateRange28dControl, BgpipTimeseriesParamsDateRange12wControl, BgpipTimeseriesParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

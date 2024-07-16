@@ -39,8 +39,8 @@ func NewDomainHistoryService(opts ...option.RequestOption) (r *DomainHistoryServ
 
 // Get Domain History
 func (r *DomainHistoryService) Get(ctx context.Context, params DomainHistoryGetParams, opts ...option.RequestOption) (res *[]DomainHistory, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DomainHistoryGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -111,7 +111,7 @@ type DomainHistoryGetParams struct {
 func (r DomainHistoryGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

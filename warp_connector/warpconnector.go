@@ -42,8 +42,8 @@ func NewWARPConnectorService(opts ...option.RequestOption) (r *WARPConnectorServ
 
 // Creates a new Warp Connector Tunnel in an account.
 func (r *WARPConnectorService) New(ctx context.Context, params WARPConnectorNewParams, opts ...option.RequestOption) (res *WARPConnectorNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WARPConnectorNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,8 +60,12 @@ func (r *WARPConnectorService) New(ctx context.Context, params WARPConnectorNewP
 // Lists and filters Warp Connector Tunnels in an account.
 func (r *WARPConnectorService) List(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WARPConnectorListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/warp_connector", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -82,8 +86,8 @@ func (r *WARPConnectorService) ListAutoPaging(ctx context.Context, params WARPCo
 
 // Deletes a Warp Connector Tunnel from an account.
 func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, body WARPConnectorDeleteParams, opts ...option.RequestOption) (res *WARPConnectorDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WARPConnectorDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -103,8 +107,8 @@ func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, body
 
 // Updates an existing Warp Connector Tunnel.
 func (r *WARPConnectorService) Edit(ctx context.Context, tunnelID string, params WARPConnectorEditParams, opts ...option.RequestOption) (res *WARPConnectorEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WARPConnectorEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -124,8 +128,8 @@ func (r *WARPConnectorService) Edit(ctx context.Context, tunnelID string, params
 
 // Fetches a single Warp Connector Tunnel.
 func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query WARPConnectorGetParams, opts ...option.RequestOption) (res *WARPConnectorGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WARPConnectorGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -146,8 +150,8 @@ func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query W
 // Gets the token used to associate warp device with a specific Warp Connector
 // tunnel.
 func (r *WARPConnectorService) Token(ctx context.Context, tunnelID string, query WARPConnectorTokenParams, opts ...option.RequestOption) (res *WARPConnectorTokenResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WARPConnectorTokenResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -168,7 +172,9 @@ func (r *WARPConnectorService) Token(ctx context.Context, tunnelID string, query
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type WARPConnectorNewResponse struct {
 	// Cloudflare account ID
-	AccountTag  string      `json:"account_tag"`
+	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]WARPConnectorNewResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections,required"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -182,7 +188,8 @@ type WARPConnectorNewResponse struct {
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// UUID of the tunnel.
-	ID       string      `json:"id" format:"uuid"`
+	ID string `json:"id" format:"uuid"`
+	// This field can have the runtime type of [interface{}].
 	Metadata interface{} `json:"metadata,required"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
@@ -224,6 +231,7 @@ func (r warpConnectorNewResponseJSON) RawJSON() string {
 }
 
 func (r *WARPConnectorNewResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WARPConnectorNewResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -231,6 +239,11 @@ func (r *WARPConnectorNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WARPConnectorNewResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are [shared.CloudflareTunnel],
+// [warp_connector.WARPConnectorNewResponseTunnelWARPConnectorTunnel].
 func (r WARPConnectorNewResponse) AsUnion() WARPConnectorNewResponseUnion {
 	return r.union
 }
@@ -450,7 +463,9 @@ func (r WARPConnectorNewResponseTunType) IsKnown() bool {
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type WARPConnectorListResponse struct {
 	// Cloudflare account ID
-	AccountTag  string      `json:"account_tag"`
+	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]WARPConnectorListResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections,required"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -464,7 +479,8 @@ type WARPConnectorListResponse struct {
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// UUID of the tunnel.
-	ID       string      `json:"id" format:"uuid"`
+	ID string `json:"id" format:"uuid"`
+	// This field can have the runtime type of [interface{}].
 	Metadata interface{} `json:"metadata,required"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
@@ -506,6 +522,7 @@ func (r warpConnectorListResponseJSON) RawJSON() string {
 }
 
 func (r *WARPConnectorListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WARPConnectorListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -513,6 +530,11 @@ func (r *WARPConnectorListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WARPConnectorListResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are [shared.CloudflareTunnel],
+// [warp_connector.WARPConnectorListResponseTunnelWARPConnectorTunnel].
 func (r WARPConnectorListResponse) AsUnion() WARPConnectorListResponseUnion {
 	return r.union
 }
@@ -732,7 +754,9 @@ func (r WARPConnectorListResponseTunType) IsKnown() bool {
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type WARPConnectorDeleteResponse struct {
 	// Cloudflare account ID
-	AccountTag  string      `json:"account_tag"`
+	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]WARPConnectorDeleteResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections,required"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -746,7 +770,8 @@ type WARPConnectorDeleteResponse struct {
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// UUID of the tunnel.
-	ID       string      `json:"id" format:"uuid"`
+	ID string `json:"id" format:"uuid"`
+	// This field can have the runtime type of [interface{}].
 	Metadata interface{} `json:"metadata,required"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
@@ -788,6 +813,7 @@ func (r warpConnectorDeleteResponseJSON) RawJSON() string {
 }
 
 func (r *WARPConnectorDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WARPConnectorDeleteResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -795,6 +821,11 @@ func (r *WARPConnectorDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WARPConnectorDeleteResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [shared.CloudflareTunnel],
+// [warp_connector.WARPConnectorDeleteResponseTunnelWARPConnectorTunnel].
 func (r WARPConnectorDeleteResponse) AsUnion() WARPConnectorDeleteResponseUnion {
 	return r.union
 }
@@ -1014,7 +1045,9 @@ func (r WARPConnectorDeleteResponseTunType) IsKnown() bool {
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type WARPConnectorEditResponse struct {
 	// Cloudflare account ID
-	AccountTag  string      `json:"account_tag"`
+	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]WARPConnectorEditResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections,required"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -1028,7 +1061,8 @@ type WARPConnectorEditResponse struct {
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// UUID of the tunnel.
-	ID       string      `json:"id" format:"uuid"`
+	ID string `json:"id" format:"uuid"`
+	// This field can have the runtime type of [interface{}].
 	Metadata interface{} `json:"metadata,required"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
@@ -1070,6 +1104,7 @@ func (r warpConnectorEditResponseJSON) RawJSON() string {
 }
 
 func (r *WARPConnectorEditResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WARPConnectorEditResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -1077,6 +1112,11 @@ func (r *WARPConnectorEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WARPConnectorEditResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are [shared.CloudflareTunnel],
+// [warp_connector.WARPConnectorEditResponseTunnelWARPConnectorTunnel].
 func (r WARPConnectorEditResponse) AsUnion() WARPConnectorEditResponseUnion {
 	return r.union
 }
@@ -1296,7 +1336,9 @@ func (r WARPConnectorEditResponseTunType) IsKnown() bool {
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type WARPConnectorGetResponse struct {
 	// Cloudflare account ID
-	AccountTag  string      `json:"account_tag"`
+	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]WARPConnectorGetResponseTunnelWARPConnectorTunnelConnection].
 	Connections interface{} `json:"connections,required"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
@@ -1310,7 +1352,8 @@ type WARPConnectorGetResponse struct {
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
 	// UUID of the tunnel.
-	ID       string      `json:"id" format:"uuid"`
+	ID string `json:"id" format:"uuid"`
+	// This field can have the runtime type of [interface{}].
 	Metadata interface{} `json:"metadata,required"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
@@ -1352,6 +1395,7 @@ func (r warpConnectorGetResponseJSON) RawJSON() string {
 }
 
 func (r *WARPConnectorGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WARPConnectorGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -1359,6 +1403,11 @@ func (r *WARPConnectorGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WARPConnectorGetResponseUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are [shared.CloudflareTunnel],
+// [warp_connector.WARPConnectorGetResponseTunnelWARPConnectorTunnel].
 func (r WARPConnectorGetResponse) AsUnion() WARPConnectorGetResponseUnion {
 	return r.union
 }
@@ -1688,7 +1737,7 @@ type WARPConnectorListParams struct {
 func (r WARPConnectorListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

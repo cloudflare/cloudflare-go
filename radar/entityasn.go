@@ -36,8 +36,8 @@ func NewEntityASNService(opts ...option.RequestOption) (r *EntityASNService) {
 
 // Gets a list of autonomous systems (AS).
 func (r *EntityASNService) List(ctx context.Context, query EntityASNListParams, opts ...option.RequestOption) (res *EntityASNListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EntityASNListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/entities/asns"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,8 +52,8 @@ func (r *EntityASNService) List(ctx context.Context, query EntityASNListParams, 
 // because Cloudflare has a small amount of traffic from/to this AS). Population
 // estimates come from APNIC (refer to https://labs.apnic.net/?p=526).
 func (r *EntityASNService) Get(ctx context.Context, asn int64, query EntityASNGetParams, opts ...option.RequestOption) (res *EntityASNGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EntityASNGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/entities/asns/%v", asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -66,8 +66,8 @@ func (r *EntityASNService) Get(ctx context.Context, asn int64, query EntityASNGe
 // Get the requested autonomous system information based on IP address. Population
 // estimates come from APNIC (refer to https://labs.apnic.net/?p=526).
 func (r *EntityASNService) IP(ctx context.Context, query EntityASNIPParams, opts ...option.RequestOption) (res *EntityAsnipResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EntityAsnipResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/entities/asns/ip"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -79,8 +79,8 @@ func (r *EntityASNService) IP(ctx context.Context, query EntityASNIPParams, opts
 
 // Get AS-level relationship for given networks.
 func (r *EntityASNService) Rel(ctx context.Context, asn int64, query EntityASNRelParams, opts ...option.RequestOption) (res *EntityASNRelResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EntityASNRelResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/entities/asns/%v/rel", asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -533,7 +533,7 @@ type EntityASNListParams struct {
 func (r EntityASNListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -601,7 +601,7 @@ type EntityASNGetParams struct {
 func (r EntityASNGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -655,7 +655,7 @@ type EntityASNIPParams struct {
 func (r EntityASNIPParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -709,7 +709,7 @@ type EntityASNRelParams struct {
 func (r EntityASNRelParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

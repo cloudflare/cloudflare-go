@@ -38,8 +38,8 @@ func NewHostnameAssociationService(opts ...option.RequestOption) (r *HostnameAss
 
 // Replace Hostname Associations
 func (r *HostnameAssociationService) Update(ctx context.Context, params HostnameAssociationUpdateParams, opts ...option.RequestOption) (res *HostnameAssociationUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameAssociationUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -55,8 +55,8 @@ func (r *HostnameAssociationService) Update(ctx context.Context, params Hostname
 
 // List Hostname Associations
 func (r *HostnameAssociationService) Get(ctx context.Context, params HostnameAssociationGetParams, opts ...option.RequestOption) (res *HostnameAssociationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HostnameAssociationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -195,7 +195,7 @@ type HostnameAssociationGetParams struct {
 func (r HostnameAssociationGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

@@ -44,9 +44,9 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 			OriginPort:       cloudflare.F[spectrum.OriginPortUnionParam](shared.UnionInt(int64(22))),
 			Protocol:         cloudflare.F("tcp/22"),
 			ArgoSmartRouting: cloudflare.F(true),
-			EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsObjectParam{
-				Connectivity: cloudflare.F(spectrum.EdgeIPsObjectConnectivityAll),
-				Type:         cloudflare.F(spectrum.EdgeIPsObjectTypeDynamic),
+			EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsEyeballIPsParam{
+				Connectivity: cloudflare.F(spectrum.EdgeIPsEyeballIPsConnectivityAll),
+				Type:         cloudflare.F(spectrum.EdgeIPsEyeballIPsTypeDynamic),
 			}),
 			IPFirewall:    cloudflare.F(true),
 			ProxyProtocol: cloudflare.F(spectrum.AppNewParamsProxyProtocolOff),
@@ -93,9 +93,9 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 			OriginPort:       cloudflare.F[spectrum.OriginPortUnionParam](shared.UnionInt(int64(22))),
 			Protocol:         cloudflare.F("tcp/22"),
 			ArgoSmartRouting: cloudflare.F(true),
-			EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsObjectParam{
-				Connectivity: cloudflare.F(spectrum.EdgeIPsObjectConnectivityAll),
-				Type:         cloudflare.F(spectrum.EdgeIPsObjectTypeDynamic),
+			EdgeIPs: cloudflare.F[spectrum.EdgeIPsUnionParam](spectrum.EdgeIPsEyeballIPsParam{
+				Connectivity: cloudflare.F(spectrum.EdgeIPsEyeballIPsConnectivityAll),
+				Type:         cloudflare.F(spectrum.EdgeIPsEyeballIPsTypeDynamic),
 			}),
 			IPFirewall:    cloudflare.F(true),
 			ProxyProtocol: cloudflare.F(spectrum.AppUpdateParamsProxyProtocolOff),

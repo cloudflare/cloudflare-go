@@ -3,14 +3,17 @@
 package dns
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"reflect"
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -49,8 +52,8 @@ func NewRecordService(opts ...option.RequestOption) (r *RecordService) {
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
 func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ...option.RequestOption) (res *Record, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -71,8 +74,8 @@ func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ..
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
 func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params RecordUpdateParams, opts ...option.RequestOption) (res *Record, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -93,8 +96,12 @@ func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params R
 // List, search, sort, and filter a zones' DNS records.
 func (r *RecordService) List(ctx context.Context, params RecordListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Record], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/dns_records", params.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -115,8 +122,8 @@ func (r *RecordService) ListAutoPaging(ctx context.Context, params RecordListPar
 
 // Delete DNS Record
 func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body RecordDeleteParams, opts ...option.RequestOption) (res *RecordDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -141,8 +148,8 @@ func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body Rec
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
 func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params RecordEditParams, opts ...option.RequestOption) (res *Record, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -181,8 +188,8 @@ func (r *RecordService) Export(ctx context.Context, query RecordExportParams, op
 
 // DNS Record Details
 func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query RecordGetParams, opts ...option.RequestOption) (res *Record, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -209,8 +216,8 @@ func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query Recor
 // [the documentation](https://developers.cloudflare.com/dns/manage-dns-records/how-to/import-and-export/ "Import and export records")
 // for more information.
 func (r *RecordService) Import(ctx context.Context, params RecordImportParams, opts ...option.RequestOption) (res *RecordImportResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordImportResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -227,8 +234,8 @@ func (r *RecordService) Import(ctx context.Context, params RecordImportParams, o
 // Scan for common DNS records on your domain and automatically add them to your
 // zone. Useful if you haven't updated your nameservers yet.
 func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts ...option.RequestOption) (res *RecordScanResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RecordScanResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -256,9 +263,6 @@ type ARecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -273,12 +277,8 @@ type ARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string      `json:"zone_name" format:"hostname"`
-	JSON     aRecordJSON `json:"-"`
+	TTL  TTL         `json:"ttl"`
+	JSON aRecordJSON `json:"-"`
 }
 
 // aRecordJSON contains the JSON metadata for the struct [ARecord]
@@ -289,15 +289,12 @@ type aRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Proxied     apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -334,6 +331,8 @@ type ARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[ARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -345,7 +344,7 @@ type ARecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r ARecordParam) MarshalJSON() (data []byte, err error) {
@@ -368,9 +367,6 @@ type AAAARecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -385,12 +381,8 @@ type AAAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     aaaaRecordJSON `json:"-"`
+	TTL  TTL            `json:"ttl"`
+	JSON aaaaRecordJSON `json:"-"`
 }
 
 // aaaaRecordJSON contains the JSON metadata for the struct [AAAARecord]
@@ -401,15 +393,12 @@ type aaaaRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Proxied     apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -446,6 +435,8 @@ type AAAARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[AAAARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -457,7 +448,7 @@ type AAAARecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r AAAARecordParam) MarshalJSON() (data []byte, err error) {
@@ -482,9 +473,6 @@ type CAARecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -496,12 +484,8 @@ type CAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     caaRecordJSON `json:"-"`
+	TTL  TTL           `json:"ttl"`
+	JSON caaRecordJSON `json:"-"`
 }
 
 // caaRecordJSON contains the JSON metadata for the struct [CAARecord]
@@ -513,14 +497,11 @@ type caaRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -585,6 +566,8 @@ type CAARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CAARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -593,7 +576,7 @@ type CAARecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r CAARecordParam) MarshalJSON() (data []byte, err error) {
@@ -632,9 +615,6 @@ type CERTRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -646,12 +626,8 @@ type CERTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     certRecordJSON `json:"-"`
+	TTL  TTL            `json:"ttl"`
+	JSON certRecordJSON `json:"-"`
 }
 
 // certRecordJSON contains the JSON metadata for the struct [CERTRecord]
@@ -663,14 +639,11 @@ type certRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -738,6 +711,8 @@ type CERTRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CERTRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -746,7 +721,7 @@ type CERTRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r CERTRecordParam) MarshalJSON() (data []byte, err error) {
@@ -785,9 +760,6 @@ type CNAMERecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -802,12 +774,8 @@ type CNAMERecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     cnameRecordJSON `json:"-"`
+	TTL  TTL             `json:"ttl"`
+	JSON cnameRecordJSON `json:"-"`
 }
 
 // cnameRecordJSON contains the JSON metadata for the struct [CNAMERecord]
@@ -818,15 +786,12 @@ type cnameRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Proxied     apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -863,6 +828,8 @@ type CNAMERecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CNAMERecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -874,7 +841,7 @@ type CNAMERecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r CNAMERecordParam) MarshalJSON() (data []byte, err error) {
@@ -899,9 +866,6 @@ type DNSKEYRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -913,12 +877,8 @@ type DNSKEYRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string           `json:"zone_name" format:"hostname"`
-	JSON     dnskeyRecordJSON `json:"-"`
+	TTL  TTL              `json:"ttl"`
+	JSON dnskeyRecordJSON `json:"-"`
 }
 
 // dnskeyRecordJSON contains the JSON metadata for the struct [DNSKEYRecord]
@@ -930,14 +890,11 @@ type dnskeyRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1006,6 +963,8 @@ type DNSKEYRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[DNSKEYRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1014,7 +973,7 @@ type DNSKEYRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r DNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1055,9 +1014,6 @@ type DSRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1069,12 +1025,8 @@ type DSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string       `json:"zone_name" format:"hostname"`
-	JSON     dsRecordJSON `json:"-"`
+	TTL  TTL          `json:"ttl"`
+	JSON dsRecordJSON `json:"-"`
 }
 
 // dsRecordJSON contains the JSON metadata for the struct [DSRecord]
@@ -1086,14 +1038,11 @@ type dsRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1161,6 +1110,8 @@ type DSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[DSRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1169,7 +1120,7 @@ type DSRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r DSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1210,9 +1161,6 @@ type HTTPSRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1224,12 +1172,8 @@ type HTTPSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     httpsRecordJSON `json:"-"`
+	TTL  TTL             `json:"ttl"`
+	JSON httpsRecordJSON `json:"-"`
 }
 
 // httpsRecordJSON contains the JSON metadata for the struct [HTTPSRecord]
@@ -1241,14 +1185,11 @@ type httpsRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1313,6 +1254,8 @@ type HTTPSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[HTTPSRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1321,7 +1264,7 @@ type HTTPSRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r HTTPSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1360,9 +1303,6 @@ type LOCRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1374,12 +1314,8 @@ type LOCRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     locRecordJSON `json:"-"`
+	TTL  TTL           `json:"ttl"`
+	JSON locRecordJSON `json:"-"`
 }
 
 // locRecordJSON contains the JSON metadata for the struct [LOCRecord]
@@ -1391,14 +1327,11 @@ type locRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1522,6 +1455,8 @@ type LOCRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[LOCRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1530,7 +1465,7 @@ type LOCRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r LOCRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1588,9 +1523,6 @@ type MXRecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1602,12 +1534,8 @@ type MXRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string       `json:"zone_name" format:"hostname"`
-	JSON     mxRecordJSON `json:"-"`
+	TTL  TTL          `json:"ttl"`
+	JSON mxRecordJSON `json:"-"`
 }
 
 // mxRecordJSON contains the JSON metadata for the struct [MXRecord]
@@ -1619,14 +1547,11 @@ type mxRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1666,6 +1591,8 @@ type MXRecordParam struct {
 	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[MXRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1674,7 +1601,7 @@ type MXRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r MXRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1699,9 +1626,6 @@ type NAPTRRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1713,12 +1637,8 @@ type NAPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     naptrRecordJSON `json:"-"`
+	TTL  TTL             `json:"ttl"`
+	JSON naptrRecordJSON `json:"-"`
 }
 
 // naptrRecordJSON contains the JSON metadata for the struct [NAPTRRecord]
@@ -1730,14 +1650,11 @@ type naptrRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1811,6 +1728,8 @@ type NAPTRRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[NAPTRRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1819,7 +1738,7 @@ type NAPTRRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r NAPTRRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1862,9 +1781,6 @@ type NSRecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1876,12 +1792,8 @@ type NSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string       `json:"zone_name" format:"hostname"`
-	JSON     nsRecordJSON `json:"-"`
+	TTL  TTL          `json:"ttl"`
+	JSON nsRecordJSON `json:"-"`
 }
 
 // nsRecordJSON contains the JSON metadata for the struct [NSRecord]
@@ -1892,14 +1804,11 @@ type nsRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1936,6 +1845,8 @@ type NSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[NSRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1944,7 +1855,7 @@ type NSRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r NSRecordParam) MarshalJSON() (data []byte, err error) {
@@ -1967,9 +1878,6 @@ type PTRRecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -1981,12 +1889,8 @@ type PTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     ptrRecordJSON `json:"-"`
+	TTL  TTL           `json:"ttl"`
+	JSON ptrRecordJSON `json:"-"`
 }
 
 // ptrRecordJSON contains the JSON metadata for the struct [PTRRecord]
@@ -1997,14 +1901,11 @@ type ptrRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2041,6 +1942,8 @@ type PTRRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[PTRRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2049,7 +1952,7 @@ type PTRRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2059,6 +1962,7 @@ func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
 func (r PTRRecordParam) implementsDNSRecordUnionParam() {}
 
 type Record struct {
+	// This field can have the runtime type of [string], [interface{}].
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
@@ -2074,25 +1978,23 @@ type Record struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Identifier
 	ID string `json:"id"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool        `json:"proxiable"`
-	Tags      interface{} `json:"tags,required"`
+	Proxiable bool `json:"proxiable"`
+	// This field can have the runtime type of [[]RecordTags].
+	Tags interface{} `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string      `json:"zone_name" format:"hostname"`
-	Data     interface{} `json:"data,required"`
+	TTL TTL `json:"ttl"`
+	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
+	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
+	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
+	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
+	Data interface{} `json:"data,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64    `json:"priority"`
@@ -2109,14 +2011,11 @@ type recordJSON struct {
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
 	ID          apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	Data        apijson.Field
 	Priority    apijson.Field
 	raw         string
@@ -2128,6 +2027,7 @@ func (r recordJSON) RawJSON() string {
 }
 
 func (r *Record) UnmarshalJSON(data []byte) (err error) {
+	*r = Record{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -2135,6 +2035,15 @@ func (r *Record) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [RecordUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
+// [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
+// [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.PTRRecord], [dns.SMIMEARecord],
+// [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord], [dns.TLSARecord],
+// [dns.TXTRecord], [dns.URIRecord].
 func (r Record) AsUnion() RecordUnion {
 	return r.union
 }
@@ -2301,12 +2210,14 @@ type RecordParam struct {
 	Type param.Field[RecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment param.Field[string]      `json:"comment"`
-	Tags    param.Field[interface{}] `json:"tags,required"`
+	Comment param.Field[string] `json:"comment"`
+	// Identifier
+	ID   param.Field[string]      `json:"id"`
+	Tags param.Field[interface{}] `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL  param.Field[TTLNumber]   `json:"ttl"`
+	TTL  param.Field[TTL]         `json:"ttl"`
 	Data param.Field[interface{}] `json:"data,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
@@ -2417,9 +2328,6 @@ type SMIMEARecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -2431,12 +2339,8 @@ type SMIMEARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string           `json:"zone_name" format:"hostname"`
-	JSON     smimeaRecordJSON `json:"-"`
+	TTL  TTL              `json:"ttl"`
+	JSON smimeaRecordJSON `json:"-"`
 }
 
 // smimeaRecordJSON contains the JSON metadata for the struct [SMIMEARecord]
@@ -2448,14 +2352,11 @@ type smimeaRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2524,6 +2425,8 @@ type SMIMEARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SMIMEARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2532,7 +2435,7 @@ type SMIMEARecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r SMIMEARecordParam) MarshalJSON() (data []byte, err error) {
@@ -2576,9 +2479,6 @@ type SRVRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -2590,12 +2490,8 @@ type SRVRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     srvRecordJSON `json:"-"`
+	TTL  TTL           `json:"ttl"`
+	JSON srvRecordJSON `json:"-"`
 }
 
 // srvRecordJSON contains the JSON metadata for the struct [SRVRecord]
@@ -2607,14 +2503,11 @@ type srvRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2700,6 +2593,8 @@ type SRVRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SRVRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2708,7 +2603,7 @@ type SRVRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r SRVRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2762,9 +2657,6 @@ type SSHFPRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -2776,12 +2668,8 @@ type SSHFPRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string          `json:"zone_name" format:"hostname"`
-	JSON     sshfpRecordJSON `json:"-"`
+	TTL  TTL             `json:"ttl"`
+	JSON sshfpRecordJSON `json:"-"`
 }
 
 // sshfpRecordJSON contains the JSON metadata for the struct [SSHFPRecord]
@@ -2793,14 +2681,11 @@ type sshfpRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2865,6 +2750,8 @@ type SSHFPRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SSHFPRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2873,7 +2760,7 @@ type SSHFPRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r SSHFPRecordParam) MarshalJSON() (data []byte, err error) {
@@ -2912,9 +2799,6 @@ type SVCBRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -2926,12 +2810,8 @@ type SVCBRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     svcbRecordJSON `json:"-"`
+	TTL  TTL            `json:"ttl"`
+	JSON svcbRecordJSON `json:"-"`
 }
 
 // svcbRecordJSON contains the JSON metadata for the struct [SVCBRecord]
@@ -2943,14 +2823,11 @@ type svcbRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3015,6 +2892,8 @@ type SVCBRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SVCBRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3023,7 +2902,7 @@ type SVCBRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r SVCBRecordParam) MarshalJSON() (data []byte, err error) {
@@ -3062,9 +2941,6 @@ type TLSARecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -3076,12 +2952,8 @@ type TLSARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string         `json:"zone_name" format:"hostname"`
-	JSON     tlsaRecordJSON `json:"-"`
+	TTL  TTL            `json:"ttl"`
+	JSON tlsaRecordJSON `json:"-"`
 }
 
 // tlsaRecordJSON contains the JSON metadata for the struct [TLSARecord]
@@ -3093,14 +2965,11 @@ type tlsaRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3168,6 +3037,8 @@ type TLSARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[TLSARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3176,7 +3047,7 @@ type TLSARecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r TLSARecordParam) MarshalJSON() (data []byte, err error) {
@@ -3201,19 +3072,21 @@ func (r TLSARecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type TTLNumber float64
+type TTL float64
 
 const (
-	TTLNumber1 TTLNumber = 1
+	TTL1 TTL = 1
 )
 
-func (r TTLNumber) IsKnown() bool {
+func (r TTL) IsKnown() bool {
 	switch r {
-	case TTLNumber1:
+	case TTL1:
 		return true
 	}
 	return false
 }
+
+func (r TTL) ImplementsDNSTTL() {}
 
 type TXTRecord struct {
 	// Text content for the record.
@@ -3229,9 +3102,6 @@ type TXTRecord struct {
 	Comment string `json:"comment"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -3243,12 +3113,8 @@ type TXTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     txtRecordJSON `json:"-"`
+	TTL  TTL           `json:"ttl"`
+	JSON txtRecordJSON `json:"-"`
 }
 
 // txtRecordJSON contains the JSON metadata for the struct [TXTRecord]
@@ -3259,14 +3125,11 @@ type txtRecordJSON struct {
 	ID          apijson.Field
 	Comment     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3303,6 +3166,8 @@ type TXTRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[TXTRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3311,7 +3176,7 @@ type TXTRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r TXTRecordParam) MarshalJSON() (data []byte, err error) {
@@ -3339,9 +3204,6 @@ type URIRecord struct {
 	Content string `json:"content"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Whether this record can be modified/deleted (true means it's managed by
-	// Cloudflare).
-	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
 	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
@@ -3353,12 +3215,8 @@ type URIRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTLNumber `json:"ttl"`
-	// Identifier
-	ZoneID string `json:"zone_id"`
-	// The domain of the record.
-	ZoneName string        `json:"zone_name" format:"hostname"`
-	JSON     uriRecordJSON `json:"-"`
+	TTL  TTL           `json:"ttl"`
+	JSON uriRecordJSON `json:"-"`
 }
 
 // uriRecordJSON contains the JSON metadata for the struct [URIRecord]
@@ -3371,14 +3229,11 @@ type uriRecordJSON struct {
 	Comment     apijson.Field
 	Content     apijson.Field
 	CreatedOn   apijson.Field
-	Locked      apijson.Field
 	Meta        apijson.Field
 	ModifiedOn  apijson.Field
 	Proxiable   apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3443,6 +3298,8 @@ type URIRecordParam struct {
 	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[URIRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3451,7 +3308,7 @@ type URIRecordParam struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTLNumber] `json:"ttl"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r URIRecordParam) MarshalJSON() (data []byte, err error) {
@@ -3694,7 +3551,7 @@ type RecordListParams struct {
 func (r RecordListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -3718,7 +3575,7 @@ type RecordListParamsComment struct {
 func (r RecordListParamsComment) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -3789,7 +3646,7 @@ type RecordListParamsTag struct {
 func (r RecordListParamsTag) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -3993,8 +3850,19 @@ type RecordImportParams struct {
 	Proxied param.Field[string] `json:"proxied"`
 }
 
-func (r RecordImportParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r RecordImportParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 type RecordImportResponseEnvelope struct {

@@ -31,7 +31,7 @@ func TestAnnotationOutageGetWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Annotations.Outages.Get(context.TODO(), radar.AnnotationOutageGetParams{
 		ASN:       cloudflare.F(int64(174)),
 		DateEnd:   cloudflare.F(time.Now()),
-		DateRange: cloudflare.F(radar.AnnotationOutageGetParamsDateRange7d),
+		DateRange: cloudflare.F("7d"),
 		DateStart: cloudflare.F(time.Now()),
 		Format:    cloudflare.F(radar.AnnotationOutageGetParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
@@ -62,7 +62,7 @@ func TestAnnotationOutageLocationsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Annotations.Outages.Locations(context.TODO(), radar.AnnotationOutageLocationsParams{
 		DateEnd:   cloudflare.F(time.Now()),
-		DateRange: cloudflare.F(radar.AnnotationOutageLocationsParamsDateRange7d),
+		DateRange: cloudflare.F("7d"),
 		DateStart: cloudflare.F(time.Now()),
 		Format:    cloudflare.F(radar.AnnotationOutageLocationsParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),

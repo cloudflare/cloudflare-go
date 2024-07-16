@@ -41,8 +41,8 @@ func NewAttackLayer3TopService(opts ...option.RequestOption) (r *AttackLayer3Top
 // the number of attacks per origin/target location (useful if all the top attacks
 // are from or to the same location).
 func (r *AttackLayer3TopService) Attacks(ctx context.Context, query AttackLayer3TopAttacksParams, opts ...option.RequestOption) (res *AttackLayer3TopAttacksResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3TopAttacksResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/top/attacks"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -54,8 +54,8 @@ func (r *AttackLayer3TopService) Attacks(ctx context.Context, query AttackLayer3
 
 // Get the Industry of attacks.
 func (r *AttackLayer3TopService) Industry(ctx context.Context, query AttackLayer3TopIndustryParams, opts ...option.RequestOption) (res *AttackLayer3TopIndustryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3TopIndustryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/top/industry"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -67,8 +67,8 @@ func (r *AttackLayer3TopService) Industry(ctx context.Context, query AttackLayer
 
 // Get the Verticals of attacks.
 func (r *AttackLayer3TopService) Vertical(ctx context.Context, query AttackLayer3TopVerticalParams, opts ...option.RequestOption) (res *AttackLayer3TopVerticalResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackLayer3TopVerticalResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/attacks/layer3/top/vertical"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -178,7 +178,7 @@ type AttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                    `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                           `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
@@ -333,7 +333,7 @@ type AttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -463,7 +463,7 @@ type AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -503,7 +503,7 @@ type AttackLayer3TopAttacksParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer3TopAttacksParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -525,6 +525,9 @@ type AttackLayer3TopAttacksParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[AttackLayer3TopAttacksParamsNormalization] `query:"normalization"`
 	// Array of L3/4 attack types.
 	Protocol param.Field[[]AttackLayer3TopAttacksParamsProtocol] `query:"protocol"`
 }
@@ -534,36 +537,8 @@ type AttackLayer3TopAttacksParams struct {
 func (r AttackLayer3TopAttacksParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer3TopAttacksParamsDateRange string
-
-const (
-	AttackLayer3TopAttacksParamsDateRange1d         AttackLayer3TopAttacksParamsDateRange = "1d"
-	AttackLayer3TopAttacksParamsDateRange2d         AttackLayer3TopAttacksParamsDateRange = "2d"
-	AttackLayer3TopAttacksParamsDateRange7d         AttackLayer3TopAttacksParamsDateRange = "7d"
-	AttackLayer3TopAttacksParamsDateRange14d        AttackLayer3TopAttacksParamsDateRange = "14d"
-	AttackLayer3TopAttacksParamsDateRange28d        AttackLayer3TopAttacksParamsDateRange = "28d"
-	AttackLayer3TopAttacksParamsDateRange12w        AttackLayer3TopAttacksParamsDateRange = "12w"
-	AttackLayer3TopAttacksParamsDateRange24w        AttackLayer3TopAttacksParamsDateRange = "24w"
-	AttackLayer3TopAttacksParamsDateRange52w        AttackLayer3TopAttacksParamsDateRange = "52w"
-	AttackLayer3TopAttacksParamsDateRange1dControl  AttackLayer3TopAttacksParamsDateRange = "1dControl"
-	AttackLayer3TopAttacksParamsDateRange2dControl  AttackLayer3TopAttacksParamsDateRange = "2dControl"
-	AttackLayer3TopAttacksParamsDateRange7dControl  AttackLayer3TopAttacksParamsDateRange = "7dControl"
-	AttackLayer3TopAttacksParamsDateRange14dControl AttackLayer3TopAttacksParamsDateRange = "14dControl"
-	AttackLayer3TopAttacksParamsDateRange28dControl AttackLayer3TopAttacksParamsDateRange = "28dControl"
-	AttackLayer3TopAttacksParamsDateRange12wControl AttackLayer3TopAttacksParamsDateRange = "12wControl"
-	AttackLayer3TopAttacksParamsDateRange24wControl AttackLayer3TopAttacksParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer3TopAttacksParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer3TopAttacksParamsDateRange1d, AttackLayer3TopAttacksParamsDateRange2d, AttackLayer3TopAttacksParamsDateRange7d, AttackLayer3TopAttacksParamsDateRange14d, AttackLayer3TopAttacksParamsDateRange28d, AttackLayer3TopAttacksParamsDateRange12w, AttackLayer3TopAttacksParamsDateRange24w, AttackLayer3TopAttacksParamsDateRange52w, AttackLayer3TopAttacksParamsDateRange1dControl, AttackLayer3TopAttacksParamsDateRange2dControl, AttackLayer3TopAttacksParamsDateRange7dControl, AttackLayer3TopAttacksParamsDateRange14dControl, AttackLayer3TopAttacksParamsDateRange28dControl, AttackLayer3TopAttacksParamsDateRange12wControl, AttackLayer3TopAttacksParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -610,6 +585,23 @@ const (
 func (r AttackLayer3TopAttacksParamsLimitDirection) IsKnown() bool {
 	switch r {
 	case AttackLayer3TopAttacksParamsLimitDirectionOrigin, AttackLayer3TopAttacksParamsLimitDirectionTarget:
+		return true
+	}
+	return false
+}
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer3TopAttacksParamsNormalization string
+
+const (
+	AttackLayer3TopAttacksParamsNormalizationPercentage AttackLayer3TopAttacksParamsNormalization = "PERCENTAGE"
+	AttackLayer3TopAttacksParamsNormalizationMinMax     AttackLayer3TopAttacksParamsNormalization = "MIN_MAX"
+)
+
+func (r AttackLayer3TopAttacksParamsNormalization) IsKnown() bool {
+	switch r {
+	case AttackLayer3TopAttacksParamsNormalizationPercentage, AttackLayer3TopAttacksParamsNormalizationMinMax:
 		return true
 	}
 	return false
@@ -665,7 +657,7 @@ type AttackLayer3TopIndustryParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer3TopIndustryParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -689,36 +681,8 @@ type AttackLayer3TopIndustryParams struct {
 func (r AttackLayer3TopIndustryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer3TopIndustryParamsDateRange string
-
-const (
-	AttackLayer3TopIndustryParamsDateRange1d         AttackLayer3TopIndustryParamsDateRange = "1d"
-	AttackLayer3TopIndustryParamsDateRange2d         AttackLayer3TopIndustryParamsDateRange = "2d"
-	AttackLayer3TopIndustryParamsDateRange7d         AttackLayer3TopIndustryParamsDateRange = "7d"
-	AttackLayer3TopIndustryParamsDateRange14d        AttackLayer3TopIndustryParamsDateRange = "14d"
-	AttackLayer3TopIndustryParamsDateRange28d        AttackLayer3TopIndustryParamsDateRange = "28d"
-	AttackLayer3TopIndustryParamsDateRange12w        AttackLayer3TopIndustryParamsDateRange = "12w"
-	AttackLayer3TopIndustryParamsDateRange24w        AttackLayer3TopIndustryParamsDateRange = "24w"
-	AttackLayer3TopIndustryParamsDateRange52w        AttackLayer3TopIndustryParamsDateRange = "52w"
-	AttackLayer3TopIndustryParamsDateRange1dControl  AttackLayer3TopIndustryParamsDateRange = "1dControl"
-	AttackLayer3TopIndustryParamsDateRange2dControl  AttackLayer3TopIndustryParamsDateRange = "2dControl"
-	AttackLayer3TopIndustryParamsDateRange7dControl  AttackLayer3TopIndustryParamsDateRange = "7dControl"
-	AttackLayer3TopIndustryParamsDateRange14dControl AttackLayer3TopIndustryParamsDateRange = "14dControl"
-	AttackLayer3TopIndustryParamsDateRange28dControl AttackLayer3TopIndustryParamsDateRange = "28dControl"
-	AttackLayer3TopIndustryParamsDateRange12wControl AttackLayer3TopIndustryParamsDateRange = "12wControl"
-	AttackLayer3TopIndustryParamsDateRange24wControl AttackLayer3TopIndustryParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer3TopIndustryParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer3TopIndustryParamsDateRange1d, AttackLayer3TopIndustryParamsDateRange2d, AttackLayer3TopIndustryParamsDateRange7d, AttackLayer3TopIndustryParamsDateRange14d, AttackLayer3TopIndustryParamsDateRange28d, AttackLayer3TopIndustryParamsDateRange12w, AttackLayer3TopIndustryParamsDateRange24w, AttackLayer3TopIndustryParamsDateRange52w, AttackLayer3TopIndustryParamsDateRange1dControl, AttackLayer3TopIndustryParamsDateRange2dControl, AttackLayer3TopIndustryParamsDateRange7dControl, AttackLayer3TopIndustryParamsDateRange14dControl, AttackLayer3TopIndustryParamsDateRange28dControl, AttackLayer3TopIndustryParamsDateRange12wControl, AttackLayer3TopIndustryParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -802,7 +766,7 @@ type AttackLayer3TopVerticalParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AttackLayer3TopVerticalParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -826,36 +790,8 @@ type AttackLayer3TopVerticalParams struct {
 func (r AttackLayer3TopVerticalParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AttackLayer3TopVerticalParamsDateRange string
-
-const (
-	AttackLayer3TopVerticalParamsDateRange1d         AttackLayer3TopVerticalParamsDateRange = "1d"
-	AttackLayer3TopVerticalParamsDateRange2d         AttackLayer3TopVerticalParamsDateRange = "2d"
-	AttackLayer3TopVerticalParamsDateRange7d         AttackLayer3TopVerticalParamsDateRange = "7d"
-	AttackLayer3TopVerticalParamsDateRange14d        AttackLayer3TopVerticalParamsDateRange = "14d"
-	AttackLayer3TopVerticalParamsDateRange28d        AttackLayer3TopVerticalParamsDateRange = "28d"
-	AttackLayer3TopVerticalParamsDateRange12w        AttackLayer3TopVerticalParamsDateRange = "12w"
-	AttackLayer3TopVerticalParamsDateRange24w        AttackLayer3TopVerticalParamsDateRange = "24w"
-	AttackLayer3TopVerticalParamsDateRange52w        AttackLayer3TopVerticalParamsDateRange = "52w"
-	AttackLayer3TopVerticalParamsDateRange1dControl  AttackLayer3TopVerticalParamsDateRange = "1dControl"
-	AttackLayer3TopVerticalParamsDateRange2dControl  AttackLayer3TopVerticalParamsDateRange = "2dControl"
-	AttackLayer3TopVerticalParamsDateRange7dControl  AttackLayer3TopVerticalParamsDateRange = "7dControl"
-	AttackLayer3TopVerticalParamsDateRange14dControl AttackLayer3TopVerticalParamsDateRange = "14dControl"
-	AttackLayer3TopVerticalParamsDateRange28dControl AttackLayer3TopVerticalParamsDateRange = "28dControl"
-	AttackLayer3TopVerticalParamsDateRange12wControl AttackLayer3TopVerticalParamsDateRange = "12wControl"
-	AttackLayer3TopVerticalParamsDateRange24wControl AttackLayer3TopVerticalParamsDateRange = "24wControl"
-)
-
-func (r AttackLayer3TopVerticalParamsDateRange) IsKnown() bool {
-	switch r {
-	case AttackLayer3TopVerticalParamsDateRange1d, AttackLayer3TopVerticalParamsDateRange2d, AttackLayer3TopVerticalParamsDateRange7d, AttackLayer3TopVerticalParamsDateRange14d, AttackLayer3TopVerticalParamsDateRange28d, AttackLayer3TopVerticalParamsDateRange12w, AttackLayer3TopVerticalParamsDateRange24w, AttackLayer3TopVerticalParamsDateRange52w, AttackLayer3TopVerticalParamsDateRange1dControl, AttackLayer3TopVerticalParamsDateRange2dControl, AttackLayer3TopVerticalParamsDateRange7dControl, AttackLayer3TopVerticalParamsDateRange14dControl, AttackLayer3TopVerticalParamsDateRange28dControl, AttackLayer3TopVerticalParamsDateRange12wControl, AttackLayer3TopVerticalParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

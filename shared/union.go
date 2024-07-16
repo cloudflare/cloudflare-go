@@ -62,8 +62,6 @@ func (UnionString) ImplementsWorkersAIRunResponseUnion()                        
 func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion()                     {}
 func (UnionString) ImplementsQueuesQueueDeleteResponseUnion()                                    {}
 func (UnionString) ImplementsQueuesConsumerDeleteResponseUnion()                                 {}
-func (UnionString) ImplementsAPIGatewayConfigurationUpdateResponseUnion()                        {}
-func (UnionString) ImplementsAPIGatewayOperationDeleteResponseUnion()                            {}
 func (UnionString) ImplementsAPIGatewayUserSchemaDeleteResponseUnion()                           {}
 func (UnionString) ImplementsSpectrumOriginPortUnionParam()                                      {}
 func (UnionString) ImplementsSpectrumOriginPortUnion()                                           {}
@@ -173,7 +171,7 @@ func (UnionInt) ImplementsRulesListItemGetResponseUnion()   {}
 
 type UnionFloat float64
 
-func (UnionFloat) ImplementsDNSTTLNumber()                                    {}
+func (UnionFloat) ImplementsDNSTTL()                                          {}
 func (UnionFloat) ImplementsD1DatabaseRawResponseResultsRowsUnion()           {}
 func (UnionFloat) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnionParam()                 {}

@@ -35,8 +35,8 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 
 // Show the DNS records needed to configure your Email Routing zone.
 func (r *DNSService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]DNSRecord, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DNSGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
@@ -61,7 +61,7 @@ type DNSRecord struct {
 	Priority float64 `json:"priority"`
 	// Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
 	// for 'automatic'.
-	TTL DNSRecordTTLNumber `json:"ttl"`
+	TTL DNSRecordTTL `json:"ttl"`
 	// DNS record type.
 	Type DNSRecordType `json:"type"`
 	JSON dnsRecordJSON `json:"-"`
@@ -86,15 +86,15 @@ func (r dnsRecordJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSRecordTTLNumber float64
+type DNSRecordTTL float64
 
 const (
-	DNSRecordTTLNumber1 DNSRecordTTLNumber = 1
+	DNSRecordTTL1 DNSRecordTTL = 1
 )
 
-func (r DNSRecordTTLNumber) IsKnown() bool {
+func (r DNSRecordTTL) IsKnown() bool {
 	switch r {
-	case DNSRecordTTLNumber1:
+	case DNSRecordTTL1:
 		return true
 	}
 	return false

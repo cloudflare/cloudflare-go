@@ -4,6 +4,7 @@ package api_gateway
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,10 +41,18 @@ func NewUserSchemaOperationService(opts ...option.RequestOption) (r *UserSchemaO
 
 // Retrieves all operations from the schema. Operations that already exist in API
 // Shield Endpoint Management will be returned as full operations.
-func (r *UserSchemaOperationService) List(ctx context.Context, schemaID string, params UserSchemaOperationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[UserSchemaOperationListResponse], err error) {
+func (r *UserSchemaOperationService) List(ctx context.Context, schemaID string, params UserSchemaOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[UserSchemaOperationListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	if schemaID == "" {
+		err = errors.New("missing required schema_id parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/api_gateway/user_schemas/%s/operations", params.ZoneID, schemaID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -59,8 +68,8 @@ func (r *UserSchemaOperationService) List(ctx context.Context, schemaID string, 
 
 // Retrieves all operations from the schema. Operations that already exist in API
 // Shield Endpoint Management will be returned as full operations.
-func (r *UserSchemaOperationService) ListAutoPaging(ctx context.Context, schemaID string, params UserSchemaOperationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[UserSchemaOperationListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, schemaID, params, opts...))
+func (r *UserSchemaOperationService) ListAutoPaging(ctx context.Context, schemaID string, params UserSchemaOperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[UserSchemaOperationListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, schemaID, params, opts...))
 }
 
 type UserSchemaOperationListResponse struct {
@@ -72,11 +81,12 @@ type UserSchemaOperationListResponse struct {
 	// RFC3986-compliant host.
 	Host string `json:"host,required" format:"hostname"`
 	// The HTTP method used to access the endpoint.
-	Method      UserSchemaOperationListResponseMethod `json:"method,required"`
-	Features    interface{}                           `json:"features,required"`
-	LastUpdated time.Time                             `json:"last_updated" format:"date-time"`
-	// UUID identifier
-	OperationID string                              `json:"operation_id" format:"uuid"`
+	Method UserSchemaOperationListResponseMethod `json:"method,required"`
+	// This field can have the runtime type of [APIShieldFeatures].
+	Features    interface{} `json:"features,required"`
+	LastUpdated time.Time   `json:"last_updated" format:"date-time"`
+	// UUID
+	OperationID string                              `json:"operation_id"`
 	JSON        userSchemaOperationListResponseJSON `json:"-"`
 	union       UserSchemaOperationListResponseUnion
 }
@@ -99,6 +109,7 @@ func (r userSchemaOperationListResponseJSON) RawJSON() string {
 }
 
 func (r *UserSchemaOperationListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = UserSchemaOperationListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -106,6 +117,11 @@ func (r *UserSchemaOperationListResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [UserSchemaOperationListResponseUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [api_gateway.APIShield],
+// [api_gateway.UserSchemaOperationListResponseAPIShieldBasicOperation].
 func (r UserSchemaOperationListResponse) AsUnion() UserSchemaOperationListResponseUnion {
 	return r.union
 }
@@ -230,9 +246,9 @@ type UserSchemaOperationListParams struct {
 	// schema that already exist in API Shield Endpoint Management.
 	OperationStatus param.Field[UserSchemaOperationListParamsOperationStatus] `query:"operation_status"`
 	// Page number of paginated results.
-	Page param.Field[interface{}] `query:"page"`
+	Page param.Field[int64] `query:"page"`
 	// Maximum number of results per page.
-	PerPage param.Field[interface{}] `query:"per_page"`
+	PerPage param.Field[int64] `query:"per_page"`
 }
 
 // URLQuery serializes [UserSchemaOperationListParams]'s query parameters as
@@ -240,7 +256,7 @@ type UserSchemaOperationListParams struct {
 func (r UserSchemaOperationListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

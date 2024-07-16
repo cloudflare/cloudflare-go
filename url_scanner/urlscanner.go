@@ -45,8 +45,8 @@ func NewURLScannerService(opts ...option.RequestOption) (r *URLScannerService) {
 // results, unless searching by `scanId`. Please take into account that older scans
 // may be removed from the search index at an unspecified time.
 func (r *URLScannerService) Scan(ctx context.Context, accountID string, query URLScannerScanParams, opts ...option.RequestOption) (res *URLScannerScanResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env URLScannerScanResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required accountId parameter")
 		return
@@ -162,7 +162,7 @@ type URLScannerScanParams struct {
 func (r URLScannerScanParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

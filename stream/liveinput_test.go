@@ -29,7 +29,7 @@ func TestLiveInputNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Stream.LiveInputs.New(context.TODO(), stream.LiveInputNewParams{
 		AccountID:                cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		DefaultCreator:           cloudflare.F("string"),
+		DefaultCreator:           cloudflare.F("defaultCreator"),
 		DeleteRecordingAfterDays: cloudflare.F(45.000000),
 		Meta: cloudflare.F[any](map[string]interface{}{
 			"name": "test stream 1",
@@ -68,7 +68,7 @@ func TestLiveInputUpdateWithOptionalParams(t *testing.T) {
 		"66be4bf738797e01e1fca35a7bdecdcd",
 		stream.LiveInputUpdateParams{
 			AccountID:                cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			DefaultCreator:           cloudflare.F("string"),
+			DefaultCreator:           cloudflare.F("defaultCreator"),
 			DeleteRecordingAfterDays: cloudflare.F(45.000000),
 			Meta: cloudflare.F[any](map[string]interface{}{
 				"name": "test stream 1",

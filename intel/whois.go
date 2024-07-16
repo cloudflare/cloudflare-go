@@ -39,8 +39,8 @@ func NewWhoisService(opts ...option.RequestOption) (r *WhoisService) {
 
 // Get WHOIS Record
 func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...option.RequestOption) (res *WhoisGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env WhoisGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -257,7 +257,7 @@ type WhoisGetParams struct {
 func (r WhoisGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

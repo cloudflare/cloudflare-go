@@ -41,8 +41,8 @@ func NewAnalyticsEventBytimeService(opts ...option.RequestOption) (r *AnalyticsE
 
 // Retrieves a list of aggregate metrics grouped by time interval.
 func (r *AnalyticsEventBytimeService) Get(ctx context.Context, zone string, query AnalyticsEventBytimeGetParams, opts ...option.RequestOption) (res *AnalyticsEventBytimeGetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AnalyticsEventBytimeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if zone == "" {
 		err = errors.New("missing required zone parameter")
 		return
@@ -129,7 +129,7 @@ type AnalyticsEventBytimeGetParams struct {
 func (r AnalyticsEventBytimeGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

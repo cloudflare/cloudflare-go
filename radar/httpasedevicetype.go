@@ -38,8 +38,8 @@ func NewHTTPAseDeviceTypeService(opts ...option.RequestOption) (r *HTTPAseDevice
 // Get the top autonomous systems (AS), by HTTP traffic, of the requested device
 // type. Values are a percentage out of the total traffic.
 func (r *HTTPAseDeviceTypeService) Get(ctx context.Context, deviceType HTTPAseDeviceTypeGetParamsDeviceType, query HTTPAseDeviceTypeGetParams, opts ...option.RequestOption) (res *HTTPAseDeviceTypeGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseDeviceTypeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/device_type/%v", deviceType)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -149,7 +149,7 @@ type HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                       `json:"dataSource,required"`
 	Description     string                                                       `json:"description,required"`
 	EventType       string                                                       `json:"eventType,required"`
-	IsInstantaneous interface{}                                                  `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                         `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                    `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                       `json:"linkedUrl"`
 	StartTime       time.Time                                                    `json:"startTime" format:"date-time"`
@@ -223,7 +223,7 @@ type HTTPAseDeviceTypeGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPAseDeviceTypeGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -253,7 +253,7 @@ type HTTPAseDeviceTypeGetParams struct {
 func (r HTTPAseDeviceTypeGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -301,34 +301,6 @@ const (
 func (r HTTPAseDeviceTypeGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPAseDeviceTypeGetParamsBrowserFamilyChrome, HTTPAseDeviceTypeGetParamsBrowserFamilyEdge, HTTPAseDeviceTypeGetParamsBrowserFamilyFirefox, HTTPAseDeviceTypeGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPAseDeviceTypeGetParamsDateRange string
-
-const (
-	HTTPAseDeviceTypeGetParamsDateRange1d         HTTPAseDeviceTypeGetParamsDateRange = "1d"
-	HTTPAseDeviceTypeGetParamsDateRange2d         HTTPAseDeviceTypeGetParamsDateRange = "2d"
-	HTTPAseDeviceTypeGetParamsDateRange7d         HTTPAseDeviceTypeGetParamsDateRange = "7d"
-	HTTPAseDeviceTypeGetParamsDateRange14d        HTTPAseDeviceTypeGetParamsDateRange = "14d"
-	HTTPAseDeviceTypeGetParamsDateRange28d        HTTPAseDeviceTypeGetParamsDateRange = "28d"
-	HTTPAseDeviceTypeGetParamsDateRange12w        HTTPAseDeviceTypeGetParamsDateRange = "12w"
-	HTTPAseDeviceTypeGetParamsDateRange24w        HTTPAseDeviceTypeGetParamsDateRange = "24w"
-	HTTPAseDeviceTypeGetParamsDateRange52w        HTTPAseDeviceTypeGetParamsDateRange = "52w"
-	HTTPAseDeviceTypeGetParamsDateRange1dControl  HTTPAseDeviceTypeGetParamsDateRange = "1dControl"
-	HTTPAseDeviceTypeGetParamsDateRange2dControl  HTTPAseDeviceTypeGetParamsDateRange = "2dControl"
-	HTTPAseDeviceTypeGetParamsDateRange7dControl  HTTPAseDeviceTypeGetParamsDateRange = "7dControl"
-	HTTPAseDeviceTypeGetParamsDateRange14dControl HTTPAseDeviceTypeGetParamsDateRange = "14dControl"
-	HTTPAseDeviceTypeGetParamsDateRange28dControl HTTPAseDeviceTypeGetParamsDateRange = "28dControl"
-	HTTPAseDeviceTypeGetParamsDateRange12wControl HTTPAseDeviceTypeGetParamsDateRange = "12wControl"
-	HTTPAseDeviceTypeGetParamsDateRange24wControl HTTPAseDeviceTypeGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPAseDeviceTypeGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPAseDeviceTypeGetParamsDateRange1d, HTTPAseDeviceTypeGetParamsDateRange2d, HTTPAseDeviceTypeGetParamsDateRange7d, HTTPAseDeviceTypeGetParamsDateRange14d, HTTPAseDeviceTypeGetParamsDateRange28d, HTTPAseDeviceTypeGetParamsDateRange12w, HTTPAseDeviceTypeGetParamsDateRange24w, HTTPAseDeviceTypeGetParamsDateRange52w, HTTPAseDeviceTypeGetParamsDateRange1dControl, HTTPAseDeviceTypeGetParamsDateRange2dControl, HTTPAseDeviceTypeGetParamsDateRange7dControl, HTTPAseDeviceTypeGetParamsDateRange14dControl, HTTPAseDeviceTypeGetParamsDateRange28dControl, HTTPAseDeviceTypeGetParamsDateRange12wControl, HTTPAseDeviceTypeGetParamsDateRange24wControl:
 		return true
 	}
 	return false

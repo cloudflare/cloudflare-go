@@ -39,8 +39,8 @@ func NewBGPTopService(opts ...option.RequestOption) (r *BGPTopService) {
 // Get the top network prefixes by BGP updates. Values are a percentage out of the
 // total BGP updates.
 func (r *BGPTopService) Prefixes(ctx context.Context, query BGPTopPrefixesParams, opts ...option.RequestOption) (res *BGPTopPrefixesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env BGPTopPrefixesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/bgp/top/prefixes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -152,7 +152,7 @@ type BGPTopPrefixesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]BGPTopPrefixesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -169,36 +169,8 @@ type BGPTopPrefixesParams struct {
 func (r BGPTopPrefixesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type BGPTopPrefixesParamsDateRange string
-
-const (
-	BGPTopPrefixesParamsDateRange1d         BGPTopPrefixesParamsDateRange = "1d"
-	BGPTopPrefixesParamsDateRange2d         BGPTopPrefixesParamsDateRange = "2d"
-	BGPTopPrefixesParamsDateRange7d         BGPTopPrefixesParamsDateRange = "7d"
-	BGPTopPrefixesParamsDateRange14d        BGPTopPrefixesParamsDateRange = "14d"
-	BGPTopPrefixesParamsDateRange28d        BGPTopPrefixesParamsDateRange = "28d"
-	BGPTopPrefixesParamsDateRange12w        BGPTopPrefixesParamsDateRange = "12w"
-	BGPTopPrefixesParamsDateRange24w        BGPTopPrefixesParamsDateRange = "24w"
-	BGPTopPrefixesParamsDateRange52w        BGPTopPrefixesParamsDateRange = "52w"
-	BGPTopPrefixesParamsDateRange1dControl  BGPTopPrefixesParamsDateRange = "1dControl"
-	BGPTopPrefixesParamsDateRange2dControl  BGPTopPrefixesParamsDateRange = "2dControl"
-	BGPTopPrefixesParamsDateRange7dControl  BGPTopPrefixesParamsDateRange = "7dControl"
-	BGPTopPrefixesParamsDateRange14dControl BGPTopPrefixesParamsDateRange = "14dControl"
-	BGPTopPrefixesParamsDateRange28dControl BGPTopPrefixesParamsDateRange = "28dControl"
-	BGPTopPrefixesParamsDateRange12wControl BGPTopPrefixesParamsDateRange = "12wControl"
-	BGPTopPrefixesParamsDateRange24wControl BGPTopPrefixesParamsDateRange = "24wControl"
-)
-
-func (r BGPTopPrefixesParamsDateRange) IsKnown() bool {
-	switch r {
-	case BGPTopPrefixesParamsDateRange1d, BGPTopPrefixesParamsDateRange2d, BGPTopPrefixesParamsDateRange7d, BGPTopPrefixesParamsDateRange14d, BGPTopPrefixesParamsDateRange28d, BGPTopPrefixesParamsDateRange12w, BGPTopPrefixesParamsDateRange24w, BGPTopPrefixesParamsDateRange52w, BGPTopPrefixesParamsDateRange1dControl, BGPTopPrefixesParamsDateRange2dControl, BGPTopPrefixesParamsDateRange7dControl, BGPTopPrefixesParamsDateRange14dControl, BGPTopPrefixesParamsDateRange28dControl, BGPTopPrefixesParamsDateRange12wControl, BGPTopPrefixesParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

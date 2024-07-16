@@ -36,8 +36,8 @@ func NewAnnotationOutageService(opts ...option.RequestOption) (r *AnnotationOuta
 
 // Get latest Internet outages and anomalies.
 func (r *AnnotationOutageService) Get(ctx context.Context, query AnnotationOutageGetParams, opts ...option.RequestOption) (res *AnnotationOutageGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AnnotationOutageGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/annotations/outages"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *AnnotationOutageService) Get(ctx context.Context, query AnnotationOutag
 
 // Get the number of outages for locations.
 func (r *AnnotationOutageService) Locations(ctx context.Context, query AnnotationOutageLocationsParams, opts ...option.RequestOption) (res *AnnotationOutageLocationsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AnnotationOutageLocationsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/annotations/outages/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -274,7 +274,7 @@ type AnnotationOutageGetParams struct {
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific
 	// start and end dates.
-	DateRange param.Field[AnnotationOutageGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -292,38 +292,8 @@ type AnnotationOutageGetParams struct {
 func (r AnnotationOutageGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Shorthand date ranges for the last X days - use when you don't need specific
-// start and end dates.
-type AnnotationOutageGetParamsDateRange string
-
-const (
-	AnnotationOutageGetParamsDateRange1d         AnnotationOutageGetParamsDateRange = "1d"
-	AnnotationOutageGetParamsDateRange2d         AnnotationOutageGetParamsDateRange = "2d"
-	AnnotationOutageGetParamsDateRange7d         AnnotationOutageGetParamsDateRange = "7d"
-	AnnotationOutageGetParamsDateRange14d        AnnotationOutageGetParamsDateRange = "14d"
-	AnnotationOutageGetParamsDateRange28d        AnnotationOutageGetParamsDateRange = "28d"
-	AnnotationOutageGetParamsDateRange12w        AnnotationOutageGetParamsDateRange = "12w"
-	AnnotationOutageGetParamsDateRange24w        AnnotationOutageGetParamsDateRange = "24w"
-	AnnotationOutageGetParamsDateRange52w        AnnotationOutageGetParamsDateRange = "52w"
-	AnnotationOutageGetParamsDateRange1dControl  AnnotationOutageGetParamsDateRange = "1dControl"
-	AnnotationOutageGetParamsDateRange2dControl  AnnotationOutageGetParamsDateRange = "2dControl"
-	AnnotationOutageGetParamsDateRange7dControl  AnnotationOutageGetParamsDateRange = "7dControl"
-	AnnotationOutageGetParamsDateRange14dControl AnnotationOutageGetParamsDateRange = "14dControl"
-	AnnotationOutageGetParamsDateRange28dControl AnnotationOutageGetParamsDateRange = "28dControl"
-	AnnotationOutageGetParamsDateRange12wControl AnnotationOutageGetParamsDateRange = "12wControl"
-	AnnotationOutageGetParamsDateRange24wControl AnnotationOutageGetParamsDateRange = "24wControl"
-)
-
-func (r AnnotationOutageGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case AnnotationOutageGetParamsDateRange1d, AnnotationOutageGetParamsDateRange2d, AnnotationOutageGetParamsDateRange7d, AnnotationOutageGetParamsDateRange14d, AnnotationOutageGetParamsDateRange28d, AnnotationOutageGetParamsDateRange12w, AnnotationOutageGetParamsDateRange24w, AnnotationOutageGetParamsDateRange52w, AnnotationOutageGetParamsDateRange1dControl, AnnotationOutageGetParamsDateRange2dControl, AnnotationOutageGetParamsDateRange7dControl, AnnotationOutageGetParamsDateRange14dControl, AnnotationOutageGetParamsDateRange28dControl, AnnotationOutageGetParamsDateRange12wControl, AnnotationOutageGetParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -370,7 +340,7 @@ type AnnotationOutageLocationsParams struct {
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific
 	// start and end dates.
-	DateRange param.Field[AnnotationOutageLocationsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -384,38 +354,8 @@ type AnnotationOutageLocationsParams struct {
 func (r AnnotationOutageLocationsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Shorthand date ranges for the last X days - use when you don't need specific
-// start and end dates.
-type AnnotationOutageLocationsParamsDateRange string
-
-const (
-	AnnotationOutageLocationsParamsDateRange1d         AnnotationOutageLocationsParamsDateRange = "1d"
-	AnnotationOutageLocationsParamsDateRange2d         AnnotationOutageLocationsParamsDateRange = "2d"
-	AnnotationOutageLocationsParamsDateRange7d         AnnotationOutageLocationsParamsDateRange = "7d"
-	AnnotationOutageLocationsParamsDateRange14d        AnnotationOutageLocationsParamsDateRange = "14d"
-	AnnotationOutageLocationsParamsDateRange28d        AnnotationOutageLocationsParamsDateRange = "28d"
-	AnnotationOutageLocationsParamsDateRange12w        AnnotationOutageLocationsParamsDateRange = "12w"
-	AnnotationOutageLocationsParamsDateRange24w        AnnotationOutageLocationsParamsDateRange = "24w"
-	AnnotationOutageLocationsParamsDateRange52w        AnnotationOutageLocationsParamsDateRange = "52w"
-	AnnotationOutageLocationsParamsDateRange1dControl  AnnotationOutageLocationsParamsDateRange = "1dControl"
-	AnnotationOutageLocationsParamsDateRange2dControl  AnnotationOutageLocationsParamsDateRange = "2dControl"
-	AnnotationOutageLocationsParamsDateRange7dControl  AnnotationOutageLocationsParamsDateRange = "7dControl"
-	AnnotationOutageLocationsParamsDateRange14dControl AnnotationOutageLocationsParamsDateRange = "14dControl"
-	AnnotationOutageLocationsParamsDateRange28dControl AnnotationOutageLocationsParamsDateRange = "28dControl"
-	AnnotationOutageLocationsParamsDateRange12wControl AnnotationOutageLocationsParamsDateRange = "12wControl"
-	AnnotationOutageLocationsParamsDateRange24wControl AnnotationOutageLocationsParamsDateRange = "24wControl"
-)
-
-func (r AnnotationOutageLocationsParamsDateRange) IsKnown() bool {
-	switch r {
-	case AnnotationOutageLocationsParamsDateRange1d, AnnotationOutageLocationsParamsDateRange2d, AnnotationOutageLocationsParamsDateRange7d, AnnotationOutageLocationsParamsDateRange14d, AnnotationOutageLocationsParamsDateRange28d, AnnotationOutageLocationsParamsDateRange12w, AnnotationOutageLocationsParamsDateRange24w, AnnotationOutageLocationsParamsDateRange52w, AnnotationOutageLocationsParamsDateRange1dControl, AnnotationOutageLocationsParamsDateRange2dControl, AnnotationOutageLocationsParamsDateRange7dControl, AnnotationOutageLocationsParamsDateRange14dControl, AnnotationOutageLocationsParamsDateRange28dControl, AnnotationOutageLocationsParamsDateRange12wControl, AnnotationOutageLocationsParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

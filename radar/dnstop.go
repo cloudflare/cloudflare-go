@@ -37,8 +37,8 @@ func NewDNSTopService(opts ...option.RequestOption) (r *DNSTopService) {
 // Get top autonomous systems by DNS queries made to Cloudflare's public DNS
 // resolver.
 func (r *DNSTopService) Ases(ctx context.Context, query DNSTopAsesParams, opts ...option.RequestOption) (res *DNSTopAsesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DNSTopAsesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/dns/top/ases"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,8 +50,8 @@ func (r *DNSTopService) Ases(ctx context.Context, query DNSTopAsesParams, opts .
 
 // Get top locations by DNS queries made to Cloudflare's public DNS resolver.
 func (r *DNSTopService) Locations(ctx context.Context, query DNSTopLocationsParams, opts ...option.RequestOption) (res *DNSTopLocationsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DNSTopLocationsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/dns/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -159,7 +159,7 @@ type DNSTopAsesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                             `json:"dataSource,required"`
 	Description     string                                             `json:"description,required"`
 	EventType       string                                             `json:"eventType,required"`
-	IsInstantaneous interface{}                                        `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                               `json:"isInstantaneous,required"`
 	EndTime         time.Time                                          `json:"endTime" format:"date-time"`
 	LinkedURL       string                                             `json:"linkedUrl"`
 	StartTime       time.Time                                          `json:"startTime" format:"date-time"`
@@ -311,7 +311,7 @@ type DNSTopLocationsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                  `json:"dataSource,required"`
 	Description     string                                                  `json:"description,required"`
 	EventType       string                                                  `json:"eventType,required"`
-	IsInstantaneous interface{}                                             `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
 	EndTime         time.Time                                               `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                  `json:"linkedUrl"`
 	StartTime       time.Time                                               `json:"startTime" format:"date-time"`
@@ -381,7 +381,7 @@ type DNSTopAsesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]DNSTopAsesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -400,36 +400,8 @@ type DNSTopAsesParams struct {
 func (r DNSTopAsesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type DNSTopAsesParamsDateRange string
-
-const (
-	DNSTopAsesParamsDateRange1d         DNSTopAsesParamsDateRange = "1d"
-	DNSTopAsesParamsDateRange2d         DNSTopAsesParamsDateRange = "2d"
-	DNSTopAsesParamsDateRange7d         DNSTopAsesParamsDateRange = "7d"
-	DNSTopAsesParamsDateRange14d        DNSTopAsesParamsDateRange = "14d"
-	DNSTopAsesParamsDateRange28d        DNSTopAsesParamsDateRange = "28d"
-	DNSTopAsesParamsDateRange12w        DNSTopAsesParamsDateRange = "12w"
-	DNSTopAsesParamsDateRange24w        DNSTopAsesParamsDateRange = "24w"
-	DNSTopAsesParamsDateRange52w        DNSTopAsesParamsDateRange = "52w"
-	DNSTopAsesParamsDateRange1dControl  DNSTopAsesParamsDateRange = "1dControl"
-	DNSTopAsesParamsDateRange2dControl  DNSTopAsesParamsDateRange = "2dControl"
-	DNSTopAsesParamsDateRange7dControl  DNSTopAsesParamsDateRange = "7dControl"
-	DNSTopAsesParamsDateRange14dControl DNSTopAsesParamsDateRange = "14dControl"
-	DNSTopAsesParamsDateRange28dControl DNSTopAsesParamsDateRange = "28dControl"
-	DNSTopAsesParamsDateRange12wControl DNSTopAsesParamsDateRange = "12wControl"
-	DNSTopAsesParamsDateRange24wControl DNSTopAsesParamsDateRange = "24wControl"
-)
-
-func (r DNSTopAsesParamsDateRange) IsKnown() bool {
-	switch r {
-	case DNSTopAsesParamsDateRange1d, DNSTopAsesParamsDateRange2d, DNSTopAsesParamsDateRange7d, DNSTopAsesParamsDateRange14d, DNSTopAsesParamsDateRange28d, DNSTopAsesParamsDateRange12w, DNSTopAsesParamsDateRange24w, DNSTopAsesParamsDateRange52w, DNSTopAsesParamsDateRange1dControl, DNSTopAsesParamsDateRange2dControl, DNSTopAsesParamsDateRange7dControl, DNSTopAsesParamsDateRange14dControl, DNSTopAsesParamsDateRange28dControl, DNSTopAsesParamsDateRange12wControl, DNSTopAsesParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -487,7 +459,7 @@ type DNSTopLocationsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]DNSTopLocationsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -506,36 +478,8 @@ type DNSTopLocationsParams struct {
 func (r DNSTopLocationsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type DNSTopLocationsParamsDateRange string
-
-const (
-	DNSTopLocationsParamsDateRange1d         DNSTopLocationsParamsDateRange = "1d"
-	DNSTopLocationsParamsDateRange2d         DNSTopLocationsParamsDateRange = "2d"
-	DNSTopLocationsParamsDateRange7d         DNSTopLocationsParamsDateRange = "7d"
-	DNSTopLocationsParamsDateRange14d        DNSTopLocationsParamsDateRange = "14d"
-	DNSTopLocationsParamsDateRange28d        DNSTopLocationsParamsDateRange = "28d"
-	DNSTopLocationsParamsDateRange12w        DNSTopLocationsParamsDateRange = "12w"
-	DNSTopLocationsParamsDateRange24w        DNSTopLocationsParamsDateRange = "24w"
-	DNSTopLocationsParamsDateRange52w        DNSTopLocationsParamsDateRange = "52w"
-	DNSTopLocationsParamsDateRange1dControl  DNSTopLocationsParamsDateRange = "1dControl"
-	DNSTopLocationsParamsDateRange2dControl  DNSTopLocationsParamsDateRange = "2dControl"
-	DNSTopLocationsParamsDateRange7dControl  DNSTopLocationsParamsDateRange = "7dControl"
-	DNSTopLocationsParamsDateRange14dControl DNSTopLocationsParamsDateRange = "14dControl"
-	DNSTopLocationsParamsDateRange28dControl DNSTopLocationsParamsDateRange = "28dControl"
-	DNSTopLocationsParamsDateRange12wControl DNSTopLocationsParamsDateRange = "12wControl"
-	DNSTopLocationsParamsDateRange24wControl DNSTopLocationsParamsDateRange = "24wControl"
-)
-
-func (r DNSTopLocationsParamsDateRange) IsKnown() bool {
-	switch r {
-	case DNSTopLocationsParamsDateRange1d, DNSTopLocationsParamsDateRange2d, DNSTopLocationsParamsDateRange7d, DNSTopLocationsParamsDateRange14d, DNSTopLocationsParamsDateRange28d, DNSTopLocationsParamsDateRange12w, DNSTopLocationsParamsDateRange24w, DNSTopLocationsParamsDateRange52w, DNSTopLocationsParamsDateRange1dControl, DNSTopLocationsParamsDateRange2dControl, DNSTopLocationsParamsDateRange7dControl, DNSTopLocationsParamsDateRange14dControl, DNSTopLocationsParamsDateRange28dControl, DNSTopLocationsParamsDateRange12wControl, DNSTopLocationsParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

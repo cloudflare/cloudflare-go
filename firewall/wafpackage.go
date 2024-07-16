@@ -49,8 +49,12 @@ func NewWAFPackageService(opts ...option.RequestOption) (r *WAFPackageService) {
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
 func (r *WAFPackageService) List(ctx context.Context, zoneIdentifier string, query WAFPackageListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFPackageListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages", zoneIdentifier)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
@@ -92,13 +96,20 @@ func (r *WAFPackageService) Get(ctx context.Context, zoneIdentifier string, iden
 }
 
 type WAFPackageListResponse struct {
-	Errors   interface{} `json:"errors,required"`
+	// This field can have the runtime type of [[]shared.ResponseInfo].
+	Errors interface{} `json:"errors,required"`
+	// This field can have the runtime type of [[]shared.ResponseInfo].
 	Messages interface{} `json:"messages,required"`
-	Result   interface{} `json:"result,required"`
+	// This field can have the runtime type of
+	// [WAFPackageListResponseFirewallAPIResponseCollectionResultUnion],
+	// [[]WAFPackageListResponseObjectResult].
+	Result interface{} `json:"result,required"`
 	// Whether the API call was successful
-	Success    WAFPackageListResponseSuccess `json:"success"`
-	ResultInfo interface{}                   `json:"result_info,required"`
-	JSON       wafPackageListResponseJSON    `json:"-"`
+	Success WAFPackageListResponseSuccess `json:"success"`
+	// This field can have the runtime type of
+	// [WAFPackageListResponseFirewallAPIResponseCollectionResultInfo].
+	ResultInfo interface{}                `json:"result_info,required"`
+	JSON       wafPackageListResponseJSON `json:"-"`
 	union      WAFPackageListResponseUnion
 }
 
@@ -119,6 +130,7 @@ func (r wafPackageListResponseJSON) RawJSON() string {
 }
 
 func (r *WAFPackageListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WAFPackageListResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -126,6 +138,12 @@ func (r *WAFPackageListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WAFPackageListResponseUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [firewall.WAFPackageListResponseFirewallAPIResponseCollection],
+// [firewall.WAFPackageListResponseObject].
 func (r WAFPackageListResponse) AsUnion() WAFPackageListResponseUnion {
 	return r.union
 }
@@ -333,6 +351,7 @@ func (r wafPackageListResponseObjectResultJSON) RawJSON() string {
 }
 
 func (r *WAFPackageListResponseObjectResult) UnmarshalJSON(data []byte) (err error) {
+	*r = WAFPackageListResponseObjectResult{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -340,6 +359,12 @@ func (r *WAFPackageListResponseObjectResult) UnmarshalJSON(data []byte) (err err
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WAFPackageListResponseObjectResultUnion] interface which you
+// can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [firewall.WAFPackageListResponseObjectResultFirewallPackageDefinition],
+// [firewall.WAFPackageListResponseObjectResultFirewallAnomalyPackage].
 func (r WAFPackageListResponseObjectResult) AsUnion() WAFPackageListResponseObjectResultUnion {
 	return r.union
 }
@@ -666,9 +691,13 @@ func (r WAFPackageListResponseSuccess) IsKnown() bool {
 }
 
 type WAFPackageGetResponse struct {
-	Errors   interface{} `json:"errors,required"`
+	// This field can have the runtime type of [[]shared.ResponseInfo].
+	Errors interface{} `json:"errors,required"`
+	// This field can have the runtime type of [[]shared.ResponseInfo].
 	Messages interface{} `json:"messages,required"`
-	Result   interface{} `json:"result,required"`
+	// This field can have the runtime type of
+	// [WAFPackageGetResponseFirewallAPIResponseSingleResultUnion], [interface{}].
+	Result interface{} `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGetResponseSuccess `json:"success"`
 	JSON    wafPackageGetResponseJSON    `json:"-"`
@@ -691,6 +720,7 @@ func (r wafPackageGetResponseJSON) RawJSON() string {
 }
 
 func (r *WAFPackageGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = WAFPackageGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -698,6 +728,12 @@ func (r *WAFPackageGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [WAFPackageGetResponseUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [firewall.WAFPackageGetResponseFirewallAPIResponseSingle],
+// [firewall.WAFPackageGetResponseObject].
 func (r WAFPackageGetResponse) AsUnion() WAFPackageGetResponseUnion {
 	return r.union
 }
@@ -844,7 +880,7 @@ type WAFPackageListParams struct {
 func (r WAFPackageListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

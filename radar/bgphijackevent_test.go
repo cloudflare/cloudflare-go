@@ -30,13 +30,13 @@ func TestBGPHijackEventListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.BGP.Hijacks.Events.List(context.TODO(), radar.BGPHijackEventListParams{
 		DateEnd:         cloudflare.F(time.Now()),
-		DateRange:       cloudflare.F(radar.BGPHijackEventListParamsDateRange7d),
+		DateRange:       cloudflare.F("7d"),
 		DateStart:       cloudflare.F(time.Now()),
 		EventID:         cloudflare.F(int64(0)),
 		Format:          cloudflare.F(radar.BGPHijackEventListParamsFormatJson),
 		HijackerASN:     cloudflare.F(int64(0)),
 		InvolvedASN:     cloudflare.F(int64(0)),
-		InvolvedCountry: cloudflare.F("string"),
+		InvolvedCountry: cloudflare.F("involvedCountry"),
 		MaxConfidence:   cloudflare.F(int64(0)),
 		MinConfidence:   cloudflare.F(int64(0)),
 		Page:            cloudflare.F(int64(0)),

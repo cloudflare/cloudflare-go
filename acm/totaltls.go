@@ -36,8 +36,8 @@ func NewTotalTLSService(opts ...option.RequestOption) (r *TotalTLSService) {
 
 // Set Total TLS Settings or disable the feature for a Zone.
 func (r *TotalTLSService) New(ctx context.Context, params TotalTLSNewParams, opts ...option.RequestOption) (res *TotalTLSNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TotalTLSNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -53,8 +53,8 @@ func (r *TotalTLSService) New(ctx context.Context, params TotalTLSNewParams, opt
 
 // Get Total TLS Settings for a Zone.
 func (r *TotalTLSService) Get(ctx context.Context, query TotalTLSGetParams, opts ...option.RequestOption) (res *TotalTLSGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TotalTLSGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

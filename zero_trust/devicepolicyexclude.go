@@ -37,8 +37,8 @@ func NewDevicePolicyExcludeService(opts ...option.RequestOption) (r *DevicePolic
 
 // Sets the list of routes excluded from the WARP client's tunnel.
 func (r *DevicePolicyExcludeService) Update(ctx context.Context, params DevicePolicyExcludeUpdateParams, opts ...option.RequestOption) (res *[]SplitTunnelExclude, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,8 +55,12 @@ func (r *DevicePolicyExcludeService) Update(ctx context.Context, params DevicePo
 // Fetches the list of routes excluded from the WARP client's tunnel.
 func (r *DevicePolicyExcludeService) List(ctx context.Context, query DevicePolicyExcludeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SplitTunnelExclude], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/devices/policy/exclude", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -78,8 +82,8 @@ func (r *DevicePolicyExcludeService) ListAutoPaging(ctx context.Context, query D
 // Fetches the list of routes excluded from the WARP client's tunnel for a specific
 // device settings profile.
 func (r *DevicePolicyExcludeService) Get(ctx context.Context, policyID string, query DevicePolicyExcludeGetParams, opts ...option.RequestOption) (res *[]SplitTunnelExclude, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

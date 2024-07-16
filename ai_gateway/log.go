@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -37,9 +38,10 @@ func NewLogService(opts ...option.RequestOption) (r *LogService) {
 }
 
 // List Gateway Logs
-func (r *LogService) Get(ctx context.Context, id string, params LogGetParams, opts ...option.RequestOption) (res *[]LogGetResponse, err error) {
+func (r *LogService) List(ctx context.Context, id string, params LogListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[LogListResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
-	var env LogGetResponseEnvelope
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -49,38 +51,47 @@ func (r *LogService) Get(ctx context.Context, id string, params LogGetParams, op
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs", params.AccountID, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type LogGetResponse struct {
-	ID                  string             `json:"id,required" format:"uuid"`
-	Cached              bool               `json:"cached,required"`
-	CreatedAt           time.Time          `json:"created_at,required" format:"date-time"`
-	Duration            int64              `json:"duration,required"`
-	Model               string             `json:"model,required"`
-	Path                string             `json:"path,required"`
-	Provider            string             `json:"provider,required"`
-	Request             string             `json:"request,required"`
-	Response            string             `json:"response,required"`
-	Success             bool               `json:"success,required"`
-	TokensIn            int64              `json:"tokens_in,required"`
-	TokensOut           int64              `json:"tokens_out,required"`
-	Metadata            string             `json:"metadata"`
-	RequestContentType  string             `json:"request_content_type"`
-	RequestType         string             `json:"request_type"`
-	ResponseContentType string             `json:"response_content_type"`
-	StatusCode          int64              `json:"status_code"`
-	Step                int64              `json:"step"`
-	JSON                logGetResponseJSON `json:"-"`
+// List Gateway Logs
+func (r *LogService) ListAutoPaging(ctx context.Context, id string, params LogListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[LogListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, id, params, opts...))
 }
 
-// logGetResponseJSON contains the JSON metadata for the struct [LogGetResponse]
-type logGetResponseJSON struct {
+type LogListResponse struct {
+	ID                  string              `json:"id,required"`
+	Cached              bool                `json:"cached,required"`
+	CreatedAt           time.Time           `json:"created_at,required" format:"date-time"`
+	Duration            int64               `json:"duration,required"`
+	Model               string              `json:"model,required"`
+	Path                string              `json:"path,required"`
+	Provider            string              `json:"provider,required"`
+	Request             string              `json:"request,required"`
+	Response            string              `json:"response,required"`
+	Success             bool                `json:"success,required"`
+	TokensIn            int64               `json:"tokens_in,required"`
+	TokensOut           int64               `json:"tokens_out,required"`
+	Metadata            string              `json:"metadata"`
+	RequestContentType  string              `json:"request_content_type"`
+	RequestType         string              `json:"request_type"`
+	ResponseContentType string              `json:"response_content_type"`
+	StatusCode          int64               `json:"status_code"`
+	Step                int64               `json:"step"`
+	JSON                logListResponseJSON `json:"-"`
+}
+
+// logListResponseJSON contains the JSON metadata for the struct [LogListResponse]
+type logListResponseJSON struct {
 	ID                  apijson.Field
 	Cached              apijson.Field
 	CreatedAt           apijson.Field
@@ -103,84 +114,61 @@ type logGetResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *LogGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LogListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r logGetResponseJSON) RawJSON() string {
+func (r logListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type LogGetParams struct {
-	AccountID param.Field[string]                `path:"account_id,required"`
-	Cached    param.Field[bool]                  `query:"cached"`
-	Direction param.Field[LogGetParamsDirection] `query:"direction"`
-	EndDate   param.Field[time.Time]             `query:"end_date" format:"date-time"`
-	OrderBy   param.Field[LogGetParamsOrderBy]   `query:"order_by"`
-	Page      param.Field[int64]                 `query:"page"`
-	PerPage   param.Field[int64]                 `query:"per_page"`
-	Search    param.Field[string]                `query:"search"`
-	StartDate param.Field[time.Time]             `query:"start_date" format:"date-time"`
-	Success   param.Field[bool]                  `query:"success"`
+type LogListParams struct {
+	AccountID param.Field[string]                 `path:"account_id,required"`
+	Cached    param.Field[bool]                   `query:"cached"`
+	Direction param.Field[LogListParamsDirection] `query:"direction"`
+	EndDate   param.Field[time.Time]              `query:"end_date" format:"date-time"`
+	OrderBy   param.Field[LogListParamsOrderBy]   `query:"order_by"`
+	Page      param.Field[int64]                  `query:"page"`
+	PerPage   param.Field[int64]                  `query:"per_page"`
+	Search    param.Field[string]                 `query:"search"`
+	StartDate param.Field[time.Time]              `query:"start_date" format:"date-time"`
+	Success   param.Field[bool]                   `query:"success"`
 }
 
-// URLQuery serializes [LogGetParams]'s query parameters as `url.Values`.
-func (r LogGetParams) URLQuery() (v url.Values) {
+// URLQuery serializes [LogListParams]'s query parameters as `url.Values`.
+func (r LogListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
-type LogGetParamsDirection string
+type LogListParamsDirection string
 
 const (
-	LogGetParamsDirectionAsc  LogGetParamsDirection = "asc"
-	LogGetParamsDirectionDesc LogGetParamsDirection = "desc"
+	LogListParamsDirectionAsc  LogListParamsDirection = "asc"
+	LogListParamsDirectionDesc LogListParamsDirection = "desc"
 )
 
-func (r LogGetParamsDirection) IsKnown() bool {
+func (r LogListParamsDirection) IsKnown() bool {
 	switch r {
-	case LogGetParamsDirectionAsc, LogGetParamsDirectionDesc:
+	case LogListParamsDirectionAsc, LogListParamsDirectionDesc:
 		return true
 	}
 	return false
 }
 
-type LogGetParamsOrderBy string
+type LogListParamsOrderBy string
 
 const (
-	LogGetParamsOrderByCreatedAt LogGetParamsOrderBy = "created_at"
-	LogGetParamsOrderByProvider  LogGetParamsOrderBy = "provider"
+	LogListParamsOrderByCreatedAt LogListParamsOrderBy = "created_at"
+	LogListParamsOrderByProvider  LogListParamsOrderBy = "provider"
 )
 
-func (r LogGetParamsOrderBy) IsKnown() bool {
+func (r LogListParamsOrderBy) IsKnown() bool {
 	switch r {
-	case LogGetParamsOrderByCreatedAt, LogGetParamsOrderByProvider:
+	case LogListParamsOrderByCreatedAt, LogListParamsOrderByProvider:
 		return true
 	}
 	return false
-}
-
-type LogGetResponseEnvelope struct {
-	Result  []LogGetResponse           `json:"result,required"`
-	Success bool                       `json:"success,required"`
-	JSON    logGetResponseEnvelopeJSON `json:"-"`
-}
-
-// logGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [LogGetResponseEnvelope]
-type logGetResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LogGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r logGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }

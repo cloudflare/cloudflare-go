@@ -39,8 +39,8 @@ func NewNetflowService(opts ...option.RequestOption) (r *NetflowService) {
 // Get network traffic change over time. Visit
 // https://en.wikipedia.org/wiki/NetFlow for more information on NetFlows.
 func (r *NetflowService) Timeseries(ctx context.Context, query NetflowTimeseriesParams, opts ...option.RequestOption) (res *NetflowTimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env NetflowTimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/netflows/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -152,7 +152,7 @@ type NetflowTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                    `json:"dataSource,required"`
 	Description     string                                                    `json:"description,required"`
 	EventType       string                                                    `json:"eventType,required"`
-	IsInstantaneous interface{}                                               `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                    `json:"linkedUrl"`
 	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
@@ -222,7 +222,7 @@ type NetflowTimeseriesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]NetflowTimeseriesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -245,7 +245,7 @@ type NetflowTimeseriesParams struct {
 func (r NetflowTimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -264,34 +264,6 @@ const (
 func (r NetflowTimeseriesParamsAggInterval) IsKnown() bool {
 	switch r {
 	case NetflowTimeseriesParamsAggInterval15m, NetflowTimeseriesParamsAggInterval1h, NetflowTimeseriesParamsAggInterval1d, NetflowTimeseriesParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type NetflowTimeseriesParamsDateRange string
-
-const (
-	NetflowTimeseriesParamsDateRange1d         NetflowTimeseriesParamsDateRange = "1d"
-	NetflowTimeseriesParamsDateRange2d         NetflowTimeseriesParamsDateRange = "2d"
-	NetflowTimeseriesParamsDateRange7d         NetflowTimeseriesParamsDateRange = "7d"
-	NetflowTimeseriesParamsDateRange14d        NetflowTimeseriesParamsDateRange = "14d"
-	NetflowTimeseriesParamsDateRange28d        NetflowTimeseriesParamsDateRange = "28d"
-	NetflowTimeseriesParamsDateRange12w        NetflowTimeseriesParamsDateRange = "12w"
-	NetflowTimeseriesParamsDateRange24w        NetflowTimeseriesParamsDateRange = "24w"
-	NetflowTimeseriesParamsDateRange52w        NetflowTimeseriesParamsDateRange = "52w"
-	NetflowTimeseriesParamsDateRange1dControl  NetflowTimeseriesParamsDateRange = "1dControl"
-	NetflowTimeseriesParamsDateRange2dControl  NetflowTimeseriesParamsDateRange = "2dControl"
-	NetflowTimeseriesParamsDateRange7dControl  NetflowTimeseriesParamsDateRange = "7dControl"
-	NetflowTimeseriesParamsDateRange14dControl NetflowTimeseriesParamsDateRange = "14dControl"
-	NetflowTimeseriesParamsDateRange28dControl NetflowTimeseriesParamsDateRange = "28dControl"
-	NetflowTimeseriesParamsDateRange12wControl NetflowTimeseriesParamsDateRange = "12wControl"
-	NetflowTimeseriesParamsDateRange24wControl NetflowTimeseriesParamsDateRange = "24wControl"
-)
-
-func (r NetflowTimeseriesParamsDateRange) IsKnown() bool {
-	switch r {
-	case NetflowTimeseriesParamsDateRange1d, NetflowTimeseriesParamsDateRange2d, NetflowTimeseriesParamsDateRange7d, NetflowTimeseriesParamsDateRange14d, NetflowTimeseriesParamsDateRange28d, NetflowTimeseriesParamsDateRange12w, NetflowTimeseriesParamsDateRange24w, NetflowTimeseriesParamsDateRange52w, NetflowTimeseriesParamsDateRange1dControl, NetflowTimeseriesParamsDateRange2dControl, NetflowTimeseriesParamsDateRange7dControl, NetflowTimeseriesParamsDateRange14dControl, NetflowTimeseriesParamsDateRange28dControl, NetflowTimeseriesParamsDateRange12wControl, NetflowTimeseriesParamsDateRange24wControl:
 		return true
 	}
 	return false

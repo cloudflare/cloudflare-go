@@ -41,8 +41,8 @@ func NewRankingService(opts ...option.RequestOption) (r *RankingService) {
 
 // Gets Domains Rank updates change over time. Raw values are returned.
 func (r *RankingService) TimeseriesGroups(ctx context.Context, query RankingTimeseriesGroupsParams, opts ...option.RequestOption) (res *RankingTimeseriesGroupsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RankingTimeseriesGroupsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/ranking/timeseries_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -57,8 +57,8 @@ func (r *RankingService) TimeseriesGroups(ctx context.Context, query RankingTime
 // that are generating a surge in interest. For more information on top domains,
 // see https://blog.cloudflare.com/radar-domain-rankings/.
 func (r *RankingService) Top(ctx context.Context, query RankingTopParams, opts ...option.RequestOption) (res *RankingTopResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RankingTopResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/ranking/top"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -303,7 +303,7 @@ type RankingTimeseriesGroupsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RankingTimeseriesGroupsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Array of comma separated list of domains names.
@@ -325,36 +325,8 @@ type RankingTimeseriesGroupsParams struct {
 func (r RankingTimeseriesGroupsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type RankingTimeseriesGroupsParamsDateRange string
-
-const (
-	RankingTimeseriesGroupsParamsDateRange1d         RankingTimeseriesGroupsParamsDateRange = "1d"
-	RankingTimeseriesGroupsParamsDateRange2d         RankingTimeseriesGroupsParamsDateRange = "2d"
-	RankingTimeseriesGroupsParamsDateRange7d         RankingTimeseriesGroupsParamsDateRange = "7d"
-	RankingTimeseriesGroupsParamsDateRange14d        RankingTimeseriesGroupsParamsDateRange = "14d"
-	RankingTimeseriesGroupsParamsDateRange28d        RankingTimeseriesGroupsParamsDateRange = "28d"
-	RankingTimeseriesGroupsParamsDateRange12w        RankingTimeseriesGroupsParamsDateRange = "12w"
-	RankingTimeseriesGroupsParamsDateRange24w        RankingTimeseriesGroupsParamsDateRange = "24w"
-	RankingTimeseriesGroupsParamsDateRange52w        RankingTimeseriesGroupsParamsDateRange = "52w"
-	RankingTimeseriesGroupsParamsDateRange1dControl  RankingTimeseriesGroupsParamsDateRange = "1dControl"
-	RankingTimeseriesGroupsParamsDateRange2dControl  RankingTimeseriesGroupsParamsDateRange = "2dControl"
-	RankingTimeseriesGroupsParamsDateRange7dControl  RankingTimeseriesGroupsParamsDateRange = "7dControl"
-	RankingTimeseriesGroupsParamsDateRange14dControl RankingTimeseriesGroupsParamsDateRange = "14dControl"
-	RankingTimeseriesGroupsParamsDateRange28dControl RankingTimeseriesGroupsParamsDateRange = "28dControl"
-	RankingTimeseriesGroupsParamsDateRange12wControl RankingTimeseriesGroupsParamsDateRange = "12wControl"
-	RankingTimeseriesGroupsParamsDateRange24wControl RankingTimeseriesGroupsParamsDateRange = "24wControl"
-)
-
-func (r RankingTimeseriesGroupsParamsDateRange) IsKnown() bool {
-	switch r {
-	case RankingTimeseriesGroupsParamsDateRange1d, RankingTimeseriesGroupsParamsDateRange2d, RankingTimeseriesGroupsParamsDateRange7d, RankingTimeseriesGroupsParamsDateRange14d, RankingTimeseriesGroupsParamsDateRange28d, RankingTimeseriesGroupsParamsDateRange12w, RankingTimeseriesGroupsParamsDateRange24w, RankingTimeseriesGroupsParamsDateRange52w, RankingTimeseriesGroupsParamsDateRange1dControl, RankingTimeseriesGroupsParamsDateRange2dControl, RankingTimeseriesGroupsParamsDateRange7dControl, RankingTimeseriesGroupsParamsDateRange14dControl, RankingTimeseriesGroupsParamsDateRange28dControl, RankingTimeseriesGroupsParamsDateRange12wControl, RankingTimeseriesGroupsParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.
@@ -432,7 +404,7 @@ type RankingTopParams struct {
 func (r RankingTopParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

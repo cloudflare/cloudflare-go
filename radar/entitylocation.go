@@ -37,8 +37,8 @@ func NewEntityLocationService(opts ...option.RequestOption) (r *EntityLocationSe
 
 // Get a list of locations.
 func (r *EntityLocationService) List(ctx context.Context, query EntityLocationListParams, opts ...option.RequestOption) (res *EntityLocationListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EntityLocationListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/entities/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,8 +52,8 @@ func (r *EntityLocationService) List(ctx context.Context, query EntityLocationLi
 // low level of confidence in the traffic data - normally this happens because
 // Cloudflare has a small amount of traffic from/to this location).
 func (r *EntityLocationService) Get(ctx context.Context, location string, query EntityLocationGetParams, opts ...option.RequestOption) (res *EntityLocationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EntityLocationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if location == "" {
 		err = errors.New("missing required location parameter")
 		return
@@ -185,7 +185,7 @@ type EntityLocationListParams struct {
 func (r EntityLocationListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -238,7 +238,7 @@ type EntityLocationGetParams struct {
 func (r EntityLocationGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

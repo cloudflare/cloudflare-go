@@ -38,8 +38,8 @@ func NewTrafficAnomalyLocationService(opts ...option.RequestOption) (r *TrafficA
 // alerts are automatically detected by Radar and then manually verified by our
 // team. This endpoint returns the sum of alerts grouped by location.
 func (r *TrafficAnomalyLocationService) Get(ctx context.Context, query TrafficAnomalyLocationGetParams, opts ...option.RequestOption) (res *TrafficAnomalyLocationGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TrafficAnomalyLocationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/traffic_anomalies/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -100,7 +100,7 @@ type TrafficAnomalyLocationGetParams struct {
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific
 	// start and end dates.
-	DateRange param.Field[TrafficAnomalyLocationGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[string] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -115,38 +115,8 @@ type TrafficAnomalyLocationGetParams struct {
 func (r TrafficAnomalyLocationGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Shorthand date ranges for the last X days - use when you don't need specific
-// start and end dates.
-type TrafficAnomalyLocationGetParamsDateRange string
-
-const (
-	TrafficAnomalyLocationGetParamsDateRange1d         TrafficAnomalyLocationGetParamsDateRange = "1d"
-	TrafficAnomalyLocationGetParamsDateRange2d         TrafficAnomalyLocationGetParamsDateRange = "2d"
-	TrafficAnomalyLocationGetParamsDateRange7d         TrafficAnomalyLocationGetParamsDateRange = "7d"
-	TrafficAnomalyLocationGetParamsDateRange14d        TrafficAnomalyLocationGetParamsDateRange = "14d"
-	TrafficAnomalyLocationGetParamsDateRange28d        TrafficAnomalyLocationGetParamsDateRange = "28d"
-	TrafficAnomalyLocationGetParamsDateRange12w        TrafficAnomalyLocationGetParamsDateRange = "12w"
-	TrafficAnomalyLocationGetParamsDateRange24w        TrafficAnomalyLocationGetParamsDateRange = "24w"
-	TrafficAnomalyLocationGetParamsDateRange52w        TrafficAnomalyLocationGetParamsDateRange = "52w"
-	TrafficAnomalyLocationGetParamsDateRange1dControl  TrafficAnomalyLocationGetParamsDateRange = "1dControl"
-	TrafficAnomalyLocationGetParamsDateRange2dControl  TrafficAnomalyLocationGetParamsDateRange = "2dControl"
-	TrafficAnomalyLocationGetParamsDateRange7dControl  TrafficAnomalyLocationGetParamsDateRange = "7dControl"
-	TrafficAnomalyLocationGetParamsDateRange14dControl TrafficAnomalyLocationGetParamsDateRange = "14dControl"
-	TrafficAnomalyLocationGetParamsDateRange28dControl TrafficAnomalyLocationGetParamsDateRange = "28dControl"
-	TrafficAnomalyLocationGetParamsDateRange12wControl TrafficAnomalyLocationGetParamsDateRange = "12wControl"
-	TrafficAnomalyLocationGetParamsDateRange24wControl TrafficAnomalyLocationGetParamsDateRange = "24wControl"
-)
-
-func (r TrafficAnomalyLocationGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case TrafficAnomalyLocationGetParamsDateRange1d, TrafficAnomalyLocationGetParamsDateRange2d, TrafficAnomalyLocationGetParamsDateRange7d, TrafficAnomalyLocationGetParamsDateRange14d, TrafficAnomalyLocationGetParamsDateRange28d, TrafficAnomalyLocationGetParamsDateRange12w, TrafficAnomalyLocationGetParamsDateRange24w, TrafficAnomalyLocationGetParamsDateRange52w, TrafficAnomalyLocationGetParamsDateRange1dControl, TrafficAnomalyLocationGetParamsDateRange2dControl, TrafficAnomalyLocationGetParamsDateRange7dControl, TrafficAnomalyLocationGetParamsDateRange14dControl, TrafficAnomalyLocationGetParamsDateRange28dControl, TrafficAnomalyLocationGetParamsDateRange12wControl, TrafficAnomalyLocationGetParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

@@ -40,8 +40,8 @@ func NewTunnelConnectionService(opts ...option.RequestOption) (r *TunnelConnecti
 // Removes connections that are in a disconnected or pending reconnect state. We
 // recommend running this command after shutting down a tunnel.
 func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, body TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelConnectionDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,8 +61,8 @@ func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, b
 
 // Fetches connection details for a Cloudflare Tunnel.
 func (r *TunnelConnectionService) Get(ctx context.Context, tunnelID string, query TunnelConnectionGetParams, opts ...option.RequestOption) (res *[]Client, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TunnelConnectionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -46,8 +46,8 @@ func NewHTTPService(opts ...option.RequestOption) (r *HTTPService) {
 
 // Get HTTP requests over time.
 func (r *HTTPService) Timeseries(ctx context.Context, query HTTPTimeseriesParams, opts ...option.RequestOption) (res *HTTPTimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -159,7 +159,7 @@ type HTTPTimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                 `json:"dataSource,required"`
 	Description     string                                                 `json:"description,required"`
 	EventType       string                                                 `json:"eventType,required"`
-	IsInstantaneous interface{}                                            `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
 	EndTime         time.Time                                              `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                 `json:"linkedUrl"`
 	StartTime       time.Time                                              `json:"startTime" format:"date-time"`
@@ -229,7 +229,7 @@ type HTTPTimeseriesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -246,7 +246,7 @@ type HTTPTimeseriesParams struct {
 func (r HTTPTimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -265,34 +265,6 @@ const (
 func (r HTTPTimeseriesParamsAggInterval) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesParamsAggInterval15m, HTTPTimeseriesParamsAggInterval1h, HTTPTimeseriesParamsAggInterval1d, HTTPTimeseriesParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesParamsDateRange string
-
-const (
-	HTTPTimeseriesParamsDateRange1d         HTTPTimeseriesParamsDateRange = "1d"
-	HTTPTimeseriesParamsDateRange2d         HTTPTimeseriesParamsDateRange = "2d"
-	HTTPTimeseriesParamsDateRange7d         HTTPTimeseriesParamsDateRange = "7d"
-	HTTPTimeseriesParamsDateRange14d        HTTPTimeseriesParamsDateRange = "14d"
-	HTTPTimeseriesParamsDateRange28d        HTTPTimeseriesParamsDateRange = "28d"
-	HTTPTimeseriesParamsDateRange12w        HTTPTimeseriesParamsDateRange = "12w"
-	HTTPTimeseriesParamsDateRange24w        HTTPTimeseriesParamsDateRange = "24w"
-	HTTPTimeseriesParamsDateRange52w        HTTPTimeseriesParamsDateRange = "52w"
-	HTTPTimeseriesParamsDateRange1dControl  HTTPTimeseriesParamsDateRange = "1dControl"
-	HTTPTimeseriesParamsDateRange2dControl  HTTPTimeseriesParamsDateRange = "2dControl"
-	HTTPTimeseriesParamsDateRange7dControl  HTTPTimeseriesParamsDateRange = "7dControl"
-	HTTPTimeseriesParamsDateRange14dControl HTTPTimeseriesParamsDateRange = "14dControl"
-	HTTPTimeseriesParamsDateRange28dControl HTTPTimeseriesParamsDateRange = "28dControl"
-	HTTPTimeseriesParamsDateRange12wControl HTTPTimeseriesParamsDateRange = "12wControl"
-	HTTPTimeseriesParamsDateRange24wControl HTTPTimeseriesParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesParamsDateRange1d, HTTPTimeseriesParamsDateRange2d, HTTPTimeseriesParamsDateRange7d, HTTPTimeseriesParamsDateRange14d, HTTPTimeseriesParamsDateRange28d, HTTPTimeseriesParamsDateRange12w, HTTPTimeseriesParamsDateRange24w, HTTPTimeseriesParamsDateRange52w, HTTPTimeseriesParamsDateRange1dControl, HTTPTimeseriesParamsDateRange2dControl, HTTPTimeseriesParamsDateRange7dControl, HTTPTimeseriesParamsDateRange14dControl, HTTPTimeseriesParamsDateRange28dControl, HTTPTimeseriesParamsDateRange12wControl, HTTPTimeseriesParamsDateRange24wControl:
 		return true
 	}
 	return false

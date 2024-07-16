@@ -37,7 +37,7 @@ func TestHTTPLocationHTTPMethodGetWithOptionalParams(t *testing.T) {
 			BrowserFamily: cloudflare.F([]radar.HTTPLocationHTTPMethodGetParamsBrowserFamily{radar.HTTPLocationHTTPMethodGetParamsBrowserFamilyChrome, radar.HTTPLocationHTTPMethodGetParamsBrowserFamilyEdge, radar.HTTPLocationHTTPMethodGetParamsBrowserFamilyFirefox}),
 			Continent:     cloudflare.F([]string{"string", "string", "string"}),
 			DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange:     cloudflare.F([]radar.HTTPLocationHTTPMethodGetParamsDateRange{radar.HTTPLocationHTTPMethodGetParamsDateRange1d, radar.HTTPLocationHTTPMethodGetParamsDateRange2d, radar.HTTPLocationHTTPMethodGetParamsDateRange7d}),
+			DateRange:     cloudflare.F([]string{"7d", "7d", "7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DeviceType:    cloudflare.F([]radar.HTTPLocationHTTPMethodGetParamsDeviceType{radar.HTTPLocationHTTPMethodGetParamsDeviceTypeDesktop, radar.HTTPLocationHTTPMethodGetParamsDeviceTypeMobile, radar.HTTPLocationHTTPMethodGetParamsDeviceTypeOther}),
 			Format:        cloudflare.F(radar.HTTPLocationHTTPMethodGetParamsFormatJson),

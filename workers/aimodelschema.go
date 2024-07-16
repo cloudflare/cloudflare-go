@@ -37,8 +37,8 @@ func NewAIModelSchemaService(opts ...option.RequestOption) (r *AIModelSchemaServ
 
 // Get Model Schema
 func (r *AIModelSchemaService) Get(ctx context.Context, params AIModelSchemaGetParams, opts ...option.RequestOption) (res *AIModelSchemaGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AIModelSchemaGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -64,7 +64,7 @@ type AIModelSchemaGetParams struct {
 func (r AIModelSchemaGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

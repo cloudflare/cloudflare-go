@@ -42,8 +42,8 @@ func NewMonitorService(opts ...option.RequestOption) (r *MonitorService) {
 
 // Create a configured monitor.
 func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts ...option.RequestOption) (res *Monitor, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MonitorNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,8 +59,8 @@ func (r *MonitorService) New(ctx context.Context, params MonitorNewParams, opts 
 
 // Modify a configured monitor.
 func (r *MonitorService) Update(ctx context.Context, monitorID string, params MonitorUpdateParams, opts ...option.RequestOption) (res *Monitor, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MonitorUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -81,8 +81,12 @@ func (r *MonitorService) Update(ctx context.Context, monitorID string, params Mo
 // List configured monitors for an account.
 func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Monitor], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -103,8 +107,8 @@ func (r *MonitorService) ListAutoPaging(ctx context.Context, query MonitorListPa
 
 // Delete a configured monitor.
 func (r *MonitorService) Delete(ctx context.Context, monitorID string, body MonitorDeleteParams, opts ...option.RequestOption) (res *MonitorDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MonitorDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -124,8 +128,8 @@ func (r *MonitorService) Delete(ctx context.Context, monitorID string, body Moni
 
 // Apply changes to an existing monitor, overwriting the supplied properties.
 func (r *MonitorService) Edit(ctx context.Context, monitorID string, params MonitorEditParams, opts ...option.RequestOption) (res *Monitor, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MonitorEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -145,8 +149,8 @@ func (r *MonitorService) Edit(ctx context.Context, monitorID string, params Moni
 
 // List a single configured monitor for an account.
 func (r *MonitorService) Get(ctx context.Context, monitorID string, query MonitorGetParams, opts ...option.RequestOption) (res *Monitor, err error) {
-	opts = append(r.Options[:], opts...)
 	var env MonitorGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

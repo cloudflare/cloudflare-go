@@ -44,8 +44,8 @@ func TestDispatchNamespaceScriptContentUpdateWithOptionalParams(t *testing.T) {
 				BodyPart:   cloudflare.F("worker.js"),
 				MainModule: cloudflare.F("worker.js"),
 			}),
-			CfWorkerBodyPart:       cloudflare.F("string"),
-			CfWorkerMainModulePart: cloudflare.F("string"),
+			CfWorkerBodyPart:       cloudflare.F("CF-WORKER-BODY-PART"),
+			CfWorkerMainModulePart: cloudflare.F("CF-WORKER-MAIN-MODULE-PART"),
 		},
 	)
 	if err != nil {

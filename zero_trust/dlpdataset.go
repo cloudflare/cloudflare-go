@@ -40,8 +40,8 @@ func NewDLPDatasetService(opts ...option.RequestOption) (r *DLPDatasetService) {
 
 // Create a new dataset.
 func (r *DLPDatasetService) New(ctx context.Context, params DLPDatasetNewParams, opts ...option.RequestOption) (res *DatasetCreation, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPDatasetNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,8 +57,8 @@ func (r *DLPDatasetService) New(ctx context.Context, params DLPDatasetNewParams,
 
 // Update details about a dataset.
 func (r *DLPDatasetService) Update(ctx context.Context, datasetID string, params DLPDatasetUpdateParams, opts ...option.RequestOption) (res *Dataset, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,8 +79,12 @@ func (r *DLPDatasetService) Update(ctx context.Context, datasetID string, params
 // Fetch all datasets with information about available versions.
 func (r *DLPDatasetService) List(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Dataset], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/datasets", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -120,8 +124,8 @@ func (r *DLPDatasetService) Delete(ctx context.Context, datasetID string, body D
 
 // Fetch a specific dataset with information about available versions.
 func (r *DLPDatasetService) Get(ctx context.Context, datasetID string, query DLPDatasetGetParams, opts ...option.RequestOption) (res *Dataset, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPDatasetGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

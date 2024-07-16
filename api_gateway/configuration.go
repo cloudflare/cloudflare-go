@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -39,26 +38,21 @@ func NewConfigurationService(opts ...option.RequestOption) (r *ConfigurationServ
 }
 
 // Set configuration properties
-func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationUpdateParams, opts ...option.RequestOption) (res *ConfigurationUpdateResponseUnion, err error) {
+func (r *ConfigurationService) Update(ctx context.Context, params ConfigurationUpdateParams, opts ...option.RequestOption) (res *ConfigurationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ConfigurationUpdateResponseEnvelope
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/configuration", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
 }
 
 // Retrieve information about specific configuration properties
 func (r *ConfigurationService) Get(ctx context.Context, params ConfigurationGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ConfigurationGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -73,7 +67,7 @@ func (r *ConfigurationService) Get(ctx context.Context, params ConfigurationGetP
 }
 
 type Configuration struct {
-	AuthIDCharacteristics []ConfigurationAuthIDCharacteristic `json:"auth_id_characteristics"`
+	AuthIDCharacteristics []ConfigurationAuthIDCharacteristic `json:"auth_id_characteristics,required"`
 	JSON                  configurationJSON                   `json:"-"`
 }
 
@@ -116,6 +110,7 @@ func (r configurationAuthIDCharacteristicJSON) RawJSON() string {
 }
 
 func (r *ConfigurationAuthIDCharacteristic) UnmarshalJSON(data []byte) (err error) {
+	*r = ConfigurationAuthIDCharacteristic{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -123,6 +118,12 @@ func (r *ConfigurationAuthIDCharacteristic) UnmarshalJSON(data []byte) (err erro
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [ConfigurationAuthIDCharacteristicsUnion] interface which you
+// can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic],
+// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaim].
 func (r ConfigurationAuthIDCharacteristic) AsUnion() ConfigurationAuthIDCharacteristicsUnion {
 	return r.union
 }
@@ -266,7 +267,7 @@ func (r ConfigurationAuthIDCharacteristicsType) IsKnown() bool {
 }
 
 type ConfigurationParam struct {
-	AuthIDCharacteristics param.Field[[]ConfigurationAuthIDCharacteristicsUnionParam] `json:"auth_id_characteristics"`
+	AuthIDCharacteristics param.Field[[]ConfigurationAuthIDCharacteristicsUnionParam] `json:"auth_id_characteristics,required"`
 }
 
 func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
@@ -334,21 +335,45 @@ func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimP
 func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimParam) implementsAPIGatewayConfigurationAuthIDCharacteristicsUnionParam() {
 }
 
-// Union satisfied by [api_gateway.ConfigurationUpdateResponseUnknown] or
-// [shared.UnionString].
-type ConfigurationUpdateResponseUnion interface {
-	ImplementsAPIGatewayConfigurationUpdateResponseUnion()
+type ConfigurationUpdateResponse struct {
+	Errors   Message `json:"errors,required"`
+	Messages Message `json:"messages,required"`
+	// Whether the API call was successful
+	Success ConfigurationUpdateResponseSuccess `json:"success,required"`
+	JSON    configurationUpdateResponseJSON    `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ConfigurationUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// configurationUpdateResponseJSON contains the JSON metadata for the struct
+// [ConfigurationUpdateResponse]
+type configurationUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConfigurationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r configurationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type ConfigurationUpdateResponseSuccess bool
+
+const (
+	ConfigurationUpdateResponseSuccessTrue ConfigurationUpdateResponseSuccess = true
+)
+
+func (r ConfigurationUpdateResponseSuccess) IsKnown() bool {
+	switch r {
+	case ConfigurationUpdateResponseSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type ConfigurationUpdateParams struct {
@@ -359,34 +384,6 @@ type ConfigurationUpdateParams struct {
 
 func (r ConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Configuration)
-}
-
-type ConfigurationUpdateResponseEnvelope struct {
-	Errors   Message                          `json:"errors,required"`
-	Messages Message                          `json:"messages,required"`
-	Result   ConfigurationUpdateResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success bool                                    `json:"success,required"`
-	JSON    configurationUpdateResponseEnvelopeJSON `json:"-"`
-}
-
-// configurationUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ConfigurationUpdateResponseEnvelope]
-type configurationUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigurationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configurationUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
 }
 
 type ConfigurationGetParams struct {
@@ -400,7 +397,7 @@ type ConfigurationGetParams struct {
 func (r ConfigurationGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -423,8 +420,8 @@ type ConfigurationGetResponseEnvelope struct {
 	Messages Message       `json:"messages,required"`
 	Result   Configuration `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                                 `json:"success,required"`
-	JSON    configurationGetResponseEnvelopeJSON `json:"-"`
+	Success ConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    configurationGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // configurationGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -444,4 +441,19 @@ func (r *ConfigurationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 
 func (r configurationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type ConfigurationGetResponseEnvelopeSuccess bool
+
+const (
+	ConfigurationGetResponseEnvelopeSuccessTrue ConfigurationGetResponseEnvelopeSuccess = true
+)
+
+func (r ConfigurationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ConfigurationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

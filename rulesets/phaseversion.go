@@ -40,7 +40,7 @@ func NewPhaseVersionService(opts ...option.RequestOption) (r *PhaseVersionServic
 // Fetches the versions of an account or zone entry point ruleset.
 func (r *PhaseVersionService) List(ctx context.Context, rulesetPhase Phase, query PhaseVersionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[PhaseVersionListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
@@ -80,8 +80,8 @@ func (r *PhaseVersionService) ListAutoPaging(ctx context.Context, rulesetPhase P
 
 // Fetches a specific version of an account or zone entry point ruleset.
 func (r *PhaseVersionService) Get(ctx context.Context, rulesetPhase Phase, rulesetVersion string, query PhaseVersionGetParams, opts ...option.RequestOption) (res *PhaseVersionGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PhaseVersionGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
@@ -200,9 +200,18 @@ func (r phaseVersionGetResponseJSON) RawJSON() string {
 
 type PhaseVersionGetResponseRule struct {
 	// The action to perform when the rule matches.
-	Action           PhaseVersionGetResponseRulesAction `json:"action"`
-	ActionParameters interface{}                        `json:"action_parameters,required"`
-	Categories       interface{}                        `json:"categories,required"`
+	Action PhaseVersionGetResponseRulesAction `json:"action"`
+	// This field can have the runtime type of [BlockRuleActionParameters],
+	// [interface{}], [CompressResponseRuleActionParameters],
+	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
+	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
+	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
+	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
+	// [SetCacheSettingsRuleActionParameters],
+	// [PhaseVersionGetResponseRulesRulesetsLogCustomFieldRuleActionParameters].
+	ActionParameters interface{} `json:"action_parameters,required"`
+	// This field can have the runtime type of [[]string].
+	Categories interface{} `json:"categories,required"`
 	// An informative description of the rule.
 	Description string `json:"description"`
 	// Whether the rule should be executed.
@@ -246,6 +255,7 @@ func (r phaseVersionGetResponseRuleJSON) RawJSON() string {
 }
 
 func (r *PhaseVersionGetResponseRule) UnmarshalJSON(data []byte) (err error) {
+	*r = PhaseVersionGetResponseRule{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -253,6 +263,19 @@ func (r *PhaseVersionGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [PhaseVersionGetResponseRulesUnion] interface which you can
+// cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [rulesets.BlockRule],
+// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
+// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule],
+// [rulesets.PhaseVersionGetResponseRulesRulesetsLogCustomFieldRule],
+// [rulesets.PhaseVersionGetResponseRulesRulesetsDDoSDynamicRule],
+// [rulesets.PhaseVersionGetResponseRulesRulesetsForceConnectionCloseRule].
 func (r PhaseVersionGetResponseRule) AsUnion() PhaseVersionGetResponseRulesUnion {
 	return r.union
 }

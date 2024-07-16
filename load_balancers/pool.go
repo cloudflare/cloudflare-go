@@ -44,8 +44,8 @@ func NewPoolService(opts ...option.RequestOption) (r *PoolService) {
 
 // Create a new pool.
 func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...option.RequestOption) (res *Pool, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PoolNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -61,8 +61,8 @@ func (r *PoolService) New(ctx context.Context, params PoolNewParams, opts ...opt
 
 // Modify a configured pool.
 func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpdateParams, opts ...option.RequestOption) (res *Pool, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PoolUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -83,8 +83,12 @@ func (r *PoolService) Update(ctx context.Context, poolID string, params PoolUpda
 // List configured pools.
 func (r *PoolService) List(ctx context.Context, params PoolListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Pool], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -105,8 +109,8 @@ func (r *PoolService) ListAutoPaging(ctx context.Context, params PoolListParams,
 
 // Delete a configured pool.
 func (r *PoolService) Delete(ctx context.Context, poolID string, body PoolDeleteParams, opts ...option.RequestOption) (res *PoolDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PoolDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -126,8 +130,8 @@ func (r *PoolService) Delete(ctx context.Context, poolID string, body PoolDelete
 
 // Apply changes to an existing pool, overwriting the supplied properties.
 func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditParams, opts ...option.RequestOption) (res *Pool, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PoolEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -147,8 +151,8 @@ func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditPa
 
 // Fetch a single configured pool.
 func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParams, opts ...option.RequestOption) (res *Pool, err error) {
-	opts = append(r.Options[:], opts...)
 	var env PoolGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -467,7 +471,7 @@ type PoolListParams struct {
 func (r PoolListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

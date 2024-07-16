@@ -36,8 +36,8 @@ func NewTracerouteService(opts ...option.RequestOption) (r *TracerouteService) {
 
 // Run traceroutes from Cloudflare colos.
 func (r *TracerouteService) New(ctx context.Context, params TracerouteNewParams, opts ...option.RequestOption) (res *[]Traceroute, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TracerouteNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return

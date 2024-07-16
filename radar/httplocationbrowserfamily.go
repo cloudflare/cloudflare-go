@@ -38,8 +38,8 @@ func NewHTTPLocationBrowserFamilyService(opts ...option.RequestOption) (r *HTTPL
 // Get the top locations, by HTTP traffic, of the requested browser family. Values
 // are a percentage out of the total traffic.
 func (r *HTTPLocationBrowserFamilyService) Get(ctx context.Context, browserFamily HTTPLocationBrowserFamilyGetParamsBrowserFamily, query HTTPLocationBrowserFamilyGetParams, opts ...option.RequestOption) (res *HTTPLocationBrowserFamilyGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPLocationBrowserFamilyGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/locations/browser_family/%v", browserFamily)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -149,7 +149,7 @@ type HTTPLocationBrowserFamilyGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                               `json:"dataSource,required"`
 	Description     string                                                               `json:"description,required"`
 	EventType       string                                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                 `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                               `json:"linkedUrl"`
 	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
@@ -221,7 +221,7 @@ type HTTPLocationBrowserFamilyGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPLocationBrowserFamilyGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -253,7 +253,7 @@ type HTTPLocationBrowserFamilyGetParams struct {
 func (r HTTPLocationBrowserFamilyGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -285,34 +285,6 @@ const (
 func (r HTTPLocationBrowserFamilyGetParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPLocationBrowserFamilyGetParamsBotClassLikelyAutomated, HTTPLocationBrowserFamilyGetParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPLocationBrowserFamilyGetParamsDateRange string
-
-const (
-	HTTPLocationBrowserFamilyGetParamsDateRange1d         HTTPLocationBrowserFamilyGetParamsDateRange = "1d"
-	HTTPLocationBrowserFamilyGetParamsDateRange2d         HTTPLocationBrowserFamilyGetParamsDateRange = "2d"
-	HTTPLocationBrowserFamilyGetParamsDateRange7d         HTTPLocationBrowserFamilyGetParamsDateRange = "7d"
-	HTTPLocationBrowserFamilyGetParamsDateRange14d        HTTPLocationBrowserFamilyGetParamsDateRange = "14d"
-	HTTPLocationBrowserFamilyGetParamsDateRange28d        HTTPLocationBrowserFamilyGetParamsDateRange = "28d"
-	HTTPLocationBrowserFamilyGetParamsDateRange12w        HTTPLocationBrowserFamilyGetParamsDateRange = "12w"
-	HTTPLocationBrowserFamilyGetParamsDateRange24w        HTTPLocationBrowserFamilyGetParamsDateRange = "24w"
-	HTTPLocationBrowserFamilyGetParamsDateRange52w        HTTPLocationBrowserFamilyGetParamsDateRange = "52w"
-	HTTPLocationBrowserFamilyGetParamsDateRange1dControl  HTTPLocationBrowserFamilyGetParamsDateRange = "1dControl"
-	HTTPLocationBrowserFamilyGetParamsDateRange2dControl  HTTPLocationBrowserFamilyGetParamsDateRange = "2dControl"
-	HTTPLocationBrowserFamilyGetParamsDateRange7dControl  HTTPLocationBrowserFamilyGetParamsDateRange = "7dControl"
-	HTTPLocationBrowserFamilyGetParamsDateRange14dControl HTTPLocationBrowserFamilyGetParamsDateRange = "14dControl"
-	HTTPLocationBrowserFamilyGetParamsDateRange28dControl HTTPLocationBrowserFamilyGetParamsDateRange = "28dControl"
-	HTTPLocationBrowserFamilyGetParamsDateRange12wControl HTTPLocationBrowserFamilyGetParamsDateRange = "12wControl"
-	HTTPLocationBrowserFamilyGetParamsDateRange24wControl HTTPLocationBrowserFamilyGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPLocationBrowserFamilyGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPLocationBrowserFamilyGetParamsDateRange1d, HTTPLocationBrowserFamilyGetParamsDateRange2d, HTTPLocationBrowserFamilyGetParamsDateRange7d, HTTPLocationBrowserFamilyGetParamsDateRange14d, HTTPLocationBrowserFamilyGetParamsDateRange28d, HTTPLocationBrowserFamilyGetParamsDateRange12w, HTTPLocationBrowserFamilyGetParamsDateRange24w, HTTPLocationBrowserFamilyGetParamsDateRange52w, HTTPLocationBrowserFamilyGetParamsDateRange1dControl, HTTPLocationBrowserFamilyGetParamsDateRange2dControl, HTTPLocationBrowserFamilyGetParamsDateRange7dControl, HTTPLocationBrowserFamilyGetParamsDateRange14dControl, HTTPLocationBrowserFamilyGetParamsDateRange28dControl, HTTPLocationBrowserFamilyGetParamsDateRange12wControl, HTTPLocationBrowserFamilyGetParamsDateRange24wControl:
 		return true
 	}
 	return false

@@ -36,8 +36,8 @@ func NewCertificatePackQuotaService(opts ...option.RequestOption) (r *Certificat
 
 // For a given zone, list certificate pack quotas.
 func (r *CertificatePackQuotaService) Get(ctx context.Context, query CertificatePackQuotaGetParams, opts ...option.RequestOption) (res *CertificatePackQuotaGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env CertificatePackQuotaGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

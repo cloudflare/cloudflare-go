@@ -90,15 +90,15 @@ func Port(from any, to any) error {
 		}
 	}
 
-	// Finally, copy over the .JSON.raw and .JSON.Extras
+	// Finally, copy over the .JSON.raw and .JSON.ExtraFields
 	if toJSON.IsValid() {
 		if raw := toJSON.FieldByName("raw"); raw.IsValid() {
 			setUnexportedField(raw, fromJSON.Interface().(interface{ RawJSON() string }).RawJSON())
 		}
 
-		if toExtras := toJSON.FieldByName("Extras"); toExtras.IsValid() {
-			if fromExtras := fromJSON.FieldByName("Extras"); fromExtras.IsValid() {
-				setUnexportedField(toExtras, fromExtras.Interface())
+		if toExtraFields := toJSON.FieldByName("ExtraFields"); toExtraFields.IsValid() {
+			if fromExtraFields := fromJSON.FieldByName("ExtraFields"); fromExtraFields.IsValid() {
+				setUnexportedField(toExtraFields, fromExtraFields.Interface())
 			}
 		}
 	}

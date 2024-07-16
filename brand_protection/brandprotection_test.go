@@ -55,7 +55,7 @@ func TestBrandProtectionURLInfoWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.BrandProtection.URLInfo(context.TODO(), brand_protection.BrandProtectionURLInfoParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		URL:       cloudflare.F("string"),
+		URL:       cloudflare.F("url"),
 		URLIDParam: cloudflare.F(brand_protection.BrandProtectionURLInfoParamsURLIDParam{
 			URLID: cloudflare.F(int64(0)),
 		}),

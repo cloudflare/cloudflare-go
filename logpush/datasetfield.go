@@ -37,8 +37,8 @@ func NewDatasetFieldService(opts ...option.RequestOption) (r *DatasetFieldServic
 // Lists all fields available for a dataset. The response result is an object with
 // key-value pairs, where keys are field names, and values are descriptions.
 func (r *DatasetFieldService) Get(ctx context.Context, datasetID string, query DatasetFieldGetParams, opts ...option.RequestOption) (res *DatasetFieldGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DatasetFieldGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Value != "" && query.ZoneID.Value != "" {

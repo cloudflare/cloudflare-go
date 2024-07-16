@@ -36,8 +36,8 @@ func NewAttackSurfaceReportIssueTypeService(opts ...option.RequestOption) (r *At
 
 // Get Security Center Issues Types
 func (r *AttackSurfaceReportIssueTypeService) Get(ctx context.Context, query AttackSurfaceReportIssueTypeGetParams, opts ...option.RequestOption) (res *[]string, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AttackSurfaceReportIssueTypeGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,9 +59,9 @@ type AttackSurfaceReportIssueTypeGetParams struct {
 type AttackSurfaceReportIssueTypeGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []string              `json:"result,required"`
 	// Whether the API call was successful
 	Success AttackSurfaceReportIssueTypeGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  []string                                               `json:"result"`
 	JSON    attackSurfaceReportIssueTypeGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -70,8 +70,8 @@ type AttackSurfaceReportIssueTypeGetResponseEnvelope struct {
 type attackSurfaceReportIssueTypeGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

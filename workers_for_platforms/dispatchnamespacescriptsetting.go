@@ -3,12 +3,15 @@
 package workers_for_platforms
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"mime/multipart"
 	"net/http"
 	"reflect"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -39,8 +42,8 @@ func NewDispatchNamespaceScriptSettingService(opts ...option.RequestOption) (r *
 
 // Patch script metadata, such as bindings
 func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptSettingEditParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingEditResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptSettingEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -64,8 +67,8 @@ func (r *DispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispat
 
 // Get script settings from a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSettingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSettingGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSettingGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptSettingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -164,14 +167,21 @@ type DispatchNamespaceScriptSettingEditResponseMigrations struct {
 	NewTag string `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
-	OldTag             string                                                   `json:"old_tag"`
-	DeletedClasses     interface{}                                              `json:"deleted_classes,required"`
-	NewClasses         interface{}                                              `json:"new_classes,required"`
-	RenamedClasses     interface{}                                              `json:"renamed_classes,required"`
-	TransferredClasses interface{}                                              `json:"transferred_classes,required"`
-	Steps              interface{}                                              `json:"steps,required"`
-	JSON               dispatchNamespaceScriptSettingEditResponseMigrationsJSON `json:"-"`
-	union              DispatchNamespaceScriptSettingEditResponseMigrationsUnion
+	OldTag string `json:"old_tag"`
+	// This field can have the runtime type of [[]string].
+	DeletedClasses interface{} `json:"deleted_classes,required"`
+	// This field can have the runtime type of [[]string].
+	NewClasses interface{} `json:"new_classes,required"`
+	// This field can have the runtime type of
+	// [[]workers.SingleStepMigrationRenamedClass].
+	RenamedClasses interface{} `json:"renamed_classes,required"`
+	// This field can have the runtime type of
+	// [[]workers.SingleStepMigrationTransferredClass].
+	TransferredClasses interface{} `json:"transferred_classes,required"`
+	// This field can have the runtime type of [[]workers.MigrationStep].
+	Steps interface{}                                              `json:"steps,required"`
+	JSON  dispatchNamespaceScriptSettingEditResponseMigrationsJSON `json:"-"`
+	union DispatchNamespaceScriptSettingEditResponseMigrationsUnion
 }
 
 // dispatchNamespaceScriptSettingEditResponseMigrationsJSON contains the JSON
@@ -193,6 +203,7 @@ func (r dispatchNamespaceScriptSettingEditResponseMigrationsJSON) RawJSON() stri
 }
 
 func (r *DispatchNamespaceScriptSettingEditResponseMigrations) UnmarshalJSON(data []byte) (err error) {
+	*r = DispatchNamespaceScriptSettingEditResponseMigrations{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -200,6 +211,11 @@ func (r *DispatchNamespaceScriptSettingEditResponseMigrations) UnmarshalJSON(dat
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [DispatchNamespaceScriptSettingEditResponseMigrationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [workers.SingleStepMigration],
+// [workers.SteppedMigration].
 func (r DispatchNamespaceScriptSettingEditResponseMigrations) AsUnion() DispatchNamespaceScriptSettingEditResponseMigrationsUnion {
 	return r.union
 }
@@ -303,14 +319,21 @@ type DispatchNamespaceScriptSettingGetResponseMigrations struct {
 	NewTag string `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
-	OldTag             string                                                  `json:"old_tag"`
-	DeletedClasses     interface{}                                             `json:"deleted_classes,required"`
-	NewClasses         interface{}                                             `json:"new_classes,required"`
-	RenamedClasses     interface{}                                             `json:"renamed_classes,required"`
-	TransferredClasses interface{}                                             `json:"transferred_classes,required"`
-	Steps              interface{}                                             `json:"steps,required"`
-	JSON               dispatchNamespaceScriptSettingGetResponseMigrationsJSON `json:"-"`
-	union              DispatchNamespaceScriptSettingGetResponseMigrationsUnion
+	OldTag string `json:"old_tag"`
+	// This field can have the runtime type of [[]string].
+	DeletedClasses interface{} `json:"deleted_classes,required"`
+	// This field can have the runtime type of [[]string].
+	NewClasses interface{} `json:"new_classes,required"`
+	// This field can have the runtime type of
+	// [[]workers.SingleStepMigrationRenamedClass].
+	RenamedClasses interface{} `json:"renamed_classes,required"`
+	// This field can have the runtime type of
+	// [[]workers.SingleStepMigrationTransferredClass].
+	TransferredClasses interface{} `json:"transferred_classes,required"`
+	// This field can have the runtime type of [[]workers.MigrationStep].
+	Steps interface{}                                             `json:"steps,required"`
+	JSON  dispatchNamespaceScriptSettingGetResponseMigrationsJSON `json:"-"`
+	union DispatchNamespaceScriptSettingGetResponseMigrationsUnion
 }
 
 // dispatchNamespaceScriptSettingGetResponseMigrationsJSON contains the JSON
@@ -332,6 +355,7 @@ func (r dispatchNamespaceScriptSettingGetResponseMigrationsJSON) RawJSON() strin
 }
 
 func (r *DispatchNamespaceScriptSettingGetResponseMigrations) UnmarshalJSON(data []byte) (err error) {
+	*r = DispatchNamespaceScriptSettingGetResponseMigrations{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -339,6 +363,11 @@ func (r *DispatchNamespaceScriptSettingGetResponseMigrations) UnmarshalJSON(data
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [DispatchNamespaceScriptSettingGetResponseMigrationsUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are [workers.SingleStepMigration],
+// [workers.SteppedMigration].
 func (r DispatchNamespaceScriptSettingGetResponseMigrations) AsUnion() DispatchNamespaceScriptSettingGetResponseMigrationsUnion {
 	return r.union
 }
@@ -371,8 +400,19 @@ type DispatchNamespaceScriptSettingEditParams struct {
 	Settings  param.Field[DispatchNamespaceScriptSettingEditParamsSettings] `json:"settings"`
 }
 
-func (r DispatchNamespaceScriptSettingEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r DispatchNamespaceScriptSettingEditParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
 type DispatchNamespaceScriptSettingEditParamsSettings struct {

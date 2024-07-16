@@ -42,8 +42,8 @@ func NewAS112Service(opts ...option.RequestOption) (r *AS112Service) {
 
 // Get AS112 queries change over time.
 func (r *AS112Service) Timeseries(ctx context.Context, query AS112TimeseriesParams, opts ...option.RequestOption) (res *AS112TimeseriesResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TimeseriesResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -155,7 +155,7 @@ type AS112TimeseriesResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                  `json:"dataSource,required"`
 	Description     string                                                  `json:"description,required"`
 	EventType       string                                                  `json:"eventType,required"`
-	IsInstantaneous interface{}                                             `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                    `json:"isInstantaneous,required"`
 	EndTime         time.Time                                               `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                  `json:"linkedUrl"`
 	StartTime       time.Time                                               `json:"startTime" format:"date-time"`
@@ -225,7 +225,7 @@ type AS112TimeseriesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112TimeseriesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -242,7 +242,7 @@ type AS112TimeseriesParams struct {
 func (r AS112TimeseriesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -261,34 +261,6 @@ const (
 func (r AS112TimeseriesParamsAggInterval) IsKnown() bool {
 	switch r {
 	case AS112TimeseriesParamsAggInterval15m, AS112TimeseriesParamsAggInterval1h, AS112TimeseriesParamsAggInterval1d, AS112TimeseriesParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type AS112TimeseriesParamsDateRange string
-
-const (
-	AS112TimeseriesParamsDateRange1d         AS112TimeseriesParamsDateRange = "1d"
-	AS112TimeseriesParamsDateRange2d         AS112TimeseriesParamsDateRange = "2d"
-	AS112TimeseriesParamsDateRange7d         AS112TimeseriesParamsDateRange = "7d"
-	AS112TimeseriesParamsDateRange14d        AS112TimeseriesParamsDateRange = "14d"
-	AS112TimeseriesParamsDateRange28d        AS112TimeseriesParamsDateRange = "28d"
-	AS112TimeseriesParamsDateRange12w        AS112TimeseriesParamsDateRange = "12w"
-	AS112TimeseriesParamsDateRange24w        AS112TimeseriesParamsDateRange = "24w"
-	AS112TimeseriesParamsDateRange52w        AS112TimeseriesParamsDateRange = "52w"
-	AS112TimeseriesParamsDateRange1dControl  AS112TimeseriesParamsDateRange = "1dControl"
-	AS112TimeseriesParamsDateRange2dControl  AS112TimeseriesParamsDateRange = "2dControl"
-	AS112TimeseriesParamsDateRange7dControl  AS112TimeseriesParamsDateRange = "7dControl"
-	AS112TimeseriesParamsDateRange14dControl AS112TimeseriesParamsDateRange = "14dControl"
-	AS112TimeseriesParamsDateRange28dControl AS112TimeseriesParamsDateRange = "28dControl"
-	AS112TimeseriesParamsDateRange12wControl AS112TimeseriesParamsDateRange = "12wControl"
-	AS112TimeseriesParamsDateRange24wControl AS112TimeseriesParamsDateRange = "24wControl"
-)
-
-func (r AS112TimeseriesParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112TimeseriesParamsDateRange1d, AS112TimeseriesParamsDateRange2d, AS112TimeseriesParamsDateRange7d, AS112TimeseriesParamsDateRange14d, AS112TimeseriesParamsDateRange28d, AS112TimeseriesParamsDateRange12w, AS112TimeseriesParamsDateRange24w, AS112TimeseriesParamsDateRange52w, AS112TimeseriesParamsDateRange1dControl, AS112TimeseriesParamsDateRange2dControl, AS112TimeseriesParamsDateRange7dControl, AS112TimeseriesParamsDateRange14dControl, AS112TimeseriesParamsDateRange28dControl, AS112TimeseriesParamsDateRange12wControl, AS112TimeseriesParamsDateRange24wControl:
 		return true
 	}
 	return false

@@ -43,8 +43,8 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 
 // Create a new access token.
 func (r *TokenService) New(ctx context.Context, body TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TokenNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "user/tokens"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -56,8 +56,8 @@ func (r *TokenService) New(ctx context.Context, body TokenNewParams, opts ...opt
 
 // Update an existing token.
 func (r *TokenService) Update(ctx context.Context, tokenID interface{}, body TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TokenUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/tokens/%v", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -70,7 +70,7 @@ func (r *TokenService) Update(ctx context.Context, tokenID interface{}, body Tok
 // List all access tokens you created.
 func (r *TokenService) List(ctx context.Context, query TokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[TokenListResponse], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/tokens"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
@@ -92,8 +92,8 @@ func (r *TokenService) ListAutoPaging(ctx context.Context, query TokenListParams
 
 // Destroy a token.
 func (r *TokenService) Delete(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TokenDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/tokens/%v", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -105,8 +105,8 @@ func (r *TokenService) Delete(ctx context.Context, tokenID interface{}, opts ...
 
 // Get information about a specific token.
 func (r *TokenService) Get(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *TokenGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TokenGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("user/tokens/%v", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -118,8 +118,8 @@ func (r *TokenService) Get(ctx context.Context, tokenID interface{}, opts ...opt
 
 // Test whether a token works.
 func (r *TokenService) Verify(ctx context.Context, opts ...option.RequestOption) (res *TokenVerifyResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env TokenVerifyResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "user/tokens/verify"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -428,7 +428,7 @@ type TokenListParams struct {
 func (r TokenListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

@@ -36,8 +36,8 @@ func NewEmailSecuritySummaryService(opts ...option.RequestOption) (r *EmailSecur
 
 // Percentage distribution of emails classified per ARC validation.
 func (r *EmailSecuritySummaryService) ARC(ctx context.Context, query EmailSecuritySummaryARCParams, opts ...option.RequestOption) (res *EmailSecuritySummaryARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/arc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *EmailSecuritySummaryService) ARC(ctx context.Context, query EmailSecuri
 
 // Percentage distribution of emails classified per DKIM validation.
 func (r *EmailSecuritySummaryService) DKIM(ctx context.Context, query EmailSecuritySummaryDKIMParams, opts ...option.RequestOption) (res *EmailSecuritySummaryDKIMResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryDKIMResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/dkim"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *EmailSecuritySummaryService) DKIM(ctx context.Context, query EmailSecur
 
 // Percentage distribution of emails classified per DMARC validation.
 func (r *EmailSecuritySummaryService) DMARC(ctx context.Context, query EmailSecuritySummaryDMARCParams, opts ...option.RequestOption) (res *EmailSecuritySummaryDMARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryDMARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/dmarc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *EmailSecuritySummaryService) DMARC(ctx context.Context, query EmailSecu
 
 // Percentage distribution of emails classified as MALICIOUS.
 func (r *EmailSecuritySummaryService) Malicious(ctx context.Context, query EmailSecuritySummaryMaliciousParams, opts ...option.RequestOption) (res *EmailSecuritySummaryMaliciousResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryMaliciousResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/malicious"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *EmailSecuritySummaryService) Malicious(ctx context.Context, query Email
 
 // Proportion of emails categorized as either spam or legitimate (non-spam).
 func (r *EmailSecuritySummaryService) Spam(ctx context.Context, query EmailSecuritySummarySpamParams, opts ...option.RequestOption) (res *EmailSecuritySummarySpamResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummarySpamResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/spam"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *EmailSecuritySummaryService) Spam(ctx context.Context, query EmailSecur
 
 // Percentage distribution of emails classified per SPF validation.
 func (r *EmailSecuritySummaryService) SPF(ctx context.Context, query EmailSecuritySummarySPFParams, opts ...option.RequestOption) (res *EmailSecuritySummarySPFResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummarySPFResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/spf"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -114,8 +114,8 @@ func (r *EmailSecuritySummaryService) SPF(ctx context.Context, query EmailSecuri
 
 // Proportion of emails categorized as either spoof or legitimate (non-spoof).
 func (r *EmailSecuritySummaryService) Spoof(ctx context.Context, query EmailSecuritySummarySpoofParams, opts ...option.RequestOption) (res *EmailSecuritySummarySpoofResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummarySpoofResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/spoof"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -127,8 +127,8 @@ func (r *EmailSecuritySummaryService) Spoof(ctx context.Context, query EmailSecu
 
 // Percentage distribution of emails classified in Threat Categories.
 func (r *EmailSecuritySummaryService) ThreatCategory(ctx context.Context, query EmailSecuritySummaryThreatCategoryParams, opts ...option.RequestOption) (res *EmailSecuritySummaryThreatCategoryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryThreatCategoryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/threat_category"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -140,8 +140,8 @@ func (r *EmailSecuritySummaryService) ThreatCategory(ctx context.Context, query 
 
 // Percentage distribution of emails classified per TLS Version.
 func (r *EmailSecuritySummaryService) TLSVersion(ctx context.Context, query EmailSecuritySummaryTLSVersionParams, opts ...option.RequestOption) (res *EmailSecuritySummaryTLSVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailSecuritySummaryTLSVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/security/summary/tls_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -253,7 +253,7 @@ type EmailSecuritySummaryARCResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -385,7 +385,7 @@ type EmailSecuritySummaryDKIMResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                           `json:"dataSource,required"`
 	Description     string                                                           `json:"description,required"`
 	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                           `json:"linkedUrl"`
 	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
@@ -517,7 +517,7 @@ type EmailSecuritySummaryDMARCResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                            `json:"dataSource,required"`
 	Description     string                                                            `json:"description,required"`
 	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous interface{}                                                       `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                            `json:"linkedUrl"`
 	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`
@@ -650,7 +650,7 @@ type EmailSecuritySummaryMaliciousResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                                `json:"dataSource,required"`
 	Description     string                                                                `json:"description,required"`
 	EventType       string                                                                `json:"eventType,required"`
-	IsInstantaneous interface{}                                                           `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                  `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                             `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                `json:"linkedUrl"`
 	StartTime       time.Time                                                             `json:"startTime" format:"date-time"`
@@ -805,7 +805,7 @@ type EmailSecuritySummarySpamResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                           `json:"dataSource,required"`
 	Description     string                                                           `json:"description,required"`
 	EventType       string                                                           `json:"eventType,required"`
-	IsInstantaneous interface{}                                                      `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                             `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                        `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                           `json:"linkedUrl"`
 	StartTime       time.Time                                                        `json:"startTime" format:"date-time"`
@@ -960,7 +960,7 @@ type EmailSecuritySummarySPFResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                          `json:"dataSource,required"`
 	Description     string                                                          `json:"description,required"`
 	EventType       string                                                          `json:"eventType,required"`
-	IsInstantaneous interface{}                                                     `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                            `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                       `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                          `json:"linkedUrl"`
 	StartTime       time.Time                                                       `json:"startTime" format:"date-time"`
@@ -1092,7 +1092,7 @@ type EmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                            `json:"dataSource,required"`
 	Description     string                                                            `json:"description,required"`
 	EventType       string                                                            `json:"eventType,required"`
-	IsInstantaneous interface{}                                                       `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                              `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                         `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                            `json:"linkedUrl"`
 	StartTime       time.Time                                                         `json:"startTime" format:"date-time"`
@@ -1249,7 +1249,7 @@ type EmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfoAnnotation stru
 	DataSource      string                                                                     `json:"dataSource,required"`
 	Description     string                                                                     `json:"description,required"`
 	EventType       string                                                                     `json:"eventType,required"`
-	IsInstantaneous interface{}                                                                `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                       `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                                  `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                     `json:"linkedUrl"`
 	StartTime       time.Time                                                                  `json:"startTime" format:"date-time"`
@@ -1409,7 +1409,7 @@ type EmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                                 `json:"dataSource,required"`
 	Description     string                                                                 `json:"description,required"`
 	EventType       string                                                                 `json:"eventType,required"`
-	IsInstantaneous interface{}                                                            `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                                   `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                                 `json:"linkedUrl"`
 	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
@@ -1472,7 +1472,7 @@ type EmailSecuritySummaryARCParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecuritySummaryARCParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1494,36 +1494,8 @@ type EmailSecuritySummaryARCParams struct {
 func (r EmailSecuritySummaryARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type EmailSecuritySummaryARCParamsDateRange string
-
-const (
-	EmailSecuritySummaryARCParamsDateRange1d         EmailSecuritySummaryARCParamsDateRange = "1d"
-	EmailSecuritySummaryARCParamsDateRange2d         EmailSecuritySummaryARCParamsDateRange = "2d"
-	EmailSecuritySummaryARCParamsDateRange7d         EmailSecuritySummaryARCParamsDateRange = "7d"
-	EmailSecuritySummaryARCParamsDateRange14d        EmailSecuritySummaryARCParamsDateRange = "14d"
-	EmailSecuritySummaryARCParamsDateRange28d        EmailSecuritySummaryARCParamsDateRange = "28d"
-	EmailSecuritySummaryARCParamsDateRange12w        EmailSecuritySummaryARCParamsDateRange = "12w"
-	EmailSecuritySummaryARCParamsDateRange24w        EmailSecuritySummaryARCParamsDateRange = "24w"
-	EmailSecuritySummaryARCParamsDateRange52w        EmailSecuritySummaryARCParamsDateRange = "52w"
-	EmailSecuritySummaryARCParamsDateRange1dControl  EmailSecuritySummaryARCParamsDateRange = "1dControl"
-	EmailSecuritySummaryARCParamsDateRange2dControl  EmailSecuritySummaryARCParamsDateRange = "2dControl"
-	EmailSecuritySummaryARCParamsDateRange7dControl  EmailSecuritySummaryARCParamsDateRange = "7dControl"
-	EmailSecuritySummaryARCParamsDateRange14dControl EmailSecuritySummaryARCParamsDateRange = "14dControl"
-	EmailSecuritySummaryARCParamsDateRange28dControl EmailSecuritySummaryARCParamsDateRange = "28dControl"
-	EmailSecuritySummaryARCParamsDateRange12wControl EmailSecuritySummaryARCParamsDateRange = "12wControl"
-	EmailSecuritySummaryARCParamsDateRange24wControl EmailSecuritySummaryARCParamsDateRange = "24wControl"
-)
-
-func (r EmailSecuritySummaryARCParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecuritySummaryARCParamsDateRange1d, EmailSecuritySummaryARCParamsDateRange2d, EmailSecuritySummaryARCParamsDateRange7d, EmailSecuritySummaryARCParamsDateRange14d, EmailSecuritySummaryARCParamsDateRange28d, EmailSecuritySummaryARCParamsDateRange12w, EmailSecuritySummaryARCParamsDateRange24w, EmailSecuritySummaryARCParamsDateRange52w, EmailSecuritySummaryARCParamsDateRange1dControl, EmailSecuritySummaryARCParamsDateRange2dControl, EmailSecuritySummaryARCParamsDateRange7dControl, EmailSecuritySummaryARCParamsDateRange14dControl, EmailSecuritySummaryARCParamsDateRange28dControl, EmailSecuritySummaryARCParamsDateRange12wControl, EmailSecuritySummaryARCParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 type EmailSecuritySummaryARCParamsDKIM string
@@ -1638,7 +1610,7 @@ type EmailSecuritySummaryDKIMParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecuritySummaryDKIMParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dmarc.
@@ -1658,7 +1630,7 @@ type EmailSecuritySummaryDKIMParams struct {
 func (r EmailSecuritySummaryDKIMParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1673,34 +1645,6 @@ const (
 func (r EmailSecuritySummaryDKIMParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecuritySummaryDKIMParamsARCPass, EmailSecuritySummaryDKIMParamsARCNone, EmailSecuritySummaryDKIMParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecuritySummaryDKIMParamsDateRange string
-
-const (
-	EmailSecuritySummaryDKIMParamsDateRange1d         EmailSecuritySummaryDKIMParamsDateRange = "1d"
-	EmailSecuritySummaryDKIMParamsDateRange2d         EmailSecuritySummaryDKIMParamsDateRange = "2d"
-	EmailSecuritySummaryDKIMParamsDateRange7d         EmailSecuritySummaryDKIMParamsDateRange = "7d"
-	EmailSecuritySummaryDKIMParamsDateRange14d        EmailSecuritySummaryDKIMParamsDateRange = "14d"
-	EmailSecuritySummaryDKIMParamsDateRange28d        EmailSecuritySummaryDKIMParamsDateRange = "28d"
-	EmailSecuritySummaryDKIMParamsDateRange12w        EmailSecuritySummaryDKIMParamsDateRange = "12w"
-	EmailSecuritySummaryDKIMParamsDateRange24w        EmailSecuritySummaryDKIMParamsDateRange = "24w"
-	EmailSecuritySummaryDKIMParamsDateRange52w        EmailSecuritySummaryDKIMParamsDateRange = "52w"
-	EmailSecuritySummaryDKIMParamsDateRange1dControl  EmailSecuritySummaryDKIMParamsDateRange = "1dControl"
-	EmailSecuritySummaryDKIMParamsDateRange2dControl  EmailSecuritySummaryDKIMParamsDateRange = "2dControl"
-	EmailSecuritySummaryDKIMParamsDateRange7dControl  EmailSecuritySummaryDKIMParamsDateRange = "7dControl"
-	EmailSecuritySummaryDKIMParamsDateRange14dControl EmailSecuritySummaryDKIMParamsDateRange = "14dControl"
-	EmailSecuritySummaryDKIMParamsDateRange28dControl EmailSecuritySummaryDKIMParamsDateRange = "28dControl"
-	EmailSecuritySummaryDKIMParamsDateRange12wControl EmailSecuritySummaryDKIMParamsDateRange = "12wControl"
-	EmailSecuritySummaryDKIMParamsDateRange24wControl EmailSecuritySummaryDKIMParamsDateRange = "24wControl"
-)
-
-func (r EmailSecuritySummaryDKIMParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecuritySummaryDKIMParamsDateRange1d, EmailSecuritySummaryDKIMParamsDateRange2d, EmailSecuritySummaryDKIMParamsDateRange7d, EmailSecuritySummaryDKIMParamsDateRange14d, EmailSecuritySummaryDKIMParamsDateRange28d, EmailSecuritySummaryDKIMParamsDateRange12w, EmailSecuritySummaryDKIMParamsDateRange24w, EmailSecuritySummaryDKIMParamsDateRange52w, EmailSecuritySummaryDKIMParamsDateRange1dControl, EmailSecuritySummaryDKIMParamsDateRange2dControl, EmailSecuritySummaryDKIMParamsDateRange7dControl, EmailSecuritySummaryDKIMParamsDateRange14dControl, EmailSecuritySummaryDKIMParamsDateRange28dControl, EmailSecuritySummaryDKIMParamsDateRange12wControl, EmailSecuritySummaryDKIMParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1802,7 +1746,7 @@ type EmailSecuritySummaryDMARCParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecuritySummaryDMARCParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1822,7 +1766,7 @@ type EmailSecuritySummaryDMARCParams struct {
 func (r EmailSecuritySummaryDMARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1837,34 +1781,6 @@ const (
 func (r EmailSecuritySummaryDMARCParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecuritySummaryDMARCParamsARCPass, EmailSecuritySummaryDMARCParamsARCNone, EmailSecuritySummaryDMARCParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecuritySummaryDMARCParamsDateRange string
-
-const (
-	EmailSecuritySummaryDMARCParamsDateRange1d         EmailSecuritySummaryDMARCParamsDateRange = "1d"
-	EmailSecuritySummaryDMARCParamsDateRange2d         EmailSecuritySummaryDMARCParamsDateRange = "2d"
-	EmailSecuritySummaryDMARCParamsDateRange7d         EmailSecuritySummaryDMARCParamsDateRange = "7d"
-	EmailSecuritySummaryDMARCParamsDateRange14d        EmailSecuritySummaryDMARCParamsDateRange = "14d"
-	EmailSecuritySummaryDMARCParamsDateRange28d        EmailSecuritySummaryDMARCParamsDateRange = "28d"
-	EmailSecuritySummaryDMARCParamsDateRange12w        EmailSecuritySummaryDMARCParamsDateRange = "12w"
-	EmailSecuritySummaryDMARCParamsDateRange24w        EmailSecuritySummaryDMARCParamsDateRange = "24w"
-	EmailSecuritySummaryDMARCParamsDateRange52w        EmailSecuritySummaryDMARCParamsDateRange = "52w"
-	EmailSecuritySummaryDMARCParamsDateRange1dControl  EmailSecuritySummaryDMARCParamsDateRange = "1dControl"
-	EmailSecuritySummaryDMARCParamsDateRange2dControl  EmailSecuritySummaryDMARCParamsDateRange = "2dControl"
-	EmailSecuritySummaryDMARCParamsDateRange7dControl  EmailSecuritySummaryDMARCParamsDateRange = "7dControl"
-	EmailSecuritySummaryDMARCParamsDateRange14dControl EmailSecuritySummaryDMARCParamsDateRange = "14dControl"
-	EmailSecuritySummaryDMARCParamsDateRange28dControl EmailSecuritySummaryDMARCParamsDateRange = "28dControl"
-	EmailSecuritySummaryDMARCParamsDateRange12wControl EmailSecuritySummaryDMARCParamsDateRange = "12wControl"
-	EmailSecuritySummaryDMARCParamsDateRange24wControl EmailSecuritySummaryDMARCParamsDateRange = "24wControl"
-)
-
-func (r EmailSecuritySummaryDMARCParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecuritySummaryDMARCParamsDateRange1d, EmailSecuritySummaryDMARCParamsDateRange2d, EmailSecuritySummaryDMARCParamsDateRange7d, EmailSecuritySummaryDMARCParamsDateRange14d, EmailSecuritySummaryDMARCParamsDateRange28d, EmailSecuritySummaryDMARCParamsDateRange12w, EmailSecuritySummaryDMARCParamsDateRange24w, EmailSecuritySummaryDMARCParamsDateRange52w, EmailSecuritySummaryDMARCParamsDateRange1dControl, EmailSecuritySummaryDMARCParamsDateRange2dControl, EmailSecuritySummaryDMARCParamsDateRange7dControl, EmailSecuritySummaryDMARCParamsDateRange14dControl, EmailSecuritySummaryDMARCParamsDateRange28dControl, EmailSecuritySummaryDMARCParamsDateRange12wControl, EmailSecuritySummaryDMARCParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1966,7 +1882,7 @@ type EmailSecuritySummaryMaliciousParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecuritySummaryMaliciousParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1988,7 +1904,7 @@ type EmailSecuritySummaryMaliciousParams struct {
 func (r EmailSecuritySummaryMaliciousParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2003,34 +1919,6 @@ const (
 func (r EmailSecuritySummaryMaliciousParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecuritySummaryMaliciousParamsARCPass, EmailSecuritySummaryMaliciousParamsARCNone, EmailSecuritySummaryMaliciousParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecuritySummaryMaliciousParamsDateRange string
-
-const (
-	EmailSecuritySummaryMaliciousParamsDateRange1d         EmailSecuritySummaryMaliciousParamsDateRange = "1d"
-	EmailSecuritySummaryMaliciousParamsDateRange2d         EmailSecuritySummaryMaliciousParamsDateRange = "2d"
-	EmailSecuritySummaryMaliciousParamsDateRange7d         EmailSecuritySummaryMaliciousParamsDateRange = "7d"
-	EmailSecuritySummaryMaliciousParamsDateRange14d        EmailSecuritySummaryMaliciousParamsDateRange = "14d"
-	EmailSecuritySummaryMaliciousParamsDateRange28d        EmailSecuritySummaryMaliciousParamsDateRange = "28d"
-	EmailSecuritySummaryMaliciousParamsDateRange12w        EmailSecuritySummaryMaliciousParamsDateRange = "12w"
-	EmailSecuritySummaryMaliciousParamsDateRange24w        EmailSecuritySummaryMaliciousParamsDateRange = "24w"
-	EmailSecuritySummaryMaliciousParamsDateRange52w        EmailSecuritySummaryMaliciousParamsDateRange = "52w"
-	EmailSecuritySummaryMaliciousParamsDateRange1dControl  EmailSecuritySummaryMaliciousParamsDateRange = "1dControl"
-	EmailSecuritySummaryMaliciousParamsDateRange2dControl  EmailSecuritySummaryMaliciousParamsDateRange = "2dControl"
-	EmailSecuritySummaryMaliciousParamsDateRange7dControl  EmailSecuritySummaryMaliciousParamsDateRange = "7dControl"
-	EmailSecuritySummaryMaliciousParamsDateRange14dControl EmailSecuritySummaryMaliciousParamsDateRange = "14dControl"
-	EmailSecuritySummaryMaliciousParamsDateRange28dControl EmailSecuritySummaryMaliciousParamsDateRange = "28dControl"
-	EmailSecuritySummaryMaliciousParamsDateRange12wControl EmailSecuritySummaryMaliciousParamsDateRange = "12wControl"
-	EmailSecuritySummaryMaliciousParamsDateRange24wControl EmailSecuritySummaryMaliciousParamsDateRange = "24wControl"
-)
-
-func (r EmailSecuritySummaryMaliciousParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecuritySummaryMaliciousParamsDateRange1d, EmailSecuritySummaryMaliciousParamsDateRange2d, EmailSecuritySummaryMaliciousParamsDateRange7d, EmailSecuritySummaryMaliciousParamsDateRange14d, EmailSecuritySummaryMaliciousParamsDateRange28d, EmailSecuritySummaryMaliciousParamsDateRange12w, EmailSecuritySummaryMaliciousParamsDateRange24w, EmailSecuritySummaryMaliciousParamsDateRange52w, EmailSecuritySummaryMaliciousParamsDateRange1dControl, EmailSecuritySummaryMaliciousParamsDateRange2dControl, EmailSecuritySummaryMaliciousParamsDateRange7dControl, EmailSecuritySummaryMaliciousParamsDateRange14dControl, EmailSecuritySummaryMaliciousParamsDateRange28dControl, EmailSecuritySummaryMaliciousParamsDateRange12wControl, EmailSecuritySummaryMaliciousParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2148,7 +2036,7 @@ type EmailSecuritySummarySpamParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecuritySummarySpamParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -2170,7 +2058,7 @@ type EmailSecuritySummarySpamParams struct {
 func (r EmailSecuritySummarySpamParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2185,34 +2073,6 @@ const (
 func (r EmailSecuritySummarySpamParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecuritySummarySpamParamsARCPass, EmailSecuritySummarySpamParamsARCNone, EmailSecuritySummarySpamParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecuritySummarySpamParamsDateRange string
-
-const (
-	EmailSecuritySummarySpamParamsDateRange1d         EmailSecuritySummarySpamParamsDateRange = "1d"
-	EmailSecuritySummarySpamParamsDateRange2d         EmailSecuritySummarySpamParamsDateRange = "2d"
-	EmailSecuritySummarySpamParamsDateRange7d         EmailSecuritySummarySpamParamsDateRange = "7d"
-	EmailSecuritySummarySpamParamsDateRange14d        EmailSecuritySummarySpamParamsDateRange = "14d"
-	EmailSecuritySummarySpamParamsDateRange28d        EmailSecuritySummarySpamParamsDateRange = "28d"
-	EmailSecuritySummarySpamParamsDateRange12w        EmailSecuritySummarySpamParamsDateRange = "12w"
-	EmailSecuritySummarySpamParamsDateRange24w        EmailSecuritySummarySpamParamsDateRange = "24w"
-	EmailSecuritySummarySpamParamsDateRange52w        EmailSecuritySummarySpamParamsDateRange = "52w"
-	EmailSecuritySummarySpamParamsDateRange1dControl  EmailSecuritySummarySpamParamsDateRange = "1dControl"
-	EmailSecuritySummarySpamParamsDateRange2dControl  EmailSecuritySummarySpamParamsDateRange = "2dControl"
-	EmailSecuritySummarySpamParamsDateRange7dControl  EmailSecuritySummarySpamParamsDateRange = "7dControl"
-	EmailSecuritySummarySpamParamsDateRange14dControl EmailSecuritySummarySpamParamsDateRange = "14dControl"
-	EmailSecuritySummarySpamParamsDateRange28dControl EmailSecuritySummarySpamParamsDateRange = "28dControl"
-	EmailSecuritySummarySpamParamsDateRange12wControl EmailSecuritySummarySpamParamsDateRange = "12wControl"
-	EmailSecuritySummarySpamParamsDateRange24wControl EmailSecuritySummarySpamParamsDateRange = "24wControl"
-)
-
-func (r EmailSecuritySummarySpamParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecuritySummarySpamParamsDateRange1d, EmailSecuritySummarySpamParamsDateRange2d, EmailSecuritySummarySpamParamsDateRange7d, EmailSecuritySummarySpamParamsDateRange14d, EmailSecuritySummarySpamParamsDateRange28d, EmailSecuritySummarySpamParamsDateRange12w, EmailSecuritySummarySpamParamsDateRange24w, EmailSecuritySummarySpamParamsDateRange52w, EmailSecuritySummarySpamParamsDateRange1dControl, EmailSecuritySummarySpamParamsDateRange2dControl, EmailSecuritySummarySpamParamsDateRange7dControl, EmailSecuritySummarySpamParamsDateRange14dControl, EmailSecuritySummarySpamParamsDateRange28dControl, EmailSecuritySummarySpamParamsDateRange12wControl, EmailSecuritySummarySpamParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2330,7 +2190,7 @@ type EmailSecuritySummarySPFParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecuritySummarySPFParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -2350,7 +2210,7 @@ type EmailSecuritySummarySPFParams struct {
 func (r EmailSecuritySummarySPFParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2365,34 +2225,6 @@ const (
 func (r EmailSecuritySummarySPFParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecuritySummarySPFParamsARCPass, EmailSecuritySummarySPFParamsARCNone, EmailSecuritySummarySPFParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecuritySummarySPFParamsDateRange string
-
-const (
-	EmailSecuritySummarySPFParamsDateRange1d         EmailSecuritySummarySPFParamsDateRange = "1d"
-	EmailSecuritySummarySPFParamsDateRange2d         EmailSecuritySummarySPFParamsDateRange = "2d"
-	EmailSecuritySummarySPFParamsDateRange7d         EmailSecuritySummarySPFParamsDateRange = "7d"
-	EmailSecuritySummarySPFParamsDateRange14d        EmailSecuritySummarySPFParamsDateRange = "14d"
-	EmailSecuritySummarySPFParamsDateRange28d        EmailSecuritySummarySPFParamsDateRange = "28d"
-	EmailSecuritySummarySPFParamsDateRange12w        EmailSecuritySummarySPFParamsDateRange = "12w"
-	EmailSecuritySummarySPFParamsDateRange24w        EmailSecuritySummarySPFParamsDateRange = "24w"
-	EmailSecuritySummarySPFParamsDateRange52w        EmailSecuritySummarySPFParamsDateRange = "52w"
-	EmailSecuritySummarySPFParamsDateRange1dControl  EmailSecuritySummarySPFParamsDateRange = "1dControl"
-	EmailSecuritySummarySPFParamsDateRange2dControl  EmailSecuritySummarySPFParamsDateRange = "2dControl"
-	EmailSecuritySummarySPFParamsDateRange7dControl  EmailSecuritySummarySPFParamsDateRange = "7dControl"
-	EmailSecuritySummarySPFParamsDateRange14dControl EmailSecuritySummarySPFParamsDateRange = "14dControl"
-	EmailSecuritySummarySPFParamsDateRange28dControl EmailSecuritySummarySPFParamsDateRange = "28dControl"
-	EmailSecuritySummarySPFParamsDateRange12wControl EmailSecuritySummarySPFParamsDateRange = "12wControl"
-	EmailSecuritySummarySPFParamsDateRange24wControl EmailSecuritySummarySPFParamsDateRange = "24wControl"
-)
-
-func (r EmailSecuritySummarySPFParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecuritySummarySPFParamsDateRange1d, EmailSecuritySummarySPFParamsDateRange2d, EmailSecuritySummarySPFParamsDateRange7d, EmailSecuritySummarySPFParamsDateRange14d, EmailSecuritySummarySPFParamsDateRange28d, EmailSecuritySummarySPFParamsDateRange12w, EmailSecuritySummarySPFParamsDateRange24w, EmailSecuritySummarySPFParamsDateRange52w, EmailSecuritySummarySPFParamsDateRange1dControl, EmailSecuritySummarySPFParamsDateRange2dControl, EmailSecuritySummarySPFParamsDateRange7dControl, EmailSecuritySummarySPFParamsDateRange14dControl, EmailSecuritySummarySPFParamsDateRange28dControl, EmailSecuritySummarySPFParamsDateRange12wControl, EmailSecuritySummarySPFParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2494,7 +2326,7 @@ type EmailSecuritySummarySpoofParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecuritySummarySpoofParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -2516,7 +2348,7 @@ type EmailSecuritySummarySpoofParams struct {
 func (r EmailSecuritySummarySpoofParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2531,34 +2363,6 @@ const (
 func (r EmailSecuritySummarySpoofParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecuritySummarySpoofParamsARCPass, EmailSecuritySummarySpoofParamsARCNone, EmailSecuritySummarySpoofParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecuritySummarySpoofParamsDateRange string
-
-const (
-	EmailSecuritySummarySpoofParamsDateRange1d         EmailSecuritySummarySpoofParamsDateRange = "1d"
-	EmailSecuritySummarySpoofParamsDateRange2d         EmailSecuritySummarySpoofParamsDateRange = "2d"
-	EmailSecuritySummarySpoofParamsDateRange7d         EmailSecuritySummarySpoofParamsDateRange = "7d"
-	EmailSecuritySummarySpoofParamsDateRange14d        EmailSecuritySummarySpoofParamsDateRange = "14d"
-	EmailSecuritySummarySpoofParamsDateRange28d        EmailSecuritySummarySpoofParamsDateRange = "28d"
-	EmailSecuritySummarySpoofParamsDateRange12w        EmailSecuritySummarySpoofParamsDateRange = "12w"
-	EmailSecuritySummarySpoofParamsDateRange24w        EmailSecuritySummarySpoofParamsDateRange = "24w"
-	EmailSecuritySummarySpoofParamsDateRange52w        EmailSecuritySummarySpoofParamsDateRange = "52w"
-	EmailSecuritySummarySpoofParamsDateRange1dControl  EmailSecuritySummarySpoofParamsDateRange = "1dControl"
-	EmailSecuritySummarySpoofParamsDateRange2dControl  EmailSecuritySummarySpoofParamsDateRange = "2dControl"
-	EmailSecuritySummarySpoofParamsDateRange7dControl  EmailSecuritySummarySpoofParamsDateRange = "7dControl"
-	EmailSecuritySummarySpoofParamsDateRange14dControl EmailSecuritySummarySpoofParamsDateRange = "14dControl"
-	EmailSecuritySummarySpoofParamsDateRange28dControl EmailSecuritySummarySpoofParamsDateRange = "28dControl"
-	EmailSecuritySummarySpoofParamsDateRange12wControl EmailSecuritySummarySpoofParamsDateRange = "12wControl"
-	EmailSecuritySummarySpoofParamsDateRange24wControl EmailSecuritySummarySpoofParamsDateRange = "24wControl"
-)
-
-func (r EmailSecuritySummarySpoofParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecuritySummarySpoofParamsDateRange1d, EmailSecuritySummarySpoofParamsDateRange2d, EmailSecuritySummarySpoofParamsDateRange7d, EmailSecuritySummarySpoofParamsDateRange14d, EmailSecuritySummarySpoofParamsDateRange28d, EmailSecuritySummarySpoofParamsDateRange12w, EmailSecuritySummarySpoofParamsDateRange24w, EmailSecuritySummarySpoofParamsDateRange52w, EmailSecuritySummarySpoofParamsDateRange1dControl, EmailSecuritySummarySpoofParamsDateRange2dControl, EmailSecuritySummarySpoofParamsDateRange7dControl, EmailSecuritySummarySpoofParamsDateRange14dControl, EmailSecuritySummarySpoofParamsDateRange28dControl, EmailSecuritySummarySpoofParamsDateRange12wControl, EmailSecuritySummarySpoofParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2676,7 +2480,7 @@ type EmailSecuritySummaryThreatCategoryParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecuritySummaryThreatCategoryParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -2698,7 +2502,7 @@ type EmailSecuritySummaryThreatCategoryParams struct {
 func (r EmailSecuritySummaryThreatCategoryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2713,34 +2517,6 @@ const (
 func (r EmailSecuritySummaryThreatCategoryParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecuritySummaryThreatCategoryParamsARCPass, EmailSecuritySummaryThreatCategoryParamsARCNone, EmailSecuritySummaryThreatCategoryParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecuritySummaryThreatCategoryParamsDateRange string
-
-const (
-	EmailSecuritySummaryThreatCategoryParamsDateRange1d         EmailSecuritySummaryThreatCategoryParamsDateRange = "1d"
-	EmailSecuritySummaryThreatCategoryParamsDateRange2d         EmailSecuritySummaryThreatCategoryParamsDateRange = "2d"
-	EmailSecuritySummaryThreatCategoryParamsDateRange7d         EmailSecuritySummaryThreatCategoryParamsDateRange = "7d"
-	EmailSecuritySummaryThreatCategoryParamsDateRange14d        EmailSecuritySummaryThreatCategoryParamsDateRange = "14d"
-	EmailSecuritySummaryThreatCategoryParamsDateRange28d        EmailSecuritySummaryThreatCategoryParamsDateRange = "28d"
-	EmailSecuritySummaryThreatCategoryParamsDateRange12w        EmailSecuritySummaryThreatCategoryParamsDateRange = "12w"
-	EmailSecuritySummaryThreatCategoryParamsDateRange24w        EmailSecuritySummaryThreatCategoryParamsDateRange = "24w"
-	EmailSecuritySummaryThreatCategoryParamsDateRange52w        EmailSecuritySummaryThreatCategoryParamsDateRange = "52w"
-	EmailSecuritySummaryThreatCategoryParamsDateRange1dControl  EmailSecuritySummaryThreatCategoryParamsDateRange = "1dControl"
-	EmailSecuritySummaryThreatCategoryParamsDateRange2dControl  EmailSecuritySummaryThreatCategoryParamsDateRange = "2dControl"
-	EmailSecuritySummaryThreatCategoryParamsDateRange7dControl  EmailSecuritySummaryThreatCategoryParamsDateRange = "7dControl"
-	EmailSecuritySummaryThreatCategoryParamsDateRange14dControl EmailSecuritySummaryThreatCategoryParamsDateRange = "14dControl"
-	EmailSecuritySummaryThreatCategoryParamsDateRange28dControl EmailSecuritySummaryThreatCategoryParamsDateRange = "28dControl"
-	EmailSecuritySummaryThreatCategoryParamsDateRange12wControl EmailSecuritySummaryThreatCategoryParamsDateRange = "12wControl"
-	EmailSecuritySummaryThreatCategoryParamsDateRange24wControl EmailSecuritySummaryThreatCategoryParamsDateRange = "24wControl"
-)
-
-func (r EmailSecuritySummaryThreatCategoryParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecuritySummaryThreatCategoryParamsDateRange1d, EmailSecuritySummaryThreatCategoryParamsDateRange2d, EmailSecuritySummaryThreatCategoryParamsDateRange7d, EmailSecuritySummaryThreatCategoryParamsDateRange14d, EmailSecuritySummaryThreatCategoryParamsDateRange28d, EmailSecuritySummaryThreatCategoryParamsDateRange12w, EmailSecuritySummaryThreatCategoryParamsDateRange24w, EmailSecuritySummaryThreatCategoryParamsDateRange52w, EmailSecuritySummaryThreatCategoryParamsDateRange1dControl, EmailSecuritySummaryThreatCategoryParamsDateRange2dControl, EmailSecuritySummaryThreatCategoryParamsDateRange7dControl, EmailSecuritySummaryThreatCategoryParamsDateRange14dControl, EmailSecuritySummaryThreatCategoryParamsDateRange28dControl, EmailSecuritySummaryThreatCategoryParamsDateRange12wControl, EmailSecuritySummaryThreatCategoryParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2858,7 +2634,7 @@ type EmailSecuritySummaryTLSVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailSecuritySummaryTLSVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -2878,7 +2654,7 @@ type EmailSecuritySummaryTLSVersionParams struct {
 func (r EmailSecuritySummaryTLSVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2893,34 +2669,6 @@ const (
 func (r EmailSecuritySummaryTLSVersionParamsARC) IsKnown() bool {
 	switch r {
 	case EmailSecuritySummaryTLSVersionParamsARCPass, EmailSecuritySummaryTLSVersionParamsARCNone, EmailSecuritySummaryTLSVersionParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailSecuritySummaryTLSVersionParamsDateRange string
-
-const (
-	EmailSecuritySummaryTLSVersionParamsDateRange1d         EmailSecuritySummaryTLSVersionParamsDateRange = "1d"
-	EmailSecuritySummaryTLSVersionParamsDateRange2d         EmailSecuritySummaryTLSVersionParamsDateRange = "2d"
-	EmailSecuritySummaryTLSVersionParamsDateRange7d         EmailSecuritySummaryTLSVersionParamsDateRange = "7d"
-	EmailSecuritySummaryTLSVersionParamsDateRange14d        EmailSecuritySummaryTLSVersionParamsDateRange = "14d"
-	EmailSecuritySummaryTLSVersionParamsDateRange28d        EmailSecuritySummaryTLSVersionParamsDateRange = "28d"
-	EmailSecuritySummaryTLSVersionParamsDateRange12w        EmailSecuritySummaryTLSVersionParamsDateRange = "12w"
-	EmailSecuritySummaryTLSVersionParamsDateRange24w        EmailSecuritySummaryTLSVersionParamsDateRange = "24w"
-	EmailSecuritySummaryTLSVersionParamsDateRange52w        EmailSecuritySummaryTLSVersionParamsDateRange = "52w"
-	EmailSecuritySummaryTLSVersionParamsDateRange1dControl  EmailSecuritySummaryTLSVersionParamsDateRange = "1dControl"
-	EmailSecuritySummaryTLSVersionParamsDateRange2dControl  EmailSecuritySummaryTLSVersionParamsDateRange = "2dControl"
-	EmailSecuritySummaryTLSVersionParamsDateRange7dControl  EmailSecuritySummaryTLSVersionParamsDateRange = "7dControl"
-	EmailSecuritySummaryTLSVersionParamsDateRange14dControl EmailSecuritySummaryTLSVersionParamsDateRange = "14dControl"
-	EmailSecuritySummaryTLSVersionParamsDateRange28dControl EmailSecuritySummaryTLSVersionParamsDateRange = "28dControl"
-	EmailSecuritySummaryTLSVersionParamsDateRange12wControl EmailSecuritySummaryTLSVersionParamsDateRange = "12wControl"
-	EmailSecuritySummaryTLSVersionParamsDateRange24wControl EmailSecuritySummaryTLSVersionParamsDateRange = "24wControl"
-)
-
-func (r EmailSecuritySummaryTLSVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailSecuritySummaryTLSVersionParamsDateRange1d, EmailSecuritySummaryTLSVersionParamsDateRange2d, EmailSecuritySummaryTLSVersionParamsDateRange7d, EmailSecuritySummaryTLSVersionParamsDateRange14d, EmailSecuritySummaryTLSVersionParamsDateRange28d, EmailSecuritySummaryTLSVersionParamsDateRange12w, EmailSecuritySummaryTLSVersionParamsDateRange24w, EmailSecuritySummaryTLSVersionParamsDateRange52w, EmailSecuritySummaryTLSVersionParamsDateRange1dControl, EmailSecuritySummaryTLSVersionParamsDateRange2dControl, EmailSecuritySummaryTLSVersionParamsDateRange7dControl, EmailSecuritySummaryTLSVersionParamsDateRange14dControl, EmailSecuritySummaryTLSVersionParamsDateRange28dControl, EmailSecuritySummaryTLSVersionParamsDateRange12wControl, EmailSecuritySummaryTLSVersionParamsDateRange24wControl:
 		return true
 	}
 	return false

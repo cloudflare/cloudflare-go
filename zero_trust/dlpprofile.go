@@ -45,8 +45,12 @@ func NewDLPProfileService(opts ...option.RequestOption) (r *DLPProfileService) {
 // Lists all DLP profiles in an account.
 func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Profile], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dlp/profiles", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -67,8 +71,8 @@ func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfile
 
 // Fetches a DLP profile by ID. Supports both predefined and custom profiles
 func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLPProfileGetParams, opts ...option.RequestOption) (res *DLPProfileGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DLPProfileGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -134,7 +138,9 @@ type Profile struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
-	Entries          interface{}      `json:"entries,required"`
+	// This field can have the runtime type of [[]PredefinedProfileEntry],
+	// [[]CustomProfileEntry], [[]ProfileDLPIntegrationProfileEntry].
+	Entries interface{} `json:"entries,required"`
 	// The ID for this profile
 	ID string `json:"id"`
 	// The name of the profile.
@@ -172,6 +178,7 @@ func (r profileJSON) RawJSON() string {
 }
 
 func (r *Profile) UnmarshalJSON(data []byte) (err error) {
+	*r = Profile{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -179,6 +186,11 @@ func (r *Profile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [ProfileUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.PredefinedProfile],
+// [zero_trust.CustomProfile], [zero_trust.ProfileDLPIntegrationProfile].
 func (r Profile) AsUnion() ProfileUnion {
 	return r.union
 }
@@ -355,7 +367,9 @@ type DLPProfileGetResponse struct {
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
-	Entries          interface{}      `json:"entries,required"`
+	// This field can have the runtime type of [[]PredefinedProfileEntry],
+	// [[]CustomProfileEntry], [[]DLPProfileGetResponseDLPIntegrationProfileEntry].
+	Entries interface{} `json:"entries,required"`
 	// The ID for this profile
 	ID string `json:"id"`
 	// The name of the profile.
@@ -394,6 +408,7 @@ func (r dlpProfileGetResponseJSON) RawJSON() string {
 }
 
 func (r *DLPProfileGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = DLPProfileGetResponse{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -401,6 +416,12 @@ func (r *DLPProfileGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [DLPProfileGetResponseUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.PredefinedProfile],
+// [zero_trust.CustomProfile],
+// [zero_trust.DLPProfileGetResponseDLPIntegrationProfile].
 func (r DLPProfileGetResponse) AsUnion() DLPProfileGetResponseUnion {
 	return r.union
 }

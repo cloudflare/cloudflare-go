@@ -39,8 +39,8 @@ func NewIPSECTunnelService(opts ...option.RequestOption) (r *IPSECTunnelService)
 // as an optional query parameter to only run validation without persisting
 // changes.
 func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParams, opts ...option.RequestOption) (res *IPSECTunnelNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -57,18 +57,18 @@ func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParam
 // Updates a specific IPsec tunnel associated with an account. Use
 // `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
-func (r *IPSECTunnelService) Update(ctx context.Context, tunnelIdentifier string, params IPSECTunnelUpdateParams, opts ...option.RequestOption) (res *IPSECTunnelUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *IPSECTunnelService) Update(ctx context.Context, ipsecTunnelID string, params IPSECTunnelUpdateParams, opts ...option.RequestOption) (res *IPSECTunnelUpdateResponse, err error) {
 	var env IPSECTunnelUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
+	if ipsecTunnelID == "" {
+		err = errors.New("missing required ipsec_tunnel_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", params.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", params.AccountID, ipsecTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -79,8 +79,8 @@ func (r *IPSECTunnelService) Update(ctx context.Context, tunnelIdentifier string
 
 // Lists IPsec tunnels associated with an account.
 func (r *IPSECTunnelService) List(ctx context.Context, query IPSECTunnelListParams, opts ...option.RequestOption) (res *IPSECTunnelListResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env IPSECTunnelListResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -97,18 +97,18 @@ func (r *IPSECTunnelService) List(ctx context.Context, query IPSECTunnelListPara
 // Disables and removes a specific static IPsec Tunnel associated with an account.
 // Use `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
-func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string, body IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *IPSECTunnelService) Delete(ctx context.Context, ipsecTunnelID string, body IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
 	var env IPSECTunnelDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
+	if ipsecTunnelID == "" {
+		err = errors.New("missing required ipsec_tunnel_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", body.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", body.AccountID, ipsecTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -118,18 +118,18 @@ func (r *IPSECTunnelService) Delete(ctx context.Context, tunnelIdentifier string
 }
 
 // Lists details for a specific IPsec tunnel.
-func (r *IPSECTunnelService) Get(ctx context.Context, tunnelIdentifier string, query IPSECTunnelGetParams, opts ...option.RequestOption) (res *IPSECTunnelGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *IPSECTunnelService) Get(ctx context.Context, ipsecTunnelID string, query IPSECTunnelGetParams, opts ...option.RequestOption) (res *IPSECTunnelGetResponse, err error) {
 	var env IPSECTunnelGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
+	if ipsecTunnelID == "" {
+		err = errors.New("missing required ipsec_tunnel_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", query.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", query.AccountID, ipsecTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -143,18 +143,18 @@ func (r *IPSECTunnelService) Get(ctx context.Context, tunnelIdentifier string, q
 // without persisting changes. After a PSK is generated, the PSK is immediately
 // persisted to Cloudflare's edge and cannot be retrieved later. Note the PSK in a
 // safe place.
-func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, tunnelIdentifier string, params IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, ipsecTunnelID string, params IPSECTunnelPSKGenerateParams, opts ...option.RequestOption) (res *IPSECTunnelPSKGenerateResponse, err error) {
 	var env IPSECTunnelPSKGenerateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if tunnelIdentifier == "" {
-		err = errors.New("missing required tunnel_identifier parameter")
+	if ipsecTunnelID == "" {
+		err = errors.New("missing required ipsec_tunnel_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", params.AccountID, tunnelIdentifier)
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", params.AccountID, ipsecTunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return

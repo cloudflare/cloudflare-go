@@ -36,8 +36,8 @@ func NewUniversalSettingService(opts ...option.RequestOption) (r *UniversalSetti
 
 // Patch Universal SSL Settings for a Zone.
 func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSettingEditParams, opts ...option.RequestOption) (res *UniversalSSLSettings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UniversalSettingEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -53,8 +53,8 @@ func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSett
 
 // Get Universal SSL Settings for a Zone.
 func (r *UniversalSettingService) Get(ctx context.Context, query UniversalSettingGetParams, opts ...option.RequestOption) (res *UniversalSSLSettings, err error) {
-	opts = append(r.Options[:], opts...)
 	var env UniversalSettingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

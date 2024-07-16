@@ -37,8 +37,8 @@ func NewAS112TopService(opts ...option.RequestOption) (r *AS112TopService) {
 
 // Get the top locations by DNS queries DNSSEC support to AS112.
 func (r *AS112TopService) DNSSEC(ctx context.Context, dnssec AS112TopDNSSECParamsDNSSEC, query AS112TopDNSSECParams, opts ...option.RequestOption) (res *AS112TopDNSSECResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TopDNSSECResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/as112/top/locations/dnssec/%v", dnssec)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,8 +50,8 @@ func (r *AS112TopService) DNSSEC(ctx context.Context, dnssec AS112TopDNSSECParam
 
 // Get the top locations, by DNS queries EDNS support to AS112.
 func (r *AS112TopService) Edns(ctx context.Context, edns AS112TopEdnsParamsEdns, query AS112TopEdnsParams, opts ...option.RequestOption) (res *AS112TopEdnsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TopEdnsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/as112/top/locations/edns/%v", edns)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -63,8 +63,8 @@ func (r *AS112TopService) Edns(ctx context.Context, edns AS112TopEdnsParamsEdns,
 
 // Get the top locations by DNS queries IP version to AS112.
 func (r *AS112TopService) IPVersion(ctx context.Context, ipVersion AS112TopIPVersionParamsIPVersion, query AS112TopIPVersionParams, opts ...option.RequestOption) (res *AS112TopIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TopIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/as112/top/locations/ip_version/%v", ipVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -77,8 +77,8 @@ func (r *AS112TopService) IPVersion(ctx context.Context, ipVersion AS112TopIPVer
 // Get the top locations by AS112 DNS queries. Values are a percentage out of the
 // total queries.
 func (r *AS112TopService) Locations(ctx context.Context, query AS112TopLocationsParams, opts ...option.RequestOption) (res *AS112TopLocationsResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env AS112TopLocationsResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/as112/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -188,7 +188,7 @@ type AS112TopDNSSECResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                 `json:"dataSource,required"`
 	Description     string                                                 `json:"description,required"`
 	EventType       string                                                 `json:"eventType,required"`
-	IsInstantaneous interface{}                                            `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                   `json:"isInstantaneous,required"`
 	EndTime         time.Time                                              `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                 `json:"linkedUrl"`
 	StartTime       time.Time                                              `json:"startTime" format:"date-time"`
@@ -342,7 +342,7 @@ type AS112TopEdnsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                               `json:"dataSource,required"`
 	Description     string                                               `json:"description,required"`
 	EventType       string                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                          `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                 `json:"isInstantaneous,required"`
 	EndTime         time.Time                                            `json:"endTime" format:"date-time"`
 	LinkedURL       string                                               `json:"linkedUrl"`
 	StartTime       time.Time                                            `json:"startTime" format:"date-time"`
@@ -496,7 +496,7 @@ type AS112TopIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                    `json:"dataSource,required"`
 	Description     string                                                    `json:"description,required"`
 	EventType       string                                                    `json:"eventType,required"`
-	IsInstantaneous interface{}                                               `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                    `json:"linkedUrl"`
 	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
@@ -650,7 +650,7 @@ type AS112TopLocationsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                    `json:"dataSource,required"`
 	Description     string                                                    `json:"description,required"`
 	EventType       string                                                    `json:"eventType,required"`
-	IsInstantaneous interface{}                                               `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                      `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                    `json:"linkedUrl"`
 	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
@@ -718,7 +718,7 @@ type AS112TopDNSSECParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112TopDNSSECParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -737,7 +737,7 @@ type AS112TopDNSSECParams struct {
 func (r AS112TopDNSSECParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -752,34 +752,6 @@ const (
 func (r AS112TopDNSSECParamsDNSSEC) IsKnown() bool {
 	switch r {
 	case AS112TopDNSSECParamsDNSSECSupported, AS112TopDNSSECParamsDNSSECNotSupported:
-		return true
-	}
-	return false
-}
-
-type AS112TopDNSSECParamsDateRange string
-
-const (
-	AS112TopDNSSECParamsDateRange1d         AS112TopDNSSECParamsDateRange = "1d"
-	AS112TopDNSSECParamsDateRange2d         AS112TopDNSSECParamsDateRange = "2d"
-	AS112TopDNSSECParamsDateRange7d         AS112TopDNSSECParamsDateRange = "7d"
-	AS112TopDNSSECParamsDateRange14d        AS112TopDNSSECParamsDateRange = "14d"
-	AS112TopDNSSECParamsDateRange28d        AS112TopDNSSECParamsDateRange = "28d"
-	AS112TopDNSSECParamsDateRange12w        AS112TopDNSSECParamsDateRange = "12w"
-	AS112TopDNSSECParamsDateRange24w        AS112TopDNSSECParamsDateRange = "24w"
-	AS112TopDNSSECParamsDateRange52w        AS112TopDNSSECParamsDateRange = "52w"
-	AS112TopDNSSECParamsDateRange1dControl  AS112TopDNSSECParamsDateRange = "1dControl"
-	AS112TopDNSSECParamsDateRange2dControl  AS112TopDNSSECParamsDateRange = "2dControl"
-	AS112TopDNSSECParamsDateRange7dControl  AS112TopDNSSECParamsDateRange = "7dControl"
-	AS112TopDNSSECParamsDateRange14dControl AS112TopDNSSECParamsDateRange = "14dControl"
-	AS112TopDNSSECParamsDateRange28dControl AS112TopDNSSECParamsDateRange = "28dControl"
-	AS112TopDNSSECParamsDateRange12wControl AS112TopDNSSECParamsDateRange = "12wControl"
-	AS112TopDNSSECParamsDateRange24wControl AS112TopDNSSECParamsDateRange = "24wControl"
-)
-
-func (r AS112TopDNSSECParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112TopDNSSECParamsDateRange1d, AS112TopDNSSECParamsDateRange2d, AS112TopDNSSECParamsDateRange7d, AS112TopDNSSECParamsDateRange14d, AS112TopDNSSECParamsDateRange28d, AS112TopDNSSECParamsDateRange12w, AS112TopDNSSECParamsDateRange24w, AS112TopDNSSECParamsDateRange52w, AS112TopDNSSECParamsDateRange1dControl, AS112TopDNSSECParamsDateRange2dControl, AS112TopDNSSECParamsDateRange7dControl, AS112TopDNSSECParamsDateRange14dControl, AS112TopDNSSECParamsDateRange28dControl, AS112TopDNSSECParamsDateRange12wControl, AS112TopDNSSECParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -838,7 +810,7 @@ type AS112TopEdnsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112TopEdnsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -857,7 +829,7 @@ type AS112TopEdnsParams struct {
 func (r AS112TopEdnsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -872,34 +844,6 @@ const (
 func (r AS112TopEdnsParamsEdns) IsKnown() bool {
 	switch r {
 	case AS112TopEdnsParamsEdnsSupported, AS112TopEdnsParamsEdnsNotSupported:
-		return true
-	}
-	return false
-}
-
-type AS112TopEdnsParamsDateRange string
-
-const (
-	AS112TopEdnsParamsDateRange1d         AS112TopEdnsParamsDateRange = "1d"
-	AS112TopEdnsParamsDateRange2d         AS112TopEdnsParamsDateRange = "2d"
-	AS112TopEdnsParamsDateRange7d         AS112TopEdnsParamsDateRange = "7d"
-	AS112TopEdnsParamsDateRange14d        AS112TopEdnsParamsDateRange = "14d"
-	AS112TopEdnsParamsDateRange28d        AS112TopEdnsParamsDateRange = "28d"
-	AS112TopEdnsParamsDateRange12w        AS112TopEdnsParamsDateRange = "12w"
-	AS112TopEdnsParamsDateRange24w        AS112TopEdnsParamsDateRange = "24w"
-	AS112TopEdnsParamsDateRange52w        AS112TopEdnsParamsDateRange = "52w"
-	AS112TopEdnsParamsDateRange1dControl  AS112TopEdnsParamsDateRange = "1dControl"
-	AS112TopEdnsParamsDateRange2dControl  AS112TopEdnsParamsDateRange = "2dControl"
-	AS112TopEdnsParamsDateRange7dControl  AS112TopEdnsParamsDateRange = "7dControl"
-	AS112TopEdnsParamsDateRange14dControl AS112TopEdnsParamsDateRange = "14dControl"
-	AS112TopEdnsParamsDateRange28dControl AS112TopEdnsParamsDateRange = "28dControl"
-	AS112TopEdnsParamsDateRange12wControl AS112TopEdnsParamsDateRange = "12wControl"
-	AS112TopEdnsParamsDateRange24wControl AS112TopEdnsParamsDateRange = "24wControl"
-)
-
-func (r AS112TopEdnsParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112TopEdnsParamsDateRange1d, AS112TopEdnsParamsDateRange2d, AS112TopEdnsParamsDateRange7d, AS112TopEdnsParamsDateRange14d, AS112TopEdnsParamsDateRange28d, AS112TopEdnsParamsDateRange12w, AS112TopEdnsParamsDateRange24w, AS112TopEdnsParamsDateRange52w, AS112TopEdnsParamsDateRange1dControl, AS112TopEdnsParamsDateRange2dControl, AS112TopEdnsParamsDateRange7dControl, AS112TopEdnsParamsDateRange14dControl, AS112TopEdnsParamsDateRange28dControl, AS112TopEdnsParamsDateRange12wControl, AS112TopEdnsParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -958,7 +902,7 @@ type AS112TopIPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112TopIPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -978,7 +922,7 @@ type AS112TopIPVersionParams struct {
 func (r AS112TopIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -993,34 +937,6 @@ const (
 func (r AS112TopIPVersionParamsIPVersion) IsKnown() bool {
 	switch r {
 	case AS112TopIPVersionParamsIPVersionIPv4, AS112TopIPVersionParamsIPVersionIPv6:
-		return true
-	}
-	return false
-}
-
-type AS112TopIPVersionParamsDateRange string
-
-const (
-	AS112TopIPVersionParamsDateRange1d         AS112TopIPVersionParamsDateRange = "1d"
-	AS112TopIPVersionParamsDateRange2d         AS112TopIPVersionParamsDateRange = "2d"
-	AS112TopIPVersionParamsDateRange7d         AS112TopIPVersionParamsDateRange = "7d"
-	AS112TopIPVersionParamsDateRange14d        AS112TopIPVersionParamsDateRange = "14d"
-	AS112TopIPVersionParamsDateRange28d        AS112TopIPVersionParamsDateRange = "28d"
-	AS112TopIPVersionParamsDateRange12w        AS112TopIPVersionParamsDateRange = "12w"
-	AS112TopIPVersionParamsDateRange24w        AS112TopIPVersionParamsDateRange = "24w"
-	AS112TopIPVersionParamsDateRange52w        AS112TopIPVersionParamsDateRange = "52w"
-	AS112TopIPVersionParamsDateRange1dControl  AS112TopIPVersionParamsDateRange = "1dControl"
-	AS112TopIPVersionParamsDateRange2dControl  AS112TopIPVersionParamsDateRange = "2dControl"
-	AS112TopIPVersionParamsDateRange7dControl  AS112TopIPVersionParamsDateRange = "7dControl"
-	AS112TopIPVersionParamsDateRange14dControl AS112TopIPVersionParamsDateRange = "14dControl"
-	AS112TopIPVersionParamsDateRange28dControl AS112TopIPVersionParamsDateRange = "28dControl"
-	AS112TopIPVersionParamsDateRange12wControl AS112TopIPVersionParamsDateRange = "12wControl"
-	AS112TopIPVersionParamsDateRange24wControl AS112TopIPVersionParamsDateRange = "24wControl"
-)
-
-func (r AS112TopIPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112TopIPVersionParamsDateRange1d, AS112TopIPVersionParamsDateRange2d, AS112TopIPVersionParamsDateRange7d, AS112TopIPVersionParamsDateRange14d, AS112TopIPVersionParamsDateRange28d, AS112TopIPVersionParamsDateRange12w, AS112TopIPVersionParamsDateRange24w, AS112TopIPVersionParamsDateRange52w, AS112TopIPVersionParamsDateRange1dControl, AS112TopIPVersionParamsDateRange2dControl, AS112TopIPVersionParamsDateRange7dControl, AS112TopIPVersionParamsDateRange14dControl, AS112TopIPVersionParamsDateRange28dControl, AS112TopIPVersionParamsDateRange12wControl, AS112TopIPVersionParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1079,7 +995,7 @@ type AS112TopLocationsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]AS112TopLocationsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1099,36 +1015,8 @@ type AS112TopLocationsParams struct {
 func (r AS112TopLocationsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AS112TopLocationsParamsDateRange string
-
-const (
-	AS112TopLocationsParamsDateRange1d         AS112TopLocationsParamsDateRange = "1d"
-	AS112TopLocationsParamsDateRange2d         AS112TopLocationsParamsDateRange = "2d"
-	AS112TopLocationsParamsDateRange7d         AS112TopLocationsParamsDateRange = "7d"
-	AS112TopLocationsParamsDateRange14d        AS112TopLocationsParamsDateRange = "14d"
-	AS112TopLocationsParamsDateRange28d        AS112TopLocationsParamsDateRange = "28d"
-	AS112TopLocationsParamsDateRange12w        AS112TopLocationsParamsDateRange = "12w"
-	AS112TopLocationsParamsDateRange24w        AS112TopLocationsParamsDateRange = "24w"
-	AS112TopLocationsParamsDateRange52w        AS112TopLocationsParamsDateRange = "52w"
-	AS112TopLocationsParamsDateRange1dControl  AS112TopLocationsParamsDateRange = "1dControl"
-	AS112TopLocationsParamsDateRange2dControl  AS112TopLocationsParamsDateRange = "2dControl"
-	AS112TopLocationsParamsDateRange7dControl  AS112TopLocationsParamsDateRange = "7dControl"
-	AS112TopLocationsParamsDateRange14dControl AS112TopLocationsParamsDateRange = "14dControl"
-	AS112TopLocationsParamsDateRange28dControl AS112TopLocationsParamsDateRange = "28dControl"
-	AS112TopLocationsParamsDateRange12wControl AS112TopLocationsParamsDateRange = "12wControl"
-	AS112TopLocationsParamsDateRange24wControl AS112TopLocationsParamsDateRange = "24wControl"
-)
-
-func (r AS112TopLocationsParamsDateRange) IsKnown() bool {
-	switch r {
-	case AS112TopLocationsParamsDateRange1d, AS112TopLocationsParamsDateRange2d, AS112TopLocationsParamsDateRange7d, AS112TopLocationsParamsDateRange14d, AS112TopLocationsParamsDateRange28d, AS112TopLocationsParamsDateRange12w, AS112TopLocationsParamsDateRange24w, AS112TopLocationsParamsDateRange52w, AS112TopLocationsParamsDateRange1dControl, AS112TopLocationsParamsDateRange2dControl, AS112TopLocationsParamsDateRange7dControl, AS112TopLocationsParamsDateRange14dControl, AS112TopLocationsParamsDateRange28dControl, AS112TopLocationsParamsDateRange12wControl, AS112TopLocationsParamsDateRange24wControl:
-		return true
-	}
-	return false
 }
 
 // Format results are returned in.

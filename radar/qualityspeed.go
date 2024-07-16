@@ -39,8 +39,8 @@ func NewQualitySpeedService(opts ...option.RequestOption) (r *QualitySpeedServic
 // Get an histogram from the previous 90 days of Cloudflare Speed Test data, split
 // into fixed bandwidth (Mbps), latency (ms) or jitter (ms) buckets.
 func (r *QualitySpeedService) Histogram(ctx context.Context, query QualitySpeedHistogramParams, opts ...option.RequestOption) (res *QualitySpeedHistogramResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QualitySpeedHistogramResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/quality/speed/histogram"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -53,8 +53,8 @@ func (r *QualitySpeedService) Histogram(ctx context.Context, query QualitySpeedH
 // Get a summary of bandwidth, latency, jitter and packet loss, from the previous
 // 90 days of Cloudflare Speed Test data.
 func (r *QualitySpeedService) Summary(ctx context.Context, query QualitySpeedSummaryParams, opts ...option.RequestOption) (res *QualitySpeedSummaryResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env QualitySpeedSummaryResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/quality/speed/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -214,7 +214,7 @@ type QualitySpeedSummaryResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                      `json:"dataSource,required"`
 	Description     string                                                      `json:"description,required"`
 	EventType       string                                                      `json:"eventType,required"`
-	IsInstantaneous interface{}                                                 `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                        `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                      `json:"linkedUrl"`
 	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
@@ -307,7 +307,7 @@ type QualitySpeedHistogramParams struct {
 func (r QualitySpeedHistogramParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -393,7 +393,7 @@ type QualitySpeedSummaryParams struct {
 func (r QualitySpeedSummaryParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

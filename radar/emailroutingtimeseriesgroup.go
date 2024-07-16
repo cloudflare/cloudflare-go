@@ -36,8 +36,8 @@ func NewEmailRoutingTimeseriesGroupService(opts ...option.RequestOption) (r *Ema
 
 // Percentage distribution of emails classified per Arc validation over time.
 func (r *EmailRoutingTimeseriesGroupService) ARC(ctx context.Context, query EmailRoutingTimeseriesGroupARCParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/arc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,8 +49,8 @@ func (r *EmailRoutingTimeseriesGroupService) ARC(ctx context.Context, query Emai
 
 // Percentage distribution of emails classified per DKIM validation over time.
 func (r *EmailRoutingTimeseriesGroupService) DKIM(ctx context.Context, query EmailRoutingTimeseriesGroupDKIMParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupDKIMResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupDKIMResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/dkim"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (r *EmailRoutingTimeseriesGroupService) DKIM(ctx context.Context, query Ema
 
 // Percentage distribution of emails classified per DMARC validation over time.
 func (r *EmailRoutingTimeseriesGroupService) DMARC(ctx context.Context, query EmailRoutingTimeseriesGroupDMARCParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupDMARCResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupDMARCResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/dmarc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,8 +75,8 @@ func (r *EmailRoutingTimeseriesGroupService) DMARC(ctx context.Context, query Em
 
 // Percentage distribution of emails by Encrypted over time.
 func (r *EmailRoutingTimeseriesGroupService) Encrypted(ctx context.Context, query EmailRoutingTimeseriesGroupEncryptedParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupEncryptedResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupEncryptedResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/encrypted"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -88,8 +88,8 @@ func (r *EmailRoutingTimeseriesGroupService) Encrypted(ctx context.Context, quer
 
 // Percentage distribution of emails by Ip Version over time.
 func (r *EmailRoutingTimeseriesGroupService) IPVersion(ctx context.Context, query EmailRoutingTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -101,8 +101,8 @@ func (r *EmailRoutingTimeseriesGroupService) IPVersion(ctx context.Context, quer
 
 // Percentage distribution of emails classified per SPF validation over time.
 func (r *EmailRoutingTimeseriesGroupService) SPF(ctx context.Context, query EmailRoutingTimeseriesGroupSPFParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupSPFResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env EmailRoutingTimeseriesGroupSPFResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/email/routing/timeseries_groups/spf"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -306,7 +306,7 @@ type EmailRoutingTimeseriesGroupARCParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingTimeseriesGroupARCParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -330,7 +330,7 @@ type EmailRoutingTimeseriesGroupARCParams struct {
 func (r EmailRoutingTimeseriesGroupARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -349,34 +349,6 @@ const (
 func (r EmailRoutingTimeseriesGroupARCParamsAggInterval) IsKnown() bool {
 	switch r {
 	case EmailRoutingTimeseriesGroupARCParamsAggInterval15m, EmailRoutingTimeseriesGroupARCParamsAggInterval1h, EmailRoutingTimeseriesGroupARCParamsAggInterval1d, EmailRoutingTimeseriesGroupARCParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingTimeseriesGroupARCParamsDateRange string
-
-const (
-	EmailRoutingTimeseriesGroupARCParamsDateRange1d         EmailRoutingTimeseriesGroupARCParamsDateRange = "1d"
-	EmailRoutingTimeseriesGroupARCParamsDateRange2d         EmailRoutingTimeseriesGroupARCParamsDateRange = "2d"
-	EmailRoutingTimeseriesGroupARCParamsDateRange7d         EmailRoutingTimeseriesGroupARCParamsDateRange = "7d"
-	EmailRoutingTimeseriesGroupARCParamsDateRange14d        EmailRoutingTimeseriesGroupARCParamsDateRange = "14d"
-	EmailRoutingTimeseriesGroupARCParamsDateRange28d        EmailRoutingTimeseriesGroupARCParamsDateRange = "28d"
-	EmailRoutingTimeseriesGroupARCParamsDateRange12w        EmailRoutingTimeseriesGroupARCParamsDateRange = "12w"
-	EmailRoutingTimeseriesGroupARCParamsDateRange24w        EmailRoutingTimeseriesGroupARCParamsDateRange = "24w"
-	EmailRoutingTimeseriesGroupARCParamsDateRange52w        EmailRoutingTimeseriesGroupARCParamsDateRange = "52w"
-	EmailRoutingTimeseriesGroupARCParamsDateRange1dControl  EmailRoutingTimeseriesGroupARCParamsDateRange = "1dControl"
-	EmailRoutingTimeseriesGroupARCParamsDateRange2dControl  EmailRoutingTimeseriesGroupARCParamsDateRange = "2dControl"
-	EmailRoutingTimeseriesGroupARCParamsDateRange7dControl  EmailRoutingTimeseriesGroupARCParamsDateRange = "7dControl"
-	EmailRoutingTimeseriesGroupARCParamsDateRange14dControl EmailRoutingTimeseriesGroupARCParamsDateRange = "14dControl"
-	EmailRoutingTimeseriesGroupARCParamsDateRange28dControl EmailRoutingTimeseriesGroupARCParamsDateRange = "28dControl"
-	EmailRoutingTimeseriesGroupARCParamsDateRange12wControl EmailRoutingTimeseriesGroupARCParamsDateRange = "12wControl"
-	EmailRoutingTimeseriesGroupARCParamsDateRange24wControl EmailRoutingTimeseriesGroupARCParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingTimeseriesGroupARCParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingTimeseriesGroupARCParamsDateRange1d, EmailRoutingTimeseriesGroupARCParamsDateRange2d, EmailRoutingTimeseriesGroupARCParamsDateRange7d, EmailRoutingTimeseriesGroupARCParamsDateRange14d, EmailRoutingTimeseriesGroupARCParamsDateRange28d, EmailRoutingTimeseriesGroupARCParamsDateRange12w, EmailRoutingTimeseriesGroupARCParamsDateRange24w, EmailRoutingTimeseriesGroupARCParamsDateRange52w, EmailRoutingTimeseriesGroupARCParamsDateRange1dControl, EmailRoutingTimeseriesGroupARCParamsDateRange2dControl, EmailRoutingTimeseriesGroupARCParamsDateRange7dControl, EmailRoutingTimeseriesGroupARCParamsDateRange14dControl, EmailRoutingTimeseriesGroupARCParamsDateRange28dControl, EmailRoutingTimeseriesGroupARCParamsDateRange12wControl, EmailRoutingTimeseriesGroupARCParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -511,7 +483,7 @@ type EmailRoutingTimeseriesGroupDKIMParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingTimeseriesGroupDKIMParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dmarc.
@@ -533,7 +505,7 @@ type EmailRoutingTimeseriesGroupDKIMParams struct {
 func (r EmailRoutingTimeseriesGroupDKIMParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -568,34 +540,6 @@ const (
 func (r EmailRoutingTimeseriesGroupDKIMParamsARC) IsKnown() bool {
 	switch r {
 	case EmailRoutingTimeseriesGroupDKIMParamsARCPass, EmailRoutingTimeseriesGroupDKIMParamsARCNone, EmailRoutingTimeseriesGroupDKIMParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingTimeseriesGroupDKIMParamsDateRange string
-
-const (
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange1d         EmailRoutingTimeseriesGroupDKIMParamsDateRange = "1d"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange2d         EmailRoutingTimeseriesGroupDKIMParamsDateRange = "2d"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange7d         EmailRoutingTimeseriesGroupDKIMParamsDateRange = "7d"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange14d        EmailRoutingTimeseriesGroupDKIMParamsDateRange = "14d"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange28d        EmailRoutingTimeseriesGroupDKIMParamsDateRange = "28d"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange12w        EmailRoutingTimeseriesGroupDKIMParamsDateRange = "12w"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange24w        EmailRoutingTimeseriesGroupDKIMParamsDateRange = "24w"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange52w        EmailRoutingTimeseriesGroupDKIMParamsDateRange = "52w"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange1dControl  EmailRoutingTimeseriesGroupDKIMParamsDateRange = "1dControl"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange2dControl  EmailRoutingTimeseriesGroupDKIMParamsDateRange = "2dControl"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange7dControl  EmailRoutingTimeseriesGroupDKIMParamsDateRange = "7dControl"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange14dControl EmailRoutingTimeseriesGroupDKIMParamsDateRange = "14dControl"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange28dControl EmailRoutingTimeseriesGroupDKIMParamsDateRange = "28dControl"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange12wControl EmailRoutingTimeseriesGroupDKIMParamsDateRange = "12wControl"
-	EmailRoutingTimeseriesGroupDKIMParamsDateRange24wControl EmailRoutingTimeseriesGroupDKIMParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingTimeseriesGroupDKIMParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingTimeseriesGroupDKIMParamsDateRange1d, EmailRoutingTimeseriesGroupDKIMParamsDateRange2d, EmailRoutingTimeseriesGroupDKIMParamsDateRange7d, EmailRoutingTimeseriesGroupDKIMParamsDateRange14d, EmailRoutingTimeseriesGroupDKIMParamsDateRange28d, EmailRoutingTimeseriesGroupDKIMParamsDateRange12w, EmailRoutingTimeseriesGroupDKIMParamsDateRange24w, EmailRoutingTimeseriesGroupDKIMParamsDateRange52w, EmailRoutingTimeseriesGroupDKIMParamsDateRange1dControl, EmailRoutingTimeseriesGroupDKIMParamsDateRange2dControl, EmailRoutingTimeseriesGroupDKIMParamsDateRange7dControl, EmailRoutingTimeseriesGroupDKIMParamsDateRange14dControl, EmailRoutingTimeseriesGroupDKIMParamsDateRange28dControl, EmailRoutingTimeseriesGroupDKIMParamsDateRange12wControl, EmailRoutingTimeseriesGroupDKIMParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -714,7 +658,7 @@ type EmailRoutingTimeseriesGroupDMARCParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingTimeseriesGroupDMARCParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -736,7 +680,7 @@ type EmailRoutingTimeseriesGroupDMARCParams struct {
 func (r EmailRoutingTimeseriesGroupDMARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -771,34 +715,6 @@ const (
 func (r EmailRoutingTimeseriesGroupDMARCParamsARC) IsKnown() bool {
 	switch r {
 	case EmailRoutingTimeseriesGroupDMARCParamsARCPass, EmailRoutingTimeseriesGroupDMARCParamsARCNone, EmailRoutingTimeseriesGroupDMARCParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingTimeseriesGroupDMARCParamsDateRange string
-
-const (
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange1d         EmailRoutingTimeseriesGroupDMARCParamsDateRange = "1d"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange2d         EmailRoutingTimeseriesGroupDMARCParamsDateRange = "2d"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange7d         EmailRoutingTimeseriesGroupDMARCParamsDateRange = "7d"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange14d        EmailRoutingTimeseriesGroupDMARCParamsDateRange = "14d"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange28d        EmailRoutingTimeseriesGroupDMARCParamsDateRange = "28d"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange12w        EmailRoutingTimeseriesGroupDMARCParamsDateRange = "12w"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange24w        EmailRoutingTimeseriesGroupDMARCParamsDateRange = "24w"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange52w        EmailRoutingTimeseriesGroupDMARCParamsDateRange = "52w"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange1dControl  EmailRoutingTimeseriesGroupDMARCParamsDateRange = "1dControl"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange2dControl  EmailRoutingTimeseriesGroupDMARCParamsDateRange = "2dControl"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange7dControl  EmailRoutingTimeseriesGroupDMARCParamsDateRange = "7dControl"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange14dControl EmailRoutingTimeseriesGroupDMARCParamsDateRange = "14dControl"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange28dControl EmailRoutingTimeseriesGroupDMARCParamsDateRange = "28dControl"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange12wControl EmailRoutingTimeseriesGroupDMARCParamsDateRange = "12wControl"
-	EmailRoutingTimeseriesGroupDMARCParamsDateRange24wControl EmailRoutingTimeseriesGroupDMARCParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingTimeseriesGroupDMARCParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingTimeseriesGroupDMARCParamsDateRange1d, EmailRoutingTimeseriesGroupDMARCParamsDateRange2d, EmailRoutingTimeseriesGroupDMARCParamsDateRange7d, EmailRoutingTimeseriesGroupDMARCParamsDateRange14d, EmailRoutingTimeseriesGroupDMARCParamsDateRange28d, EmailRoutingTimeseriesGroupDMARCParamsDateRange12w, EmailRoutingTimeseriesGroupDMARCParamsDateRange24w, EmailRoutingTimeseriesGroupDMARCParamsDateRange52w, EmailRoutingTimeseriesGroupDMARCParamsDateRange1dControl, EmailRoutingTimeseriesGroupDMARCParamsDateRange2dControl, EmailRoutingTimeseriesGroupDMARCParamsDateRange7dControl, EmailRoutingTimeseriesGroupDMARCParamsDateRange14dControl, EmailRoutingTimeseriesGroupDMARCParamsDateRange28dControl, EmailRoutingTimeseriesGroupDMARCParamsDateRange12wControl, EmailRoutingTimeseriesGroupDMARCParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -917,7 +833,7 @@ type EmailRoutingTimeseriesGroupEncryptedParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingTimeseriesGroupEncryptedParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -939,7 +855,7 @@ type EmailRoutingTimeseriesGroupEncryptedParams struct {
 func (r EmailRoutingTimeseriesGroupEncryptedParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -974,34 +890,6 @@ const (
 func (r EmailRoutingTimeseriesGroupEncryptedParamsARC) IsKnown() bool {
 	switch r {
 	case EmailRoutingTimeseriesGroupEncryptedParamsARCPass, EmailRoutingTimeseriesGroupEncryptedParamsARCNone, EmailRoutingTimeseriesGroupEncryptedParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingTimeseriesGroupEncryptedParamsDateRange string
-
-const (
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange1d         EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "1d"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange2d         EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "2d"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange7d         EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "7d"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange14d        EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "14d"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange28d        EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "28d"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange12w        EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "12w"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange24w        EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "24w"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange52w        EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "52w"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange1dControl  EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "1dControl"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange2dControl  EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "2dControl"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange7dControl  EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "7dControl"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange14dControl EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "14dControl"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange28dControl EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "28dControl"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange12wControl EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "12wControl"
-	EmailRoutingTimeseriesGroupEncryptedParamsDateRange24wControl EmailRoutingTimeseriesGroupEncryptedParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingTimeseriesGroupEncryptedParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingTimeseriesGroupEncryptedParamsDateRange1d, EmailRoutingTimeseriesGroupEncryptedParamsDateRange2d, EmailRoutingTimeseriesGroupEncryptedParamsDateRange7d, EmailRoutingTimeseriesGroupEncryptedParamsDateRange14d, EmailRoutingTimeseriesGroupEncryptedParamsDateRange28d, EmailRoutingTimeseriesGroupEncryptedParamsDateRange12w, EmailRoutingTimeseriesGroupEncryptedParamsDateRange24w, EmailRoutingTimeseriesGroupEncryptedParamsDateRange52w, EmailRoutingTimeseriesGroupEncryptedParamsDateRange1dControl, EmailRoutingTimeseriesGroupEncryptedParamsDateRange2dControl, EmailRoutingTimeseriesGroupEncryptedParamsDateRange7dControl, EmailRoutingTimeseriesGroupEncryptedParamsDateRange14dControl, EmailRoutingTimeseriesGroupEncryptedParamsDateRange28dControl, EmailRoutingTimeseriesGroupEncryptedParamsDateRange12wControl, EmailRoutingTimeseriesGroupEncryptedParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1121,7 +1009,7 @@ type EmailRoutingTimeseriesGroupIPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingTimeseriesGroupIPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1143,7 +1031,7 @@ type EmailRoutingTimeseriesGroupIPVersionParams struct {
 func (r EmailRoutingTimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1178,34 +1066,6 @@ const (
 func (r EmailRoutingTimeseriesGroupIPVersionParamsARC) IsKnown() bool {
 	switch r {
 	case EmailRoutingTimeseriesGroupIPVersionParamsARCPass, EmailRoutingTimeseriesGroupIPVersionParamsARCNone, EmailRoutingTimeseriesGroupIPVersionParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingTimeseriesGroupIPVersionParamsDateRange string
-
-const (
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange1d         EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "1d"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange2d         EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "2d"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange7d         EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "7d"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange14d        EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "14d"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange28d        EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "28d"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange12w        EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "12w"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange24w        EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "24w"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange52w        EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "52w"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange1dControl  EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "1dControl"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange2dControl  EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "2dControl"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange7dControl  EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "7dControl"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange14dControl EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "14dControl"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange28dControl EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "28dControl"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange12wControl EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "12wControl"
-	EmailRoutingTimeseriesGroupIPVersionParamsDateRange24wControl EmailRoutingTimeseriesGroupIPVersionParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingTimeseriesGroupIPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingTimeseriesGroupIPVersionParamsDateRange1d, EmailRoutingTimeseriesGroupIPVersionParamsDateRange2d, EmailRoutingTimeseriesGroupIPVersionParamsDateRange7d, EmailRoutingTimeseriesGroupIPVersionParamsDateRange14d, EmailRoutingTimeseriesGroupIPVersionParamsDateRange28d, EmailRoutingTimeseriesGroupIPVersionParamsDateRange12w, EmailRoutingTimeseriesGroupIPVersionParamsDateRange24w, EmailRoutingTimeseriesGroupIPVersionParamsDateRange52w, EmailRoutingTimeseriesGroupIPVersionParamsDateRange1dControl, EmailRoutingTimeseriesGroupIPVersionParamsDateRange2dControl, EmailRoutingTimeseriesGroupIPVersionParamsDateRange7dControl, EmailRoutingTimeseriesGroupIPVersionParamsDateRange14dControl, EmailRoutingTimeseriesGroupIPVersionParamsDateRange28dControl, EmailRoutingTimeseriesGroupIPVersionParamsDateRange12wControl, EmailRoutingTimeseriesGroupIPVersionParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1325,7 +1185,7 @@ type EmailRoutingTimeseriesGroupSPFParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]EmailRoutingTimeseriesGroupSPFParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
@@ -1347,7 +1207,7 @@ type EmailRoutingTimeseriesGroupSPFParams struct {
 func (r EmailRoutingTimeseriesGroupSPFParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1382,34 +1242,6 @@ const (
 func (r EmailRoutingTimeseriesGroupSPFParamsARC) IsKnown() bool {
 	switch r {
 	case EmailRoutingTimeseriesGroupSPFParamsARCPass, EmailRoutingTimeseriesGroupSPFParamsARCNone, EmailRoutingTimeseriesGroupSPFParamsARCFail:
-		return true
-	}
-	return false
-}
-
-type EmailRoutingTimeseriesGroupSPFParamsDateRange string
-
-const (
-	EmailRoutingTimeseriesGroupSPFParamsDateRange1d         EmailRoutingTimeseriesGroupSPFParamsDateRange = "1d"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange2d         EmailRoutingTimeseriesGroupSPFParamsDateRange = "2d"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange7d         EmailRoutingTimeseriesGroupSPFParamsDateRange = "7d"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange14d        EmailRoutingTimeseriesGroupSPFParamsDateRange = "14d"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange28d        EmailRoutingTimeseriesGroupSPFParamsDateRange = "28d"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange12w        EmailRoutingTimeseriesGroupSPFParamsDateRange = "12w"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange24w        EmailRoutingTimeseriesGroupSPFParamsDateRange = "24w"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange52w        EmailRoutingTimeseriesGroupSPFParamsDateRange = "52w"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange1dControl  EmailRoutingTimeseriesGroupSPFParamsDateRange = "1dControl"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange2dControl  EmailRoutingTimeseriesGroupSPFParamsDateRange = "2dControl"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange7dControl  EmailRoutingTimeseriesGroupSPFParamsDateRange = "7dControl"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange14dControl EmailRoutingTimeseriesGroupSPFParamsDateRange = "14dControl"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange28dControl EmailRoutingTimeseriesGroupSPFParamsDateRange = "28dControl"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange12wControl EmailRoutingTimeseriesGroupSPFParamsDateRange = "12wControl"
-	EmailRoutingTimeseriesGroupSPFParamsDateRange24wControl EmailRoutingTimeseriesGroupSPFParamsDateRange = "24wControl"
-)
-
-func (r EmailRoutingTimeseriesGroupSPFParamsDateRange) IsKnown() bool {
-	switch r {
-	case EmailRoutingTimeseriesGroupSPFParamsDateRange1d, EmailRoutingTimeseriesGroupSPFParamsDateRange2d, EmailRoutingTimeseriesGroupSPFParamsDateRange7d, EmailRoutingTimeseriesGroupSPFParamsDateRange14d, EmailRoutingTimeseriesGroupSPFParamsDateRange28d, EmailRoutingTimeseriesGroupSPFParamsDateRange12w, EmailRoutingTimeseriesGroupSPFParamsDateRange24w, EmailRoutingTimeseriesGroupSPFParamsDateRange52w, EmailRoutingTimeseriesGroupSPFParamsDateRange1dControl, EmailRoutingTimeseriesGroupSPFParamsDateRange2dControl, EmailRoutingTimeseriesGroupSPFParamsDateRange7dControl, EmailRoutingTimeseriesGroupSPFParamsDateRange14dControl, EmailRoutingTimeseriesGroupSPFParamsDateRange28dControl, EmailRoutingTimeseriesGroupSPFParamsDateRange12wControl, EmailRoutingTimeseriesGroupSPFParamsDateRange24wControl:
 		return true
 	}
 	return false

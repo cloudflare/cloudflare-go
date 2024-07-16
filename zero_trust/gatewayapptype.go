@@ -4,6 +4,7 @@ package zero_trust
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -39,8 +40,12 @@ func NewGatewayAppTypeService(opts ...option.RequestOption) (r *GatewayAppTypeSe
 // Fetches all application and application type mappings.
 func (r *GatewayAppTypeService) List(ctx context.Context, query GatewayAppTypeListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AppType], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/gateway/app_types", query.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
@@ -90,6 +95,7 @@ func (r appTypeJSON) RawJSON() string {
 }
 
 func (r *AppType) UnmarshalJSON(data []byte) (err error) {
+	*r = AppType{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -97,6 +103,12 @@ func (r *AppType) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
+// AsUnion returns a [AppTypeUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.AppTypeZeroTrustGatewayApplication],
+// [zero_trust.AppTypeZeroTrustGatewayApplicationType].
 func (r AppType) AsUnion() AppTypeUnion {
 	return r.union
 }

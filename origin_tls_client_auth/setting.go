@@ -38,8 +38,8 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 // true either before/after the certificate is uploaded to see the certificate in
 // use.
 func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams, opts ...option.RequestOption) (res *SettingUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SettingUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -56,8 +56,8 @@ func (r *SettingService) Update(ctx context.Context, params SettingUpdateParams,
 // Get whether zone-level authenticated origin pulls is enabled or not. It is false
 // by default.
 func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts ...option.RequestOption) (res *SettingGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env SettingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

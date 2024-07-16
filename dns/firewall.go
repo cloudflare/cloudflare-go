@@ -44,8 +44,8 @@ func NewFirewallService(opts ...option.RequestOption) (r *FirewallService) {
 
 // Create a configured DNS Firewall Cluster.
 func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opts ...option.RequestOption) (res *Firewall, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FirewallNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -62,8 +62,12 @@ func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opt
 // List configured DNS Firewall clusters for an account.
 func (r *FirewallService) List(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Firewall], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
 	path := fmt.Sprintf("accounts/%s/dns_firewall", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
@@ -84,8 +88,8 @@ func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallLis
 
 // Delete a configured DNS Firewall Cluster.
 func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body FirewallDeleteParams, opts ...option.RequestOption) (res *FirewallDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FirewallDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -105,8 +109,8 @@ func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body
 
 // Modify a DNS Firewall Cluster configuration.
 func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params FirewallEditParams, opts ...option.RequestOption) (res *Firewall, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FirewallEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -126,8 +130,8 @@ func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params
 
 // Show a single configured DNS Firewall cluster for an account.
 func (r *FirewallService) Get(ctx context.Context, dnsFirewallID string, query FirewallGetParams, opts ...option.RequestOption) (res *Firewall, err error) {
-	opts = append(r.Options[:], opts...)
 	var env FirewallGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -192,10 +196,14 @@ type Firewall struct {
 	DeprecateAnyRequests bool               `json:"deprecate_any_requests,required"`
 	DNSFirewallIPs       []FirewallIPsUnion `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
-	EcsFallback bool `json:"ecs_fallback,required"`
-	// Maximum DNS Cache TTL.
+	ECSFallback bool `json:"ecs_fallback,required"`
+	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
+	// decreased to the maximum defined here for caching purposes.
 	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
-	// Minimum DNS Cache TTL.
+	// Minimum DNS cache TTL. This setting sets a lower bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
+	// increased to the minimum defined here for caching purposes.
 	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
 	// Last modification of DNS Firewall cluster.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
@@ -204,7 +212,8 @@ type Firewall struct {
 	UpstreamIPs []UpstreamIPsUnion `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation AttackMitigation `json:"attack_mitigation,nullable"`
-	// Negative DNS Cache TTL.
+	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
+	// negative responses (e.g., NXDOMAIN) from the upstream servers.
 	NegativeCacheTTL float64 `json:"negative_cache_ttl,nullable"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster).
@@ -220,7 +229,7 @@ type firewallJSON struct {
 	ID                   apijson.Field
 	DeprecateAnyRequests apijson.Field
 	DNSFirewallIPs       apijson.Field
-	EcsFallback          apijson.Field
+	ECSFallback          apijson.Field
 	MaximumCacheTTL      apijson.Field
 	MinimumCacheTTL      apijson.Field
 	ModifiedOn           apijson.Field
@@ -243,21 +252,28 @@ func (r firewallJSON) RawJSON() string {
 }
 
 type FirewallParam struct {
+	// Identifier
+	ID param.Field[string] `json:"id,required"`
 	// Deprecate the response to ANY requests.
 	DeprecateAnyRequests param.Field[bool]                    `json:"deprecate_any_requests,required"`
 	DNSFirewallIPs       param.Field[[]FirewallIPsUnionParam] `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
-	EcsFallback param.Field[bool] `json:"ecs_fallback,required"`
-	// Maximum DNS Cache TTL.
+	ECSFallback param.Field[bool] `json:"ecs_fallback,required"`
+	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
+	// decreased to the maximum defined here for caching purposes.
 	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl,required"`
-	// Minimum DNS Cache TTL.
+	// Minimum DNS cache TTL. This setting sets a lower bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
+	// increased to the minimum defined here for caching purposes.
 	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl,required"`
 	// DNS Firewall Cluster Name.
 	Name        param.Field[string]                  `json:"name,required"`
 	UpstreamIPs param.Field[[]UpstreamIPsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
-	// Negative DNS Cache TTL.
+	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
+	// negative responses (e.g., NXDOMAIN) from the upstream servers.
 	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster).
@@ -362,12 +378,17 @@ type FirewallNewParams struct {
 	// Deprecate the response to ANY requests.
 	DeprecateAnyRequests param.Field[bool] `json:"deprecate_any_requests"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
-	EcsFallback param.Field[bool] `json:"ecs_fallback"`
-	// Maximum DNS Cache TTL.
+	ECSFallback param.Field[bool] `json:"ecs_fallback"`
+	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
+	// decreased to the maximum defined here for caching purposes.
 	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl"`
-	// Minimum DNS Cache TTL.
+	// Minimum DNS cache TTL. This setting sets a lower bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
+	// increased to the minimum defined here for caching purposes.
 	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl"`
-	// Negative DNS Cache TTL.
+	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
+	// negative responses (e.g., NXDOMAIN) from the upstream servers.
 	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
 	// the upstream nameservers configured on the cluster).
@@ -384,9 +405,9 @@ func (r FirewallNewParams) MarshalJSON() (data []byte, err error) {
 type FirewallNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Firewall              `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Firewall                           `json:"result"`
 	JSON    firewallNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -395,8 +416,8 @@ type FirewallNewResponseEnvelope struct {
 type firewallNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -437,7 +458,7 @@ type FirewallListParams struct {
 func (r FirewallListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -447,11 +468,11 @@ type FirewallDeleteParams struct {
 }
 
 type FirewallDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   FirewallDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FirewallDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  FirewallDeleteResponse                `json:"result"`
 	JSON    firewallDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -460,8 +481,8 @@ type FirewallDeleteResponseEnvelope struct {
 type firewallDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -502,9 +523,9 @@ func (r FirewallEditParams) MarshalJSON() (data []byte, err error) {
 type FirewallEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Firewall              `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  Firewall                            `json:"result"`
 	JSON    firewallEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -513,8 +534,8 @@ type FirewallEditResponseEnvelope struct {
 type firewallEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -550,9 +571,9 @@ type FirewallGetParams struct {
 type FirewallGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Firewall              `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Firewall                           `json:"result"`
 	JSON    firewallGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -561,8 +582,8 @@ type FirewallGetResponseEnvelope struct {
 type firewallGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

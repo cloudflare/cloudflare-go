@@ -38,7 +38,7 @@ func NewBillingHistoryService(opts ...option.RequestOption) (r *BillingHistorySe
 // Accesses your billing history object.
 func (r *BillingHistoryService) List(ctx context.Context, query BillingHistoryListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[BillingHistory], err error) {
 	var raw *http.Response
-	opts = append(r.Options, opts...)
+	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/billing/history"
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
@@ -142,7 +142,7 @@ type BillingHistoryListParams struct {
 func (r BillingHistoryListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

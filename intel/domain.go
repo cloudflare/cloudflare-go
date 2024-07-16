@@ -40,8 +40,8 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 
 // Get Domain Details
 func (r *DomainService) Get(ctx context.Context, params DomainGetParams, opts ...option.RequestOption) (res *Domain, err error) {
-	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -239,7 +239,7 @@ type DomainGetParams struct {
 func (r DomainGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

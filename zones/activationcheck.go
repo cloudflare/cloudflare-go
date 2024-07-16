@@ -37,8 +37,8 @@ func NewActivationCheckService(opts ...option.RequestOption) (r *ActivationCheck
 // Triggeres a new activation check for a PENDING Zone. This can be triggered every
 // 5 min for paygo/ent customers, every hour for FREE Zones.
 func (r *ActivationCheckService) Trigger(ctx context.Context, body ActivationCheckTriggerParams, opts ...option.RequestOption) (res *ActivationCheckTriggerResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env ActivationCheckTriggerResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return

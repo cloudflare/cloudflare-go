@@ -29,9 +29,9 @@ func TestRiskScoringIntegrationReferenceGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.RiskScoring.Integrations.References.Get(
 		context.TODO(),
-		"string",
+		"reference_id",
 		zero_trust.RiskScoringIntegrationReferenceGetParams{
-			AccountID: cloudflare.F("string"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

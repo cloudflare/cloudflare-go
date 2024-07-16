@@ -47,8 +47,8 @@ func NewRiskScoringService(opts ...option.RequestOption) (r *RiskScoringService)
 
 // Get risk event/score information for a specific user
 func (r *RiskScoringService) Get(ctx context.Context, accountIdentifier string, userID string, query RiskScoringGetParams, opts ...option.RequestOption) (res *RiskScoringGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RiskScoringGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -68,8 +68,8 @@ func (r *RiskScoringService) Get(ctx context.Context, accountIdentifier string, 
 
 // Clear the risk score for a particular user
 func (r *RiskScoringService) Reset(ctx context.Context, accountIdentifier string, userID string, opts ...option.RequestOption) (res *RiskScoringResetResponseUnion, err error) {
-	opts = append(r.Options[:], opts...)
 	var env RiskScoringResetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
 		err = errors.New("missing required account_identifier parameter")
 		return
@@ -205,7 +205,7 @@ type RiskScoringGetParams struct {
 func (r RiskScoringGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 

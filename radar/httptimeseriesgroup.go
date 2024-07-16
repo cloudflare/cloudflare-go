@@ -39,8 +39,8 @@ func NewHTTPTimeseriesGroupService(opts ...option.RequestOption) (r *HTTPTimeser
 // https://developers.cloudflare.com/radar/concepts/bot-classes/ for more
 // information.
 func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTimeseriesGroupBotClassParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBotClassResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupBotClassResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/bot_class"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -53,8 +53,8 @@ func (r *HTTPTimeseriesGroupService) BotClass(ctx context.Context, query HTTPTim
 // Get a time series of the percentage distribution of traffic of the top user
 // agents.
 func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTimeseriesGroupBrowserParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBrowserResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupBrowserResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/browser"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -67,8 +67,8 @@ func (r *HTTPTimeseriesGroupService) Browser(ctx context.Context, query HTTPTime
 // Get a time series of the percentage distribution of traffic of the top user
 // agents aggregated in families.
 func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HTTPTimeseriesGroupBrowserFamilyParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupBrowserFamilyResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupBrowserFamilyResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/browser_family"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -80,8 +80,8 @@ func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HT
 
 // Get a time series of the percentage distribution of traffic per device type.
 func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPTimeseriesGroupDeviceTypeParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupDeviceTypeResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupDeviceTypeResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/device_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -93,8 +93,8 @@ func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPT
 
 // Get a time series of the percentage distribution of traffic per HTTP protocol.
 func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTTPTimeseriesGroupHTTPProtocolParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPProtocolResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupHTTPProtocolResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/http_protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -107,8 +107,8 @@ func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTT
 // Get a time series of the percentage distribution of traffic per HTTP protocol
 // version.
 func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTPTimeseriesGroupHTTPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupHTTPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/http_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -121,8 +121,8 @@ func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTP
 // Get a time series of the percentage distribution of traffic per IP protocol
 // version.
 func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupIPVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupIPVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -135,8 +135,8 @@ func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTi
 // Get a time series of the percentage distribution of traffic of the top operating
 // systems.
 func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeseriesGroupOSParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupOSResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupOSResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/os"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -149,8 +149,8 @@ func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeserie
 // Get a time series of the percentage distribution of traffic per Post Quantum
 // suport.
 func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTPTimeseriesGroupPostQuantumParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupPostQuantumResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupPostQuantumResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/post_quantum"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -163,8 +163,8 @@ func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTP
 // Get a time series of the percentage distribution of traffic per TLS protocol
 // version.
 func (r *HTTPTimeseriesGroupService) TLSVersion(ctx context.Context, query HTTPTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupTLSVersionResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPTimeseriesGroupTLSVersionResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := "radar/http/timeseries_groups/tls_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -673,7 +673,7 @@ type HTTPTimeseriesGroupBotClassParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesGroupBotClassParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -703,7 +703,7 @@ type HTTPTimeseriesGroupBotClassParams struct {
 func (r HTTPTimeseriesGroupBotClassParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -722,34 +722,6 @@ const (
 func (r HTTPTimeseriesGroupBotClassParamsAggInterval) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupBotClassParamsAggInterval15m, HTTPTimeseriesGroupBotClassParamsAggInterval1h, HTTPTimeseriesGroupBotClassParamsAggInterval1d, HTTPTimeseriesGroupBotClassParamsAggInterval1w:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesGroupBotClassParamsDateRange string
-
-const (
-	HTTPTimeseriesGroupBotClassParamsDateRange1d         HTTPTimeseriesGroupBotClassParamsDateRange = "1d"
-	HTTPTimeseriesGroupBotClassParamsDateRange2d         HTTPTimeseriesGroupBotClassParamsDateRange = "2d"
-	HTTPTimeseriesGroupBotClassParamsDateRange7d         HTTPTimeseriesGroupBotClassParamsDateRange = "7d"
-	HTTPTimeseriesGroupBotClassParamsDateRange14d        HTTPTimeseriesGroupBotClassParamsDateRange = "14d"
-	HTTPTimeseriesGroupBotClassParamsDateRange28d        HTTPTimeseriesGroupBotClassParamsDateRange = "28d"
-	HTTPTimeseriesGroupBotClassParamsDateRange12w        HTTPTimeseriesGroupBotClassParamsDateRange = "12w"
-	HTTPTimeseriesGroupBotClassParamsDateRange24w        HTTPTimeseriesGroupBotClassParamsDateRange = "24w"
-	HTTPTimeseriesGroupBotClassParamsDateRange52w        HTTPTimeseriesGroupBotClassParamsDateRange = "52w"
-	HTTPTimeseriesGroupBotClassParamsDateRange1dControl  HTTPTimeseriesGroupBotClassParamsDateRange = "1dControl"
-	HTTPTimeseriesGroupBotClassParamsDateRange2dControl  HTTPTimeseriesGroupBotClassParamsDateRange = "2dControl"
-	HTTPTimeseriesGroupBotClassParamsDateRange7dControl  HTTPTimeseriesGroupBotClassParamsDateRange = "7dControl"
-	HTTPTimeseriesGroupBotClassParamsDateRange14dControl HTTPTimeseriesGroupBotClassParamsDateRange = "14dControl"
-	HTTPTimeseriesGroupBotClassParamsDateRange28dControl HTTPTimeseriesGroupBotClassParamsDateRange = "28dControl"
-	HTTPTimeseriesGroupBotClassParamsDateRange12wControl HTTPTimeseriesGroupBotClassParamsDateRange = "12wControl"
-	HTTPTimeseriesGroupBotClassParamsDateRange24wControl HTTPTimeseriesGroupBotClassParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesGroupBotClassParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesGroupBotClassParamsDateRange1d, HTTPTimeseriesGroupBotClassParamsDateRange2d, HTTPTimeseriesGroupBotClassParamsDateRange7d, HTTPTimeseriesGroupBotClassParamsDateRange14d, HTTPTimeseriesGroupBotClassParamsDateRange28d, HTTPTimeseriesGroupBotClassParamsDateRange12w, HTTPTimeseriesGroupBotClassParamsDateRange24w, HTTPTimeseriesGroupBotClassParamsDateRange52w, HTTPTimeseriesGroupBotClassParamsDateRange1dControl, HTTPTimeseriesGroupBotClassParamsDateRange2dControl, HTTPTimeseriesGroupBotClassParamsDateRange7dControl, HTTPTimeseriesGroupBotClassParamsDateRange14dControl, HTTPTimeseriesGroupBotClassParamsDateRange28dControl, HTTPTimeseriesGroupBotClassParamsDateRange12wControl, HTTPTimeseriesGroupBotClassParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -915,7 +887,7 @@ type HTTPTimeseriesGroupBrowserParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesGroupBrowserParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -948,7 +920,7 @@ type HTTPTimeseriesGroupBrowserParams struct {
 func (r HTTPTimeseriesGroupBrowserParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -982,34 +954,6 @@ const (
 func (r HTTPTimeseriesGroupBrowserParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupBrowserParamsBotClassLikelyAutomated, HTTPTimeseriesGroupBrowserParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesGroupBrowserParamsDateRange string
-
-const (
-	HTTPTimeseriesGroupBrowserParamsDateRange1d         HTTPTimeseriesGroupBrowserParamsDateRange = "1d"
-	HTTPTimeseriesGroupBrowserParamsDateRange2d         HTTPTimeseriesGroupBrowserParamsDateRange = "2d"
-	HTTPTimeseriesGroupBrowserParamsDateRange7d         HTTPTimeseriesGroupBrowserParamsDateRange = "7d"
-	HTTPTimeseriesGroupBrowserParamsDateRange14d        HTTPTimeseriesGroupBrowserParamsDateRange = "14d"
-	HTTPTimeseriesGroupBrowserParamsDateRange28d        HTTPTimeseriesGroupBrowserParamsDateRange = "28d"
-	HTTPTimeseriesGroupBrowserParamsDateRange12w        HTTPTimeseriesGroupBrowserParamsDateRange = "12w"
-	HTTPTimeseriesGroupBrowserParamsDateRange24w        HTTPTimeseriesGroupBrowserParamsDateRange = "24w"
-	HTTPTimeseriesGroupBrowserParamsDateRange52w        HTTPTimeseriesGroupBrowserParamsDateRange = "52w"
-	HTTPTimeseriesGroupBrowserParamsDateRange1dControl  HTTPTimeseriesGroupBrowserParamsDateRange = "1dControl"
-	HTTPTimeseriesGroupBrowserParamsDateRange2dControl  HTTPTimeseriesGroupBrowserParamsDateRange = "2dControl"
-	HTTPTimeseriesGroupBrowserParamsDateRange7dControl  HTTPTimeseriesGroupBrowserParamsDateRange = "7dControl"
-	HTTPTimeseriesGroupBrowserParamsDateRange14dControl HTTPTimeseriesGroupBrowserParamsDateRange = "14dControl"
-	HTTPTimeseriesGroupBrowserParamsDateRange28dControl HTTPTimeseriesGroupBrowserParamsDateRange = "28dControl"
-	HTTPTimeseriesGroupBrowserParamsDateRange12wControl HTTPTimeseriesGroupBrowserParamsDateRange = "12wControl"
-	HTTPTimeseriesGroupBrowserParamsDateRange24wControl HTTPTimeseriesGroupBrowserParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesGroupBrowserParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesGroupBrowserParamsDateRange1d, HTTPTimeseriesGroupBrowserParamsDateRange2d, HTTPTimeseriesGroupBrowserParamsDateRange7d, HTTPTimeseriesGroupBrowserParamsDateRange14d, HTTPTimeseriesGroupBrowserParamsDateRange28d, HTTPTimeseriesGroupBrowserParamsDateRange12w, HTTPTimeseriesGroupBrowserParamsDateRange24w, HTTPTimeseriesGroupBrowserParamsDateRange52w, HTTPTimeseriesGroupBrowserParamsDateRange1dControl, HTTPTimeseriesGroupBrowserParamsDateRange2dControl, HTTPTimeseriesGroupBrowserParamsDateRange7dControl, HTTPTimeseriesGroupBrowserParamsDateRange14dControl, HTTPTimeseriesGroupBrowserParamsDateRange28dControl, HTTPTimeseriesGroupBrowserParamsDateRange12wControl, HTTPTimeseriesGroupBrowserParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1175,7 +1119,7 @@ type HTTPTimeseriesGroupBrowserFamilyParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesGroupBrowserFamilyParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -1205,7 +1149,7 @@ type HTTPTimeseriesGroupBrowserFamilyParams struct {
 func (r HTTPTimeseriesGroupBrowserFamilyParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1239,34 +1183,6 @@ const (
 func (r HTTPTimeseriesGroupBrowserFamilyParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupBrowserFamilyParamsBotClassLikelyAutomated, HTTPTimeseriesGroupBrowserFamilyParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesGroupBrowserFamilyParamsDateRange string
-
-const (
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange1d         HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "1d"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange2d         HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "2d"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange7d         HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "7d"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange14d        HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "14d"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange28d        HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "28d"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange12w        HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "12w"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange24w        HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "24w"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange52w        HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "52w"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange1dControl  HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "1dControl"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange2dControl  HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "2dControl"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange7dControl  HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "7dControl"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange14dControl HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "14dControl"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange28dControl HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "28dControl"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange12wControl HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "12wControl"
-	HTTPTimeseriesGroupBrowserFamilyParamsDateRange24wControl HTTPTimeseriesGroupBrowserFamilyParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesGroupBrowserFamilyParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesGroupBrowserFamilyParamsDateRange1d, HTTPTimeseriesGroupBrowserFamilyParamsDateRange2d, HTTPTimeseriesGroupBrowserFamilyParamsDateRange7d, HTTPTimeseriesGroupBrowserFamilyParamsDateRange14d, HTTPTimeseriesGroupBrowserFamilyParamsDateRange28d, HTTPTimeseriesGroupBrowserFamilyParamsDateRange12w, HTTPTimeseriesGroupBrowserFamilyParamsDateRange24w, HTTPTimeseriesGroupBrowserFamilyParamsDateRange52w, HTTPTimeseriesGroupBrowserFamilyParamsDateRange1dControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange2dControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange7dControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange14dControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange28dControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange12wControl, HTTPTimeseriesGroupBrowserFamilyParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1432,7 +1348,7 @@ type HTTPTimeseriesGroupDeviceTypeParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesGroupDeviceTypeParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
@@ -1460,7 +1376,7 @@ type HTTPTimeseriesGroupDeviceTypeParams struct {
 func (r HTTPTimeseriesGroupDeviceTypeParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1494,34 +1410,6 @@ const (
 func (r HTTPTimeseriesGroupDeviceTypeParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupDeviceTypeParamsBotClassLikelyAutomated, HTTPTimeseriesGroupDeviceTypeParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesGroupDeviceTypeParamsDateRange string
-
-const (
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange1d         HTTPTimeseriesGroupDeviceTypeParamsDateRange = "1d"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange2d         HTTPTimeseriesGroupDeviceTypeParamsDateRange = "2d"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange7d         HTTPTimeseriesGroupDeviceTypeParamsDateRange = "7d"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange14d        HTTPTimeseriesGroupDeviceTypeParamsDateRange = "14d"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange28d        HTTPTimeseriesGroupDeviceTypeParamsDateRange = "28d"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange12w        HTTPTimeseriesGroupDeviceTypeParamsDateRange = "12w"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange24w        HTTPTimeseriesGroupDeviceTypeParamsDateRange = "24w"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange52w        HTTPTimeseriesGroupDeviceTypeParamsDateRange = "52w"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange1dControl  HTTPTimeseriesGroupDeviceTypeParamsDateRange = "1dControl"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange2dControl  HTTPTimeseriesGroupDeviceTypeParamsDateRange = "2dControl"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange7dControl  HTTPTimeseriesGroupDeviceTypeParamsDateRange = "7dControl"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange14dControl HTTPTimeseriesGroupDeviceTypeParamsDateRange = "14dControl"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange28dControl HTTPTimeseriesGroupDeviceTypeParamsDateRange = "28dControl"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange12wControl HTTPTimeseriesGroupDeviceTypeParamsDateRange = "12wControl"
-	HTTPTimeseriesGroupDeviceTypeParamsDateRange24wControl HTTPTimeseriesGroupDeviceTypeParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesGroupDeviceTypeParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesGroupDeviceTypeParamsDateRange1d, HTTPTimeseriesGroupDeviceTypeParamsDateRange2d, HTTPTimeseriesGroupDeviceTypeParamsDateRange7d, HTTPTimeseriesGroupDeviceTypeParamsDateRange14d, HTTPTimeseriesGroupDeviceTypeParamsDateRange28d, HTTPTimeseriesGroupDeviceTypeParamsDateRange12w, HTTPTimeseriesGroupDeviceTypeParamsDateRange24w, HTTPTimeseriesGroupDeviceTypeParamsDateRange52w, HTTPTimeseriesGroupDeviceTypeParamsDateRange1dControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange2dControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange7dControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange14dControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange28dControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange12wControl, HTTPTimeseriesGroupDeviceTypeParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1671,7 +1559,7 @@ type HTTPTimeseriesGroupHTTPProtocolParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesGroupHTTPProtocolParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -1699,7 +1587,7 @@ type HTTPTimeseriesGroupHTTPProtocolParams struct {
 func (r HTTPTimeseriesGroupHTTPProtocolParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1733,34 +1621,6 @@ const (
 func (r HTTPTimeseriesGroupHTTPProtocolParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupHTTPProtocolParamsBotClassLikelyAutomated, HTTPTimeseriesGroupHTTPProtocolParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesGroupHTTPProtocolParamsDateRange string
-
-const (
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange1d         HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "1d"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange2d         HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "2d"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange7d         HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "7d"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange14d        HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "14d"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange28d        HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "28d"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange12w        HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "12w"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange24w        HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "24w"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange52w        HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "52w"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange1dControl  HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "1dControl"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange2dControl  HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "2dControl"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange7dControl  HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "7dControl"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange14dControl HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "14dControl"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange28dControl HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "28dControl"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange12wControl HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "12wControl"
-	HTTPTimeseriesGroupHTTPProtocolParamsDateRange24wControl HTTPTimeseriesGroupHTTPProtocolParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesGroupHTTPProtocolParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesGroupHTTPProtocolParamsDateRange1d, HTTPTimeseriesGroupHTTPProtocolParamsDateRange2d, HTTPTimeseriesGroupHTTPProtocolParamsDateRange7d, HTTPTimeseriesGroupHTTPProtocolParamsDateRange14d, HTTPTimeseriesGroupHTTPProtocolParamsDateRange28d, HTTPTimeseriesGroupHTTPProtocolParamsDateRange12w, HTTPTimeseriesGroupHTTPProtocolParamsDateRange24w, HTTPTimeseriesGroupHTTPProtocolParamsDateRange52w, HTTPTimeseriesGroupHTTPProtocolParamsDateRange1dControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange2dControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange7dControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange14dControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange28dControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange12wControl, HTTPTimeseriesGroupHTTPProtocolParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -1911,7 +1771,7 @@ type HTTPTimeseriesGroupHTTPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesGroupHTTPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -1939,7 +1799,7 @@ type HTTPTimeseriesGroupHTTPVersionParams struct {
 func (r HTTPTimeseriesGroupHTTPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -1973,34 +1833,6 @@ const (
 func (r HTTPTimeseriesGroupHTTPVersionParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupHTTPVersionParamsBotClassLikelyAutomated, HTTPTimeseriesGroupHTTPVersionParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesGroupHTTPVersionParamsDateRange string
-
-const (
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange1d         HTTPTimeseriesGroupHTTPVersionParamsDateRange = "1d"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange2d         HTTPTimeseriesGroupHTTPVersionParamsDateRange = "2d"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange7d         HTTPTimeseriesGroupHTTPVersionParamsDateRange = "7d"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange14d        HTTPTimeseriesGroupHTTPVersionParamsDateRange = "14d"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange28d        HTTPTimeseriesGroupHTTPVersionParamsDateRange = "28d"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange12w        HTTPTimeseriesGroupHTTPVersionParamsDateRange = "12w"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange24w        HTTPTimeseriesGroupHTTPVersionParamsDateRange = "24w"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange52w        HTTPTimeseriesGroupHTTPVersionParamsDateRange = "52w"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange1dControl  HTTPTimeseriesGroupHTTPVersionParamsDateRange = "1dControl"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange2dControl  HTTPTimeseriesGroupHTTPVersionParamsDateRange = "2dControl"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange7dControl  HTTPTimeseriesGroupHTTPVersionParamsDateRange = "7dControl"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange14dControl HTTPTimeseriesGroupHTTPVersionParamsDateRange = "14dControl"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange28dControl HTTPTimeseriesGroupHTTPVersionParamsDateRange = "28dControl"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange12wControl HTTPTimeseriesGroupHTTPVersionParamsDateRange = "12wControl"
-	HTTPTimeseriesGroupHTTPVersionParamsDateRange24wControl HTTPTimeseriesGroupHTTPVersionParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesGroupHTTPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesGroupHTTPVersionParamsDateRange1d, HTTPTimeseriesGroupHTTPVersionParamsDateRange2d, HTTPTimeseriesGroupHTTPVersionParamsDateRange7d, HTTPTimeseriesGroupHTTPVersionParamsDateRange14d, HTTPTimeseriesGroupHTTPVersionParamsDateRange28d, HTTPTimeseriesGroupHTTPVersionParamsDateRange12w, HTTPTimeseriesGroupHTTPVersionParamsDateRange24w, HTTPTimeseriesGroupHTTPVersionParamsDateRange52w, HTTPTimeseriesGroupHTTPVersionParamsDateRange1dControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange2dControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange7dControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange14dControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange28dControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange12wControl, HTTPTimeseriesGroupHTTPVersionParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2150,7 +1982,7 @@ type HTTPTimeseriesGroupIPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesGroupIPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -2178,7 +2010,7 @@ type HTTPTimeseriesGroupIPVersionParams struct {
 func (r HTTPTimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2212,34 +2044,6 @@ const (
 func (r HTTPTimeseriesGroupIPVersionParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupIPVersionParamsBotClassLikelyAutomated, HTTPTimeseriesGroupIPVersionParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesGroupIPVersionParamsDateRange string
-
-const (
-	HTTPTimeseriesGroupIPVersionParamsDateRange1d         HTTPTimeseriesGroupIPVersionParamsDateRange = "1d"
-	HTTPTimeseriesGroupIPVersionParamsDateRange2d         HTTPTimeseriesGroupIPVersionParamsDateRange = "2d"
-	HTTPTimeseriesGroupIPVersionParamsDateRange7d         HTTPTimeseriesGroupIPVersionParamsDateRange = "7d"
-	HTTPTimeseriesGroupIPVersionParamsDateRange14d        HTTPTimeseriesGroupIPVersionParamsDateRange = "14d"
-	HTTPTimeseriesGroupIPVersionParamsDateRange28d        HTTPTimeseriesGroupIPVersionParamsDateRange = "28d"
-	HTTPTimeseriesGroupIPVersionParamsDateRange12w        HTTPTimeseriesGroupIPVersionParamsDateRange = "12w"
-	HTTPTimeseriesGroupIPVersionParamsDateRange24w        HTTPTimeseriesGroupIPVersionParamsDateRange = "24w"
-	HTTPTimeseriesGroupIPVersionParamsDateRange52w        HTTPTimeseriesGroupIPVersionParamsDateRange = "52w"
-	HTTPTimeseriesGroupIPVersionParamsDateRange1dControl  HTTPTimeseriesGroupIPVersionParamsDateRange = "1dControl"
-	HTTPTimeseriesGroupIPVersionParamsDateRange2dControl  HTTPTimeseriesGroupIPVersionParamsDateRange = "2dControl"
-	HTTPTimeseriesGroupIPVersionParamsDateRange7dControl  HTTPTimeseriesGroupIPVersionParamsDateRange = "7dControl"
-	HTTPTimeseriesGroupIPVersionParamsDateRange14dControl HTTPTimeseriesGroupIPVersionParamsDateRange = "14dControl"
-	HTTPTimeseriesGroupIPVersionParamsDateRange28dControl HTTPTimeseriesGroupIPVersionParamsDateRange = "28dControl"
-	HTTPTimeseriesGroupIPVersionParamsDateRange12wControl HTTPTimeseriesGroupIPVersionParamsDateRange = "12wControl"
-	HTTPTimeseriesGroupIPVersionParamsDateRange24wControl HTTPTimeseriesGroupIPVersionParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesGroupIPVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesGroupIPVersionParamsDateRange1d, HTTPTimeseriesGroupIPVersionParamsDateRange2d, HTTPTimeseriesGroupIPVersionParamsDateRange7d, HTTPTimeseriesGroupIPVersionParamsDateRange14d, HTTPTimeseriesGroupIPVersionParamsDateRange28d, HTTPTimeseriesGroupIPVersionParamsDateRange12w, HTTPTimeseriesGroupIPVersionParamsDateRange24w, HTTPTimeseriesGroupIPVersionParamsDateRange52w, HTTPTimeseriesGroupIPVersionParamsDateRange1dControl, HTTPTimeseriesGroupIPVersionParamsDateRange2dControl, HTTPTimeseriesGroupIPVersionParamsDateRange7dControl, HTTPTimeseriesGroupIPVersionParamsDateRange14dControl, HTTPTimeseriesGroupIPVersionParamsDateRange28dControl, HTTPTimeseriesGroupIPVersionParamsDateRange12wControl, HTTPTimeseriesGroupIPVersionParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2390,7 +2194,7 @@ type HTTPTimeseriesGroupOSParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesGroupOSParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -2418,7 +2222,7 @@ type HTTPTimeseriesGroupOSParams struct {
 func (r HTTPTimeseriesGroupOSParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2452,34 +2256,6 @@ const (
 func (r HTTPTimeseriesGroupOSParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupOSParamsBotClassLikelyAutomated, HTTPTimeseriesGroupOSParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesGroupOSParamsDateRange string
-
-const (
-	HTTPTimeseriesGroupOSParamsDateRange1d         HTTPTimeseriesGroupOSParamsDateRange = "1d"
-	HTTPTimeseriesGroupOSParamsDateRange2d         HTTPTimeseriesGroupOSParamsDateRange = "2d"
-	HTTPTimeseriesGroupOSParamsDateRange7d         HTTPTimeseriesGroupOSParamsDateRange = "7d"
-	HTTPTimeseriesGroupOSParamsDateRange14d        HTTPTimeseriesGroupOSParamsDateRange = "14d"
-	HTTPTimeseriesGroupOSParamsDateRange28d        HTTPTimeseriesGroupOSParamsDateRange = "28d"
-	HTTPTimeseriesGroupOSParamsDateRange12w        HTTPTimeseriesGroupOSParamsDateRange = "12w"
-	HTTPTimeseriesGroupOSParamsDateRange24w        HTTPTimeseriesGroupOSParamsDateRange = "24w"
-	HTTPTimeseriesGroupOSParamsDateRange52w        HTTPTimeseriesGroupOSParamsDateRange = "52w"
-	HTTPTimeseriesGroupOSParamsDateRange1dControl  HTTPTimeseriesGroupOSParamsDateRange = "1dControl"
-	HTTPTimeseriesGroupOSParamsDateRange2dControl  HTTPTimeseriesGroupOSParamsDateRange = "2dControl"
-	HTTPTimeseriesGroupOSParamsDateRange7dControl  HTTPTimeseriesGroupOSParamsDateRange = "7dControl"
-	HTTPTimeseriesGroupOSParamsDateRange14dControl HTTPTimeseriesGroupOSParamsDateRange = "14dControl"
-	HTTPTimeseriesGroupOSParamsDateRange28dControl HTTPTimeseriesGroupOSParamsDateRange = "28dControl"
-	HTTPTimeseriesGroupOSParamsDateRange12wControl HTTPTimeseriesGroupOSParamsDateRange = "12wControl"
-	HTTPTimeseriesGroupOSParamsDateRange24wControl HTTPTimeseriesGroupOSParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesGroupOSParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesGroupOSParamsDateRange1d, HTTPTimeseriesGroupOSParamsDateRange2d, HTTPTimeseriesGroupOSParamsDateRange7d, HTTPTimeseriesGroupOSParamsDateRange14d, HTTPTimeseriesGroupOSParamsDateRange28d, HTTPTimeseriesGroupOSParamsDateRange12w, HTTPTimeseriesGroupOSParamsDateRange24w, HTTPTimeseriesGroupOSParamsDateRange52w, HTTPTimeseriesGroupOSParamsDateRange1dControl, HTTPTimeseriesGroupOSParamsDateRange2dControl, HTTPTimeseriesGroupOSParamsDateRange7dControl, HTTPTimeseriesGroupOSParamsDateRange14dControl, HTTPTimeseriesGroupOSParamsDateRange28dControl, HTTPTimeseriesGroupOSParamsDateRange12wControl, HTTPTimeseriesGroupOSParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2625,7 +2401,7 @@ type HTTPTimeseriesGroupPostQuantumParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesGroupPostQuantumParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -2655,7 +2431,7 @@ type HTTPTimeseriesGroupPostQuantumParams struct {
 func (r HTTPTimeseriesGroupPostQuantumParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2689,34 +2465,6 @@ const (
 func (r HTTPTimeseriesGroupPostQuantumParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupPostQuantumParamsBotClassLikelyAutomated, HTTPTimeseriesGroupPostQuantumParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesGroupPostQuantumParamsDateRange string
-
-const (
-	HTTPTimeseriesGroupPostQuantumParamsDateRange1d         HTTPTimeseriesGroupPostQuantumParamsDateRange = "1d"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange2d         HTTPTimeseriesGroupPostQuantumParamsDateRange = "2d"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange7d         HTTPTimeseriesGroupPostQuantumParamsDateRange = "7d"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange14d        HTTPTimeseriesGroupPostQuantumParamsDateRange = "14d"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange28d        HTTPTimeseriesGroupPostQuantumParamsDateRange = "28d"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange12w        HTTPTimeseriesGroupPostQuantumParamsDateRange = "12w"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange24w        HTTPTimeseriesGroupPostQuantumParamsDateRange = "24w"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange52w        HTTPTimeseriesGroupPostQuantumParamsDateRange = "52w"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange1dControl  HTTPTimeseriesGroupPostQuantumParamsDateRange = "1dControl"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange2dControl  HTTPTimeseriesGroupPostQuantumParamsDateRange = "2dControl"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange7dControl  HTTPTimeseriesGroupPostQuantumParamsDateRange = "7dControl"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange14dControl HTTPTimeseriesGroupPostQuantumParamsDateRange = "14dControl"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange28dControl HTTPTimeseriesGroupPostQuantumParamsDateRange = "28dControl"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange12wControl HTTPTimeseriesGroupPostQuantumParamsDateRange = "12wControl"
-	HTTPTimeseriesGroupPostQuantumParamsDateRange24wControl HTTPTimeseriesGroupPostQuantumParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesGroupPostQuantumParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesGroupPostQuantumParamsDateRange1d, HTTPTimeseriesGroupPostQuantumParamsDateRange2d, HTTPTimeseriesGroupPostQuantumParamsDateRange7d, HTTPTimeseriesGroupPostQuantumParamsDateRange14d, HTTPTimeseriesGroupPostQuantumParamsDateRange28d, HTTPTimeseriesGroupPostQuantumParamsDateRange12w, HTTPTimeseriesGroupPostQuantumParamsDateRange24w, HTTPTimeseriesGroupPostQuantumParamsDateRange52w, HTTPTimeseriesGroupPostQuantumParamsDateRange1dControl, HTTPTimeseriesGroupPostQuantumParamsDateRange2dControl, HTTPTimeseriesGroupPostQuantumParamsDateRange7dControl, HTTPTimeseriesGroupPostQuantumParamsDateRange14dControl, HTTPTimeseriesGroupPostQuantumParamsDateRange28dControl, HTTPTimeseriesGroupPostQuantumParamsDateRange12wControl, HTTPTimeseriesGroupPostQuantumParamsDateRange24wControl:
 		return true
 	}
 	return false
@@ -2882,7 +2630,7 @@ type HTTPTimeseriesGroupTLSVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPTimeseriesGroupTLSVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -2910,7 +2658,7 @@ type HTTPTimeseriesGroupTLSVersionParams struct {
 func (r HTTPTimeseriesGroupTLSVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -2944,34 +2692,6 @@ const (
 func (r HTTPTimeseriesGroupTLSVersionParamsBotClass) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesGroupTLSVersionParamsBotClassLikelyAutomated, HTTPTimeseriesGroupTLSVersionParamsBotClassLikelyHuman:
-		return true
-	}
-	return false
-}
-
-type HTTPTimeseriesGroupTLSVersionParamsDateRange string
-
-const (
-	HTTPTimeseriesGroupTLSVersionParamsDateRange1d         HTTPTimeseriesGroupTLSVersionParamsDateRange = "1d"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange2d         HTTPTimeseriesGroupTLSVersionParamsDateRange = "2d"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange7d         HTTPTimeseriesGroupTLSVersionParamsDateRange = "7d"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange14d        HTTPTimeseriesGroupTLSVersionParamsDateRange = "14d"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange28d        HTTPTimeseriesGroupTLSVersionParamsDateRange = "28d"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange12w        HTTPTimeseriesGroupTLSVersionParamsDateRange = "12w"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange24w        HTTPTimeseriesGroupTLSVersionParamsDateRange = "24w"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange52w        HTTPTimeseriesGroupTLSVersionParamsDateRange = "52w"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange1dControl  HTTPTimeseriesGroupTLSVersionParamsDateRange = "1dControl"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange2dControl  HTTPTimeseriesGroupTLSVersionParamsDateRange = "2dControl"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange7dControl  HTTPTimeseriesGroupTLSVersionParamsDateRange = "7dControl"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange14dControl HTTPTimeseriesGroupTLSVersionParamsDateRange = "14dControl"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange28dControl HTTPTimeseriesGroupTLSVersionParamsDateRange = "28dControl"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange12wControl HTTPTimeseriesGroupTLSVersionParamsDateRange = "12wControl"
-	HTTPTimeseriesGroupTLSVersionParamsDateRange24wControl HTTPTimeseriesGroupTLSVersionParamsDateRange = "24wControl"
-)
-
-func (r HTTPTimeseriesGroupTLSVersionParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPTimeseriesGroupTLSVersionParamsDateRange1d, HTTPTimeseriesGroupTLSVersionParamsDateRange2d, HTTPTimeseriesGroupTLSVersionParamsDateRange7d, HTTPTimeseriesGroupTLSVersionParamsDateRange14d, HTTPTimeseriesGroupTLSVersionParamsDateRange28d, HTTPTimeseriesGroupTLSVersionParamsDateRange12w, HTTPTimeseriesGroupTLSVersionParamsDateRange24w, HTTPTimeseriesGroupTLSVersionParamsDateRange52w, HTTPTimeseriesGroupTLSVersionParamsDateRange1dControl, HTTPTimeseriesGroupTLSVersionParamsDateRange2dControl, HTTPTimeseriesGroupTLSVersionParamsDateRange7dControl, HTTPTimeseriesGroupTLSVersionParamsDateRange14dControl, HTTPTimeseriesGroupTLSVersionParamsDateRange28dControl, HTTPTimeseriesGroupTLSVersionParamsDateRange12wControl, HTTPTimeseriesGroupTLSVersionParamsDateRange24wControl:
 		return true
 	}
 	return false

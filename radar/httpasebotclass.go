@@ -40,8 +40,8 @@ func NewHTTPAseBotClassService(opts ...option.RequestOption) (r *HTTPAseBotClass
 // [Bot Scores](https://developers.cloudflare.com/bots/concepts/bot-score) for more
 // information. Values are a percentage out of the total traffic.
 func (r *HTTPAseBotClassService) Get(ctx context.Context, botClass HTTPAseBotClassGetParamsBotClass, query HTTPAseBotClassGetParams, opts ...option.RequestOption) (res *HTTPAseBotClassGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
 	var env HTTPAseBotClassGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("radar/http/top/ases/bot_class/%v", botClass)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -151,7 +151,7 @@ type HTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                     `json:"dataSource,required"`
 	Description     string                                                     `json:"description,required"`
 	EventType       string                                                     `json:"eventType,required"`
-	IsInstantaneous interface{}                                                `json:"isInstantaneous,required"`
+	IsInstantaneous bool                                                       `json:"isInstantaneous,required"`
 	EndTime         time.Time                                                  `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                     `json:"linkedUrl"`
 	StartTime       time.Time                                                  `json:"startTime" format:"date-time"`
@@ -221,7 +221,7 @@ type HTTPAseBotClassGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]HTTPAseBotClassGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]string] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
@@ -253,7 +253,7 @@ type HTTPAseBotClassGetParams struct {
 func (r HTTPAseBotClassGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
+		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
@@ -285,34 +285,6 @@ const (
 func (r HTTPAseBotClassGetParamsBrowserFamily) IsKnown() bool {
 	switch r {
 	case HTTPAseBotClassGetParamsBrowserFamilyChrome, HTTPAseBotClassGetParamsBrowserFamilyEdge, HTTPAseBotClassGetParamsBrowserFamilyFirefox, HTTPAseBotClassGetParamsBrowserFamilySafari:
-		return true
-	}
-	return false
-}
-
-type HTTPAseBotClassGetParamsDateRange string
-
-const (
-	HTTPAseBotClassGetParamsDateRange1d         HTTPAseBotClassGetParamsDateRange = "1d"
-	HTTPAseBotClassGetParamsDateRange2d         HTTPAseBotClassGetParamsDateRange = "2d"
-	HTTPAseBotClassGetParamsDateRange7d         HTTPAseBotClassGetParamsDateRange = "7d"
-	HTTPAseBotClassGetParamsDateRange14d        HTTPAseBotClassGetParamsDateRange = "14d"
-	HTTPAseBotClassGetParamsDateRange28d        HTTPAseBotClassGetParamsDateRange = "28d"
-	HTTPAseBotClassGetParamsDateRange12w        HTTPAseBotClassGetParamsDateRange = "12w"
-	HTTPAseBotClassGetParamsDateRange24w        HTTPAseBotClassGetParamsDateRange = "24w"
-	HTTPAseBotClassGetParamsDateRange52w        HTTPAseBotClassGetParamsDateRange = "52w"
-	HTTPAseBotClassGetParamsDateRange1dControl  HTTPAseBotClassGetParamsDateRange = "1dControl"
-	HTTPAseBotClassGetParamsDateRange2dControl  HTTPAseBotClassGetParamsDateRange = "2dControl"
-	HTTPAseBotClassGetParamsDateRange7dControl  HTTPAseBotClassGetParamsDateRange = "7dControl"
-	HTTPAseBotClassGetParamsDateRange14dControl HTTPAseBotClassGetParamsDateRange = "14dControl"
-	HTTPAseBotClassGetParamsDateRange28dControl HTTPAseBotClassGetParamsDateRange = "28dControl"
-	HTTPAseBotClassGetParamsDateRange12wControl HTTPAseBotClassGetParamsDateRange = "12wControl"
-	HTTPAseBotClassGetParamsDateRange24wControl HTTPAseBotClassGetParamsDateRange = "24wControl"
-)
-
-func (r HTTPAseBotClassGetParamsDateRange) IsKnown() bool {
-	switch r {
-	case HTTPAseBotClassGetParamsDateRange1d, HTTPAseBotClassGetParamsDateRange2d, HTTPAseBotClassGetParamsDateRange7d, HTTPAseBotClassGetParamsDateRange14d, HTTPAseBotClassGetParamsDateRange28d, HTTPAseBotClassGetParamsDateRange12w, HTTPAseBotClassGetParamsDateRange24w, HTTPAseBotClassGetParamsDateRange52w, HTTPAseBotClassGetParamsDateRange1dControl, HTTPAseBotClassGetParamsDateRange2dControl, HTTPAseBotClassGetParamsDateRange7dControl, HTTPAseBotClassGetParamsDateRange14dControl, HTTPAseBotClassGetParamsDateRange28dControl, HTTPAseBotClassGetParamsDateRange12wControl, HTTPAseBotClassGetParamsDateRange24wControl:
 		return true
 	}
 	return false

@@ -33,7 +33,7 @@ func TestAS112TimeseriesWithOptionalParams(t *testing.T) {
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]radar.AS112TimeseriesParamsDateRange{radar.AS112TimeseriesParamsDateRange1d, radar.AS112TimeseriesParamsDateRange2d, radar.AS112TimeseriesParamsDateRange7d}),
+		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:      cloudflare.F(radar.AS112TimeseriesParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
