@@ -320,8 +320,8 @@ type OperationSchemaValidationEditResponseEnvelope struct {
 	Messages Message                 `json:"messages,required"`
 	Result   SettingsMultipleRequest `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                                              `json:"success,required"`
-	JSON    operationSchemaValidationEditResponseEnvelopeJSON `json:"-"`
+	Success OperationSchemaValidationEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    operationSchemaValidationEditResponseEnvelopeJSON    `json:"-"`
 }
 
 // operationSchemaValidationEditResponseEnvelopeJSON contains the JSON metadata for
@@ -341,6 +341,21 @@ func (r *OperationSchemaValidationEditResponseEnvelope) UnmarshalJSON(data []byt
 
 func (r operationSchemaValidationEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type OperationSchemaValidationEditResponseEnvelopeSuccess bool
+
+const (
+	OperationSchemaValidationEditResponseEnvelopeSuccessTrue OperationSchemaValidationEditResponseEnvelopeSuccess = true
+)
+
+func (r OperationSchemaValidationEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OperationSchemaValidationEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type OperationSchemaValidationGetParams struct {

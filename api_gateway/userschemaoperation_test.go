@@ -37,8 +37,8 @@ func TestUserSchemaOperationListWithOptionalParams(t *testing.T) {
 			Host:            cloudflare.F([]string{"api.cloudflare.com"}),
 			Method:          cloudflare.F([]string{"GET"}),
 			OperationStatus: cloudflare.F(api_gateway.UserSchemaOperationListParamsOperationStatusNew),
-			Page:            cloudflare.F[any](map[string]interface{}{}),
-			PerPage:         cloudflare.F[any](map[string]interface{}{}),
+			Page:            cloudflare.F(int64(1)),
+			PerPage:         cloudflare.F(int64(5)),
 		},
 	)
 	if err != nil {

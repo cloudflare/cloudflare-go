@@ -73,8 +73,8 @@ func TestOperationListWithOptionalParams(t *testing.T) {
 		Host:      cloudflare.F([]string{"api.cloudflare.com"}),
 		Method:    cloudflare.F([]string{"GET"}),
 		Order:     cloudflare.F(api_gateway.OperationListParamsOrderMethod),
-		Page:      cloudflare.F[any](map[string]interface{}{}),
-		PerPage:   cloudflare.F(5.000000),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(5)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
