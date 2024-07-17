@@ -80,7 +80,8 @@ func (r *GatewayCertificateService) ListAutoPaging(ctx context.Context, query Ga
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
-// Deletes a gateway-managed Zero Trust certificate.
+// Deletes a gateway-managed Zero Trust certificate. A certificate must be
+// deactivated from the edge (inactive) before it is deleted.
 func (r *GatewayCertificateService) Delete(ctx context.Context, certificateID string, body GatewayCertificateDeleteParams, opts ...option.RequestOption) (res *GatewayCertificateDeleteResponse, err error) {
 	var env GatewayCertificateDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -125,7 +126,8 @@ func (r *GatewayCertificateService) Get(ctx context.Context, certificateID strin
 type GatewayCertificateNewResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
-	// The deployment status of the certificate on Cloudflare's edge.
+	// The deployment status of the certificate on Cloudflare's edge. Certificates in
+	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateNewResponseBindingStatus `json:"binding_status"`
 	CreatedAt     time.Time                                  `json:"created_at" format:"date-time"`
 	// Use this certificate for Gateway TLS interception
@@ -161,7 +163,8 @@ func (r gatewayCertificateNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The deployment status of the certificate on Cloudflare's edge.
+// The deployment status of the certificate on Cloudflare's edge. Certificates in
+// the 'active' state may be used for Gateway TLS interception.
 type GatewayCertificateNewResponseBindingStatus string
 
 const (
@@ -198,7 +201,8 @@ func (r GatewayCertificateNewResponseType) IsKnown() bool {
 type GatewayCertificateListResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
-	// The deployment status of the certificate on Cloudflare's edge.
+	// The deployment status of the certificate on Cloudflare's edge. Certificates in
+	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateListResponseBindingStatus `json:"binding_status"`
 	CreatedAt     time.Time                                   `json:"created_at" format:"date-time"`
 	// Use this certificate for Gateway TLS interception
@@ -234,7 +238,8 @@ func (r gatewayCertificateListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The deployment status of the certificate on Cloudflare's edge.
+// The deployment status of the certificate on Cloudflare's edge. Certificates in
+// the 'active' state may be used for Gateway TLS interception.
 type GatewayCertificateListResponseBindingStatus string
 
 const (
@@ -271,7 +276,8 @@ func (r GatewayCertificateListResponseType) IsKnown() bool {
 type GatewayCertificateDeleteResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
-	// The deployment status of the certificate on Cloudflare's edge.
+	// The deployment status of the certificate on Cloudflare's edge. Certificates in
+	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateDeleteResponseBindingStatus `json:"binding_status"`
 	CreatedAt     time.Time                                     `json:"created_at" format:"date-time"`
 	// Use this certificate for Gateway TLS interception
@@ -307,7 +313,8 @@ func (r gatewayCertificateDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The deployment status of the certificate on Cloudflare's edge.
+// The deployment status of the certificate on Cloudflare's edge. Certificates in
+// the 'active' state may be used for Gateway TLS interception.
 type GatewayCertificateDeleteResponseBindingStatus string
 
 const (
@@ -344,7 +351,8 @@ func (r GatewayCertificateDeleteResponseType) IsKnown() bool {
 type GatewayCertificateGetResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
-	// The deployment status of the certificate on Cloudflare's edge.
+	// The deployment status of the certificate on Cloudflare's edge. Certificates in
+	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateGetResponseBindingStatus `json:"binding_status"`
 	CreatedAt     time.Time                                  `json:"created_at" format:"date-time"`
 	// Use this certificate for Gateway TLS interception
@@ -380,7 +388,8 @@ func (r gatewayCertificateGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The deployment status of the certificate on Cloudflare's edge.
+// The deployment status of the certificate on Cloudflare's edge. Certificates in
+// the 'active' state may be used for Gateway TLS interception.
 type GatewayCertificateGetResponseBindingStatus string
 
 const (
