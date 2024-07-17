@@ -46,6 +46,8 @@ type TeamsAccountSettings struct {
 	ProtocolDetection     *TeamsProtocolDetection     `json:"protocol_detection,omitempty"`
 	BodyScanning          *TeamsBodyScanning          `json:"body_scanning,omitempty"`
 	ExtendedEmailMatching *TeamsExtendedEmailMatching `json:"extended_email_matching,omitempty"`
+	CustomCertificate     *TeamsCustomCertificate     `json:"custom_certificate,omitempty"`
+	Certificate           *TeamsCertificateSetting    `json:"certificate,omitempty"`
 }
 
 type BrowserIsolation struct {
@@ -103,6 +105,18 @@ type TeamsExtendedEmailMatching struct {
 	Enabled *bool `json:"enabled,omitempty"`
 }
 
+type TeamsCustomCertificate struct {
+	Enabled       *bool      `json:"enabled,omitempty"`
+	ID            string     `json:"id,omitempty"`
+	BindingStatus string     `json:"binding_status,omitempty"`
+	QsPackId      string     `json:"qs_pack_id,omitempty"`
+	UpdatedAt     *time.Time `json:"updated_at,omitempty"`
+}
+
+type TeamsCertificateSetting struct {
+	ID string `json:"id"`
+}
+
 type TeamsRuleType = string
 
 const (
@@ -122,9 +136,10 @@ type TeamsLoggingSettings struct {
 }
 
 type TeamsDeviceSettings struct {
-	GatewayProxyEnabled                bool `json:"gateway_proxy_enabled"`
-	GatewayProxyUDPEnabled             bool `json:"gateway_udp_proxy_enabled"`
-	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
+	GatewayProxyEnabled                bool  `json:"gateway_proxy_enabled"`
+	GatewayProxyUDPEnabled             bool  `json:"gateway_udp_proxy_enabled"`
+	RootCertificateInstallationEnabled bool  `json:"root_certificate_installation_enabled"`
+	UseZTVirtualIP                     *bool `json:"use_zt_virtual_ip"`
 }
 
 type TeamsDeviceSettingsResponse struct {
@@ -135,6 +150,16 @@ type TeamsDeviceSettingsResponse struct {
 type TeamsLoggingSettingsResponse struct {
 	Response
 	Result TeamsLoggingSettings `json:"result"`
+}
+
+type TeamsConnectivitySettings struct {
+	ICMPProxyEnabled   *bool `json:"icmp_proxy_enabled"`
+	OfframpWARPEnabled *bool `json:"offramp_warp_enabled"`
+}
+
+type TeamsAccountConnectivitySettingsResponse struct {
+	Response
+	Result TeamsConnectivitySettings `json:"result"`
 }
 
 // TeamsAccount returns teams account information with internal and external ID.
@@ -217,6 +242,26 @@ func (api *API) TeamsAccountLoggingConfiguration(ctx context.Context, accountID 
 	return teamsConfigResponse.Result, nil
 }
 
+// TeamsAccountConnectivityConfiguration returns zero trust account connectivity settings.
+//
+// API reference: https://developers.cloudflare.com/api/operations/zero-trust-accounts-get-connectivity-settings
+func (api *API) TeamsAccountConnectivityConfiguration(ctx context.Context, accountID string) (TeamsConnectivitySettings, error) {
+	uri := fmt.Sprintf("/accounts/%s/zerotrust/connectivity_settings", accountID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return TeamsConnectivitySettings{}, err
+	}
+
+	var teamsConnectivityResponse TeamsAccountConnectivitySettingsResponse
+	err = json.Unmarshal(res, &teamsConnectivityResponse)
+	if err != nil {
+		return TeamsConnectivitySettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return teamsConnectivityResponse.Result, nil
+}
+
 // TeamsAccountUpdateConfiguration updates a teams account configuration.
 //
 // API reference: TBA.
@@ -275,4 +320,24 @@ func (api *API) TeamsAccountDeviceUpdateConfiguration(ctx context.Context, accou
 	}
 
 	return teamsDeviceResponse.Result, nil
+}
+
+// TeamsAccountConnectivityUpdateConfiguration updates zero trust account connectivity settings.
+//
+// API reference: https://developers.cloudflare.com/api/operations/zero-trust-accounts-patch-connectivity-settings
+func (api *API) TeamsAccountConnectivityUpdateConfiguration(ctx context.Context, accountID string, settings TeamsConnectivitySettings) (TeamsConnectivitySettings, error) {
+	uri := fmt.Sprintf("/accounts/%s/zerotrust/connectivity_settings", accountID)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, settings)
+	if err != nil {
+		return TeamsConnectivitySettings{}, err
+	}
+
+	var teamsConnectivityResponse TeamsAccountConnectivitySettingsResponse
+	err = json.Unmarshal(res, &teamsConnectivityResponse)
+	if err != nil {
+		return TeamsConnectivitySettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return teamsConnectivityResponse.Result, nil
 }

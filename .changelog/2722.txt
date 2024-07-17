@@ -1,0 +1,3 @@
+```release-note:enhancement
+gateway_categories: add ListGatewayCategories which returns all gateway categories.
+```

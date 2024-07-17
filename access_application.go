@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -53,8 +54,11 @@ type AccessApplication struct {
 	ServiceAuth401Redirect   *bool                          `json:"service_auth_401_redirect,omitempty"`
 	PathCookieAttribute      *bool                          `json:"path_cookie_attribute,omitempty"`
 	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
+	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
+	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
+	Policies                 []AccessPolicy                 `json:"policies,omitempty"`
 	AccessAppLauncherCustomization
 }
 
@@ -73,6 +77,96 @@ type AccessApplicationCorsHeaders struct {
 	AllowAllOrigins  bool     `json:"allow_all_origins,omitempty"`
 	AllowCredentials bool     `json:"allow_credentials,omitempty"`
 	MaxAge           int      `json:"max_age,omitempty"`
+}
+
+// AccessApplicationSCIMConfig represents the configuration for provisioning to an Access Application via SCIM.
+type AccessApplicationSCIMConfig struct {
+	Enabled            *bool                                    `json:"enabled,omitempty"`
+	RemoteURI          string                                   `json:"remote_uri,omitempty"`
+	Authentication     *AccessApplicationScimAuthenticationJson `json:"authentication,omitempty"`
+	IdPUID             string                                   `json:"idp_uid,omitempty"`
+	DeactivateOnDelete *bool                                    `json:"deactivate_on_delete,omitempty"`
+	Mappings           []*AccessApplicationScimMapping          `json:"mappings,omitempty"`
+}
+
+type AccessApplicationScimAuthenticationScheme string
+
+const (
+	AccessApplicationScimAuthenticationSchemeHttpBasic        AccessApplicationScimAuthenticationScheme = "httpbasic"
+	AccessApplicationScimAuthenticationSchemeOauthBearerToken AccessApplicationScimAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationScimAuthenticationSchemeOauth2           AccessApplicationScimAuthenticationScheme = "oauth2"
+)
+
+type AccessApplicationScimAuthenticationJson struct {
+	Value AccessApplicationScimAuthentication
+}
+
+func (a *AccessApplicationScimAuthenticationJson) UnmarshalJSON(buf []byte) error {
+	var scheme baseScimAuthentication
+	if err := json.Unmarshal(buf, &scheme); err != nil {
+		return err
+	}
+
+	switch scheme.Scheme {
+	case AccessApplicationScimAuthenticationSchemeHttpBasic:
+		a.Value = new(AccessApplicationScimAuthenticationHttpBasic)
+	case AccessApplicationScimAuthenticationSchemeOauthBearerToken:
+		a.Value = new(AccessApplicationScimAuthenticationOauthBearerToken)
+	case AccessApplicationScimAuthenticationSchemeOauth2:
+		a.Value = new(AccessApplicationScimAuthenticationOauth2)
+	default:
+		return errors.New("invalid authentication scheme")
+	}
+
+	return json.Unmarshal(buf, a.Value)
+}
+
+func (a *AccessApplicationScimAuthenticationJson) MarshalJSON() ([]byte, error) {
+	return json.Marshal(a.Value)
+}
+
+type AccessApplicationScimAuthentication interface {
+	isScimAuthentication()
+}
+
+type baseScimAuthentication struct {
+	Scheme AccessApplicationScimAuthenticationScheme `json:"scheme"`
+}
+
+func (baseScimAuthentication) isScimAuthentication() {}
+
+type AccessApplicationScimAuthenticationHttpBasic struct {
+	baseScimAuthentication
+	User     string `json:"user"`
+	Password string `json:"password"`
+}
+
+type AccessApplicationScimAuthenticationOauthBearerToken struct {
+	baseScimAuthentication
+	Token string `json:"token"`
+}
+
+type AccessApplicationScimAuthenticationOauth2 struct {
+	baseScimAuthentication
+	ClientID         string   `json:"client_id"`
+	ClientSecret     string   `json:"client_secret"`
+	AuthorizationURL string   `json:"authorization_url"`
+	TokenURL         string   `json:"token_url"`
+	Scopes           []string `json:"scopes,omitempty"`
+}
+
+type AccessApplicationScimMapping struct {
+	Schema           string                                  `json:"schema"`
+	Enabled          *bool                                   `json:"enabled,omitempty"`
+	Filter           string                                  `json:"filter,omitempty"`
+	TransformJsonata string                                  `json:"transform_jsonata,omitempty"`
+	Operations       *AccessApplicationScimMappingOperations `json:"operations,omitempty"`
+}
+
+type AccessApplicationScimMappingOperations struct {
+	Create *bool `json:"create,omitempty"`
+	Update *bool `json:"update,omitempty"`
+	Delete *bool `json:"delete,omitempty"`
 }
 
 // AccessApplicationListResponse represents the response from the list
@@ -105,6 +199,22 @@ type SAMLAttributeConfig struct {
 	Source       SourceConfig `json:"source"`
 }
 
+type OIDCClaimConfig struct {
+	Name     string       `json:"name,omitempty"`
+	Source   SourceConfig `json:"source"`
+	Required *bool        `json:"required,omitempty"`
+	Scope    string       `json:"scope,omitempty"`
+}
+
+type RefreshTokenOptions struct {
+	Lifetime string `json:"lifetime,omitempty"`
+}
+
+type AccessApplicationHybridAndImplicitOptions struct {
+	ReturnIDTokenFromAuthorizationEndpoint     *bool `json:"return_id_token_from_authorization_endpoint,omitempty"`
+	ReturnAccessTokenFromAuthorizationEndpoint *bool `json:"return_access_token_from_authorization_endpoint,omitempty"`
+}
+
 type SaasApplication struct {
 	// Items common to both SAML and OIDC
 	AppID     string     `json:"app_id,omitempty"`
@@ -125,13 +235,18 @@ type SaasApplication struct {
 	SamlAttributeTransformJsonata string                `json:"saml_attribute_transform_jsonata"`
 
 	// OIDC saas app
-	ClientID         string   `json:"client_id,omitempty"`
-	ClientSecret     string   `json:"client_secret,omitempty"`
-	RedirectURIs     []string `json:"redirect_uris,omitempty"`
-	GrantTypes       []string `json:"grant_types,omitempty"`
-	Scopes           []string `json:"scopes,omitempty"`
-	AppLauncherURL   string   `json:"app_launcher_url,omitempty"`
-	GroupFilterRegex string   `json:"group_filter_regex,omitempty"`
+	ClientID                     string                                     `json:"client_id,omitempty"`
+	ClientSecret                 string                                     `json:"client_secret,omitempty"`
+	RedirectURIs                 []string                                   `json:"redirect_uris,omitempty"`
+	GrantTypes                   []string                                   `json:"grant_types,omitempty"`
+	Scopes                       []string                                   `json:"scopes,omitempty"`
+	AppLauncherURL               string                                     `json:"app_launcher_url,omitempty"`
+	GroupFilterRegex             string                                     `json:"group_filter_regex,omitempty"`
+	CustomClaims                 []OIDCClaimConfig                          `json:"custom_claims,omitempty"`
+	AllowPKCEWithoutClientSecret *bool                                      `json:"allow_pkce_without_client_secret,omitempty"`
+	RefreshTokenOptions          *RefreshTokenOptions                       `json:"refresh_token_options,omitempty"`
+	HybridAndImplicitOptions     *AccessApplicationHybridAndImplicitOptions `json:"hybrid_and_implicit_options,omitempty"`
+	AccessTokenLifetime          string                                     `json:"access_token_lifetime,omitempty"`
 }
 
 type AccessAppLauncherCustomization struct {
@@ -154,6 +269,7 @@ type AccessLandingPageDesign struct {
 	ButtonColor     string `json:"button_color"`
 	ButtonTextColor string `json:"button_text_color"`
 }
+
 type ListAccessApplicationsParams struct {
 	ResultInfo
 }
@@ -181,10 +297,14 @@ type CreateAccessApplicationParams struct {
 	ServiceAuth401Redirect   *bool                          `json:"service_auth_401_redirect,omitempty"`
 	SessionDuration          string                         `json:"session_duration,omitempty"`
 	SkipInterstitial         *bool                          `json:"skip_interstitial,omitempty"`
+	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	Type                     AccessApplicationType          `json:"type,omitempty"`
 	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
+	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
+	// List of policy ids to link to this application in ascending order of precedence.
+	Policies []string `json:"policies,omitempty"`
 	AccessAppLauncherCustomization
 }
 
@@ -214,8 +334,14 @@ type UpdateAccessApplicationParams struct {
 	SkipInterstitial         *bool                          `json:"skip_interstitial,omitempty"`
 	Type                     AccessApplicationType          `json:"type,omitempty"`
 	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
+	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
+	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
+	// List of policy ids to link to this application in ascending order of precedence.
+	// Can reference reusable policies and policies specific to this application.
+	// If this field is not provided, the existing policies will not be modified.
+	Policies *[]string `json:"policies,omitempty"`
 	AccessAppLauncherCustomization
 }
 

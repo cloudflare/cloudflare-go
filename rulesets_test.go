@@ -403,7 +403,9 @@ func TestGetRuleset_SetConfig(t *testing.T) {
 				"server_side_excludes":true,
 				"ssl":"off",
 				"sxg":true,
-				"hotlink_protection":true
+				"hotlink_protection":true,
+				"fonts":true,
+				"disable_rum":true
             },
 			"description": "Set all available config rules in one rule",
 			"last_updated": "2020-12-18T09:28:09.655749Z",
@@ -440,7 +442,9 @@ func TestGetRuleset_SetConfig(t *testing.T) {
 			DisableApps:             BoolPtr(true),
 			DisableZaraz:            BoolPtr(true),
 			DisableRailgun:          BoolPtr(true),
+			DisableRUM:              BoolPtr(true),
 			EmailObfuscation:        BoolPtr(true),
+			Fonts:                   BoolPtr(true),
 			Mirage:                  BoolPtr(true),
 			OpportunisticEncryption: BoolPtr(true),
 			Polish:                  PolishOff.IntoRef(),

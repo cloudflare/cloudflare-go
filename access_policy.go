@@ -2,16 +2,11 @@ package cloudflare
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/goccy/go-json"
-)
-
-var (
-	ErrMissingApplicationID = errors.New("missing required application ID")
 )
 
 type AccessApprovalGroup struct {
@@ -23,11 +18,16 @@ type AccessApprovalGroup struct {
 // AccessPolicy defines a policy for allowing or disallowing access to
 // one or more Access applications.
 type AccessPolicy struct {
-	ID         string     `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
+	// Precedence is the order in which the policy is executed in an Access application.
+	// As a general rule, lower numbers take precedence over higher numbers.
+	// This field can only be zero when a reusable policy is requested outside the context
+	// of an Access application.
 	Precedence int        `json:"precedence"`
 	Decision   string     `json:"decision"`
 	CreatedAt  *time.Time `json:"created_at"`
 	UpdatedAt  *time.Time `json:"updated_at"`
+	Reusable   *bool      `json:"reusable,omitempty"`
 	Name       string     `json:"name"`
 
 	IsolationRequired            *bool                 `json:"isolation_required,omitempty"`
@@ -68,18 +68,28 @@ type AccessPolicyDetailResponse struct {
 }
 
 type ListAccessPoliciesParams struct {
+	// ApplicationID is the application ID to list attached access policies for.
+	// If omitted, only reusable policies for the account are returned.
 	ApplicationID string `json:"-"`
 	ResultInfo
 }
 
 type GetAccessPolicyParams struct {
+	PolicyID string `json:"-"`
+	// ApplicationID is the application ID for which to scope the policy for.
+	// Optional, but if included, the policy returned will include its execution precedence within the application.
 	ApplicationID string `json:"-"`
-	PolicyID      string `json:"-"`
 }
 
 type CreateAccessPolicyParams struct {
+	// ApplicationID is the application ID for which to create the policy for.
+	// Pass an empty value to create a reusable policy.
 	ApplicationID string `json:"-"`
 
+	// Precedence is the order in which the policy is executed in an Access application.
+	// As a general rule, lower numbers take precedence over higher numbers.
+	// This field is ignored when creating a reusable policy.
+	// Read more here https://developers.cloudflare.com/cloudflare-one/policies/access/#order-of-execution
 	Precedence int    `json:"precedence"`
 	Decision   string `json:"decision"`
 	Name       string `json:"name"`
@@ -105,9 +115,14 @@ type CreateAccessPolicyParams struct {
 }
 
 type UpdateAccessPolicyParams struct {
+	// ApplicationID is the application ID that owns the existing policy.
+	// Pass an empty value if the existing policy is reusable.
 	ApplicationID string `json:"-"`
 	PolicyID      string `json:"-"`
 
+	// Precedence is the order in which the policy is executed in an Access application.
+	// As a general rule, lower numbers take precedence over higher numbers.
+	// This field is ignored when updating a reusable policy.
 	Precedence int    `json:"precedence"`
 	Decision   string `json:"decision"`
 	Name       string `json:"name"`
@@ -133,25 +148,32 @@ type UpdateAccessPolicyParams struct {
 }
 
 type DeleteAccessPolicyParams struct {
+	// ApplicationID is the application ID the policy belongs to.
+	// If the existing policy is reusable, this field must be omitted. Otherwise, it is required.
 	ApplicationID string `json:"-"`
 	PolicyID      string `json:"-"`
 }
 
-// ListAccessPolicies returns all access policies for an access application.
+// ListAccessPolicies returns all access policies that match the parameters.
 //
 // Account API reference: https://developers.cloudflare.com/api/operations/access-policies-list-access-policies
 // Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-policies-list-access-policies
 func (api *API) ListAccessPolicies(ctx context.Context, rc *ResourceContainer, params ListAccessPoliciesParams) ([]AccessPolicy, *ResultInfo, error) {
-	if params.ApplicationID == "" {
-		return []AccessPolicy{}, &ResultInfo{}, ErrMissingApplicationID
+	var baseURL string
+	if params.ApplicationID != "" {
+		baseURL = fmt.Sprintf(
+			"/%s/%s/access/apps/%s/policies",
+			rc.Level,
+			rc.Identifier,
+			params.ApplicationID,
+		)
+	} else {
+		baseURL = fmt.Sprintf(
+			"/%s/%s/access/policies",
+			rc.Level,
+			rc.Identifier,
+		)
 	}
-
-	baseURL := fmt.Sprintf(
-		"/%s/%s/access/apps/%s/policies",
-		rc.Level,
-		rc.Identifier,
-		params.ApplicationID,
-	)
 
 	autoPaginate := true
 	if params.PerPage >= 1 || params.Page >= 1 {
@@ -194,13 +216,23 @@ func (api *API) ListAccessPolicies(ctx context.Context, rc *ResourceContainer, p
 // Account API reference: https://developers.cloudflare.com/api/operations/access-policies-get-an-access-policy
 // Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-policies-get-an-access-policy
 func (api *API) GetAccessPolicy(ctx context.Context, rc *ResourceContainer, params GetAccessPolicyParams) (AccessPolicy, error) {
-	uri := fmt.Sprintf(
-		"/%s/%s/access/apps/%s/policies/%s",
-		rc.Level,
-		rc.Identifier,
-		params.ApplicationID,
-		params.PolicyID,
-	)
+	var uri string
+	if params.ApplicationID != "" {
+		uri = fmt.Sprintf(
+			"/%s/%s/access/apps/%s/policies/%s",
+			rc.Level,
+			rc.Identifier,
+			params.ApplicationID,
+			params.PolicyID,
+		)
+	} else {
+		uri = fmt.Sprintf(
+			"/%s/%s/access/policies/%s",
+			rc.Level,
+			rc.Identifier,
+			params.PolicyID,
+		)
+	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -221,12 +253,21 @@ func (api *API) GetAccessPolicy(ctx context.Context, rc *ResourceContainer, para
 // Account API reference: https://developers.cloudflare.com/api/operations/access-policies-create-an-access-policy
 // Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-policies-create-an-access-policy
 func (api *API) CreateAccessPolicy(ctx context.Context, rc *ResourceContainer, params CreateAccessPolicyParams) (AccessPolicy, error) {
-	uri := fmt.Sprintf(
-		"/%s/%s/access/apps/%s/policies",
-		rc.Level,
-		rc.Identifier,
-		params.ApplicationID,
-	)
+	var uri string
+	if params.ApplicationID != "" {
+		uri = fmt.Sprintf(
+			"/%s/%s/access/apps/%s/policies",
+			rc.Level,
+			rc.Identifier,
+			params.ApplicationID,
+		)
+	} else {
+		uri = fmt.Sprintf(
+			"/%s/%s/access/policies",
+			rc.Level,
+			rc.Identifier,
+		)
+	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
@@ -251,13 +292,23 @@ func (api *API) UpdateAccessPolicy(ctx context.Context, rc *ResourceContainer, p
 		return AccessPolicy{}, fmt.Errorf("access policy ID cannot be empty")
 	}
 
-	uri := fmt.Sprintf(
-		"/%s/%s/access/apps/%s/policies/%s",
-		rc.Level,
-		rc.Identifier,
-		params.ApplicationID,
-		params.PolicyID,
-	)
+	var uri string
+	if params.ApplicationID != "" {
+		uri = fmt.Sprintf(
+			"/%s/%s/access/apps/%s/policies/%s",
+			rc.Level,
+			rc.Identifier,
+			params.ApplicationID,
+			params.PolicyID,
+		)
+	} else {
+		uri = fmt.Sprintf(
+			"/%s/%s/access/policies/%s",
+			rc.Level,
+			rc.Identifier,
+			params.PolicyID,
+		)
+	}
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
@@ -278,13 +329,23 @@ func (api *API) UpdateAccessPolicy(ctx context.Context, rc *ResourceContainer, p
 // Account API reference: https://developers.cloudflare.com/api/operations/access-policies-delete-an-access-policy
 // Zone API reference: https://developers.cloudflare.com/api/operations/zone-level-access-policies-delete-an-access-policy
 func (api *API) DeleteAccessPolicy(ctx context.Context, rc *ResourceContainer, params DeleteAccessPolicyParams) error {
-	uri := fmt.Sprintf(
-		"/%s/%s/access/apps/%s/policies/%s",
-		rc.Level,
-		rc.Identifier,
-		params.ApplicationID,
-		params.PolicyID,
-	)
+	var uri string
+	if params.ApplicationID != "" {
+		uri = fmt.Sprintf(
+			"/%s/%s/access/apps/%s/policies/%s",
+			rc.Level,
+			rc.Identifier,
+			params.ApplicationID,
+			params.PolicyID,
+		)
+	} else {
+		uri = fmt.Sprintf(
+			"/%s/%s/access/policies/%s",
+			rc.Level,
+			rc.Identifier,
+			params.PolicyID,
+		)
+	}
 
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {

@@ -1,4 +1,118 @@
-## 0.93.0 (Unreleased)
+## 0.101.0 (Unreleased)
+
+## 0.100.0 (July 18th, 2024)
+
+BREAKING CHANGES:
+
+* teams_accounts: rename `TeamsCertificate` in `TeamsAccountConfiguration` to `TeamsCertificateSetting` ([#2754](https://github.com/cloudflare/cloudflare-go/issues/2754))
+
+ENHANCEMENTS:
+
+* Add CloudConnectorAPI Client ([#2698](https://github.com/cloudflare/cloudflare-go/issues/2698))
+* gateway_categories: add ListGatewayCategories which returns all gateway categories. ([#2722](https://github.com/cloudflare/cloudflare-go/issues/2722))
+* teams_certificates: add `TeamsCertificate` resource to manage gateway certificates ([#2754](https://github.com/cloudflare/cloudflare-go/issues/2754))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 2.1.0 to 2.2.0 ([#2727](https://github.com/cloudflare/cloudflare-go/issues/2727))
+* deps: bumps golang.org/x/net from 0.26.0 to 0.27.0 ([#2726](https://github.com/cloudflare/cloudflare-go/issues/2726))
+
+## 0.99.0 (July 3rd, 2024)
+
+ENHANCEMENTS:
+
+* teams: added per account certificate setting to teams gateway configuration ([#2713](https://github.com/cloudflare/cloudflare-go/issues/2713))
+* teams_list: Added description to ZT list item ([#2621](https://github.com/cloudflare/cloudflare-go/issues/2621))
+* teams_rules: Added ZT rule settings `ignore_cname_category_matches` ([#2621](https://github.com/cloudflare/cloudflare-go/issues/2621))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.1 to 0.7.7 ([#2699](https://github.com/cloudflare/cloudflare-go/issues/2699))
+
+## 0.98.0 (June 19th, 2024)
+
+ENHANCEMENTS:
+
+* access_application: Add support for SaaS OIDC Access Token Lifetime ([#2455](https://github.com/cloudflare/cloudflare-go/issues/2455))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.25.0 to 0.26.0 ([#2364](https://github.com/cloudflare/cloudflare-go/issues/2364))
+* deps: bumps goreleaser/goreleaser-action from 5.1.0 to 6.0.0 ([#2365](https://github.com/cloudflare/cloudflare-go/issues/2365))
+
+## 0.97.0 (June 5th, 2024)
+
+ENHANCEMENTS:
+
+* access_application: Add support for Hybrid/Implicit flows and options ([#2131](https://github.com/cloudflare/cloudflare-go/issues/2131))
+* teams_account: Add Zero Trust connectivity settings ([#2165](https://github.com/cloudflare/cloudflare-go/issues/2165))
+* teams_accounts: Add `use_zt_virtual_ip` attribute ([#2126](https://github.com/cloudflare/cloudflare-go/issues/2126))
+
+DEPENDENCIES:
+
+* deps: bumps `github.com/goccy/go-json` from 0.10.2 to 0.10.3 ([#2107](https://github.com/cloudflare/cloudflare-go/issues/2107))
+* deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.6 to 0.7.7 ([#2249](https://github.com/cloudflare/cloudflare-go/issues/2249))
+
+## 0.96.0 (May 22nd, 2024)
+
+ENHANCEMENTS:
+
+* access_application: Add Refresh Token, Custom Claims, and PKCE Without Client Secret support for OIDC SaaS configurations ([#1981](https://github.com/cloudflare/cloudflare-go/issues/1981))
+* ruleset: add support for action parameters `fonts` and `disable_rum` ([#1832](https://github.com/cloudflare/cloudflare-go/issues/1832))
+
+DEPENDENCIES:
+
+* deps: bumps bflad/action-milestone-comment from 1 to 2 ([#1991](https://github.com/cloudflare/cloudflare-go/issues/1991))
+* deps: bumps github.com/hashicorp/go-retryablehttp from 0.7.5 to 0.7.6 ([#1993](https://github.com/cloudflare/cloudflare-go/issues/1993))
+* deps: bumps goreleaser/goreleaser-action from 5.0.0 to 5.1.0 ([#1992](https://github.com/cloudflare/cloudflare-go/issues/1992))
+
+## 0.95.0 (May 8th, 2024)
+
+ENHANCEMENTS:
+
+* access_application: add support for `policies` array ([#1956](https://github.com/cloudflare/cloudflare-go/issues/1956))
+* access_application: add support for `scim_config` ([#1921](https://github.com/cloudflare/cloudflare-go/issues/1921))
+* access_policy: add support for reusable policies ([#1956](https://github.com/cloudflare/cloudflare-go/issues/1956))
+* dlp: add support for zt risk behavior configuration ([#1887](https://github.com/cloudflare/cloudflare-go/issues/1887))
+
+BUG FIXES:
+
+* access_application: fix scim configuration authentication json marshalling ([#1959](https://github.com/cloudflare/cloudflare-go/issues/1959))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 2.0.0 to 2.1.0 ([#1839](https://github.com/cloudflare/cloudflare-go/issues/1839))
+* deps: bumps github.com/urfave/cli/v2 from 2.27.1 to 2.27.2 ([#1861](https://github.com/cloudflare/cloudflare-go/issues/1861))
+* deps: bumps golang.org/x/net from 0.24.0 to 0.25.0 ([#1974](https://github.com/cloudflare/cloudflare-go/issues/1974))
+* deps: bumps golangci/golangci-lint-action from 4 to 5 ([#1845](https://github.com/cloudflare/cloudflare-go/issues/1845))
+* deps: bumps golangci/golangci-lint-action from 5 to 6 ([#1975](https://github.com/cloudflare/cloudflare-go/issues/1975))
+
+## 0.94.0 (April 24th, 2024)
+
+ENHANCEMENTS:
+
+* access_application: support options_preflight_bypass for access_application ([#1790](https://github.com/cloudflare/cloudflare-go/issues/1790))
+* gateway: added ecs_support field to teams_location resource ([#1826](https://github.com/cloudflare/cloudflare-go/issues/1826))
+* teams_account: adds custom certificate setting to teams account configuration ([#1811](https://github.com/cloudflare/cloudflare-go/issues/1811))
+* workers: support deleting namespaced Workers ([#1737](https://github.com/cloudflare/cloudflare-go/issues/1737))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.19.0 to 0.23.0 ([#1825](https://github.com/cloudflare/cloudflare-go/issues/1825))
+
+## 0.93.0 (April 10th, 2024)
+
+BREAKING CHANGES:
+
+* dns: Remove "locked" flag which is always false ([#1618](https://github.com/cloudflare/cloudflare-go/issues/1618))
+
+ENHANCEMENTS:
+
+* magic_transit_ipsec_tunnel: Adds support for replay_protection boolean flag ([#1710](https://github.com/cloudflare/cloudflare-go/issues/1710))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.22.0 to 0.24.0 ([#1688](https://github.com/cloudflare/cloudflare-go/issues/1688))
 
 ## 0.92.0 (March 27th, 2024)
 

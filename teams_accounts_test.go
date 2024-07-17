@@ -93,6 +93,9 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 					},
 					"extended_email_matching": {
 						"enabled": true
+					},
+					"certificate": {
+						"id": "7559a944-3dd7-41bf-b183-360a814a8c36"
 					}
 				}
 			}
@@ -138,6 +141,9 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 			ExtendedEmailMatching: &TeamsExtendedEmailMatching{
 				Enabled: BoolPtr(true),
 			},
+			Certificate: &TeamsCertificateSetting{
+				ID: "7559a944-3dd7-41bf-b183-360a814a8c36",
+			},
 		})
 	}
 }
@@ -169,6 +175,9 @@ func TestTeamsAccountUpdateConfiguration(t *testing.T) {
 					},
 					"extended_email_matching": {
 						"enabled": true
+					},
+					"custom_certificate": {
+						"enabled": true
 					}
 				}
 			}
@@ -182,6 +191,9 @@ func TestTeamsAccountUpdateConfiguration(t *testing.T) {
 		TLSDecrypt:        &TeamsTLSDecrypt{Enabled: true},
 		ProtocolDetection: &TeamsProtocolDetection{Enabled: true},
 		ExtendedEmailMatching: &TeamsExtendedEmailMatching{
+			Enabled: BoolPtr(true),
+		},
+		CustomCertificate: &TeamsCustomCertificate{
 			Enabled: BoolPtr(true),
 		},
 	}
@@ -283,7 +295,7 @@ func TestTeamsAccountGetDeviceConfiguration(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": {"gateway_proxy_enabled": true,"gateway_udp_proxy_enabled":false, "root_certificate_installation_enabled":true}
+			"result": {"gateway_proxy_enabled": true,"gateway_udp_proxy_enabled":false, "root_certificate_installation_enabled":true, "use_zt_virtual_ip":false}
 		}`)
 	}
 
@@ -296,6 +308,7 @@ func TestTeamsAccountGetDeviceConfiguration(t *testing.T) {
 			GatewayProxyEnabled:                true,
 			GatewayProxyUDPEnabled:             false,
 			RootCertificateInstallationEnabled: true,
+			UseZTVirtualIP:                     BoolPtr(false),
 		})
 	}
 }
@@ -311,7 +324,7 @@ func TestTeamsAccountUpdateDeviceConfiguration(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": {"gateway_proxy_enabled": true,"gateway_udp_proxy_enabled":true, "root_certificate_installation_enabled":true}
+			"result": {"gateway_proxy_enabled": true,"gateway_udp_proxy_enabled":true, "root_certificate_installation_enabled":true, "use_zt_virtual_ip":true}
 		}`)
 	}
 
@@ -321,6 +334,7 @@ func TestTeamsAccountUpdateDeviceConfiguration(t *testing.T) {
 		GatewayProxyUDPEnabled:             true,
 		GatewayProxyEnabled:                true,
 		RootCertificateInstallationEnabled: true,
+		UseZTVirtualIP:                     BoolPtr(true),
 	})
 
 	if assert.NoError(t, err) {
@@ -328,6 +342,64 @@ func TestTeamsAccountUpdateDeviceConfiguration(t *testing.T) {
 			GatewayProxyEnabled:                true,
 			GatewayProxyUDPEnabled:             true,
 			RootCertificateInstallationEnabled: true,
+			UseZTVirtualIP:                     BoolPtr(true),
+		})
+	}
+}
+
+func TestTeamsAccountGetConnectivityConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {"icmp_proxy_enabled": false,"offramp_warp_enabled":false}
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/zerotrust/connectivity_settings", handler)
+
+	actual, err := client.TeamsAccountConnectivityConfiguration(context.Background(), testAccountID)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, actual, TeamsConnectivitySettings{
+			ICMPProxyEnabled:   BoolPtr(false),
+			OfframpWARPEnabled: BoolPtr(false),
+		})
+	}
+}
+
+func TestTeamsAccountUpdateConnectivityConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {"icmp_proxy_enabled": true,"offramp_warp_enabled":true}
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/zerotrust/connectivity_settings", handler)
+
+	actual, err := client.TeamsAccountConnectivityUpdateConfiguration(context.Background(), testAccountID, TeamsConnectivitySettings{
+		ICMPProxyEnabled:   BoolPtr(true),
+		OfframpWARPEnabled: BoolPtr(true),
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, actual, TeamsConnectivitySettings{
+			ICMPProxyEnabled:   BoolPtr(true),
+			OfframpWARPEnabled: BoolPtr(true),
 		})
 	}
 }
