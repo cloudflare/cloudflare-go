@@ -1,4 +1,6 @@
-## 0.100.0 (Unreleased)
+## 0.101.0 (Unreleased)
+
+## 0.100.0 (July 18th, 2024)
 
 BREAKING CHANGES:
 
