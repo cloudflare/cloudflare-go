@@ -1,5 +1,20 @@
 ## 0.100.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* teams_accounts: rename `TeamsCertificate` in `TeamsAccountConfiguration` to `TeamsCertificateSetting` ([#2754](https://github.com/cloudflare/cloudflare-go/issues/2754))
+
+ENHANCEMENTS:
+
+* Add CloudConnectorAPI Client ([#2698](https://github.com/cloudflare/cloudflare-go/issues/2698))
+* gateway_categories: add ListGatewayCategories which returns all gateway categories. ([#2722](https://github.com/cloudflare/cloudflare-go/issues/2722))
+* teams_certificates: add `TeamsCertificate` resource to manage gateway certificates ([#2754](https://github.com/cloudflare/cloudflare-go/issues/2754))
+
+DEPENDENCIES:
+
+* deps: bumps dependabot/fetch-metadata from 2.1.0 to 2.2.0 ([#2727](https://github.com/cloudflare/cloudflare-go/issues/2727))
+* deps: bumps golang.org/x/net from 0.26.0 to 0.27.0 ([#2726](https://github.com/cloudflare/cloudflare-go/issues/2726))
+
 ## 0.99.0 (July 3rd, 2024)
 
 ENHANCEMENTS:
