@@ -645,6 +645,71 @@ func TestDevicePostureClientCertificateRule(t *testing.T) {
 	}
 }
 
+func TestDevicePostureClientCertificateRuleV2(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+				"schedule": "1h",
+				"expiration": "1h",
+				"type": "client_certificate_v2",
+				"name": "My rule name",
+				"description": "My description",
+				"match": [
+					{
+						"platform": "windows"
+					}
+				],
+				"input": {
+					"certificate_id": "d2c04b78-3ba2-4294-8efa-4e85aef0777f",
+					"cn": "example.com",
+					"extended_key_usage": ["clientAuth", "emailProtection"],
+					"locations": {"trust_stores": ["system"]},
+					"check_private_key": true
+				}
+			}
+		}
+		`)
+	}
+
+	checkPrivateKey := true
+
+	want := DevicePostureRule{
+		ID:          "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:        "My rule name",
+		Description: "My description",
+		Type:        "client_certificate_v2",
+		Schedule:    "1h",
+		Expiration:  "1h",
+		Match:       []DevicePostureRuleMatch{{Platform: "windows"}},
+		Input: DevicePostureRuleInput{
+			CertificateID:    "d2c04b78-3ba2-4294-8efa-4e85aef0777f",
+			CommonName:       "example.com",
+			CheckPrivateKey:  &checkPrivateKey,
+			ExtendedKeyUsage: []string{"clientAuth", "emailProtection"},
+			Locations: CertificateLocations{
+				TrustStores: []string{"system"},
+			},
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err := client.DevicePostureRule(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestCreateDevicePostureRule(t *testing.T) {
 	setup()
 	defer teardown()
