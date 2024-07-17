@@ -1,3 +1,7 @@
 ```release-note:breaking-change
-teams: gateway: rename TeamsCertificate in TeamsAccountConfiguration to TeamsCertificateSetting, add TeamsCertificate resource to manage gateway certificates
+teams_accounts: rename `TeamsCertificate` in `TeamsAccountConfiguration` to `TeamsCertificateSetting`
+```
+
+```release-note:enhancement
+teams_certificates: add `TeamsCertificate` resource to manage gateway certificates
 ```
