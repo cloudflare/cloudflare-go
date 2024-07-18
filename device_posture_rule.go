@@ -205,7 +205,7 @@ type DevicePostureRuleInput struct {
 	Locations        CertificateLocations `json:"locations,omitempty"`
 }
 
-// Locations struct for client certificate rule v2
+// Locations struct for client certificate rule v2.
 type CertificateLocations struct {
 	Paths       []string `json:"paths,omitempty"`
 	TrustStores []string `json:"trust_stores,omitempty"`
