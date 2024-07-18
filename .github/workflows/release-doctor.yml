@@ -3,10 +3,15 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   release_doctor:
     name: release doctor
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     if: github.repository == 'cloudflare/cloudflare-go' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || startsWith(github.head_ref, 'release-please') || github.head_ref == 'next')
 
     steps:
