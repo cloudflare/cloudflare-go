@@ -30,7 +30,7 @@ func TestDatasetJobGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Logpush.Datasets.Jobs.Get(
 		context.TODO(),
-		"http_requests",
+		"gateway_dns",
 		logpush.DatasetJobGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},
