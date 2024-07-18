@@ -289,22 +289,22 @@ func (r RewriteActionDisable) IsKnown() bool {
 	return false
 }
 
-type WAFRule map[string]WAFRuleItemItem
+type WAFRule map[string]WAFRuleItem
 
 // The WAF rule action to apply.
-type WAFRuleItemItem string
+type WAFRuleItem string
 
 const (
-	WAFRuleItemItemChallenge WAFRuleItemItem = "challenge"
-	WAFRuleItemItemBlock     WAFRuleItemItem = "block"
-	WAFRuleItemItemSimulate  WAFRuleItemItem = "simulate"
-	WAFRuleItemItemDisable   WAFRuleItemItem = "disable"
-	WAFRuleItemItemDefault   WAFRuleItemItem = "default"
+	WAFRuleItemChallenge WAFRuleItem = "challenge"
+	WAFRuleItemBlock     WAFRuleItem = "block"
+	WAFRuleItemSimulate  WAFRuleItem = "simulate"
+	WAFRuleItemDisable   WAFRuleItem = "disable"
+	WAFRuleItemDefault   WAFRuleItem = "default"
 )
 
-func (r WAFRuleItemItem) IsKnown() bool {
+func (r WAFRuleItem) IsKnown() bool {
 	switch r {
-	case WAFRuleItemItemChallenge, WAFRuleItemItemBlock, WAFRuleItemItemSimulate, WAFRuleItemItemDisable, WAFRuleItemItemDefault:
+	case WAFRuleItemChallenge, WAFRuleItemBlock, WAFRuleItemSimulate, WAFRuleItemDisable, WAFRuleItemDefault:
 		return true
 	}
 	return false

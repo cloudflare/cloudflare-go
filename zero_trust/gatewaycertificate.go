@@ -102,6 +102,48 @@ func (r *GatewayCertificateService) Delete(ctx context.Context, certificateID st
 	return
 }
 
+// Binds a single Zero Trust certificate to the edge.
+func (r *GatewayCertificateService) Activate(ctx context.Context, certificateID string, params GatewayCertificateActivateParams, opts ...option.RequestOption) (res *GatewayCertificateActivateResponse, err error) {
+	var env GatewayCertificateActivateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/gateway/certificates/%s/activate", params.AccountID, certificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Unbinds a single Zero Trust certificate from the edge
+func (r *GatewayCertificateService) Deactivate(ctx context.Context, certificateID string, params GatewayCertificateDeactivateParams, opts ...option.RequestOption) (res *GatewayCertificateDeactivateResponse, err error) {
+	var env GatewayCertificateDeactivateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if certificateID == "" {
+		err = errors.New("missing required certificate_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/gateway/certificates/%s/deactivate", params.AccountID, certificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches a single Zero Trust certificate.
 func (r *GatewayCertificateService) Get(ctx context.Context, certificateID string, query GatewayCertificateGetParams, opts ...option.RequestOption) (res *GatewayCertificateGetResponse, err error) {
 	var env GatewayCertificateGetResponseEnvelope
@@ -348,6 +390,156 @@ func (r GatewayCertificateDeleteResponseType) IsKnown() bool {
 	return false
 }
 
+type GatewayCertificateActivateResponse struct {
+	// Certificate UUID tag.
+	ID string `json:"id"`
+	// The deployment status of the certificate on Cloudflare's edge. Certificates in
+	// the 'active' state may be used for Gateway TLS interception.
+	BindingStatus GatewayCertificateActivateResponseBindingStatus `json:"binding_status"`
+	CreatedAt     time.Time                                       `json:"created_at" format:"date-time"`
+	// Use this certificate for Gateway TLS interception
+	Enabled   bool      `json:"enabled"`
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+	Type       GatewayCertificateActivateResponseType `json:"type"`
+	UpdatedAt  time.Time                              `json:"updated_at" format:"date-time"`
+	UploadedOn time.Time                              `json:"uploaded_on" format:"date-time"`
+	JSON       gatewayCertificateActivateResponseJSON `json:"-"`
+}
+
+// gatewayCertificateActivateResponseJSON contains the JSON metadata for the struct
+// [GatewayCertificateActivateResponse]
+type gatewayCertificateActivateResponseJSON struct {
+	ID            apijson.Field
+	BindingStatus apijson.Field
+	CreatedAt     apijson.Field
+	Enabled       apijson.Field
+	ExpiresOn     apijson.Field
+	Type          apijson.Field
+	UpdatedAt     apijson.Field
+	UploadedOn    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *GatewayCertificateActivateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayCertificateActivateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The deployment status of the certificate on Cloudflare's edge. Certificates in
+// the 'active' state may be used for Gateway TLS interception.
+type GatewayCertificateActivateResponseBindingStatus string
+
+const (
+	GatewayCertificateActivateResponseBindingStatusPendingDeployment GatewayCertificateActivateResponseBindingStatus = "pending_deployment"
+	GatewayCertificateActivateResponseBindingStatusActive            GatewayCertificateActivateResponseBindingStatus = "active"
+	GatewayCertificateActivateResponseBindingStatusPendingDeletion   GatewayCertificateActivateResponseBindingStatus = "pending_deletion"
+	GatewayCertificateActivateResponseBindingStatusInactive          GatewayCertificateActivateResponseBindingStatus = "inactive"
+)
+
+func (r GatewayCertificateActivateResponseBindingStatus) IsKnown() bool {
+	switch r {
+	case GatewayCertificateActivateResponseBindingStatusPendingDeployment, GatewayCertificateActivateResponseBindingStatusActive, GatewayCertificateActivateResponseBindingStatusPendingDeletion, GatewayCertificateActivateResponseBindingStatusInactive:
+		return true
+	}
+	return false
+}
+
+// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+type GatewayCertificateActivateResponseType string
+
+const (
+	GatewayCertificateActivateResponseTypeCustom         GatewayCertificateActivateResponseType = "custom"
+	GatewayCertificateActivateResponseTypeGatewayManaged GatewayCertificateActivateResponseType = "gateway_managed"
+)
+
+func (r GatewayCertificateActivateResponseType) IsKnown() bool {
+	switch r {
+	case GatewayCertificateActivateResponseTypeCustom, GatewayCertificateActivateResponseTypeGatewayManaged:
+		return true
+	}
+	return false
+}
+
+type GatewayCertificateDeactivateResponse struct {
+	// Certificate UUID tag.
+	ID string `json:"id"`
+	// The deployment status of the certificate on Cloudflare's edge. Certificates in
+	// the 'active' state may be used for Gateway TLS interception.
+	BindingStatus GatewayCertificateDeactivateResponseBindingStatus `json:"binding_status"`
+	CreatedAt     time.Time                                         `json:"created_at" format:"date-time"`
+	// Use this certificate for Gateway TLS interception
+	Enabled   bool      `json:"enabled"`
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+	Type       GatewayCertificateDeactivateResponseType `json:"type"`
+	UpdatedAt  time.Time                                `json:"updated_at" format:"date-time"`
+	UploadedOn time.Time                                `json:"uploaded_on" format:"date-time"`
+	JSON       gatewayCertificateDeactivateResponseJSON `json:"-"`
+}
+
+// gatewayCertificateDeactivateResponseJSON contains the JSON metadata for the
+// struct [GatewayCertificateDeactivateResponse]
+type gatewayCertificateDeactivateResponseJSON struct {
+	ID            apijson.Field
+	BindingStatus apijson.Field
+	CreatedAt     apijson.Field
+	Enabled       apijson.Field
+	ExpiresOn     apijson.Field
+	Type          apijson.Field
+	UpdatedAt     apijson.Field
+	UploadedOn    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *GatewayCertificateDeactivateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayCertificateDeactivateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The deployment status of the certificate on Cloudflare's edge. Certificates in
+// the 'active' state may be used for Gateway TLS interception.
+type GatewayCertificateDeactivateResponseBindingStatus string
+
+const (
+	GatewayCertificateDeactivateResponseBindingStatusPendingDeployment GatewayCertificateDeactivateResponseBindingStatus = "pending_deployment"
+	GatewayCertificateDeactivateResponseBindingStatusActive            GatewayCertificateDeactivateResponseBindingStatus = "active"
+	GatewayCertificateDeactivateResponseBindingStatusPendingDeletion   GatewayCertificateDeactivateResponseBindingStatus = "pending_deletion"
+	GatewayCertificateDeactivateResponseBindingStatusInactive          GatewayCertificateDeactivateResponseBindingStatus = "inactive"
+)
+
+func (r GatewayCertificateDeactivateResponseBindingStatus) IsKnown() bool {
+	switch r {
+	case GatewayCertificateDeactivateResponseBindingStatusPendingDeployment, GatewayCertificateDeactivateResponseBindingStatusActive, GatewayCertificateDeactivateResponseBindingStatusPendingDeletion, GatewayCertificateDeactivateResponseBindingStatusInactive:
+		return true
+	}
+	return false
+}
+
+// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
+type GatewayCertificateDeactivateResponseType string
+
+const (
+	GatewayCertificateDeactivateResponseTypeCustom         GatewayCertificateDeactivateResponseType = "custom"
+	GatewayCertificateDeactivateResponseTypeGatewayManaged GatewayCertificateDeactivateResponseType = "gateway_managed"
+)
+
+func (r GatewayCertificateDeactivateResponseType) IsKnown() bool {
+	switch r {
+	case GatewayCertificateDeactivateResponseTypeCustom, GatewayCertificateDeactivateResponseTypeGatewayManaged:
+		return true
+	}
+	return false
+}
+
 type GatewayCertificateGetResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
@@ -523,6 +715,110 @@ const (
 func (r GatewayCertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case GatewayCertificateDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type GatewayCertificateActivateParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r GatewayCertificateActivateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type GatewayCertificateActivateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success GatewayCertificateActivateResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayCertificateActivateResponse                `json:"result"`
+	JSON    gatewayCertificateActivateResponseEnvelopeJSON    `json:"-"`
+}
+
+// gatewayCertificateActivateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [GatewayCertificateActivateResponseEnvelope]
+type gatewayCertificateActivateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayCertificateActivateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayCertificateActivateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type GatewayCertificateActivateResponseEnvelopeSuccess bool
+
+const (
+	GatewayCertificateActivateResponseEnvelopeSuccessTrue GatewayCertificateActivateResponseEnvelopeSuccess = true
+)
+
+func (r GatewayCertificateActivateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayCertificateActivateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type GatewayCertificateDeactivateParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+	Body      interface{}         `json:"body,required"`
+}
+
+func (r GatewayCertificateDeactivateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type GatewayCertificateDeactivateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success GatewayCertificateDeactivateResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayCertificateDeactivateResponse                `json:"result"`
+	JSON    gatewayCertificateDeactivateResponseEnvelopeJSON    `json:"-"`
+}
+
+// gatewayCertificateDeactivateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [GatewayCertificateDeactivateResponseEnvelope]
+type gatewayCertificateDeactivateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayCertificateDeactivateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayCertificateDeactivateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type GatewayCertificateDeactivateResponseEnvelopeSuccess bool
+
+const (
+	GatewayCertificateDeactivateResponseEnvelopeSuccessTrue GatewayCertificateDeactivateResponseEnvelopeSuccess = true
+)
+
+func (r GatewayCertificateDeactivateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayCertificateDeactivateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
