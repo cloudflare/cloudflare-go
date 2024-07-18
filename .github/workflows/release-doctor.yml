@@ -1,6 +1,8 @@
 name: Release Doctor
 on:
   pull_request:
+    branches:
+      - v2
   workflow_dispatch:
 
 concurrency:
