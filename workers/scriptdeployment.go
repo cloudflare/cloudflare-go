@@ -7,8 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -195,13 +197,25 @@ func (r scriptDeploymentGetResponseDeploymentJSON) RawJSON() string {
 
 type ScriptDeploymentNewParams struct {
 	// Identifier
-	AccountID   param.Field[string]          `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// If set to true, the deployment will be created even if normally blocked by
+	// something such rolling back to an older version when a secret has changed.
+	Force       param.Field[bool]            `query:"force"`
 	Annotations param.Field[DeploymentParam] `json:"annotations"`
 	Strategy    param.Field[string]          `json:"strategy"`
 }
 
 func (r ScriptDeploymentNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [ScriptDeploymentNewParams]'s query parameters as
+// `url.Values`.
+func (r ScriptDeploymentNewParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type ScriptDeploymentNewResponseEnvelope struct {
