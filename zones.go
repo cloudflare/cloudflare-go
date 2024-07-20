@@ -92,6 +92,7 @@ func (s *ZonesService) List(ctx context.Context, params *ZoneListParams) ([]Zone
 		var zones []Zone
 		params.PerPage = defaultZonesPerPage
 		params.Page = 1
+		zones = append(zones, r.Result...)
 		for !params.ResultInfo.Done() {
 			res, _ := s.client.get(ctx, buildURI("/zones", params), nil)
 
