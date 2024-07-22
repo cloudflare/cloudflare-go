@@ -33,10 +33,10 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 		ClientDefault:       cloudflare.F(false),
 		DNSDestinationIPsID: cloudflare.F("0e4a32c6-6fb8-4858-9296-98f51631e8e6"),
 		ECSSupport:          cloudflare.F(false),
-		Endpoints: cloudflare.F(zero_trust.GatewayLocationNewParamsEndpoints{
-			DOH: cloudflare.F(zero_trust.GatewayLocationNewParamsEndpointsDOH{
+		Endpoints: cloudflare.F(zero_trust.EndpointParam{
+			DOH: cloudflare.F(zero_trust.DOHEndpointParam{
 				Enabled: cloudflare.F(true),
-				Networks: cloudflare.F([]zero_trust.GatewayLocationNewParamsEndpointsDOHNetwork{{
+				Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
 					Network: cloudflare.F("2001:85a3::/64"),
 				}, {
 					Network: cloudflare.F("2001:85a3::/64"),
@@ -45,9 +45,9 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 				}}),
 				RequireToken: cloudflare.F(true),
 			}),
-			DOT: cloudflare.F(zero_trust.GatewayLocationNewParamsEndpointsDOT{
+			DOT: cloudflare.F(zero_trust.DOTEndpointParam{
 				Enabled: cloudflare.F(true),
-				Networks: cloudflare.F([]zero_trust.GatewayLocationNewParamsEndpointsDOTNetwork{{
+				Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
 					Network: cloudflare.F("2001:85a3::/64"),
 				}, {
 					Network: cloudflare.F("2001:85a3::/64"),
@@ -55,12 +55,12 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 					Network: cloudflare.F("2001:85a3::/64"),
 				}}),
 			}),
-			IPV4: cloudflare.F(zero_trust.GatewayLocationNewParamsEndpointsIPV4{
+			IPV4: cloudflare.F(zero_trust.IPV4EndpointParam{
 				Enabled: cloudflare.F(true),
 			}),
-			IPV6: cloudflare.F(zero_trust.GatewayLocationNewParamsEndpointsIPV6{
+			IPV6: cloudflare.F(zero_trust.IPV6EndpointParam{
 				Enabled: cloudflare.F(true),
-				Networks: cloudflare.F([]zero_trust.GatewayLocationNewParamsEndpointsIPV6Network{{
+				Networks: cloudflare.F([]zero_trust.IPV6NetworkParam{{
 					Network: cloudflare.F("2001:85a3::/64"),
 				}, {
 					Network: cloudflare.F("2001:85a3::/64"),
@@ -108,10 +108,10 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 			ClientDefault:       cloudflare.F(false),
 			DNSDestinationIPsID: cloudflare.F("0e4a32c6-6fb8-4858-9296-98f51631e8e6"),
 			ECSSupport:          cloudflare.F(false),
-			Endpoints: cloudflare.F(zero_trust.GatewayLocationUpdateParamsEndpoints{
-				DOH: cloudflare.F(zero_trust.GatewayLocationUpdateParamsEndpointsDOH{
+			Endpoints: cloudflare.F(zero_trust.EndpointParam{
+				DOH: cloudflare.F(zero_trust.DOHEndpointParam{
 					Enabled: cloudflare.F(true),
-					Networks: cloudflare.F([]zero_trust.GatewayLocationUpdateParamsEndpointsDOHNetwork{{
+					Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
 						Network: cloudflare.F("2001:85a3::/64"),
 					}, {
 						Network: cloudflare.F("2001:85a3::/64"),
@@ -120,9 +120,9 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 					}}),
 					RequireToken: cloudflare.F(true),
 				}),
-				DOT: cloudflare.F(zero_trust.GatewayLocationUpdateParamsEndpointsDOT{
+				DOT: cloudflare.F(zero_trust.DOTEndpointParam{
 					Enabled: cloudflare.F(true),
-					Networks: cloudflare.F([]zero_trust.GatewayLocationUpdateParamsEndpointsDOTNetwork{{
+					Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
 						Network: cloudflare.F("2001:85a3::/64"),
 					}, {
 						Network: cloudflare.F("2001:85a3::/64"),
@@ -130,12 +130,12 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 						Network: cloudflare.F("2001:85a3::/64"),
 					}}),
 				}),
-				IPV4: cloudflare.F(zero_trust.GatewayLocationUpdateParamsEndpointsIPV4{
+				IPV4: cloudflare.F(zero_trust.IPV4EndpointParam{
 					Enabled: cloudflare.F(true),
 				}),
-				IPV6: cloudflare.F(zero_trust.GatewayLocationUpdateParamsEndpointsIPV6{
+				IPV6: cloudflare.F(zero_trust.IPV6EndpointParam{
 					Enabled: cloudflare.F(true),
-					Networks: cloudflare.F([]zero_trust.GatewayLocationUpdateParamsEndpointsIPV6Network{{
+					Networks: cloudflare.F([]zero_trust.IPV6NetworkParam{{
 						Network: cloudflare.F("2001:85a3::/64"),
 					}, {
 						Network: cloudflare.F("2001:85a3::/64"),
