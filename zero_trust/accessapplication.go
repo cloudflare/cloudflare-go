@@ -358,14 +358,14 @@ const (
 	ApplicationTypeVNC         ApplicationType = "vnc"
 	ApplicationTypeAppLauncher ApplicationType = "app_launcher"
 	ApplicationTypeWARP        ApplicationType = "warp"
-	ApplicationTypeBiso        ApplicationType = "biso"
+	ApplicationTypeBISO        ApplicationType = "biso"
 	ApplicationTypeBookmark    ApplicationType = "bookmark"
 	ApplicationTypeDashSSO     ApplicationType = "dash_sso"
 )
 
 func (r ApplicationType) IsKnown() bool {
 	switch r {
-	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBiso, ApplicationTypeBookmark, ApplicationTypeDashSSO:
+	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO:
 		return true
 	}
 	return false

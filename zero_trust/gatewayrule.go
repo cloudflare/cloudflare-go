@@ -369,7 +369,7 @@ type RuleSetting struct {
 	// Settings for the Audit SSH action.
 	AuditSSH RuleSettingAuditSSH `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
-	BisoAdminControls RuleSettingBisoAdminControls `json:"biso_admin_controls"`
+	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls"`
 	// Enable the custom block page.
 	BlockPageEnabled bool `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -425,7 +425,7 @@ type ruleSettingJSON struct {
 	AddHeaders                      apijson.Field
 	AllowChildBypass                apijson.Field
 	AuditSSH                        apijson.Field
-	BisoAdminControls               apijson.Field
+	BISOAdminControls               apijson.Field
 	BlockPageEnabled                apijson.Field
 	BlockReason                     apijson.Field
 	BypassParentRule                apijson.Field
@@ -479,7 +479,7 @@ func (r ruleSettingAuditSSHJSON) RawJSON() string {
 }
 
 // Configure how browser isolation behaves.
-type RuleSettingBisoAdminControls struct {
+type RuleSettingBISOAdminControls struct {
 	// Set to false to enable copy-pasting.
 	DCP bool `json:"dcp"`
 	// Set to false to enable downloading.
@@ -490,12 +490,12 @@ type RuleSettingBisoAdminControls struct {
 	DP bool `json:"dp"`
 	// Set to false to enable uploading.
 	DU   bool                             `json:"du"`
-	JSON ruleSettingBisoAdminControlsJSON `json:"-"`
+	JSON ruleSettingBISOAdminControlsJSON `json:"-"`
 }
 
-// ruleSettingBisoAdminControlsJSON contains the JSON metadata for the struct
-// [RuleSettingBisoAdminControls]
-type ruleSettingBisoAdminControlsJSON struct {
+// ruleSettingBISOAdminControlsJSON contains the JSON metadata for the struct
+// [RuleSettingBISOAdminControls]
+type ruleSettingBISOAdminControlsJSON struct {
 	DCP         apijson.Field
 	DD          apijson.Field
 	DK          apijson.Field
@@ -505,11 +505,11 @@ type ruleSettingBisoAdminControlsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSettingBisoAdminControls) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingBISOAdminControls) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingBisoAdminControlsJSON) RawJSON() string {
+func (r ruleSettingBISOAdminControlsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -731,7 +731,7 @@ type RuleSettingParam struct {
 	// Settings for the Audit SSH action.
 	AuditSSH param.Field[RuleSettingAuditSSHParam] `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
-	BisoAdminControls param.Field[RuleSettingBisoAdminControlsParam] `json:"biso_admin_controls"`
+	BISOAdminControls param.Field[RuleSettingBISOAdminControlsParam] `json:"biso_admin_controls"`
 	// Enable the custom block page.
 	BlockPageEnabled param.Field[bool] `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -796,7 +796,7 @@ func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Configure how browser isolation behaves.
-type RuleSettingBisoAdminControlsParam struct {
+type RuleSettingBISOAdminControlsParam struct {
 	// Set to false to enable copy-pasting.
 	DCP param.Field[bool] `json:"dcp"`
 	// Set to false to enable downloading.
@@ -809,7 +809,7 @@ type RuleSettingBisoAdminControlsParam struct {
 	DU param.Field[bool] `json:"du"`
 }
 
-func (r RuleSettingBisoAdminControlsParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
