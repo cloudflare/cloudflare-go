@@ -240,6 +240,9 @@ type HTTPTimeseriesParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[HTTPTimeseriesParamsNormalization] `query:"normalization"`
 }
 
 // URLQuery serializes [HTTPTimeseriesParams]'s query parameters as `url.Values`.
@@ -281,6 +284,23 @@ const (
 func (r HTTPTimeseriesParamsFormat) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesParamsFormatJson, HTTPTimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesParamsNormalization string
+
+const (
+	HTTPTimeseriesParamsNormalizationPercentageChange HTTPTimeseriesParamsNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesParamsNormalizationMin0Max          HTTPTimeseriesParamsNormalization = "MIN0_MAX"
+)
+
+func (r HTTPTimeseriesParamsNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsNormalizationPercentageChange, HTTPTimeseriesParamsNormalizationMin0Max:
 		return true
 	}
 	return false
