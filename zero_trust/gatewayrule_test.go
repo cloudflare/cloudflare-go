@@ -51,7 +51,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			AuditSSH: cloudflare.F(zero_trust.RuleSettingAuditSSHParam{
 				CommandLogging: cloudflare.F(false),
 			}),
-			BisoAdminControls: cloudflare.F(zero_trust.RuleSettingBisoAdminControlsParam{
+			BISOAdminControls: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsParam{
 				DCP: cloudflare.F(false),
 				DD:  cloudflare.F(false),
 				DK:  cloudflare.F(false),
@@ -188,7 +188,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				AuditSSH: cloudflare.F(zero_trust.RuleSettingAuditSSHParam{
 					CommandLogging: cloudflare.F(false),
 				}),
-				BisoAdminControls: cloudflare.F(zero_trust.RuleSettingBisoAdminControlsParam{
+				BISOAdminControls: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsParam{
 					DCP: cloudflare.F(false),
 					DD:  cloudflare.F(false),
 					DK:  cloudflare.F(false),
