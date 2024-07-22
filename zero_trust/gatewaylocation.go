@@ -145,6 +145,265 @@ func (r *GatewayLocationService) Get(ctx context.Context, locationID string, que
 	return
 }
 
+type DOHEndpoint struct {
+	// True if the endpoint is enabled for this location.
+	Enabled bool `json:"enabled"`
+	// A list of allowed source IP network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
+	Networks []IPNetwork `json:"networks"`
+	// True if the endpoint requires
+	// [user identity](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/dns/dns-over-https/#filter-doh-requests-by-user)
+	// authentication.
+	RequireToken bool            `json:"require_token"`
+	JSON         dohEndpointJSON `json:"-"`
+}
+
+// dohEndpointJSON contains the JSON metadata for the struct [DOHEndpoint]
+type dohEndpointJSON struct {
+	Enabled      apijson.Field
+	Networks     apijson.Field
+	RequireToken apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DOHEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dohEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type DOHEndpointParam struct {
+	// True if the endpoint is enabled for this location.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of allowed source IP network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
+	Networks param.Field[[]IPNetworkParam] `json:"networks"`
+	// True if the endpoint requires
+	// [user identity](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/dns/dns-over-https/#filter-doh-requests-by-user)
+	// authentication.
+	RequireToken param.Field[bool] `json:"require_token"`
+}
+
+func (r DOHEndpointParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DOTEndpoint struct {
+	// True if the endpoint is enabled for this location.
+	Enabled bool `json:"enabled"`
+	// A list of allowed source IP network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
+	Networks []IPNetwork     `json:"networks"`
+	JSON     dotEndpointJSON `json:"-"`
+}
+
+// dotEndpointJSON contains the JSON metadata for the struct [DOTEndpoint]
+type dotEndpointJSON struct {
+	Enabled     apijson.Field
+	Networks    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DOTEndpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dotEndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type DOTEndpointParam struct {
+	// True if the endpoint is enabled for this location.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of allowed source IP network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
+	Networks param.Field[[]IPNetworkParam] `json:"networks"`
+}
+
+func (r DOTEndpointParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The destination endpoints configured for this location. When updating a
+// location, if this field is absent or set with null, the endpoints configuration
+// remains unchanged.
+type Endpoint struct {
+	DOH  DOHEndpoint  `json:"doh"`
+	DOT  DOTEndpoint  `json:"dot"`
+	IPV4 IPV4Endpoint `json:"ipv4"`
+	IPV6 IPV6Endpoint `json:"ipv6"`
+	JSON endpointJSON `json:"-"`
+}
+
+// endpointJSON contains the JSON metadata for the struct [Endpoint]
+type endpointJSON struct {
+	DOH         apijson.Field
+	DOT         apijson.Field
+	IPV4        apijson.Field
+	IPV6        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Endpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r endpointJSON) RawJSON() string {
+	return r.raw
+}
+
+// The destination endpoints configured for this location. When updating a
+// location, if this field is absent or set with null, the endpoints configuration
+// remains unchanged.
+type EndpointParam struct {
+	DOH  param.Field[DOHEndpointParam]  `json:"doh"`
+	DOT  param.Field[DOTEndpointParam]  `json:"dot"`
+	IPV4 param.Field[IPV4EndpointParam] `json:"ipv4"`
+	IPV6 param.Field[IPV6EndpointParam] `json:"ipv6"`
+}
+
+func (r EndpointParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IPNetwork struct {
+	// The IP address or IP CIDR.
+	Network string        `json:"network,required"`
+	JSON    ipNetworkJSON `json:"-"`
+}
+
+// ipNetworkJSON contains the JSON metadata for the struct [IPNetwork]
+type ipNetworkJSON struct {
+	Network     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPNetwork) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipNetworkJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPNetworkParam struct {
+	// The IP address or IP CIDR.
+	Network param.Field[string] `json:"network,required"`
+}
+
+func (r IPNetworkParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IPV4Endpoint struct {
+	// True if the endpoint is enabled for this location.
+	Enabled bool             `json:"enabled"`
+	JSON    ipv4EndpointJSON `json:"-"`
+}
+
+// ipv4EndpointJSON contains the JSON metadata for the struct [IPV4Endpoint]
+type ipv4EndpointJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPV4Endpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipv4EndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPV4EndpointParam struct {
+	// True if the endpoint is enabled for this location.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r IPV4EndpointParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IPV6Endpoint struct {
+	// True if the endpoint is enabled for this location.
+	Enabled bool `json:"enabled"`
+	// A list of allowed source IPv6 network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
+	Networks []IPV6Network    `json:"networks"`
+	JSON     ipv6EndpointJSON `json:"-"`
+}
+
+// ipv6EndpointJSON contains the JSON metadata for the struct [IPV6Endpoint]
+type ipv6EndpointJSON struct {
+	Enabled     apijson.Field
+	Networks    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPV6Endpoint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipv6EndpointJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPV6EndpointParam struct {
+	// True if the endpoint is enabled for this location.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of allowed source IPv6 network ranges for this endpoint. When empty, all
+	// source IPs are allowed. A non-empty list is only effective if the endpoint is
+	// enabled for this location.
+	Networks param.Field[[]IPV6NetworkParam] `json:"networks"`
+}
+
+func (r IPV6EndpointParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type IPV6Network struct {
+	// The IPv6 address or IPv6 CIDR.
+	Network string          `json:"network,required"`
+	JSON    ipv6NetworkJSON `json:"-"`
+}
+
+// ipv6NetworkJSON contains the JSON metadata for the struct [IPV6Network]
+type ipv6NetworkJSON struct {
+	Network     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPV6Network) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipv6NetworkJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPV6NetworkParam struct {
+	// The IPv6 address or IPv6 CIDR.
+	Network param.Field[string] `json:"network,required"`
+}
+
+func (r IPV6NetworkParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type Location struct {
 	ID string `json:"id"`
 	// True if the location is the default location.
@@ -160,7 +419,7 @@ type Location struct {
 	// The destination endpoints configured for this location. When updating a
 	// location, if this field is absent or set with null, the endpoints configuration
 	// remains unchanged.
-	Endpoints LocationEndpoints `json:"endpoints"`
+	Endpoints Endpoint `json:"endpoints"`
 	// IPV6 destination ip assigned to this location. DNS requests sent to this IP will
 	// counted as the request under this location. This field is auto-generated by
 	// Gateway.
@@ -205,210 +464,6 @@ func (r *Location) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r locationJSON) RawJSON() string {
-	return r.raw
-}
-
-// The destination endpoints configured for this location. When updating a
-// location, if this field is absent or set with null, the endpoints configuration
-// remains unchanged.
-type LocationEndpoints struct {
-	DOH  LocationEndpointsDOH  `json:"doh"`
-	DOT  LocationEndpointsDOT  `json:"dot"`
-	IPV4 LocationEndpointsIPV4 `json:"ipv4"`
-	IPV6 LocationEndpointsIPV6 `json:"ipv6"`
-	JSON locationEndpointsJSON `json:"-"`
-}
-
-// locationEndpointsJSON contains the JSON metadata for the struct
-// [LocationEndpoints]
-type locationEndpointsJSON struct {
-	DOH         apijson.Field
-	DOT         apijson.Field
-	IPV4        apijson.Field
-	IPV6        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LocationEndpoints) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locationEndpointsJSON) RawJSON() string {
-	return r.raw
-}
-
-type LocationEndpointsDOH struct {
-	// True if the endpoint is enabled for this location.
-	Enabled bool `json:"enabled"`
-	// A list of allowed source IP network ranges for this endpoint. When empty, all
-	// source IPs are allowed. A non-empty list is only effective if the endpoint is
-	// enabled for this location.
-	Networks []LocationEndpointsDOHNetwork `json:"networks"`
-	// True if the endpoint requires
-	// [user identity](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/dns/dns-over-https/#filter-doh-requests-by-user)
-	// authentication.
-	RequireToken bool                     `json:"require_token"`
-	JSON         locationEndpointsDOHJSON `json:"-"`
-}
-
-// locationEndpointsDOHJSON contains the JSON metadata for the struct
-// [LocationEndpointsDOH]
-type locationEndpointsDOHJSON struct {
-	Enabled      apijson.Field
-	Networks     apijson.Field
-	RequireToken apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *LocationEndpointsDOH) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locationEndpointsDOHJSON) RawJSON() string {
-	return r.raw
-}
-
-type LocationEndpointsDOHNetwork struct {
-	// The IP address or IP CIDR.
-	Network string                          `json:"network,required"`
-	JSON    locationEndpointsDOHNetworkJSON `json:"-"`
-}
-
-// locationEndpointsDOHNetworkJSON contains the JSON metadata for the struct
-// [LocationEndpointsDOHNetwork]
-type locationEndpointsDOHNetworkJSON struct {
-	Network     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LocationEndpointsDOHNetwork) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locationEndpointsDOHNetworkJSON) RawJSON() string {
-	return r.raw
-}
-
-type LocationEndpointsDOT struct {
-	// True if the endpoint is enabled for this location.
-	Enabled bool `json:"enabled"`
-	// A list of allowed source IP network ranges for this endpoint. When empty, all
-	// source IPs are allowed. A non-empty list is only effective if the endpoint is
-	// enabled for this location.
-	Networks []LocationEndpointsDOTNetwork `json:"networks"`
-	JSON     locationEndpointsDOTJSON      `json:"-"`
-}
-
-// locationEndpointsDOTJSON contains the JSON metadata for the struct
-// [LocationEndpointsDOT]
-type locationEndpointsDOTJSON struct {
-	Enabled     apijson.Field
-	Networks    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LocationEndpointsDOT) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locationEndpointsDOTJSON) RawJSON() string {
-	return r.raw
-}
-
-type LocationEndpointsDOTNetwork struct {
-	// The IP address or IP CIDR.
-	Network string                          `json:"network,required"`
-	JSON    locationEndpointsDOTNetworkJSON `json:"-"`
-}
-
-// locationEndpointsDOTNetworkJSON contains the JSON metadata for the struct
-// [LocationEndpointsDOTNetwork]
-type locationEndpointsDOTNetworkJSON struct {
-	Network     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LocationEndpointsDOTNetwork) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locationEndpointsDOTNetworkJSON) RawJSON() string {
-	return r.raw
-}
-
-type LocationEndpointsIPV4 struct {
-	// True if the endpoint is enabled for this location.
-	Enabled bool                      `json:"enabled"`
-	JSON    locationEndpointsIPV4JSON `json:"-"`
-}
-
-// locationEndpointsIPV4JSON contains the JSON metadata for the struct
-// [LocationEndpointsIPV4]
-type locationEndpointsIPV4JSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LocationEndpointsIPV4) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locationEndpointsIPV4JSON) RawJSON() string {
-	return r.raw
-}
-
-type LocationEndpointsIPV6 struct {
-	// True if the endpoint is enabled for this location.
-	Enabled bool `json:"enabled"`
-	// A list of allowed source IPv6 network ranges for this endpoint. When empty, all
-	// source IPs are allowed. A non-empty list is only effective if the endpoint is
-	// enabled for this location.
-	Networks []LocationEndpointsIPV6Network `json:"networks"`
-	JSON     locationEndpointsIPV6JSON      `json:"-"`
-}
-
-// locationEndpointsIPV6JSON contains the JSON metadata for the struct
-// [LocationEndpointsIPV6]
-type locationEndpointsIPV6JSON struct {
-	Enabled     apijson.Field
-	Networks    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LocationEndpointsIPV6) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locationEndpointsIPV6JSON) RawJSON() string {
-	return r.raw
-}
-
-type LocationEndpointsIPV6Network struct {
-	// The IPv6 address or IPv6 CIDR.
-	Network string                           `json:"network,required"`
-	JSON    locationEndpointsIPV6NetworkJSON `json:"-"`
-}
-
-// locationEndpointsIPV6NetworkJSON contains the JSON metadata for the struct
-// [LocationEndpointsIPV6Network]
-type locationEndpointsIPV6NetworkJSON struct {
-	Network     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LocationEndpointsIPV6Network) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locationEndpointsIPV6NetworkJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -467,7 +522,7 @@ type GatewayLocationNewParams struct {
 	// The destination endpoints configured for this location. When updating a
 	// location, if this field is absent or set with null, the endpoints configuration
 	// remains unchanged.
-	Endpoints param.Field[GatewayLocationNewParamsEndpoints] `json:"endpoints"`
+	Endpoints param.Field[EndpointParam] `json:"endpoints"`
 	// A list of network ranges that requests from this location would originate from.
 	// A non-empty list is only effective if the ipv4 endpoint is enabled for this
 	// location.
@@ -475,99 +530,6 @@ type GatewayLocationNewParams struct {
 }
 
 func (r GatewayLocationNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The destination endpoints configured for this location. When updating a
-// location, if this field is absent or set with null, the endpoints configuration
-// remains unchanged.
-type GatewayLocationNewParamsEndpoints struct {
-	DOH  param.Field[GatewayLocationNewParamsEndpointsDOH]  `json:"doh"`
-	DOT  param.Field[GatewayLocationNewParamsEndpointsDOT]  `json:"dot"`
-	IPV4 param.Field[GatewayLocationNewParamsEndpointsIPV4] `json:"ipv4"`
-	IPV6 param.Field[GatewayLocationNewParamsEndpointsIPV6] `json:"ipv6"`
-}
-
-func (r GatewayLocationNewParamsEndpoints) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationNewParamsEndpointsDOH struct {
-	// True if the endpoint is enabled for this location.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of allowed source IP network ranges for this endpoint. When empty, all
-	// source IPs are allowed. A non-empty list is only effective if the endpoint is
-	// enabled for this location.
-	Networks param.Field[[]GatewayLocationNewParamsEndpointsDOHNetwork] `json:"networks"`
-	// True if the endpoint requires
-	// [user identity](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/dns/dns-over-https/#filter-doh-requests-by-user)
-	// authentication.
-	RequireToken param.Field[bool] `json:"require_token"`
-}
-
-func (r GatewayLocationNewParamsEndpointsDOH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationNewParamsEndpointsDOHNetwork struct {
-	// The IP address or IP CIDR.
-	Network param.Field[string] `json:"network,required"`
-}
-
-func (r GatewayLocationNewParamsEndpointsDOHNetwork) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationNewParamsEndpointsDOT struct {
-	// True if the endpoint is enabled for this location.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of allowed source IP network ranges for this endpoint. When empty, all
-	// source IPs are allowed. A non-empty list is only effective if the endpoint is
-	// enabled for this location.
-	Networks param.Field[[]GatewayLocationNewParamsEndpointsDOTNetwork] `json:"networks"`
-}
-
-func (r GatewayLocationNewParamsEndpointsDOT) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationNewParamsEndpointsDOTNetwork struct {
-	// The IP address or IP CIDR.
-	Network param.Field[string] `json:"network,required"`
-}
-
-func (r GatewayLocationNewParamsEndpointsDOTNetwork) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationNewParamsEndpointsIPV4 struct {
-	// True if the endpoint is enabled for this location.
-	Enabled param.Field[bool] `json:"enabled"`
-}
-
-func (r GatewayLocationNewParamsEndpointsIPV4) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationNewParamsEndpointsIPV6 struct {
-	// True if the endpoint is enabled for this location.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of allowed source IPv6 network ranges for this endpoint. When empty, all
-	// source IPs are allowed. A non-empty list is only effective if the endpoint is
-	// enabled for this location.
-	Networks param.Field[[]GatewayLocationNewParamsEndpointsIPV6Network] `json:"networks"`
-}
-
-func (r GatewayLocationNewParamsEndpointsIPV6) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationNewParamsEndpointsIPV6Network struct {
-	// The IPv6 address or IPv6 CIDR.
-	Network param.Field[string] `json:"network,required"`
-}
-
-func (r GatewayLocationNewParamsEndpointsIPV6Network) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -640,7 +602,7 @@ type GatewayLocationUpdateParams struct {
 	// The destination endpoints configured for this location. When updating a
 	// location, if this field is absent or set with null, the endpoints configuration
 	// remains unchanged.
-	Endpoints param.Field[GatewayLocationUpdateParamsEndpoints] `json:"endpoints"`
+	Endpoints param.Field[EndpointParam] `json:"endpoints"`
 	// A list of network ranges that requests from this location would originate from.
 	// A non-empty list is only effective if the ipv4 endpoint is enabled for this
 	// location.
@@ -648,99 +610,6 @@ type GatewayLocationUpdateParams struct {
 }
 
 func (r GatewayLocationUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The destination endpoints configured for this location. When updating a
-// location, if this field is absent or set with null, the endpoints configuration
-// remains unchanged.
-type GatewayLocationUpdateParamsEndpoints struct {
-	DOH  param.Field[GatewayLocationUpdateParamsEndpointsDOH]  `json:"doh"`
-	DOT  param.Field[GatewayLocationUpdateParamsEndpointsDOT]  `json:"dot"`
-	IPV4 param.Field[GatewayLocationUpdateParamsEndpointsIPV4] `json:"ipv4"`
-	IPV6 param.Field[GatewayLocationUpdateParamsEndpointsIPV6] `json:"ipv6"`
-}
-
-func (r GatewayLocationUpdateParamsEndpoints) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationUpdateParamsEndpointsDOH struct {
-	// True if the endpoint is enabled for this location.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of allowed source IP network ranges for this endpoint. When empty, all
-	// source IPs are allowed. A non-empty list is only effective if the endpoint is
-	// enabled for this location.
-	Networks param.Field[[]GatewayLocationUpdateParamsEndpointsDOHNetwork] `json:"networks"`
-	// True if the endpoint requires
-	// [user identity](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/dns/dns-over-https/#filter-doh-requests-by-user)
-	// authentication.
-	RequireToken param.Field[bool] `json:"require_token"`
-}
-
-func (r GatewayLocationUpdateParamsEndpointsDOH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationUpdateParamsEndpointsDOHNetwork struct {
-	// The IP address or IP CIDR.
-	Network param.Field[string] `json:"network,required"`
-}
-
-func (r GatewayLocationUpdateParamsEndpointsDOHNetwork) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationUpdateParamsEndpointsDOT struct {
-	// True if the endpoint is enabled for this location.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of allowed source IP network ranges for this endpoint. When empty, all
-	// source IPs are allowed. A non-empty list is only effective if the endpoint is
-	// enabled for this location.
-	Networks param.Field[[]GatewayLocationUpdateParamsEndpointsDOTNetwork] `json:"networks"`
-}
-
-func (r GatewayLocationUpdateParamsEndpointsDOT) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationUpdateParamsEndpointsDOTNetwork struct {
-	// The IP address or IP CIDR.
-	Network param.Field[string] `json:"network,required"`
-}
-
-func (r GatewayLocationUpdateParamsEndpointsDOTNetwork) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationUpdateParamsEndpointsIPV4 struct {
-	// True if the endpoint is enabled for this location.
-	Enabled param.Field[bool] `json:"enabled"`
-}
-
-func (r GatewayLocationUpdateParamsEndpointsIPV4) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationUpdateParamsEndpointsIPV6 struct {
-	// True if the endpoint is enabled for this location.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of allowed source IPv6 network ranges for this endpoint. When empty, all
-	// source IPs are allowed. A non-empty list is only effective if the endpoint is
-	// enabled for this location.
-	Networks param.Field[[]GatewayLocationUpdateParamsEndpointsIPV6Network] `json:"networks"`
-}
-
-func (r GatewayLocationUpdateParamsEndpointsIPV6) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayLocationUpdateParamsEndpointsIPV6Network struct {
-	// The IPv6 address or IPv6 CIDR.
-	Network param.Field[string] `json:"network,required"`
-}
-
-func (r GatewayLocationUpdateParamsEndpointsIPV6Network) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
