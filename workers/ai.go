@@ -450,8 +450,6 @@ type AIRunParamsBody struct {
 	Height            param.Field[int64]       `json:"height"`
 	Image             param.Field[interface{}] `json:"image,required"`
 	ImageB64          param.Field[string]      `json:"image_b64"`
-	LoraWeights       param.Field[interface{}] `json:"lora_weights,required"`
-	Loras             param.Field[interface{}] `json:"loras,required"`
 	Mask              param.Field[interface{}] `json:"mask,required"`
 	NegativePrompt    param.Field[string]      `json:"negative_prompt"`
 	NumSteps          param.Field[int64]       `json:"num_steps"`
@@ -512,8 +510,6 @@ type AIRunParamsBodyTextToImage struct {
 	Height         param.Field[int64]     `json:"height"`
 	Image          param.Field[[]float64] `json:"image"`
 	ImageB64       param.Field[string]    `json:"image_b64"`
-	LoraWeights    param.Field[[]float64] `json:"lora_weights"`
-	Loras          param.Field[[]string]  `json:"loras"`
 	Mask           param.Field[[]float64] `json:"mask"`
 	NegativePrompt param.Field[string]    `json:"negative_prompt"`
 	NumSteps       param.Field[int64]     `json:"num_steps"`
