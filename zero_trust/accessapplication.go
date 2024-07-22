@@ -355,7 +355,7 @@ const (
 	ApplicationTypeSelfHosted  ApplicationType = "self_hosted"
 	ApplicationTypeSaaS        ApplicationType = "saas"
 	ApplicationTypeSSH         ApplicationType = "ssh"
-	ApplicationTypeVnc         ApplicationType = "vnc"
+	ApplicationTypeVNC         ApplicationType = "vnc"
 	ApplicationTypeAppLauncher ApplicationType = "app_launcher"
 	ApplicationTypeWARP        ApplicationType = "warp"
 	ApplicationTypeBiso        ApplicationType = "biso"
@@ -365,10 +365,77 @@ const (
 
 func (r ApplicationType) IsKnown() bool {
 	switch r {
-	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVnc, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBiso, ApplicationTypeBookmark, ApplicationTypeDashSSO:
+	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBiso, ApplicationTypeBookmark, ApplicationTypeDashSSO:
 		return true
 	}
 	return false
+}
+
+type CORSHeaders struct {
+	// Allows all HTTP request headers.
+	AllowAllHeaders bool `json:"allow_all_headers"`
+	// Allows all HTTP request methods.
+	AllowAllMethods bool `json:"allow_all_methods"`
+	// Allows all origins.
+	AllowAllOrigins bool `json:"allow_all_origins"`
+	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
+	// client certificates) with requests.
+	AllowCredentials bool `json:"allow_credentials"`
+	// Allowed HTTP request headers.
+	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
+	// Allowed HTTP request methods.
+	AllowedMethods []AllowedMethods `json:"allowed_methods"`
+	// Allowed origins.
+	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
+	// The maximum number of seconds the results of a preflight request can be cached.
+	MaxAge float64         `json:"max_age"`
+	JSON   corsHeadersJSON `json:"-"`
+}
+
+// corsHeadersJSON contains the JSON metadata for the struct [CORSHeaders]
+type corsHeadersJSON struct {
+	AllowAllHeaders  apijson.Field
+	AllowAllMethods  apijson.Field
+	AllowAllOrigins  apijson.Field
+	AllowCredentials apijson.Field
+	AllowedHeaders   apijson.Field
+	AllowedMethods   apijson.Field
+	AllowedOrigins   apijson.Field
+	MaxAge           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *CORSHeaders) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r corsHeadersJSON) RawJSON() string {
+	return r.raw
+}
+
+type CORSHeadersParam struct {
+	// Allows all HTTP request headers.
+	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
+	// Allows all HTTP request methods.
+	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
+	// Allows all origins.
+	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
+	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
+	// client certificates) with requests.
+	AllowCredentials param.Field[bool] `json:"allow_credentials"`
+	// Allowed HTTP request headers.
+	AllowedHeaders param.Field[[]AllowedHeadersParam] `json:"allowed_headers"`
+	// Allowed HTTP request methods.
+	AllowedMethods param.Field[[]AllowedMethods] `json:"allowed_methods"`
+	// Allowed origins.
+	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowed_origins"`
+	// The maximum number of seconds the results of a preflight request can be cached.
+	MaxAge param.Field[float64] `json:"max_age"`
+}
+
+func (r CORSHeadersParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // The action Access will take if a user matches this policy.
@@ -1018,7 +1085,7 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationN
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1042,7 +1109,7 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationU
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1066,7 +1133,7 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationL
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1090,7 +1157,7 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationG
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1144,7 +1211,7 @@ func (r SCIMConfigAuthenticationHTTPBasicParam) implementsZeroTrustAccessApplica
 func (r SCIMConfigAuthenticationHTTPBasicParam) implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationUnion() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion() {
+func (r SCIMConfigAuthenticationHTTPBasicParam) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasicParam) implementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
@@ -1168,7 +1235,7 @@ func (r SCIMConfigAuthenticationHTTPBasicParam) implementsZeroTrustAccessApplica
 func (r SCIMConfigAuthenticationHTTPBasicParam) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationUnion() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasicParam) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion() {
+func (r SCIMConfigAuthenticationHTTPBasicParam) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasicParam) implementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
@@ -1219,7 +1286,7 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1243,7 +1310,7 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1267,7 +1334,7 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1291,7 +1358,7 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1343,7 +1410,7 @@ func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsZeroTrustAccess
 func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationUnion() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion() {
+func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
@@ -1367,7 +1434,7 @@ func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsZeroTrustAccess
 func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationUnion() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion() {
+func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerTokenParam) implementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
@@ -1434,7 +1501,7 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewR
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1458,7 +1525,7 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpda
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1482,7 +1549,7 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationList
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1506,7 +1573,7 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetR
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication() {
+func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthentication() {
@@ -1570,7 +1637,7 @@ func (r SCIMConfigAuthenticationOauth2Param) implementsZeroTrustAccessApplicatio
 func (r SCIMConfigAuthenticationOauth2Param) implementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationUnion() {
 }
 
-func (r SCIMConfigAuthenticationOauth2Param) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion() {
+func (r SCIMConfigAuthenticationOauth2Param) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion() {
 }
 
 func (r SCIMConfigAuthenticationOauth2Param) implementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
@@ -1594,7 +1661,7 @@ func (r SCIMConfigAuthenticationOauth2Param) implementsZeroTrustAccessApplicatio
 func (r SCIMConfigAuthenticationOauth2Param) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationUnion() {
 }
 
-func (r SCIMConfigAuthenticationOauth2Param) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion() {
+func (r SCIMConfigAuthenticationOauth2Param) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion() {
 }
 
 func (r SCIMConfigAuthenticationOauth2Param) implementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationUnion() {
@@ -1727,7 +1794,7 @@ type AccessApplicationNewResponse struct {
 	// [AccessApplicationNewResponseSelfHostedApplicationSCIMConfig],
 	// [AccessApplicationNewResponseSaaSApplicationSCIMConfig],
 	// [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfig],
-	// [AccessApplicationNewResponseBrowserVncApplicationSCIMConfig],
+	// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig],
 	// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfig],
 	// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
 	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig],
@@ -1745,12 +1812,8 @@ type AccessApplicationNewResponse struct {
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// This field can have the runtime type of
-	// [AccessApplicationNewResponseSelfHostedApplicationCORSHeaders],
-	// [AccessApplicationNewResponseBrowserSSHApplicationCORSHeaders],
-	// [AccessApplicationNewResponseBrowserVncApplicationCORSHeaders].
-	CORSHeaders interface{} `json:"cors_headers,required"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -1864,7 +1927,7 @@ func (r *AccessApplicationNewResponse) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.AccessApplicationNewResponseSelfHostedApplication],
 // [zero_trust.AccessApplicationNewResponseSaaSApplication],
 // [zero_trust.AccessApplicationNewResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationNewResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationNewResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
@@ -1877,7 +1940,7 @@ func (r AccessApplicationNewResponse) AsUnion() AccessApplicationNewResponseUnio
 // [zero_trust.AccessApplicationNewResponseSelfHostedApplication],
 // [zero_trust.AccessApplicationNewResponseSaaSApplication],
 // [zero_trust.AccessApplicationNewResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationNewResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationNewResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication]
@@ -1904,7 +1967,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVncApplication{}),
+			Type:       reflect.TypeOf(AccessApplicationNewResponseBrowserVNCApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -1947,9 +2010,9 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                         `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationNewResponseSelfHostedApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                    `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -2046,51 +2109,6 @@ func (r accessApplicationNewResponseSelfHostedApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationNewResponseSelfHostedApplication) implementsZeroTrustAccessApplicationNewResponse() {
-}
-
-type AccessApplicationNewResponseSelfHostedApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                          `json:"max_age"`
-	JSON   accessApplicationNewResponseSelfHostedApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationNewResponseSelfHostedApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationNewResponseSelfHostedApplicationCORSHeaders]
-type accessApplicationNewResponseSelfHostedApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseSelfHostedApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseSelfHostedApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -2659,9 +2677,9 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                         `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationNewResponseBrowserSSHApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                    `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -2758,51 +2776,6 @@ func (r accessApplicationNewResponseBrowserSSHApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationNewResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationNewResponse() {
-}
-
-type AccessApplicationNewResponseBrowserSSHApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                          `json:"max_age"`
-	JSON   accessApplicationNewResponseBrowserSSHApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationNewResponseBrowserSSHApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserSSHApplicationCORSHeaders]
-type accessApplicationNewResponseBrowserSSHApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBrowserSSHApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBrowserSSHApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -2966,7 +2939,7 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 	return false
 }
 
-type AccessApplicationNewResponseBrowserVncApplication struct {
+type AccessApplicationNewResponseBrowserVNCApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
@@ -2988,9 +2961,9 @@ type AccessApplicationNewResponseBrowserVncApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                         `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationNewResponseBrowserVncApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                    `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -3024,7 +2997,7 @@ type AccessApplicationNewResponseBrowserVncApplication struct {
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
-	SCIMConfig AccessApplicationNewResponseBrowserVncApplicationSCIMConfig `json:"scim_config"`
+	SCIMConfig AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -3039,12 +3012,12 @@ type AccessApplicationNewResponseBrowserVncApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags      []string                                              `json:"tags"`
 	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
-	JSON      accessApplicationNewResponseBrowserVncApplicationJSON `json:"-"`
+	JSON      accessApplicationNewResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
-// accessApplicationNewResponseBrowserVncApplicationJSON contains the JSON metadata
-// for the struct [AccessApplicationNewResponseBrowserVncApplication]
-type accessApplicationNewResponseBrowserVncApplicationJSON struct {
+// accessApplicationNewResponseBrowserVNCApplicationJSON contains the JSON metadata
+// for the struct [AccessApplicationNewResponseBrowserVNCApplication]
+type accessApplicationNewResponseBrowserVNCApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
@@ -3078,65 +3051,20 @@ type accessApplicationNewResponseBrowserVncApplicationJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessApplicationNewResponseBrowserVncApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationNewResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationNewResponseBrowserVncApplicationJSON) RawJSON() string {
+func (r accessApplicationNewResponseBrowserVNCApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessApplicationNewResponseBrowserVncApplication) implementsZeroTrustAccessApplicationNewResponse() {
-}
-
-type AccessApplicationNewResponseBrowserVncApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                          `json:"max_age"`
-	JSON   accessApplicationNewResponseBrowserVncApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationNewResponseBrowserVncApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserVncApplicationCORSHeaders]
-type accessApplicationNewResponseBrowserVncApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBrowserVncApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBrowserVncApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
+func (r AccessApplicationNewResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationNewResponse() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
 // in closed beta.
-type AccessApplicationNewResponseBrowserVncApplicationSCIMConfig struct {
+type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
 	IdPUID string `json:"idp_uid,required"`
@@ -3144,7 +3072,7 @@ type AccessApplicationNewResponseBrowserVncApplicationSCIMConfig struct {
 	RemoteURI string `json:"remote_uri,required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
-	Authentication AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication `json:"authentication"`
+	Authentication AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication `json:"authentication"`
 	// If false, propagates DELETE requests to the target application for SCIM
 	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
 	// targets do not support DELETE operations.
@@ -3154,13 +3082,13 @@ type AccessApplicationNewResponseBrowserVncApplicationSCIMConfig struct {
 	// A list of mappings to apply to SCIM resources before provisioning them in this
 	// application. These can transform or filter the resources to be provisioned.
 	Mappings []SCIMConfigMapping                                             `json:"mappings"`
-	JSON     accessApplicationNewResponseBrowserVncApplicationSCIMConfigJSON `json:"-"`
+	JSON     accessApplicationNewResponseBrowserVNCApplicationSCIMConfigJSON `json:"-"`
 }
 
-// accessApplicationNewResponseBrowserVncApplicationSCIMConfigJSON contains the
+// accessApplicationNewResponseBrowserVNCApplicationSCIMConfigJSON contains the
 // JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserVncApplicationSCIMConfig]
-type accessApplicationNewResponseBrowserVncApplicationSCIMConfigJSON struct {
+// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig]
+type accessApplicationNewResponseBrowserVNCApplicationSCIMConfigJSON struct {
 	IdPUID             apijson.Field
 	RemoteURI          apijson.Field
 	Authentication     apijson.Field
@@ -3171,21 +3099,21 @@ type accessApplicationNewResponseBrowserVncApplicationSCIMConfigJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessApplicationNewResponseBrowserVncApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationNewResponseBrowserVncApplicationSCIMConfigJSON) RawJSON() string {
+func (r accessApplicationNewResponseBrowserVNCApplicationSCIMConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
-type AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication struct {
+type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication struct {
 	// Password used to authenticate with the remote SCIM service.
 	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
 	// User name used to authenticate with the remote SCIM service.
 	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
@@ -3203,14 +3131,14 @@ type AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication s
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                        `json:"token_url"`
-	JSON     accessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationUnion
+	JSON     accessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union    AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
 }
 
-// accessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationJSON
+// accessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication]
-type accessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationJSON struct {
+// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication]
+type accessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON struct {
 	Password         apijson.Field
 	Scheme           apijson.Field
 	User             apijson.Field
@@ -3224,12 +3152,12 @@ type accessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationJS
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r accessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+func (r accessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication{}
+func (r *AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -3238,14 +3166,14 @@ func (r *AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticati
 }
 
 // AsUnion returns a
-// [AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationUnion]
+// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion]
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
 // [zero_trust.SCIMConfigAuthenticationHTTPBasic],
 // [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
 // [zero_trust.SCIMConfigAuthenticationOauth2].
-func (r AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationUnion {
+func (r AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
 
@@ -3255,13 +3183,13 @@ func (r AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticatio
 // Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
 // [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
 // [zero_trust.SCIMConfigAuthenticationOauth2].
-type AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationUnion interface {
-	implementsZeroTrustAccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthentication()
+type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		reflect.TypeOf((*AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -3279,17 +3207,17 @@ func init() {
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationScheme string
+type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme string
 
 const (
-	AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauth2"
+	AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauth2"
 )
 
-func (r AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+func (r AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2:
+	case AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2:
 		return true
 	}
 	return false
@@ -4189,7 +4117,7 @@ type AccessApplicationUpdateResponse struct {
 	// [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfig],
 	// [AccessApplicationUpdateResponseSaaSApplicationSCIMConfig],
 	// [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig],
 	// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig],
 	// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
 	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig],
@@ -4207,12 +4135,8 @@ type AccessApplicationUpdateResponse struct {
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// This field can have the runtime type of
-	// [AccessApplicationUpdateResponseSelfHostedApplicationCORSHeaders],
-	// [AccessApplicationUpdateResponseBrowserSSHApplicationCORSHeaders],
-	// [AccessApplicationUpdateResponseBrowserVncApplicationCORSHeaders].
-	CORSHeaders interface{} `json:"cors_headers,required"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -4326,7 +4250,7 @@ func (r *AccessApplicationUpdateResponse) UnmarshalJSON(data []byte) (err error)
 // [zero_trust.AccessApplicationUpdateResponseSelfHostedApplication],
 // [zero_trust.AccessApplicationUpdateResponseSaaSApplication],
 // [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationUpdateResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
@@ -4339,7 +4263,7 @@ func (r AccessApplicationUpdateResponse) AsUnion() AccessApplicationUpdateRespon
 // [zero_trust.AccessApplicationUpdateResponseSelfHostedApplication],
 // [zero_trust.AccessApplicationUpdateResponseSaaSApplication],
 // [zero_trust.AccessApplicationUpdateResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationUpdateResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication]
@@ -4366,7 +4290,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVncApplication{}),
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBrowserVNCApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -4409,9 +4333,9 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                            `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationUpdateResponseSelfHostedApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                       `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -4508,51 +4432,6 @@ func (r accessApplicationUpdateResponseSelfHostedApplicationJSON) RawJSON() stri
 }
 
 func (r AccessApplicationUpdateResponseSelfHostedApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
-}
-
-type AccessApplicationUpdateResponseSelfHostedApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                             `json:"max_age"`
-	JSON   accessApplicationUpdateResponseSelfHostedApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseSelfHostedApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUpdateResponseSelfHostedApplicationCORSHeaders]
-type accessApplicationUpdateResponseSelfHostedApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseSelfHostedApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseSelfHostedApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -5122,9 +5001,9 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                            `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationUpdateResponseBrowserSSHApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                       `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -5221,51 +5100,6 @@ func (r accessApplicationUpdateResponseBrowserSSHApplicationJSON) RawJSON() stri
 }
 
 func (r AccessApplicationUpdateResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
-}
-
-type AccessApplicationUpdateResponseBrowserSSHApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                             `json:"max_age"`
-	JSON   accessApplicationUpdateResponseBrowserSSHApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseBrowserSSHApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserSSHApplicationCORSHeaders]
-type accessApplicationUpdateResponseBrowserSSHApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBrowserSSHApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBrowserSSHApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -5429,7 +5263,7 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentica
 	return false
 }
 
-type AccessApplicationUpdateResponseBrowserVncApplication struct {
+type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
@@ -5451,9 +5285,9 @@ type AccessApplicationUpdateResponseBrowserVncApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                            `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationUpdateResponseBrowserVncApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                       `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -5487,7 +5321,7 @@ type AccessApplicationUpdateResponseBrowserVncApplication struct {
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
-	SCIMConfig AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfig `json:"scim_config"`
+	SCIMConfig AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -5502,12 +5336,12 @@ type AccessApplicationUpdateResponseBrowserVncApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags      []string                                                 `json:"tags"`
 	UpdatedAt time.Time                                                `json:"updated_at" format:"date-time"`
-	JSON      accessApplicationUpdateResponseBrowserVncApplicationJSON `json:"-"`
+	JSON      accessApplicationUpdateResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
-// accessApplicationUpdateResponseBrowserVncApplicationJSON contains the JSON
-// metadata for the struct [AccessApplicationUpdateResponseBrowserVncApplication]
-type accessApplicationUpdateResponseBrowserVncApplicationJSON struct {
+// accessApplicationUpdateResponseBrowserVNCApplicationJSON contains the JSON
+// metadata for the struct [AccessApplicationUpdateResponseBrowserVNCApplication]
+type accessApplicationUpdateResponseBrowserVNCApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
@@ -5541,65 +5375,20 @@ type accessApplicationUpdateResponseBrowserVncApplicationJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessApplicationUpdateResponseBrowserVncApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationUpdateResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationUpdateResponseBrowserVncApplicationJSON) RawJSON() string {
+func (r accessApplicationUpdateResponseBrowserVNCApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessApplicationUpdateResponseBrowserVncApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
-}
-
-type AccessApplicationUpdateResponseBrowserVncApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                             `json:"max_age"`
-	JSON   accessApplicationUpdateResponseBrowserVncApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseBrowserVncApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserVncApplicationCORSHeaders]
-type accessApplicationUpdateResponseBrowserVncApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBrowserVncApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBrowserVncApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
+func (r AccessApplicationUpdateResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
 // in closed beta.
-type AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfig struct {
+type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
 	IdPUID string `json:"idp_uid,required"`
@@ -5607,7 +5396,7 @@ type AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfig struct {
 	RemoteURI string `json:"remote_uri,required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
-	Authentication AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication `json:"authentication"`
+	Authentication AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication `json:"authentication"`
 	// If false, propagates DELETE requests to the target application for SCIM
 	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
 	// targets do not support DELETE operations.
@@ -5617,13 +5406,13 @@ type AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfig struct {
 	// A list of mappings to apply to SCIM resources before provisioning them in this
 	// application. These can transform or filter the resources to be provisioned.
 	Mappings []SCIMConfigMapping                                                `json:"mappings"`
-	JSON     accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigJSON `json:"-"`
+	JSON     accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigJSON `json:"-"`
 }
 
-// accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigJSON contains the
+// accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigJSON contains the
 // JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfig]
-type accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigJSON struct {
+// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig]
+type accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigJSON struct {
 	IdPUID             apijson.Field
 	RemoteURI          apijson.Field
 	Authentication     apijson.Field
@@ -5634,21 +5423,21 @@ type accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigJSON) RawJSON() string {
+func (r accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
-type AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication struct {
+type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication struct {
 	// Password used to authenticate with the remote SCIM service.
 	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
 	// User name used to authenticate with the remote SCIM service.
 	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
@@ -5666,14 +5455,14 @@ type AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticatio
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                           `json:"token_url"`
-	JSON     accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationUnion
+	JSON     accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union    AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
 }
 
-// accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationJSON
+// accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication]
-type accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationJSON struct {
+// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication]
+type accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON struct {
 	Password         apijson.Field
 	Scheme           apijson.Field
 	User             apijson.Field
@@ -5687,12 +5476,12 @@ type accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticatio
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r accessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+func (r accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication{}
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -5701,14 +5490,14 @@ func (r *AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentic
 }
 
 // AsUnion returns a
-// [AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationUnion]
+// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion]
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
 // [zero_trust.SCIMConfigAuthenticationHTTPBasic],
 // [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
 // [zero_trust.SCIMConfigAuthenticationOauth2].
-func (r AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationUnion {
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
 
@@ -5718,13 +5507,13 @@ func (r AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentica
 // Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
 // [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
 // [zero_trust.SCIMConfigAuthenticationOauth2].
-type AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationUnion interface {
-	implementsZeroTrustAccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthentication()
+type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		reflect.TypeOf((*AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -5742,17 +5531,17 @@ func init() {
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationScheme string
+type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme string
 
 const (
-	AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauth2"
+	AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauth2"
 )
 
-func (r AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2:
+	case AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2:
 		return true
 	}
 	return false
@@ -6652,7 +6441,7 @@ type AccessApplicationListResponse struct {
 	// [AccessApplicationListResponseSelfHostedApplicationSCIMConfig],
 	// [AccessApplicationListResponseSaaSApplicationSCIMConfig],
 	// [AccessApplicationListResponseBrowserSSHApplicationSCIMConfig],
-	// [AccessApplicationListResponseBrowserVncApplicationSCIMConfig],
+	// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfig],
 	// [AccessApplicationListResponseAppLauncherApplicationSCIMConfig],
 	// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
 	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig],
@@ -6670,12 +6459,8 @@ type AccessApplicationListResponse struct {
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// This field can have the runtime type of
-	// [AccessApplicationListResponseSelfHostedApplicationCORSHeaders],
-	// [AccessApplicationListResponseBrowserSSHApplicationCORSHeaders],
-	// [AccessApplicationListResponseBrowserVncApplicationCORSHeaders].
-	CORSHeaders interface{} `json:"cors_headers,required"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -6789,7 +6574,7 @@ func (r *AccessApplicationListResponse) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.AccessApplicationListResponseSelfHostedApplication],
 // [zero_trust.AccessApplicationListResponseSaaSApplication],
 // [zero_trust.AccessApplicationListResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationListResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationListResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationListResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication],
@@ -6802,7 +6587,7 @@ func (r AccessApplicationListResponse) AsUnion() AccessApplicationListResponseUn
 // [zero_trust.AccessApplicationListResponseSelfHostedApplication],
 // [zero_trust.AccessApplicationListResponseSaaSApplication],
 // [zero_trust.AccessApplicationListResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationListResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationListResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationListResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication]
@@ -6829,7 +6614,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVncApplication{}),
+			Type:       reflect.TypeOf(AccessApplicationListResponseBrowserVNCApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -6872,9 +6657,9 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                          `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationListResponseSelfHostedApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                     `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -6971,51 +6756,6 @@ func (r accessApplicationListResponseSelfHostedApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationListResponseSelfHostedApplication) implementsZeroTrustAccessApplicationListResponse() {
-}
-
-type AccessApplicationListResponseSelfHostedApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                           `json:"max_age"`
-	JSON   accessApplicationListResponseSelfHostedApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationListResponseSelfHostedApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationListResponseSelfHostedApplicationCORSHeaders]
-type accessApplicationListResponseSelfHostedApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseSelfHostedApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseSelfHostedApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -7584,9 +7324,9 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                          `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationListResponseBrowserSSHApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                     `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -7683,51 +7423,6 @@ func (r accessApplicationListResponseBrowserSSHApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationListResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationListResponse() {
-}
-
-type AccessApplicationListResponseBrowserSSHApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                           `json:"max_age"`
-	JSON   accessApplicationListResponseBrowserSSHApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationListResponseBrowserSSHApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationListResponseBrowserSSHApplicationCORSHeaders]
-type accessApplicationListResponseBrowserSSHApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBrowserSSHApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBrowserSSHApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -7891,7 +7586,7 @@ func (r AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticati
 	return false
 }
 
-type AccessApplicationListResponseBrowserVncApplication struct {
+type AccessApplicationListResponseBrowserVNCApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
@@ -7913,9 +7608,9 @@ type AccessApplicationListResponseBrowserVncApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                          `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationListResponseBrowserVncApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                     `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -7949,7 +7644,7 @@ type AccessApplicationListResponseBrowserVncApplication struct {
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
-	SCIMConfig AccessApplicationListResponseBrowserVncApplicationSCIMConfig `json:"scim_config"`
+	SCIMConfig AccessApplicationListResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -7964,12 +7659,12 @@ type AccessApplicationListResponseBrowserVncApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags      []string                                               `json:"tags"`
 	UpdatedAt time.Time                                              `json:"updated_at" format:"date-time"`
-	JSON      accessApplicationListResponseBrowserVncApplicationJSON `json:"-"`
+	JSON      accessApplicationListResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
-// accessApplicationListResponseBrowserVncApplicationJSON contains the JSON
-// metadata for the struct [AccessApplicationListResponseBrowserVncApplication]
-type accessApplicationListResponseBrowserVncApplicationJSON struct {
+// accessApplicationListResponseBrowserVNCApplicationJSON contains the JSON
+// metadata for the struct [AccessApplicationListResponseBrowserVNCApplication]
+type accessApplicationListResponseBrowserVNCApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
@@ -8003,65 +7698,20 @@ type accessApplicationListResponseBrowserVncApplicationJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessApplicationListResponseBrowserVncApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationListResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationListResponseBrowserVncApplicationJSON) RawJSON() string {
+func (r accessApplicationListResponseBrowserVNCApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessApplicationListResponseBrowserVncApplication) implementsZeroTrustAccessApplicationListResponse() {
-}
-
-type AccessApplicationListResponseBrowserVncApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                           `json:"max_age"`
-	JSON   accessApplicationListResponseBrowserVncApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationListResponseBrowserVncApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationListResponseBrowserVncApplicationCORSHeaders]
-type accessApplicationListResponseBrowserVncApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBrowserVncApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBrowserVncApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
+func (r AccessApplicationListResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationListResponse() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
 // in closed beta.
-type AccessApplicationListResponseBrowserVncApplicationSCIMConfig struct {
+type AccessApplicationListResponseBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
 	IdPUID string `json:"idp_uid,required"`
@@ -8069,7 +7719,7 @@ type AccessApplicationListResponseBrowserVncApplicationSCIMConfig struct {
 	RemoteURI string `json:"remote_uri,required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
-	Authentication AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication `json:"authentication"`
+	Authentication AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication `json:"authentication"`
 	// If false, propagates DELETE requests to the target application for SCIM
 	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
 	// targets do not support DELETE operations.
@@ -8079,13 +7729,13 @@ type AccessApplicationListResponseBrowserVncApplicationSCIMConfig struct {
 	// A list of mappings to apply to SCIM resources before provisioning them in this
 	// application. These can transform or filter the resources to be provisioned.
 	Mappings []SCIMConfigMapping                                              `json:"mappings"`
-	JSON     accessApplicationListResponseBrowserVncApplicationSCIMConfigJSON `json:"-"`
+	JSON     accessApplicationListResponseBrowserVNCApplicationSCIMConfigJSON `json:"-"`
 }
 
-// accessApplicationListResponseBrowserVncApplicationSCIMConfigJSON contains the
+// accessApplicationListResponseBrowserVNCApplicationSCIMConfigJSON contains the
 // JSON metadata for the struct
-// [AccessApplicationListResponseBrowserVncApplicationSCIMConfig]
-type accessApplicationListResponseBrowserVncApplicationSCIMConfigJSON struct {
+// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfig]
+type accessApplicationListResponseBrowserVNCApplicationSCIMConfigJSON struct {
 	IdPUID             apijson.Field
 	RemoteURI          apijson.Field
 	Authentication     apijson.Field
@@ -8096,21 +7746,21 @@ type accessApplicationListResponseBrowserVncApplicationSCIMConfigJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessApplicationListResponseBrowserVncApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationListResponseBrowserVNCApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationListResponseBrowserVncApplicationSCIMConfigJSON) RawJSON() string {
+func (r accessApplicationListResponseBrowserVNCApplicationSCIMConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
-type AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication struct {
+type AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication struct {
 	// Password used to authenticate with the remote SCIM service.
 	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
 	// User name used to authenticate with the remote SCIM service.
 	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
@@ -8128,14 +7778,14 @@ type AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication 
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                         `json:"token_url"`
-	JSON     accessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationUnion
+	JSON     accessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union    AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
 }
 
-// accessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationJSON
+// accessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
-// [AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication]
-type accessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationJSON struct {
+// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication]
+type accessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON struct {
 	Password         apijson.Field
 	Scheme           apijson.Field
 	User             apijson.Field
@@ -8149,12 +7799,12 @@ type accessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationJ
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r accessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+func (r accessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication{}
+func (r *AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -8163,14 +7813,14 @@ func (r *AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticat
 }
 
 // AsUnion returns a
-// [AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationUnion]
+// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion]
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
 // [zero_trust.SCIMConfigAuthenticationHTTPBasic],
 // [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
 // [zero_trust.SCIMConfigAuthenticationOauth2].
-func (r AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationUnion {
+func (r AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
 
@@ -8180,13 +7830,13 @@ func (r AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticati
 // Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
 // [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
 // [zero_trust.SCIMConfigAuthenticationOauth2].
-type AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationUnion interface {
-	implementsZeroTrustAccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthentication()
+type AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		reflect.TypeOf((*AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -8204,17 +7854,17 @@ func init() {
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationScheme string
+type AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme string
 
 const (
-	AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauth2"
+	AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauth2"
 )
 
-func (r AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+func (r AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
 	switch r {
-	case AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationListResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2:
+	case AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2:
 		return true
 	}
 	return false
@@ -9136,7 +8786,7 @@ type AccessApplicationGetResponse struct {
 	// [AccessApplicationGetResponseSelfHostedApplicationSCIMConfig],
 	// [AccessApplicationGetResponseSaaSApplicationSCIMConfig],
 	// [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfig],
-	// [AccessApplicationGetResponseBrowserVncApplicationSCIMConfig],
+	// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig],
 	// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfig],
 	// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
 	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig],
@@ -9154,12 +8804,8 @@ type AccessApplicationGetResponse struct {
 	AppLauncherVisible bool `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
-	// This field can have the runtime type of
-	// [AccessApplicationGetResponseSelfHostedApplicationCORSHeaders],
-	// [AccessApplicationGetResponseBrowserSSHApplicationCORSHeaders],
-	// [AccessApplicationGetResponseBrowserVncApplicationCORSHeaders].
-	CORSHeaders interface{} `json:"cors_headers,required"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -9273,7 +8919,7 @@ func (r *AccessApplicationGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.AccessApplicationGetResponseSelfHostedApplication],
 // [zero_trust.AccessApplicationGetResponseSaaSApplication],
 // [zero_trust.AccessApplicationGetResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationGetResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationGetResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
@@ -9286,7 +8932,7 @@ func (r AccessApplicationGetResponse) AsUnion() AccessApplicationGetResponseUnio
 // [zero_trust.AccessApplicationGetResponseSelfHostedApplication],
 // [zero_trust.AccessApplicationGetResponseSaaSApplication],
 // [zero_trust.AccessApplicationGetResponseBrowserSSHApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserVncApplication],
+// [zero_trust.AccessApplicationGetResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationGetResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication]
@@ -9313,7 +8959,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVncApplication{}),
+			Type:       reflect.TypeOf(AccessApplicationGetResponseBrowserVNCApplication{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -9356,9 +9002,9 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                         `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationGetResponseSelfHostedApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                    `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -9455,51 +9101,6 @@ func (r accessApplicationGetResponseSelfHostedApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationGetResponseSelfHostedApplication) implementsZeroTrustAccessApplicationGetResponse() {
-}
-
-type AccessApplicationGetResponseSelfHostedApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                          `json:"max_age"`
-	JSON   accessApplicationGetResponseSelfHostedApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationGetResponseSelfHostedApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationGetResponseSelfHostedApplicationCORSHeaders]
-type accessApplicationGetResponseSelfHostedApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseSelfHostedApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseSelfHostedApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -10068,9 +9669,9 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                         `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationGetResponseBrowserSSHApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                    `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -10167,51 +9768,6 @@ func (r accessApplicationGetResponseBrowserSSHApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationGetResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationGetResponse() {
-}
-
-type AccessApplicationGetResponseBrowserSSHApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                          `json:"max_age"`
-	JSON   accessApplicationGetResponseBrowserSSHApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationGetResponseBrowserSSHApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserSSHApplicationCORSHeaders]
-type accessApplicationGetResponseBrowserSSHApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBrowserSSHApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBrowserSSHApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -10375,7 +9931,7 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 	return false
 }
 
-type AccessApplicationGetResponseBrowserVncApplication struct {
+type AccessApplicationGetResponseBrowserVNCApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
@@ -10397,9 +9953,9 @@ type AccessApplicationGetResponseBrowserVncApplication struct {
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                         `json:"auto_redirect_to_identity"`
-	CORSHeaders            AccessApplicationGetResponseBrowserVncApplicationCORSHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                    `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
+	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	CreatedAt              time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -10433,7 +9989,7 @@ type AccessApplicationGetResponseBrowserVncApplication struct {
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
-	SCIMConfig AccessApplicationGetResponseBrowserVncApplicationSCIMConfig `json:"scim_config"`
+	SCIMConfig AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -10448,12 +10004,12 @@ type AccessApplicationGetResponseBrowserVncApplication struct {
 	// applications in the App Launcher dashboard.
 	Tags      []string                                              `json:"tags"`
 	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
-	JSON      accessApplicationGetResponseBrowserVncApplicationJSON `json:"-"`
+	JSON      accessApplicationGetResponseBrowserVNCApplicationJSON `json:"-"`
 }
 
-// accessApplicationGetResponseBrowserVncApplicationJSON contains the JSON metadata
-// for the struct [AccessApplicationGetResponseBrowserVncApplication]
-type accessApplicationGetResponseBrowserVncApplicationJSON struct {
+// accessApplicationGetResponseBrowserVNCApplicationJSON contains the JSON metadata
+// for the struct [AccessApplicationGetResponseBrowserVNCApplication]
+type accessApplicationGetResponseBrowserVNCApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
@@ -10487,65 +10043,20 @@ type accessApplicationGetResponseBrowserVncApplicationJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessApplicationGetResponseBrowserVncApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationGetResponseBrowserVNCApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationGetResponseBrowserVncApplicationJSON) RawJSON() string {
+func (r accessApplicationGetResponseBrowserVNCApplicationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AccessApplicationGetResponseBrowserVncApplication) implementsZeroTrustAccessApplicationGetResponse() {
-}
-
-type AccessApplicationGetResponseBrowserVncApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []AllowedHeaders `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AllowedMethods `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []AllowedOrigins `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                          `json:"max_age"`
-	JSON   accessApplicationGetResponseBrowserVncApplicationCORSHeadersJSON `json:"-"`
-}
-
-// accessApplicationGetResponseBrowserVncApplicationCORSHeadersJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserVncApplicationCORSHeaders]
-type accessApplicationGetResponseBrowserVncApplicationCORSHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBrowserVncApplicationCORSHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBrowserVncApplicationCORSHeadersJSON) RawJSON() string {
-	return r.raw
+func (r AccessApplicationGetResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationGetResponse() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
 // in closed beta.
-type AccessApplicationGetResponseBrowserVncApplicationSCIMConfig struct {
+type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
 	IdPUID string `json:"idp_uid,required"`
@@ -10553,7 +10064,7 @@ type AccessApplicationGetResponseBrowserVncApplicationSCIMConfig struct {
 	RemoteURI string `json:"remote_uri,required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
-	Authentication AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication `json:"authentication"`
+	Authentication AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication `json:"authentication"`
 	// If false, propagates DELETE requests to the target application for SCIM
 	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
 	// targets do not support DELETE operations.
@@ -10563,13 +10074,13 @@ type AccessApplicationGetResponseBrowserVncApplicationSCIMConfig struct {
 	// A list of mappings to apply to SCIM resources before provisioning them in this
 	// application. These can transform or filter the resources to be provisioned.
 	Mappings []SCIMConfigMapping                                             `json:"mappings"`
-	JSON     accessApplicationGetResponseBrowserVncApplicationSCIMConfigJSON `json:"-"`
+	JSON     accessApplicationGetResponseBrowserVNCApplicationSCIMConfigJSON `json:"-"`
 }
 
-// accessApplicationGetResponseBrowserVncApplicationSCIMConfigJSON contains the
+// accessApplicationGetResponseBrowserVNCApplicationSCIMConfigJSON contains the
 // JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserVncApplicationSCIMConfig]
-type accessApplicationGetResponseBrowserVncApplicationSCIMConfigJSON struct {
+// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig]
+type accessApplicationGetResponseBrowserVNCApplicationSCIMConfigJSON struct {
 	IdPUID             apijson.Field
 	RemoteURI          apijson.Field
 	Authentication     apijson.Field
@@ -10580,21 +10091,21 @@ type accessApplicationGetResponseBrowserVncApplicationSCIMConfigJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessApplicationGetResponseBrowserVncApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessApplicationGetResponseBrowserVncApplicationSCIMConfigJSON) RawJSON() string {
+func (r accessApplicationGetResponseBrowserVNCApplicationSCIMConfigJSON) RawJSON() string {
 	return r.raw
 }
 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
-type AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication struct {
+type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication struct {
 	// Password used to authenticate with the remote SCIM service.
 	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	Scheme AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
 	// User name used to authenticate with the remote SCIM service.
 	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
@@ -10612,14 +10123,14 @@ type AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication s
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL string                                                                        `json:"token_url"`
-	JSON     accessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationUnion
+	JSON     accessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union    AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
 }
 
-// accessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationJSON
+// accessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication]
-type accessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationJSON struct {
+// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication]
+type accessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON struct {
 	Password         apijson.Field
 	Scheme           apijson.Field
 	User             apijson.Field
@@ -10633,12 +10144,12 @@ type accessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationJS
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r accessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+func (r accessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication{}
+func (r *AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -10647,14 +10158,14 @@ func (r *AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticati
 }
 
 // AsUnion returns a
-// [AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationUnion]
+// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion]
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
 // [zero_trust.SCIMConfigAuthenticationHTTPBasic],
 // [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
 // [zero_trust.SCIMConfigAuthenticationOauth2].
-func (r AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationUnion {
+func (r AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion {
 	return r.union
 }
 
@@ -10664,13 +10175,13 @@ func (r AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticatio
 // Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
 // [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
 // [zero_trust.SCIMConfigAuthenticationOauth2].
-type AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationUnion interface {
-	implementsZeroTrustAccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthentication()
+type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		reflect.TypeOf((*AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -10688,17 +10199,17 @@ func init() {
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationScheme string
+type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme string
 
 const (
-	AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauth2"
+	AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauth2"
 )
 
-func (r AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+func (r AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
 	switch r {
-	case AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationGetResponseBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2:
+	case AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2:
 		return true
 	}
 	return false
@@ -11613,8 +11124,8 @@ type AccessApplicationNewParamsBody struct {
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]        `json:"auto_redirect_to_identity"`
-	CORSHeaders            param.Field[interface{}] `json:"cors_headers,required"`
+	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -11673,7 +11184,7 @@ func (r AccessApplicationNewParamsBody) implementsZeroTrustAccessApplicationNewP
 // Satisfied by [zero_trust.AccessApplicationNewParamsBodySelfHostedApplication],
 // [zero_trust.AccessApplicationNewParamsBodySaaSApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplication],
-// [zero_trust.AccessApplicationNewParamsBodyBrowserVncApplication],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplication],
 // [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplication],
 // [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication],
@@ -11701,8 +11212,8 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]                                                           `json:"auto_redirect_to_identity"`
-	CORSHeaders            param.Field[AccessApplicationNewParamsBodySelfHostedApplicationCORSHeaders] `json:"cors_headers"`
+	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -11760,30 +11271,6 @@ func (r AccessApplicationNewParamsBodySelfHostedApplication) MarshalJSON() (data
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
-}
-
-type AccessApplicationNewParamsBodySelfHostedApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials param.Field[bool] `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]AllowedHeadersParam] `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods param.Field[[]AllowedMethods] `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge param.Field[float64] `json:"max_age"`
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationCORSHeaders) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -12321,8 +11808,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]                                                           `json:"auto_redirect_to_identity"`
-	CORSHeaders            param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationCORSHeaders] `json:"cors_headers"`
+	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -12380,30 +11867,6 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplication) MarshalJSON() (data
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
-}
-
-type AccessApplicationNewParamsBodyBrowserSSHApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials param.Field[bool] `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]AllowedHeadersParam] `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods param.Field[[]AllowedMethods] `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge param.Field[float64] `json:"max_age"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationCORSHeaders) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -12603,7 +12066,7 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticat
 	return false
 }
 
-type AccessApplicationNewParamsBodyBrowserVncApplication struct {
+type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain param.Field[string] `json:"domain,required"`
@@ -12621,8 +12084,8 @@ type AccessApplicationNewParamsBodyBrowserVncApplication struct {
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]                                                           `json:"auto_redirect_to_identity"`
-	CORSHeaders            param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationCORSHeaders] `json:"cors_headers"`
+	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -12653,13 +12116,13 @@ type AccessApplicationNewParamsBodyBrowserVncApplication struct {
 	// The policies that will apply to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
-	SCIMConfig param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfig] `json:"scim_config"`
+	SCIMConfig param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -12675,39 +12138,15 @@ type AccessApplicationNewParamsBodyBrowserVncApplication struct {
 	Tags param.Field[[]string] `json:"tags"`
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplication) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplication) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
-}
-
-type AccessApplicationNewParamsBodyBrowserVncApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials param.Field[bool] `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]AllowedHeadersParam] `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods param.Field[[]AllowedMethods] `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge param.Field[float64] `json:"max_age"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationCORSHeaders) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r AccessApplicationNewParamsBodyBrowserVNCApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyBrowserVncApplicationPolicy struct {
+type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -12738,26 +12177,26 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationPolicy struct {
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationPolicy) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationPolicy) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion() {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 
 // A JSON that links a reusable policy to an application.
 //
 // Satisfied by
-// [zero_trust.AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink],
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink],
 // [shared.UnionString],
-// [zero_trust.AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObject],
-// [AccessApplicationNewParamsBodyBrowserVncApplicationPolicy].
-type AccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion()
+// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject],
+// [AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy].
+type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion interface {
+	ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion()
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -12765,14 +12204,14 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyL
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion() {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 
-type AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObject struct {
+type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
@@ -12810,16 +12249,16 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObject struct {
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion() {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
 // in closed beta.
-type AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfig struct {
+type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
 	IdPUID param.Field[string] `json:"idp_uid,required"`
@@ -12827,7 +12266,7 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfig struct {
 	RemoteURI param.Field[string] `json:"remote_uri,required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
-	Authentication param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
+	Authentication param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
 	// If false, propagates DELETE requests to the target application for SCIM
 	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
 	// targets do not support DELETE operations.
@@ -12839,17 +12278,17 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfig struct {
 	Mappings param.Field[[]SCIMConfigMappingParam] `json:"mappings"`
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
-type AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthentication struct {
+type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthentication struct {
 	// Password used to authenticate with the remote SCIM service.
 	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
 	// User name used to authenticate with the remote SCIM service.
 	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
@@ -12868,11 +12307,11 @@ type AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthentication
 	TokenURL param.Field[string] `json:"token_url"`
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthentication) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion() {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthentication) implementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion() {
 }
 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
@@ -12881,23 +12320,23 @@ func (r AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticat
 // Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
 // [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
 // [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthentication].
-type AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion interface {
-	implementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion()
+// [AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthentication].
+type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion()
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme string
+type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme string
 
 const (
-	AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauth2"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauth2"
 )
 
-func (r AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
 	switch r {
-	case AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2:
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2:
 		return true
 	}
 	return false
@@ -13759,8 +13198,8 @@ type AccessApplicationUpdateParamsBody struct {
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]        `json:"auto_redirect_to_identity"`
-	CORSHeaders            param.Field[interface{}] `json:"cors_headers,required"`
+	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -13821,7 +13260,7 @@ func (r AccessApplicationUpdateParamsBody) implementsZeroTrustAccessApplicationU
 // [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodySaaSApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplication],
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVncApplication],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication],
@@ -13849,8 +13288,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]                                                              `json:"auto_redirect_to_identity"`
-	CORSHeaders            param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationCORSHeaders] `json:"cors_headers"`
+	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -13908,30 +13347,6 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplication) MarshalJSON() (d
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodySelfHostedApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials param.Field[bool] `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]AllowedHeadersParam] `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods param.Field[[]AllowedMethods] `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge param.Field[float64] `json:"max_age"`
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationCORSHeaders) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -14469,8 +13884,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]                                                              `json:"auto_redirect_to_identity"`
-	CORSHeaders            param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationCORSHeaders] `json:"cors_headers"`
+	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -14528,30 +13943,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) MarshalJSON() (d
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials param.Field[bool] `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]AllowedHeadersParam] `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods param.Field[[]AllowedMethods] `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge param.Field[float64] `json:"max_age"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationCORSHeaders) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -14751,7 +14142,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenti
 	return false
 }
 
-type AccessApplicationUpdateParamsBodyBrowserVncApplication struct {
+type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain param.Field[string] `json:"domain,required"`
@@ -14769,8 +14160,8 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplication struct {
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]                                                              `json:"auto_redirect_to_identity"`
-	CORSHeaders            param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationCORSHeaders] `json:"cors_headers"`
+	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
+	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -14801,13 +14192,13 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplication struct {
 	// The policies that will apply to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
-	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfig] `json:"scim_config"`
+	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
@@ -14823,39 +14214,15 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplication struct {
 	Tags param.Field[[]string] `json:"tags"`
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplication) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyBrowserVncApplicationCORSHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials param.Field[bool] `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]AllowedHeadersParam] `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods param.Field[[]AllowedMethods] `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins param.Field[[]AllowedOriginsParam] `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge param.Field[float64] `json:"max_age"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationCORSHeaders) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicy struct {
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -14886,26 +14253,26 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicy struct {
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicy) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicy) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion() {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 
 // A JSON that links a reusable policy to an application.
 //
 // Satisfied by
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink],
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink],
 // [shared.UnionString],
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObject],
-// [AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicy].
-type AccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion()
+// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject],
+// [AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy].
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion interface {
+	ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion()
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -14913,14 +14280,14 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesAccessAppPoli
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion() {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 
-type AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObject struct {
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
@@ -14958,16 +14325,16 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObject struct
 	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion() {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
 // in closed beta.
-type AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfig struct {
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfig struct {
 	// The UID of the IdP to use as the source for SCIM resources to provision to this
 	// application.
 	IdPUID param.Field[string] `json:"idp_uid,required"`
@@ -14975,7 +14342,7 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfig struct {
 	RemoteURI param.Field[string] `json:"remote_uri,required"`
 	// Attributes for configuring HTTP Basic authentication scheme for SCIM
 	// provisioning to an application.
-	Authentication param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
+	Authentication param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion] `json:"authentication"`
 	// If false, propagates DELETE requests to the target application for SCIM
 	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
 	// targets do not support DELETE operations.
@@ -14987,17 +14354,17 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfig struct {
 	Mappings param.Field[[]SCIMConfigMappingParam] `json:"mappings"`
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
-type AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthentication struct {
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthentication struct {
 	// Password used to authenticate with the remote SCIM service.
 	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
+	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
 	// User name used to authenticate with the remote SCIM service.
 	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
@@ -15016,11 +14383,11 @@ type AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticat
 	TokenURL param.Field[string] `json:"token_url"`
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthentication) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion() {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthentication) implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion() {
 }
 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
@@ -15029,23 +14396,23 @@ func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenti
 // Satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasicParam],
 // [zero_trust.SCIMConfigAuthenticationOAuthBearerTokenParam],
 // [zero_trust.SCIMConfigAuthenticationOauth2Param],
-// [AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthentication].
-type AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion interface {
-	implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationUnion()
+// [AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthentication].
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationUnion()
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme string
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme string
 
 const (
-	AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme = "oauth2"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme = "oauth2"
 )
 
-func (r AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
 	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBrowserVncApplicationSCIMConfigAuthenticationSchemeOauth2:
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationSchemeOauth2:
 		return true
 	}
 	return false
