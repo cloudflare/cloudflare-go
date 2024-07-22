@@ -110,7 +110,7 @@ func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedAp
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {}
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
 }
-func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVncApplicationPolicyUnion() {
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
 }
@@ -123,7 +123,7 @@ func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHoste
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {}
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
 }
-func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVncApplicationPolicyUnion() {
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
 }
