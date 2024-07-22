@@ -354,10 +354,10 @@ func TestDevicePostureRules(t *testing.T) {
 		Input: DevicePostureRuleInput{
 			ID:         "9e597887-345e-4a32-a09c-68811b129768",
 			Path:       "/tmp/data.zta",
-			Exists:     true,
+			Exists:     BoolPtr(true),
 			Thumbprint: "asdfasdfasdfasdf",
 			Sha256:     "D75398FC796D659DEB4170569DCFEC63E3897C71E3AE8642FD3139A554AEE21E",
-			Running:    true,
+			Running:    BoolPtr(true),
 		},
 	}}
 
@@ -413,7 +413,7 @@ func TestDevicePostureFileRule(t *testing.T) {
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input: DevicePostureRuleInput{
 			Path:   "/tmp/test",
-			Exists: true,
+			Exists: BoolPtr(true),
 			Sha256: "42b4daec3962691f5893a966245e5ea30f9f8df7254e7b7af43a171e3e29c857",
 		},
 	}
@@ -468,7 +468,7 @@ func TestDevicePostureDiskEncryptionRule(t *testing.T) {
 		Expiration:  "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input: DevicePostureRuleInput{
-			RequireAll: true,
+			RequireAll: BoolPtr(true),
 			CheckDisks: []string{"C", "D"},
 		},
 	}
@@ -680,8 +680,6 @@ func TestDevicePostureClientCertificateRuleV2(t *testing.T) {
 		`)
 	}
 
-	checkPrivateKey := true
-
 	want := DevicePostureRule{
 		ID:          "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
 		Name:        "My rule name",
@@ -693,7 +691,7 @@ func TestDevicePostureClientCertificateRuleV2(t *testing.T) {
 		Input: DevicePostureRuleInput{
 			CertificateID:    "d2c04b78-3ba2-4294-8efa-4e85aef0777f",
 			CommonName:       "example.com",
-			CheckPrivateKey:  &checkPrivateKey,
+			CheckPrivateKey:  BoolPtr(true),
 			ExtendedKeyUsage: []string{"clientAuth", "emailProtection"},
 			Locations: CertificateLocations{
 				TrustStores: []string{"system"},

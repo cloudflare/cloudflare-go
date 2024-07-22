@@ -167,13 +167,13 @@ type DevicePostureRuleMatch struct {
 type DevicePostureRuleInput struct {
 	ID               string               `json:"id,omitempty"`
 	Path             string               `json:"path,omitempty"`
-	Exists           bool                 `json:"exists,omitempty"`
+	Exists           *bool                `json:"exists,omitempty"`
 	Thumbprint       string               `json:"thumbprint,omitempty"`
 	Sha256           string               `json:"sha256,omitempty"`
-	Running          bool                 `json:"running,omitempty"`
-	RequireAll       bool                 `json:"requireAll,omitempty"`
+	Running          *bool                `json:"running,omitempty"`
+	RequireAll       *bool                `json:"requireAll,omitempty"`
 	CheckDisks       []string             `json:"checkDisks,omitempty"`
-	Enabled          bool                 `json:"enabled,omitempty"`
+	Enabled          *bool                `json:"enabled,omitempty"`
 	Version          string               `json:"version,omitempty"`
 	VersionOperator  string               `json:"versionOperator,omitempty"`
 	Overall          string               `json:"overall,omitempty"`
@@ -194,8 +194,8 @@ type DevicePostureRuleInput struct {
 	CommonName       string               `json:"cn,omitempty"`
 	ActiveThreats    int                  `json:"active_threats,omitempty"`
 	NetworkStatus    string               `json:"network_status,omitempty"`
-	Infected         bool                 `json:"infected,omitempty"`
-	IsActive         bool                 `json:"is_active,omitempty"`
+	Infected         *bool                `json:"infected,omitempty"`
+	IsActive         *bool                `json:"is_active,omitempty"`
 	EidLastSeen      string               `json:"eid_last_seen,omitempty"`
 	RiskLevel        string               `json:"risk_level,omitempty"`
 	State            string               `json:"state,omitempty"`
