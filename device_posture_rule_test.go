@@ -354,10 +354,10 @@ func TestDevicePostureRules(t *testing.T) {
 		Input: DevicePostureRuleInput{
 			ID:         "9e597887-345e-4a32-a09c-68811b129768",
 			Path:       "/tmp/data.zta",
-			Exists:     true,
+			Exists:     BoolPtr(true),
 			Thumbprint: "asdfasdfasdfasdf",
 			Sha256:     "D75398FC796D659DEB4170569DCFEC63E3897C71E3AE8642FD3139A554AEE21E",
-			Running:    true,
+			Running:    BoolPtr(true),
 		},
 	}}
 
@@ -413,7 +413,7 @@ func TestDevicePostureFileRule(t *testing.T) {
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input: DevicePostureRuleInput{
 			Path:   "/tmp/test",
-			Exists: true,
+			Exists: BoolPtr(true),
 			Sha256: "42b4daec3962691f5893a966245e5ea30f9f8df7254e7b7af43a171e3e29c857",
 		},
 	}
@@ -468,7 +468,7 @@ func TestDevicePostureDiskEncryptionRule(t *testing.T) {
 		Expiration:  "1h",
 		Match:       []DevicePostureRuleMatch{{Platform: "ios"}},
 		Input: DevicePostureRuleInput{
-			RequireAll: true,
+			RequireAll: BoolPtr(true),
 			CheckDisks: []string{"C", "D"},
 		},
 	}
@@ -633,6 +633,69 @@ func TestDevicePostureClientCertificateRule(t *testing.T) {
 		Input: DevicePostureRuleInput{
 			CertificateID: "d2c04b78-3ba2-4294-8efa-4e85aef0777f",
 			CommonName:    "example.com",
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/devices/posture/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
+
+	actual, err := client.DevicePostureRule(context.Background(), testAccountID, "480f4f69-1a28-4fdd-9240-1ed29f0ac1db")
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestDevicePostureClientCertificateRuleV2(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+				"schedule": "1h",
+				"expiration": "1h",
+				"type": "client_certificate_v2",
+				"name": "My rule name",
+				"description": "My description",
+				"match": [
+					{
+						"platform": "windows"
+					}
+				],
+				"input": {
+					"certificate_id": "d2c04b78-3ba2-4294-8efa-4e85aef0777f",
+					"cn": "example.com",
+					"extended_key_usage": ["clientAuth", "emailProtection"],
+					"locations": {"trust_stores": ["system"]},
+					"check_private_key": true
+				}
+			}
+		}
+		`)
+	}
+
+	want := DevicePostureRule{
+		ID:          "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:        "My rule name",
+		Description: "My description",
+		Type:        "client_certificate_v2",
+		Schedule:    "1h",
+		Expiration:  "1h",
+		Match:       []DevicePostureRuleMatch{{Platform: "windows"}},
+		Input: DevicePostureRuleInput{
+			CertificateID:    "d2c04b78-3ba2-4294-8efa-4e85aef0777f",
+			CommonName:       "example.com",
+			CheckPrivateKey:  BoolPtr(true),
+			ExtendedKeyUsage: []string{"clientAuth", "emailProtection"},
+			Locations: CertificateLocations{
+				TrustStores: []string{"system"},
+			},
 		},
 	}
 
