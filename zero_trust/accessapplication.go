@@ -1865,9 +1865,27 @@ type AccessApplicationNewResponse struct {
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationNewResponseSaaSApplicationSaaSApp].
-	SaaSApp interface{}                      `json:"saas_app,required"`
-	JSON    accessApplicationNewResponseJSON `json:"-"`
-	union   AccessApplicationNewResponseUnion
+	SaaSApp interface{} `json:"saas_app,required"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
+	// The background color of the App Launcher page.
+	BgColor string `json:"bg_color"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseAppLauncherApplicationFooterLink],
+	// [[]AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink],
+	// [[]AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink].
+	FooterLinks interface{} `json:"footer_links,required"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// This field can have the runtime type of
+	// [AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign],
+	// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
+	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	LandingPageDesign interface{} `json:"landing_page_design,required"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                             `json:"skip_app_launcher_login_page"`
+	JSON                     accessApplicationNewResponseJSON `json:"-"`
+	union                    AccessApplicationNewResponseUnion
 }
 
 // accessApplicationNewResponseJSON contains the JSON metadata for the struct
@@ -1903,6 +1921,12 @@ type accessApplicationNewResponseJSON struct {
 	Type                     apijson.Field
 	Policies                 apijson.Field
 	SaaSApp                  apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	BgColor                  apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -3231,15 +3255,25 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationNewResponseAppLauncherApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -3249,28 +3283,36 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                 `json:"session_duration"`
-	UpdatedAt       time.Time                                              `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationNewResponseAppLauncherApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                   `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                              `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationNewResponseAppLauncherApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseAppLauncherApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationNewResponseAppLauncherApplication]
 type accessApplicationNewResponseAppLauncherApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseAppLauncherApplication) UnmarshalJSON(data []byte) (err error) {
@@ -3282,6 +3324,68 @@ func (r accessApplicationNewResponseAppLauncherApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationNewResponseAppLauncherApplication) implementsZeroTrustAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseAppLauncherApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                           `json:"url,required"`
+	JSON accessApplicationNewResponseAppLauncherApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationNewResponseAppLauncherApplicationFooterLinkJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationNewResponseAppLauncherApplicationFooterLink]
+type accessApplicationNewResponseAppLauncherApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseAppLauncherApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseAppLauncherApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                  `json:"title"`
+	JSON  accessApplicationNewResponseAppLauncherApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationNewResponseAppLauncherApplicationLandingPageDesignJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign]
+type accessApplicationNewResponseAppLauncherApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseAppLauncherApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -3453,15 +3557,25 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -3471,29 +3585,37 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                                 `json:"session_duration"`
-	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                                   `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                                              `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON contains
 // the JSON metadata for the struct
 // [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication]
 type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
@@ -3505,6 +3627,68 @@ func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON) 
 }
 
 func (r AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                                           `json:"url,required"`
+	JSON accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink]
+type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                                  `json:"title"`
+	JSON  accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign]
+type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -3676,15 +3860,25 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -3694,29 +3888,37 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                                 `json:"session_duration"`
-	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                                   `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                                              `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON contains
 // the JSON metadata for the struct
 // [AccessApplicationNewResponseBrowserIsolationPermissionsApplication]
 type accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
@@ -3728,6 +3930,68 @@ func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON) 
 }
 
 func (r AccessApplicationNewResponseBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                                           `json:"url,required"`
+	JSON accessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLinkJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink]
+type accessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                                  `json:"title"`
+	JSON  accessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign]
+type accessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -4188,9 +4452,27 @@ type AccessApplicationUpdateResponse struct {
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationUpdateResponseSaaSApplicationSaaSApp].
-	SaaSApp interface{}                         `json:"saas_app,required"`
-	JSON    accessApplicationUpdateResponseJSON `json:"-"`
-	union   AccessApplicationUpdateResponseUnion
+	SaaSApp interface{} `json:"saas_app,required"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
+	// The background color of the App Launcher page.
+	BgColor string `json:"bg_color"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseAppLauncherApplicationFooterLink],
+	// [[]AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink],
+	// [[]AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink].
+	FooterLinks interface{} `json:"footer_links,required"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// This field can have the runtime type of
+	// [AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign],
+	// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
+	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	LandingPageDesign interface{} `json:"landing_page_design,required"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                `json:"skip_app_launcher_login_page"`
+	JSON                     accessApplicationUpdateResponseJSON `json:"-"`
+	union                    AccessApplicationUpdateResponseUnion
 }
 
 // accessApplicationUpdateResponseJSON contains the JSON metadata for the struct
@@ -4226,6 +4508,12 @@ type accessApplicationUpdateResponseJSON struct {
 	Type                     apijson.Field
 	Policies                 apijson.Field
 	SaaSApp                  apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	BgColor                  apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -5555,15 +5843,25 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationUpdateResponseAppLauncherApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -5573,28 +5871,36 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                    `json:"session_duration"`
-	UpdatedAt       time.Time                                                 `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationUpdateResponseAppLauncherApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                      `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                                 `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationUpdateResponseAppLauncherApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseAppLauncherApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseAppLauncherApplication]
 type accessApplicationUpdateResponseAppLauncherApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseAppLauncherApplication) UnmarshalJSON(data []byte) (err error) {
@@ -5606,6 +5912,68 @@ func (r accessApplicationUpdateResponseAppLauncherApplicationJSON) RawJSON() str
 }
 
 func (r AccessApplicationUpdateResponseAppLauncherApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseAppLauncherApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                              `json:"url,required"`
+	JSON accessApplicationUpdateResponseAppLauncherApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseAppLauncherApplicationFooterLinkJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationUpdateResponseAppLauncherApplicationFooterLink]
+type accessApplicationUpdateResponseAppLauncherApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseAppLauncherApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseAppLauncherApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                     `json:"title"`
+	JSON  accessApplicationUpdateResponseAppLauncherApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseAppLauncherApplicationLandingPageDesignJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign]
+type accessApplicationUpdateResponseAppLauncherApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseAppLauncherApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -5777,15 +6145,25 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struc
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -5795,29 +6173,37 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struc
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                                    `json:"session_duration"`
-	UpdatedAt       time.Time                                                                 `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                                      `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                                                 `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication]
 type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
@@ -5829,6 +6215,68 @@ func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSO
 }
 
 func (r AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                                              `json:"url,required"`
+	JSON accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink]
+type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                                     `json:"title"`
+	JSON  accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign]
+type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -6000,15 +6448,25 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struc
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -6018,29 +6476,37 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struc
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                                    `json:"session_duration"`
-	UpdatedAt       time.Time                                                                 `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                                      `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                                                 `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication]
 type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
@@ -6052,6 +6518,68 @@ func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSO
 }
 
 func (r AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                                              `json:"url,required"`
+	JSON accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLinkJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink]
+type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                                     `json:"title"`
+	JSON  accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign]
+type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -6512,9 +7040,27 @@ type AccessApplicationListResponse struct {
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationListResponseSaaSApplicationSaaSApp].
-	SaaSApp interface{}                       `json:"saas_app,required"`
-	JSON    accessApplicationListResponseJSON `json:"-"`
-	union   AccessApplicationListResponseUnion
+	SaaSApp interface{} `json:"saas_app,required"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
+	// The background color of the App Launcher page.
+	BgColor string `json:"bg_color"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseAppLauncherApplicationFooterLink],
+	// [[]AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink],
+	// [[]AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink].
+	FooterLinks interface{} `json:"footer_links,required"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// This field can have the runtime type of
+	// [AccessApplicationListResponseAppLauncherApplicationLandingPageDesign],
+	// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
+	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	LandingPageDesign interface{} `json:"landing_page_design,required"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                              `json:"skip_app_launcher_login_page"`
+	JSON                     accessApplicationListResponseJSON `json:"-"`
+	union                    AccessApplicationListResponseUnion
 }
 
 // accessApplicationListResponseJSON contains the JSON metadata for the struct
@@ -6550,6 +7096,12 @@ type accessApplicationListResponseJSON struct {
 	Type                     apijson.Field
 	Policies                 apijson.Field
 	SaaSApp                  apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	BgColor                  apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -7878,15 +8430,25 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationListResponseAppLauncherApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationListResponseAppLauncherApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -7896,28 +8458,36 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                  `json:"session_duration"`
-	UpdatedAt       time.Time                                               `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationListResponseAppLauncherApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                    `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                               `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationListResponseAppLauncherApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseAppLauncherApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseAppLauncherApplication]
 type accessApplicationListResponseAppLauncherApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseAppLauncherApplication) UnmarshalJSON(data []byte) (err error) {
@@ -7929,6 +8499,68 @@ func (r accessApplicationListResponseAppLauncherApplicationJSON) RawJSON() strin
 }
 
 func (r AccessApplicationListResponseAppLauncherApplication) implementsZeroTrustAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseAppLauncherApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                            `json:"url,required"`
+	JSON accessApplicationListResponseAppLauncherApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationListResponseAppLauncherApplicationFooterLinkJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationListResponseAppLauncherApplicationFooterLink]
+type accessApplicationListResponseAppLauncherApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseAppLauncherApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseAppLauncherApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationListResponseAppLauncherApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                   `json:"title"`
+	JSON  accessApplicationListResponseAppLauncherApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationListResponseAppLauncherApplicationLandingPageDesignJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseAppLauncherApplicationLandingPageDesign]
+type accessApplicationListResponseAppLauncherApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseAppLauncherApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseAppLauncherApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -8100,15 +8732,25 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct 
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -8118,29 +8760,37 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct 
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                                  `json:"session_duration"`
-	UpdatedAt       time.Time                                                               `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                                    `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                                               `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON contains
 // the JSON metadata for the struct
 // [AccessApplicationListResponseDeviceEnrollmentPermissionsApplication]
 type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
@@ -8152,6 +8802,68 @@ func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON)
 }
 
 func (r AccessApplicationListResponseDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                                            `json:"url,required"`
+	JSON accessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink]
+type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                                   `json:"title"`
+	JSON  accessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign]
+type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -8323,15 +9035,25 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct 
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -8341,29 +9063,37 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct 
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                                  `json:"session_duration"`
-	UpdatedAt       time.Time                                                               `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                                    `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                                               `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON contains
 // the JSON metadata for the struct
 // [AccessApplicationListResponseBrowserIsolationPermissionsApplication]
 type accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
@@ -8375,6 +9105,68 @@ func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationJSON)
 }
 
 func (r AccessApplicationListResponseBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                                            `json:"url,required"`
+	JSON accessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLinkJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink]
+type accessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                                   `json:"title"`
+	JSON  accessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign]
+type accessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -8857,9 +9649,27 @@ type AccessApplicationGetResponse struct {
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationGetResponseSaaSApplicationSaaSApp].
-	SaaSApp interface{}                      `json:"saas_app,required"`
-	JSON    accessApplicationGetResponseJSON `json:"-"`
-	union   AccessApplicationGetResponseUnion
+	SaaSApp interface{} `json:"saas_app,required"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
+	// The background color of the App Launcher page.
+	BgColor string `json:"bg_color"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseAppLauncherApplicationFooterLink],
+	// [[]AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink],
+	// [[]AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink].
+	FooterLinks interface{} `json:"footer_links,required"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// This field can have the runtime type of
+	// [AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign],
+	// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
+	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	LandingPageDesign interface{} `json:"landing_page_design,required"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                             `json:"skip_app_launcher_login_page"`
+	JSON                     accessApplicationGetResponseJSON `json:"-"`
+	union                    AccessApplicationGetResponseUnion
 }
 
 // accessApplicationGetResponseJSON contains the JSON metadata for the struct
@@ -8895,6 +9705,12 @@ type accessApplicationGetResponseJSON struct {
 	Type                     apijson.Field
 	Policies                 apijson.Field
 	SaaSApp                  apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	BgColor                  apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -10223,15 +11039,25 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationGetResponseAppLauncherApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -10241,28 +11067,36 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                 `json:"session_duration"`
-	UpdatedAt       time.Time                                              `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationGetResponseAppLauncherApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                   `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                              `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationGetResponseAppLauncherApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseAppLauncherApplicationJSON contains the JSON
 // metadata for the struct [AccessApplicationGetResponseAppLauncherApplication]
 type accessApplicationGetResponseAppLauncherApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseAppLauncherApplication) UnmarshalJSON(data []byte) (err error) {
@@ -10274,6 +11108,68 @@ func (r accessApplicationGetResponseAppLauncherApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationGetResponseAppLauncherApplication) implementsZeroTrustAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseAppLauncherApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                           `json:"url,required"`
+	JSON accessApplicationGetResponseAppLauncherApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationGetResponseAppLauncherApplicationFooterLinkJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationGetResponseAppLauncherApplicationFooterLink]
+type accessApplicationGetResponseAppLauncherApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseAppLauncherApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseAppLauncherApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                  `json:"title"`
+	JSON  accessApplicationGetResponseAppLauncherApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationGetResponseAppLauncherApplicationLandingPageDesignJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign]
+type accessApplicationGetResponseAppLauncherApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseAppLauncherApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -10445,15 +11341,25 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -10463,29 +11369,37 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                                 `json:"session_duration"`
-	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                                   `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                                              `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON contains
 // the JSON metadata for the struct
 // [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication]
 type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
@@ -10497,6 +11411,68 @@ func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON) 
 }
 
 func (r AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                                           `json:"url,required"`
+	JSON accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink]
+type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                                  `json:"title"`
+	JSON  accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign]
+type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -10668,15 +11644,25 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs []AllowedIdPs `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Audience tag.
 	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool      `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor   string    `json:"bg_color"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
+	// The links in the App Launcher footer.
+	FooterLinks []AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
 	Name     string              `json:"name"`
 	Policies []ApplicationPolicy `json:"policies"`
@@ -10686,29 +11672,37 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string                                                                 `json:"session_duration"`
-	UpdatedAt       time.Time                                                              `json:"updated_at" format:"date-time"`
-	JSON            accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
+	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool                                                                   `json:"skip_app_launcher_login_page"`
+	UpdatedAt                time.Time                                                              `json:"updated_at" format:"date-time"`
+	JSON                     accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON `json:"-"`
 }
 
 // accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON contains
 // the JSON metadata for the struct
 // [AccessApplicationGetResponseBrowserIsolationPermissionsApplication]
 type accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON struct {
-	Type                   apijson.Field
-	ID                     apijson.Field
-	AllowedIdPs            apijson.Field
-	AUD                    apijson.Field
-	AutoRedirectToIdentity apijson.Field
-	CreatedAt              apijson.Field
-	Domain                 apijson.Field
-	Name                   apijson.Field
-	Policies               apijson.Field
-	SCIMConfig             apijson.Field
-	SessionDuration        apijson.Field
-	UpdatedAt              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
+	AUD                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
+	CreatedAt                apijson.Field
+	Domain                   apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
+	LandingPageDesign        apijson.Field
+	Name                     apijson.Field
+	Policies                 apijson.Field
+	SCIMConfig               apijson.Field
+	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplication) UnmarshalJSON(data []byte) (err error) {
@@ -10720,6 +11714,68 @@ func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON) 
 }
 
 func (r AccessApplicationGetResponseBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name string `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL  string                                                                           `json:"url,required"`
+	JSON accessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLinkJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLinkJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink]
+type accessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLinkJSON struct {
+	Name        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLinkJSON) RawJSON() string {
+	return r.raw
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor string `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor string `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL string `json:"image_url"`
+	// The message shown on the landing page.
+	Message string `json:"message"`
+	// The title shown on the landing page.
+	Title string                                                                                  `json:"title"`
+	JSON  accessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign]
+type accessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON struct {
+	ButtonColor     apijson.Field
+	ButtonTextColor apijson.Field
+	ImageURL        apijson.Field
+	Message         apijson.Field
+	Title           apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -11173,6 +12229,16 @@ type AccessApplicationNewParamsBody struct {
 	Policies   param.Field[interface{}] `json:"policies,required"`
 	SCIMConfig param.Field[interface{}] `json:"scim_config,required"`
 	SaaSApp    param.Field[interface{}] `json:"saas_app,required"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
+	// The background color of the App Launcher page.
+	BgColor     param.Field[string]      `json:"bg_color"`
+	FooterLinks param.Field[interface{}] `json:"footer_links,required"`
+	// The background color of the App Launcher header.
+	HeaderBgColor     param.Field[string]      `json:"header_bg_color"`
+	LandingPageDesign param.Field[interface{}] `json:"landing_page_design,required"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -12348,9 +13414,19 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor param.Field[string] `json:"bg_color"`
+	// The links in the App Launcher footer.
+	FooterLinks param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationFooterLink] `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor param.Field[string] `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
 	// The policies that will apply to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
@@ -12362,6 +13438,8 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplication) MarshalJSON() (data []byte, err error) {
@@ -12369,6 +13447,35 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplication) MarshalJSON() (dat
 }
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
+}
+
+type AccessApplicationNewParamsBodyAppLauncherApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name param.Field[string] `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL param.Field[string] `json:"url,required"`
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationFooterLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor param.Field[string] `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor param.Field[string] `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL param.Field[string] `json:"image_url"`
+	// The message shown on the landing page.
+	Message param.Field[string] `json:"message"`
+	// The title shown on the landing page.
+	Title param.Field[string] `json:"title"`
+}
+
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -12574,9 +13681,19 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor param.Field[string] `json:"bg_color"`
+	// The links in the App Launcher footer.
+	FooterLinks param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink] `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor param.Field[string] `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
 	// The policies that will apply to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
@@ -12588,6 +13705,8 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication) MarshalJSON() (data []byte, err error) {
@@ -12595,6 +13714,35 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication) Ma
 }
 
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
+}
+
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name param.Field[string] `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL param.Field[string] `json:"url,required"`
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor param.Field[string] `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor param.Field[string] `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL param.Field[string] `json:"image_url"`
+	// The message shown on the landing page.
+	Message param.Field[string] `json:"message"`
+	// The title shown on the landing page.
+	Title param.Field[string] `json:"title"`
+}
+
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -12800,9 +13948,19 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor param.Field[string] `json:"bg_color"`
+	// The links in the App Launcher footer.
+	FooterLinks param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationFooterLink] `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor param.Field[string] `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
 	// The policies that will apply to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
@@ -12814,6 +13972,8 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication) MarshalJSON() (data []byte, err error) {
@@ -12821,6 +13981,35 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication) Ma
 }
 
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
+}
+
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name param.Field[string] `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL param.Field[string] `json:"url,required"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationFooterLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor param.Field[string] `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor param.Field[string] `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL param.Field[string] `json:"image_url"`
+	// The message shown on the landing page.
+	Message param.Field[string] `json:"message"`
+	// The title shown on the landing page.
+	Title param.Field[string] `json:"title"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -13247,6 +14436,16 @@ type AccessApplicationUpdateParamsBody struct {
 	Policies   param.Field[interface{}] `json:"policies,required"`
 	SCIMConfig param.Field[interface{}] `json:"scim_config,required"`
 	SaaSApp    param.Field[interface{}] `json:"saas_app,required"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
+	// The background color of the App Launcher page.
+	BgColor     param.Field[string]      `json:"bg_color"`
+	FooterLinks param.Field[interface{}] `json:"footer_links,required"`
+	// The background color of the App Launcher header.
+	HeaderBgColor     param.Field[string]      `json:"header_bg_color"`
+	LandingPageDesign param.Field[interface{}] `json:"landing_page_design,required"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -14424,9 +15623,19 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor param.Field[string] `json:"bg_color"`
+	// The links in the App Launcher footer.
+	FooterLinks param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationFooterLink] `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor param.Field[string] `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
 	// The policies that will apply to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
@@ -14438,6 +15647,8 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplication) MarshalJSON() (data []byte, err error) {
@@ -14445,6 +15656,35 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplication) MarshalJSON() (
 }
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name param.Field[string] `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL param.Field[string] `json:"url,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationFooterLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor param.Field[string] `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor param.Field[string] `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL param.Field[string] `json:"image_url"`
+	// The message shown on the landing page.
+	Message param.Field[string] `json:"message"`
+	// The title shown on the landing page.
+	Title param.Field[string] `json:"title"`
+}
+
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -14650,9 +15890,19 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor param.Field[string] `json:"bg_color"`
+	// The links in the App Launcher footer.
+	FooterLinks param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink] `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor param.Field[string] `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
 	// The policies that will apply to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
@@ -14664,6 +15914,8 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication) MarshalJSON() (data []byte, err error) {
@@ -14671,6 +15923,35 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication)
 }
 
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name param.Field[string] `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL param.Field[string] `json:"url,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationFooterLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor param.Field[string] `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor param.Field[string] `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL param.Field[string] `json:"image_url"`
+	// The message shown on the landing page.
+	Message param.Field[string] `json:"message"`
+	// The title shown on the landing page.
+	Title param.Field[string] `json:"title"`
+}
+
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
@@ -14876,9 +16157,19 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdPs param.Field[[]AllowedIdPsParam] `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor param.Field[string] `json:"bg_color"`
+	// The links in the App Launcher footer.
+	FooterLinks param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationFooterLink] `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor param.Field[string] `json:"header_bg_color"`
+	// The design of the App Launcher landing page shown to users when they log in.
+	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
 	// The policies that will apply to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
@@ -14890,6 +16181,8 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication) MarshalJSON() (data []byte, err error) {
@@ -14897,6 +16190,35 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication)
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationFooterLink struct {
+	// The hypertext in the footer link.
+	Name param.Field[string] `json:"name,required"`
+	// the hyperlink in the footer link.
+	URL param.Field[string] `json:"url,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationFooterLink) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The design of the App Launcher landing page shown to users when they log in.
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign struct {
+	// The background color of the log in button on the landing page.
+	ButtonColor param.Field[string] `json:"button_color"`
+	// The color of the text in the log in button on the landing page.
+	ButtonTextColor param.Field[string] `json:"button_text_color"`
+	// The URL of the image shown on the landing page.
+	ImageURL param.Field[string] `json:"image_url"`
+	// The message shown on the landing page.
+	Message param.Field[string] `json:"message"`
+	// The title shown on the landing page.
+	Title param.Field[string] `json:"title"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A JSON that links a reusable policy to an application.
