@@ -179,9 +179,6 @@ type TokenParam struct {
 	// Status of the token.
 	Status    param.Field[TokenStatus]         `json:"status,required"`
 	Condition param.Field[TokenConditionParam] `json:"condition"`
-	// The expiration time on or after which the JWT MUST NOT be accepted for
-	// processing.
-	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
 	// The time before which the token MUST NOT be accepted for processing.
 	NotBefore param.Field[time.Time] `json:"not_before" format:"date-time"`
 }
@@ -333,9 +330,6 @@ type TokenNewParams struct {
 	// List of access policies assigned to the token.
 	Policies  param.Field[[]PolicyParam]           `json:"policies,required"`
 	Condition param.Field[TokenNewParamsCondition] `json:"condition"`
-	// The expiration time on or after which the JWT MUST NOT be accepted for
-	// processing.
-	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
 	// The time before which the token MUST NOT be accepted for processing.
 	NotBefore param.Field[time.Time] `json:"not_before" format:"date-time"`
 }
