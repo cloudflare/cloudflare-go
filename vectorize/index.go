@@ -416,7 +416,7 @@ func (r indexQueryJSON) RawJSON() string {
 }
 
 type IndexQueryMatch struct {
-	// Identifier
+	// Identifier for a Vector
 	ID       string      `json:"id"`
 	Metadata interface{} `json:"metadata,nullable"`
 	// The score of the vector according to the index's distance metric
