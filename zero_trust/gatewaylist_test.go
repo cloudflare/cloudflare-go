@@ -7,7 +7,6 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
@@ -34,15 +33,12 @@ func TestGatewayListNewWithOptionalParams(t *testing.T) {
 		Type:        cloudflare.F(zero_trust.GatewayListNewParamsTypeSerial),
 		Description: cloudflare.F("The serial numbers for administrators"),
 		Items: cloudflare.F([]zero_trust.GatewayItemParam{{
-			CreatedAt:   cloudflare.F(time.Now()),
 			Description: cloudflare.F("Austin office IP"),
 			Value:       cloudflare.F("8GE8721REF"),
 		}, {
-			CreatedAt:   cloudflare.F(time.Now()),
 			Description: cloudflare.F("Austin office IP"),
 			Value:       cloudflare.F("8GE8721REF"),
 		}, {
-			CreatedAt:   cloudflare.F(time.Now()),
 			Description: cloudflare.F("Austin office IP"),
 			Value:       cloudflare.F("8GE8721REF"),
 		}}),
@@ -161,15 +157,12 @@ func TestGatewayListEditWithOptionalParams(t *testing.T) {
 		zero_trust.GatewayListEditParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Append: cloudflare.F([]zero_trust.GatewayItemParam{{
-				CreatedAt:   cloudflare.F(time.Now()),
 				Description: cloudflare.F("Austin office IP"),
 				Value:       cloudflare.F("8GE8721REF"),
 			}, {
-				CreatedAt:   cloudflare.F(time.Now()),
 				Description: cloudflare.F("Austin office IP"),
 				Value:       cloudflare.F("8GE8721REF"),
 			}, {
-				CreatedAt:   cloudflare.F(time.Now()),
 				Description: cloudflare.F("Austin office IP"),
 				Value:       cloudflare.F("8GE8721REF"),
 			}}),

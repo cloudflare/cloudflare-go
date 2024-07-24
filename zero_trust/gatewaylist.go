@@ -197,7 +197,6 @@ func (r gatewayItemJSON) RawJSON() string {
 }
 
 type GatewayItemParam struct {
-	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
 	// The description of the list item, if present
 	Description param.Field[string] `json:"description"`
 	// The value of the item in a list.
