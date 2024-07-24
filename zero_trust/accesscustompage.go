@@ -204,11 +204,9 @@ type CustomPageParam struct {
 	// Custom page type.
 	Type param.Field[CustomPageType] `json:"type,required"`
 	// Number of apps the custom page is assigned to.
-	AppCount  param.Field[int64]     `json:"app_count"`
-	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
+	AppCount param.Field[int64] `json:"app_count"`
 	// UUID
-	UID       param.Field[string]    `json:"uid"`
-	UpdatedAt param.Field[time.Time] `json:"updated_at" format:"date-time"`
+	UID param.Field[string] `json:"uid"`
 }
 
 func (r CustomPageParam) MarshalJSON() (data []byte, err error) {

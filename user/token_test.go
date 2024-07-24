@@ -89,7 +89,6 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 				NotIn: cloudflare.F([]user.CIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
 			}),
 		}),
-		ExpiresOn: cloudflare.F(time.Now()),
 		NotBefore: cloudflare.F(time.Now()),
 	})
 	if err != nil {
@@ -126,7 +125,6 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 						NotIn: cloudflare.F([]user.CIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
 					}),
 				}),
-				ExpiresOn: cloudflare.F(time.Now()),
 				Name:      cloudflare.F("readonly token"),
 				NotBefore: cloudflare.F(time.Now()),
 				Policies: cloudflare.F([]user.PolicyParam{{

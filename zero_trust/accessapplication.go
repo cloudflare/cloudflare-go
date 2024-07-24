@@ -719,7 +719,6 @@ type OIDCSaaSAppParam struct {
 	ClientID param.Field[string] `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret param.Field[string]                       `json:"client_secret"`
-	CreatedAt    param.Field[time.Time]                    `json:"created_at" format:"date-time"`
 	CustomClaims param.Field[OIDCSaaSAppCustomClaimsParam] `json:"custom_claims"`
 	// The OIDC flows supported by this application
 	GrantTypes param.Field[[]OIDCSaaSAppGrantType] `json:"grant_types"`
@@ -734,8 +733,7 @@ type OIDCSaaSAppParam struct {
 	RefreshTokenOptions param.Field[OIDCSaaSAppRefreshTokenOptionsParam] `json:"refresh_token_options"`
 	// Define the user information shared with access, "offline_access" scope will be
 	// automatically enabled if refresh tokens are enabled
-	Scopes    param.Field[[]OIDCSaaSAppScope] `json:"scopes"`
-	UpdatedAt param.Field[time.Time]          `json:"updated_at" format:"date-time"`
+	Scopes param.Field[[]OIDCSaaSAppScope] `json:"scopes"`
 }
 
 func (r OIDCSaaSAppParam) MarshalJSON() (data []byte, err error) {
@@ -991,7 +989,6 @@ type SAMLSaaSAppParam struct {
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL param.Field[string]                           `json:"consumer_service_url"`
-	CreatedAt          param.Field[time.Time]                        `json:"created_at" format:"date-time"`
 	CustomAttributes   param.Field[SAMLSaaSAppCustomAttributesParam] `json:"custom_attributes"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
@@ -1016,8 +1013,7 @@ type SAMLSaaSAppParam struct {
 	// A globally unique name for an identity or service provider.
 	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint param.Field[string]    `json:"sso_endpoint"`
-	UpdatedAt   param.Field[time.Time] `json:"updated_at" format:"date-time"`
+	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
 }
 
 func (r SAMLSaaSAppParam) MarshalJSON() (data []byte, err error) {
@@ -12691,7 +12687,6 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL param.Field[string]      `json:"consumer_service_url"`
-	CreatedAt          param.Field[time.Time]   `json:"created_at" format:"date-time"`
 	CustomAttributes   param.Field[interface{}] `json:"custom_attributes,required"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
@@ -12716,8 +12711,7 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
 	// A globally unique name for an identity or service provider.
 	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint param.Field[string]    `json:"sso_endpoint"`
-	UpdatedAt   param.Field[time.Time] `json:"updated_at" format:"date-time"`
+	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
 	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
 	// be greater than or equal to 1m and less than or equal to 24h.
 	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
@@ -14900,7 +14894,6 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL param.Field[string]      `json:"consumer_service_url"`
-	CreatedAt          param.Field[time.Time]   `json:"created_at" format:"date-time"`
 	CustomAttributes   param.Field[interface{}] `json:"custom_attributes,required"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
@@ -14925,8 +14918,7 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
 	// A globally unique name for an identity or service provider.
 	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint param.Field[string]    `json:"sso_endpoint"`
-	UpdatedAt   param.Field[time.Time] `json:"updated_at" format:"date-time"`
+	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
 	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
 	// be greater than or equal to 1m and less than or equal to 24h.
 	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
