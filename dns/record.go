@@ -3086,8 +3086,6 @@ func (r TTL) IsKnown() bool {
 	return false
 }
 
-func (r TTL) ImplementsDNSTTL() {}
-
 type TXTRecord struct {
 	// Text content for the record.
 	Content string `json:"content,required"`
