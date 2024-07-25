@@ -468,6 +468,7 @@ type AIRunParamsBody struct {
 	Temperature       param.Field[float64]     `json:"temperature"`
 	TopK              param.Field[int64]       `json:"top_k"`
 	TopP              param.Field[float64]     `json:"top_p"`
+	Functions         param.Field[interface{}] `json:"functions,required"`
 	Messages          param.Field[interface{}] `json:"messages,required"`
 	Tools             param.Field[interface{}] `json:"tools,required"`
 	SourceLang        param.Field[string]      `json:"source_lang"`
