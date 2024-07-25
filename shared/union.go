@@ -97,7 +97,6 @@ func (UnionString) ImplementsStreamDownloadDeleteResponseUnion()                
 func (UnionString) ImplementsStreamDownloadGetResponseUnion()                                    {}
 func (UnionString) ImplementsAlertingMechanismItemIDUnionParam()                                 {}
 func (UnionString) ImplementsAlertingMechanismItemIDUnion()                                      {}
-func (UnionString) ImplementsD1DatabaseDeleteResponseUnion()                                     {}
 func (UnionString) ImplementsD1DatabaseRawResponseResultsRowsUnion()                             {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                      {}
 func (UnionString) ImplementsZeroTrustDeviceGetResponseUnion()                                   {}
