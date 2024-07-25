@@ -59,6 +59,7 @@ type DeviceSettingsPolicy struct {
 	Description         *string           `json:"description"`
 	LANAllowMinutes     *uint             `json:"lan_allow_minutes"`
 	LANAllowSubnetSize  *uint             `json:"lan_allow_subnet_size"`
+	TunnelProtocol      *string           `json:"tunnel_protocol"`
 }
 
 type DeviceSettingsPolicyResponse struct {
@@ -89,6 +90,7 @@ type CreateDeviceSettingsPolicyParams struct {
 	Description         *string        `json:"description,omitempty"`
 	LANAllowMinutes     *uint          `json:"lan_allow_minutes,omitempty"`
 	LANAllowSubnetSize  *uint          `json:"lan_allow_subnet_size,omitempty"`
+	TunnelProtocol      *string        `json:"tunnel_protocol,omitempty"`
 }
 
 type UpdateDefaultDeviceSettingsPolicyParams struct {
@@ -109,6 +111,7 @@ type UpdateDefaultDeviceSettingsPolicyParams struct {
 	Description         *string        `json:"description,omitempty"`
 	LANAllowMinutes     *uint          `json:"lan_allow_minutes,omitempty"`
 	LANAllowSubnetSize  *uint          `json:"lan_allow_subnet_size,omitempty"`
+	TunnelProtocol      *string        `json:"tunnel_protocol,omitempty"`
 }
 
 type UpdateDeviceSettingsPolicyParams struct {
@@ -130,6 +133,7 @@ type UpdateDeviceSettingsPolicyParams struct {
 	Description         *string        `json:"description,omitempty"`
 	LANAllowMinutes     *uint          `json:"lan_allow_minutes,omitempty"`
 	LANAllowSubnetSize  *uint          `json:"lan_allow_subnet_size,omitempty"`
+	TunnelProtocol      *string        `json:"tunnel_protocol,omitempty"`
 }
 
 type ListDeviceSettingsPoliciesResponse struct {

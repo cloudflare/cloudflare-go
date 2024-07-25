@@ -45,6 +45,7 @@ var (
 		Description:        nil,
 		LANAllowMinutes:    nil,
 		LANAllowSubnetSize: nil,
+		TunnelProtocol:     StringPtr("wireguard"),
 	}
 
 	nonDefaultDeviceSettingsPolicy = DeviceSettingsPolicy{
@@ -78,6 +79,7 @@ var (
 		Description:        StringPtr("Test Description"),
 		LANAllowMinutes:    UintPtr(120),
 		LANAllowSubnetSize: UintPtr(31),
+		TunnelProtocol:     StringPtr("masque"),
 	}
 
 	defaultDeviceSettingsPolicyJson = `{
@@ -111,7 +113,8 @@ var (
 		"allowed_to_leave": true,
 		"enabled": true,
 		"default": true,
-		"exclude_office_ips":false
+		"exclude_office_ips":false,
+		"tunnel_protocol":"wireguard"
 	}`
 
 	nonDefaultDeviceSettingsPolicyJson = fmt.Sprintf(`{
@@ -152,7 +155,8 @@ var (
 		"exclude_office_ips":true,
 		"description":"Test Description",
 		"lan_allow_minutes": 120,
-		"lan_allow_subnet_size": 31
+		"lan_allow_subnet_size": 31,
+		"tunnel_protocol":"masque"
 	}`, deviceSettingsPolicyID, deviceSettingsPolicyMatch)
 )
 
