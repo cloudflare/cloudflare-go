@@ -3,6 +3,8 @@
 package d1
 
 import (
+	"time"
+
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
@@ -30,7 +32,7 @@ func NewD1Service(opts ...option.RequestOption) (r *D1Service) {
 
 type D1 struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt string `json:"created_at"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The D1 database's size, in bytes.
 	FileSize  float64 `json:"file_size"`
 	Name      string  `json:"name"`

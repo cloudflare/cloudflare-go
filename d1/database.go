@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -84,7 +85,7 @@ func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseLis
 }
 
 // Deletes the specified D1 database.
-func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body DatabaseDeleteParams, opts ...option.RequestOption) (res *DatabaseDeleteResponseUnion, err error) {
+func (r *DatabaseService) Delete(ctx context.Context, databaseID string, body DatabaseDeleteParams, opts ...option.RequestOption) (res *DatabaseDeleteResponse, err error) {
 	var env DatabaseDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -273,7 +274,7 @@ func (r queryResultMetaJSON) RawJSON() string {
 
 type DatabaseNewResponse struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt string                  `json:"created_at"`
+	CreatedAt time.Time               `json:"created_at" format:"date-time"`
 	Name      string                  `json:"name"`
 	UUID      string                  `json:"uuid"`
 	Version   string                  `json:"version"`
@@ -301,7 +302,7 @@ func (r databaseNewResponseJSON) RawJSON() string {
 
 type DatabaseListResponse struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt string                   `json:"created_at"`
+	CreatedAt time.Time                `json:"created_at" format:"date-time"`
 	Name      string                   `json:"name"`
 	UUID      string                   `json:"uuid"`
 	Version   string                   `json:"version"`
@@ -327,21 +328,7 @@ func (r databaseListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [d1.DatabaseDeleteResponseUnknown] or [shared.UnionString].
-type DatabaseDeleteResponseUnion interface {
-	ImplementsD1DatabaseDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DatabaseDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type DatabaseDeleteResponse = interface{}
 
 type DatabaseExportResponse struct {
 	// The current time-travel bookmark for your D1, used to poll for updates. Will not
@@ -779,9 +766,9 @@ type DatabaseDeleteParams struct {
 }
 
 type DatabaseDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   DatabaseDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   DatabaseDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success DatabaseDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseDeleteResponseEnvelopeJSON    `json:"-"`
