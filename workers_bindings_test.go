@@ -35,7 +35,7 @@ func TestListWorkerBindings(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, successResponse, res.Response)
-	assert.Equal(t, 9, len(res.BindingList))
+	assert.Equal(t, 10, len(res.BindingList))
 
 	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
 		Name: "MY_KV",
@@ -106,6 +106,15 @@ func TestListWorkerBindings(t *testing.T) {
 		},
 	})
 	assert.Equal(t, WorkerD1DataseBindingType, res.BindingList[8].Binding.Type())
+
+	assert.Equal(t, res.BindingList[9], WorkerBindingListItem{
+		Name: "MY_CERTIFICATE",
+		Binding: WorkerMtlsCertificateBinding{
+			CertificateID: "e0eeaf74-279a-45e3-8d27-65f336b94161",
+		},
+	})
+
+	assert.Equal(t, WorkerMtlsCertificateBindingType, res.BindingList[9].Binding.Type())
 }
 
 func TestListWorkerBindings_Wfp(t *testing.T) {
@@ -125,7 +134,7 @@ func TestListWorkerBindings_Wfp(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, successResponse, res.Response)
-	assert.Equal(t, 9, len(res.BindingList))
+	assert.Equal(t, 10, len(res.BindingList))
 
 	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
 		Name: "MY_KV",
@@ -181,7 +190,6 @@ func TestListWorkerBindings_Wfp(t *testing.T) {
 			Dataset: "my_dataset",
 		},
 	})
-
 	assert.Equal(t, WorkerAnalyticsEngineBindingType, res.BindingList[7].Binding.Type())
 
 	assert.Equal(t, res.BindingList[8], WorkerBindingListItem{
@@ -191,6 +199,14 @@ func TestListWorkerBindings_Wfp(t *testing.T) {
 		},
 	})
 	assert.Equal(t, WorkerD1DataseBindingType, res.BindingList[8].Binding.Type())
+
+	assert.Equal(t, res.BindingList[9], WorkerBindingListItem{
+		Name: "MY_CERTIFICATE",
+		Binding: WorkerMtlsCertificateBinding{
+			CertificateID: "e0eeaf74-279a-45e3-8d27-65f336b94161",
+		},
+	})
+	assert.Equal(t, WorkerMtlsCertificateBindingType, res.BindingList[9].Binding.Type())
 }
 
 func ExampleUnsafeBinding() {

@@ -46,6 +46,8 @@ const (
 	DispatchNamespaceBindingType WorkerBindingType = "dispatch_namespace"
 	// WorkerD1DataseBindingType is for D1 databases.
 	WorkerD1DataseBindingType WorkerBindingType = "d1"
+	// WorkerMtlsCertificateBindingType is for mtls certificates.
+	WorkerMtlsCertificateBindingType WorkerBindingType = "mtls_certificate"
 )
 
 type ListWorkerBindingsParams struct {
@@ -433,6 +435,28 @@ func (b WorkerD1DatabaseBinding) serialize(bindingName string) (workerBindingMet
 	}, nil, nil
 }
 
+// WorkerMtlsCertificateBinding is a binding to a mtls certificate.
+type WorkerMtlsCertificateBinding struct {
+	CertificateID string
+}
+
+// Type returns the type of the binding.
+func (b WorkerMtlsCertificateBinding) Type() WorkerBindingType {
+	return WorkerMtlsCertificateBindingType
+}
+
+func (b WorkerMtlsCertificateBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.CertificateID == "" {
+		return nil, nil, fmt.Errorf(`certificate ID for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name": bindingName,
+		"type": b.Type(),
+		"id":   b.CertificateID,
+	}, nil, nil
+}
+
 // UnsafeBinding is for experimental or deprecated bindings, and allows specifying any binding type or property.
 type UnsafeBinding map[string]interface{}
 
@@ -561,6 +585,11 @@ func (api *API) ListWorkerBindings(ctx context.Context, rc *ResourceContainer, p
 			database_id := jsonBinding["database_id"].(string)
 			bindingListItem.Binding = WorkerD1DatabaseBinding{
 				DatabaseID: database_id,
+			}
+		case WorkerMtlsCertificateBindingType:
+			certificate_id := jsonBinding["certificate_id"].(string)
+			bindingListItem.Binding = WorkerMtlsCertificateBinding{
+				CertificateID: certificate_id,
 			}
 		default:
 			bindingListItem.Binding = WorkerInheritBinding{}
