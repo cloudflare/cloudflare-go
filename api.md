@@ -5557,6 +5557,14 @@ Methods:
 
 ## Annotations
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#AnnotationListResponse">AnnotationListResponse</a>
+
+Methods:
+
+- <code title="get /radar/annotations">client.Radar.Annotations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#AnnotationService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#AnnotationListParams">AnnotationListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#AnnotationListResponse">AnnotationListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Outages
 
 Response Types:
@@ -5682,10 +5690,12 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#NetflowSummaryResponse">NetflowSummaryResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#NetflowTimeseriesResponse">NetflowTimeseriesResponse</a>
 
 Methods:
 
+- <code title="get /radar/netflows/summary">client.Radar.Netflows.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#NetflowService.Summary">Summary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#NetflowSummaryParams">NetflowSummaryParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#NetflowSummaryResponse">NetflowSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/netflows/timeseries">client.Radar.Netflows.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#NetflowService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#NetflowTimeseriesParams">NetflowTimeseriesParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#NetflowTimeseriesResponse">NetflowTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Top
