@@ -27,14 +27,14 @@ type RiskScoreIntegration struct {
 	CreatedAt       *time.Time `json:"created_at,omitempty"`
 }
 
-// The properties required to create a new risk score integration
+// The properties required to create a new risk score integration.
 type RiskScoreIntegrationCreateRequest struct {
 	IntegrationType string `json:"integration_type,omitempty"`
 	TenantUrl       string `json:"tenant_url,omitempty"`
 	ReferenceID     string `json:"reference_id,omitempty"`
 }
 
-// The properties required to update a risk score integration
+// The properties required to update a risk score integration.
 type RiskScoreIntegrationUpdateRequest struct {
 	IntegrationType string `json:"integration_type,omitempty"`
 	TenantUrl       string `json:"tenant_url,omitempty"`
