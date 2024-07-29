@@ -1292,7 +1292,8 @@ func TestCreateApplicationWithAccessAppLauncherCustomization(t *testing.T) {
 						"url": "https://somesite.com",
 						"name": "bug"
 					}
-				]
+				],
+				"skip_app_launcher_login_page": true
 			}
 		}
 		`)
@@ -1332,6 +1333,7 @@ func TestCreateApplicationWithAccessAppLauncherCustomization(t *testing.T) {
 					Name: "bug",
 				},
 			},
+			SkipAppLauncherLoginPage: BoolPtr(true),
 		},
 	}
 
@@ -1357,6 +1359,7 @@ func TestCreateApplicationWithAccessAppLauncherCustomization(t *testing.T) {
 					Name: "bug",
 				},
 			},
+			SkipAppLauncherLoginPage: BoolPtr(true),
 		},
 	})
 
