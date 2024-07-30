@@ -10,10 +10,12 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"net/url"
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -927,6 +929,8 @@ type IndexInsertParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// ndjson file containing vectors to insert.
 	Body io.Reader `json:"body,required" format:"binary"`
+	// Behavior for ndjson parse failures.
+	UnparsableBehavior param.Field[IndexInsertParamsUnparsableBehavior] `query:"unparsable-behavior"`
 }
 
 func (r IndexInsertParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -942,6 +946,30 @@ func (r IndexInsertParams) MarshalMultipart() (data []byte, contentType string, 
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+// URLQuery serializes [IndexInsertParams]'s query parameters as `url.Values`.
+func (r IndexInsertParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Behavior for ndjson parse failures.
+type IndexInsertParamsUnparsableBehavior string
+
+const (
+	IndexInsertParamsUnparsableBehaviorError   IndexInsertParamsUnparsableBehavior = "error"
+	IndexInsertParamsUnparsableBehaviorDiscard IndexInsertParamsUnparsableBehavior = "discard"
+)
+
+func (r IndexInsertParamsUnparsableBehavior) IsKnown() bool {
+	switch r {
+	case IndexInsertParamsUnparsableBehaviorError, IndexInsertParamsUnparsableBehaviorDiscard:
+		return true
+	}
+	return false
 }
 
 type IndexInsertResponseEnvelope struct {
@@ -1054,6 +1082,8 @@ type IndexUpsertParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// ndjson file containing vectors to upsert.
 	Body io.Reader `json:"body,required" format:"binary"`
+	// Behavior for ndjson parse failures.
+	UnparsableBehavior param.Field[IndexUpsertParamsUnparsableBehavior] `query:"unparsable-behavior"`
 }
 
 func (r IndexUpsertParams) MarshalMultipart() (data []byte, contentType string, err error) {
@@ -1069,6 +1099,30 @@ func (r IndexUpsertParams) MarshalMultipart() (data []byte, contentType string, 
 		return nil, "", err
 	}
 	return buf.Bytes(), writer.FormDataContentType(), nil
+}
+
+// URLQuery serializes [IndexUpsertParams]'s query parameters as `url.Values`.
+func (r IndexUpsertParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// Behavior for ndjson parse failures.
+type IndexUpsertParamsUnparsableBehavior string
+
+const (
+	IndexUpsertParamsUnparsableBehaviorError   IndexUpsertParamsUnparsableBehavior = "error"
+	IndexUpsertParamsUnparsableBehaviorDiscard IndexUpsertParamsUnparsableBehavior = "discard"
+)
+
+func (r IndexUpsertParamsUnparsableBehavior) IsKnown() bool {
+	switch r {
+	case IndexUpsertParamsUnparsableBehaviorError, IndexUpsertParamsUnparsableBehaviorDiscard:
+		return true
+	}
+	return false
 }
 
 type IndexUpsertResponseEnvelope struct {
