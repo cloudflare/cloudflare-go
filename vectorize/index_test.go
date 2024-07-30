@@ -219,7 +219,7 @@ func TestIndexInfo(t *testing.T) {
 	}
 }
 
-func TestIndexInsert(t *testing.T) {
+func TestIndexInsertWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -237,8 +237,9 @@ func TestIndexInsert(t *testing.T) {
 		context.TODO(),
 		"example-index",
 		vectorize.IndexInsertParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:               io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			UnparsableBehavior: cloudflare.F(vectorize.IndexInsertParamsUnparsableBehaviorError),
 		},
 	)
 	if err != nil {
@@ -289,7 +290,7 @@ func TestIndexQueryWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestIndexUpsert(t *testing.T) {
+func TestIndexUpsertWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -307,8 +308,9 @@ func TestIndexUpsert(t *testing.T) {
 		context.TODO(),
 		"example-index",
 		vectorize.IndexUpsertParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:               io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			UnparsableBehavior: cloudflare.F(vectorize.IndexUpsertParamsUnparsableBehaviorError),
 		},
 	)
 	if err != nil {
