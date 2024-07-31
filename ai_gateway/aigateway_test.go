@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestAIGatewayNew(t *testing.T) {
+func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -33,9 +33,12 @@ func TestAIGatewayNew(t *testing.T) {
 		CacheInvalidateOnUpdate: cloudflare.F(true),
 		CacheTTL:                cloudflare.F(int64(0)),
 		CollectLogs:             cloudflare.F(true),
+		ImprovedLogs:            cloudflare.F(true),
+		Logpush:                 cloudflare.F(true),
 		RateLimitingInterval:    cloudflare.F(int64(0)),
 		RateLimitingLimit:       cloudflare.F(int64(0)),
 		RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayNewParamsRateLimitingTechniqueFixed),
+		LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -46,7 +49,7 @@ func TestAIGatewayNew(t *testing.T) {
 	}
 }
 
-func TestAIGatewayUpdate(t *testing.T) {
+func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -67,9 +70,12 @@ func TestAIGatewayUpdate(t *testing.T) {
 			CacheInvalidateOnUpdate: cloudflare.F(true),
 			CacheTTL:                cloudflare.F(int64(0)),
 			CollectLogs:             cloudflare.F(true),
+			ImprovedLogs:            cloudflare.F(true),
+			Logpush:                 cloudflare.F(true),
 			RateLimitingInterval:    cloudflare.F(int64(0)),
 			RateLimitingLimit:       cloudflare.F(int64(0)),
 			RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
+			LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
 		},
 	)
 	if err != nil {
