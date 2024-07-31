@@ -291,11 +291,12 @@ type CertificatePackEditResponseCertificateAuthority string
 const (
 	CertificatePackEditResponseCertificateAuthorityGoogle      CertificatePackEditResponseCertificateAuthority = "google"
 	CertificatePackEditResponseCertificateAuthorityLetsEncrypt CertificatePackEditResponseCertificateAuthority = "lets_encrypt"
+	CertificatePackEditResponseCertificateAuthoritySSLCom      CertificatePackEditResponseCertificateAuthority = "ssl_com"
 )
 
 func (r CertificatePackEditResponseCertificateAuthority) IsKnown() bool {
 	switch r {
-	case CertificatePackEditResponseCertificateAuthorityGoogle, CertificatePackEditResponseCertificateAuthorityLetsEncrypt:
+	case CertificatePackEditResponseCertificateAuthorityGoogle, CertificatePackEditResponseCertificateAuthorityLetsEncrypt, CertificatePackEditResponseCertificateAuthoritySSLCom:
 		return true
 	}
 	return false

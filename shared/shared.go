@@ -183,11 +183,12 @@ const (
 	CertificateCADigicert    CertificateCA = "digicert"
 	CertificateCAGoogle      CertificateCA = "google"
 	CertificateCALetsEncrypt CertificateCA = "lets_encrypt"
+	CertificateCASSLCom      CertificateCA = "ssl_com"
 )
 
 func (r CertificateCA) IsKnown() bool {
 	switch r {
-	case CertificateCADigicert, CertificateCAGoogle, CertificateCALetsEncrypt:
+	case CertificateCADigicert, CertificateCAGoogle, CertificateCALetsEncrypt, CertificateCASSLCom:
 		return true
 	}
 	return false

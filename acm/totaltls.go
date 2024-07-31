@@ -74,11 +74,12 @@ type CertificateAuthority string
 const (
 	CertificateAuthorityGoogle      CertificateAuthority = "google"
 	CertificateAuthorityLetsEncrypt CertificateAuthority = "lets_encrypt"
+	CertificateAuthoritySSLCom      CertificateAuthority = "ssl_com"
 )
 
 func (r CertificateAuthority) IsKnown() bool {
 	switch r {
-	case CertificateAuthorityGoogle, CertificateAuthorityLetsEncrypt:
+	case CertificateAuthorityGoogle, CertificateAuthorityLetsEncrypt, CertificateAuthoritySSLCom:
 		return true
 	}
 	return false
@@ -91,8 +92,8 @@ type TotalTLSNewResponse struct {
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
 	// The validity period in days for the certificates ordered via Total TLS.
-	ValidityDays TotalTLSNewResponseValidityDays `json:"validity_days"`
-	JSON         totalTLSNewResponseJSON         `json:"-"`
+	ValidityPeriod TotalTLSNewResponseValidityPeriod `json:"validity_period"`
+	JSON           totalTLSNewResponseJSON           `json:"-"`
 }
 
 // totalTLSNewResponseJSON contains the JSON metadata for the struct
@@ -100,7 +101,7 @@ type TotalTLSNewResponse struct {
 type totalTLSNewResponseJSON struct {
 	CertificateAuthority apijson.Field
 	Enabled              apijson.Field
-	ValidityDays         apijson.Field
+	ValidityPeriod       apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -114,15 +115,15 @@ func (r totalTLSNewResponseJSON) RawJSON() string {
 }
 
 // The validity period in days for the certificates ordered via Total TLS.
-type TotalTLSNewResponseValidityDays int64
+type TotalTLSNewResponseValidityPeriod int64
 
 const (
-	TotalTLSNewResponseValidityDays90 TotalTLSNewResponseValidityDays = 90
+	TotalTLSNewResponseValidityPeriod90 TotalTLSNewResponseValidityPeriod = 90
 )
 
-func (r TotalTLSNewResponseValidityDays) IsKnown() bool {
+func (r TotalTLSNewResponseValidityPeriod) IsKnown() bool {
 	switch r {
-	case TotalTLSNewResponseValidityDays90:
+	case TotalTLSNewResponseValidityPeriod90:
 		return true
 	}
 	return false
@@ -135,8 +136,8 @@ type TotalTLSGetResponse struct {
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
 	// The validity period in days for the certificates ordered via Total TLS.
-	ValidityDays TotalTLSGetResponseValidityDays `json:"validity_days"`
-	JSON         totalTLSGetResponseJSON         `json:"-"`
+	ValidityPeriod TotalTLSGetResponseValidityPeriod `json:"validity_period"`
+	JSON           totalTLSGetResponseJSON           `json:"-"`
 }
 
 // totalTLSGetResponseJSON contains the JSON metadata for the struct
@@ -144,7 +145,7 @@ type TotalTLSGetResponse struct {
 type totalTLSGetResponseJSON struct {
 	CertificateAuthority apijson.Field
 	Enabled              apijson.Field
-	ValidityDays         apijson.Field
+	ValidityPeriod       apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -158,15 +159,15 @@ func (r totalTLSGetResponseJSON) RawJSON() string {
 }
 
 // The validity period in days for the certificates ordered via Total TLS.
-type TotalTLSGetResponseValidityDays int64
+type TotalTLSGetResponseValidityPeriod int64
 
 const (
-	TotalTLSGetResponseValidityDays90 TotalTLSGetResponseValidityDays = 90
+	TotalTLSGetResponseValidityPeriod90 TotalTLSGetResponseValidityPeriod = 90
 )
 
-func (r TotalTLSGetResponseValidityDays) IsKnown() bool {
+func (r TotalTLSGetResponseValidityPeriod) IsKnown() bool {
 	switch r {
-	case TotalTLSGetResponseValidityDays90:
+	case TotalTLSGetResponseValidityPeriod90:
 		return true
 	}
 	return false

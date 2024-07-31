@@ -58,6 +58,9 @@ const CertificateCAGoogle = shared.CertificateCAGoogle
 // This is an alias to an internal value.
 const CertificateCALetsEncrypt = shared.CertificateCALetsEncrypt
 
+// This is an alias to an internal value.
+const CertificateCASSLCom = shared.CertificateCASSLCom
+
 // Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 // or "keyless-certificate" (for Keyless SSL servers).
 //
