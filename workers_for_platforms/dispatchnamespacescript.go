@@ -55,7 +55,7 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 // Upload a worker module to a Workers for Platforms namespace. You can find an
 // example of the metadata on our docs:
 // https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/reference/metadata/
-func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *workers.Script, err error) {
+func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptUpdateResponse, err error) {
 	var env DispatchNamespaceScriptUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -153,6 +153,51 @@ func (r *Script) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptJSON) RawJSON() string {
+	return r.raw
+}
+
+type DispatchNamespaceScriptUpdateResponse struct {
+	// The id of the script in the Workers system. Usually the script name.
+	ID string `json:"id"`
+	// When the script was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Hashed script content, can be used in a If-None-Match header when updating.
+	Etag string `json:"etag"`
+	// Whether Logpush is turned on for the Worker.
+	Logpush bool `json:"logpush"`
+	// When the script was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Specifies the placement mode for the Worker (e.g. 'smart').
+	PlacementMode string `json:"placement_mode"`
+	StartupTimeMs int64  `json:"startup_time_ms"`
+	// List of Workers that will consume logs from the attached Worker.
+	TailConsumers []workers.ConsumerScript `json:"tail_consumers"`
+	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
+	UsageModel string                                    `json:"usage_model"`
+	JSON       dispatchNamespaceScriptUpdateResponseJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptUpdateResponseJSON contains the JSON metadata for the
+// struct [DispatchNamespaceScriptUpdateResponse]
+type dispatchNamespaceScriptUpdateResponseJSON struct {
+	ID            apijson.Field
+	CreatedOn     apijson.Field
+	Etag          apijson.Field
+	Logpush       apijson.Field
+	ModifiedOn    apijson.Field
+	PlacementMode apijson.Field
+	StartupTimeMs apijson.Field
+	TailConsumers apijson.Field
+	UsageModel    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -308,7 +353,7 @@ type DispatchNamespaceScriptUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  workers.Script                                       `json:"result"`
+	Result  DispatchNamespaceScriptUpdateResponse                `json:"result"`
 	JSON    dispatchNamespaceScriptUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
