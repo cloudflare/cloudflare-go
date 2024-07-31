@@ -79,8 +79,8 @@ type LogListResponse struct {
 	Request             string              `json:"request,required"`
 	Response            string              `json:"response,required"`
 	Success             bool                `json:"success,required"`
-	TokensIn            int64               `json:"tokens_in,required"`
-	TokensOut           int64               `json:"tokens_out,required"`
+	TokensIn            int64               `json:"tokens_in,required,nullable"`
+	TokensOut           int64               `json:"tokens_out,required,nullable"`
 	Cost                float64             `json:"cost"`
 	Metadata            string              `json:"metadata"`
 	RequestContentType  string              `json:"request_content_type"`
