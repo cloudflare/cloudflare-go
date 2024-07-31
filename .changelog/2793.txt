@@ -1,0 +1,3 @@
+```release-note:enhancement
+access_application: add `skip_app_launcher_login_page` flag to skip the App Launcher landing page
+```

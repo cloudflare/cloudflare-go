@@ -250,11 +250,12 @@ type SaasApplication struct {
 }
 
 type AccessAppLauncherCustomization struct {
-	LandingPageDesign     AccessLandingPageDesign `json:"landing_page_design"`
-	LogoURL               string                  `json:"app_launcher_logo_url"`
-	HeaderBackgroundColor string                  `json:"header_bg_color"`
-	BackgroundColor       string                  `json:"bg_color"`
-	FooterLinks           []AccessFooterLink      `json:"footer_links"`
+	LandingPageDesign        AccessLandingPageDesign `json:"landing_page_design"`
+	LogoURL                  string                  `json:"app_launcher_logo_url"`
+	HeaderBackgroundColor    string                  `json:"header_bg_color"`
+	BackgroundColor          string                  `json:"bg_color"`
+	FooterLinks              []AccessFooterLink      `json:"footer_links"`
+	SkipAppLauncherLoginPage *bool                   `json:"skip_app_launcher_login_page,omitempty"`
 }
 
 type AccessFooterLink struct {
