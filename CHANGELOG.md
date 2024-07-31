@@ -1,5 +1,16 @@
 ## 0.101.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* access_application: add `skip_app_launcher_login_page` flag to skip the App Launcher landing page ([#2793](https://github.com/cloudflare/cloudflare-go/issues/2793))
+* device_posture_rule: support extended_key_usage, check_private_key, and locations for client_certificate_v2 posture rule ([#1685](https://github.com/cloudflare/cloudflare-go/issues/1685))
+* devices_policy: Add new tunnel_protocol field to policy ([#2778](https://github.com/cloudflare/cloudflare-go/issues/2778))
+* risk_score_integration: Add support for Risk Score Integrations ([#2786](https://github.com/cloudflare/cloudflare-go/issues/2786))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.27.2 to 2.27.3 ([#2787](https://github.com/cloudflare/cloudflare-go/issues/2787))
+
 ## 0.100.0 (July 18th, 2024)
 
 BREAKING CHANGES:
