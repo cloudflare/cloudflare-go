@@ -107,6 +107,9 @@ func (r *V4PagePagination[T]) GetNextPage() (res *V4PagePagination[T], err error
 }
 
 func (r *V4PagePagination[T]) SetPageConfig(cfg *requestconfig.RequestConfig, res *http.Response) {
+	if r == nil {
+		r = &V4PagePagination[T]{}
+	}
 	r.cfg = cfg
 	r.res = res
 }
@@ -228,6 +231,9 @@ func (r *V4PagePaginationArray[T]) GetNextPage() (res *V4PagePaginationArray[T],
 }
 
 func (r *V4PagePaginationArray[T]) SetPageConfig(cfg *requestconfig.RequestConfig, res *http.Response) {
+	if r == nil {
+		r = &V4PagePaginationArray[T]{}
+	}
 	r.cfg = cfg
 	r.res = res
 }
@@ -348,6 +354,9 @@ func (r *CursorPagination[T]) GetNextPage() (res *CursorPagination[T], err error
 }
 
 func (r *CursorPagination[T]) SetPageConfig(cfg *requestconfig.RequestConfig, res *http.Response) {
+	if r == nil {
+		r = &CursorPagination[T]{}
+	}
 	r.cfg = cfg
 	r.res = res
 }
@@ -468,6 +477,9 @@ func (r *CursorLimitPagination[T]) GetNextPage() (res *CursorLimitPagination[T],
 }
 
 func (r *CursorLimitPagination[T]) SetPageConfig(cfg *requestconfig.RequestConfig, res *http.Response) {
+	if r == nil {
+		r = &CursorLimitPagination[T]{}
+	}
 	r.cfg = cfg
 	r.res = res
 }
@@ -560,6 +572,9 @@ func (r *SinglePage[T]) GetNextPage() (res *SinglePage[T], err error) {
 }
 
 func (r *SinglePage[T]) SetPageConfig(cfg *requestconfig.RequestConfig, res *http.Response) {
+	if r == nil {
+		r = &SinglePage[T]{}
+	}
 	r.cfg = cfg
 	r.res = res
 }
