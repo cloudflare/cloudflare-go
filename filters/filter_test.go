@@ -32,7 +32,7 @@ func TestFilterNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		filters.FilterNewParams{
-			Body: map[string]interface{}{},
+			Expression: cloudflare.F("(http.request.uri.path ~ \".*wp-login.php\" or http.request.uri.path ~ \".*xmlrpc.php\") and ip.addr ne 172.16.22.155"),
 		},
 	)
 	if err != nil {
