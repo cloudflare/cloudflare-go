@@ -106,11 +106,12 @@ type CertificatePackOrderNewResponseCertificateAuthority string
 const (
 	CertificatePackOrderNewResponseCertificateAuthorityGoogle      CertificatePackOrderNewResponseCertificateAuthority = "google"
 	CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt CertificatePackOrderNewResponseCertificateAuthority = "lets_encrypt"
+	CertificatePackOrderNewResponseCertificateAuthoritySSLCom      CertificatePackOrderNewResponseCertificateAuthority = "ssl_com"
 )
 
 func (r CertificatePackOrderNewResponseCertificateAuthority) IsKnown() bool {
 	switch r {
-	case CertificatePackOrderNewResponseCertificateAuthorityGoogle, CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt:
+	case CertificatePackOrderNewResponseCertificateAuthorityGoogle, CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt, CertificatePackOrderNewResponseCertificateAuthoritySSLCom:
 		return true
 	}
 	return false
@@ -199,11 +200,12 @@ type CertificatePackOrderNewParamsCertificateAuthority string
 const (
 	CertificatePackOrderNewParamsCertificateAuthorityGoogle      CertificatePackOrderNewParamsCertificateAuthority = "google"
 	CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt CertificatePackOrderNewParamsCertificateAuthority = "lets_encrypt"
+	CertificatePackOrderNewParamsCertificateAuthoritySSLCom      CertificatePackOrderNewParamsCertificateAuthority = "ssl_com"
 )
 
 func (r CertificatePackOrderNewParamsCertificateAuthority) IsKnown() bool {
 	switch r {
-	case CertificatePackOrderNewParamsCertificateAuthorityGoogle, CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt:
+	case CertificatePackOrderNewParamsCertificateAuthorityGoogle, CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt, CertificatePackOrderNewParamsCertificateAuthoritySSLCom:
 		return true
 	}
 	return false
