@@ -300,79 +300,11 @@ func init() {
 }
 
 type UARuleNewParams struct {
-	// The rule configuration.
-	Configuration param.Field[UARuleNewParamsConfigurationUnion] `json:"configuration,required"`
-	// The action to apply to a matched request.
-	Mode param.Field[UARuleNewParamsMode] `json:"mode,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r UARuleNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The rule configuration.
-type UARuleNewParamsConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the rule.
-	Target param.Field[UARuleNewParamsConfigurationTarget] `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r UARuleNewParamsConfiguration) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r UARuleNewParamsConfiguration) implementsFirewallUARuleNewParamsConfigurationUnion() {}
-
-// The rule configuration.
-//
-// Satisfied by [firewall.AccessRuleIPConfigurationParam],
-// [firewall.IPV6ConfigurationParam], [firewall.AccessRuleCIDRConfigurationParam],
-// [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
-// [UARuleNewParamsConfiguration].
-type UARuleNewParamsConfigurationUnion interface {
-	implementsFirewallUARuleNewParamsConfigurationUnion()
-}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the rule.
-type UARuleNewParamsConfigurationTarget string
-
-const (
-	UARuleNewParamsConfigurationTargetIP      UARuleNewParamsConfigurationTarget = "ip"
-	UARuleNewParamsConfigurationTargetIp6     UARuleNewParamsConfigurationTarget = "ip6"
-	UARuleNewParamsConfigurationTargetIPRange UARuleNewParamsConfigurationTarget = "ip_range"
-	UARuleNewParamsConfigurationTargetASN     UARuleNewParamsConfigurationTarget = "asn"
-	UARuleNewParamsConfigurationTargetCountry UARuleNewParamsConfigurationTarget = "country"
-)
-
-func (r UARuleNewParamsConfigurationTarget) IsKnown() bool {
-	switch r {
-	case UARuleNewParamsConfigurationTargetIP, UARuleNewParamsConfigurationTargetIp6, UARuleNewParamsConfigurationTargetIPRange, UARuleNewParamsConfigurationTargetASN, UARuleNewParamsConfigurationTargetCountry:
-		return true
-	}
-	return false
-}
-
-// The action to apply to a matched request.
-type UARuleNewParamsMode string
-
-const (
-	UARuleNewParamsModeBlock            UARuleNewParamsMode = "block"
-	UARuleNewParamsModeChallenge        UARuleNewParamsMode = "challenge"
-	UARuleNewParamsModeWhitelist        UARuleNewParamsMode = "whitelist"
-	UARuleNewParamsModeJSChallenge      UARuleNewParamsMode = "js_challenge"
-	UARuleNewParamsModeManagedChallenge UARuleNewParamsMode = "managed_challenge"
-)
-
-func (r UARuleNewParamsMode) IsKnown() bool {
-	switch r {
-	case UARuleNewParamsModeBlock, UARuleNewParamsModeChallenge, UARuleNewParamsModeWhitelist, UARuleNewParamsModeJSChallenge, UARuleNewParamsModeManagedChallenge:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.Body)
 }
 
 type UARuleNewResponseEnvelope struct {
@@ -419,79 +351,11 @@ func (r UARuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleUpdateParams struct {
-	// The rule configuration.
-	Configuration param.Field[UARuleUpdateParamsConfigurationUnion] `json:"configuration,required"`
-	// The action to apply to a matched request.
-	Mode param.Field[UARuleUpdateParamsMode] `json:"mode,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r UARuleUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The rule configuration.
-type UARuleUpdateParamsConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the rule.
-	Target param.Field[UARuleUpdateParamsConfigurationTarget] `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r UARuleUpdateParamsConfiguration) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r UARuleUpdateParamsConfiguration) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
-
-// The rule configuration.
-//
-// Satisfied by [firewall.AccessRuleIPConfigurationParam],
-// [firewall.IPV6ConfigurationParam], [firewall.AccessRuleCIDRConfigurationParam],
-// [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
-// [UARuleUpdateParamsConfiguration].
-type UARuleUpdateParamsConfigurationUnion interface {
-	implementsFirewallUARuleUpdateParamsConfigurationUnion()
-}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the rule.
-type UARuleUpdateParamsConfigurationTarget string
-
-const (
-	UARuleUpdateParamsConfigurationTargetIP      UARuleUpdateParamsConfigurationTarget = "ip"
-	UARuleUpdateParamsConfigurationTargetIp6     UARuleUpdateParamsConfigurationTarget = "ip6"
-	UARuleUpdateParamsConfigurationTargetIPRange UARuleUpdateParamsConfigurationTarget = "ip_range"
-	UARuleUpdateParamsConfigurationTargetASN     UARuleUpdateParamsConfigurationTarget = "asn"
-	UARuleUpdateParamsConfigurationTargetCountry UARuleUpdateParamsConfigurationTarget = "country"
-)
-
-func (r UARuleUpdateParamsConfigurationTarget) IsKnown() bool {
-	switch r {
-	case UARuleUpdateParamsConfigurationTargetIP, UARuleUpdateParamsConfigurationTargetIp6, UARuleUpdateParamsConfigurationTargetIPRange, UARuleUpdateParamsConfigurationTargetASN, UARuleUpdateParamsConfigurationTargetCountry:
-		return true
-	}
-	return false
-}
-
-// The action to apply to a matched request.
-type UARuleUpdateParamsMode string
-
-const (
-	UARuleUpdateParamsModeBlock            UARuleUpdateParamsMode = "block"
-	UARuleUpdateParamsModeChallenge        UARuleUpdateParamsMode = "challenge"
-	UARuleUpdateParamsModeWhitelist        UARuleUpdateParamsMode = "whitelist"
-	UARuleUpdateParamsModeJSChallenge      UARuleUpdateParamsMode = "js_challenge"
-	UARuleUpdateParamsModeManagedChallenge UARuleUpdateParamsMode = "managed_challenge"
-)
-
-func (r UARuleUpdateParamsMode) IsKnown() bool {
-	switch r {
-	case UARuleUpdateParamsModeBlock, UARuleUpdateParamsModeChallenge, UARuleUpdateParamsModeWhitelist, UARuleUpdateParamsModeJSChallenge, UARuleUpdateParamsModeManagedChallenge:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.Body)
 }
 
 type UARuleUpdateResponseEnvelope struct {
