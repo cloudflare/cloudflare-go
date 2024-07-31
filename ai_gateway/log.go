@@ -81,6 +81,7 @@ type LogListResponse struct {
 	Success             bool                `json:"success,required"`
 	TokensIn            int64               `json:"tokens_in,required"`
 	TokensOut           int64               `json:"tokens_out,required"`
+	Cost                float64             `json:"cost"`
 	Metadata            string              `json:"metadata"`
 	RequestContentType  string              `json:"request_content_type"`
 	RequestType         string              `json:"request_type"`
@@ -104,6 +105,7 @@ type logListResponseJSON struct {
 	Success             apijson.Field
 	TokensIn            apijson.Field
 	TokensOut           apijson.Field
+	Cost                apijson.Field
 	Metadata            apijson.Field
 	RequestContentType  apijson.Field
 	RequestType         apijson.Field
