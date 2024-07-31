@@ -119,22 +119,24 @@ func (r *ScriptVersionService) Get(ctx context.Context, scriptName string, versi
 }
 
 type ScriptVersionNewResponse struct {
-	Resources interface{}                  `json:"resources,required"`
-	ID        string                       `json:"id"`
-	Metadata  interface{}                  `json:"metadata"`
-	Number    float64                      `json:"number"`
-	JSON      scriptVersionNewResponseJSON `json:"-"`
+	Resources     interface{}                  `json:"resources,required"`
+	ID            string                       `json:"id"`
+	Metadata      interface{}                  `json:"metadata"`
+	Number        float64                      `json:"number"`
+	StartupTimeMs int64                        `json:"startup_time_ms"`
+	JSON          scriptVersionNewResponseJSON `json:"-"`
 }
 
 // scriptVersionNewResponseJSON contains the JSON metadata for the struct
 // [ScriptVersionNewResponse]
 type scriptVersionNewResponseJSON struct {
-	Resources   apijson.Field
-	ID          apijson.Field
-	Metadata    apijson.Field
-	Number      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Resources     apijson.Field
+	ID            apijson.Field
+	Metadata      apijson.Field
+	Number        apijson.Field
+	StartupTimeMs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ScriptVersionNewResponse) UnmarshalJSON(data []byte) (err error) {

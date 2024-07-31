@@ -55,7 +55,7 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 }
 
 // Upload a worker module.
-func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
+func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *ScriptUpdateResponse, err error) {
 	var env ScriptUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -212,6 +212,51 @@ type ScriptSettingParam struct {
 
 func (r ScriptSettingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type ScriptUpdateResponse struct {
+	// The id of the script in the Workers system. Usually the script name.
+	ID string `json:"id"`
+	// When the script was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Hashed script content, can be used in a If-None-Match header when updating.
+	Etag string `json:"etag"`
+	// Whether Logpush is turned on for the Worker.
+	Logpush bool `json:"logpush"`
+	// When the script was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Specifies the placement mode for the Worker (e.g. 'smart').
+	PlacementMode string `json:"placement_mode"`
+	StartupTimeMs int64  `json:"startup_time_ms"`
+	// List of Workers that will consume logs from the attached Worker.
+	TailConsumers []ConsumerScript `json:"tail_consumers"`
+	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
+	UsageModel string                   `json:"usage_model"`
+	JSON       scriptUpdateResponseJSON `json:"-"`
+}
+
+// scriptUpdateResponseJSON contains the JSON metadata for the struct
+// [ScriptUpdateResponse]
+type scriptUpdateResponseJSON struct {
+	ID            apijson.Field
+	CreatedOn     apijson.Field
+	Etag          apijson.Field
+	Logpush       apijson.Field
+	ModifiedOn    apijson.Field
+	PlacementMode apijson.Field
+	StartupTimeMs apijson.Field
+	TailConsumers apijson.Field
+	UsageModel    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ScriptUpdateParams struct {
@@ -374,7 +419,7 @@ type ScriptUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Script                              `json:"result"`
+	Result  ScriptUpdateResponse                `json:"result"`
 	JSON    scriptUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
