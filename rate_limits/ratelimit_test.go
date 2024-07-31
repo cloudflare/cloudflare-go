@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/rate_limits"
 )
 
-func TestRateLimitNewWithOptionalParams(t *testing.T) {
+func TestRateLimitNew(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -32,39 +32,7 @@ func TestRateLimitNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		rate_limits.RateLimitNewParams{
-			Action: cloudflare.F(rate_limits.RateLimitNewParamsAction{
-				Mode: cloudflare.F(rate_limits.RateLimitNewParamsActionModeChallenge),
-				Response: cloudflare.F(rate_limits.RateLimitNewParamsActionResponse{
-					Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
-					ContentType: cloudflare.F("text/xml"),
-				}),
-				Timeout: cloudflare.F(86400.000000),
-			}),
-			Match: cloudflare.F(rate_limits.RateLimitNewParamsMatch{
-				Headers: cloudflare.F([]rate_limits.RateLimitNewParamsMatchHeader{{
-					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpNe),
-					Value: cloudflare.F("HIT"),
-				}, {
-					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpNe),
-					Value: cloudflare.F("HIT"),
-				}, {
-					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpNe),
-					Value: cloudflare.F("HIT"),
-				}}),
-				Request: cloudflare.F(rate_limits.RateLimitNewParamsMatchRequest{
-					Methods: cloudflare.F([]rate_limits.Methods{rate_limits.MethodsGet, rate_limits.MethodsPost}),
-					Schemes: cloudflare.F([]string{"HTTP", "HTTPS"}),
-					URL:     cloudflare.F("*.example.org/path*"),
-				}),
-				Response: cloudflare.F(rate_limits.RateLimitNewParamsMatchResponse{
-					OriginTraffic: cloudflare.F(true),
-				}),
-			}),
-			Period:    cloudflare.F(900.000000),
-			Threshold: cloudflare.F(60.000000),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -133,7 +101,7 @@ func TestRateLimitDelete(t *testing.T) {
 	}
 }
 
-func TestRateLimitEditWithOptionalParams(t *testing.T) {
+func TestRateLimitEdit(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -152,39 +120,7 @@ func TestRateLimitEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		rate_limits.RateLimitEditParams{
-			Action: cloudflare.F(rate_limits.RateLimitEditParamsAction{
-				Mode: cloudflare.F(rate_limits.RateLimitEditParamsActionModeChallenge),
-				Response: cloudflare.F(rate_limits.RateLimitEditParamsActionResponse{
-					Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
-					ContentType: cloudflare.F("text/xml"),
-				}),
-				Timeout: cloudflare.F(86400.000000),
-			}),
-			Match: cloudflare.F(rate_limits.RateLimitEditParamsMatch{
-				Headers: cloudflare.F([]rate_limits.RateLimitEditParamsMatchHeader{{
-					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpNe),
-					Value: cloudflare.F("HIT"),
-				}, {
-					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpNe),
-					Value: cloudflare.F("HIT"),
-				}, {
-					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpNe),
-					Value: cloudflare.F("HIT"),
-				}}),
-				Request: cloudflare.F(rate_limits.RateLimitEditParamsMatchRequest{
-					Methods: cloudflare.F([]rate_limits.Methods{rate_limits.MethodsGet, rate_limits.MethodsPost}),
-					Schemes: cloudflare.F([]string{"HTTP", "HTTPS"}),
-					URL:     cloudflare.F("*.example.org/path*"),
-				}),
-				Response: cloudflare.F(rate_limits.RateLimitEditParamsMatchResponse{
-					OriginTraffic: cloudflare.F(true),
-				}),
-			}),
-			Period:    cloudflare.F(900.000000),
-			Threshold: cloudflare.F(60.000000),
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
