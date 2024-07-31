@@ -150,11 +150,11 @@ func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetPa
 
 type Queue struct {
 	Consumers           interface{} `json:"consumers"`
-	ConsumersTotalCount interface{} `json:"consumers_total_count"`
-	CreatedOn           interface{} `json:"created_on"`
-	ModifiedOn          interface{} `json:"modified_on"`
+	ConsumersTotalCount float64     `json:"consumers_total_count"`
+	CreatedOn           string      `json:"created_on"`
+	ModifiedOn          string      `json:"modified_on"`
 	Producers           interface{} `json:"producers"`
-	ProducersTotalCount interface{} `json:"producers_total_count"`
+	ProducersTotalCount float64     `json:"producers_total_count"`
 	QueueID             string      `json:"queue_id"`
 	QueueName           string      `json:"queue_name"`
 	JSON                queueJSON   `json:"-"`
@@ -183,8 +183,8 @@ func (r queueJSON) RawJSON() string {
 }
 
 type QueueCreated struct {
-	CreatedOn  interface{}      `json:"created_on"`
-	ModifiedOn interface{}      `json:"modified_on"`
+	CreatedOn  string           `json:"created_on"`
+	ModifiedOn string           `json:"modified_on"`
 	QueueID    string           `json:"queue_id"`
 	QueueName  string           `json:"queue_name"`
 	JSON       queueCreatedJSON `json:"-"`
@@ -209,8 +209,8 @@ func (r queueCreatedJSON) RawJSON() string {
 }
 
 type QueueUpdated struct {
-	CreatedOn  interface{}      `json:"created_on"`
-	ModifiedOn interface{}      `json:"modified_on"`
+	CreatedOn  string           `json:"created_on"`
+	ModifiedOn string           `json:"modified_on"`
 	QueueID    string           `json:"queue_id"`
 	QueueName  string           `json:"queue_name"`
 	JSON       queueUpdatedJSON `json:"-"`
