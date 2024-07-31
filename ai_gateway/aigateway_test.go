@@ -33,11 +33,11 @@ func TestAIGatewayNewWithOptionalParams(t *testing.T) {
 		CacheInvalidateOnUpdate: cloudflare.F(true),
 		CacheTTL:                cloudflare.F(int64(0)),
 		CollectLogs:             cloudflare.F(true),
-		ImprovedLogs:            cloudflare.F(true),
-		Logpush:                 cloudflare.F(true),
 		RateLimitingInterval:    cloudflare.F(int64(0)),
 		RateLimitingLimit:       cloudflare.F(int64(0)),
 		RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayNewParamsRateLimitingTechniqueFixed),
+		ImprovedLogs:            cloudflare.F(true),
+		Logpush:                 cloudflare.F(true),
 		LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
 	})
 	if err != nil {
@@ -70,11 +70,11 @@ func TestAIGatewayUpdateWithOptionalParams(t *testing.T) {
 			CacheInvalidateOnUpdate: cloudflare.F(true),
 			CacheTTL:                cloudflare.F(int64(0)),
 			CollectLogs:             cloudflare.F(true),
-			ImprovedLogs:            cloudflare.F(true),
-			Logpush:                 cloudflare.F(true),
 			RateLimitingInterval:    cloudflare.F(int64(0)),
 			RateLimitingLimit:       cloudflare.F(int64(0)),
 			RateLimitingTechnique:   cloudflare.F(ai_gateway.AIGatewayUpdateParamsRateLimitingTechniqueFixed),
+			ImprovedLogs:            cloudflare.F(true),
+			Logpush:                 cloudflare.F(true),
 			LogpushPublicKey:        cloudflare.F("xxxxxxxxxxxxxxxx"),
 		},
 	)
