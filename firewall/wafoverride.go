@@ -61,19 +61,19 @@ func (r *WAFOverrideService) New(ctx context.Context, zoneIdentifier string, bod
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFOverrideService) Update(ctx context.Context, zoneIdentifier string, params WAFOverrideUpdateParams, opts ...option.RequestOption) (res *Override, err error) {
+func (r *WAFOverrideService) Update(ctx context.Context, zoneIdentifier string, id string, body WAFOverrideUpdateParams, opts ...option.RequestOption) (res *Override, err error) {
 	var env WAFOverrideUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.PathID.Value == "" {
-		err = errors.New("missing required path_id parameter")
-		return
-	}
 	if zoneIdentifier == "" {
 		err = errors.New("missing required zone_identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, params.PathID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/firewall/waf/overrides/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -219,22 +219,17 @@ func (r overrideJSON) RawJSON() string {
 
 type OverrideURL = string
 
-type OverrideURLParam = string
-
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
 type RewriteAction struct {
 	// The WAF rule action to apply.
-	Block RewriteActionBlock `json:"block"`
+	Block     RewriteActionBlock `json:"block"`
+	Challenge string             `json:"challenge"`
+	Default   string             `json:"default"`
 	// The WAF rule action to apply.
-	Challenge RewriteActionChallenge `json:"challenge"`
-	// The WAF rule action to apply.
-	Default RewriteActionDefault `json:"default"`
-	// The WAF rule action to apply.
-	Disable RewriteActionDisable `json:"disable"`
-	// The WAF rule action to apply.
-	Simulate RewriteActionSimulate `json:"simulate"`
-	JSON     rewriteActionJSON     `json:"-"`
+	Disable  RewriteActionDisable `json:"disable"`
+	Simulate string               `json:"simulate"`
+	JSON     rewriteActionJSON    `json:"-"`
 }
 
 // rewriteActionJSON contains the JSON metadata for the struct [RewriteAction]
@@ -276,44 +271,6 @@ func (r RewriteActionBlock) IsKnown() bool {
 }
 
 // The WAF rule action to apply.
-type RewriteActionChallenge string
-
-const (
-	RewriteActionChallengeChallenge RewriteActionChallenge = "challenge"
-	RewriteActionChallengeBlock     RewriteActionChallenge = "block"
-	RewriteActionChallengeSimulate  RewriteActionChallenge = "simulate"
-	RewriteActionChallengeDisable   RewriteActionChallenge = "disable"
-	RewriteActionChallengeDefault   RewriteActionChallenge = "default"
-)
-
-func (r RewriteActionChallenge) IsKnown() bool {
-	switch r {
-	case RewriteActionChallengeChallenge, RewriteActionChallengeBlock, RewriteActionChallengeSimulate, RewriteActionChallengeDisable, RewriteActionChallengeDefault:
-		return true
-	}
-	return false
-}
-
-// The WAF rule action to apply.
-type RewriteActionDefault string
-
-const (
-	RewriteActionDefaultChallenge RewriteActionDefault = "challenge"
-	RewriteActionDefaultBlock     RewriteActionDefault = "block"
-	RewriteActionDefaultSimulate  RewriteActionDefault = "simulate"
-	RewriteActionDefaultDisable   RewriteActionDefault = "disable"
-	RewriteActionDefaultDefault   RewriteActionDefault = "default"
-)
-
-func (r RewriteActionDefault) IsKnown() bool {
-	switch r {
-	case RewriteActionDefaultChallenge, RewriteActionDefaultBlock, RewriteActionDefaultSimulate, RewriteActionDefaultDisable, RewriteActionDefaultDefault:
-		return true
-	}
-	return false
-}
-
-// The WAF rule action to apply.
 type RewriteActionDisable string
 
 const (
@@ -330,44 +287,6 @@ func (r RewriteActionDisable) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// The WAF rule action to apply.
-type RewriteActionSimulate string
-
-const (
-	RewriteActionSimulateChallenge RewriteActionSimulate = "challenge"
-	RewriteActionSimulateBlock     RewriteActionSimulate = "block"
-	RewriteActionSimulateSimulate  RewriteActionSimulate = "simulate"
-	RewriteActionSimulateDisable   RewriteActionSimulate = "disable"
-	RewriteActionSimulateDefault   RewriteActionSimulate = "default"
-)
-
-func (r RewriteActionSimulate) IsKnown() bool {
-	switch r {
-	case RewriteActionSimulateChallenge, RewriteActionSimulateBlock, RewriteActionSimulateSimulate, RewriteActionSimulateDisable, RewriteActionSimulateDefault:
-		return true
-	}
-	return false
-}
-
-// Specifies that, when a WAF rule matches, its configured action will be replaced
-// by the action configured in this object.
-type RewriteActionParam struct {
-	// The WAF rule action to apply.
-	Block param.Field[RewriteActionBlock] `json:"block"`
-	// The WAF rule action to apply.
-	Challenge param.Field[RewriteActionChallenge] `json:"challenge"`
-	// The WAF rule action to apply.
-	Default param.Field[RewriteActionDefault] `json:"default"`
-	// The WAF rule action to apply.
-	Disable param.Field[RewriteActionDisable] `json:"disable"`
-	// The WAF rule action to apply.
-	Simulate param.Field[RewriteActionSimulate] `json:"simulate"`
-}
-
-func (r RewriteActionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type WAFRule map[string]WAFRuleItem
@@ -390,8 +309,6 @@ func (r WAFRuleItem) IsKnown() bool {
 	}
 	return false
 }
-
-type WAFRuleParam map[string]WAFRuleItem
 
 type WAFOverrideDeleteResponse struct {
 	// The unique identifier of the WAF override.
@@ -416,14 +333,11 @@ func (r wafOverrideDeleteResponseJSON) RawJSON() string {
 }
 
 type WAFOverrideNewParams struct {
-	// The URLs to include in the current WAF override. You can use wildcards. Each
-	// entered URL will be escaped before use, which means you can only use simple
-	// wildcard patterns.
-	URLs param.Field[[]OverrideURLParam] `json:"urls,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r WAFOverrideNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 type WAFOverrideNewResponseEnvelope struct {
@@ -470,27 +384,11 @@ func (r WAFOverrideNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type WAFOverrideUpdateParams struct {
-	// The unique identifier of the WAF override.
-	PathID param.Field[string] `path:"id,required"`
-	// Identifier
-	BodyID param.Field[string] `json:"id,required"`
-	// Specifies that, when a WAF rule matches, its configured action will be replaced
-	// by the action configured in this object.
-	RewriteAction param.Field[RewriteActionParam] `json:"rewrite_action,required"`
-	// An object that allows you to override the action of specific WAF rules. Each key
-	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
-	// action. Unless you are disabling a rule, ensure that you also enable the rule
-	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
-	// you must provide a `groups` object or a `rules` object.
-	Rules param.Field[WAFRuleParam] `json:"rules,required"`
-	// The URLs to include in the current WAF override. You can use wildcards. Each
-	// entered URL will be escaped before use, which means you can only use simple
-	// wildcard patterns.
-	URLs param.Field[[]OverrideURLParam] `json:"urls,required"`
+	Body interface{} `json:"body,required"`
 }
 
 func (r WAFOverrideUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 type WAFOverrideUpdateResponseEnvelope struct {
