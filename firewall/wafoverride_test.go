@@ -32,7 +32,7 @@ func TestWAFOverrideNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.WAFOverrideNewParams{
-			Body: map[string]interface{}{},
+			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
 		},
 	)
 	if err != nil {
@@ -44,7 +44,7 @@ func TestWAFOverrideNew(t *testing.T) {
 	}
 }
 
-func TestWAFOverrideUpdate(t *testing.T) {
+func TestWAFOverrideUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -61,9 +61,20 @@ func TestWAFOverrideUpdate(t *testing.T) {
 	_, err := client.Firewall.WAF.Overrides.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"de677e5818985db1285d0e80225f06e5",
 		firewall.WAFOverrideUpdateParams{
-			Body: map[string]interface{}{},
+			PathID: cloudflare.F("de677e5818985db1285d0e80225f06e5"),
+			BodyID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			RewriteAction: cloudflare.F(firewall.RewriteActionParam{
+				Block:     cloudflare.F(firewall.RewriteActionBlockChallenge),
+				Challenge: cloudflare.F(firewall.RewriteActionChallengeChallenge),
+				Default:   cloudflare.F(firewall.RewriteActionDefaultChallenge),
+				Disable:   cloudflare.F(firewall.RewriteActionDisableChallenge),
+				Simulate:  cloudflare.F(firewall.RewriteActionSimulateChallenge),
+			}),
+			Rules: cloudflare.F(firewall.WAFRuleParam{
+				"100015": firewall.WAFRuleItemDisable,
+			}),
+			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
 		},
 	)
 	if err != nil {
