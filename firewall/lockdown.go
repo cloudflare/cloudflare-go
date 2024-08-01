@@ -235,6 +235,34 @@ func (r ConfigurationTarget) IsKnown() bool {
 	return false
 }
 
+// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
+// specified in the Zone Lockdown rule. You can include any number of `ip` or
+// `ip_range` configurations.
+type ConfigurationParam struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the Zone Lockdown rule.
+	Target param.Field[ConfigurationTarget] `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r ConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigurationParam) implementsFirewallConfigurationUnionParam() {}
+
+// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
+// specified in the Zone Lockdown rule. You can include any number of `ip` or
+// `ip_range` configurations.
+//
+// Satisfied by [firewall.LockdownIPConfigurationParam],
+// [firewall.LockdownCIDRConfigurationParam], [ConfigurationParam].
+type ConfigurationUnionParam interface {
+	implementsFirewallConfigurationUnionParam()
+}
+
 type Lockdown struct {
 	// The unique identifier of the Zone Lockdown rule.
 	ID string `json:"id,required"`
@@ -322,6 +350,20 @@ func (r LockdownCIDRConfigurationTarget) IsKnown() bool {
 	return false
 }
 
+type LockdownCIDRConfigurationParam struct {
+	// The configuration target. You must set the target to `ip_range` when specifying
+	// an IP address range in the Zone Lockdown rule.
+	Target param.Field[LockdownCIDRConfigurationTarget] `json:"target"`
+	// The IP address range to match. You can only use prefix lengths `/16` and `/24`.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r LockdownCIDRConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r LockdownCIDRConfigurationParam) implementsFirewallConfigurationUnionParam() {}
+
 type LockdownIPConfiguration struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
 	// address in the Zone Lockdown rule.
@@ -367,6 +409,21 @@ func (r LockdownIPConfigurationTarget) IsKnown() bool {
 	return false
 }
 
+type LockdownIPConfigurationParam struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the Zone Lockdown rule.
+	Target param.Field[LockdownIPConfigurationTarget] `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r LockdownIPConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r LockdownIPConfigurationParam) implementsFirewallConfigurationUnionParam() {}
+
 type LockdownURL = string
 
 type LockdownDeleteResponse struct {
@@ -392,11 +449,18 @@ func (r lockdownDeleteResponseJSON) RawJSON() string {
 }
 
 type LockdownNewParams struct {
-	Body interface{} `json:"body,required"`
+	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
+	// specified in the Zone Lockdown rule. You can include any number of `ip` or
+	// `ip_range` configurations.
+	Configurations param.Field[ConfigurationUnionParam] `json:"configurations,required"`
+	// The URLs to include in the current WAF override. You can use wildcards. Each
+	// entered URL will be escaped before use, which means you can only use simple
+	// wildcard patterns.
+	URLs param.Field[[]OverrideURLParam] `json:"urls,required"`
 }
 
 func (r LockdownNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type LockdownNewResponseEnvelope struct {
@@ -443,11 +507,18 @@ func (r LockdownNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LockdownUpdateParams struct {
-	Body interface{} `json:"body,required"`
+	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
+	// specified in the Zone Lockdown rule. You can include any number of `ip` or
+	// `ip_range` configurations.
+	Configurations param.Field[ConfigurationUnionParam] `json:"configurations,required"`
+	// The URLs to include in the current WAF override. You can use wildcards. Each
+	// entered URL will be escaped before use, which means you can only use simple
+	// wildcard patterns.
+	URLs param.Field[[]OverrideURLParam] `json:"urls,required"`
 }
 
 func (r LockdownUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type LockdownUpdateResponseEnvelope struct {
