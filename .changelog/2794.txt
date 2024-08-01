@@ -1,0 +1,3 @@
+```release-notes:enhancement
+worker_bindings: add support for `hyperdrive` bindings
+```
