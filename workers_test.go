@@ -145,6 +145,11 @@ const (
 				"name": "MY_DATABASE",
 				"type": "d1",
 				"database_id": "cef5331f-e5c7-4c8a-a415-7908ae45f92a"
+			},
+			{
+				"name": "MY_HYPERDRIVE",
+				"type": "hyperdrive",
+				"id": "aaf4609248cc493cbc8d3e446e38fdfa"
 			}
 		],
 		"success": true,
