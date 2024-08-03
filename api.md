@@ -6204,17 +6204,6 @@ Methods:
 
 ### Top
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#Browser">Browser</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTopBrowserFamiliesResponse">HTTPTopBrowserFamiliesResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTopBrowsersResponse">HTTPTopBrowsersResponse</a>
-
-Methods:
-
-- <code title="get /radar/http/top/browser_families">client.Radar.HTTP.Top.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTopService.BrowserFamilies">BrowserFamilies</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTopBrowserFamiliesParams">HTTPTopBrowserFamiliesParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTopBrowserFamiliesResponse">HTTPTopBrowserFamiliesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /radar/http/top/browsers">client.Radar.HTTP.Top.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTopService.Browsers">Browsers</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTopBrowsersParams">HTTPTopBrowsersParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTopBrowsersResponse">HTTPTopBrowsersResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Locations
 
 Response Types:
