@@ -234,9 +234,9 @@ func (r attackLayer3TopAttacksResponseTop0JSON) RawJSON() string {
 }
 
 type AttackLayer3TopIndustryResponse struct {
-	Meta AttackLayer3TopIndustryResponseMeta `json:"meta,required"`
-	Top0 []Browser                           `json:"top_0,required"`
-	JSON attackLayer3TopIndustryResponseJSON `json:"-"`
+	Meta AttackLayer3TopIndustryResponseMeta   `json:"meta,required"`
+	Top0 []AttackLayer3TopIndustryResponseTop0 `json:"top_0,required"`
+	JSON attackLayer3TopIndustryResponseJSON   `json:"-"`
 }
 
 // attackLayer3TopIndustryResponseJSON contains the JSON metadata for the struct
@@ -363,10 +363,33 @@ func (r attackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationJSON) RawJSON
 	return r.raw
 }
 
+type AttackLayer3TopIndustryResponseTop0 struct {
+	Name  string                                  `json:"name,required"`
+	Value string                                  `json:"value,required"`
+	JSON  attackLayer3TopIndustryResponseTop0JSON `json:"-"`
+}
+
+// attackLayer3TopIndustryResponseTop0JSON contains the JSON metadata for the
+// struct [AttackLayer3TopIndustryResponseTop0]
+type attackLayer3TopIndustryResponseTop0JSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3TopIndustryResponseTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3TopIndustryResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type AttackLayer3TopVerticalResponse struct {
-	Meta AttackLayer3TopVerticalResponseMeta `json:"meta,required"`
-	Top0 []Browser                           `json:"top_0,required"`
-	JSON attackLayer3TopVerticalResponseJSON `json:"-"`
+	Meta AttackLayer3TopVerticalResponseMeta   `json:"meta,required"`
+	Top0 []AttackLayer3TopVerticalResponseTop0 `json:"top_0,required"`
+	JSON attackLayer3TopVerticalResponseJSON   `json:"-"`
 }
 
 // attackLayer3TopVerticalResponseJSON contains the JSON metadata for the struct
@@ -490,6 +513,29 @@ func (r *AttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotation) UnmarshalJ
 }
 
 func (r attackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer3TopVerticalResponseTop0 struct {
+	Name  string                                  `json:"name,required"`
+	Value string                                  `json:"value,required"`
+	JSON  attackLayer3TopVerticalResponseTop0JSON `json:"-"`
+}
+
+// attackLayer3TopVerticalResponseTop0JSON contains the JSON metadata for the
+// struct [AttackLayer3TopVerticalResponseTop0]
+type attackLayer3TopVerticalResponseTop0JSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer3TopVerticalResponseTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer3TopVerticalResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

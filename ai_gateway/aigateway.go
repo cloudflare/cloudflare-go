@@ -180,7 +180,7 @@ type AIGatewayNewResponseTask struct {
 	RateLimitingTechnique   AIGatewayNewResponseTaskRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	ImprovedLogs            bool                                          `json:"improved_logs"`
 	Logpush                 bool                                          `json:"logpush"`
-	LogpushPublicKey        string                                        `json:"logpush_public_key"`
+	LogpushPublicKey        string                                        `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayNewResponseTaskJSON                  `json:"-"`
 }
 
@@ -239,7 +239,7 @@ type AIGatewayUpdateResponse struct {
 	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	ImprovedLogs            bool                                         `json:"improved_logs"`
 	Logpush                 bool                                         `json:"logpush"`
-	LogpushPublicKey        string                                       `json:"logpush_public_key"`
+	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayUpdateResponseJSON                  `json:"-"`
 }
 
@@ -298,7 +298,7 @@ type AIGatewayListResponse struct {
 	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	ImprovedLogs            bool                                       `json:"improved_logs"`
 	Logpush                 bool                                       `json:"logpush"`
-	LogpushPublicKey        string                                     `json:"logpush_public_key"`
+	LogpushPublicKey        string                                     `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayListResponseJSON                  `json:"-"`
 }
 
@@ -357,7 +357,7 @@ type AIGatewayDeleteResponse struct {
 	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	ImprovedLogs            bool                                         `json:"improved_logs"`
 	Logpush                 bool                                         `json:"logpush"`
-	LogpushPublicKey        string                                       `json:"logpush_public_key"`
+	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayDeleteResponseJSON                  `json:"-"`
 }
 
@@ -416,7 +416,7 @@ type AIGatewayGetResponse struct {
 	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
 	ImprovedLogs            bool                                      `json:"improved_logs"`
 	Logpush                 bool                                      `json:"logpush"`
-	LogpushPublicKey        string                                    `json:"logpush_public_key"`
+	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayGetResponseJSON                  `json:"-"`
 }
 

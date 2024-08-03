@@ -141,7 +141,7 @@ type Profile struct {
 	// This field can have the runtime type of [[]PredefinedProfileEntry],
 	// [[]CustomProfileEntry], [[]ProfileDLPIntegrationProfileEntry].
 	Entries interface{} `json:"entries,required"`
-	// The ID for this profile
+	// Unique identifier for a DLP profile
 	ID string `json:"id"`
 	// The name of the profile.
 	Name string `json:"name"`
@@ -221,7 +221,7 @@ func init() {
 }
 
 type ProfileDLPIntegrationProfile struct {
-	// The ID for this profile
+	// Unique identifier for a DLP profile
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The description of the profile.
@@ -262,15 +262,15 @@ func (r ProfileDLPIntegrationProfile) implementsZeroTrustProfile() {}
 
 // An entry derived from an integration
 type ProfileDLPIntegrationProfileEntry struct {
-	// The ID for this entry
+	// Unique identifier for a DLP entry
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Whether the entry is enabled or not.
 	Enabled bool `json:"enabled"`
 	// The name of the entry.
 	Name string `json:"name"`
-	// ID of the parent profile
-	ProfileID interface{}                           `json:"profile_id"`
+	// Unique identifier for a DLP profile
+	ProfileID string                                `json:"profile_id"`
 	UpdatedAt time.Time                             `json:"updated_at" format:"date-time"`
 	JSON      profileDLPIntegrationProfileEntryJSON `json:"-"`
 }
@@ -370,7 +370,7 @@ type DLPProfileGetResponse struct {
 	// This field can have the runtime type of [[]PredefinedProfileEntry],
 	// [[]CustomProfileEntry], [[]DLPProfileGetResponseDLPIntegrationProfileEntry].
 	Entries interface{} `json:"entries,required"`
-	// The ID for this profile
+	// Unique identifier for a DLP profile
 	ID string `json:"id"`
 	// The name of the profile.
 	Name string `json:"name"`
@@ -452,7 +452,7 @@ func init() {
 }
 
 type DLPProfileGetResponseDLPIntegrationProfile struct {
-	// The ID for this profile
+	// Unique identifier for a DLP profile
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The description of the profile.
@@ -493,15 +493,15 @@ func (r DLPProfileGetResponseDLPIntegrationProfile) implementsZeroTrustDLPProfil
 
 // An entry derived from an integration
 type DLPProfileGetResponseDLPIntegrationProfileEntry struct {
-	// The ID for this entry
+	// Unique identifier for a DLP entry
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Whether the entry is enabled or not.
 	Enabled bool `json:"enabled"`
 	// The name of the entry.
 	Name string `json:"name"`
-	// ID of the parent profile
-	ProfileID interface{}                                         `json:"profile_id"`
+	// Unique identifier for a DLP profile
+	ProfileID string                                              `json:"profile_id"`
 	UpdatedAt time.Time                                           `json:"updated_at" format:"date-time"`
 	JSON      dlpProfileGetResponseDLPIntegrationProfileEntryJSON `json:"-"`
 }
