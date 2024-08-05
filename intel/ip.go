@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // IPService contains methods and other services that help with interacting with
@@ -59,7 +57,7 @@ type IP struct {
 	// Specifies a reference to the autonomous systems (AS) that the IP address belongs
 	// to.
 	BelongsToRef IPBelongsToRef `json:"belongs_to_ref"`
-	IP           IPIPUnion      `json:"ip" format:"ipv4"`
+	IP           string         `json:"ip" format:"ipv4"`
 	RiskTypes    []interface{}  `json:"risk_types"`
 	JSON         ipJSON         `json:"-"`
 }
@@ -127,26 +125,6 @@ func (r IPBelongsToRefType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type IPIPUnion interface {
-	ImplementsIntelIpipUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*IPIPUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type IPGetParams struct {

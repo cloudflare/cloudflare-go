@@ -76,7 +76,7 @@ func (r *AccessApplicationService) New(ctx context.Context, params AccessApplica
 }
 
 // Updates an Access application.
-func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDUnionParam, params AccessApplicationUpdateParams, opts ...option.RequestOption) (res *AccessApplicationUpdateResponse, err error) {
+func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDParam, params AccessApplicationUpdateParams, opts ...option.RequestOption) (res *AccessApplicationUpdateResponse, err error) {
 	var env AccessApplicationUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -97,7 +97,11 @@ func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDUnionP
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/apps/%v", accountOrZone, accountOrZoneID, appID)
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/apps/%s", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -148,7 +152,7 @@ func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, query Acc
 }
 
 // Deletes an application from Access.
-func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDUnionParam, body AccessApplicationDeleteParams, opts ...option.RequestOption) (res *AccessApplicationDeleteResponse, err error) {
+func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDParam, body AccessApplicationDeleteParams, opts ...option.RequestOption) (res *AccessApplicationDeleteResponse, err error) {
 	var env AccessApplicationDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -169,7 +173,11 @@ func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDUnionP
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/apps/%v", accountOrZone, accountOrZoneID, appID)
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/apps/%s", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -179,7 +187,7 @@ func (r *AccessApplicationService) Delete(ctx context.Context, appID AppIDUnionP
 }
 
 // Fetches information about an Access application.
-func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDUnionParam, query AccessApplicationGetParams, opts ...option.RequestOption) (res *AccessApplicationGetResponse, err error) {
+func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDParam, query AccessApplicationGetParams, opts ...option.RequestOption) (res *AccessApplicationGetResponse, err error) {
 	var env AccessApplicationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -200,7 +208,11 @@ func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDUnionPara
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/apps/%v", accountOrZone, accountOrZoneID, appID)
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/apps/%s", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -210,7 +222,7 @@ func (r *AccessApplicationService) Get(ctx context.Context, appID AppIDUnionPara
 }
 
 // Revokes all tokens issued for an application.
-func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AppIDUnionParam, body AccessApplicationRevokeTokensParams, opts ...option.RequestOption) (res *AccessApplicationRevokeTokensResponse, err error) {
+func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AppIDParam, body AccessApplicationRevokeTokensParams, opts ...option.RequestOption) (res *AccessApplicationRevokeTokensResponse, err error) {
 	var env AccessApplicationRevokeTokensResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -231,7 +243,11 @@ func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID AppID
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/apps/%v/revoke_tokens", accountOrZone, accountOrZoneID, appID)
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/apps/%s/revoke_tokens", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -274,12 +290,7 @@ type AllowedOrigins = string
 
 type AllowedOriginsParam = string
 
-// Identifier
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type AppIDUnionParam interface {
-	ImplementsZeroTrustAppIDUnionParam()
-}
+type AppIDParam = string
 
 type ApplicationPolicy struct {
 	// The UUID of the policy

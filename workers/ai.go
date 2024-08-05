@@ -72,8 +72,8 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 // [workers.AIRunResponseAutomaticSpeechRecognition],
 // [workers.AIRunResponseImageClassification],
 // [workers.AIRunResponseObjectDetection], [workers.AIRunResponseObject],
-// [shared.UnionString], [workers.AIRunResponseTranslation],
-// [workers.AIRunResponseSummarization] or [workers.AIRunResponseImageToText].
+// [workers.AIRunResponseTranslation], [workers.AIRunResponseSummarization] or
+// [workers.AIRunResponseImageToText].
 type AIRunResponseUnion interface {
 	ImplementsWorkersAIRunResponseUnion()
 }
@@ -109,10 +109,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AIRunResponseObject{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,

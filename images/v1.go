@@ -178,8 +178,8 @@ type Image struct {
 	// When the media item was uploaded.
 	Uploaded time.Time `json:"uploaded" format:"date-time"`
 	// Object specifying available variants for an image.
-	Variants []ImageVariantsUnion `json:"variants" format:"uri"`
-	JSON     imageJSON            `json:"-"`
+	Variants []string  `json:"variants" format:"uri"`
+	JSON     imageJSON `json:"-"`
 }
 
 // imageJSON contains the JSON metadata for the struct [Image]
@@ -200,33 +200,6 @@ func (r *Image) UnmarshalJSON(data []byte) (err error) {
 
 func (r imageJSON) RawJSON() string {
 	return r.raw
-}
-
-// URI to thumbnail variant for an image.
-//
-// Union satisfied by [shared.UnionString], [shared.UnionString] or
-// [shared.UnionString].
-type ImageVariantsUnion interface {
-	ImplementsImagesImageVariantsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ImageVariantsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type V1ListResponse struct {
