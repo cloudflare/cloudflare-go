@@ -140,39 +140,37 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	return
 }
 
-type Mechanism map[string][]MechanismItem
-
-type MechanismItem struct {
+type Mechanism struct {
 	// UUID
-	ID   MechanismItemIDUnion `json:"id"`
-	JSON mechanismItemJSON    `json:"-"`
+	ID   MechanismIDUnion `json:"id"`
+	JSON mechanismJSON    `json:"-"`
 }
 
-// mechanismItemJSON contains the JSON metadata for the struct [MechanismItem]
-type mechanismItemJSON struct {
+// mechanismJSON contains the JSON metadata for the struct [Mechanism]
+type mechanismJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MechanismItem) UnmarshalJSON(data []byte) (err error) {
+func (r *Mechanism) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r mechanismItemJSON) RawJSON() string {
+func (r mechanismJSON) RawJSON() string {
 	return r.raw
 }
 
 // UUID
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type MechanismItemIDUnion interface {
-	ImplementsAlertingMechanismItemIDUnion()
+type MechanismIDUnion interface {
+	ImplementsAlertingMechanismIDUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*MechanismItemIDUnion)(nil)).Elem(),
+		reflect.TypeOf((*MechanismIDUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -185,22 +183,20 @@ func init() {
 	)
 }
 
-type MechanismParam map[string][]MechanismItemParam
-
-type MechanismItemParam struct {
+type MechanismParam struct {
 	// UUID
-	ID param.Field[MechanismItemIDUnionParam] `json:"id"`
+	ID param.Field[MechanismIDUnionParam] `json:"id"`
 }
 
-func (r MechanismItemParam) MarshalJSON() (data []byte, err error) {
+func (r MechanismParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // UUID
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
-type MechanismItemIDUnionParam interface {
-	ImplementsAlertingMechanismItemIDUnionParam()
+type MechanismIDUnionParam interface {
+	ImplementsAlertingMechanismIDUnionParam()
 }
 
 type Policy struct {
@@ -224,8 +220,8 @@ type Policy struct {
 	Filters PolicyFilter `json:"filters"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
-	Mechanisms Mechanism `json:"mechanisms"`
-	Modified   time.Time `json:"modified" format:"date-time"`
+	Mechanisms map[string][]Mechanism `json:"mechanisms"`
+	Modified   time.Time              `json:"modified" format:"date-time"`
 	// Name of the policy.
 	Name string     `json:"name"`
 	JSON policyJSON `json:"-"`
@@ -351,7 +347,7 @@ type PolicyParam struct {
 	Filters param.Field[PolicyFilterParam] `json:"filters"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
-	Mechanisms param.Field[MechanismParam] `json:"mechanisms"`
+	Mechanisms param.Field[map[string][]MechanismParam] `json:"mechanisms"`
 	// Name of the policy.
 	Name param.Field[string] `json:"name"`
 }
@@ -751,7 +747,7 @@ type PolicyNewParams struct {
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
-	Mechanisms param.Field[MechanismParam] `json:"mechanisms,required"`
+	Mechanisms param.Field[map[string][]MechanismParam] `json:"mechanisms,required"`
 	// Name of the policy.
 	Name param.Field[string] `json:"name,required"`
 	// Optional specification of how often to re-alert from the same incident, not
@@ -888,7 +884,7 @@ type PolicyUpdateParams struct {
 	Filters param.Field[PolicyFilterParam] `json:"filters"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
-	Mechanisms param.Field[MechanismParam] `json:"mechanisms"`
+	Mechanisms param.Field[map[string][]MechanismParam] `json:"mechanisms"`
 	// Name of the policy.
 	Name param.Field[string] `json:"name"`
 }
