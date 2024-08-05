@@ -78,29 +78,32 @@ type Components struct {
 	// seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
 	// Maximum results for each metric.
-	Max interface{} `json:"max,required"`
+	Max map[string]float64 `json:"max,required"`
 	// Minimum results for each metric.
-	Min interface{} `json:"min,required"`
+	Min map[string]float64 `json:"min,required"`
 	// For specifying result metrics.
 	Query ComponentsQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Total results for metrics across all data.
-	Totals interface{}    `json:"totals,required"`
-	JSON   componentsJSON `json:"-"`
+	Totals map[string]float64 `json:"totals,required"`
+	// Time interval buckets by beginning and ending
+	TimeIntervals [][]time.Time  `json:"time_intervals" format:"date-time"`
+	JSON          componentsJSON `json:"-"`
 }
 
 // componentsJSON contains the JSON metadata for the struct [Components]
 type componentsJSON struct {
-	Data        apijson.Field
-	DataLag     apijson.Field
-	Max         apijson.Field
-	Min         apijson.Field
-	Query       apijson.Field
-	Rows        apijson.Field
-	Totals      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data          apijson.Field
+	DataLag       apijson.Field
+	Max           apijson.Field
+	Min           apijson.Field
+	Query         apijson.Field
+	Rows          apijson.Field
+	Totals        apijson.Field
+	TimeIntervals apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *Components) UnmarshalJSON(data []byte) (err error) {
@@ -113,13 +116,15 @@ func (r componentsJSON) RawJSON() string {
 
 type ComponentsData struct {
 	// List of metrics returned by the query.
-	Metrics []interface{}      `json:"metrics,required"`
-	JSON    componentsDataJSON `json:"-"`
+	Metrics    [][]float64        `json:"metrics,required"`
+	Dimensions []string           `json:"dimensions"`
+	JSON       componentsDataJSON `json:"-"`
 }
 
 // componentsDataJSON contains the JSON metadata for the struct [ComponentsData]
 type componentsDataJSON struct {
 	Metrics     apijson.Field
+	Dimensions  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -160,7 +165,7 @@ type ComponentsQuery struct {
 	Since time.Time `json:"since" format:"date-time"`
 	// Array of dimensions or metrics to sort by, each dimension/metric may be prefixed
 	// by - (descending) or + (ascending).
-	Sort []interface{} `json:"sort"`
+	Sort []string `json:"sort"`
 	// End of time interval to query, defaults to current time.
 	Until time.Time           `json:"until" format:"date-time"`
 	JSON  componentsQueryJSON `json:"-"`
@@ -194,29 +199,32 @@ type Schema struct {
 	// seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
 	// Maximum results for each metric.
-	Max interface{} `json:"max,required"`
+	Max map[string]float64 `json:"max,required"`
 	// Minimum results for each metric.
-	Min interface{} `json:"min,required"`
+	Min map[string]float64 `json:"min,required"`
 	// For specifying result metrics.
 	Query SchemaQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Total results for metrics across all data.
-	Totals interface{} `json:"totals,required"`
-	JSON   schemaJSON  `json:"-"`
+	Totals map[string]float64 `json:"totals,required"`
+	// Time interval buckets by beginning and ending
+	TimeIntervals [][]time.Time `json:"time_intervals" format:"date-time"`
+	JSON          schemaJSON    `json:"-"`
 }
 
 // schemaJSON contains the JSON metadata for the struct [Schema]
 type schemaJSON struct {
-	Data        apijson.Field
-	DataLag     apijson.Field
-	Max         apijson.Field
-	Min         apijson.Field
-	Query       apijson.Field
-	Rows        apijson.Field
-	Totals      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data          apijson.Field
+	DataLag       apijson.Field
+	Max           apijson.Field
+	Min           apijson.Field
+	Query         apijson.Field
+	Rows          apijson.Field
+	Totals        apijson.Field
+	TimeIntervals apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *Schema) UnmarshalJSON(data []byte) (err error) {
@@ -229,13 +237,15 @@ func (r schemaJSON) RawJSON() string {
 
 type SchemaData struct {
 	// List of metrics returned by the query.
-	Metrics []interface{}  `json:"metrics,required"`
-	JSON    schemaDataJSON `json:"-"`
+	Metrics    [][]float64    `json:"metrics,required"`
+	Dimensions []string       `json:"dimensions"`
+	JSON       schemaDataJSON `json:"-"`
 }
 
 // schemaDataJSON contains the JSON metadata for the struct [SchemaData]
 type schemaDataJSON struct {
 	Metrics     apijson.Field
+	Dimensions  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -276,7 +286,7 @@ type SchemaQuery struct {
 	Since time.Time `json:"since" format:"date-time"`
 	// Array of dimensions or metrics to sort by, each dimension/metric may be prefixed
 	// by - (descending) or + (ascending).
-	Sort []interface{} `json:"sort"`
+	Sort []string `json:"sort"`
 	// End of time interval to query, defaults to current time.
 	Until time.Time       `json:"until" format:"date-time"`
 	JSON  schemaQueryJSON `json:"-"`
@@ -346,7 +356,7 @@ type AnalyticsListParamsQuery struct {
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
 	// Array of dimensions or metrics to sort by, each dimension/metric may be prefixed
 	// by - (descending) or + (ascending).
-	Sort param.Field[[]interface{}] `query:"sort"`
+	Sort param.Field[[]string] `query:"sort"`
 	// End of time interval to query, defaults to current time.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
@@ -481,7 +491,7 @@ type AnalyticsStoredParamsQuery struct {
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
 	// Array of dimensions or metrics to sort by, each dimension/metric may be prefixed
 	// by - (descending) or + (ascending).
-	Sort param.Field[[]interface{}] `query:"sort"`
+	Sort param.Field[[]string] `query:"sort"`
 	// End of time interval to query, defaults to current time.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
