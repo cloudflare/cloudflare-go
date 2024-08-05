@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // PolicyService contains methods and other services that help with interacting
@@ -142,8 +140,8 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 
 type Mechanism struct {
 	// UUID
-	ID   MechanismIDUnion `json:"id"`
-	JSON mechanismJSON    `json:"-"`
+	ID   string        `json:"id"`
+	JSON mechanismJSON `json:"-"`
 }
 
 // mechanismJSON contains the JSON metadata for the struct [Mechanism]
@@ -161,42 +159,13 @@ func (r mechanismJSON) RawJSON() string {
 	return r.raw
 }
 
-// UUID
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type MechanismIDUnion interface {
-	ImplementsAlertingMechanismIDUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*MechanismIDUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type MechanismParam struct {
 	// UUID
-	ID param.Field[MechanismIDUnionParam] `json:"id"`
+	ID param.Field[string] `json:"id"`
 }
 
 func (r MechanismParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// UUID
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type MechanismIDUnionParam interface {
-	ImplementsAlertingMechanismIDUnionParam()
 }
 
 type Policy struct {

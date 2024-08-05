@@ -27,10 +27,6 @@ func (UnionString) ImplementsCustomCertificatesCustomCertificateGetResponseUnion
 func (UnionString) ImplementsCustomHostnamesFallbackOriginUpdateResponseUnion()        {}
 func (UnionString) ImplementsCustomHostnamesFallbackOriginDeleteResponseUnion()        {}
 func (UnionString) ImplementsCustomHostnamesFallbackOriginGetResponseUnion()           {}
-func (UnionString) ImplementsDNSFirewallIPsUnionParam()                                {}
-func (UnionString) ImplementsDNSFirewallIPsUnion()                                     {}
-func (UnionString) ImplementsDNSUpstreamIPsUnionParam()                                {}
-func (UnionString) ImplementsDNSUpstreamIPsUnion()                                     {}
 func (UnionString) ImplementsDNSSECDNSSECDeleteResponseUnion()                         {}
 func (UnionString) ImplementsFirewallAccessRuleNewResponseUnion()                      {}
 func (UnionString) ImplementsFirewallAccessRuleEditResponseUnion()                     {}
@@ -69,14 +65,10 @@ func (UnionString) ImplementsSpectrumAnalyticsEventBytimeGetResponseUnion()     
 func (UnionString) ImplementsSpectrumAnalyticsEventSummaryGetResponseUnion()                     {}
 func (UnionString) ImplementsSpectrumAppGetResponseUnion()                                       {}
 func (UnionString) ImplementsBillingProfileGetResponseUnion()                                    {}
-func (UnionString) ImplementsImagesImageVariantsUnion()                                          {}
 func (UnionString) ImplementsImagesV1DeleteResponseUnion()                                       {}
 func (UnionString) ImplementsImagesV1VariantDeleteResponseUnion()                                {}
-func (UnionString) ImplementsIntelIpipUnion()                                                    {}
 func (UnionString) ImplementsIntelMiscategorizationNewResponseUnion()                            {}
 func (UnionString) ImplementsIntelAttackSurfaceReportIssueDismissResponseUnion()                 {}
-func (UnionString) ImplementsMagicTransitSubnetUnionParam()                                      {}
-func (UnionString) ImplementsMagicTransitSubnetUnion()                                           {}
 func (UnionString) ImplementsPagesProjectNewResponseUnion()                                      {}
 func (UnionString) ImplementsPagesProjectEditResponseUnion()                                     {}
 func (UnionString) ImplementsPagesProjectDeploymentHistoryLogGetResponseUnion()                  {}
@@ -96,15 +88,12 @@ func (UnionString) ImplementsStreamWebhookGetResponseUnion()                    
 func (UnionString) ImplementsStreamDownloadNewResponseUnion()                                    {}
 func (UnionString) ImplementsStreamDownloadDeleteResponseUnion()                                 {}
 func (UnionString) ImplementsStreamDownloadGetResponseUnion()                                    {}
-func (UnionString) ImplementsAlertingMechanismIDUnionParam()                                     {}
-func (UnionString) ImplementsAlertingMechanismIDUnion()                                          {}
 func (UnionString) ImplementsD1DatabaseRawResponseResultsRowsUnion()                             {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                      {}
 func (UnionString) ImplementsZeroTrustDeviceGetResponseUnion()                                   {}
 func (UnionString) ImplementsZeroTrustDevicePostureIntegrationDeleteResponseUnion()              {}
 func (UnionString) ImplementsZeroTrustDeviceRevokeNewResponseUnion()                             {}
 func (UnionString) ImplementsZeroTrustDeviceUnrevokeNewResponseUnion()                           {}
-func (UnionString) ImplementsZeroTrustAppIDUnionParam()                                          {}
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {}
