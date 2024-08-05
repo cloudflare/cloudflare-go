@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -262,11 +263,11 @@ func (r *IndexService) Upsert(ctx context.Context, indexName string, params Inde
 type CreateIndex struct {
 	Config IndexDimensionConfiguration `json:"config"`
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedOn string `json:"created_on"`
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Specifies the description of the index.
 	Description string `json:"description"`
 	// Specifies the timestamp the resource was modified as an ISO8601 string.
-	ModifiedOn string          `json:"modified_on"`
+	ModifiedOn time.Time       `json:"modified_on" format:"date-time"`
 	Name       string          `json:"name"`
 	JSON       createIndexJSON `json:"-"`
 }
@@ -389,8 +390,9 @@ type IndexGetByIDsResponse = interface{}
 type IndexInfoResponse struct {
 	// Specifies the number of dimensions for the index
 	Dimensions int64 `json:"dimensions"`
-	// Specifies the timestamp the last mutation batch was processed.
-	ProcessedUpToDatetime string `json:"processedUpToDatetime,nullable"`
+	// Specifies the timestamp the last mutation batch was processed as an ISO8601
+	// string.
+	ProcessedUpToDatetime time.Time `json:"processedUpToDatetime,nullable" format:"date-time"`
 	// The unique identifier for the async mutation operation containing the changeset.
 	ProcessedUpToMutation string `json:"processedUpToMutation"`
 	// Specifies the number of vectors present in the index
