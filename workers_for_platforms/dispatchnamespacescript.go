@@ -239,7 +239,7 @@ func (r DispatchNamespaceScriptUpdateParamsBody) implementsWorkersForPlatformsDi
 
 // Satisfied by
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObject],
-// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObject],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyMessage],
 // [DispatchNamespaceScriptUpdateParamsBody].
 type DispatchNamespaceScriptUpdateParamsBodyUnion interface {
 	implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyUnion()
@@ -346,6 +346,19 @@ func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModel) IsKnown
 		return true
 	}
 	return false
+}
+
+type DispatchNamespaceScriptUpdateParamsBodyMessage struct {
+	// Rollback message to be associated with this deployment. Only parsed when query
+	// param `"rollback_to"` is present.
+	Message param.Field[string] `json:"message"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsBodyMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsBodyMessage) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyUnion() {
 }
 
 type DispatchNamespaceScriptUpdateResponseEnvelope struct {
