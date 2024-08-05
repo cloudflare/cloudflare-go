@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 func TestSiteACLNewWithOptionalParams(t *testing.T) {
@@ -37,13 +36,13 @@ func TestSiteACLNewWithOptionalParams(t *testing.T) {
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
 				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 			}),
 			LAN2: cloudflare.F(magic_transit.ACLConfigurationParam{
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
 				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 			}),
 			Name:           cloudflare.F("PIN Pad - Cash Register"),
 			Description:    cloudflare.F("Allows local traffic between PIN pads and cash register."),
@@ -85,13 +84,13 @@ func TestSiteACLUpdateWithOptionalParams(t *testing.T) {
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
 				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 			}),
 			LAN2: cloudflare.F(magic_transit.ACLConfigurationParam{
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
 				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 			}),
 			Name:      cloudflare.F("PIN Pad - Cash Register"),
 			Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),
@@ -190,13 +189,13 @@ func TestSiteACLEditWithOptionalParams(t *testing.T) {
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
 				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 			}),
 			LAN2: cloudflare.F(magic_transit.ACLConfigurationParam{
 				LANID:   cloudflare.F("lan_id"),
 				LANName: cloudflare.F("lan_name"),
 				Ports:   cloudflare.F([]int64{int64(1), int64(1), int64(1)}),
-				Subnets: cloudflare.F([]magic_transit.SubnetUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1"), shared.UnionString("192.0.2.1")}),
+				Subnets: cloudflare.F([]magic_transit.SubnetParam{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 			}),
 			Name:      cloudflare.F("PIN Pad - Cash Register"),
 			Protocols: cloudflare.F([]magic_transit.AllowedProtocol{magic_transit.AllowedProtocolTCP, magic_transit.AllowedProtocolUdp, magic_transit.AllowedProtocolIcmp}),

@@ -11,7 +11,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
@@ -143,7 +142,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.Update(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationUpdateParams{
 			Body: zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplication{
 				AllowAuthenticateViaWARP: cloudflare.F(true),
@@ -285,7 +284,7 @@ func TestAccessApplicationDeleteWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.Delete(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationDeleteParams{
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -315,7 +314,7 @@ func TestAccessApplicationGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.Get(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -345,7 +344,7 @@ func TestAccessApplicationRevokeTokensWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.RevokeTokens(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationRevokeTokensParams{
 			AccountID: cloudflare.F("account_id"),
 		},

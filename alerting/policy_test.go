@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/alerting"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 func TestPolicyNewWithOptionalParams(t *testing.T) {
@@ -35,13 +34,13 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 		Enabled:   cloudflare.F(true),
 		Mechanisms: cloudflare.F(map[string][]alerting.MechanismParam{
 			"email": {{
-				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("test@example.com")),
+				ID: cloudflare.F("test@example.com"),
 			}},
 			"pagerduty": {{
-				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+				ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
 			}},
 			"webhooks": {{
-				ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
+				ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
 			}},
 		}),
 		Name:          cloudflare.F("SSL Notification Event Policy"),
@@ -166,13 +165,13 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 			}),
 			Mechanisms: cloudflare.F(map[string][]alerting.MechanismParam{
 				"email": {{
-					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("test@example.com")),
+					ID: cloudflare.F("test@example.com"),
 				}},
 				"pagerduty": {{
-					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+					ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
 				}},
 				"webhooks": {{
-					ID: cloudflare.F[alerting.MechanismIDUnionParam](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
+					ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
 				}},
 			}),
 			Name: cloudflare.F("SSL Notification Event Policy"),
