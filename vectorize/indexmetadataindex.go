@@ -7,14 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // IndexMetadataIndexService contains methods and other services that help with
@@ -79,7 +77,7 @@ func (r *IndexMetadataIndexService) List(ctx context.Context, indexName string, 
 }
 
 // Allow Vectorize to delete the specified metadata index.
-func (r *IndexMetadataIndexService) Delete(ctx context.Context, indexName string, params IndexMetadataIndexDeleteParams, opts ...option.RequestOption) (res *IndexMetadataIndexDeleteResponseUnion, err error) {
+func (r *IndexMetadataIndexService) Delete(ctx context.Context, indexName string, params IndexMetadataIndexDeleteParams, opts ...option.RequestOption) (res *IndexMetadataIndexDeleteResponse, err error) {
 	var env IndexMetadataIndexDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -185,21 +183,26 @@ func (r IndexMetadataIndexListResponseMetadataIndexesIndexType) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [vectorize.IndexMetadataIndexDeleteResponseUnknown] or
-// [shared.UnionString].
-type IndexMetadataIndexDeleteResponseUnion interface {
-	ImplementsVectorizeIndexMetadataIndexDeleteResponseUnion()
+type IndexMetadataIndexDeleteResponse struct {
+	// The unique identifier for the async mutation operation containing the changeset.
+	MutationID string                               `json:"mutationId"`
+	JSON       indexMetadataIndexDeleteResponseJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*IndexMetadataIndexDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// indexMetadataIndexDeleteResponseJSON contains the JSON metadata for the struct
+// [IndexMetadataIndexDeleteResponse]
+type indexMetadataIndexDeleteResponseJSON struct {
+	MutationID  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IndexMetadataIndexDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexMetadataIndexDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type IndexMetadataIndexNewParams struct {
@@ -335,9 +338,9 @@ func (r IndexMetadataIndexDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IndexMetadataIndexDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   IndexMetadataIndexDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo            `json:"errors,required"`
+	Messages []shared.ResponseInfo            `json:"messages,required"`
+	Result   IndexMetadataIndexDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexMetadataIndexDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexMetadataIndexDeleteResponseEnvelopeJSON    `json:"-"`
