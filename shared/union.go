@@ -84,6 +84,7 @@ func (UnionString) ImplementsPagesProjectDomainNewResponseUnion()               
 func (UnionString) ImplementsPagesProjectDomainEditResponseUnion()                               {}
 func (UnionString) ImplementsPagesProjectDomainGetResponseUnion()                                {}
 func (UnionString) ImplementsRegistrarDomainUpdateResponseUnion()                                {}
+func (UnionString) ImplementsRegistrarDomainListResponseResultUnion()                            {}
 func (UnionString) ImplementsRegistrarDomainGetResponseUnion()                                   {}
 func (UnionString) ImplementsRulesListItemGetResponseUnion()                                     {}
 func (UnionString) ImplementsStreamAudioTrackDeleteResponseUnion()                               {}
