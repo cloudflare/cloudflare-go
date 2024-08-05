@@ -23,7 +23,6 @@ import (
 // the [NewHTTPService] method instead.
 type HTTPService struct {
 	Options          []option.RequestOption
-	Top              *HTTPTopService
 	Locations        *HTTPLocationService
 	Ases             *HTTPAseService
 	Summary          *HTTPSummaryService
@@ -36,7 +35,6 @@ type HTTPService struct {
 func NewHTTPService(opts ...option.RequestOption) (r *HTTPService) {
 	r = &HTTPService{}
 	r.Options = opts
-	r.Top = NewHTTPTopService(opts...)
 	r.Locations = NewHTTPLocationService(opts...)
 	r.Ases = NewHTTPAseService(opts...)
 	r.Summary = NewHTTPSummaryService(opts...)

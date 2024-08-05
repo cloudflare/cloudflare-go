@@ -6202,8 +6202,6 @@ Methods:
 
 - <code title="get /radar/http/timeseries">client.Radar.HTTP.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPService.Timeseries">Timeseries</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTimeseriesParams">HTTPTimeseriesParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#HTTPTimeseriesResponse">HTTPTimeseriesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-### Top
-
 ### Locations
 
 Response Types:
