@@ -60,7 +60,7 @@ func (r *DomainService) Update(ctx context.Context, domainName string, params Do
 }
 
 // List domains handled by Registrar.
-func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Domain], err error) {
+func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DomainListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -82,7 +82,7 @@ func (r *DomainService) List(ctx context.Context, query DomainListParams, opts .
 }
 
 // List domains handled by Registrar.
-func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Domain] {
+func (r *DomainService) ListAutoPaging(ctx context.Context, query DomainListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DomainListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -227,18 +227,18 @@ func (r domainRegistrantContactJSON) RawJSON() string {
 // Statuses for domain transfers into Cloudflare Registrar.
 type DomainTransferIn struct {
 	// Form of authorization has been accepted by the registrant.
-	AcceptFoa string `json:"accept_foa"`
+	AcceptFoa DomainTransferInAcceptFoa `json:"accept_foa"`
 	// Shows transfer status with the registry.
-	ApproveTransfer string `json:"approve_transfer"`
+	ApproveTransfer DomainTransferInApproveTransfer `json:"approve_transfer"`
 	// Indicates if cancellation is still possible.
 	CanCancelTransfer bool `json:"can_cancel_transfer"`
 	// Privacy guards are disabled at the foreign registrar.
-	DisablePrivacy interface{} `json:"disable_privacy"`
+	DisablePrivacy DomainTransferInDisablePrivacy `json:"disable_privacy"`
 	// Auth code has been entered and verified.
-	EnterAuthCode string `json:"enter_auth_code"`
+	EnterAuthCode DomainTransferInEnterAuthCode `json:"enter_auth_code"`
 	// Domain is unlocked at the foreign registrar.
-	UnlockDomain interface{}          `json:"unlock_domain"`
-	JSON         domainTransferInJSON `json:"-"`
+	UnlockDomain DomainTransferInUnlockDomain `json:"unlock_domain"`
+	JSON         domainTransferInJSON         `json:"-"`
 }
 
 // domainTransferInJSON contains the JSON metadata for the struct
@@ -260,6 +260,97 @@ func (r *DomainTransferIn) UnmarshalJSON(data []byte) (err error) {
 
 func (r domainTransferInJSON) RawJSON() string {
 	return r.raw
+}
+
+// Form of authorization has been accepted by the registrant.
+type DomainTransferInAcceptFoa string
+
+const (
+	DomainTransferInAcceptFoaNeeded DomainTransferInAcceptFoa = "needed"
+	DomainTransferInAcceptFoaOk     DomainTransferInAcceptFoa = "ok"
+)
+
+func (r DomainTransferInAcceptFoa) IsKnown() bool {
+	switch r {
+	case DomainTransferInAcceptFoaNeeded, DomainTransferInAcceptFoaOk:
+		return true
+	}
+	return false
+}
+
+// Shows transfer status with the registry.
+type DomainTransferInApproveTransfer string
+
+const (
+	DomainTransferInApproveTransferNeeded   DomainTransferInApproveTransfer = "needed"
+	DomainTransferInApproveTransferOk       DomainTransferInApproveTransfer = "ok"
+	DomainTransferInApproveTransferPending  DomainTransferInApproveTransfer = "pending"
+	DomainTransferInApproveTransferTrying   DomainTransferInApproveTransfer = "trying"
+	DomainTransferInApproveTransferRejected DomainTransferInApproveTransfer = "rejected"
+	DomainTransferInApproveTransferUnknown  DomainTransferInApproveTransfer = "unknown"
+)
+
+func (r DomainTransferInApproveTransfer) IsKnown() bool {
+	switch r {
+	case DomainTransferInApproveTransferNeeded, DomainTransferInApproveTransferOk, DomainTransferInApproveTransferPending, DomainTransferInApproveTransferTrying, DomainTransferInApproveTransferRejected, DomainTransferInApproveTransferUnknown:
+		return true
+	}
+	return false
+}
+
+// Privacy guards are disabled at the foreign registrar.
+type DomainTransferInDisablePrivacy string
+
+const (
+	DomainTransferInDisablePrivacyNeeded  DomainTransferInDisablePrivacy = "needed"
+	DomainTransferInDisablePrivacyOk      DomainTransferInDisablePrivacy = "ok"
+	DomainTransferInDisablePrivacyUnknown DomainTransferInDisablePrivacy = "unknown"
+)
+
+func (r DomainTransferInDisablePrivacy) IsKnown() bool {
+	switch r {
+	case DomainTransferInDisablePrivacyNeeded, DomainTransferInDisablePrivacyOk, DomainTransferInDisablePrivacyUnknown:
+		return true
+	}
+	return false
+}
+
+// Auth code has been entered and verified.
+type DomainTransferInEnterAuthCode string
+
+const (
+	DomainTransferInEnterAuthCodeNeeded   DomainTransferInEnterAuthCode = "needed"
+	DomainTransferInEnterAuthCodeOk       DomainTransferInEnterAuthCode = "ok"
+	DomainTransferInEnterAuthCodePending  DomainTransferInEnterAuthCode = "pending"
+	DomainTransferInEnterAuthCodeTrying   DomainTransferInEnterAuthCode = "trying"
+	DomainTransferInEnterAuthCodeRejected DomainTransferInEnterAuthCode = "rejected"
+)
+
+func (r DomainTransferInEnterAuthCode) IsKnown() bool {
+	switch r {
+	case DomainTransferInEnterAuthCodeNeeded, DomainTransferInEnterAuthCodeOk, DomainTransferInEnterAuthCodePending, DomainTransferInEnterAuthCodeTrying, DomainTransferInEnterAuthCodeRejected:
+		return true
+	}
+	return false
+}
+
+// Domain is unlocked at the foreign registrar.
+type DomainTransferInUnlockDomain string
+
+const (
+	DomainTransferInUnlockDomainNeeded  DomainTransferInUnlockDomain = "needed"
+	DomainTransferInUnlockDomainOk      DomainTransferInUnlockDomain = "ok"
+	DomainTransferInUnlockDomainPending DomainTransferInUnlockDomain = "pending"
+	DomainTransferInUnlockDomainTrying  DomainTransferInUnlockDomain = "trying"
+	DomainTransferInUnlockDomainUnknown DomainTransferInUnlockDomain = "unknown"
+)
+
+func (r DomainTransferInUnlockDomain) IsKnown() bool {
+	switch r {
+	case DomainTransferInUnlockDomainNeeded, DomainTransferInUnlockDomainOk, DomainTransferInUnlockDomainPending, DomainTransferInUnlockDomainTrying, DomainTransferInUnlockDomainUnknown:
+		return true
+	}
+	return false
 }
 
 // Union satisfied by [registrar.DomainUpdateResponseUnknown],
@@ -286,6 +377,107 @@ func init() {
 type DomainUpdateResponseArray []interface{}
 
 func (r DomainUpdateResponseArray) ImplementsRegistrarDomainUpdateResponseUnion() {}
+
+type DomainListResponse struct {
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   DomainListResponseResultUnion `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    DomainListResponseSuccess    `json:"success,required"`
+	ResultInfo DomainListResponseResultInfo `json:"result_info"`
+	JSON       domainListResponseJSON       `json:"-"`
+}
+
+// domainListResponseJSON contains the JSON metadata for the struct
+// [DomainListResponse]
+type domainListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Union satisfied by [registrar.DomainListResponseResultUnknown],
+// [registrar.DomainListResponseResultArray] or [shared.UnionString].
+type DomainListResponseResultUnion interface {
+	ImplementsRegistrarDomainListResponseResultUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DomainListResponseResultUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DomainListResponseResultArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DomainListResponseResultArray []interface{}
+
+func (r DomainListResponseResultArray) ImplementsRegistrarDomainListResponseResultUnion() {}
+
+// Whether the API call was successful
+type DomainListResponseSuccess bool
+
+const (
+	DomainListResponseSuccessTrue DomainListResponseSuccess = true
+)
+
+func (r DomainListResponseSuccess) IsKnown() bool {
+	switch r {
+	case DomainListResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DomainListResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                          `json:"total_count"`
+	JSON       domainListResponseResultInfoJSON `json:"-"`
+}
+
+// domainListResponseResultInfoJSON contains the JSON metadata for the struct
+// [DomainListResponseResultInfo]
+type domainListResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainListResponseResultInfoJSON) RawJSON() string {
+	return r.raw
+}
 
 // Union satisfied by [registrar.DomainGetResponseUnknown],
 // [registrar.DomainGetResponseArray] or [shared.UnionString].
