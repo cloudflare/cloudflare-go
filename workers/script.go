@@ -307,7 +307,7 @@ func (r ScriptUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 func (r ScriptUpdateParamsBody) implementsWorkersScriptUpdateParamsBodyUnion() {}
 
 // Satisfied by [workers.ScriptUpdateParamsBodyObject],
-// [workers.ScriptUpdateParamsBodyObject], [ScriptUpdateParamsBody].
+// [workers.ScriptUpdateParamsBodyMessage], [ScriptUpdateParamsBody].
 type ScriptUpdateParamsBodyUnion interface {
 	implementsWorkersScriptUpdateParamsBodyUnion()
 }
@@ -413,6 +413,18 @@ func (r ScriptUpdateParamsBodyObjectMetadataUsageModel) IsKnown() bool {
 	}
 	return false
 }
+
+type ScriptUpdateParamsBodyMessage struct {
+	// Rollback message to be associated with this deployment. Only parsed when query
+	// param `"rollback_to"` is present.
+	Message param.Field[string] `json:"message"`
+}
+
+func (r ScriptUpdateParamsBodyMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsBodyMessage) implementsWorkersScriptUpdateParamsBodyUnion() {}
 
 type ScriptUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
