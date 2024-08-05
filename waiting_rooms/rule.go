@@ -581,14 +581,14 @@ func (r RuleEditParamsPosition) implementsWaitingRoomsRuleEditParamsPositionUnio
 
 // Reorder the position of a rule
 //
-// Satisfied by [waiting_rooms.RuleEditParamsPositionObject],
-// [waiting_rooms.RuleEditParamsPositionObject],
-// [waiting_rooms.RuleEditParamsPositionObject], [RuleEditParamsPosition].
+// Satisfied by [waiting_rooms.RuleEditParamsPositionIndex],
+// [waiting_rooms.RuleEditParamsPositionBefore],
+// [waiting_rooms.RuleEditParamsPositionAfter], [RuleEditParamsPosition].
 type RuleEditParamsPositionUnion interface {
 	implementsWaitingRoomsRuleEditParamsPositionUnion()
 }
 
-type RuleEditParamsPositionObject struct {
+type RuleEditParamsPositionIndex struct {
 	// Places the rule in the exact position specified by the integer number
 	// <POSITION_NUMBER>. Position numbers start with 1. Existing rules in the ruleset
 	// from the specified position number onward are shifted one position (no rule is
@@ -596,11 +596,35 @@ type RuleEditParamsPositionObject struct {
 	Index param.Field[int64] `json:"index"`
 }
 
-func (r RuleEditParamsPositionObject) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsPositionIndex) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsPositionObject) implementsWaitingRoomsRuleEditParamsPositionUnion() {}
+func (r RuleEditParamsPositionIndex) implementsWaitingRoomsRuleEditParamsPositionUnion() {}
+
+type RuleEditParamsPositionBefore struct {
+	// Places the rule before rule <RULE_ID>. Use this argument with an empty rule ID
+	// value ("") to set the rule as the first rule in the ruleset.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsPositionBefore) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsPositionBefore) implementsWaitingRoomsRuleEditParamsPositionUnion() {}
+
+type RuleEditParamsPositionAfter struct {
+	// Places the rule after rule <RULE_ID>. Use this argument with an empty rule ID
+	// value ("") to set the rule as the last rule in the ruleset.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsPositionAfter) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsPositionAfter) implementsWaitingRoomsRuleEditParamsPositionUnion() {}
 
 type RuleEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
