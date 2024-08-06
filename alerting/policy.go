@@ -138,33 +138,37 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	return
 }
 
-type Mechanism struct {
+type Mechanism map[string][]MechanismItem
+
+type MechanismItem struct {
 	// UUID
-	ID   string        `json:"id"`
-	JSON mechanismJSON `json:"-"`
+	ID   string            `json:"id"`
+	JSON mechanismItemJSON `json:"-"`
 }
 
-// mechanismJSON contains the JSON metadata for the struct [Mechanism]
-type mechanismJSON struct {
+// mechanismItemJSON contains the JSON metadata for the struct [MechanismItem]
+type mechanismItemJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Mechanism) UnmarshalJSON(data []byte) (err error) {
+func (r *MechanismItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r mechanismJSON) RawJSON() string {
+func (r mechanismItemJSON) RawJSON() string {
 	return r.raw
 }
 
-type MechanismParam struct {
+type MechanismParam map[string][]MechanismItemParam
+
+type MechanismItemParam struct {
 	// UUID
 	ID param.Field[string] `json:"id"`
 }
 
-func (r MechanismParam) MarshalJSON() (data []byte, err error) {
+func (r MechanismItemParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -189,8 +193,8 @@ type Policy struct {
 	Filters PolicyFilter `json:"filters"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
-	Mechanisms map[string][]Mechanism `json:"mechanisms"`
-	Modified   time.Time              `json:"modified" format:"date-time"`
+	Mechanisms Mechanism `json:"mechanisms"`
+	Modified   time.Time `json:"modified" format:"date-time"`
 	// Name of the policy.
 	Name string     `json:"name"`
 	JSON policyJSON `json:"-"`
@@ -316,7 +320,7 @@ type PolicyParam struct {
 	Filters param.Field[PolicyFilterParam] `json:"filters"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
-	Mechanisms param.Field[map[string][]MechanismParam] `json:"mechanisms"`
+	Mechanisms param.Field[MechanismParam] `json:"mechanisms"`
 	// Name of the policy.
 	Name param.Field[string] `json:"name"`
 }
@@ -716,7 +720,7 @@ type PolicyNewParams struct {
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
-	Mechanisms param.Field[map[string][]MechanismParam] `json:"mechanisms,required"`
+	Mechanisms param.Field[MechanismParam] `json:"mechanisms,required"`
 	// Name of the policy.
 	Name param.Field[string] `json:"name,required"`
 	// Optional specification of how often to re-alert from the same incident, not
@@ -853,7 +857,7 @@ type PolicyUpdateParams struct {
 	Filters param.Field[PolicyFilterParam] `json:"filters"`
 	// List of IDs that will be used when dispatching a notification. IDs for email
 	// type will be the email address.
-	Mechanisms param.Field[map[string][]MechanismParam] `json:"mechanisms"`
+	Mechanisms param.Field[MechanismParam] `json:"mechanisms"`
 	// Name of the policy.
 	Name param.Field[string] `json:"name"`
 }
