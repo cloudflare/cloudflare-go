@@ -51,10 +51,11 @@ func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListPa
 }
 
 type Availability struct {
-	Quota          AvailabilityQuota `json:"quota"`
-	Regions        []LabeledRegion   `json:"regions"`
-	RegionsPerPlan interface{}       `json:"regionsPerPlan"`
-	JSON           availabilityJSON  `json:"-"`
+	Quota   AvailabilityQuota `json:"quota"`
+	Regions []LabeledRegion   `json:"regions"`
+	// Available regions.
+	RegionsPerPlan AvailabilityRegionsPerPlan `json:"regionsPerPlan"`
+	JSON           availabilityJSON           `json:"-"`
 }
 
 // availabilityJSON contains the JSON metadata for the struct [Availability]
@@ -78,14 +79,14 @@ type AvailabilityQuota struct {
 	// Cloudflare plan.
 	Plan string `json:"plan"`
 	// The number of tests available per plan.
-	QuotasPerPlan map[string]float64 `json:"quotasPerPlan"`
+	QuotasPerPlan AvailabilityQuotaQuotasPerPlan `json:"quotasPerPlan"`
 	// The number of remaining schedules available.
 	RemainingSchedules float64 `json:"remainingSchedules"`
 	// The number of remaining tests available.
 	RemainingTests float64 `json:"remainingTests"`
 	// The number of schedules available per plan.
-	ScheduleQuotasPerPlan map[string]float64    `json:"scheduleQuotasPerPlan"`
-	JSON                  availabilityQuotaJSON `json:"-"`
+	ScheduleQuotasPerPlan AvailabilityQuotaScheduleQuotasPerPlan `json:"scheduleQuotasPerPlan"`
+	JSON                  availabilityQuotaJSON                  `json:"-"`
 }
 
 // availabilityQuotaJSON contains the JSON metadata for the struct
@@ -105,6 +106,136 @@ func (r *AvailabilityQuota) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r availabilityQuotaJSON) RawJSON() string {
+	return r.raw
+}
+
+// The number of tests available per plan.
+type AvailabilityQuotaQuotasPerPlan struct {
+	// Counts per account plan.
+	Value AvailabilityQuotaQuotasPerPlanValue `json:"value"`
+	JSON  availabilityQuotaQuotasPerPlanJSON  `json:"-"`
+}
+
+// availabilityQuotaQuotasPerPlanJSON contains the JSON metadata for the struct
+// [AvailabilityQuotaQuotasPerPlan]
+type availabilityQuotaQuotasPerPlanJSON struct {
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AvailabilityQuotaQuotasPerPlan) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availabilityQuotaQuotasPerPlanJSON) RawJSON() string {
+	return r.raw
+}
+
+// Counts per account plan.
+type AvailabilityQuotaQuotasPerPlanValue struct {
+	Business   int64                                   `json:"business"`
+	Enterprise int64                                   `json:"enterprise"`
+	Free       int64                                   `json:"free"`
+	Pro        int64                                   `json:"pro"`
+	JSON       availabilityQuotaQuotasPerPlanValueJSON `json:"-"`
+}
+
+// availabilityQuotaQuotasPerPlanValueJSON contains the JSON metadata for the
+// struct [AvailabilityQuotaQuotasPerPlanValue]
+type availabilityQuotaQuotasPerPlanValueJSON struct {
+	Business    apijson.Field
+	Enterprise  apijson.Field
+	Free        apijson.Field
+	Pro         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AvailabilityQuotaQuotasPerPlanValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availabilityQuotaQuotasPerPlanValueJSON) RawJSON() string {
+	return r.raw
+}
+
+// The number of schedules available per plan.
+type AvailabilityQuotaScheduleQuotasPerPlan struct {
+	// Counts per account plan.
+	Value AvailabilityQuotaScheduleQuotasPerPlanValue `json:"value"`
+	JSON  availabilityQuotaScheduleQuotasPerPlanJSON  `json:"-"`
+}
+
+// availabilityQuotaScheduleQuotasPerPlanJSON contains the JSON metadata for the
+// struct [AvailabilityQuotaScheduleQuotasPerPlan]
+type availabilityQuotaScheduleQuotasPerPlanJSON struct {
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AvailabilityQuotaScheduleQuotasPerPlan) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availabilityQuotaScheduleQuotasPerPlanJSON) RawJSON() string {
+	return r.raw
+}
+
+// Counts per account plan.
+type AvailabilityQuotaScheduleQuotasPerPlanValue struct {
+	Business   int64                                           `json:"business"`
+	Enterprise int64                                           `json:"enterprise"`
+	Free       int64                                           `json:"free"`
+	Pro        int64                                           `json:"pro"`
+	JSON       availabilityQuotaScheduleQuotasPerPlanValueJSON `json:"-"`
+}
+
+// availabilityQuotaScheduleQuotasPerPlanValueJSON contains the JSON metadata for
+// the struct [AvailabilityQuotaScheduleQuotasPerPlanValue]
+type availabilityQuotaScheduleQuotasPerPlanValueJSON struct {
+	Business    apijson.Field
+	Enterprise  apijson.Field
+	Free        apijson.Field
+	Pro         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AvailabilityQuotaScheduleQuotasPerPlanValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availabilityQuotaScheduleQuotasPerPlanValueJSON) RawJSON() string {
+	return r.raw
+}
+
+// Available regions.
+type AvailabilityRegionsPerPlan struct {
+	Business   []LabeledRegion                `json:"business"`
+	Enterprise []LabeledRegion                `json:"enterprise"`
+	Free       []LabeledRegion                `json:"free"`
+	Pro        []LabeledRegion                `json:"pro"`
+	JSON       availabilityRegionsPerPlanJSON `json:"-"`
+}
+
+// availabilityRegionsPerPlanJSON contains the JSON metadata for the struct
+// [AvailabilityRegionsPerPlan]
+type availabilityRegionsPerPlanJSON struct {
+	Business    apijson.Field
+	Enterprise  apijson.Field
+	Free        apijson.Field
+	Pro         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AvailabilityRegionsPerPlan) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availabilityRegionsPerPlanJSON) RawJSON() string {
 	return r.raw
 }
 
