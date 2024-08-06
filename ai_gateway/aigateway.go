@@ -147,16 +147,33 @@ func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGe
 }
 
 type AIGatewayNewResponse struct {
-	Task AIGatewayNewResponseTask `json:"task,required"`
-	JSON aiGatewayNewResponseJSON `json:"-"`
+	// gateway id
+	ID                      string                                    `json:"id,required"`
+	CacheInvalidateOnUpdate bool                                      `json:"cache_invalidate_on_update,required"`
+	CacheTTL                int64                                     `json:"cache_ttl,required,nullable"`
+	CollectLogs             bool                                      `json:"collect_logs,required"`
+	CreatedAt               time.Time                                 `json:"created_at,required" format:"date-time"`
+	ModifiedAt              time.Time                                 `json:"modified_at,required" format:"date-time"`
+	RateLimitingInterval    int64                                     `json:"rate_limiting_interval,required,nullable"`
+	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
+	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	JSON                    aiGatewayNewResponseJSON                  `json:"-"`
 }
 
 // aiGatewayNewResponseJSON contains the JSON metadata for the struct
 // [AIGatewayNewResponse]
 type aiGatewayNewResponseJSON struct {
-	Task        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                      apijson.Field
+	CacheInvalidateOnUpdate apijson.Field
+	CacheTTL                apijson.Field
+	CollectLogs             apijson.Field
+	CreatedAt               apijson.Field
+	ModifiedAt              apijson.Field
+	RateLimitingInterval    apijson.Field
+	RateLimitingLimit       apijson.Field
+	RateLimitingTechnique   apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *AIGatewayNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -167,60 +184,16 @@ func (r aiGatewayNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type AIGatewayNewResponseTask struct {
-	// gateway id
-	ID                      string                                        `json:"id,required"`
-	CacheInvalidateOnUpdate bool                                          `json:"cache_invalidate_on_update,required"`
-	CacheTTL                int64                                         `json:"cache_ttl,required,nullable"`
-	CollectLogs             bool                                          `json:"collect_logs,required"`
-	CreatedAt               time.Time                                     `json:"created_at,required" format:"date-time"`
-	ModifiedAt              time.Time                                     `json:"modified_at,required" format:"date-time"`
-	RateLimitingInterval    int64                                         `json:"rate_limiting_interval,required,nullable"`
-	RateLimitingLimit       int64                                         `json:"rate_limiting_limit,required,nullable"`
-	RateLimitingTechnique   AIGatewayNewResponseTaskRateLimitingTechnique `json:"rate_limiting_technique,required"`
-	ImprovedLogs            bool                                          `json:"improved_logs"`
-	Logpush                 bool                                          `json:"logpush"`
-	LogpushPublicKey        string                                        `json:"logpush_public_key,nullable"`
-	JSON                    aiGatewayNewResponseTaskJSON                  `json:"-"`
-}
-
-// aiGatewayNewResponseTaskJSON contains the JSON metadata for the struct
-// [AIGatewayNewResponseTask]
-type aiGatewayNewResponseTaskJSON struct {
-	ID                      apijson.Field
-	CacheInvalidateOnUpdate apijson.Field
-	CacheTTL                apijson.Field
-	CollectLogs             apijson.Field
-	CreatedAt               apijson.Field
-	ModifiedAt              apijson.Field
-	RateLimitingInterval    apijson.Field
-	RateLimitingLimit       apijson.Field
-	RateLimitingTechnique   apijson.Field
-	ImprovedLogs            apijson.Field
-	Logpush                 apijson.Field
-	LogpushPublicKey        apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *AIGatewayNewResponseTask) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aiGatewayNewResponseTaskJSON) RawJSON() string {
-	return r.raw
-}
-
-type AIGatewayNewResponseTaskRateLimitingTechnique string
+type AIGatewayNewResponseRateLimitingTechnique string
 
 const (
-	AIGatewayNewResponseTaskRateLimitingTechniqueFixed   AIGatewayNewResponseTaskRateLimitingTechnique = "fixed"
-	AIGatewayNewResponseTaskRateLimitingTechniqueSliding AIGatewayNewResponseTaskRateLimitingTechnique = "sliding"
+	AIGatewayNewResponseRateLimitingTechniqueFixed   AIGatewayNewResponseRateLimitingTechnique = "fixed"
+	AIGatewayNewResponseRateLimitingTechniqueSliding AIGatewayNewResponseRateLimitingTechnique = "sliding"
 )
 
-func (r AIGatewayNewResponseTaskRateLimitingTechnique) IsKnown() bool {
+func (r AIGatewayNewResponseRateLimitingTechnique) IsKnown() bool {
 	switch r {
-	case AIGatewayNewResponseTaskRateLimitingTechniqueFixed, AIGatewayNewResponseTaskRateLimitingTechniqueSliding:
+	case AIGatewayNewResponseRateLimitingTechniqueFixed, AIGatewayNewResponseRateLimitingTechniqueSliding:
 		return true
 	}
 	return false
@@ -237,9 +210,6 @@ type AIGatewayUpdateResponse struct {
 	RateLimitingInterval    int64                                        `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayUpdateResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
-	ImprovedLogs            bool                                         `json:"improved_logs"`
-	Logpush                 bool                                         `json:"logpush"`
-	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayUpdateResponseJSON                  `json:"-"`
 }
 
@@ -255,9 +225,6 @@ type aiGatewayUpdateResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
-	ImprovedLogs            apijson.Field
-	Logpush                 apijson.Field
-	LogpushPublicKey        apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -296,9 +263,6 @@ type AIGatewayListResponse struct {
 	RateLimitingInterval    int64                                      `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                      `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayListResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
-	ImprovedLogs            bool                                       `json:"improved_logs"`
-	Logpush                 bool                                       `json:"logpush"`
-	LogpushPublicKey        string                                     `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayListResponseJSON                  `json:"-"`
 }
 
@@ -314,9 +278,6 @@ type aiGatewayListResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
-	ImprovedLogs            apijson.Field
-	Logpush                 apijson.Field
-	LogpushPublicKey        apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -355,9 +316,6 @@ type AIGatewayDeleteResponse struct {
 	RateLimitingInterval    int64                                        `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                        `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayDeleteResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
-	ImprovedLogs            bool                                         `json:"improved_logs"`
-	Logpush                 bool                                         `json:"logpush"`
-	LogpushPublicKey        string                                       `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayDeleteResponseJSON                  `json:"-"`
 }
 
@@ -373,9 +331,6 @@ type aiGatewayDeleteResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
-	ImprovedLogs            apijson.Field
-	Logpush                 apijson.Field
-	LogpushPublicKey        apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -414,9 +369,6 @@ type AIGatewayGetResponse struct {
 	RateLimitingInterval    int64                                     `json:"rate_limiting_interval,required,nullable"`
 	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
 	RateLimitingTechnique   AIGatewayGetResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
-	ImprovedLogs            bool                                      `json:"improved_logs"`
-	Logpush                 bool                                      `json:"logpush"`
-	LogpushPublicKey        string                                    `json:"logpush_public_key,nullable"`
 	JSON                    aiGatewayGetResponseJSON                  `json:"-"`
 }
 
@@ -432,9 +384,6 @@ type aiGatewayGetResponseJSON struct {
 	RateLimitingInterval    apijson.Field
 	RateLimitingLimit       apijson.Field
 	RateLimitingTechnique   apijson.Field
-	ImprovedLogs            apijson.Field
-	Logpush                 apijson.Field
-	LogpushPublicKey        apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -472,9 +421,6 @@ type AIGatewayNewParams struct {
 	RateLimitingInterval    param.Field[int64]                                   `json:"rate_limiting_interval,required"`
 	RateLimitingLimit       param.Field[int64]                                   `json:"rate_limiting_limit,required"`
 	RateLimitingTechnique   param.Field[AIGatewayNewParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
-	ImprovedLogs            param.Field[bool]                                    `json:"improved_logs"`
-	Logpush                 param.Field[bool]                                    `json:"logpush"`
-	LogpushPublicKey        param.Field[string]                                  `json:"logpush_public_key"`
 }
 
 func (r AIGatewayNewParams) MarshalJSON() (data []byte, err error) {
@@ -527,9 +473,6 @@ type AIGatewayUpdateParams struct {
 	RateLimitingInterval    param.Field[int64]                                      `json:"rate_limiting_interval,required"`
 	RateLimitingLimit       param.Field[int64]                                      `json:"rate_limiting_limit,required"`
 	RateLimitingTechnique   param.Field[AIGatewayUpdateParamsRateLimitingTechnique] `json:"rate_limiting_technique,required"`
-	ImprovedLogs            param.Field[bool]                                       `json:"improved_logs"`
-	Logpush                 param.Field[bool]                                       `json:"logpush"`
-	LogpushPublicKey        param.Field[string]                                     `json:"logpush_public_key"`
 }
 
 func (r AIGatewayUpdateParams) MarshalJSON() (data []byte, err error) {
