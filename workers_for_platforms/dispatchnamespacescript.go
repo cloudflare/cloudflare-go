@@ -52,9 +52,9 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 	return
 }
 
-// Upload a worker module to a Workers for Platforms namespace. You can find an
-// example of the metadata on our docs:
-// https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/reference/metadata/
+// Upload a worker module to a Workers for Platforms namespace. You can find more
+// about the multipart metadata on our docs:
+// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/.
 func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptUpdateResponse, err error) {
 	var env DispatchNamespaceScriptUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
