@@ -172,9 +172,9 @@ type GatewayCertificateNewResponse struct {
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateNewResponseBindingStatus `json:"binding_status"`
 	CreatedAt     time.Time                                  `json:"created_at" format:"date-time"`
+	ExpiresOn     time.Time                                  `json:"expires_on" format:"date-time"`
 	// Use this certificate for Gateway TLS interception
-	Enabled   bool      `json:"enabled"`
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	InUse bool `json:"in_use"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateNewResponseType `json:"type"`
 	UpdatedAt  time.Time                         `json:"updated_at" format:"date-time"`
@@ -188,8 +188,8 @@ type gatewayCertificateNewResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
 	CreatedAt     apijson.Field
-	Enabled       apijson.Field
 	ExpiresOn     apijson.Field
+	InUse         apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -247,9 +247,9 @@ type GatewayCertificateListResponse struct {
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateListResponseBindingStatus `json:"binding_status"`
 	CreatedAt     time.Time                                   `json:"created_at" format:"date-time"`
+	ExpiresOn     time.Time                                   `json:"expires_on" format:"date-time"`
 	// Use this certificate for Gateway TLS interception
-	Enabled   bool      `json:"enabled"`
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	InUse bool `json:"in_use"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateListResponseType `json:"type"`
 	UpdatedAt  time.Time                          `json:"updated_at" format:"date-time"`
@@ -263,8 +263,8 @@ type gatewayCertificateListResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
 	CreatedAt     apijson.Field
-	Enabled       apijson.Field
 	ExpiresOn     apijson.Field
+	InUse         apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -322,9 +322,9 @@ type GatewayCertificateDeleteResponse struct {
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateDeleteResponseBindingStatus `json:"binding_status"`
 	CreatedAt     time.Time                                     `json:"created_at" format:"date-time"`
+	ExpiresOn     time.Time                                     `json:"expires_on" format:"date-time"`
 	// Use this certificate for Gateway TLS interception
-	Enabled   bool      `json:"enabled"`
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	InUse bool `json:"in_use"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateDeleteResponseType `json:"type"`
 	UpdatedAt  time.Time                            `json:"updated_at" format:"date-time"`
@@ -338,8 +338,8 @@ type gatewayCertificateDeleteResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
 	CreatedAt     apijson.Field
-	Enabled       apijson.Field
 	ExpiresOn     apijson.Field
+	InUse         apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -397,9 +397,9 @@ type GatewayCertificateActivateResponse struct {
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateActivateResponseBindingStatus `json:"binding_status"`
 	CreatedAt     time.Time                                       `json:"created_at" format:"date-time"`
+	ExpiresOn     time.Time                                       `json:"expires_on" format:"date-time"`
 	// Use this certificate for Gateway TLS interception
-	Enabled   bool      `json:"enabled"`
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	InUse bool `json:"in_use"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateActivateResponseType `json:"type"`
 	UpdatedAt  time.Time                              `json:"updated_at" format:"date-time"`
@@ -413,8 +413,8 @@ type gatewayCertificateActivateResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
 	CreatedAt     apijson.Field
-	Enabled       apijson.Field
 	ExpiresOn     apijson.Field
+	InUse         apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -472,9 +472,9 @@ type GatewayCertificateDeactivateResponse struct {
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateDeactivateResponseBindingStatus `json:"binding_status"`
 	CreatedAt     time.Time                                         `json:"created_at" format:"date-time"`
+	ExpiresOn     time.Time                                         `json:"expires_on" format:"date-time"`
 	// Use this certificate for Gateway TLS interception
-	Enabled   bool      `json:"enabled"`
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	InUse bool `json:"in_use"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateDeactivateResponseType `json:"type"`
 	UpdatedAt  time.Time                                `json:"updated_at" format:"date-time"`
@@ -488,8 +488,8 @@ type gatewayCertificateDeactivateResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
 	CreatedAt     apijson.Field
-	Enabled       apijson.Field
 	ExpiresOn     apijson.Field
+	InUse         apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -547,9 +547,9 @@ type GatewayCertificateGetResponse struct {
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateGetResponseBindingStatus `json:"binding_status"`
 	CreatedAt     time.Time                                  `json:"created_at" format:"date-time"`
+	ExpiresOn     time.Time                                  `json:"expires_on" format:"date-time"`
 	// Use this certificate for Gateway TLS interception
-	Enabled   bool      `json:"enabled"`
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	InUse bool `json:"in_use"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateGetResponseType `json:"type"`
 	UpdatedAt  time.Time                         `json:"updated_at" format:"date-time"`
@@ -563,8 +563,8 @@ type gatewayCertificateGetResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
 	CreatedAt     apijson.Field
-	Enabled       apijson.Field
 	ExpiresOn     apijson.Field
+	InUse         apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
