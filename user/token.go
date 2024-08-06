@@ -209,7 +209,7 @@ func (r TokenStatus) IsKnown() bool {
 
 type TokenConditionParam struct {
 	// Client IP restrictions.
-	RequestIP param.Field[TokenConditionRequestIPParam] `json:"request_ip"`
+	RequestIP param.Field[TokenConditionRequestIPParam] `json:"request.ip"`
 }
 
 func (r TokenConditionParam) MarshalJSON() (data []byte, err error) {
@@ -346,7 +346,7 @@ func (r TokenNewParams) MarshalJSON() (data []byte, err error) {
 
 type TokenNewParamsCondition struct {
 	// Client IP restrictions.
-	RequestIP param.Field[TokenNewParamsConditionRequestIP] `json:"request_ip"`
+	RequestIP param.Field[TokenNewParamsConditionRequestIP] `json:"request.ip"`
 }
 
 func (r TokenNewParamsCondition) MarshalJSON() (data []byte, err error) {
