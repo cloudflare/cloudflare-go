@@ -32,14 +32,14 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		AlertType: cloudflare.F(alerting.PolicyNewParamsAlertTypeUniversalSSLEventType),
 		Enabled:   cloudflare.F(true),
-		Mechanisms: cloudflare.F(map[string][]alerting.MechanismParam{
-			"email": {{
+		Mechanisms: cloudflare.F(alerting.MechanismParam{
+			"email": []alerting.MechanismItemParam{{
 				ID: cloudflare.F("test@example.com"),
 			}},
-			"pagerduty": {{
+			"pagerduty": []alerting.MechanismItemParam{{
 				ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
 			}},
-			"webhooks": {{
+			"webhooks": []alerting.MechanismItemParam{{
 				ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
 			}},
 		}),
@@ -163,14 +163,14 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 				Where:                        cloudflare.F([]string{"string", "string", "string"}),
 				Zones:                        cloudflare.F([]string{"string", "string", "string"}),
 			}),
-			Mechanisms: cloudflare.F(map[string][]alerting.MechanismParam{
-				"email": {{
+			Mechanisms: cloudflare.F(alerting.MechanismParam{
+				"email": []alerting.MechanismItemParam{{
 					ID: cloudflare.F("test@example.com"),
 				}},
-				"pagerduty": {{
+				"pagerduty": []alerting.MechanismItemParam{{
 					ID: cloudflare.F("e8133a15-00a4-4d69-aec1-32f70c51f6e5"),
 				}},
-				"webhooks": {{
+				"webhooks": []alerting.MechanismItemParam{{
 					ID: cloudflare.F("14cc1190-5d2b-4b98-a696-c424cb2ad05f"),
 				}},
 			}),
