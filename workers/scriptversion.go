@@ -41,7 +41,9 @@ func NewScriptVersionService(opts ...option.RequestOption) (r *ScriptVersionServ
 	return
 }
 
-// Upload a Worker Version without deploying to Cloudflare's network.
+// Upload a Worker Version without deploying to Cloudflare's network. You can find
+// more about the multipart metadata on our docs:
+// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/.
 func (r *ScriptVersionService) New(ctx context.Context, scriptName string, params ScriptVersionNewParams, opts ...option.RequestOption) (res *ScriptVersionNewResponse, err error) {
 	var env ScriptVersionNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
