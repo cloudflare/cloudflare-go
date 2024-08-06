@@ -1526,16 +1526,6 @@ Methods:
 
 ### Retention
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionNewResponse">ControlRetentionNewResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionGetResponse">ControlRetentionGetResponse</a>
-
-Methods:
-
-- <code title="post /zones/{zone_identifier}/logs/control/retention/flag">client.Logs.Control.Retention.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionNewParams">ControlRetentionNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionNewResponse">ControlRetentionNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_identifier}/logs/control/retention/flag">client.Logs.Control.Retention.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionGetResponse">ControlRetentionGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Cmb
 
 #### Config
@@ -1557,33 +1547,9 @@ Methods:
 
 ## RayID
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#RayIDGetResponseUnion">RayIDGetResponseUnion</a>
-
-Methods:
-
-- <code title="get /zones/{zone_identifier}/logs/rayids/{ray_identifier}">client.Logs.RayID.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#RayIDService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, rayIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#RayIDGetParams">RayIDGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#RayIDGetResponseUnion">RayIDGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Received
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedGetResponseUnion">ReceivedGetResponseUnion</a>
-
-Methods:
-
-- <code title="get /zones/{zone_identifier}/logs/received">client.Logs.Received.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedGetParams">ReceivedGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedGetResponseUnion">ReceivedGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Fields
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedFieldGetResponse">ReceivedFieldGetResponse</a>
-
-Methods:
-
-- <code title="get /zones/{zone_identifier}/logs/received/fields">client.Logs.Received.Fields.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedFieldService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedFieldGetResponse">ReceivedFieldGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # OriginTLSClientAuth
 
