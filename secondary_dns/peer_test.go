@@ -30,7 +30,7 @@ func TestPeerNew(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.Peers.New(context.TODO(), secondary_dns.PeerNewParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		Body:      map[string]interface{}{},
+		Name:      cloudflare.F("my-peer-1"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
