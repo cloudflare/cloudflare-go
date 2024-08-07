@@ -40,6 +40,10 @@ func (UnionString) ImplementsFirewallWAFPackageGetResponseFirewallAPIResponseSin
 func (UnionString) ImplementsFirewallWAFPackageGroupEditResponseUnion()                          {}
 func (UnionString) ImplementsFirewallWAFPackageGroupGetResponseUnion()                           {}
 func (UnionString) ImplementsFirewallWAFPackageRuleGetResponseUnion()                            {}
+func (UnionString) ImplementsLogsRayIDGetResponseUnion()                                         {}
+func (UnionString) ImplementsLogsReceivedGetResponseUnion()                                      {}
+func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                                     {}
+func (UnionString) ImplementsLogsReceivedGetParamsStartUnion()                                   {}
 func (UnionString) ImplementsOriginTLSClientAuthOriginTLSClientAuthNewResponseUnion()            {}
 func (UnionString) ImplementsOriginTLSClientAuthOriginTLSClientAuthDeleteResponseUnion()         {}
 func (UnionString) ImplementsOriginTLSClientAuthOriginTLSClientAuthGetResponseUnion()            {}
@@ -148,9 +152,11 @@ func (UnionString) ImplementsEventNotificationsR2ConfigurationQueueDeleteRespons
 
 type UnionInt int64
 
-func (UnionInt) ImplementsSpectrumOriginPortUnionParam()  {}
-func (UnionInt) ImplementsSpectrumOriginPortUnion()       {}
-func (UnionInt) ImplementsRulesListItemGetResponseUnion() {}
+func (UnionInt) ImplementsLogsReceivedGetParamsEndUnion()   {}
+func (UnionInt) ImplementsLogsReceivedGetParamsStartUnion() {}
+func (UnionInt) ImplementsSpectrumOriginPortUnionParam()    {}
+func (UnionInt) ImplementsSpectrumOriginPortUnion()         {}
+func (UnionInt) ImplementsRulesListItemGetResponseUnion()   {}
 
 type UnionFloat float64
 
