@@ -116,7 +116,7 @@ type IncomingNewResponse struct {
 	// Zone name.
 	Name string `json:"name"`
 	// A list of peer tags.
-	Peers []interface{} `json:"peers"`
+	Peers []string `json:"peers"`
 	// The serial number of the SOA for the given zone.
 	SOASerial float64                 `json:"soa_serial"`
 	JSON      incomingNewResponseJSON `json:"-"`
@@ -159,7 +159,7 @@ type IncomingUpdateResponse struct {
 	// Zone name.
 	Name string `json:"name"`
 	// A list of peer tags.
-	Peers []interface{} `json:"peers"`
+	Peers []string `json:"peers"`
 	// The serial number of the SOA for the given zone.
 	SOASerial float64                    `json:"soa_serial"`
 	JSON      incomingUpdateResponseJSON `json:"-"`
@@ -223,7 +223,7 @@ type IncomingGetResponse struct {
 	// Zone name.
 	Name string `json:"name"`
 	// A list of peer tags.
-	Peers []interface{} `json:"peers"`
+	Peers []string `json:"peers"`
 	// The serial number of the SOA for the given zone.
 	SOASerial float64                 `json:"soa_serial"`
 	JSON      incomingGetResponseJSON `json:"-"`
@@ -260,7 +260,7 @@ type IncomingNewParams struct {
 	// Zone name.
 	Name param.Field[string] `json:"name,required"`
 	// A list of peer tags.
-	Peers param.Field[[]interface{}] `json:"peers,required"`
+	Peers param.Field[[]string] `json:"peers,required"`
 }
 
 func (r IncomingNewParams) MarshalJSON() (data []byte, err error) {
@@ -318,7 +318,7 @@ type IncomingUpdateParams struct {
 	// Zone name.
 	Name param.Field[string] `json:"name,required"`
 	// A list of peer tags.
-	Peers param.Field[[]interface{}] `json:"peers,required"`
+	Peers param.Field[[]string] `json:"peers,required"`
 }
 
 func (r IncomingUpdateParams) MarshalJSON() (data []byte, err error) {
