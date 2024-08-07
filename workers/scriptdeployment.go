@@ -113,24 +113,24 @@ func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptDeploymentNewResponse struct {
+	Strategy    string                          `json:"strategy,required"`
 	ID          string                          `json:"id"`
 	Annotations Deployment                      `json:"annotations"`
 	AuthorEmail string                          `json:"author_email"`
 	CreatedOn   string                          `json:"created_on"`
 	Source      string                          `json:"source"`
-	Strategy    string                          `json:"strategy"`
 	JSON        scriptDeploymentNewResponseJSON `json:"-"`
 }
 
 // scriptDeploymentNewResponseJSON contains the JSON metadata for the struct
 // [ScriptDeploymentNewResponse]
 type scriptDeploymentNewResponseJSON struct {
+	Strategy    apijson.Field
 	ID          apijson.Field
 	Annotations apijson.Field
 	AuthorEmail apijson.Field
 	CreatedOn   apijson.Field
 	Source      apijson.Field
-	Strategy    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -165,24 +165,24 @@ func (r scriptDeploymentGetResponseJSON) RawJSON() string {
 }
 
 type ScriptDeploymentGetResponseDeployment struct {
+	Strategy    string                                    `json:"strategy,required"`
 	ID          string                                    `json:"id"`
 	Annotations Deployment                                `json:"annotations"`
 	AuthorEmail string                                    `json:"author_email"`
 	CreatedOn   string                                    `json:"created_on"`
 	Source      string                                    `json:"source"`
-	Strategy    string                                    `json:"strategy"`
 	JSON        scriptDeploymentGetResponseDeploymentJSON `json:"-"`
 }
 
 // scriptDeploymentGetResponseDeploymentJSON contains the JSON metadata for the
 // struct [ScriptDeploymentGetResponseDeployment]
 type scriptDeploymentGetResponseDeploymentJSON struct {
+	Strategy    apijson.Field
 	ID          apijson.Field
 	Annotations apijson.Field
 	AuthorEmail apijson.Field
 	CreatedOn   apijson.Field
 	Source      apijson.Field
-	Strategy    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -198,11 +198,11 @@ func (r scriptDeploymentGetResponseDeploymentJSON) RawJSON() string {
 type ScriptDeploymentNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	Strategy  param.Field[string] `json:"strategy,required"`
 	// If set to true, the deployment will be created even if normally blocked by
 	// something such rolling back to an older version when a secret has changed.
 	Force       param.Field[bool]            `query:"force"`
 	Annotations param.Field[DeploymentParam] `json:"annotations"`
-	Strategy    param.Field[string]          `json:"strategy"`
 }
 
 func (r ScriptDeploymentNewParams) MarshalJSON() (data []byte, err error) {

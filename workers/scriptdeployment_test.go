@@ -32,11 +32,11 @@ func TestScriptDeploymentNewWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptDeploymentNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Strategy:  cloudflare.F("strategy"),
 			Force:     cloudflare.F(true),
 			Annotations: cloudflare.F(workers.DeploymentParam{
 				WorkersMessage: cloudflare.F("Deploy bug fix."),
 			}),
-			Strategy: cloudflare.F("strategy"),
 		},
 	)
 	if err != nil {
