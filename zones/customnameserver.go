@@ -39,7 +39,7 @@ func NewCustomNameserverService(opts ...option.RequestOption) (r *CustomNameserv
 // If you would like new zones in the account to use account custom nameservers by
 // default, use PUT /accounts/:identifier to set the account setting
 // use_account_custom_ns_by_default to true.
-func (r *CustomNameserverService) Update(ctx context.Context, params CustomNameserverUpdateParams, opts ...option.RequestOption) (res *[]CustomNameserverUpdateResponse, err error) {
+func (r *CustomNameserverService) Update(ctx context.Context, params CustomNameserverUpdateParams, opts ...option.RequestOption) (res *[]string, err error) {
 	var env CustomNameserverUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -72,8 +72,6 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 	return
 }
 
-type CustomNameserverUpdateResponse = interface{}
-
 type CustomNameserverGetResponse = interface{}
 
 type CustomNameserverUpdateParams struct {
@@ -94,7 +92,7 @@ type CustomNameserverUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    CustomNameserverUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CustomNameserverUpdateResponse                 `json:"result,nullable"`
+	Result     []string                                         `json:"result,nullable"`
 	ResultInfo CustomNameserverUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       customNameserverUpdateResponseEnvelopeJSON       `json:"-"`
 }
