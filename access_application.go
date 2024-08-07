@@ -224,15 +224,15 @@ type SaasApplication struct {
 	AuthType  string     `json:"auth_type,omitempty"`
 
 	// SAML saas app
-	ConsumerServiceUrl            string                `json:"consumer_service_url,omitempty"`
-	SPEntityID                    string                `json:"sp_entity_id,omitempty"`
-	IDPEntityID                   string                `json:"idp_entity_id,omitempty"`
-	NameIDFormat                  string                `json:"name_id_format,omitempty"`
-	SSOEndpoint                   string                `json:"sso_endpoint,omitempty"`
-	DefaultRelayState             string                `json:"default_relay_state,omitempty"`
-	CustomAttributes              []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
-	NameIDTransformJsonata        string                `json:"name_id_transform_jsonata,omitempty"`
-	SamlAttributeTransformJsonata string                `json:"saml_attribute_transform_jsonata"`
+	ConsumerServiceUrl            string                 `json:"consumer_service_url,omitempty"`
+	SPEntityID                    string                 `json:"sp_entity_id,omitempty"`
+	IDPEntityID                   string                 `json:"idp_entity_id,omitempty"`
+	NameIDFormat                  string                 `json:"name_id_format,omitempty"`
+	SSOEndpoint                   string                 `json:"sso_endpoint,omitempty"`
+	DefaultRelayState             string                 `json:"default_relay_state,omitempty"`
+	CustomAttributes              *[]SAMLAttributeConfig `json:"custom_attributes"`
+	NameIDTransformJsonata        string                 `json:"name_id_transform_jsonata,omitempty"`
+	SamlAttributeTransformJsonata string                 `json:"saml_attribute_transform_jsonata"`
 
 	// OIDC saas app
 	ClientID                     string                                     `json:"client_id,omitempty"`
@@ -242,7 +242,7 @@ type SaasApplication struct {
 	Scopes                       []string                                   `json:"scopes,omitempty"`
 	AppLauncherURL               string                                     `json:"app_launcher_url,omitempty"`
 	GroupFilterRegex             string                                     `json:"group_filter_regex,omitempty"`
-	CustomClaims                 []OIDCClaimConfig                          `json:"custom_claims,omitempty"`
+	CustomClaims                 *[]OIDCClaimConfig                         `json:"custom_claims"`
 	AllowPKCEWithoutClientSecret *bool                                      `json:"allow_pkce_without_client_secret,omitempty"`
 	RefreshTokenOptions          *RefreshTokenOptions                       `json:"refresh_token_options,omitempty"`
 	HybridAndImplicitOptions     *AccessApplicationHybridAndImplicitOptions `json:"hybrid_and_implicit_options,omitempty"`
