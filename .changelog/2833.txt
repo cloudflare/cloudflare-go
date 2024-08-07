@@ -1,2 +1,2 @@
 release-note:enhancement
-Add DeleteRulesetRule()
+rulesets: Add DeleteRulesetRule() function
