@@ -30,7 +30,8 @@ func TestACLNew(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.ACLs.New(context.TODO(), secondary_dns.ACLNewParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		Body:      map[string]interface{}{},
+		IPRange:   cloudflare.F("192.0.2.53/28"),
+		Name:      cloudflare.F("my-acl-1"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

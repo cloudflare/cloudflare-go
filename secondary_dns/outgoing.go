@@ -171,7 +171,7 @@ type OutgoingNewResponse struct {
 	// Zone name.
 	Name string `json:"name"`
 	// A list of peer tags.
-	Peers []interface{} `json:"peers"`
+	Peers []string `json:"peers"`
 	// The serial number of the SOA for the given zone.
 	SOASerial float64                 `json:"soa_serial"`
 	JSON      outgoingNewResponseJSON `json:"-"`
@@ -210,7 +210,7 @@ type OutgoingUpdateResponse struct {
 	// Zone name.
 	Name string `json:"name"`
 	// A list of peer tags.
-	Peers []interface{} `json:"peers"`
+	Peers []string `json:"peers"`
 	// The serial number of the SOA for the given zone.
 	SOASerial float64                    `json:"soa_serial"`
 	JSON      outgoingUpdateResponseJSON `json:"-"`
@@ -270,7 +270,7 @@ type OutgoingGetResponse struct {
 	// Zone name.
 	Name string `json:"name"`
 	// A list of peer tags.
-	Peers []interface{} `json:"peers"`
+	Peers []string `json:"peers"`
 	// The serial number of the SOA for the given zone.
 	SOASerial float64                 `json:"soa_serial"`
 	JSON      outgoingGetResponseJSON `json:"-"`
@@ -303,7 +303,7 @@ type OutgoingNewParams struct {
 	// Zone name.
 	Name param.Field[string] `json:"name,required"`
 	// A list of peer tags.
-	Peers param.Field[[]interface{}] `json:"peers,required"`
+	Peers param.Field[[]string] `json:"peers,required"`
 }
 
 func (r OutgoingNewParams) MarshalJSON() (data []byte, err error) {
@@ -358,7 +358,7 @@ type OutgoingUpdateParams struct {
 	// Zone name.
 	Name param.Field[string] `json:"name,required"`
 	// A list of peer tags.
-	Peers param.Field[[]interface{}] `json:"peers,required"`
+	Peers param.Field[[]string] `json:"peers,required"`
 }
 
 func (r OutgoingUpdateParams) MarshalJSON() (data []byte, err error) {
