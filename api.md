@@ -428,7 +428,6 @@ Response Types:
 Methods:
 
 - <code title="post /zones/{identifier}/subscription">client.Zones.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SubscriptionService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SubscriptionNewParams">SubscriptionNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SubscriptionNewResponseUnion">SubscriptionNewResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_identifier}/subscriptions">client.Zones.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SubscriptionService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#Subscription">Subscription</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{identifier}/subscription">client.Zones.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SubscriptionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SubscriptionGetResponseUnion">SubscriptionGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # LoadBalancers
@@ -760,16 +759,11 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions">subscriptions</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionNewResponseUnion">SubscriptionNewResponseUnion</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions">subscriptions</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionUpdateResponseUnion">SubscriptionUpdateResponseUnion</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions">subscriptions</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionDeleteResponse">SubscriptionDeleteResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions">subscriptions</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionGetResponseUnion">SubscriptionGetResponseUnion</a>
 
 Methods:
 
 - <code title="post /zones/{identifier}/subscription">client.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions">subscriptions</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionNewParams">SubscriptionNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions">subscriptions</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionNewResponseUnion">SubscriptionNewResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="put /accounts/{account_identifier}/subscriptions/{subscription_identifier}">client.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, subscriptionIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions">subscriptions</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionUpdateParams">SubscriptionUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions">subscriptions</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionUpdateResponseUnion">SubscriptionUpdateResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_identifier}/subscriptions">client.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#Subscription">Subscription</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="delete /accounts/{account_identifier}/subscriptions/{subscription_identifier}">client.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, subscriptionIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions">subscriptions</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionDeleteResponse">SubscriptionDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{identifier}/subscription">client.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions">subscriptions</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/subscriptions#SubscriptionGetResponseUnion">SubscriptionGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # ACM
@@ -819,24 +813,7 @@ Methods:
 
 # Plans
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans">plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#AvailableRatePlan">AvailableRatePlan</a>
-
-Methods:
-
-- <code title="get /zones/{zone_identifier}/available_plans">client.Plans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#PlanService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans">plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#AvailableRatePlan">AvailableRatePlan</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_identifier}/available_plans/{plan_identifier}">client.Plans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#PlanService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, planIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans">plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#AvailableRatePlan">AvailableRatePlan</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 # RatePlans
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans">rate_plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans#RatePlan">RatePlan</a>
-
-Methods:
-
-- <code title="get /zones/{zone_identifier}/available_rate_plans">client.RatePlans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans#RatePlanService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans">rate_plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans#RatePlan">RatePlan</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # CertificateAuthorities
 
@@ -2894,14 +2871,6 @@ Methods:
 # Billing
 
 ## Profiles
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/billing">billing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/billing#ProfileGetResponseUnion">ProfileGetResponseUnion</a>
-
-Methods:
-
-- <code title="get /accounts/{account_identifier}/billing/profile">client.Billing.Profiles.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/billing#ProfileService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier interface{}) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/billing">billing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/billing#ProfileGetResponseUnion">ProfileGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # BrandProtection
 
