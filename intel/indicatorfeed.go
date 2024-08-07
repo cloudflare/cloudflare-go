@@ -27,6 +27,7 @@ type IndicatorFeedService struct {
 	Options     []option.RequestOption
 	Snapshots   *IndicatorFeedSnapshotService
 	Permissions *IndicatorFeedPermissionService
+	Downloads   *IndicatorFeedDownloadService
 }
 
 // NewIndicatorFeedService generates a new service that applies the given options
@@ -37,6 +38,7 @@ func NewIndicatorFeedService(opts ...option.RequestOption) (r *IndicatorFeedServ
 	r.Options = opts
 	r.Snapshots = NewIndicatorFeedSnapshotService(opts...)
 	r.Permissions = NewIndicatorFeedPermissionService(opts...)
+	r.Downloads = NewIndicatorFeedDownloadService(opts...)
 	return
 }
 

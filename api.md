@@ -1526,6 +1526,16 @@ Methods:
 
 ### Retention
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionNewResponse">ControlRetentionNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionGetResponse">ControlRetentionGetResponse</a>
+
+Methods:
+
+- <code title="post /zones/{zone_id}/logs/control/retention/flag">client.Logs.Control.Retention.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionNewParams">ControlRetentionNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionNewResponse">ControlRetentionNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/logs/control/retention/flag">client.Logs.Control.Retention.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionGetParams">ControlRetentionGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ControlRetentionGetResponse">ControlRetentionGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Cmb
 
 #### Config
@@ -1547,9 +1557,33 @@ Methods:
 
 ## RayID
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#RayIDGetResponseUnion">RayIDGetResponseUnion</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/logs/rayids/{ray_id}">client.Logs.RayID.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#RayIDService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, RayID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#RayIDGetParams">RayIDGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#RayIDGetResponseUnion">RayIDGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Received
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedGetResponseUnion">ReceivedGetResponseUnion</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/logs/received">client.Logs.Received.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedGetParams">ReceivedGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedGetResponseUnion">ReceivedGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Fields
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedFieldGetResponse">ReceivedFieldGetResponse</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/logs/received/fields">client.Logs.Received.Fields.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedFieldService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedFieldGetParams">ReceivedFieldGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs">logs</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/logs#ReceivedFieldGetResponse">ReceivedFieldGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # OriginTLSClientAuth
 
@@ -3124,6 +3158,16 @@ Methods:
 - <code title="put /accounts/{account_id}/intel/indicator-feeds/permissions/add">client.Intel.IndicatorFeeds.Permissions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedPermissionService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedPermissionNewParams">IndicatorFeedPermissionNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedPermissionNewResponse">IndicatorFeedPermissionNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/intel/indicator-feeds/permissions/view">client.Intel.IndicatorFeeds.Permissions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedPermissionService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedPermissionListParams">IndicatorFeedPermissionListParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedPermissionListResponse">IndicatorFeedPermissionListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="put /accounts/{account_id}/intel/indicator-feeds/permissions/remove">client.Intel.IndicatorFeeds.Permissions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedPermissionService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedPermissionDeleteParams">IndicatorFeedPermissionDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedPermissionDeleteResponse">IndicatorFeedPermissionDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### Downloads
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedDownloadGetResponse">IndicatorFeedDownloadGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/intel/indicator_feeds/{feed_id}/download">client.Intel.IndicatorFeeds.Downloads.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedDownloadService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, feedID <a href="https://pkg.go.dev/builtin#int64">int64</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedDownloadGetParams">IndicatorFeedDownloadGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel">intel</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/intel#IndicatorFeedDownloadGetResponse">IndicatorFeedDownloadGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Sinkholes
 
