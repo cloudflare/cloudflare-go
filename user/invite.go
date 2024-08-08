@@ -189,13 +189,20 @@ func (r InviteEditParamsStatus) IsKnown() bool {
 }
 
 type InviteEditResponseEnvelope struct {
-	Result InviteEditResponse             `json:"result"`
-	JSON   inviteEditResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success InviteEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  InviteEditResponse                `json:"result"`
+	JSON    inviteEditResponseEnvelopeJSON    `json:"-"`
 }
 
 // inviteEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [InviteEditResponseEnvelope]
 type inviteEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -209,14 +216,36 @@ func (r inviteEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Whether the API call was successful
+type InviteEditResponseEnvelopeSuccess bool
+
+const (
+	InviteEditResponseEnvelopeSuccessTrue InviteEditResponseEnvelopeSuccess = true
+)
+
+func (r InviteEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case InviteEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type InviteGetResponseEnvelope struct {
-	Result InviteGetResponse             `json:"result"`
-	JSON   inviteGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success InviteGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  InviteGetResponse                `json:"result"`
+	JSON    inviteGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // inviteGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [InviteGetResponseEnvelope]
 type inviteGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -228,4 +257,19 @@ func (r *InviteGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r inviteGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type InviteGetResponseEnvelopeSuccess bool
+
+const (
+	InviteGetResponseEnvelopeSuccessTrue InviteGetResponseEnvelopeSuccess = true
+)
+
+func (r InviteGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case InviteGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

@@ -366,13 +366,20 @@ func (r TokenNewParamsConditionRequestIP) MarshalJSON() (data []byte, err error)
 }
 
 type TokenNewResponseEnvelope struct {
-	Result TokenNewResponse             `json:"result"`
-	JSON   tokenNewResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success TokenNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  TokenNewResponse                `json:"result"`
+	JSON    tokenNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // tokenNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TokenNewResponseEnvelope]
 type tokenNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -386,6 +393,21 @@ func (r tokenNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Whether the API call was successful
+type TokenNewResponseEnvelopeSuccess bool
+
+const (
+	TokenNewResponseEnvelopeSuccessTrue TokenNewResponseEnvelopeSuccess = true
+)
+
+func (r TokenNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TokenUpdateParams struct {
 	Token TokenParam `json:"token,required"`
 }
@@ -395,13 +417,20 @@ func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenUpdateResponseEnvelope struct {
-	Result TokenUpdateResponse             `json:"result"`
-	JSON   tokenUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success TokenUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  TokenUpdateResponse                `json:"result"`
+	JSON    tokenUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // tokenUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TokenUpdateResponseEnvelope]
 type tokenUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -413,6 +442,21 @@ func (r *TokenUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r tokenUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type TokenUpdateResponseEnvelopeSuccess bool
+
+const (
+	TokenUpdateResponseEnvelopeSuccessTrue TokenUpdateResponseEnvelopeSuccess = true
+)
+
+func (r TokenUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type TokenListParams struct {
@@ -492,13 +536,20 @@ func (r TokenDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type TokenGetResponseEnvelope struct {
-	Result TokenGetResponse             `json:"result"`
-	JSON   tokenGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success TokenGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  TokenGetResponse                `json:"result"`
+	JSON    tokenGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // tokenGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TokenGetResponseEnvelope]
 type tokenGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -512,14 +563,36 @@ func (r tokenGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Whether the API call was successful
+type TokenGetResponseEnvelopeSuccess bool
+
+const (
+	TokenGetResponseEnvelopeSuccessTrue TokenGetResponseEnvelopeSuccess = true
+)
+
+func (r TokenGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type TokenVerifyResponseEnvelope struct {
-	Result TokenVerifyResponse             `json:"result"`
-	JSON   tokenVerifyResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success TokenVerifyResponseEnvelopeSuccess `json:"success,required"`
+	Result  TokenVerifyResponse                `json:"result"`
+	JSON    tokenVerifyResponseEnvelopeJSON    `json:"-"`
 }
 
 // tokenVerifyResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TokenVerifyResponseEnvelope]
 type tokenVerifyResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -531,4 +604,19 @@ func (r *TokenVerifyResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r tokenVerifyResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type TokenVerifyResponseEnvelopeSuccess bool
+
+const (
+	TokenVerifyResponseEnvelopeSuccessTrue TokenVerifyResponseEnvelopeSuccess = true
+)
+
+func (r TokenVerifyResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenVerifyResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

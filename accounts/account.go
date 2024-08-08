@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // AccountService contains methods and other services that help with interacting
@@ -245,13 +246,20 @@ func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountUpdateResponseEnvelope struct {
-	Result AccountUpdateResponse             `json:"result"`
-	JSON   accountUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success AccountUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccountUpdateResponse                `json:"result"`
+	JSON    accountUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // accountUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AccountUpdateResponseEnvelope]
 type accountUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -263,6 +271,21 @@ func (r *AccountUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r accountUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type AccountUpdateResponseEnvelopeSuccess bool
+
+const (
+	AccountUpdateResponseEnvelopeSuccessTrue AccountUpdateResponseEnvelopeSuccess = true
+)
+
+func (r AccountUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccountUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type AccountListParams struct {
@@ -305,13 +328,20 @@ type AccountGetParams struct {
 }
 
 type AccountGetResponseEnvelope struct {
-	Result AccountGetResponse             `json:"result"`
-	JSON   accountGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success AccountGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccountGetResponse                `json:"result"`
+	JSON    accountGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // accountGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AccountGetResponseEnvelope]
 type accountGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -323,4 +353,19 @@ func (r *AccountGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r accountGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type AccountGetResponseEnvelopeSuccess bool
+
+const (
+	AccountGetResponseEnvelopeSuccessTrue AccountGetResponseEnvelopeSuccess = true
+)
+
+func (r AccountGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccountGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

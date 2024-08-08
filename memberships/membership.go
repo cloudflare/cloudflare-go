@@ -782,13 +782,20 @@ func (r MembershipUpdateParamsStatus) IsKnown() bool {
 }
 
 type MembershipUpdateResponseEnvelope struct {
-	Result MembershipUpdateResponse             `json:"result"`
-	JSON   membershipUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success MembershipUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  MembershipUpdateResponse                `json:"result"`
+	JSON    membershipUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // membershipUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [MembershipUpdateResponseEnvelope]
 type membershipUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -800,6 +807,21 @@ func (r *MembershipUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error
 
 func (r membershipUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type MembershipUpdateResponseEnvelopeSuccess bool
+
+const (
+	MembershipUpdateResponseEnvelopeSuccessTrue MembershipUpdateResponseEnvelopeSuccess = true
+)
+
+func (r MembershipUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MembershipUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type MembershipListParams struct {
@@ -934,13 +956,20 @@ func (r MembershipDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MembershipGetResponseEnvelope struct {
-	Result MembershipGetResponse             `json:"result"`
-	JSON   membershipGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success MembershipGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  MembershipGetResponse                `json:"result"`
+	JSON    membershipGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // membershipGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [MembershipGetResponseEnvelope]
 type membershipGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -952,4 +981,19 @@ func (r *MembershipGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r membershipGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type MembershipGetResponseEnvelopeSuccess bool
+
+const (
+	MembershipGetResponseEnvelopeSuccessTrue MembershipGetResponseEnvelopeSuccess = true
+)
+
+func (r MembershipGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MembershipGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

@@ -2560,7 +2560,6 @@ Params Types:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#Policy">Policy</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PolicyNewResponse">PolicyNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PolicyUpdateResponse">PolicyUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PolicyListResponse">PolicyListResponse</a>
@@ -3735,7 +3734,6 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/registrar">registrar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/registrar#Domain">Domain</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/registrar">registrar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/registrar#DomainUpdateResponseUnion">DomainUpdateResponseUnion</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/registrar">registrar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/registrar#DomainListResponse">DomainListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/registrar">registrar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/registrar#DomainGetResponseUnion">DomainGetResponseUnion</a>
@@ -4095,7 +4093,6 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting">alerting</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting#MechanismParam">MechanismParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting">alerting</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting#PolicyParam">PolicyParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting">alerting</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/alerting#PolicyFilterParam">PolicyFilterParam</a>
 
 Response Types:
@@ -6814,13 +6811,12 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#Test">Test</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestListResponse">PageTestListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestDeleteResponse">PageTestDeleteResponse</a>
 
 Methods:
 
 - <code title="post /zones/{zone_id}/speed_api/pages/{url}/tests">client.Speed.Pages.Tests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, url <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestNewParams">PageTestNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#Test">Test</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_id}/speed_api/pages/{url}/tests">client.Speed.Pages.Tests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, url <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestListParams">PageTestListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestListResponse">PageTestListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/speed_api/pages/{url}/tests">client.Speed.Pages.Tests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, url <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestListParams">PageTestListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#Test">Test</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="delete /zones/{zone_id}/speed_api/pages/{url}/tests">client.Speed.Pages.Tests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, url <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestDeleteParams">PageTestDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestDeleteResponse">PageTestDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/speed_api/pages/{url}/tests/{test_id}">client.Speed.Pages.Tests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, url <a href="https://pkg.go.dev/builtin#string">string</a>, testID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#PageTestGetParams">PageTestGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed">speed</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/speed#Test">Test</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 

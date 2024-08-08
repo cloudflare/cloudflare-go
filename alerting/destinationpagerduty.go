@@ -249,13 +249,20 @@ type DestinationPagerdutyNewParams struct {
 }
 
 type DestinationPagerdutyNewResponseEnvelope struct {
-	Result DestinationPagerdutyNewResponse             `json:"result"`
-	JSON   destinationPagerdutyNewResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DestinationPagerdutyNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  DestinationPagerdutyNewResponse                `json:"result"`
+	JSON    destinationPagerdutyNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // destinationPagerdutyNewResponseEnvelopeJSON contains the JSON metadata for the
 // struct [DestinationPagerdutyNewResponseEnvelope]
 type destinationPagerdutyNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -267,6 +274,21 @@ func (r *DestinationPagerdutyNewResponseEnvelope) UnmarshalJSON(data []byte) (er
 
 func (r destinationPagerdutyNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type DestinationPagerdutyNewResponseEnvelopeSuccess bool
+
+const (
+	DestinationPagerdutyNewResponseEnvelopeSuccessTrue DestinationPagerdutyNewResponseEnvelopeSuccess = true
+)
+
+func (r DestinationPagerdutyNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DestinationPagerdutyNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type DestinationPagerdutyDeleteParams struct {
@@ -361,13 +383,20 @@ type DestinationPagerdutyLinkParams struct {
 }
 
 type DestinationPagerdutyLinkResponseEnvelope struct {
-	Result DestinationPagerdutyLinkResponse             `json:"result"`
-	JSON   destinationPagerdutyLinkResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DestinationPagerdutyLinkResponseEnvelopeSuccess `json:"success,required"`
+	Result  DestinationPagerdutyLinkResponse                `json:"result"`
+	JSON    destinationPagerdutyLinkResponseEnvelopeJSON    `json:"-"`
 }
 
 // destinationPagerdutyLinkResponseEnvelopeJSON contains the JSON metadata for the
 // struct [DestinationPagerdutyLinkResponseEnvelope]
 type destinationPagerdutyLinkResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -379,4 +408,19 @@ func (r *DestinationPagerdutyLinkResponseEnvelope) UnmarshalJSON(data []byte) (e
 
 func (r destinationPagerdutyLinkResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type DestinationPagerdutyLinkResponseEnvelopeSuccess bool
+
+const (
+	DestinationPagerdutyLinkResponseEnvelopeSuccessTrue DestinationPagerdutyLinkResponseEnvelopeSuccess = true
+)
+
+func (r DestinationPagerdutyLinkResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DestinationPagerdutyLinkResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

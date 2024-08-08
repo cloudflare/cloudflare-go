@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // UserService contains methods and other services that help with interacting with
@@ -91,13 +92,20 @@ func (r UserEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UserEditResponseEnvelope struct {
-	Result UserEditResponse             `json:"result"`
-	JSON   userEditResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success UserEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  UserEditResponse                `json:"result"`
+	JSON    userEditResponseEnvelopeJSON    `json:"-"`
 }
 
 // userEditResponseEnvelopeJSON contains the JSON metadata for the struct
 // [UserEditResponseEnvelope]
 type userEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -111,14 +119,36 @@ func (r userEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Whether the API call was successful
+type UserEditResponseEnvelopeSuccess bool
+
+const (
+	UserEditResponseEnvelopeSuccessTrue UserEditResponseEnvelopeSuccess = true
+)
+
+func (r UserEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UserEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type UserGetResponseEnvelope struct {
-	Result UserGetResponse             `json:"result"`
-	JSON   userGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success UserGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  UserGetResponse                `json:"result"`
+	JSON    userGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // userGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [UserGetResponseEnvelope]
 type userGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -130,4 +160,19 @@ func (r *UserGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r userGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type UserGetResponseEnvelopeSuccess bool
+
+const (
+	UserGetResponseEnvelopeSuccessTrue UserGetResponseEnvelopeSuccess = true
+)
+
+func (r UserGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case UserGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
