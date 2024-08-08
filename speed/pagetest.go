@@ -12,6 +12,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -59,8 +60,10 @@ func (r *PageTestService) New(ctx context.Context, url string, params PageTestNe
 }
 
 // Test history (list of tests) for a specific webpage.
-func (r *PageTestService) List(ctx context.Context, url string, params PageTestListParams, opts ...option.RequestOption) (res *PageTestListResponse, err error) {
+func (r *PageTestService) List(ctx context.Context, url string, params PageTestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Test], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
@@ -70,8 +73,21 @@ func (r *PageTestService) List(ctx context.Context, url string, params PageTestL
 		return
 	}
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Test history (list of tests) for a specific webpage.
+func (r *PageTestService) ListAutoPaging(ctx context.Context, url string, params PageTestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Test] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, url, params, opts...))
 }
 
 // Deletes all tests for a specific webpage from a specific region. Deleted tests
@@ -175,61 +191,6 @@ func (r TestScheduleFrequency) IsKnown() bool {
 	return false
 }
 
-type PageTestListResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful.
-	Success    bool                           `json:"success,required"`
-	ResultInfo PageTestListResponseResultInfo `json:"result_info"`
-	JSON       pageTestListResponseJSON       `json:"-"`
-}
-
-// pageTestListResponseJSON contains the JSON metadata for the struct
-// [PageTestListResponse]
-type pageTestListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageTestListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageTestListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type PageTestListResponseResultInfo struct {
-	Count      int64                              `json:"count"`
-	Page       int64                              `json:"page"`
-	PerPage    int64                              `json:"per_page"`
-	TotalCount int64                              `json:"total_count"`
-	JSON       pageTestListResponseResultInfoJSON `json:"-"`
-}
-
-// pageTestListResponseResultInfoJSON contains the JSON metadata for the struct
-// [PageTestListResponseResultInfo]
-type pageTestListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageTestListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageTestListResponseResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type PageTestDeleteResponse struct {
 	// Number of items affected.
 	Count float64                    `json:"count"`
@@ -299,13 +260,20 @@ func (r PageTestNewParamsRegion) IsKnown() bool {
 }
 
 type PageTestNewResponseEnvelope struct {
-	Result Test                            `json:"result"`
-	JSON   pageTestNewResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful.
+	Success bool                            `json:"success,required"`
+	Result  Test                            `json:"result"`
+	JSON    pageTestNewResponseEnvelopeJSON `json:"-"`
 }
 
 // pageTestNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageTestNewResponseEnvelope]
 type pageTestNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -422,13 +390,20 @@ func (r PageTestDeleteParamsRegion) IsKnown() bool {
 }
 
 type PageTestDeleteResponseEnvelope struct {
-	Result PageTestDeleteResponse             `json:"result"`
-	JSON   pageTestDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful.
+	Success bool                               `json:"success,required"`
+	Result  PageTestDeleteResponse             `json:"result"`
+	JSON    pageTestDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // pageTestDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageTestDeleteResponseEnvelope]
 type pageTestDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -448,13 +423,20 @@ type PageTestGetParams struct {
 }
 
 type PageTestGetResponseEnvelope struct {
-	Result Test                            `json:"result"`
-	JSON   pageTestGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful.
+	Success bool                            `json:"success,required"`
+	Result  Test                            `json:"result"`
+	JSON    pageTestGetResponseEnvelopeJSON `json:"-"`
 }
 
 // pageTestGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageTestGetResponseEnvelope]
 type pageTestGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
