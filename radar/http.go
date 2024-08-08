@@ -27,6 +27,7 @@ type HTTPService struct {
 	Ases             *HTTPAseService
 	Summary          *HTTPSummaryService
 	TimeseriesGroups *HTTPTimeseriesGroupService
+	Top              *HTTPTopService
 }
 
 // NewHTTPService generates a new service that applies the given options to each
@@ -39,6 +40,7 @@ func NewHTTPService(opts ...option.RequestOption) (r *HTTPService) {
 	r.Ases = NewHTTPAseService(opts...)
 	r.Summary = NewHTTPSummaryService(opts...)
 	r.TimeseriesGroups = NewHTTPTimeseriesGroupService(opts...)
+	r.Top = NewHTTPTopService(opts...)
 	return
 }
 
