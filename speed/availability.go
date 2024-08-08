@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // AvailabilityService contains methods and other services that help with
@@ -245,13 +246,20 @@ type AvailabilityListParams struct {
 }
 
 type AvailabilityListResponseEnvelope struct {
-	Result Availability                         `json:"result"`
-	JSON   availabilityListResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful.
+	Success bool                                 `json:"success,required"`
+	Result  Availability                         `json:"result"`
+	JSON    availabilityListResponseEnvelopeJSON `json:"-"`
 }
 
 // availabilityListResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AvailabilityListResponseEnvelope]
 type availabilityListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
