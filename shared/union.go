@@ -17,6 +17,7 @@ func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()              
 func (UnionString) ImplementsSSLAnalyzeNewResponseUnion()                              {}
 func (UnionString) ImplementsSSLCertificatePackGetResponseUnion()                      {}
 func (UnionString) ImplementsSubscriptionsSubscriptionNewResponseUnion()               {}
+func (UnionString) ImplementsSubscriptionsSubscriptionUpdateResponseUnion()            {}
 func (UnionString) ImplementsSubscriptionsSubscriptionGetResponseUnion()               {}
 func (UnionString) ImplementsArgoSmartRoutingEditResponseUnion()                       {}
 func (UnionString) ImplementsArgoSmartRoutingGetResponseUnion()                        {}
@@ -63,6 +64,7 @@ func (UnionString) ImplementsSpectrumOriginPortUnion()                          
 func (UnionString) ImplementsSpectrumAnalyticsEventBytimeGetResponseUnion()                      {}
 func (UnionString) ImplementsSpectrumAnalyticsEventSummaryGetResponseUnion()                     {}
 func (UnionString) ImplementsSpectrumAppGetResponseUnion()                                       {}
+func (UnionString) ImplementsBillingProfileGetResponseUnion()                                    {}
 func (UnionString) ImplementsImagesV1DeleteResponseUnion()                                       {}
 func (UnionString) ImplementsImagesV1VariantDeleteResponseUnion()                                {}
 func (UnionString) ImplementsIntelMiscategorizationNewResponseUnion()                            {}

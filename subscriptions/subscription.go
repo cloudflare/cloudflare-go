@@ -10,6 +10,8 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
@@ -53,6 +55,75 @@ func (r *SubscriptionService) New(ctx context.Context, identifier string, body S
 	return
 }
 
+// Updates an account subscription.
+func (r *SubscriptionService) Update(ctx context.Context, subscriptionIdentifier string, params SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponseUnion, err error) {
+	var env SubscriptionUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if subscriptionIdentifier == "" {
+		err = errors.New("missing required subscription_identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/subscriptions/%s", params.AccountID, subscriptionIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Lists all of an account's subscriptions.
+func (r *SubscriptionService) List(ctx context.Context, query SubscriptionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.Subscription], err error) {
+	var raw *http.Response
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/subscriptions", query.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all of an account's subscriptions.
+func (r *SubscriptionService) ListAutoPaging(ctx context.Context, query SubscriptionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.Subscription] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+}
+
+// Deletes an account's subscription.
+func (r *SubscriptionService) Delete(ctx context.Context, subscriptionIdentifier string, body SubscriptionDeleteParams, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
+	var env SubscriptionDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if subscriptionIdentifier == "" {
+		err = errors.New("missing required subscription_identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/subscriptions/%s", body.AccountID, subscriptionIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists zone subscription details.
 func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionGetResponseUnion, err error) {
 	var env SubscriptionGetResponseEnvelope
@@ -85,6 +156,45 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
+}
+
+// Union satisfied by [subscriptions.SubscriptionUpdateResponseUnknown] or
+// [shared.UnionString].
+type SubscriptionUpdateResponseUnion interface {
+	ImplementsSubscriptionsSubscriptionUpdateResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SubscriptionUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type SubscriptionDeleteResponse struct {
+	// Subscription identifier tag.
+	SubscriptionID string                         `json:"subscription_id"`
+	JSON           subscriptionDeleteResponseJSON `json:"-"`
+}
+
+// subscriptionDeleteResponseJSON contains the JSON metadata for the struct
+// [SubscriptionDeleteResponse]
+type subscriptionDeleteResponseJSON struct {
+	SubscriptionID apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *SubscriptionDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [subscriptions.SubscriptionGetResponseUnknown] or
@@ -150,6 +260,112 @@ const (
 func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SubscriptionNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SubscriptionUpdateParams struct {
+	// Identifier
+	AccountID    param.Field[string]    `path:"account_id,required"`
+	Subscription user.SubscriptionParam `json:"subscription,required"`
+}
+
+func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Subscription)
+}
+
+type SubscriptionUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   SubscriptionUpdateResponseUnion `json:"result,required"`
+	// Whether the API call was successful
+	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// subscriptionUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SubscriptionUpdateResponseEnvelope]
+type subscriptionUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubscriptionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SubscriptionUpdateResponseEnvelopeSuccess bool
+
+const (
+	SubscriptionUpdateResponseEnvelopeSuccessTrue SubscriptionUpdateResponseEnvelopeSuccess = true
+)
+
+func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubscriptionUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SubscriptionListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type SubscriptionDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type SubscriptionDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   SubscriptionDeleteResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success SubscriptionDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    subscriptionDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// subscriptionDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SubscriptionDeleteResponseEnvelope]
+type subscriptionDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubscriptionDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SubscriptionDeleteResponseEnvelopeSuccess bool
+
+const (
+	SubscriptionDeleteResponseEnvelopeSuccessTrue SubscriptionDeleteResponseEnvelopeSuccess = true
+)
+
+func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubscriptionDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
