@@ -79,15 +79,6 @@ func (UnionString) ImplementsRegistrarDomainUpdateResponseUnion()               
 func (UnionString) ImplementsRegistrarDomainListResponseResultUnion()                            {}
 func (UnionString) ImplementsRegistrarDomainGetResponseUnion()                                   {}
 func (UnionString) ImplementsRulesListItemGetResponseUnion()                                     {}
-func (UnionString) ImplementsStreamAudioTrackDeleteResponseUnion()                               {}
-func (UnionString) ImplementsStreamKeyDeleteResponseUnion()                                      {}
-func (UnionString) ImplementsStreamWatermarkDeleteResponseUnion()                                {}
-func (UnionString) ImplementsStreamWebhookUpdateResponseUnion()                                  {}
-func (UnionString) ImplementsStreamWebhookDeleteResponseUnion()                                  {}
-func (UnionString) ImplementsStreamWebhookGetResponseUnion()                                     {}
-func (UnionString) ImplementsStreamDownloadNewResponseUnion()                                    {}
-func (UnionString) ImplementsStreamDownloadDeleteResponseUnion()                                 {}
-func (UnionString) ImplementsStreamDownloadGetResponseUnion()                                    {}
 func (UnionString) ImplementsD1DatabaseRawResponseResultsRowsUnion()                             {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                      {}
 func (UnionString) ImplementsZeroTrustDeviceGetResponseUnion()                                   {}
