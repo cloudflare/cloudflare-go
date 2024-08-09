@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -18,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // GatewayListService contains methods and other services that help with
@@ -108,7 +106,7 @@ func (r *GatewayListService) ListAutoPaging(ctx context.Context, params GatewayL
 }
 
 // Deletes a Zero Trust list.
-func (r *GatewayListService) Delete(ctx context.Context, listID string, body GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponseUnion, err error) {
+func (r *GatewayListService) Delete(ctx context.Context, listID string, body GatewayListDeleteParams, opts ...option.RequestOption) (res *GatewayListDeleteResponse, err error) {
 	var env GatewayListDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -320,22 +318,7 @@ func (r GatewayListNewResponseType) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [zero_trust.GatewayListDeleteResponseUnknown] or
-// [shared.UnionString].
-type GatewayListDeleteResponseUnion interface {
-	ImplementsZeroTrustGatewayListDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayListDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type GatewayListDeleteResponse = interface{}
 
 type GatewayListNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -512,7 +495,7 @@ type GatewayListDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayListDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  GatewayListDeleteResponseUnion           `json:"result"`
+	Result  GatewayListDeleteResponse                `json:"result"`
 	JSON    gatewayListDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

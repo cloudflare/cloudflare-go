@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // GatewayProxyEndpointService contains methods and other services that help with
@@ -72,7 +70,7 @@ func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayPro
 }
 
 // Deletes a configured Zero Trust Gateway proxy endpoint.
-func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, body GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponseUnion, err error) {
+func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointID string, body GatewayProxyEndpointDeleteParams, opts ...option.RequestOption) (res *GatewayProxyEndpointDeleteResponse, err error) {
 	var env GatewayProxyEndpointDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -171,22 +169,7 @@ func (r proxyEndpointJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [zero_trust.GatewayProxyEndpointDeleteResponseUnknown] or
-// [shared.UnionString].
-type GatewayProxyEndpointDeleteResponseUnion interface {
-	ImplementsZeroTrustGatewayProxyEndpointDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayProxyEndpointDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type GatewayProxyEndpointDeleteResponse = interface{}
 
 type GatewayProxyEndpointNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -299,7 +282,7 @@ type GatewayProxyEndpointDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayProxyEndpointDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  GatewayProxyEndpointDeleteResponseUnion           `json:"result"`
+	Result  GatewayProxyEndpointDeleteResponse                `json:"result"`
 	JSON    gatewayProxyEndpointDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -401,7 +384,7 @@ type GatewayProxyEndpointGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    GatewayProxyEndpointGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []ProxyEndpoint                                   `json:"result,nullable"`
+	Result     []ProxyEndpoint                                   `json:"result"`
 	ResultInfo GatewayProxyEndpointGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       gatewayProxyEndpointGetResponseEnvelopeJSON       `json:"-"`
 }
