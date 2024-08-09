@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // GatewayRuleService contains methods and other services that help with
@@ -104,7 +102,7 @@ func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRu
 }
 
 // Deletes a Zero Trust Gateway rule.
-func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponseUnion, err error) {
+func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponse, err error) {
 	var env GatewayRuleDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -363,7 +361,7 @@ func (r GatewayRuleAction) IsKnown() bool {
 type RuleSetting struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
-	AddHeaders interface{} `json:"add_headers"`
+	AddHeaders map[string]string `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass bool `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
@@ -725,7 +723,7 @@ func (r RuleSettingUntrustedCERTAction) IsKnown() bool {
 type RuleSettingParam struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
-	AddHeaders param.Field[interface{}] `json:"add_headers"`
+	AddHeaders param.Field[map[string]string] `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
@@ -1014,22 +1012,7 @@ func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by [zero_trust.GatewayRuleDeleteResponseUnknown] or
-// [shared.UnionString].
-type GatewayRuleDeleteResponseUnion interface {
-	ImplementsZeroTrustGatewayRuleDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayRuleDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type GatewayRuleDeleteResponse = interface{}
 
 type GatewayRuleNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1260,7 +1243,7 @@ type GatewayRuleDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  GatewayRuleDeleteResponseUnion           `json:"result"`
+	Result  GatewayRuleDeleteResponse                `json:"result"`
 	JSON    gatewayRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

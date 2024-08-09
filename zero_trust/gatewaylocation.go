@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -16,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // GatewayLocationService contains methods and other services that help with
@@ -104,7 +102,7 @@ func (r *GatewayLocationService) ListAutoPaging(ctx context.Context, query Gatew
 }
 
 // Deletes a configured Zero Trust Gateway location.
-func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, body GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponseUnion, err error) {
+func (r *GatewayLocationService) Delete(ctx context.Context, locationID string, body GatewayLocationDeleteParams, opts ...option.RequestOption) (res *GatewayLocationDeleteResponse, err error) {
 	var env GatewayLocationDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -488,22 +486,7 @@ func (r locationNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [zero_trust.GatewayLocationDeleteResponseUnknown] or
-// [shared.UnionString].
-type GatewayLocationDeleteResponseUnion interface {
-	ImplementsZeroTrustGatewayLocationDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayLocationDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type GatewayLocationDeleteResponse = interface{}
 
 type GatewayLocationNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -678,7 +661,7 @@ type GatewayLocationDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayLocationDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  GatewayLocationDeleteResponseUnion           `json:"result"`
+	Result  GatewayLocationDeleteResponse                `json:"result"`
 	JSON    gatewayLocationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

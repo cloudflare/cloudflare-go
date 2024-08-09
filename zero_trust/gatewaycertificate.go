@@ -171,10 +171,18 @@ type GatewayCertificateNewResponse struct {
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateNewResponseBindingStatus `json:"binding_status"`
-	CreatedAt     time.Time                                  `json:"created_at" format:"date-time"`
-	ExpiresOn     time.Time                                  `json:"expires_on" format:"date-time"`
+	// The CA certificate
+	Certificate string    `json:"certificate"`
+	CreatedAt   time.Time `json:"created_at" format:"date-time"`
+	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
+	// The SHA256 fingerprint of the certificate.
+	Fingerprint string `json:"fingerprint"`
 	// Use this certificate for Gateway TLS interception
 	InUse bool `json:"in_use"`
+	// The organization that issued the certificate.
+	IssuerOrg string `json:"issuer_org"`
+	// The entire issuer field of the certificate.
+	IssuerRaw string `json:"issuer_raw"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateNewResponseType `json:"type"`
 	UpdatedAt  time.Time                         `json:"updated_at" format:"date-time"`
@@ -187,9 +195,13 @@ type GatewayCertificateNewResponse struct {
 type gatewayCertificateNewResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
+	Certificate   apijson.Field
 	CreatedAt     apijson.Field
 	ExpiresOn     apijson.Field
+	Fingerprint   apijson.Field
 	InUse         apijson.Field
+	IssuerOrg     apijson.Field
+	IssuerRaw     apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -246,10 +258,18 @@ type GatewayCertificateListResponse struct {
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateListResponseBindingStatus `json:"binding_status"`
-	CreatedAt     time.Time                                   `json:"created_at" format:"date-time"`
-	ExpiresOn     time.Time                                   `json:"expires_on" format:"date-time"`
+	// The CA certificate
+	Certificate string    `json:"certificate"`
+	CreatedAt   time.Time `json:"created_at" format:"date-time"`
+	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
+	// The SHA256 fingerprint of the certificate.
+	Fingerprint string `json:"fingerprint"`
 	// Use this certificate for Gateway TLS interception
 	InUse bool `json:"in_use"`
+	// The organization that issued the certificate.
+	IssuerOrg string `json:"issuer_org"`
+	// The entire issuer field of the certificate.
+	IssuerRaw string `json:"issuer_raw"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateListResponseType `json:"type"`
 	UpdatedAt  time.Time                          `json:"updated_at" format:"date-time"`
@@ -262,9 +282,13 @@ type GatewayCertificateListResponse struct {
 type gatewayCertificateListResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
+	Certificate   apijson.Field
 	CreatedAt     apijson.Field
 	ExpiresOn     apijson.Field
+	Fingerprint   apijson.Field
 	InUse         apijson.Field
+	IssuerOrg     apijson.Field
+	IssuerRaw     apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -321,10 +345,18 @@ type GatewayCertificateDeleteResponse struct {
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateDeleteResponseBindingStatus `json:"binding_status"`
-	CreatedAt     time.Time                                     `json:"created_at" format:"date-time"`
-	ExpiresOn     time.Time                                     `json:"expires_on" format:"date-time"`
+	// The CA certificate
+	Certificate string    `json:"certificate"`
+	CreatedAt   time.Time `json:"created_at" format:"date-time"`
+	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
+	// The SHA256 fingerprint of the certificate.
+	Fingerprint string `json:"fingerprint"`
 	// Use this certificate for Gateway TLS interception
 	InUse bool `json:"in_use"`
+	// The organization that issued the certificate.
+	IssuerOrg string `json:"issuer_org"`
+	// The entire issuer field of the certificate.
+	IssuerRaw string `json:"issuer_raw"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateDeleteResponseType `json:"type"`
 	UpdatedAt  time.Time                            `json:"updated_at" format:"date-time"`
@@ -337,9 +369,13 @@ type GatewayCertificateDeleteResponse struct {
 type gatewayCertificateDeleteResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
+	Certificate   apijson.Field
 	CreatedAt     apijson.Field
 	ExpiresOn     apijson.Field
+	Fingerprint   apijson.Field
 	InUse         apijson.Field
+	IssuerOrg     apijson.Field
+	IssuerRaw     apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -396,10 +432,18 @@ type GatewayCertificateActivateResponse struct {
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateActivateResponseBindingStatus `json:"binding_status"`
-	CreatedAt     time.Time                                       `json:"created_at" format:"date-time"`
-	ExpiresOn     time.Time                                       `json:"expires_on" format:"date-time"`
+	// The CA certificate
+	Certificate string    `json:"certificate"`
+	CreatedAt   time.Time `json:"created_at" format:"date-time"`
+	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
+	// The SHA256 fingerprint of the certificate.
+	Fingerprint string `json:"fingerprint"`
 	// Use this certificate for Gateway TLS interception
 	InUse bool `json:"in_use"`
+	// The organization that issued the certificate.
+	IssuerOrg string `json:"issuer_org"`
+	// The entire issuer field of the certificate.
+	IssuerRaw string `json:"issuer_raw"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateActivateResponseType `json:"type"`
 	UpdatedAt  time.Time                              `json:"updated_at" format:"date-time"`
@@ -412,9 +456,13 @@ type GatewayCertificateActivateResponse struct {
 type gatewayCertificateActivateResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
+	Certificate   apijson.Field
 	CreatedAt     apijson.Field
 	ExpiresOn     apijson.Field
+	Fingerprint   apijson.Field
 	InUse         apijson.Field
+	IssuerOrg     apijson.Field
+	IssuerRaw     apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -471,10 +519,18 @@ type GatewayCertificateDeactivateResponse struct {
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateDeactivateResponseBindingStatus `json:"binding_status"`
-	CreatedAt     time.Time                                         `json:"created_at" format:"date-time"`
-	ExpiresOn     time.Time                                         `json:"expires_on" format:"date-time"`
+	// The CA certificate
+	Certificate string    `json:"certificate"`
+	CreatedAt   time.Time `json:"created_at" format:"date-time"`
+	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
+	// The SHA256 fingerprint of the certificate.
+	Fingerprint string `json:"fingerprint"`
 	// Use this certificate for Gateway TLS interception
 	InUse bool `json:"in_use"`
+	// The organization that issued the certificate.
+	IssuerOrg string `json:"issuer_org"`
+	// The entire issuer field of the certificate.
+	IssuerRaw string `json:"issuer_raw"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateDeactivateResponseType `json:"type"`
 	UpdatedAt  time.Time                                `json:"updated_at" format:"date-time"`
@@ -487,9 +543,13 @@ type GatewayCertificateDeactivateResponse struct {
 type gatewayCertificateDeactivateResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
+	Certificate   apijson.Field
 	CreatedAt     apijson.Field
 	ExpiresOn     apijson.Field
+	Fingerprint   apijson.Field
 	InUse         apijson.Field
+	IssuerOrg     apijson.Field
+	IssuerRaw     apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
@@ -546,10 +606,18 @@ type GatewayCertificateGetResponse struct {
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
 	// the 'active' state may be used for Gateway TLS interception.
 	BindingStatus GatewayCertificateGetResponseBindingStatus `json:"binding_status"`
-	CreatedAt     time.Time                                  `json:"created_at" format:"date-time"`
-	ExpiresOn     time.Time                                  `json:"expires_on" format:"date-time"`
+	// The CA certificate
+	Certificate string    `json:"certificate"`
+	CreatedAt   time.Time `json:"created_at" format:"date-time"`
+	ExpiresOn   time.Time `json:"expires_on" format:"date-time"`
+	// The SHA256 fingerprint of the certificate.
+	Fingerprint string `json:"fingerprint"`
 	// Use this certificate for Gateway TLS interception
 	InUse bool `json:"in_use"`
+	// The organization that issued the certificate.
+	IssuerOrg string `json:"issuer_org"`
+	// The entire issuer field of the certificate.
+	IssuerRaw string `json:"issuer_raw"`
 	// The type of certificate, either BYO-PKI (custom) or Gateway-managed.
 	Type       GatewayCertificateGetResponseType `json:"type"`
 	UpdatedAt  time.Time                         `json:"updated_at" format:"date-time"`
@@ -562,9 +630,13 @@ type GatewayCertificateGetResponse struct {
 type gatewayCertificateGetResponseJSON struct {
 	ID            apijson.Field
 	BindingStatus apijson.Field
+	Certificate   apijson.Field
 	CreatedAt     apijson.Field
 	ExpiresOn     apijson.Field
+	Fingerprint   apijson.Field
 	InUse         apijson.Field
+	IssuerOrg     apijson.Field
+	IssuerRaw     apijson.Field
 	Type          apijson.Field
 	UpdatedAt     apijson.Field
 	UploadedOn    apijson.Field
