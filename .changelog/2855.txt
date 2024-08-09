@@ -1,0 +1,3 @@
+```release-notes:enhancement
+ssl: add support for ssl/tls automatic mode setting
+```

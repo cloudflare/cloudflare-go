@@ -174,8 +174,22 @@ type ZoneSSLSetting struct {
 	CertificateStatus string `json:"certificate_status"`
 }
 
+// ZoneAutomaticSSLModeSetting contains automatic ssl mode
+type ZoneAutomaticSSLModeSetting struct {
+	ID                string `json:"id"`
+	Editable          bool   `json:"editable"`
+	ModifiedOn        string `json:"modified_on"`
+	Value             string `json:"value"`
+	NextScheduledScan string `json:"next_scheduled_scan"`
+}
+
+// ZoneAutomaticSSLModeSettingResponse represents the response from the Zone automatic SSL mode setting
+type ZoneAutomaticSSLModeSettingResponse struct {
+	Response
+	Result ZoneAutomaticSSLModeSetting `json:"result"`
+}
+
 // ZoneSSLSettingResponse represents the response from the Zone SSL Setting
-// endpoint.
 type ZoneSSLSettingResponse struct {
 	Response
 	Result ZoneSSLSetting `json:"result"`
@@ -848,12 +862,46 @@ func (api *API) ZoneSSLSettings(ctx context.Context, zoneID string) (ZoneSSLSett
 	return r.Result, nil
 }
 
+// ZoneSSLSettings returns information about SSL setting to the specified zone.
+//
+// API reference: https://api.cloudflare.com/#zone-settings-get-automatic-ssl-mode-setting
+func (api *API) ZoneAutomaticSSLModeSetting(ctx context.Context, zoneID string) (ZoneAutomaticSSLModeSetting, error) {
+	uri := fmt.Sprintf("/zones/%s/settings/ssl_automatic_mode", zoneID)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return ZoneAutomaticSSLModeSetting{}, err
+	}
+	var r ZoneAutomaticSSLModeSettingResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneAutomaticSSLModeSetting{}, fmt.Errorf("%s: %s %w", errUnmarshalError, string(res), err)
+	}
+	return r.Result, nil
+}
+
 // UpdateZoneSSLSettings update information about SSL setting to the specified zone.
 //
 // API reference: https://api.cloudflare.com/#zone-settings-change-ssl-setting
 func (api *API) UpdateZoneSSLSettings(ctx context.Context, zoneID string, sslValue string) (ZoneSSLSetting, error) {
 	uri := fmt.Sprintf("/zones/%s/settings/ssl", zoneID)
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ZoneSSLSetting{Value: sslValue})
+	if err != nil {
+		return ZoneSSLSetting{}, err
+	}
+	var r ZoneSSLSettingResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneSSLSetting{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+	return r.Result, nil
+}
+
+// UpdateZoneAutomaticSSLSettingMode update information about Automatic SSL mode setting to the specified zone.
+//
+// API reference: https://api.cloudflare.com/[#-add-url-slug-here]
+func (api *API) UpdateZoneAutomaticSSLSettingMode(ctx context.Context, zoneID, mode string) (ZoneSSLSetting, error) {
+	uri := fmt.Sprintf("/zones/%s/settings/ssl_automatic_mode", zoneID)
+	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, ZoneSSLSetting{Value: mode})
 	if err != nil {
 		return ZoneSSLSetting{}, err
 	}

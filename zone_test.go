@@ -1511,6 +1511,59 @@ func TestUpdateZoneSSLSettings(t *testing.T) {
 	}
 }
 
+func TestUpdateZoneAutomaticSSLModeSetting(t *testing.T) {
+	setup()
+	defer teardown()
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPatch, r.Method, "Expected method 'PATCH', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		// JSON data from: https://api.cloudflare.com/#zone-settings-properties
+		_, _ = fmt.Fprintf(w, `{
+			"result": {
+				"id": "ssl_automatic_mode",
+				"value": "auto",
+				"editable": true,
+				"modified_on": "2014-01-01T05:20:00.12345Z"
+			}
+		}`)
+	}
+	mux.HandleFunc("/zones/foo/settings/ssl_automatic_mode", handler)
+	s, err := client.UpdateZoneAutomaticSSLSettingMode(context.Background(), "foo", "auto")
+	if assert.NoError(t, err) {
+		assert.Equal(t, s.ID, "ssl_automatic_mode")
+		assert.Equal(t, s.Value, "auto")
+		assert.Equal(t, s.Editable, true)
+		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
+	}
+}
+
+func TestGetZoneAutomaticSSLModeSetting(t *testing.T) {
+	setup()
+	defer teardown()
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		_, _ = fmt.Fprintf(w, `{
+			"result": {
+				"id": "ssl_automatic_mode",
+				"value": "custom",
+				"editable": true,
+				"modified_on": "2014-01-01T05:20:00.12345Z",
+				"next_scheduled_scan": "2024-01-01T05:20:00.12345Z"
+			}
+		}`)
+	}
+	mux.HandleFunc("/zones/foo/settings/ssl_automatic_mode", handler)
+	s, err := client.ZoneAutomaticSSLModeSetting(context.Background(), "foo")
+	if assert.NoError(t, err) {
+		assert.Equal(t, s.ID, "ssl_automatic_mode")
+		assert.Equal(t, s.Value, "custom")
+		assert.Equal(t, s.Editable, true)
+		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
+		assert.Equal(t, s.NextScheduledScan, "2024-01-01T05:20:00.12345Z")
+	}
+}
+
 func TestGetZoneSetting(t *testing.T) {
 	setup()
 	defer teardown()
