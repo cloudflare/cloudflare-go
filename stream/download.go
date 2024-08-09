@@ -7,12 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/tidwall/gjson"
 )
 
 // DownloadService contains methods and other services that help with interacting
@@ -35,7 +37,7 @@ func NewDownloadService(opts ...option.RequestOption) (r *DownloadService) {
 }
 
 // Creates a download for a video when a video is ready to view.
-func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponse, err error) {
+func (r *DownloadService) New(ctx context.Context, identifier string, params DownloadNewParams, opts ...option.RequestOption) (res *DownloadNewResponseUnion, err error) {
 	var env DownloadNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -56,7 +58,7 @@ func (r *DownloadService) New(ctx context.Context, identifier string, params Dow
 }
 
 // Delete the downloads for a video.
-func (r *DownloadService) Delete(ctx context.Context, identifier string, body DownloadDeleteParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *DownloadService) Delete(ctx context.Context, identifier string, body DownloadDeleteParams, opts ...option.RequestOption) (res *DownloadDeleteResponseUnion, err error) {
 	var env DownloadDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -77,7 +79,7 @@ func (r *DownloadService) Delete(ctx context.Context, identifier string, body Do
 }
 
 // Lists the downloads created for a video.
-func (r *DownloadService) Get(ctx context.Context, identifier string, query DownloadGetParams, opts ...option.RequestOption) (res *DownloadGetResponse, err error) {
+func (r *DownloadService) Get(ctx context.Context, identifier string, query DownloadGetParams, opts ...option.RequestOption) (res *DownloadGetResponseUnion, err error) {
 	var env DownloadGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -97,9 +99,54 @@ func (r *DownloadService) Get(ctx context.Context, identifier string, query Down
 	return
 }
 
-type DownloadNewResponse = interface{}
+// Union satisfied by [stream.DownloadNewResponseUnknown] or [shared.UnionString].
+type DownloadNewResponseUnion interface {
+	ImplementsStreamDownloadNewResponseUnion()
+}
 
-type DownloadGetResponse = interface{}
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DownloadNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [stream.DownloadDeleteResponseUnknown] or
+// [shared.UnionString].
+type DownloadDeleteResponseUnion interface {
+	ImplementsStreamDownloadDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DownloadDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [stream.DownloadGetResponseUnknown] or [shared.UnionString].
+type DownloadGetResponseUnion interface {
+	ImplementsStreamDownloadGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DownloadGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
 type DownloadNewParams struct {
 	// Identifier
@@ -116,7 +163,7 @@ type DownloadNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DownloadNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  DownloadNewResponse                `json:"result"`
+	Result  DownloadNewResponseUnion           `json:"result"`
 	JSON    downloadNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -164,7 +211,7 @@ type DownloadDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DownloadDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  string                                `json:"result"`
+	Result  DownloadDeleteResponseUnion           `json:"result"`
 	JSON    downloadDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -212,7 +259,7 @@ type DownloadGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DownloadGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  DownloadGetResponse                `json:"result"`
+	Result  DownloadGetResponseUnion           `json:"result"`
 	JSON    downloadGetResponseEnvelopeJSON    `json:"-"`
 }
 
