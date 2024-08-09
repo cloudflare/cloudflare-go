@@ -325,7 +325,7 @@ type ConsumerDeleteResponseArray []interface{}
 func (r ConsumerDeleteResponseArray) ImplementsQueuesConsumerDeleteResponseUnion() {}
 
 type ConsumerNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Body      interface{}         `json:"body,required"`
 }
@@ -338,7 +338,7 @@ type ConsumerNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   ConsumerNewResponse   `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    ConsumerNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       consumerNewResponseEnvelopeJSON       `json:"-"`
@@ -364,7 +364,7 @@ func (r consumerNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ConsumerNewResponseEnvelopeSuccess bool
 
 const (
@@ -411,7 +411,7 @@ func (r consumerNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type ConsumerUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Body      interface{}         `json:"body,required"`
 }
@@ -424,7 +424,7 @@ type ConsumerUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
 	Messages []shared.ResponseInfo  `json:"messages,required"`
 	Result   ConsumerUpdateResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    ConsumerUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       consumerUpdateResponseEnvelopeJSON       `json:"-"`
@@ -450,7 +450,7 @@ func (r consumerUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ConsumerUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -497,7 +497,7 @@ func (r consumerUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type ConsumerDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -505,7 +505,7 @@ type ConsumerDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo       `json:"errors,required"`
 	Messages []shared.ResponseInfo       `json:"messages,required"`
 	Result   ConsumerDeleteResponseUnion `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    ConsumerDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       consumerDeleteResponseEnvelopeJSON       `json:"-"`
@@ -531,7 +531,7 @@ func (r consumerDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ConsumerDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -578,7 +578,7 @@ func (r consumerDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type ConsumerGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -586,7 +586,7 @@ type ConsumerGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   []Consumer            `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    ConsumerGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       consumerGetResponseEnvelopeJSON       `json:"-"`
@@ -612,7 +612,7 @@ func (r consumerGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ConsumerGetResponseEnvelopeSuccess bool
 
 const (
