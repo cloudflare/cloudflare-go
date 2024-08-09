@@ -154,8 +154,7 @@ type PhaseUpdateResponseRule struct {
 	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
 	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
 	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [SetCacheSettingsRuleActionParameters],
-	// [PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParameters].
+	// [SetCacheSettingsRuleActionParameters], [LogCustomFieldRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters,required"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories,required"`
@@ -219,10 +218,8 @@ func (r *PhaseUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
 // [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
 // [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
 // [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsLogCustomFieldRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsDDoSDynamicRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule].
+// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
+// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
 func (r PhaseUpdateResponseRule) AsUnion() PhaseUpdateResponseRulesUnion {
 	return r.union
 }
@@ -233,9 +230,8 @@ func (r PhaseUpdateResponseRule) AsUnion() PhaseUpdateResponseRulesUnion {
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsLogCustomFieldRule],
-// [rulesets.PhaseUpdateResponseRulesRulesetsDDoSDynamicRule] or
-// [rulesets.PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule].
+// [rulesets.LogCustomFieldRule], [rulesets.DDoSDynamicRule] or
+// [rulesets.ForceConnectionCloseRule].
 type PhaseUpdateResponseRulesUnion interface {
 	implementsRulesetsPhaseUpdateResponseRule()
 }
@@ -321,333 +317,20 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PhaseUpdateResponseRulesRulesetsLogCustomFieldRule{}),
+			Type:               reflect.TypeOf(LogCustomFieldRule{}),
 			DiscriminatorValue: "log_custom_field",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PhaseUpdateResponseRulesRulesetsDDoSDynamicRule{}),
+			Type:               reflect.TypeOf(DDoSDynamicRule{}),
 			DiscriminatorValue: "ddos_dynamic",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule{}),
+			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
 			DiscriminatorValue: "force_connection_close",
 		},
 	)
-}
-
-type PhaseUpdateResponseRulesRulesetsLogCustomFieldRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                 `json:"ref"`
-	JSON phaseUpdateResponseRulesRulesetsLogCustomFieldRuleJSON `json:"-"`
-}
-
-// phaseUpdateResponseRulesRulesetsLogCustomFieldRuleJSON contains the JSON
-// metadata for the struct [PhaseUpdateResponseRulesRulesetsLogCustomFieldRule]
-type phaseUpdateResponseRulesRulesetsLogCustomFieldRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PhaseUpdateResponseRulesRulesetsLogCustomFieldRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseUpdateResponseRulesRulesetsLogCustomFieldRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PhaseUpdateResponseRulesRulesetsLogCustomFieldRule) implementsRulesetsPhaseUpdateResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleAction string
-
-const (
-	PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionLogCustomField PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleAction = "log_custom_field"
-)
-
-func (r PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionLogCustomField:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParameters struct {
-	// The cookie fields to log.
-	CookieFields []PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField `json:"cookie_fields"`
-	// The request fields to log.
-	RequestFields []PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField `json:"request_fields"`
-	// The response fields to log.
-	ResponseFields []PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField `json:"response_fields"`
-	JSON           phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON            `json:"-"`
-}
-
-// phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON contains
-// the JSON metadata for the struct
-// [PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParameters]
-type phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON struct {
-	CookieFields   apijson.Field
-	RequestFields  apijson.Field
-	ResponseFields apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// The cookie field to log.
-type PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField struct {
-	// The name of the field.
-	Name string                                                                            `json:"name,required"`
-	JSON phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON `json:"-"`
-}
-
-// phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON
-// contains the JSON metadata for the struct
-// [PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField]
-type phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON) RawJSON() string {
-	return r.raw
-}
-
-// The request field to log.
-type PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField struct {
-	// The name of the field.
-	Name string                                                                             `json:"name,required"`
-	JSON phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON `json:"-"`
-}
-
-// phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON
-// contains the JSON metadata for the struct
-// [PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField]
-type phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON) RawJSON() string {
-	return r.raw
-}
-
-// The response field to log.
-type PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField struct {
-	// The name of the field.
-	Name string                                                                              `json:"name,required"`
-	JSON phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON `json:"-"`
-}
-
-// phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON
-// contains the JSON metadata for the struct
-// [PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField]
-type phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseUpdateResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON) RawJSON() string {
-	return r.raw
-}
-
-type PhaseUpdateResponseRulesRulesetsDDoSDynamicRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                              `json:"ref"`
-	JSON phaseUpdateResponseRulesRulesetsDDoSDynamicRuleJSON `json:"-"`
-}
-
-// phaseUpdateResponseRulesRulesetsDDoSDynamicRuleJSON contains the JSON metadata
-// for the struct [PhaseUpdateResponseRulesRulesetsDDoSDynamicRule]
-type phaseUpdateResponseRulesRulesetsDDoSDynamicRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PhaseUpdateResponseRulesRulesetsDDoSDynamicRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseUpdateResponseRulesRulesetsDDoSDynamicRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PhaseUpdateResponseRulesRulesetsDDoSDynamicRule) implementsRulesetsPhaseUpdateResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                       `json:"ref"`
-	JSON phaseUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON `json:"-"`
-}
-
-// phaseUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON contains the JSON
-// metadata for the struct
-// [PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule]
-type phaseUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseUpdateResponseRulesRulesetsForceConnectionCloseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PhaseUpdateResponseRulesRulesetsForceConnectionCloseRule) implementsRulesetsPhaseUpdateResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.
@@ -735,8 +418,7 @@ type PhaseGetResponseRule struct {
 	// [RewriteRuleActionParameters], [RouteRuleActionParameters],
 	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
 	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
-	// [SetCacheSettingsRuleActionParameters],
-	// [PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParameters].
+	// [SetCacheSettingsRuleActionParameters], [LogCustomFieldRuleActionParameters].
 	ActionParameters interface{} `json:"action_parameters,required"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories,required"`
@@ -800,10 +482,8 @@ func (r *PhaseGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 // [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
 // [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
 // [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
-// [rulesets.SetCacheSettingsRule],
-// [rulesets.PhaseGetResponseRulesRulesetsLogCustomFieldRule],
-// [rulesets.PhaseGetResponseRulesRulesetsDDoSDynamicRule],
-// [rulesets.PhaseGetResponseRulesRulesetsForceConnectionCloseRule].
+// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
+// [rulesets.DDoSDynamicRule], [rulesets.ForceConnectionCloseRule].
 func (r PhaseGetResponseRule) AsUnion() PhaseGetResponseRulesUnion {
 	return r.union
 }
@@ -814,9 +494,8 @@ func (r PhaseGetResponseRule) AsUnion() PhaseGetResponseRulesUnion {
 // [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
 // [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
 // [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.PhaseGetResponseRulesRulesetsLogCustomFieldRule],
-// [rulesets.PhaseGetResponseRulesRulesetsDDoSDynamicRule] or
-// [rulesets.PhaseGetResponseRulesRulesetsForceConnectionCloseRule].
+// [rulesets.LogCustomFieldRule], [rulesets.DDoSDynamicRule] or
+// [rulesets.ForceConnectionCloseRule].
 type PhaseGetResponseRulesUnion interface {
 	implementsRulesetsPhaseGetResponseRule()
 }
@@ -902,330 +581,20 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PhaseGetResponseRulesRulesetsLogCustomFieldRule{}),
+			Type:               reflect.TypeOf(LogCustomFieldRule{}),
 			DiscriminatorValue: "log_custom_field",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PhaseGetResponseRulesRulesetsDDoSDynamicRule{}),
+			Type:               reflect.TypeOf(DDoSDynamicRule{}),
 			DiscriminatorValue: "ddos_dynamic",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PhaseGetResponseRulesRulesetsForceConnectionCloseRule{}),
+			Type:               reflect.TypeOf(ForceConnectionCloseRule{}),
 			DiscriminatorValue: "force_connection_close",
 		},
 	)
-}
-
-type PhaseGetResponseRulesRulesetsLogCustomFieldRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action PhaseGetResponseRulesRulesetsLogCustomFieldRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                              `json:"ref"`
-	JSON phaseGetResponseRulesRulesetsLogCustomFieldRuleJSON `json:"-"`
-}
-
-// phaseGetResponseRulesRulesetsLogCustomFieldRuleJSON contains the JSON metadata
-// for the struct [PhaseGetResponseRulesRulesetsLogCustomFieldRule]
-type phaseGetResponseRulesRulesetsLogCustomFieldRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PhaseGetResponseRulesRulesetsLogCustomFieldRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseGetResponseRulesRulesetsLogCustomFieldRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PhaseGetResponseRulesRulesetsLogCustomFieldRule) implementsRulesetsPhaseGetResponseRule() {}
-
-// The action to perform when the rule matches.
-type PhaseGetResponseRulesRulesetsLogCustomFieldRuleAction string
-
-const (
-	PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionLogCustomField PhaseGetResponseRulesRulesetsLogCustomFieldRuleAction = "log_custom_field"
-)
-
-func (r PhaseGetResponseRulesRulesetsLogCustomFieldRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionLogCustomField:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParameters struct {
-	// The cookie fields to log.
-	CookieFields []PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField `json:"cookie_fields"`
-	// The request fields to log.
-	RequestFields []PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField `json:"request_fields"`
-	// The response fields to log.
-	ResponseFields []PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField `json:"response_fields"`
-	JSON           phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON            `json:"-"`
-}
-
-// phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON contains the
-// JSON metadata for the struct
-// [PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParameters]
-type phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON struct {
-	CookieFields   apijson.Field
-	RequestFields  apijson.Field
-	ResponseFields apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersJSON) RawJSON() string {
-	return r.raw
-}
-
-// The cookie field to log.
-type PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField struct {
-	// The name of the field.
-	Name string                                                                         `json:"name,required"`
-	JSON phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON `json:"-"`
-}
-
-// phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON
-// contains the JSON metadata for the struct
-// [PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField]
-type phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieField) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersCookieFieldJSON) RawJSON() string {
-	return r.raw
-}
-
-// The request field to log.
-type PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField struct {
-	// The name of the field.
-	Name string                                                                          `json:"name,required"`
-	JSON phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON `json:"-"`
-}
-
-// phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON
-// contains the JSON metadata for the struct
-// [PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField]
-type phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestField) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersRequestFieldJSON) RawJSON() string {
-	return r.raw
-}
-
-// The response field to log.
-type PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField struct {
-	// The name of the field.
-	Name string                                                                           `json:"name,required"`
-	JSON phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON `json:"-"`
-}
-
-// phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON
-// contains the JSON metadata for the struct
-// [PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField]
-type phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON struct {
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PhaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseField) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseGetResponseRulesRulesetsLogCustomFieldRuleActionParametersResponseFieldJSON) RawJSON() string {
-	return r.raw
-}
-
-type PhaseGetResponseRulesRulesetsDDoSDynamicRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action PhaseGetResponseRulesRulesetsDDoSDynamicRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                           `json:"ref"`
-	JSON phaseGetResponseRulesRulesetsDDoSDynamicRuleJSON `json:"-"`
-}
-
-// phaseGetResponseRulesRulesetsDDoSDynamicRuleJSON contains the JSON metadata for
-// the struct [PhaseGetResponseRulesRulesetsDDoSDynamicRule]
-type phaseGetResponseRulesRulesetsDDoSDynamicRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PhaseGetResponseRulesRulesetsDDoSDynamicRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseGetResponseRulesRulesetsDDoSDynamicRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PhaseGetResponseRulesRulesetsDDoSDynamicRule) implementsRulesetsPhaseGetResponseRule() {}
-
-// The action to perform when the rule matches.
-type PhaseGetResponseRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	PhaseGetResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic PhaseGetResponseRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r PhaseGetResponseRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseGetResponseRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type PhaseGetResponseRulesRulesetsForceConnectionCloseRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action PhaseGetResponseRulesRulesetsForceConnectionCloseRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                                    `json:"ref"`
-	JSON phaseGetResponseRulesRulesetsForceConnectionCloseRuleJSON `json:"-"`
-}
-
-// phaseGetResponseRulesRulesetsForceConnectionCloseRuleJSON contains the JSON
-// metadata for the struct [PhaseGetResponseRulesRulesetsForceConnectionCloseRule]
-type phaseGetResponseRulesRulesetsForceConnectionCloseRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *PhaseGetResponseRulesRulesetsForceConnectionCloseRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r phaseGetResponseRulesRulesetsForceConnectionCloseRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PhaseGetResponseRulesRulesetsForceConnectionCloseRule) implementsRulesetsPhaseGetResponseRule() {
-}
-
-// The action to perform when the rule matches.
-type PhaseGetResponseRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	PhaseGetResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose PhaseGetResponseRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r PhaseGetResponseRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseGetResponseRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.
@@ -1309,180 +678,11 @@ func (r PhaseUpdateParamsRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 // [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
 // [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
 // [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam],
-// [rulesets.SetCacheSettingsRuleParam],
-// [rulesets.PhaseUpdateParamsRulesRulesetsLogCustomFieldRule],
-// [rulesets.PhaseUpdateParamsRulesRulesetsDDoSDynamicRule],
-// [rulesets.PhaseUpdateParamsRulesRulesetsForceConnectionCloseRule],
+// [rulesets.SetCacheSettingsRuleParam], [rulesets.LogCustomFieldRuleParam],
+// [rulesets.DDoSDynamicRuleParam], [rulesets.ForceConnectionCloseRuleParam],
 // [PhaseUpdateParamsRule].
 type PhaseUpdateParamsRuleUnion interface {
 	implementsRulesetsPhaseUpdateParamsRuleUnion()
-}
-
-type PhaseUpdateParamsRulesRulesetsLogCustomFieldRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParameters] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r PhaseUpdateParamsRulesRulesetsLogCustomFieldRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PhaseUpdateParamsRulesRulesetsLogCustomFieldRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleAction string
-
-const (
-	PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionLogCustomField PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleAction = "log_custom_field"
-)
-
-func (r PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionLogCustomField:
-		return true
-	}
-	return false
-}
-
-// The parameters configuring the rule's action.
-type PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParameters struct {
-	// The cookie fields to log.
-	CookieFields param.Field[[]PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersCookieField] `json:"cookie_fields"`
-	// The request fields to log.
-	RequestFields param.Field[[]PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersRequestField] `json:"request_fields"`
-	// The response fields to log.
-	ResponseFields param.Field[[]PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersResponseField] `json:"response_fields"`
-}
-
-func (r PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParameters) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The cookie field to log.
-type PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersCookieField struct {
-	// The name of the field.
-	Name param.Field[string] `json:"name,required"`
-}
-
-func (r PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersCookieField) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The request field to log.
-type PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersRequestField struct {
-	// The name of the field.
-	Name param.Field[string] `json:"name,required"`
-}
-
-func (r PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersRequestField) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The response field to log.
-type PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersResponseField struct {
-	// The name of the field.
-	Name param.Field[string] `json:"name,required"`
-}
-
-func (r PhaseUpdateParamsRulesRulesetsLogCustomFieldRuleActionParametersResponseField) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type PhaseUpdateParamsRulesRulesetsDDoSDynamicRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r PhaseUpdateParamsRulesRulesetsDDoSDynamicRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PhaseUpdateParamsRulesRulesetsDDoSDynamicRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleAction string
-
-const (
-	PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleActionDDoSDynamic PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleAction = "ddos_dynamic"
-)
-
-func (r PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateParamsRulesRulesetsDDoSDynamicRuleActionDDoSDynamic:
-		return true
-	}
-	return false
-}
-
-type PhaseUpdateParamsRulesRulesetsForceConnectionCloseRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r PhaseUpdateParamsRulesRulesetsForceConnectionCloseRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PhaseUpdateParamsRulesRulesetsForceConnectionCloseRule) implementsRulesetsPhaseUpdateParamsRuleUnion() {
-}
-
-// The action to perform when the rule matches.
-type PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleAction string
-
-const (
-	PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleAction = "force_connection_close"
-)
-
-func (r PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleAction) IsKnown() bool {
-	switch r {
-	case PhaseUpdateParamsRulesRulesetsForceConnectionCloseRuleActionForceConnectionClose:
-		return true
-	}
-	return false
 }
 
 // The action to perform when the rule matches.

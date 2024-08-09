@@ -33,6 +33,42 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 		ClientDefault:       cloudflare.F(false),
 		DNSDestinationIPsID: cloudflare.F("0e4a32c6-6fb8-4858-9296-98f51631e8e6"),
 		ECSSupport:          cloudflare.F(false),
+		Endpoints: cloudflare.F(zero_trust.EndpointParam{
+			DOH: cloudflare.F(zero_trust.DOHEndpointParam{
+				Enabled: cloudflare.F(true),
+				Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
+					Network: cloudflare.F("2001:85a3::/64"),
+				}, {
+					Network: cloudflare.F("2001:85a3::/64"),
+				}, {
+					Network: cloudflare.F("2001:85a3::/64"),
+				}}),
+				RequireToken: cloudflare.F(true),
+			}),
+			DOT: cloudflare.F(zero_trust.DOTEndpointParam{
+				Enabled: cloudflare.F(true),
+				Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
+					Network: cloudflare.F("2001:85a3::/64"),
+				}, {
+					Network: cloudflare.F("2001:85a3::/64"),
+				}, {
+					Network: cloudflare.F("2001:85a3::/64"),
+				}}),
+			}),
+			IPV4: cloudflare.F(zero_trust.IPV4EndpointParam{
+				Enabled: cloudflare.F(true),
+			}),
+			IPV6: cloudflare.F(zero_trust.IPV6EndpointParam{
+				Enabled: cloudflare.F(true),
+				Networks: cloudflare.F([]zero_trust.IPV6NetworkParam{{
+					Network: cloudflare.F("2001:85a3::/64"),
+				}, {
+					Network: cloudflare.F("2001:85a3::/64"),
+				}, {
+					Network: cloudflare.F("2001:85a3::/64"),
+				}}),
+			}),
+		}),
 		Networks: cloudflare.F([]zero_trust.GatewayLocationNewParamsNetwork{{
 			Network: cloudflare.F("192.0.2.1/32"),
 		}, {
@@ -72,6 +108,42 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 			ClientDefault:       cloudflare.F(false),
 			DNSDestinationIPsID: cloudflare.F("0e4a32c6-6fb8-4858-9296-98f51631e8e6"),
 			ECSSupport:          cloudflare.F(false),
+			Endpoints: cloudflare.F(zero_trust.EndpointParam{
+				DOH: cloudflare.F(zero_trust.DOHEndpointParam{
+					Enabled: cloudflare.F(true),
+					Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
+						Network: cloudflare.F("2001:85a3::/64"),
+					}, {
+						Network: cloudflare.F("2001:85a3::/64"),
+					}, {
+						Network: cloudflare.F("2001:85a3::/64"),
+					}}),
+					RequireToken: cloudflare.F(true),
+				}),
+				DOT: cloudflare.F(zero_trust.DOTEndpointParam{
+					Enabled: cloudflare.F(true),
+					Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
+						Network: cloudflare.F("2001:85a3::/64"),
+					}, {
+						Network: cloudflare.F("2001:85a3::/64"),
+					}, {
+						Network: cloudflare.F("2001:85a3::/64"),
+					}}),
+				}),
+				IPV4: cloudflare.F(zero_trust.IPV4EndpointParam{
+					Enabled: cloudflare.F(true),
+				}),
+				IPV6: cloudflare.F(zero_trust.IPV6EndpointParam{
+					Enabled: cloudflare.F(true),
+					Networks: cloudflare.F([]zero_trust.IPV6NetworkParam{{
+						Network: cloudflare.F("2001:85a3::/64"),
+					}, {
+						Network: cloudflare.F("2001:85a3::/64"),
+					}, {
+						Network: cloudflare.F("2001:85a3::/64"),
+					}}),
+				}),
+			}),
 			Networks: cloudflare.F([]zero_trust.GatewayLocationUpdateParamsNetwork{{
 				Network: cloudflare.F("192.0.2.1/32"),
 			}, {

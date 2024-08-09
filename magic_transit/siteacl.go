@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // SiteACLService contains methods and other services that help with interacting
@@ -239,7 +237,7 @@ type ACLConfiguration struct {
 	Ports []int64 `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets []SubnetUnion        `json:"subnets"`
+	Subnets []Subnet             `json:"subnets"`
 	JSON    aclConfigurationJSON `json:"-"`
 }
 
@@ -272,7 +270,7 @@ type ACLConfigurationParam struct {
 	Ports param.Field[[]int64] `json:"ports"`
 	// Array of subnet IPs within the LAN that will be included in the ACL. If no
 	// subnets are provided, communication on any subnets on this LAN are allowed.
-	Subnets param.Field[[]SubnetUnionParam] `json:"subnets"`
+	Subnets param.Field[[]SubnetParam] `json:"subnets"`
 }
 
 func (r ACLConfigurationParam) MarshalJSON() (data []byte, err error) {
@@ -297,34 +295,9 @@ func (r AllowedProtocol) IsKnown() bool {
 	return false
 }
 
-// A valid IPv4 address.
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type SubnetUnion interface {
-	ImplementsMagicTransitSubnetUnion()
-}
+type Subnet = string
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SubnetUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// A valid IPv4 address.
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type SubnetUnionParam interface {
-	ImplementsMagicTransitSubnetUnionParam()
-}
+type SubnetParam = string
 
 type SiteACLNewParams struct {
 	// Identifier

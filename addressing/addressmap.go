@@ -456,7 +456,6 @@ func (r AddressMapNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapNewParamsMembership struct {
-	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
 	// The identifier for the membership (eg. a zone or account tag).
 	Identifier param.Field[string] `json:"identifier"`
 	// The type of the membership.

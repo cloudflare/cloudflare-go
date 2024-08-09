@@ -229,11 +229,12 @@ func (r peerDeleteResponseJSON) RawJSON() string {
 
 type PeerNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	// The name of the peer.
+	Name param.Field[string] `json:"name,required"`
 }
 
 func (r PeerNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type PeerNewResponseEnvelope struct {

@@ -11,7 +11,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
@@ -74,18 +73,18 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				Precedence: cloudflare.F(int64(0)),
 			}}),
 			SCIMConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig{
-				Authentication: cloudflare.F[zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic{
+				Authentication: cloudflare.F[zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.SCIMConfigAuthenticationHTTPBasicParam{
 					Password: cloudflare.F("password"),
-					Scheme:   cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
+					Scheme:   cloudflare.F(zero_trust.SCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
 					User:     cloudflare.F("user"),
 				}),
 				DeactivateOnDelete: cloudflare.F(true),
 				Enabled:            cloudflare.F(true),
 				IdPUID:             cloudflare.F("idp_uid"),
-				Mappings: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMapping{{
+				Mappings: cloudflare.F([]zero_trust.SCIMConfigMappingParam{{
 					Enabled: cloudflare.F(true),
 					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+					Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 						Create: cloudflare.F(true),
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
@@ -95,7 +94,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				}, {
 					Enabled: cloudflare.F(true),
 					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+					Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 						Create: cloudflare.F(true),
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
@@ -105,7 +104,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				}, {
 					Enabled: cloudflare.F(true),
 					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+					Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 						Create: cloudflare.F(true),
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
@@ -143,7 +142,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.Update(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationUpdateParams{
 			Body: zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplication{
 				AllowAuthenticateViaWARP: cloudflare.F(true),
@@ -189,18 +188,18 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					Precedence: cloudflare.F(int64(0)),
 				}}),
 				SCIMConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig{
-					Authentication: cloudflare.F[zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic{
+					Authentication: cloudflare.F[zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.SCIMConfigAuthenticationHTTPBasicParam{
 						Password: cloudflare.F("password"),
-						Scheme:   cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
+						Scheme:   cloudflare.F(zero_trust.SCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
 						User:     cloudflare.F("user"),
 					}),
 					DeactivateOnDelete: cloudflare.F(true),
 					Enabled:            cloudflare.F(true),
 					IdPUID:             cloudflare.F("idp_uid"),
-					Mappings: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMapping{{
+					Mappings: cloudflare.F([]zero_trust.SCIMConfigMappingParam{{
 						Enabled: cloudflare.F(true),
 						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+						Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 							Create: cloudflare.F(true),
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
@@ -210,7 +209,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					}, {
 						Enabled: cloudflare.F(true),
 						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+						Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 							Create: cloudflare.F(true),
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
@@ -220,7 +219,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					}, {
 						Enabled: cloudflare.F(true),
 						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+						Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 							Create: cloudflare.F(true),
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
@@ -285,7 +284,7 @@ func TestAccessApplicationDeleteWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.Delete(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationDeleteParams{
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -315,7 +314,7 @@ func TestAccessApplicationGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.Get(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -345,7 +344,7 @@ func TestAccessApplicationRevokeTokensWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.RevokeTokens(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationRevokeTokensParams{
 			AccountID: cloudflare.F("account_id"),
 		},

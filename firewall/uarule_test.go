@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestUARuleNew(t *testing.T) {
+func TestUARuleNewWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -32,7 +32,11 @@ func TestUARuleNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.UARuleNewParams{
-			Body: map[string]interface{}{},
+			Configuration: cloudflare.F[firewall.UARuleNewParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
+				Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
+				Value:  cloudflare.F("198.51.100.4"),
+			}),
+			Mode: cloudflare.F(firewall.UARuleNewParamsModeChallenge),
 		},
 	)
 	if err != nil {
@@ -44,7 +48,7 @@ func TestUARuleNew(t *testing.T) {
 	}
 }
 
-func TestUARuleUpdate(t *testing.T) {
+func TestUARuleUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -63,7 +67,11 @@ func TestUARuleUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		firewall.UARuleUpdateParams{
-			Body: map[string]interface{}{},
+			Configuration: cloudflare.F[firewall.UARuleUpdateParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
+				Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
+				Value:  cloudflare.F("198.51.100.4"),
+			}),
+			Mode: cloudflare.F(firewall.UARuleUpdateParamsModeChallenge),
 		},
 	)
 	if err != nil {

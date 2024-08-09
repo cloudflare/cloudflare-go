@@ -1325,13 +1325,20 @@ func (r MemberNewParamsBodyStatus) IsKnown() bool {
 }
 
 type MemberNewResponseEnvelope struct {
-	Result MemberNewResponse             `json:"result"`
-	JSON   memberNewResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success MemberNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  MemberNewResponse                `json:"result"`
+	JSON    memberNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // memberNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [MemberNewResponseEnvelope]
 type memberNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1343,6 +1350,21 @@ func (r *MemberNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r memberNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type MemberNewResponseEnvelopeSuccess bool
+
+const (
+	MemberNewResponseEnvelopeSuccessTrue MemberNewResponseEnvelopeSuccess = true
+)
+
+func (r MemberNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MemberNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type MemberUpdateParams struct {
@@ -1452,13 +1474,20 @@ func (r MemberUpdateParamsBodyStatus) IsKnown() bool {
 }
 
 type MemberUpdateResponseEnvelope struct {
-	Result MemberUpdateResponse             `json:"result"`
-	JSON   memberUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success MemberUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  MemberUpdateResponse                `json:"result"`
+	JSON    memberUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // memberUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [MemberUpdateResponseEnvelope]
 type memberUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1470,6 +1499,21 @@ func (r *MemberUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r memberUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type MemberUpdateResponseEnvelopeSuccess bool
+
+const (
+	MemberUpdateResponseEnvelopeSuccessTrue MemberUpdateResponseEnvelopeSuccess = true
+)
+
+func (r MemberUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MemberUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type MemberListParams struct {
@@ -1600,13 +1644,20 @@ type MemberGetParams struct {
 }
 
 type MemberGetResponseEnvelope struct {
-	Result MemberGetResponse             `json:"result"`
-	JSON   memberGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success MemberGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  MemberGetResponse                `json:"result"`
+	JSON    memberGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // memberGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [MemberGetResponseEnvelope]
 type memberGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1618,4 +1669,19 @@ func (r *MemberGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r memberGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type MemberGetResponseEnvelopeSuccess bool
+
+const (
+	MemberGetResponseEnvelopeSuccessTrue MemberGetResponseEnvelopeSuccess = true
+)
+
+func (r MemberGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case MemberGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

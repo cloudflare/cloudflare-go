@@ -147,43 +147,22 @@ func (r *AIGatewayService) Get(ctx context.Context, id string, query AIGatewayGe
 }
 
 type AIGatewayNewResponse struct {
-	Task AIGatewayNewResponseTask `json:"task,required"`
-	JSON aiGatewayNewResponseJSON `json:"-"`
+	// gateway id
+	ID                      string                                    `json:"id,required"`
+	CacheInvalidateOnUpdate bool                                      `json:"cache_invalidate_on_update,required"`
+	CacheTTL                int64                                     `json:"cache_ttl,required,nullable"`
+	CollectLogs             bool                                      `json:"collect_logs,required"`
+	CreatedAt               time.Time                                 `json:"created_at,required" format:"date-time"`
+	ModifiedAt              time.Time                                 `json:"modified_at,required" format:"date-time"`
+	RateLimitingInterval    int64                                     `json:"rate_limiting_interval,required,nullable"`
+	RateLimitingLimit       int64                                     `json:"rate_limiting_limit,required,nullable"`
+	RateLimitingTechnique   AIGatewayNewResponseRateLimitingTechnique `json:"rate_limiting_technique,required"`
+	JSON                    aiGatewayNewResponseJSON                  `json:"-"`
 }
 
 // aiGatewayNewResponseJSON contains the JSON metadata for the struct
 // [AIGatewayNewResponse]
 type aiGatewayNewResponseJSON struct {
-	Task        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AIGatewayNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aiGatewayNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AIGatewayNewResponseTask struct {
-	// gateway id
-	ID                      string                                        `json:"id,required"`
-	CacheInvalidateOnUpdate bool                                          `json:"cache_invalidate_on_update,required"`
-	CacheTTL                int64                                         `json:"cache_ttl,required,nullable"`
-	CollectLogs             bool                                          `json:"collect_logs,required"`
-	CreatedAt               time.Time                                     `json:"created_at,required" format:"date-time"`
-	ModifiedAt              time.Time                                     `json:"modified_at,required" format:"date-time"`
-	RateLimitingInterval    int64                                         `json:"rate_limiting_interval,required,nullable"`
-	RateLimitingLimit       int64                                         `json:"rate_limiting_limit,required,nullable"`
-	RateLimitingTechnique   AIGatewayNewResponseTaskRateLimitingTechnique `json:"rate_limiting_technique,required"`
-	JSON                    aiGatewayNewResponseTaskJSON                  `json:"-"`
-}
-
-// aiGatewayNewResponseTaskJSON contains the JSON metadata for the struct
-// [AIGatewayNewResponseTask]
-type aiGatewayNewResponseTaskJSON struct {
 	ID                      apijson.Field
 	CacheInvalidateOnUpdate apijson.Field
 	CacheTTL                apijson.Field
@@ -197,24 +176,24 @@ type aiGatewayNewResponseTaskJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *AIGatewayNewResponseTask) UnmarshalJSON(data []byte) (err error) {
+func (r *AIGatewayNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aiGatewayNewResponseTaskJSON) RawJSON() string {
+func (r aiGatewayNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type AIGatewayNewResponseTaskRateLimitingTechnique string
+type AIGatewayNewResponseRateLimitingTechnique string
 
 const (
-	AIGatewayNewResponseTaskRateLimitingTechniqueFixed   AIGatewayNewResponseTaskRateLimitingTechnique = "fixed"
-	AIGatewayNewResponseTaskRateLimitingTechniqueSliding AIGatewayNewResponseTaskRateLimitingTechnique = "sliding"
+	AIGatewayNewResponseRateLimitingTechniqueFixed   AIGatewayNewResponseRateLimitingTechnique = "fixed"
+	AIGatewayNewResponseRateLimitingTechniqueSliding AIGatewayNewResponseRateLimitingTechnique = "sliding"
 )
 
-func (r AIGatewayNewResponseTaskRateLimitingTechnique) IsKnown() bool {
+func (r AIGatewayNewResponseRateLimitingTechnique) IsKnown() bool {
 	switch r {
-	case AIGatewayNewResponseTaskRateLimitingTechniqueFixed, AIGatewayNewResponseTaskRateLimitingTechniqueSliding:
+	case AIGatewayNewResponseRateLimitingTechniqueFixed, AIGatewayNewResponseRateLimitingTechniqueSliding:
 		return true
 	}
 	return false

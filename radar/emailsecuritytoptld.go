@@ -55,9 +55,9 @@ func (r *EmailSecurityTopTldService) Get(ctx context.Context, query EmailSecurit
 }
 
 type EmailSecurityTopTldGetResponse struct {
-	Meta EmailSecurityTopTldGetResponseMeta `json:"meta,required"`
-	Top0 []Browser                          `json:"top_0,required"`
-	JSON emailSecurityTopTldGetResponseJSON `json:"-"`
+	Meta EmailSecurityTopTldGetResponseMeta   `json:"meta,required"`
+	Top0 []EmailSecurityTopTldGetResponseTop0 `json:"top_0,required"`
+	JSON emailSecurityTopTldGetResponseJSON   `json:"-"`
 }
 
 // emailSecurityTopTldGetResponseJSON contains the JSON metadata for the struct
@@ -181,6 +181,29 @@ func (r *EmailSecurityTopTldGetResponseMetaConfidenceInfoAnnotation) UnmarshalJS
 }
 
 func (r emailSecurityTopTldGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTopTldGetResponseTop0 struct {
+	Name  string                                 `json:"name,required"`
+	Value string                                 `json:"value,required"`
+	JSON  emailSecurityTopTldGetResponseTop0JSON `json:"-"`
+}
+
+// emailSecurityTopTldGetResponseTop0JSON contains the JSON metadata for the struct
+// [EmailSecurityTopTldGetResponseTop0]
+type emailSecurityTopTldGetResponseTop0JSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTopTldGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTopTldGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

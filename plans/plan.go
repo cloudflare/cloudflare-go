@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
@@ -35,15 +36,15 @@ func NewPlanService(opts ...option.RequestOption) (r *PlanService) {
 }
 
 // Lists available plans the zone can subscribe to.
-func (r *PlanService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[AvailableRatePlan], err error) {
+func (r *PlanService) List(ctx context.Context, query PlanListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AvailableRatePlan], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/available_plans", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/available_plans", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -57,23 +58,23 @@ func (r *PlanService) List(ctx context.Context, zoneIdentifier string, opts ...o
 }
 
 // Lists available plans the zone can subscribe to.
-func (r *PlanService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AvailableRatePlan] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
+func (r *PlanService) ListAutoPaging(ctx context.Context, query PlanListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AvailableRatePlan] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Details of the available plan that the zone can subscribe to.
-func (r *PlanService) Get(ctx context.Context, zoneIdentifier string, planIdentifier string, opts ...option.RequestOption) (res *AvailableRatePlan, err error) {
+func (r *PlanService) Get(ctx context.Context, planIdentifier string, query PlanGetParams, opts ...option.RequestOption) (res *AvailableRatePlan, err error) {
 	var env PlanGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	if planIdentifier == "" {
 		err = errors.New("missing required plan_identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/available_plans/%s", zoneIdentifier, planIdentifier)
+	path := fmt.Sprintf("zones/%s/available_plans/%s", query.ZoneID, planIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -147,6 +148,16 @@ func (r AvailableRatePlanFrequency) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type PlanListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type PlanGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type PlanGetResponseEnvelope struct {

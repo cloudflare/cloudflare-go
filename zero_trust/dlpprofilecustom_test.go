@@ -172,7 +172,6 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
-				ProfileID: cloudflare.F[any](map[string]interface{}{}),
 			}, {
 				Enabled: cloudflare.F(true),
 				Name:    cloudflare.F("Credit card (Visa)"),
@@ -180,7 +179,6 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
-				ProfileID: cloudflare.F[any](map[string]interface{}{}),
 			}, {
 				Enabled: cloudflare.F(true),
 				Name:    cloudflare.F("Credit card (Visa)"),
@@ -188,7 +186,6 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
-				ProfileID: cloudflare.F[any](map[string]interface{}{}),
 			}}),
 			Name:       cloudflare.F("Generic CVV Card Number"),
 			OCREnabled: cloudflare.F(true),

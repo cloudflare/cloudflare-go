@@ -81,14 +81,14 @@ type UserSchemaOperationListResponse struct {
 	// RFC3986-compliant host.
 	Host string `json:"host,required" format:"hostname"`
 	// The HTTP method used to access the endpoint.
-	Method UserSchemaOperationListResponseMethod `json:"method,required"`
-	// This field can have the runtime type of [APIShieldFeatures].
-	Features    interface{} `json:"features,required"`
-	LastUpdated time.Time   `json:"last_updated" format:"date-time"`
+	Method      UserSchemaOperationListResponseMethod `json:"method,required"`
+	LastUpdated time.Time                             `json:"last_updated" format:"date-time"`
 	// UUID
-	OperationID string                              `json:"operation_id"`
-	JSON        userSchemaOperationListResponseJSON `json:"-"`
-	union       UserSchemaOperationListResponseUnion
+	OperationID string `json:"operation_id"`
+	// This field can have the runtime type of [APIShieldFeatures].
+	Features interface{}                         `json:"features,required"`
+	JSON     userSchemaOperationListResponseJSON `json:"-"`
+	union    UserSchemaOperationListResponseUnion
 }
 
 // userSchemaOperationListResponseJSON contains the JSON metadata for the struct
@@ -97,9 +97,9 @@ type userSchemaOperationListResponseJSON struct {
 	Endpoint    apijson.Field
 	Host        apijson.Field
 	Method      apijson.Field
-	Features    apijson.Field
 	LastUpdated apijson.Field
 	OperationID apijson.Field
+	Features    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

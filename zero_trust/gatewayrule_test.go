@@ -38,20 +38,14 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
 		Precedence:    cloudflare.F(int64(0)),
 		RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
-			AddHeaders: cloudflare.F[any](map[string]interface{}{
-				"My-Next-Header": map[string]interface{}{
-					"0": "foo",
-					"1": "bar",
-				},
-				"X-Custom-Header-Name": map[string]interface{}{
-					"0": "somecustomvalue",
-				},
+			AddHeaders: cloudflare.F(map[string]string{
+				"foo": "string",
 			}),
 			AllowChildBypass: cloudflare.F(false),
 			AuditSSH: cloudflare.F(zero_trust.RuleSettingAuditSSHParam{
 				CommandLogging: cloudflare.F(false),
 			}),
-			BisoAdminControls: cloudflare.F(zero_trust.RuleSettingBisoAdminControlsParam{
+			BISOAdminControls: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsParam{
 				DCP: cloudflare.F(false),
 				DD:  cloudflare.F(false),
 				DK:  cloudflare.F(false),
@@ -175,20 +169,14 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 			Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
 			Precedence:    cloudflare.F(int64(0)),
 			RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
-				AddHeaders: cloudflare.F[any](map[string]interface{}{
-					"My-Next-Header": map[string]interface{}{
-						"0": "foo",
-						"1": "bar",
-					},
-					"X-Custom-Header-Name": map[string]interface{}{
-						"0": "somecustomvalue",
-					},
+				AddHeaders: cloudflare.F(map[string]string{
+					"foo": "string",
 				}),
 				AllowChildBypass: cloudflare.F(false),
 				AuditSSH: cloudflare.F(zero_trust.RuleSettingAuditSSHParam{
 					CommandLogging: cloudflare.F(false),
 				}),
-				BisoAdminControls: cloudflare.F(zero_trust.RuleSettingBisoAdminControlsParam{
+				BISOAdminControls: cloudflare.F(zero_trust.RuleSettingBISOAdminControlsParam{
 					DCP: cloudflare.F(false),
 					DD:  cloudflare.F(false),
 					DK:  cloudflare.F(false),

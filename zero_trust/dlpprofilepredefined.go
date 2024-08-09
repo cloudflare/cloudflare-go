@@ -72,7 +72,7 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 }
 
 type PredefinedProfile struct {
-	// The ID for this profile
+	// Unique identifier for a DLP profile
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64 `json:"allowed_match_count"`
@@ -118,14 +118,14 @@ func (r PredefinedProfile) implementsZeroTrustDLPProfileGetResponse() {}
 
 // A predefined entry that matches a profile
 type PredefinedProfileEntry struct {
-	// The ID for this entry
+	// Unique identifier for a DLP entry
 	ID string `json:"id"`
 	// Whether the entry is enabled or not.
 	Enabled bool `json:"enabled"`
 	// The name of the entry.
 	Name string `json:"name"`
-	// ID of the parent profile
-	ProfileID interface{}                `json:"profile_id"`
+	// Unique identifier for a DLP profile
+	ProfileID string                     `json:"profile_id"`
 	JSON      predefinedProfileEntryJSON `json:"-"`
 }
 

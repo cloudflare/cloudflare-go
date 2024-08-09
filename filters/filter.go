@@ -212,12 +212,30 @@ func (r firewallFilterJSON) RawJSON() string {
 
 func (r FirewallFilter) ImplementsFirewallFirewallRuleFilter() {}
 
+type FirewallFilterParam struct {
+	// An informative summary of the filter.
+	Description param.Field[string] `json:"description"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression param.Field[string] `json:"expression"`
+	// When true, indicates that the filter is currently paused.
+	Paused param.Field[bool] `json:"paused"`
+	// A short reference tag. Allows you to select related filters.
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r FirewallFilterParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type FilterNewParams struct {
-	Body interface{} `json:"body,required"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression param.Field[string] `json:"expression,required"`
 }
 
 func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type FilterNewResponseEnvelope struct {

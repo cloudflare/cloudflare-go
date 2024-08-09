@@ -9,12 +9,13 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/filters"
 	"github.com/cloudflare/cloudflare-go/v2/firewall"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestRuleNew(t *testing.T) {
+func TestRuleNewWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -32,7 +33,20 @@ func TestRuleNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.RuleNewParams{
-			Body: map[string]interface{}{},
+			Action: cloudflare.F(firewall.RuleNewParamsAction{
+				Mode: cloudflare.F(firewall.RuleNewParamsActionModeChallenge),
+				Response: cloudflare.F(firewall.RuleNewParamsActionResponse{
+					Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
+					ContentType: cloudflare.F("text/xml"),
+				}),
+				Timeout: cloudflare.F(86400.000000),
+			}),
+			Filter: cloudflare.F(filters.FirewallFilterParam{
+				Description: cloudflare.F("Restrict access from these browsers on this address range."),
+				Expression:  cloudflare.F("(http.request.uri.path ~ \".*wp-login.php\" or http.request.uri.path ~ \".*xmlrpc.php\") and ip.addr ne 172.16.22.155"),
+				Paused:      cloudflare.F(false),
+				Ref:         cloudflare.F("FIL-100"),
+			}),
 		},
 	)
 	if err != nil {
@@ -44,7 +58,7 @@ func TestRuleNew(t *testing.T) {
 	}
 }
 
-func TestRuleUpdate(t *testing.T) {
+func TestRuleUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -63,7 +77,20 @@ func TestRuleUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b60",
 		firewall.RuleUpdateParams{
-			Body: map[string]interface{}{},
+			Action: cloudflare.F(firewall.RuleUpdateParamsAction{
+				Mode: cloudflare.F(firewall.RuleUpdateParamsActionModeChallenge),
+				Response: cloudflare.F(firewall.RuleUpdateParamsActionResponse{
+					Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
+					ContentType: cloudflare.F("text/xml"),
+				}),
+				Timeout: cloudflare.F(86400.000000),
+			}),
+			Filter: cloudflare.F(filters.FirewallFilterParam{
+				Description: cloudflare.F("Restrict access from these browsers on this address range."),
+				Expression:  cloudflare.F("(http.request.uri.path ~ \".*wp-login.php\" or http.request.uri.path ~ \".*xmlrpc.php\") and ip.addr ne 172.16.22.155"),
+				Paused:      cloudflare.F(false),
+				Ref:         cloudflare.F("FIL-100"),
+			}),
 		},
 	)
 	if err != nil {
@@ -154,9 +181,7 @@ func TestRuleEdit(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b60",
-		firewall.RuleEditParams{
-			Body: map[string]interface{}{},
-		},
+		firewall.RuleEditParams{},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

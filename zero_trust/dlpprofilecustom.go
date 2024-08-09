@@ -113,7 +113,7 @@ func (r *DLPProfileCustomService) Get(ctx context.Context, profileID string, que
 }
 
 type CustomProfile struct {
-	// The ID for this profile
+	// Unique identifier for a DLP profile
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64 `json:"allowed_match_count"`
@@ -165,7 +165,7 @@ func (r CustomProfile) implementsZeroTrustDLPProfileGetResponse() {}
 
 // A custom entry that matches a profile
 type CustomProfileEntry struct {
-	// The ID for this entry
+	// Unique identifier for a DLP entry
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Whether the entry is enabled or not.
@@ -174,8 +174,8 @@ type CustomProfileEntry struct {
 	Name string `json:"name"`
 	// A pattern that matches an entry
 	Pattern Pattern `json:"pattern"`
-	// ID of the parent profile
-	ProfileID interface{}            `json:"profile_id"`
+	// Unique identifier for a DLP profile
+	ProfileID string                 `json:"profile_id"`
 	UpdatedAt time.Time              `json:"updated_at" format:"date-time"`
 	JSON      customProfileEntryJSON `json:"-"`
 }
@@ -444,8 +444,6 @@ type DLPProfileCustomUpdateParamsEntry struct {
 	Name param.Field[string] `json:"name"`
 	// A pattern that matches an entry
 	Pattern param.Field[PatternParam] `json:"pattern"`
-	// ID of the parent profile
-	ProfileID param.Field[interface{}] `json:"profile_id"`
 }
 
 func (r DLPProfileCustomUpdateParamsEntry) MarshalJSON() (data []byte, err error) {

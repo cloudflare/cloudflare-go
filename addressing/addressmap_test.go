@@ -7,7 +7,6 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/addressing"
@@ -34,15 +33,12 @@ func TestAddressMapNewWithOptionalParams(t *testing.T) {
 		Enabled:     cloudflare.F(true),
 		IPs:         cloudflare.F([]string{"192.0.2.1", "192.0.2.1", "192.0.2.1"}),
 		Memberships: cloudflare.F([]addressing.AddressMapNewParamsMembership{{
-			CreatedAt:  cloudflare.F(time.Now()),
 			Identifier: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Kind:       cloudflare.F(addressing.KindZone),
 		}, {
-			CreatedAt:  cloudflare.F(time.Now()),
 			Identifier: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Kind:       cloudflare.F(addressing.KindZone),
 		}, {
-			CreatedAt:  cloudflare.F(time.Now()),
 			Identifier: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Kind:       cloudflare.F(addressing.KindZone),
 		}}),

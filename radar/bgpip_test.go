@@ -29,13 +29,14 @@ func TestBGPIPTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.IPs.Timeseries(context.TODO(), radar.BGPIPTimeseriesParams{
-		ASN:          cloudflare.F("174,7922"),
-		DateEnd:      cloudflare.F(time.Now()),
-		DateRange:    cloudflare.F("7d"),
-		DateStart:    cloudflare.F(time.Now()),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
+		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		DateRange:    cloudflare.F([]string{"7d", "7d", "7d"}),
+		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:       cloudflare.F(radar.BgpipTimeseriesParamsFormatJson),
 		IncludeDelay: cloudflare.F(true),
-		Location:     cloudflare.F("US,CA"),
+		IPVersion:    cloudflare.F([]radar.BgpipTimeseriesParamsIPVersion{radar.BgpipTimeseriesParamsIPVersionIPv4, radar.BgpipTimeseriesParamsIPVersionIPv6}),
+		Location:     cloudflare.F([]string{"string", "string", "string"}),
 		Name:         cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {

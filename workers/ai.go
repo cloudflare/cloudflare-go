@@ -72,8 +72,8 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 // [workers.AIRunResponseAutomaticSpeechRecognition],
 // [workers.AIRunResponseImageClassification],
 // [workers.AIRunResponseObjectDetection], [workers.AIRunResponseObject],
-// [shared.UnionString], [workers.AIRunResponseTranslation],
-// [workers.AIRunResponseSummarization] or [workers.AIRunResponseImageToText].
+// [workers.AIRunResponseTranslation], [workers.AIRunResponseSummarization] or
+// [workers.AIRunResponseImageToText].
 type AIRunResponseUnion interface {
 	ImplementsWorkersAIRunResponseUnion()
 }
@@ -111,10 +111,6 @@ func init() {
 			Type:       reflect.TypeOf(AIRunResponseObject{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AIRunResponseTranslation{}),
 		},
@@ -129,9 +125,32 @@ func init() {
 	)
 }
 
-type AIRunResponseTextClassification []AIRunResponseTextClassification
+type AIRunResponseTextClassification []AIRunResponseTextClassificationItem
 
 func (r AIRunResponseTextClassification) ImplementsWorkersAIRunResponseUnion() {}
+
+type AIRunResponseTextClassificationItem struct {
+	Label string                                  `json:"label"`
+	Score float64                                 `json:"score"`
+	JSON  aiRunResponseTextClassificationItemJSON `json:"-"`
+}
+
+// aiRunResponseTextClassificationItemJSON contains the JSON metadata for the
+// struct [AIRunResponseTextClassificationItem]
+type aiRunResponseTextClassificationItemJSON struct {
+	Label       apijson.Field
+	Score       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIRunResponseTextClassificationItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseTextClassificationItemJSON) RawJSON() string {
+	return r.raw
+}
 
 type AIRunResponseTextEmbeddings struct {
 	Data  [][]float64                     `json:"data"`
@@ -212,13 +231,88 @@ func (r aiRunResponseAutomaticSpeechRecognitionWordJSON) RawJSON() string {
 	return r.raw
 }
 
-type AIRunResponseImageClassification []AIRunResponseImageClassification
+type AIRunResponseImageClassification []AIRunResponseImageClassificationItem
 
 func (r AIRunResponseImageClassification) ImplementsWorkersAIRunResponseUnion() {}
 
-type AIRunResponseObjectDetection []AIRunResponseObjectDetection
+type AIRunResponseImageClassificationItem struct {
+	Label string                                   `json:"label"`
+	Score float64                                  `json:"score"`
+	JSON  aiRunResponseImageClassificationItemJSON `json:"-"`
+}
+
+// aiRunResponseImageClassificationItemJSON contains the JSON metadata for the
+// struct [AIRunResponseImageClassificationItem]
+type aiRunResponseImageClassificationItemJSON struct {
+	Label       apijson.Field
+	Score       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIRunResponseImageClassificationItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseImageClassificationItemJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIRunResponseObjectDetection []AIRunResponseObjectDetectionItem
 
 func (r AIRunResponseObjectDetection) ImplementsWorkersAIRunResponseUnion() {}
+
+type AIRunResponseObjectDetectionItem struct {
+	Box   AIRunResponseObjectDetectionBox      `json:"box"`
+	Label string                               `json:"label"`
+	Score float64                              `json:"score"`
+	JSON  aiRunResponseObjectDetectionItemJSON `json:"-"`
+}
+
+// aiRunResponseObjectDetectionItemJSON contains the JSON metadata for the struct
+// [AIRunResponseObjectDetectionItem]
+type aiRunResponseObjectDetectionItemJSON struct {
+	Box         apijson.Field
+	Label       apijson.Field
+	Score       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIRunResponseObjectDetectionItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseObjectDetectionItemJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIRunResponseObjectDetectionBox struct {
+	Xmax float64                             `json:"xmax"`
+	Xmin float64                             `json:"xmin"`
+	Ymax float64                             `json:"ymax"`
+	Ymin float64                             `json:"ymin"`
+	JSON aiRunResponseObjectDetectionBoxJSON `json:"-"`
+}
+
+// aiRunResponseObjectDetectionBoxJSON contains the JSON metadata for the struct
+// [AIRunResponseObjectDetectionBox]
+type aiRunResponseObjectDetectionBoxJSON struct {
+	Xmax        apijson.Field
+	Xmin        apijson.Field
+	Ymax        apijson.Field
+	Ymin        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIRunResponseObjectDetectionBox) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseObjectDetectionBoxJSON) RawJSON() string {
+	return r.raw
+}
 
 type AIRunResponseObject struct {
 	Response  string                        `json:"response"`
@@ -352,8 +446,6 @@ type AIRunParamsBody struct {
 	Height            param.Field[int64]       `json:"height"`
 	Image             param.Field[interface{}] `json:"image,required"`
 	ImageB64          param.Field[string]      `json:"image_b64"`
-	LoraWeights       param.Field[interface{}] `json:"lora_weights,required"`
-	Loras             param.Field[interface{}] `json:"loras,required"`
 	Mask              param.Field[interface{}] `json:"mask,required"`
 	NegativePrompt    param.Field[string]      `json:"negative_prompt"`
 	NumSteps          param.Field[int64]       `json:"num_steps"`
@@ -372,6 +464,7 @@ type AIRunParamsBody struct {
 	Temperature       param.Field[float64]     `json:"temperature"`
 	TopK              param.Field[int64]       `json:"top_k"`
 	TopP              param.Field[float64]     `json:"top_p"`
+	Functions         param.Field[interface{}] `json:"functions,required"`
 	Messages          param.Field[interface{}] `json:"messages,required"`
 	Tools             param.Field[interface{}] `json:"tools,required"`
 	SourceLang        param.Field[string]      `json:"source_lang"`
@@ -414,8 +507,6 @@ type AIRunParamsBodyTextToImage struct {
 	Height         param.Field[int64]     `json:"height"`
 	Image          param.Field[[]float64] `json:"image"`
 	ImageB64       param.Field[string]    `json:"image_b64"`
-	LoraWeights    param.Field[[]float64] `json:"lora_weights"`
-	Loras          param.Field[[]string]  `json:"loras"`
 	Mask           param.Field[[]float64] `json:"mask"`
 	NegativePrompt param.Field[string]    `json:"negative_prompt"`
 	NumSteps       param.Field[int64]     `json:"num_steps"`

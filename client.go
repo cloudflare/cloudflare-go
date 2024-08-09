@@ -35,6 +35,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/dnssec"
 	"github.com/cloudflare/cloudflare-go/v2/durable_objects"
 	"github.com/cloudflare/cloudflare-go/v2/email_routing"
+	"github.com/cloudflare/cloudflare-go/v2/email_security"
 	"github.com/cloudflare/cloudflare-go/v2/event_notifications"
 	"github.com/cloudflare/cloudflare-go/v2/filters"
 	"github.com/cloudflare/cloudflare-go/v2/firewall"
@@ -122,6 +123,7 @@ type Client struct {
 	CustomNameservers           *custom_nameservers.CustomNameserverService
 	DNS                         *dns.DNSService
 	DNSSEC                      *dnssec.DNSSECService
+	EmailSecurity               *email_security.EmailSecurityService
 	EmailRouting                *email_routing.EmailRoutingService
 	Filters                     *filters.FilterService
 	Firewall                    *firewall.FirewallService
@@ -232,6 +234,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CustomNameservers = custom_nameservers.NewCustomNameserverService(opts...)
 	r.DNS = dns.NewDNSService(opts...)
 	r.DNSSEC = dnssec.NewDNSSECService(opts...)
+	r.EmailSecurity = email_security.NewEmailSecurityService(opts...)
 	r.EmailRouting = email_routing.NewEmailRoutingService(opts...)
 	r.Filters = filters.NewFilterService(opts...)
 	r.Firewall = firewall.NewFirewallService(opts...)

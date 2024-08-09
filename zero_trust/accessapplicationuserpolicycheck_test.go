@@ -11,7 +11,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
@@ -31,7 +30,7 @@ func TestAccessApplicationUserPolicyCheckListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.UserPolicyChecks.List(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationUserPolicyCheckListParams{
 			AccountID: cloudflare.F("account_id"),
 		},

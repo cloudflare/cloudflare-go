@@ -129,10 +129,10 @@ func (r *ConsumerService) Get(ctx context.Context, queueID string, query Consume
 }
 
 type Consumer struct {
-	CreatedOn   interface{}      `json:"created_on"`
-	Environment interface{}      `json:"environment"`
-	QueueName   interface{}      `json:"queue_name"`
-	Service     interface{}      `json:"service"`
+	CreatedOn   string           `json:"created_on"`
+	Environment string           `json:"environment"`
+	QueueName   string           `json:"queue_name"`
+	Service     string           `json:"service"`
 	Settings    ConsumerSettings `json:"settings"`
 	JSON        consumerJSON     `json:"-"`
 }
@@ -157,8 +157,9 @@ func (r consumerJSON) RawJSON() string {
 }
 
 type ConsumerSettings struct {
-	// The maximum number of messages to include in a batch
-	BatchSize     float64              `json:"batch_size"`
+	// The maximum number of messages to include in a batch.
+	BatchSize float64 `json:"batch_size"`
+	// The maximum number of retries
 	MaxRetries    float64              `json:"max_retries"`
 	MaxWaitTimeMs float64              `json:"max_wait_time_ms"`
 	JSON          consumerSettingsJSON `json:"-"`
@@ -183,11 +184,12 @@ func (r consumerSettingsJSON) RawJSON() string {
 }
 
 type ConsumerNewResponse struct {
-	CreatedOn       interface{}                 `json:"created_on"`
+	CreatedOn string `json:"created_on"`
+	// The name of the dead letter queue.
 	DeadLetterQueue string                      `json:"dead_letter_queue"`
-	Environment     interface{}                 `json:"environment"`
-	QueueName       interface{}                 `json:"queue_name"`
-	ScriptName      interface{}                 `json:"script_name"`
+	Environment     string                      `json:"environment"`
+	QueueName       string                      `json:"queue_name"`
+	ScriptName      string                      `json:"script_name"`
 	Settings        ConsumerNewResponseSettings `json:"settings"`
 	JSON            consumerNewResponseJSON     `json:"-"`
 }
@@ -214,8 +216,9 @@ func (r consumerNewResponseJSON) RawJSON() string {
 }
 
 type ConsumerNewResponseSettings struct {
-	// The maximum number of messages to include in a batch
-	BatchSize     float64                         `json:"batch_size"`
+	// The maximum number of messages to include in a batch.
+	BatchSize float64 `json:"batch_size"`
+	// The maximum number of retries
 	MaxRetries    float64                         `json:"max_retries"`
 	MaxWaitTimeMs float64                         `json:"max_wait_time_ms"`
 	JSON          consumerNewResponseSettingsJSON `json:"-"`
@@ -240,11 +243,11 @@ func (r consumerNewResponseSettingsJSON) RawJSON() string {
 }
 
 type ConsumerUpdateResponse struct {
-	CreatedOn       interface{}                    `json:"created_on"`
+	CreatedOn       string                         `json:"created_on"`
 	DeadLetterQueue string                         `json:"dead_letter_queue"`
-	Environment     interface{}                    `json:"environment"`
-	QueueName       interface{}                    `json:"queue_name"`
-	ScriptName      interface{}                    `json:"script_name"`
+	Environment     string                         `json:"environment"`
+	QueueName       string                         `json:"queue_name"`
+	ScriptName      string                         `json:"script_name"`
 	Settings        ConsumerUpdateResponseSettings `json:"settings"`
 	JSON            consumerUpdateResponseJSON     `json:"-"`
 }
@@ -271,7 +274,8 @@ func (r consumerUpdateResponseJSON) RawJSON() string {
 }
 
 type ConsumerUpdateResponseSettings struct {
-	BatchSize     float64                            `json:"batch_size"`
+	BatchSize float64 `json:"batch_size"`
+	// The maximum number of retries
 	MaxRetries    float64                            `json:"max_retries"`
 	MaxWaitTimeMs float64                            `json:"max_wait_time_ms"`
 	JSON          consumerUpdateResponseSettingsJSON `json:"-"`
@@ -376,13 +380,13 @@ func (r ConsumerNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConsumerNewResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                   `json:"total_count"`
 	JSON       consumerNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -462,13 +466,13 @@ func (r ConsumerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConsumerUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                      `json:"total_count"`
 	JSON       consumerUpdateResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -543,13 +547,13 @@ func (r ConsumerDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConsumerDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                      `json:"total_count"`
 	JSON       consumerDeleteResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -624,13 +628,13 @@ func (r ConsumerGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConsumerGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                   `json:"total_count"`
 	TotalPages float64                                   `json:"total_pages"`
 	JSON       consumerGetResponseEnvelopeResultInfoJSON `json:"-"`

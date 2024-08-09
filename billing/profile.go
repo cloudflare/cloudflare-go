@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
@@ -35,10 +36,10 @@ func NewProfileService(opts ...option.RequestOption) (r *ProfileService) {
 }
 
 // Gets the current billing profile for the account.
-func (r *ProfileService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *ProfileGetResponseUnion, err error) {
+func (r *ProfileService) Get(ctx context.Context, query ProfileGetParams, opts ...option.RequestOption) (res *ProfileGetResponseUnion, err error) {
 	var env ProfileGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v/billing/profile", accountIdentifier)
+	path := fmt.Sprintf("accounts/%v/billing/profile", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -61,6 +62,10 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
+}
+
+type ProfileGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type ProfileGetResponseEnvelope struct {

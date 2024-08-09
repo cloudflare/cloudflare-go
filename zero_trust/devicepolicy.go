@@ -203,7 +203,9 @@ type SettingsPolicy struct {
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
 	SwitchLocked bool                       `json:"switch_locked"`
 	TargetTests  []SettingsPolicyTargetTest `json:"target_tests"`
-	JSON         settingsPolicyJSON         `json:"-"`
+	// Determines which tunnel protocol to use.
+	TunnelProtocol string             `json:"tunnel_protocol"`
+	JSON           settingsPolicyJSON `json:"-"`
 }
 
 // settingsPolicyJSON contains the JSON metadata for the struct [SettingsPolicy]
@@ -232,6 +234,7 @@ type settingsPolicyJSON struct {
 	SupportURL          apijson.Field
 	SwitchLocked        apijson.Field
 	TargetTests         apijson.Field
+	TunnelProtocol      apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -343,6 +346,8 @@ type DevicePolicyNewParams struct {
 	SupportURL param.Field[string] `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
 	SwitchLocked param.Field[bool] `json:"switch_locked"`
+	// Determines which tunnel protocol to use.
+	TunnelProtocol param.Field[string] `json:"tunnel_protocol"`
 }
 
 func (r DevicePolicyNewParams) MarshalJSON() (data []byte, err error) {
@@ -555,6 +560,8 @@ type DevicePolicyEditParams struct {
 	SupportURL param.Field[string] `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
 	SwitchLocked param.Field[bool] `json:"switch_locked"`
+	// Determines which tunnel protocol to use.
+	TunnelProtocol param.Field[string] `json:"tunnel_protocol"`
 }
 
 func (r DevicePolicyEditParams) MarshalJSON() (data []byte, err error) {

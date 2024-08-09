@@ -36,7 +36,7 @@ func TestAnalyticsListWithOptionalParams(t *testing.T) {
 			Limit:      cloudflare.F(int64(0)),
 			Metrics:    cloudflare.F([]storage.AnalyticsListParamsQueryMetric{storage.AnalyticsListParamsQueryMetricRequests, storage.AnalyticsListParamsQueryMetricWriteKiB, storage.AnalyticsListParamsQueryMetricReadKiB}),
 			Since:      cloudflare.F(time.Now()),
-			Sort:       cloudflare.F([]interface{}{"+requests", "-responseCode"}),
+			Sort:       cloudflare.F([]string{"+requests", "-responseCode"}),
 			Until:      cloudflare.F(time.Now()),
 		}),
 	})
@@ -70,7 +70,7 @@ func TestAnalyticsStoredWithOptionalParams(t *testing.T) {
 			Limit:      cloudflare.F(int64(0)),
 			Metrics:    cloudflare.F([]storage.AnalyticsStoredParamsQueryMetric{storage.AnalyticsStoredParamsQueryMetricStoredBytes, storage.AnalyticsStoredParamsQueryMetricStoredKeys}),
 			Since:      cloudflare.F(time.Now()),
-			Sort:       cloudflare.F([]interface{}{"+storedBytes", "-namespaceId"}),
+			Sort:       cloudflare.F([]string{"+storedBytes", "-namespaceId"}),
 			Until:      cloudflare.F(time.Now()),
 		}),
 	})

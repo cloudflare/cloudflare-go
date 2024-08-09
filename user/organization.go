@@ -238,13 +238,20 @@ func (r OrganizationListParamsStatus) IsKnown() bool {
 }
 
 type OrganizationGetResponseEnvelope struct {
-	Result OrganizationGetResponse             `json:"result"`
-	JSON   organizationGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success OrganizationGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  OrganizationGetResponse                `json:"result"`
+	JSON    organizationGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // organizationGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [OrganizationGetResponseEnvelope]
 type organizationGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -256,4 +263,19 @@ func (r *OrganizationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 
 func (r organizationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type OrganizationGetResponseEnvelopeSuccess bool
+
+const (
+	OrganizationGetResponseEnvelopeSuccessTrue OrganizationGetResponseEnvelopeSuccess = true
+)
+
+func (r OrganizationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OrganizationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

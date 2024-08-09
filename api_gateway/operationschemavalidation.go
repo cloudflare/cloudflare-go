@@ -82,10 +82,10 @@ func (r *OperationSchemaValidationService) Get(ctx context.Context, operationID 
 	return
 }
 
-type SettingsMultipleRequest map[string]SettingsMultipleRequestItemItem
+type SettingsMultipleRequest map[string]SettingsMultipleRequestItem
 
 // Operation ID to mitigation action mappings
-type SettingsMultipleRequestItemItem struct {
+type SettingsMultipleRequestItem struct {
 	// When set, this applies a mitigation action to this operation
 	//
 	//   - `log` log request when request does not conform to schema for this operation
@@ -95,22 +95,22 @@ type SettingsMultipleRequestItemItem struct {
 	//   - `null` indicates that no operation level mitigation is in place, see Zone
 	//     Level Schema Validation Settings for mitigation action that will be applied
 	MitigationAction SettingsMultipleRequestItemMitigationAction `json:"mitigation_action,nullable"`
-	JSON             settingsMultipleRequestItemItemJSON         `json:"-"`
+	JSON             settingsMultipleRequestItemJSON             `json:"-"`
 }
 
-// settingsMultipleRequestItemItemJSON contains the JSON metadata for the struct
-// [SettingsMultipleRequestItemItem]
-type settingsMultipleRequestItemItemJSON struct {
+// settingsMultipleRequestItemJSON contains the JSON metadata for the struct
+// [SettingsMultipleRequestItem]
+type settingsMultipleRequestItemJSON struct {
 	MitigationAction apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SettingsMultipleRequestItemItem) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingsMultipleRequestItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingsMultipleRequestItemItemJSON) RawJSON() string {
+func (r settingsMultipleRequestItemJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -138,10 +138,10 @@ func (r SettingsMultipleRequestItemMitigationAction) IsKnown() bool {
 	return false
 }
 
-type SettingsMultipleRequestParam map[string]SettingsMultipleRequestItemItemParam
+type SettingsMultipleRequestParam map[string]SettingsMultipleRequestItemParam
 
 // Operation ID to mitigation action mappings
-type SettingsMultipleRequestItemItemParam struct {
+type SettingsMultipleRequestItemParam struct {
 	// When set, this applies a mitigation action to this operation
 	//
 	//   - `log` log request when request does not conform to schema for this operation
@@ -153,7 +153,7 @@ type SettingsMultipleRequestItemItemParam struct {
 	MitigationAction param.Field[SettingsMultipleRequestItemMitigationAction] `json:"mitigation_action"`
 }
 
-func (r SettingsMultipleRequestItemItemParam) MarshalJSON() (data []byte, err error) {
+func (r SettingsMultipleRequestItemParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

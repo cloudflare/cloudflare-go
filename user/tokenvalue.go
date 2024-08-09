@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // TokenValueService contains methods and other services that help with interacting
@@ -55,6 +56,10 @@ func (r TokenValueUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TokenValueUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success TokenValueUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// The token value.
 	Result Value                                `json:"result"`
 	JSON   tokenValueUpdateResponseEnvelopeJSON `json:"-"`
@@ -63,6 +68,9 @@ type TokenValueUpdateResponseEnvelope struct {
 // tokenValueUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [TokenValueUpdateResponseEnvelope]
 type tokenValueUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -74,4 +82,19 @@ func (r *TokenValueUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error
 
 func (r tokenValueUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type TokenValueUpdateResponseEnvelopeSuccess bool
+
+const (
+	TokenValueUpdateResponseEnvelopeSuccessTrue TokenValueUpdateResponseEnvelopeSuccess = true
+)
+
+func (r TokenValueUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TokenValueUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

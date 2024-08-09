@@ -49,9 +49,9 @@ func (r *EmailSecurityTopTldSpamService) Get(ctx context.Context, spam EmailSecu
 }
 
 type EmailSecurityTopTldSpamGetResponse struct {
-	Meta EmailSecurityTopTldSpamGetResponseMeta `json:"meta,required"`
-	Top0 []Browser                              `json:"top_0,required"`
-	JSON emailSecurityTopTldSpamGetResponseJSON `json:"-"`
+	Meta EmailSecurityTopTldSpamGetResponseMeta   `json:"meta,required"`
+	Top0 []EmailSecurityTopTldSpamGetResponseTop0 `json:"top_0,required"`
+	JSON emailSecurityTopTldSpamGetResponseJSON   `json:"-"`
 }
 
 // emailSecurityTopTldSpamGetResponseJSON contains the JSON metadata for the struct
@@ -175,6 +175,29 @@ func (r *EmailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotation) Unmarsh
 }
 
 func (r emailSecurityTopTldSpamGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTopTldSpamGetResponseTop0 struct {
+	Name  string                                     `json:"name,required"`
+	Value string                                     `json:"value,required"`
+	JSON  emailSecurityTopTldSpamGetResponseTop0JSON `json:"-"`
+}
+
+// emailSecurityTopTldSpamGetResponseTop0JSON contains the JSON metadata for the
+// struct [EmailSecurityTopTldSpamGetResponseTop0]
+type emailSecurityTopTldSpamGetResponseTop0JSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTopTldSpamGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTopTldSpamGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

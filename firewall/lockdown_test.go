@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestLockdownNew(t *testing.T) {
+func TestLockdownNewWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -33,7 +33,11 @@ func TestLockdownNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.LockdownNewParams{
-			Body: map[string]interface{}{},
+			Configurations: cloudflare.F[firewall.ConfigurationUnionParam](firewall.LockdownIPConfigurationParam{
+				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
+				Value:  cloudflare.F("198.51.100.4"),
+			}),
+			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
 		},
 	)
 	if err != nil {
@@ -45,7 +49,7 @@ func TestLockdownNew(t *testing.T) {
 	}
 }
 
-func TestLockdownUpdate(t *testing.T) {
+func TestLockdownUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -64,7 +68,11 @@ func TestLockdownUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		firewall.LockdownUpdateParams{
-			Body: map[string]interface{}{},
+			Configurations: cloudflare.F[firewall.ConfigurationUnionParam](firewall.LockdownIPConfigurationParam{
+				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
+				Value:  cloudflare.F("198.51.100.4"),
+			}),
+			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
 		},
 	)
 	if err != nil {

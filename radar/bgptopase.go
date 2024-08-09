@@ -254,7 +254,7 @@ type BGPTopAseGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Array of BGP network prefixes.
-	Prefix param.Field[[]BGPTopAseGetParamsPrefix] `query:"prefix"`
+	Prefix param.Field[[]string] `query:"prefix"`
 	// Array of BGP update types.
 	UpdateType param.Field[[]BGPTopAseGetParamsUpdateType] `query:"updateType"`
 }
@@ -281,23 +281,6 @@ func (r BGPTopAseGetParamsFormat) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type BGPTopAseGetParamsPrefix struct {
-	In   param.Field[string]  `query:"in,required"`
-	Name param.Field[string]  `query:"name,required"`
-	Test param.Field[float64] `query:"test,required"`
-	// Network prefix, IPv4 or IPv6.
-	Type param.Field[string] `query:"type"`
-}
-
-// URLQuery serializes [BGPTopAseGetParamsPrefix]'s query parameters as
-// `url.Values`.
-func (r BGPTopAseGetParamsPrefix) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type BGPTopAseGetParamsUpdateType string

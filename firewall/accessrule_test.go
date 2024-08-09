@@ -62,23 +62,17 @@ func TestAccessRuleListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.AccessRules.List(context.TODO(), firewall.AccessRuleListParams{
 		AccountID: cloudflare.F("account_id"),
+		Configuration: cloudflare.F(firewall.AccessRuleListParamsConfiguration{
+			Target: cloudflare.F(firewall.AccessRuleListParamsConfigurationTargetIP),
+			Value:  cloudflare.F("198.51.100.4"),
+		}),
 		Direction: cloudflare.F(firewall.AccessRuleListParamsDirectionDesc),
-		EgsPagination: cloudflare.F(firewall.AccessRuleListParamsEgsPagination{
-			Json: cloudflare.F(firewall.AccessRuleListParamsEgsPaginationJson{
-				Page:    cloudflare.F(1.000000),
-				PerPage: cloudflare.F(1.000000),
-			}),
-		}),
-		Filters: cloudflare.F(firewall.AccessRuleListParamsFilters{
-			ConfigurationTarget: cloudflare.F(firewall.AccessRuleListParamsFiltersConfigurationTargetIP),
-			ConfigurationValue:  cloudflare.F("198.51.100.4"),
-			Match:               cloudflare.F(firewall.AccessRuleListParamsFiltersMatchAny),
-			Mode:                cloudflare.F(firewall.AccessRuleListParamsFiltersModeChallenge),
-			Notes:               cloudflare.F("my note"),
-		}),
-		Order:   cloudflare.F(firewall.AccessRuleListParamsOrderMode),
-		Page:    cloudflare.F(1.000000),
-		PerPage: cloudflare.F(20.000000),
+		Match:     cloudflare.F(firewall.AccessRuleListParamsMatchAny),
+		Mode:      cloudflare.F(firewall.AccessRuleListParamsModeChallenge),
+		Notes:     cloudflare.F("my note"),
+		Order:     cloudflare.F(firewall.AccessRuleListParamsOrderMode),
+		Page:      cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(20.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -105,7 +99,7 @@ func TestAccessRuleDeleteWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.AccessRules.Delete(
 		context.TODO(),
-		map[string]interface{}{},
+		"de677e5818985db1285d0e80225f06e5",
 		firewall.AccessRuleDeleteParams{
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -135,7 +129,7 @@ func TestAccessRuleEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.AccessRules.Edit(
 		context.TODO(),
-		map[string]interface{}{},
+		"de677e5818985db1285d0e80225f06e5",
 		firewall.AccessRuleEditParams{
 			Configuration: cloudflare.F[firewall.AccessRuleEditParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
 				Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
@@ -171,7 +165,7 @@ func TestAccessRuleGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.AccessRules.Get(
 		context.TODO(),
-		map[string]interface{}{},
+		"de677e5818985db1285d0e80225f06e5",
 		firewall.AccessRuleGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},

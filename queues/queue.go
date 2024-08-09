@@ -150,11 +150,11 @@ func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetPa
 
 type Queue struct {
 	Consumers           interface{} `json:"consumers"`
-	ConsumersTotalCount interface{} `json:"consumers_total_count"`
-	CreatedOn           interface{} `json:"created_on"`
-	ModifiedOn          interface{} `json:"modified_on"`
+	ConsumersTotalCount float64     `json:"consumers_total_count"`
+	CreatedOn           string      `json:"created_on"`
+	ModifiedOn          string      `json:"modified_on"`
 	Producers           interface{} `json:"producers"`
-	ProducersTotalCount interface{} `json:"producers_total_count"`
+	ProducersTotalCount float64     `json:"producers_total_count"`
 	QueueID             string      `json:"queue_id"`
 	QueueName           string      `json:"queue_name"`
 	JSON                queueJSON   `json:"-"`
@@ -183,8 +183,8 @@ func (r queueJSON) RawJSON() string {
 }
 
 type QueueCreated struct {
-	CreatedOn  interface{}      `json:"created_on"`
-	ModifiedOn interface{}      `json:"modified_on"`
+	CreatedOn  string           `json:"created_on"`
+	ModifiedOn string           `json:"modified_on"`
 	QueueID    string           `json:"queue_id"`
 	QueueName  string           `json:"queue_name"`
 	JSON       queueCreatedJSON `json:"-"`
@@ -209,8 +209,8 @@ func (r queueCreatedJSON) RawJSON() string {
 }
 
 type QueueUpdated struct {
-	CreatedOn  interface{}      `json:"created_on"`
-	ModifiedOn interface{}      `json:"modified_on"`
+	CreatedOn  string           `json:"created_on"`
+	ModifiedOn string           `json:"modified_on"`
 	QueueID    string           `json:"queue_id"`
 	QueueName  string           `json:"queue_name"`
 	JSON       queueUpdatedJSON `json:"-"`
@@ -262,11 +262,11 @@ func (r QueueDeleteResponseArray) ImplementsQueuesQueueDeleteResponseUnion() {}
 type QueueNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	QueueName param.Field[string] `json:"queue_name,required"`
 }
 
 func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type QueueNewResponseEnvelope struct {
@@ -315,13 +315,13 @@ func (r QueueNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type QueueNewResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                `json:"total_count"`
 	JSON       queueNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -401,13 +401,13 @@ func (r QueueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type QueueUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                   `json:"total_count"`
 	JSON       queueUpdateResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -487,13 +487,13 @@ func (r QueueDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type QueueDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                   `json:"total_count"`
 	JSON       queueDeleteResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -568,13 +568,13 @@ func (r QueueGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type QueueGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                `json:"total_count"`
 	JSON       queueGetResponseEnvelopeResultInfoJSON `json:"-"`
 }

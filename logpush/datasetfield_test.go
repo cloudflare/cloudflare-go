@@ -30,7 +30,7 @@ func TestDatasetFieldGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Logpush.Datasets.Fields.Get(
 		context.TODO(),
-		"http_requests",
+		"gateway_dns",
 		logpush.DatasetFieldGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},

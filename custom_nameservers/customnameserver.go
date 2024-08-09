@@ -52,7 +52,7 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 }
 
 // Delete Account Custom Nameserver
-func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *[]CustomNameserverDeleteResponse, err error) {
+func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *[]string, err error) {
 	var env CustomNameserverDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -199,8 +199,6 @@ func (r CustomNameserverStatus) IsKnown() bool {
 	return false
 }
 
-type CustomNameserverDeleteResponse = interface{}
-
 type CustomNameserverNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -268,7 +266,7 @@ type CustomNameserverDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    CustomNameserverDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CustomNameserverDeleteResponse                 `json:"result,nullable"`
+	Result     []string                                         `json:"result,nullable"`
 	ResultInfo CustomNameserverDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       customNameserverDeleteResponseEnvelopeJSON       `json:"-"`
 }

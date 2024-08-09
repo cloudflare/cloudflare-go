@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
@@ -34,14 +35,14 @@ func NewRatePlanService(opts ...option.RequestOption) (r *RatePlanService) {
 }
 
 // Lists all rate plans the zone can subscribe to.
-func (r *RatePlanService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]RatePlan, err error) {
+func (r *RatePlanService) Get(ctx context.Context, query RatePlanGetParams, opts ...option.RequestOption) (res *[]RatePlan, err error) {
 	var env RatePlanGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/available_rate_plans", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/available_rate_plans", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -148,6 +149,11 @@ func (r RatePlanFrequency) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RatePlanGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RatePlanGetResponseEnvelope struct {

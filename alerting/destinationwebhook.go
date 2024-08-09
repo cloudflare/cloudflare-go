@@ -339,13 +339,20 @@ func (r DestinationWebhookNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DestinationWebhookNewResponseEnvelope struct {
-	Result DestinationWebhookNewResponse             `json:"result"`
-	JSON   destinationWebhookNewResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DestinationWebhookNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  DestinationWebhookNewResponse                `json:"result"`
+	JSON    destinationWebhookNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // destinationWebhookNewResponseEnvelopeJSON contains the JSON metadata for the
 // struct [DestinationWebhookNewResponseEnvelope]
 type destinationWebhookNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -357,6 +364,21 @@ func (r *DestinationWebhookNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 
 func (r destinationWebhookNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type DestinationWebhookNewResponseEnvelopeSuccess bool
+
+const (
+	DestinationWebhookNewResponseEnvelopeSuccessTrue DestinationWebhookNewResponseEnvelopeSuccess = true
+)
+
+func (r DestinationWebhookNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DestinationWebhookNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type DestinationWebhookUpdateParams struct {
@@ -378,13 +400,20 @@ func (r DestinationWebhookUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DestinationWebhookUpdateResponseEnvelope struct {
-	Result DestinationWebhookUpdateResponse             `json:"result"`
-	JSON   destinationWebhookUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DestinationWebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  DestinationWebhookUpdateResponse                `json:"result"`
+	JSON    destinationWebhookUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // destinationWebhookUpdateResponseEnvelopeJSON contains the JSON metadata for the
 // struct [DestinationWebhookUpdateResponseEnvelope]
 type destinationWebhookUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -396,6 +425,21 @@ func (r *DestinationWebhookUpdateResponseEnvelope) UnmarshalJSON(data []byte) (e
 
 func (r destinationWebhookUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type DestinationWebhookUpdateResponseEnvelopeSuccess bool
+
+const (
+	DestinationWebhookUpdateResponseEnvelopeSuccessTrue DestinationWebhookUpdateResponseEnvelopeSuccess = true
+)
+
+func (r DestinationWebhookUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DestinationWebhookUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type DestinationWebhookListParams struct {
@@ -414,13 +458,20 @@ type DestinationWebhookGetParams struct {
 }
 
 type DestinationWebhookGetResponseEnvelope struct {
-	Result Webhooks                                  `json:"result"`
-	JSON   destinationWebhookGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DestinationWebhookGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Webhooks                                     `json:"result"`
+	JSON    destinationWebhookGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // destinationWebhookGetResponseEnvelopeJSON contains the JSON metadata for the
 // struct [DestinationWebhookGetResponseEnvelope]
 type destinationWebhookGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -432,4 +483,19 @@ func (r *DestinationWebhookGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 
 func (r destinationWebhookGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type DestinationWebhookGetResponseEnvelopeSuccess bool
+
+const (
+	DestinationWebhookGetResponseEnvelopeSuccessTrue DestinationWebhookGetResponseEnvelopeSuccess = true
+)
+
+func (r DestinationWebhookGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DestinationWebhookGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

@@ -54,8 +54,10 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	return
 }
 
-// Upload a worker module.
-func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
+// Upload a worker module. You can find more about the multipart metadata on our
+// docs:
+// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/.
+func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *ScriptUpdateResponse, err error) {
 	var env ScriptUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -214,6 +216,51 @@ func (r ScriptSettingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type ScriptUpdateResponse struct {
+	// The id of the script in the Workers system. Usually the script name.
+	ID string `json:"id"`
+	// When the script was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Hashed script content, can be used in a If-None-Match header when updating.
+	Etag string `json:"etag"`
+	// Whether Logpush is turned on for the Worker.
+	Logpush bool `json:"logpush"`
+	// When the script was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Specifies the placement mode for the Worker (e.g. 'smart').
+	PlacementMode string `json:"placement_mode"`
+	StartupTimeMs int64  `json:"startup_time_ms"`
+	// List of Workers that will consume logs from the attached Worker.
+	TailConsumers []ConsumerScript `json:"tail_consumers"`
+	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
+	UsageModel string                   `json:"usage_model"`
+	JSON       scriptUpdateResponseJSON `json:"-"`
+}
+
+// scriptUpdateResponseJSON contains the JSON metadata for the struct
+// [ScriptUpdateResponse]
+type scriptUpdateResponseJSON struct {
+	ID            apijson.Field
+	CreatedOn     apijson.Field
+	Etag          apijson.Field
+	Logpush       apijson.Field
+	ModifiedOn    apijson.Field
+	PlacementMode apijson.Field
+	StartupTimeMs apijson.Field
+	TailConsumers apijson.Field
+	UsageModel    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScriptUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string]         `path:"account_id,required"`
@@ -262,7 +309,7 @@ func (r ScriptUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 func (r ScriptUpdateParamsBody) implementsWorkersScriptUpdateParamsBodyUnion() {}
 
 // Satisfied by [workers.ScriptUpdateParamsBodyObject],
-// [workers.ScriptUpdateParamsBodyObject], [ScriptUpdateParamsBody].
+// [workers.ScriptUpdateParamsBodyMessage], [ScriptUpdateParamsBody].
 type ScriptUpdateParamsBodyUnion interface {
 	implementsWorkersScriptUpdateParamsBodyUnion()
 }
@@ -369,12 +416,24 @@ func (r ScriptUpdateParamsBodyObjectMetadataUsageModel) IsKnown() bool {
 	return false
 }
 
+type ScriptUpdateParamsBodyMessage struct {
+	// Rollback message to be associated with this deployment. Only parsed when query
+	// param `"rollback_to"` is present.
+	Message param.Field[string] `json:"message"`
+}
+
+func (r ScriptUpdateParamsBodyMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsBodyMessage) implementsWorkersScriptUpdateParamsBodyUnion() {}
+
 type ScriptUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Script                              `json:"result"`
+	Result  ScriptUpdateResponse                `json:"result"`
 	JSON    scriptUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

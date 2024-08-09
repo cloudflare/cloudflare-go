@@ -51,7 +51,6 @@ func (r *BGPIPService) Timeseries(ctx context.Context, query BGPIPTimeseriesPara
 type BgpipTimeseriesResponse struct {
 	Meta     BgpipTimeseriesResponseMeta     `json:"meta,required"`
 	Serie174 BgpipTimeseriesResponseSerie174 `json:"serie_174,required"`
-	SerieCn  BgpipTimeseriesResponseSerieCn  `json:"serie_cn,required"`
 	JSON     bgpipTimeseriesResponseJSON     `json:"-"`
 }
 
@@ -60,7 +59,6 @@ type BgpipTimeseriesResponse struct {
 type bgpipTimeseriesResponseJSON struct {
 	Meta        apijson.Field
 	Serie174    apijson.Field
-	SerieCn     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -74,14 +72,14 @@ func (r bgpipTimeseriesResponseJSON) RawJSON() string {
 }
 
 type BgpipTimeseriesResponseMeta struct {
-	DateRange []BgpipTimeseriesResponseMetaDateRange `json:"dateRange,required"`
-	JSON      bgpipTimeseriesResponseMetaJSON        `json:"-"`
+	Queries []BgpipTimeseriesResponseMetaQuery `json:"queries,required"`
+	JSON    bgpipTimeseriesResponseMetaJSON    `json:"-"`
 }
 
 // bgpipTimeseriesResponseMetaJSON contains the JSON metadata for the struct
 // [BgpipTimeseriesResponseMeta]
 type bgpipTimeseriesResponseMetaJSON struct {
-	DateRange   apijson.Field
+	Queries     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -94,28 +92,49 @@ func (r bgpipTimeseriesResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-type BgpipTimeseriesResponseMetaDateRange struct {
-	// Adjusted end of date range.
-	EndTime time.Time `json:"endTime,required" format:"date-time"`
-	// Adjusted start of date range.
-	StartTime time.Time                                `json:"startTime,required" format:"date-time"`
-	JSON      bgpipTimeseriesResponseMetaDateRangeJSON `json:"-"`
+type BgpipTimeseriesResponseMetaQuery struct {
+	DateRange BgpipTimeseriesResponseMetaQueriesDateRange `json:"dateRange,required"`
+	Entity    string                                      `json:"entity,required"`
+	JSON      bgpipTimeseriesResponseMetaQueryJSON        `json:"-"`
 }
 
-// bgpipTimeseriesResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [BgpipTimeseriesResponseMetaDateRange]
-type bgpipTimeseriesResponseMetaDateRangeJSON struct {
+// bgpipTimeseriesResponseMetaQueryJSON contains the JSON metadata for the struct
+// [BgpipTimeseriesResponseMetaQuery]
+type bgpipTimeseriesResponseMetaQueryJSON struct {
+	DateRange   apijson.Field
+	Entity      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BgpipTimeseriesResponseMetaQuery) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bgpipTimeseriesResponseMetaQueryJSON) RawJSON() string {
+	return r.raw
+}
+
+type BgpipTimeseriesResponseMetaQueriesDateRange struct {
+	EndTime   string                                          `json:"endTime,required"`
+	StartTime string                                          `json:"startTime,required"`
+	JSON      bgpipTimeseriesResponseMetaQueriesDateRangeJSON `json:"-"`
+}
+
+// bgpipTimeseriesResponseMetaQueriesDateRangeJSON contains the JSON metadata for
+// the struct [BgpipTimeseriesResponseMetaQueriesDateRange]
+type bgpipTimeseriesResponseMetaQueriesDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BgpipTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *BgpipTimeseriesResponseMetaQueriesDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpipTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
+func (r bgpipTimeseriesResponseMetaQueriesDateRangeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -144,47 +163,27 @@ func (r bgpipTimeseriesResponseSerie174JSON) RawJSON() string {
 	return r.raw
 }
 
-type BgpipTimeseriesResponseSerieCn struct {
-	IPV4       []string                           `json:"ipv4,required"`
-	IPV6       []string                           `json:"ipv6,required"`
-	Timestamps []time.Time                        `json:"timestamps,required" format:"date-time"`
-	JSON       bgpipTimeseriesResponseSerieCnJSON `json:"-"`
-}
-
-// bgpipTimeseriesResponseSerieCnJSON contains the JSON metadata for the struct
-// [BgpipTimeseriesResponseSerieCn]
-type bgpipTimeseriesResponseSerieCnJSON struct {
-	IPV4        apijson.Field
-	IPV6        apijson.Field
-	Timestamps  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BgpipTimeseriesResponseSerieCn) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpipTimeseriesResponseSerieCnJSON) RawJSON() string {
-	return r.raw
-}
-
 type BGPIPTimeseriesParams struct {
-	// Comma separated list of ASNs.
-	ASN param.Field[string] `query:"asn"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
-	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
-	// Shorthand date ranges for the last X days - use when you don't need specific
-	// start and end dates.
-	DateRange param.Field[string] `query:"dateRange"`
-	// Start of the date range (inclusive).
-	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]string] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[BgpipTimeseriesParamsFormat] `query:"format"`
 	// Include data delay meta information
 	IncludeDelay param.Field[bool] `query:"includeDelay"`
-	// Comma separated list of locations.
-	Location param.Field[string] `query:"location"`
+	// Filter for ip version.
+	IPVersion param.Field[[]BgpipTimeseriesParamsIPVersion] `query:"ipVersion"`
+	// Array of locations (alpha-2 country codes).
+	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 }
@@ -208,6 +207,21 @@ const (
 func (r BgpipTimeseriesParamsFormat) IsKnown() bool {
 	switch r {
 	case BgpipTimeseriesParamsFormatJson, BgpipTimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+type BgpipTimeseriesParamsIPVersion string
+
+const (
+	BgpipTimeseriesParamsIPVersionIPv4 BgpipTimeseriesParamsIPVersion = "IPv4"
+	BgpipTimeseriesParamsIPVersionIPv6 BgpipTimeseriesParamsIPVersion = "IPv6"
+)
+
+func (r BgpipTimeseriesParamsIPVersion) IsKnown() bool {
+	switch r {
+	case BgpipTimeseriesParamsIPVersionIPv4, BgpipTimeseriesParamsIPVersionIPv6:
 		return true
 	}
 	return false

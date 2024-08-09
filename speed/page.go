@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // PageService contains methods and other services that help with interacting with
@@ -213,13 +214,20 @@ func (r PageTrendParamsRegion) IsKnown() bool {
 }
 
 type PageTrendResponseEnvelope struct {
-	Result Trend                         `json:"result"`
-	JSON   pageTrendResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful.
+	Success bool                          `json:"success,required"`
+	Result  Trend                         `json:"result"`
+	JSON    pageTrendResponseEnvelopeJSON `json:"-"`
 }
 
 // pageTrendResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PageTrendResponseEnvelope]
 type pageTrendResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

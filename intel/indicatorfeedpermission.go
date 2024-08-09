@@ -114,6 +114,8 @@ type IndicatorFeedPermissionListResponse struct {
 	Description string `json:"description"`
 	// Whether the indicator feed can be attributed to a provider
 	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed can be downloaded
+	IsDownloadable bool `json:"is_downloadable"`
 	// Whether the indicator feed is exposed to customers
 	IsPublic bool `json:"is_public"`
 	// The name of the indicator feed
@@ -127,6 +129,7 @@ type indicatorFeedPermissionListResponseJSON struct {
 	ID             apijson.Field
 	Description    apijson.Field
 	IsAttributable apijson.Field
+	IsDownloadable apijson.Field
 	IsPublic       apijson.Field
 	Name           apijson.Field
 	raw            string

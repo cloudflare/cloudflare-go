@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -18,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // FirewallService contains methods and other services that help with interacting
@@ -193,8 +191,8 @@ type Firewall struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests bool               `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       []FirewallIPsUnion `json:"dns_firewall_ips,required" format:"ipv4"`
+	DeprecateAnyRequests bool          `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
 	ECSFallback bool `json:"ecs_fallback,required"`
 	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
@@ -208,8 +206,8 @@ type Firewall struct {
 	// Last modification of DNS Firewall cluster.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// DNS Firewall Cluster Name.
-	Name        string             `json:"name,required"`
-	UpstreamIPs []UpstreamIPsUnion `json:"upstream_ips,required" format:"ipv4"`
+	Name        string        `json:"name,required"`
+	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation AttackMitigation `json:"attack_mitigation,nullable"`
 	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
@@ -255,8 +253,8 @@ type FirewallParam struct {
 	// Identifier
 	ID param.Field[string] `json:"id,required"`
 	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests param.Field[bool]                    `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       param.Field[[]FirewallIPsUnionParam] `json:"dns_firewall_ips,required" format:"ipv4"`
+	DeprecateAnyRequests param.Field[bool]               `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       param.Field[[]FirewallIPsParam] `json:"dns_firewall_ips,required" format:"ipv4"`
 	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
 	ECSFallback param.Field[bool] `json:"ecs_fallback,required"`
 	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
@@ -268,8 +266,8 @@ type FirewallParam struct {
 	// increased to the minimum defined here for caching purposes.
 	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl,required"`
 	// DNS Firewall Cluster Name.
-	Name        param.Field[string]                  `json:"name,required"`
-	UpstreamIPs param.Field[[]UpstreamIPsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
+	Name        param.Field[string]             `json:"name,required"`
+	UpstreamIPs param.Field[[]UpstreamIPsParam] `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
 	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
@@ -287,63 +285,13 @@ func (r FirewallParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Cloudflare-assigned DNS IPv4 Address.
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type FirewallIPsUnion interface {
-	ImplementsDNSFirewallIPsUnion()
-}
+type FirewallIPs = string
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FirewallIPsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type FirewallIPsParam = string
 
-// Cloudflare-assigned DNS IPv4 Address.
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type FirewallIPsUnionParam interface {
-	ImplementsDNSFirewallIPsUnionParam()
-}
+type UpstreamIPs = string
 
-// Upstream DNS Server IPv4 Address.
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type UpstreamIPsUnion interface {
-	ImplementsDNSUpstreamIPsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UpstreamIPsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Upstream DNS Server IPv4 Address.
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type UpstreamIPsUnionParam interface {
-	ImplementsDNSUpstreamIPsUnionParam()
-}
+type UpstreamIPsParam = string
 
 type FirewallDeleteResponse struct {
 	// Identifier
@@ -371,8 +319,8 @@ type FirewallNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// DNS Firewall Cluster Name.
-	Name        param.Field[string]                  `json:"name,required"`
-	UpstreamIPs param.Field[[]UpstreamIPsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
+	Name        param.Field[string]             `json:"name,required"`
+	UpstreamIPs param.Field[[]UpstreamIPsParam] `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings.
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
 	// Deprecate the response to ANY requests.

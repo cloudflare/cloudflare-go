@@ -35,7 +35,7 @@ func NewAccessApplicationUserPolicyCheckService(opts ...option.RequestOption) (r
 }
 
 // Tests if a specific user has permission to access an application.
-func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appID AppIDUnionParam, query AccessApplicationUserPolicyCheckListParams, opts ...option.RequestOption) (res *AccessApplicationUserPolicyCheckListResponse, err error) {
+func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appID AppIDParam, query AccessApplicationUserPolicyCheckListParams, opts ...option.RequestOption) (res *AccessApplicationUserPolicyCheckListResponse, err error) {
 	var env AccessApplicationUserPolicyCheckListResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -56,7 +56,11 @@ func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appI
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/access/apps/%v/user_policy_checks", accountOrZone, accountOrZoneID, appID)
+	if appID == "" {
+		err = errors.New("missing required app_id parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/access/apps/%s/user_policy_checks", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

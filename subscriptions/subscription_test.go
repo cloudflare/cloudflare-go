@@ -90,9 +90,9 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Subscriptions.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"506e3185e9c882d175a2d0cb0093d9f2",
 		subscriptions.SubscriptionUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Subscription: user.SubscriptionParam{
 				App: cloudflare.F(user.SubscriptionAppParam{
 					InstallID: cloudflare.F("install_id"),
@@ -149,7 +149,9 @@ func TestSubscriptionList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Subscriptions.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Subscriptions.List(context.TODO(), subscriptions.SubscriptionListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -174,8 +176,10 @@ func TestSubscriptionDelete(t *testing.T) {
 	)
 	_, err := client.Subscriptions.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"506e3185e9c882d175a2d0cb0093d9f2",
+		subscriptions.SubscriptionDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

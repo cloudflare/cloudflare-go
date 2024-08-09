@@ -42,7 +42,7 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 			}),
 			ID:   cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 			Name: cloudflare.F("Widget Corps IDP"),
-			SCIMConfig: cloudflare.F(zero_trust.SCIMConfigParam{
+			SCIMConfig: cloudflare.F(zero_trust.IdentityProviderSCIMConfigParam{
 				Enabled:                cloudflare.F(true),
 				GroupMemberDeprovision: cloudflare.F(true),
 				SeatDeprovision:        cloudflare.F(true),
@@ -93,7 +93,7 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 				}),
 				ID:   cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Name: cloudflare.F("Widget Corps IDP"),
-				SCIMConfig: cloudflare.F(zero_trust.SCIMConfigParam{
+				SCIMConfig: cloudflare.F(zero_trust.IdentityProviderSCIMConfigParam{
 					Enabled:                cloudflare.F(true),
 					GroupMemberDeprovision: cloudflare.F(true),
 					SeatDeprovision:        cloudflare.F(true),

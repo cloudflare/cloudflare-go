@@ -36,23 +36,8 @@ func TestBGPTimeseriesWithOptionalParams(t *testing.T) {
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:      cloudflare.F(radar.BGPTimeseriesParamsFormatJson),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		Prefix: cloudflare.F([]radar.BGPTimeseriesParamsPrefix{{
-			In:   cloudflare.F("query"),
-			Name: cloudflare.F("prefix"),
-			Test: cloudflare.F(12.000000),
-			Type: cloudflare.F("1.1.1.0/24"),
-		}, {
-			In:   cloudflare.F("query"),
-			Name: cloudflare.F("prefix"),
-			Test: cloudflare.F(12.000000),
-			Type: cloudflare.F("1.1.1.0/24"),
-		}, {
-			In:   cloudflare.F("query"),
-			Name: cloudflare.F("prefix"),
-			Test: cloudflare.F(12.000000),
-			Type: cloudflare.F("1.1.1.0/24"),
-		}}),
-		UpdateType: cloudflare.F([]radar.BGPTimeseriesParamsUpdateType{radar.BGPTimeseriesParamsUpdateTypeAnnouncement, radar.BGPTimeseriesParamsUpdateTypeWithdrawal}),
+		Prefix:      cloudflare.F([]string{"1.1.1.0/24", "1.1.1.0/24", "1.1.1.0/24"}),
+		UpdateType:  cloudflare.F([]radar.BGPTimeseriesParamsUpdateType{radar.BGPTimeseriesParamsUpdateTypeAnnouncement, radar.BGPTimeseriesParamsUpdateTypeWithdrawal}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

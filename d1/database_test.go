@@ -98,6 +98,42 @@ func TestDatabaseDelete(t *testing.T) {
 	}
 }
 
+func TestDatabaseExportWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.D1.Database.Export(
+		context.TODO(),
+		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+		d1.DatabaseExportParams{
+			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			OutputFormat:    cloudflare.F(d1.DatabaseExportParamsOutputFormatPolling),
+			CurrentBookmark: cloudflare.F("current_bookmark"),
+			DumpOptions: cloudflare.F(d1.DatabaseExportParamsDumpOptions{
+				NoData:   cloudflare.F(true),
+				NoSchema: cloudflare.F(true),
+				Tables:   cloudflare.F([]string{"string", "string", "string"}),
+			}),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestDatabaseGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -116,6 +152,39 @@ func TestDatabaseGet(t *testing.T) {
 		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 		d1.DatabaseGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestDatabaseImport(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.D1.Database.Import(
+		context.TODO(),
+		"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+		d1.DatabaseImportParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body: d1.DatabaseImportParamsBodyObject{
+				Action: cloudflare.F(d1.DatabaseImportParamsBodyObjectActionInit),
+				Etag:   cloudflare.F("etag"),
+			},
 		},
 	)
 	if err != nil {

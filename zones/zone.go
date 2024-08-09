@@ -61,7 +61,8 @@ func (r *ZoneService) New(ctx context.Context, body ZoneNewParams, opts ...optio
 	return
 }
 
-// Lists, searches, sorts, and filters your zones.
+// Lists, searches, sorts, and filters your zones. Listing zones across more than
+// 500 accounts is currently not allowed.
 func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Zone], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -79,7 +80,8 @@ func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...op
 	return res, nil
 }
 
-// Lists, searches, sorts, and filters your zones.
+// Lists, searches, sorts, and filters your zones. Listing zones across more than
+// 500 accounts is currently not allowed.
 func (r *ZoneService) ListAutoPaging(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Zone] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }

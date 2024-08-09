@@ -28,18 +28,15 @@ func TestReceivedGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Logs.Received.Get(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		logs.ReceivedGetParams{
-			End:        cloudflare.F[logs.ReceivedGetParamsEndUnion](shared.UnionString("2018-05-20T10:01:00Z")),
-			Count:      cloudflare.F(int64(1)),
-			Fields:     cloudflare.F("ClientIP,RayID,EdgeStartTimestamp"),
-			Sample:     cloudflare.F(0.100000),
-			Start:      cloudflare.F[logs.ReceivedGetParamsStartUnion](shared.UnionString("2018-05-20T10:00:00Z")),
-			Timestamps: cloudflare.F(logs.ReceivedGetParamsTimestampsUnixnano),
-		},
-	)
+	_, err := client.Logs.Received.Get(context.TODO(), logs.ReceivedGetParams{
+		ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		End:        cloudflare.F[logs.ReceivedGetParamsEndUnion](shared.UnionString("2018-05-20T10:01:00Z")),
+		Count:      cloudflare.F(int64(1)),
+		Fields:     cloudflare.F("ClientIP,RayID,EdgeStartTimestamp"),
+		Sample:     cloudflare.F(0.100000),
+		Start:      cloudflare.F[logs.ReceivedGetParamsStartUnion](shared.UnionString("2018-05-20T10:00:00Z")),
+		Timestamps: cloudflare.F(logs.ReceivedGetParamsTimestampsUnixnano),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

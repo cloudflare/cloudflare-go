@@ -198,13 +198,11 @@ type AccessTagNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
-	Name      param.Field[string]    `json:"name,required"`
-	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
-	UpdatedAt param.Field[time.Time] `json:"updated_at" format:"date-time"`
+	Body string `json:"body,required"`
 }
 
 func (r AccessTagNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 type AccessTagNewResponseEnvelope struct {
@@ -255,9 +253,7 @@ type AccessTagUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
-	Name      param.Field[string]    `json:"name,required"`
-	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
-	UpdatedAt param.Field[time.Time] `json:"updated_at" format:"date-time"`
+	Name param.Field[string] `json:"name,required"`
 }
 
 func (r AccessTagUpdateParams) MarshalJSON() (data []byte, err error) {
