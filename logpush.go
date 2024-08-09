@@ -371,7 +371,7 @@ type UpdateLogpushJobParams struct {
 	Enabled                  bool                  `json:"enabled"`
 	Kind                     string                `json:"kind,omitempty"`
 	Name                     string                `json:"name"`
-	LogpullOptions           string                `json:"logpull_options,omitempty"`
+	LogpullOptions           string                `json:"logpull_options"`
 	OutputOptions            *LogpushOutputOptions `json:"output_options,omitempty"`
 	DestinationConf          string                `json:"destination_conf"`
 	OwnershipChallenge       string                `json:"ownership_challenge,omitempty"`
