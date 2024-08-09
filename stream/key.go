@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -14,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/tidwall/gjson"
 )
 
 // KeyService contains methods and other services that help with interacting with
@@ -55,7 +57,7 @@ func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...optio
 }
 
 // Deletes signing keys and revokes all signed URLs generated with the key.
-func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDeleteParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDeleteParams, opts ...option.RequestOption) (res *KeyDeleteResponseUnion, err error) {
 	var env KeyDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -120,6 +122,22 @@ func (r *Keys) UnmarshalJSON(data []byte) (err error) {
 
 func (r keysJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [stream.KeyDeleteResponseUnknown] or [shared.UnionString].
+type KeyDeleteResponseUnion interface {
+	ImplementsStreamKeyDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*KeyDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type KeyGetResponse struct {
@@ -209,7 +227,7 @@ type KeyDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success KeyDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  string                           `json:"result"`
+	Result  KeyDeleteResponseUnion           `json:"result"`
 	JSON    keyDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

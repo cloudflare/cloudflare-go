@@ -7,12 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/tidwall/gjson"
 )
 
 // AudioTrackService contains methods and other services that help with interacting
@@ -36,7 +38,7 @@ func NewAudioTrackService(opts ...option.RequestOption) (r *AudioTrackService) {
 
 // Deletes additional audio tracks on a video. Deleting a default audio track is
 // not allowed. You must assign another audio track as default prior to deletion.
-func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audioIdentifier string, body AudioTrackDeleteParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audioIdentifier string, body AudioTrackDeleteParams, opts ...option.RequestOption) (res *AudioTrackDeleteResponseUnion, err error) {
 	var env AudioTrackDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -178,6 +180,23 @@ func (r AudioStatus) IsKnown() bool {
 	return false
 }
 
+// Union satisfied by [stream.AudioTrackDeleteResponseUnknown] or
+// [shared.UnionString].
+type AudioTrackDeleteResponseUnion interface {
+	ImplementsStreamAudioTrackDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AudioTrackDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type AudioTrackDeleteParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -188,7 +207,7 @@ type AudioTrackDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AudioTrackDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  string                                  `json:"result"`
+	Result  AudioTrackDeleteResponseUnion           `json:"result"`
 	JSON    audioTrackDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

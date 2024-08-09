@@ -7,12 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/tidwall/gjson"
 )
 
 // WebhookService contains methods and other services that help with interacting
@@ -35,7 +37,7 @@ func NewWebhookService(opts ...option.RequestOption) (r *WebhookService) {
 }
 
 // Creates a webhook notification.
-func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams, opts ...option.RequestOption) (res *WebhookUpdateResponse, err error) {
+func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams, opts ...option.RequestOption) (res *WebhookUpdateResponseUnion, err error) {
 	var env WebhookUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -52,7 +54,7 @@ func (r *WebhookService) Update(ctx context.Context, params WebhookUpdateParams,
 }
 
 // Deletes a webhook.
-func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, opts ...option.RequestOption) (res *WebhookDeleteResponseUnion, err error) {
 	var env WebhookDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -69,7 +71,7 @@ func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, o
 }
 
 // Retrieves a list of webhooks.
-func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts ...option.RequestOption) (res *WebhookGetResponse, err error) {
+func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts ...option.RequestOption) (res *WebhookGetResponseUnion, err error) {
 	var env WebhookGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -85,9 +87,55 @@ func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts .
 	return
 }
 
-type WebhookUpdateResponse = interface{}
+// Union satisfied by [stream.WebhookUpdateResponseUnknown] or
+// [shared.UnionString].
+type WebhookUpdateResponseUnion interface {
+	ImplementsStreamWebhookUpdateResponseUnion()
+}
 
-type WebhookGetResponse = interface{}
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WebhookUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [stream.WebhookDeleteResponseUnknown] or
+// [shared.UnionString].
+type WebhookDeleteResponseUnion interface {
+	ImplementsStreamWebhookDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WebhookDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [stream.WebhookGetResponseUnknown] or [shared.UnionString].
+type WebhookGetResponseUnion interface {
+	ImplementsStreamWebhookGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WebhookGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
 type WebhookUpdateParams struct {
 	// The account identifier tag.
@@ -105,7 +153,7 @@ type WebhookUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  WebhookUpdateResponse                `json:"result"`
+	Result  WebhookUpdateResponseUnion           `json:"result"`
 	JSON    webhookUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -153,7 +201,7 @@ type WebhookDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WebhookDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  string                               `json:"result"`
+	Result  WebhookDeleteResponseUnion           `json:"result"`
 	JSON    webhookDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -201,7 +249,7 @@ type WebhookGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WebhookGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  WebhookGetResponse                `json:"result"`
+	Result  WebhookGetResponseUnion           `json:"result"`
 	JSON    webhookGetResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"mime/multipart"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
@@ -18,6 +19,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/tidwall/gjson"
 )
 
 // WatermarkService contains methods and other services that help with interacting
@@ -85,7 +87,7 @@ func (r *WatermarkService) ListAutoPaging(ctx context.Context, query WatermarkLi
 }
 
 // Deletes a watermark profile.
-func (r *WatermarkService) Delete(ctx context.Context, identifier string, body WatermarkDeleteParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *WatermarkService) Delete(ctx context.Context, identifier string, body WatermarkDeleteParams, opts ...option.RequestOption) (res *WatermarkDeleteResponseUnion, err error) {
 	var env WatermarkDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -187,6 +189,23 @@ func (r watermarkJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by [stream.WatermarkDeleteResponseUnknown] or
+// [shared.UnionString].
+type WatermarkDeleteResponseUnion interface {
+	ImplementsStreamWatermarkDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WatermarkDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type WatermarkNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -286,7 +305,7 @@ type WatermarkDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success WatermarkDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  string                                 `json:"result"`
+	Result  WatermarkDeleteResponseUnion           `json:"result"`
 	JSON    watermarkDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
