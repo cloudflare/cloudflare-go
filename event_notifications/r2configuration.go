@@ -132,7 +132,7 @@ func (r R2ConfigurationGetResponseItemRulesAction) IsKnown() bool {
 }
 
 type R2ConfigurationGetParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -140,7 +140,7 @@ type R2ConfigurationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo      `json:"errors,required"`
 	Messages []shared.ResponseInfo      `json:"messages,required"`
 	Result   R2ConfigurationGetResponse `json:"result,required"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success R2ConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    r2ConfigurationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -164,7 +164,7 @@ func (r r2ConfigurationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type R2ConfigurationGetResponseEnvelopeSuccess bool
 
 const (
