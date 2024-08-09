@@ -741,6 +741,11 @@ type UpdateEntrypointRulesetParams struct {
 	Rules       []RulesetRule `json:"rules"`
 }
 
+type DeleteRulesetRuleParams struct {
+	rulesetID     string `json:"-"`
+	rulesetRuleID string `json:"-"`
+}
+
 // ListRulesets lists all Rulesets in a given zone or account depending on the
 // ResourceContainer type provided.
 //
@@ -848,8 +853,8 @@ func (api *API) UpdateRuleset(ctx context.Context, rc *ResourceContainer, params
 // ruleset rule ID.
 //
 // API reference: https://developers.cloudflare.com/api/operations/deleteZoneRulesetRule
-func (api *API) DeleteRulesetRule(ctx context.Context, rc *ResourceContainer, rulesetID, rulesetRuleID string) error {
-	uri := fmt.Sprintf("/%s/%s/rulesets/%s/rules/%s", rc.Level, rc.Identifier, rulesetID, rulesetRuleID)
+func (api *API) DeleteRulesetRule(ctx context.Context, rc *ResourceContainer, params DeleteRulesetRuleParams) error {
+	uri := fmt.Sprintf("/%s/%s/rulesets/%s/rules/%s", rc.Level, rc.Identifier, params.rulesetID, params.rulesetRuleID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
