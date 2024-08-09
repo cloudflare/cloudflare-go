@@ -157,7 +157,7 @@ func (r consumerJSON) RawJSON() string {
 }
 
 type ConsumerSettings struct {
-	// The maximum number of messages to include in a batch
+	// The maximum number of messages to include in a batch.
 	BatchSize float64 `json:"batch_size"`
 	// The maximum number of retries
 	MaxRetries    float64              `json:"max_retries"`
@@ -185,7 +185,7 @@ func (r consumerSettingsJSON) RawJSON() string {
 
 type ConsumerNewResponse struct {
 	CreatedOn string `json:"created_on"`
-	// The name of the dead letter queue
+	// The name of the dead letter queue.
 	DeadLetterQueue string                      `json:"dead_letter_queue"`
 	Environment     string                      `json:"environment"`
 	QueueName       string                      `json:"queue_name"`
@@ -216,7 +216,7 @@ func (r consumerNewResponseJSON) RawJSON() string {
 }
 
 type ConsumerNewResponseSettings struct {
-	// The maximum number of messages to include in a batch
+	// The maximum number of messages to include in a batch.
 	BatchSize float64 `json:"batch_size"`
 	// The maximum number of retries
 	MaxRetries    float64                         `json:"max_retries"`
@@ -325,7 +325,7 @@ type ConsumerDeleteResponseArray []interface{}
 func (r ConsumerDeleteResponseArray) ImplementsQueuesConsumerDeleteResponseUnion() {}
 
 type ConsumerNewParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Body      interface{}         `json:"body,required"`
 }
@@ -338,7 +338,7 @@ type ConsumerNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   ConsumerNewResponse   `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    ConsumerNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       consumerNewResponseEnvelopeJSON       `json:"-"`
@@ -364,7 +364,7 @@ func (r consumerNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ConsumerNewResponseEnvelopeSuccess bool
 
 const (
@@ -380,13 +380,13 @@ func (r ConsumerNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConsumerNewResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                   `json:"total_count"`
 	JSON       consumerNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -411,7 +411,7 @@ func (r consumerNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type ConsumerUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Body      interface{}         `json:"body,required"`
 }
@@ -424,7 +424,7 @@ type ConsumerUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
 	Messages []shared.ResponseInfo  `json:"messages,required"`
 	Result   ConsumerUpdateResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    ConsumerUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       consumerUpdateResponseEnvelopeJSON       `json:"-"`
@@ -450,7 +450,7 @@ func (r consumerUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ConsumerUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -466,13 +466,13 @@ func (r ConsumerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConsumerUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                      `json:"total_count"`
 	JSON       consumerUpdateResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -497,7 +497,7 @@ func (r consumerUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type ConsumerDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -505,7 +505,7 @@ type ConsumerDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo       `json:"errors,required"`
 	Messages []shared.ResponseInfo       `json:"messages,required"`
 	Result   ConsumerDeleteResponseUnion `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    ConsumerDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       consumerDeleteResponseEnvelopeJSON       `json:"-"`
@@ -531,7 +531,7 @@ func (r consumerDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ConsumerDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -547,13 +547,13 @@ func (r ConsumerDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConsumerDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                      `json:"total_count"`
 	JSON       consumerDeleteResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -578,7 +578,7 @@ func (r consumerDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type ConsumerGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -586,7 +586,7 @@ type ConsumerGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   []Consumer            `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    ConsumerGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConsumerGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       consumerGetResponseEnvelopeJSON       `json:"-"`
@@ -612,7 +612,7 @@ func (r consumerGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type ConsumerGetResponseEnvelopeSuccess bool
 
 const (
@@ -628,13 +628,13 @@ func (r ConsumerGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type ConsumerGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                   `json:"total_count"`
 	TotalPages float64                                   `json:"total_pages"`
 	JSON       consumerGetResponseEnvelopeResultInfoJSON `json:"-"`
