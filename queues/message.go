@@ -77,9 +77,9 @@ func (r *MessageService) Pull(ctx context.Context, queueID string, params Messag
 }
 
 type MessageAckResponse struct {
-	// The number of messages that were succesfully acknowledged
+	// The number of messages that were succesfully acknowledged.
 	AckCount float64 `json:"ackCount"`
-	// The number of messages that were succesfully retried
+	// The number of messages that were succesfully retried.
 	RetryCount float64                `json:"retryCount"`
 	Warnings   []string               `json:"warnings"`
 	JSON       messageAckResponseJSON `json:"-"`
@@ -135,7 +135,7 @@ func (r messagePullResponseJSON) RawJSON() string {
 }
 
 type MessageAckParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string]                  `path:"account_id,required"`
 	Acks      param.Field[[]MessageAckParamsAck]   `json:"acks"`
 	Retries   param.Field[[]MessageAckParamsRetry] `json:"retries"`
@@ -170,7 +170,7 @@ type MessageAckResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   MessageAckResponse    `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    MessageAckResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo MessageAckResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       messageAckResponseEnvelopeJSON       `json:"-"`
@@ -196,7 +196,7 @@ func (r messageAckResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type MessageAckResponseEnvelopeSuccess bool
 
 const (
@@ -212,13 +212,13 @@ func (r MessageAckResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MessageAckResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                  `json:"total_count"`
 	JSON       messageAckResponseEnvelopeResultInfoJSON `json:"-"`
 }
@@ -243,9 +243,9 @@ func (r messageAckResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type MessagePullParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The maximum number of messages to include in a batch
+	// The maximum number of messages to include in a batch.
 	BatchSize param.Field[float64] `json:"batch_size"`
 	// The number of milliseconds that a message is exclusively leased. After the
 	// timeout, the message becomes available for another attempt.
@@ -260,7 +260,7 @@ type MessagePullResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   []MessagePullResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    MessagePullResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo MessagePullResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       messagePullResponseEnvelopeJSON       `json:"-"`
@@ -286,7 +286,7 @@ func (r messagePullResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type MessagePullResponseEnvelopeSuccess bool
 
 const (
@@ -302,13 +302,13 @@ func (r MessagePullResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type MessagePullResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results for the requested service.
 	Count float64 `json:"count"`
-	// Current page within paginated list of results
+	// Current page within paginated list of results.
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
+	// Total results available without any search parameters.
 	TotalCount float64                                   `json:"total_count"`
 	JSON       messagePullResponseEnvelopeResultInfoJSON `json:"-"`
 }
