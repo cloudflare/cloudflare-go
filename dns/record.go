@@ -748,7 +748,7 @@ func (r CERTRecordDataParam) MarshalJSON() (data []byte, err error) {
 
 type CNAMERecord struct {
 	// A valid hostname. Must not match the record's name.
-	Content interface{} `json:"content,required"`
+	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
@@ -823,7 +823,7 @@ func (r CNAMERecordType) IsKnown() bool {
 
 type CNAMERecordParam struct {
 	// A valid hostname. Must not match the record's name.
-	Content param.Field[interface{}] `json:"content,required"`
+	Content param.Field[string] `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
@@ -1962,8 +1962,8 @@ func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
 func (r PTRRecordParam) implementsDNSRecordUnionParam() {}
 
 type Record struct {
-	// This field can have the runtime type of [string], [interface{}].
-	Content interface{} `json:"content,required"`
+	// A valid IPv4 address.
+	Content string `json:"content" format:"ipv4"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Whether the record is receiving the performance and security benefits of
@@ -2200,7 +2200,8 @@ func (r RecordType) IsKnown() bool {
 }
 
 type RecordParam struct {
-	Content param.Field[interface{}] `json:"content,required"`
+	// A valid IPv4 address.
+	Content param.Field[string] `json:"content" format:"ipv4"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Whether the record is receiving the performance and security benefits of
