@@ -152,6 +152,10 @@ func (e RequestError) Type() ErrorType {
 	return e.cloudflareError.Type
 }
 
+func (e RequestError) Unwrap() error {
+	return e.cloudflareError
+}
+
 func NewRequestError(e *Error) RequestError {
 	return RequestError{
 		cloudflareError: e,
@@ -190,6 +194,10 @@ func (e RatelimitError) RayID() string {
 
 func (e RatelimitError) Type() ErrorType {
 	return e.cloudflareError.Type
+}
+
+func (e RatelimitError) Unwrap() error {
+	return e.cloudflareError
 }
 
 func NewRatelimitError(e *Error) RatelimitError {
@@ -231,6 +239,10 @@ func (e ServiceError) Type() ErrorType {
 	return e.cloudflareError.Type
 }
 
+func (e ServiceError) Unwrap() error {
+	return e.cloudflareError
+}
+
 func NewServiceError(e *Error) ServiceError {
 	return ServiceError{
 		cloudflareError: e,
@@ -268,6 +280,10 @@ func (e AuthenticationError) RayID() string {
 
 func (e AuthenticationError) Type() ErrorType {
 	return e.cloudflareError.Type
+}
+
+func (e AuthenticationError) Unwrap() error {
+	return e.cloudflareError
 }
 
 func NewAuthenticationError(e *Error) AuthenticationError {
@@ -309,6 +325,10 @@ func (e AuthorizationError) Type() ErrorType {
 	return e.cloudflareError.Type
 }
 
+func (e AuthorizationError) Unwrap() error {
+	return e.cloudflareError
+}
+
 func NewAuthorizationError(e *Error) AuthorizationError {
 	return AuthorizationError{
 		cloudflareError: e,
@@ -346,6 +366,10 @@ func (e NotFoundError) RayID() string {
 
 func (e NotFoundError) Type() ErrorType {
 	return e.cloudflareError.Type
+}
+
+func (e NotFoundError) Unwrap() error {
+	return e.cloudflareError
 }
 
 func NewNotFoundError(e *Error) NotFoundError {
