@@ -112,7 +112,7 @@ type SeatEditResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    SeatEditResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []Seat                             `json:"result,nullable"`
+	Result     []Seat                             `json:"result"`
 	ResultInfo SeatEditResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       seatEditResponseEnvelopeJSON       `json:"-"`
 }

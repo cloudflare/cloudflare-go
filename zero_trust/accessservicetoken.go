@@ -267,7 +267,8 @@ type ServiceToken struct {
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
+	Duration  string    `json:"duration"`
+	ExpiresAt time.Time `json:"expires_at" format:"date-time"`
 	// The name of the service token.
 	Name      string           `json:"name"`
 	UpdatedAt time.Time        `json:"updated_at" format:"date-time"`
@@ -280,6 +281,7 @@ type serviceTokenJSON struct {
 	ClientID    apijson.Field
 	CreatedAt   apijson.Field
 	Duration    apijson.Field
+	ExpiresAt   apijson.Field
 	Name        apijson.Field
 	UpdatedAt   apijson.Field
 	raw         string
