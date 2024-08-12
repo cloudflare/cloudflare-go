@@ -32,7 +32,7 @@ func TestPageTestNewWithOptionalParams(t *testing.T) {
 		"example.com",
 		speed.PageTestNewParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Region: cloudflare.F(speed.PageTestNewParamsRegionUsCentral1),
+			Region: cloudflare.F(speed.PageTestNewParamsRegionAsiaEast1),
 		},
 	)
 	if err != nil {
@@ -64,7 +64,7 @@ func TestPageTestListWithOptionalParams(t *testing.T) {
 			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Page:    cloudflare.F(int64(0)),
 			PerPage: cloudflare.F(int64(5)),
-			Region:  cloudflare.F(speed.PageTestListParamsRegionUsCentral1),
+			Region:  cloudflare.F(speed.PageTestListParamsRegionAsiaEast1),
 		},
 	)
 	if err != nil {
@@ -94,7 +94,7 @@ func TestPageTestDeleteWithOptionalParams(t *testing.T) {
 		"example.com",
 		speed.PageTestDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Region: cloudflare.F(speed.PageTestDeleteParamsRegionUsCentral1),
+			Region: cloudflare.F(speed.PageTestDeleteParamsRegionAsiaEast1),
 		},
 	)
 	if err != nil {

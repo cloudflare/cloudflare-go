@@ -29,7 +29,7 @@ func TestHTTPTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.Timeseries(context.TODO(), radar.HTTPTimeseriesParams{
-		AggInterval:   cloudflare.F(radar.HTTPTimeseriesParamsAggInterval1h),
+		AggInterval:   cloudflare.F(radar.HTTPTimeseriesParamsAggInterval15m),
 		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -38,7 +38,7 @@ func TestHTTPTimeseriesWithOptionalParams(t *testing.T) {
 		Format:        cloudflare.F(radar.HTTPTimeseriesParamsFormatJson),
 		Location:      cloudflare.F([]string{"string", "string", "string"}),
 		Name:          cloudflare.F([]string{"string", "string", "string"}),
-		Normalization: cloudflare.F(radar.HTTPTimeseriesParamsNormalizationMin0Max),
+		Normalization: cloudflare.F(radar.HTTPTimeseriesParamsNormalizationPercentageChange),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

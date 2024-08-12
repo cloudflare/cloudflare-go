@@ -63,7 +63,7 @@ func TestQualityIQITimeseriesGroupsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Quality.IQI.TimeseriesGroups(context.TODO(), radar.QualityIQITimeseriesGroupsParams{
 		Metric:        cloudflare.F(radar.QualityIQITimeseriesGroupsParamsMetricBandwidth),
-		AggInterval:   cloudflare.F(radar.QualityIQITimeseriesGroupsParamsAggInterval1h),
+		AggInterval:   cloudflare.F(radar.QualityIQITimeseriesGroupsParamsAggInterval15m),
 		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

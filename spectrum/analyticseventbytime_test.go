@@ -37,7 +37,7 @@ func TestAnalyticsEventBytimeGetWithOptionalParams(t *testing.T) {
 			Metrics:    cloudflare.F([]spectrum.AnalyticsEventBytimeGetParamsMetric{spectrum.AnalyticsEventBytimeGetParamsMetricCount, spectrum.AnalyticsEventBytimeGetParamsMetricBytesIngress}),
 			Since:      cloudflare.F(time.Now()),
 			Sort:       cloudflare.F([]interface{}{"+count", "-bytesIngress"}),
-			TimeDelta:  cloudflare.F(spectrum.AnalyticsEventBytimeGetParamsTimeDeltaMinute),
+			TimeDelta:  cloudflare.F(spectrum.AnalyticsEventBytimeGetParamsTimeDeltaYear),
 			Until:      cloudflare.F(time.Now()),
 		},
 	)

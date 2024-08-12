@@ -30,11 +30,11 @@ func TestDiscoveryOperationListWithOptionalParams(t *testing.T) {
 	_, err := client.APIGateway.Discovery.Operations.List(context.TODO(), api_gateway.DiscoveryOperationListParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Diff:      cloudflare.F(true),
-		Direction: cloudflare.F(api_gateway.DiscoveryOperationListParamsDirectionDesc),
+		Direction: cloudflare.F(api_gateway.DiscoveryOperationListParamsDirectionAsc),
 		Endpoint:  cloudflare.F("/api/v1"),
 		Host:      cloudflare.F([]string{"api.cloudflare.com"}),
 		Method:    cloudflare.F([]string{"GET"}),
-		Order:     cloudflare.F(api_gateway.DiscoveryOperationListParamsOrderMethod),
+		Order:     cloudflare.F(api_gateway.DiscoveryOperationListParamsOrderHost),
 		Origin:    cloudflare.F(api_gateway.DiscoveryOperationListParamsOriginMl),
 		Page:      cloudflare.F(int64(1)),
 		PerPage:   cloudflare.F(int64(5)),

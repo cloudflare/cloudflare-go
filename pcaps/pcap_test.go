@@ -30,6 +30,10 @@ func TestPCAPNewWithOptionalParams(t *testing.T) {
 	_, err := client.PCAPs.New(context.TODO(), pcaps.PCAPNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: pcaps.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimple{
+			PacketLimit: cloudflare.F(10000.000000),
+			System:      cloudflare.F(pcaps.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystemMagicTransit),
+			TimeLimit:   cloudflare.F(300.000000),
+			Type:        cloudflare.F(pcaps.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleTypeSimple),
 			FilterV1: cloudflare.F(pcaps.PCAPFilterParam{
 				DestinationAddress: cloudflare.F("1.2.3.4"),
 				DestinationPort:    cloudflare.F(80.000000),
@@ -37,10 +41,6 @@ func TestPCAPNewWithOptionalParams(t *testing.T) {
 				SourceAddress:      cloudflare.F("1.2.3.4"),
 				SourcePort:         cloudflare.F(123.000000),
 			}),
-			PacketLimit: cloudflare.F(10000.000000),
-			System:      cloudflare.F(pcaps.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystemMagicTransit),
-			TimeLimit:   cloudflare.F(300.000000),
-			Type:        cloudflare.F(pcaps.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleTypeSimple),
 		},
 	})
 	if err != nil {

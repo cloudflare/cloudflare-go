@@ -29,10 +29,11 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Rulesets.New(context.TODO(), rulesets.RulesetNewParams{
-		Kind:  cloudflare.F(rulesets.KindRoot),
+		Kind:  cloudflare.F(rulesets.KindManaged),
 		Name:  cloudflare.F("My ruleset"),
-		Phase: cloudflare.F(rulesets.PhaseHTTPRequestFirewallCustom),
+		Phase: cloudflare.F(rulesets.PhaseDDoSL4),
 		Rules: cloudflare.F([]rulesets.RulesetNewParamsRuleUnion{rulesets.BlockRuleParam{
+			ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 			Action: cloudflare.F(rulesets.BlockRuleActionBlock),
 			ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
 				Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
@@ -44,12 +45,12 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 			Enabled:     cloudflare.F(true),
 			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-			ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 			Logging: cloudflare.F(rulesets.LoggingParam{
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
 		}, rulesets.BlockRuleParam{
+			ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 			Action: cloudflare.F(rulesets.BlockRuleActionBlock),
 			ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
 				Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
@@ -61,12 +62,12 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 			Enabled:     cloudflare.F(true),
 			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-			ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 			Logging: cloudflare.F(rulesets.LoggingParam{
 				Enabled: cloudflare.F(true),
 			}),
 			Ref: cloudflare.F("my_ref"),
 		}, rulesets.BlockRuleParam{
+			ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 			Action: cloudflare.F(rulesets.BlockRuleActionBlock),
 			ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
 				Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
@@ -78,7 +79,6 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 			Enabled:     cloudflare.F(true),
 			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-			ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 			Logging: cloudflare.F(rulesets.LoggingParam{
 				Enabled: cloudflare.F(true),
 			}),
@@ -115,6 +115,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RulesetUpdateParams{
 			Rules: cloudflare.F([]rulesets.RulesetUpdateParamsRuleUnion{rulesets.BlockRuleParam{
+				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
 					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
@@ -126,12 +127,12 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 				Logging: cloudflare.F(rulesets.LoggingParam{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}, rulesets.BlockRuleParam{
+				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
 					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
@@ -143,12 +144,12 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 				Logging: cloudflare.F(rulesets.LoggingParam{
 					Enabled: cloudflare.F(true),
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}, rulesets.BlockRuleParam{
+				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
 				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
 					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
@@ -160,7 +161,6 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
 				Enabled:     cloudflare.F(true),
 				Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-				ID:          cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
 				Logging: cloudflare.F(rulesets.LoggingParam{
 					Enabled: cloudflare.F(true),
 				}),
@@ -168,9 +168,9 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 			}}),
 			AccountID:   cloudflare.F("account_id"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),
-			Kind:        cloudflare.F(rulesets.KindRoot),
+			Kind:        cloudflare.F(rulesets.KindManaged),
 			Name:        cloudflare.F("My ruleset"),
-			Phase:       cloudflare.F(rulesets.PhaseHTTPRequestFirewallCustom),
+			Phase:       cloudflare.F(rulesets.PhaseDDoSL4),
 		},
 	)
 	if err != nil {

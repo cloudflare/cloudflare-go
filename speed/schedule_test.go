@@ -32,7 +32,7 @@ func TestScheduleNewWithOptionalParams(t *testing.T) {
 		"example.com",
 		speed.ScheduleNewParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Region: cloudflare.F(speed.ScheduleNewParamsRegionUsCentral1),
+			Region: cloudflare.F(speed.ScheduleNewParamsRegionAsiaEast1),
 		},
 	)
 	if err != nil {
@@ -62,7 +62,7 @@ func TestScheduleDeleteWithOptionalParams(t *testing.T) {
 		"example.com",
 		speed.ScheduleDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Region: cloudflare.F(speed.ScheduleDeleteParamsRegionUsCentral1),
+			Region: cloudflare.F(speed.ScheduleDeleteParamsRegionAsiaEast1),
 		},
 	)
 	if err != nil {
@@ -92,7 +92,7 @@ func TestScheduleGetWithOptionalParams(t *testing.T) {
 		"example.com",
 		speed.ScheduleGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Region: cloudflare.F(speed.ScheduleGetParamsRegionUsCentral1),
+			Region: cloudflare.F(speed.ScheduleGetParamsRegionAsiaEast1),
 		},
 	)
 	if err != nil {

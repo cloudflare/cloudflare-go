@@ -34,7 +34,7 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.RuleNewParams{
 			Action: cloudflare.F(firewall.RuleNewParamsAction{
-				Mode: cloudflare.F(firewall.RuleNewParamsActionModeChallenge),
+				Mode: cloudflare.F(firewall.RuleNewParamsActionModeSimulate),
 				Response: cloudflare.F(firewall.RuleNewParamsActionResponse{
 					Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
 					ContentType: cloudflare.F("text/xml"),
@@ -78,7 +78,7 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 		"372e67954025e0ba6aaa6d586b9e0b60",
 		firewall.RuleUpdateParams{
 			Action: cloudflare.F(firewall.RuleUpdateParamsAction{
-				Mode: cloudflare.F(firewall.RuleUpdateParamsActionModeChallenge),
+				Mode: cloudflare.F(firewall.RuleUpdateParamsActionModeSimulate),
 				Response: cloudflare.F(firewall.RuleUpdateParamsActionResponse{
 					Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
 					ContentType: cloudflare.F("text/xml"),

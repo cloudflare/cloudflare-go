@@ -54,7 +54,7 @@ func TestMonitorPreviewNewWithOptionalParams(t *testing.T) {
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(load_balancers.MonitorPreviewNewParamsTypeHTTPS),
+			Type:      cloudflare.F(load_balancers.MonitorPreviewNewParamsTypeHTTP),
 		},
 	)
 	if err != nil {

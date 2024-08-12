@@ -32,7 +32,7 @@ func TestOperationSchemaValidationUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.OperationSchemaValidationUpdateParams{
 			ZoneID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			MitigationAction: cloudflare.F(api_gateway.OperationSchemaValidationUpdateParamsMitigationActionBlock),
+			MitigationAction: cloudflare.F(api_gateway.OperationSchemaValidationUpdateParamsMitigationActionLog),
 		},
 	)
 	if err != nil {
@@ -64,7 +64,7 @@ func TestOperationSchemaValidationEdit(t *testing.T) {
 				MitigationAction: cloudflare.F(api_gateway.SettingsMultipleRequestItemMitigationActionLog),
 			},
 			"b17c8043-99a0-4202-b7d9-8f7cdbee02cd": api_gateway.SettingsMultipleRequestItemParam{
-				MitigationAction: cloudflare.F(api_gateway.SettingsMultipleRequestItemMitigationActionBlock),
+				MitigationAction: cloudflare.F(api_gateway.SettingsMultipleRequestItemMitigationActionLog),
 			},
 		},
 	})

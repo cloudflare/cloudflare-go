@@ -31,11 +31,11 @@ func TestTemporaryCredentialNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		TemporaryCredential: r2.TemporaryCredentialParam{
 			Bucket:            cloudflare.F("example-bucket"),
-			Objects:           cloudflare.F([]string{"example-object"}),
 			ParentAccessKeyID: cloudflare.F("example-access-key-id"),
-			Permission:        cloudflare.F(r2.TemporaryCredentialPermissionObjectReadWrite),
-			Prefixes:          cloudflare.F([]string{"example-prefix/"}),
+			Permission:        cloudflare.F(r2.TemporaryCredentialPermissionAdminReadWrite),
 			TTLSeconds:        cloudflare.F(3600.000000),
+			Objects:           cloudflare.F([]string{"example-object"}),
+			Prefixes:          cloudflare.F([]string{"example-prefix/"}),
 		},
 	})
 	if err != nil {

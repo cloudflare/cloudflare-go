@@ -35,7 +35,7 @@ func TestReceivedGetWithOptionalParams(t *testing.T) {
 		Fields:     cloudflare.F("ClientIP,RayID,EdgeStartTimestamp"),
 		Sample:     cloudflare.F(0.100000),
 		Start:      cloudflare.F[logs.ReceivedGetParamsStartUnion](shared.UnionString("2018-05-20T10:00:00Z")),
-		Timestamps: cloudflare.F(logs.ReceivedGetParamsTimestampsUnixnano),
+		Timestamps: cloudflare.F(logs.ReceivedGetParamsTimestampsUnix),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

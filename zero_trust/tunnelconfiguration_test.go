@@ -35,11 +35,12 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 			Config: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfig{
 				Ingress: cloudflare.F([]zero_trust.TunnelConfigurationUpdateParamsConfigIngress{{
 					Hostname: cloudflare.F("tunnel.example.com"),
+					Service:  cloudflare.F("https://localhost:8001"),
 					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
 						Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess{
 							AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
-							Required: cloudflare.F(true),
 							TeamName: cloudflare.F("teamName"),
+							Required: cloudflare.F(true),
 						}),
 						CAPool:                 cloudflare.F("caPool"),
 						ConnectTimeout:         cloudflare.F(int64(0)),
@@ -55,15 +56,15 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 						TCPKeepAlive:           cloudflare.F(int64(0)),
 						TLSTimeout:             cloudflare.F(int64(0)),
 					}),
-					Path:    cloudflare.F("subpath"),
-					Service: cloudflare.F("https://localhost:8001"),
+					Path: cloudflare.F("subpath"),
 				}, {
 					Hostname: cloudflare.F("tunnel.example.com"),
+					Service:  cloudflare.F("https://localhost:8001"),
 					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
 						Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess{
 							AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
-							Required: cloudflare.F(true),
 							TeamName: cloudflare.F("teamName"),
+							Required: cloudflare.F(true),
 						}),
 						CAPool:                 cloudflare.F("caPool"),
 						ConnectTimeout:         cloudflare.F(int64(0)),
@@ -79,15 +80,15 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 						TCPKeepAlive:           cloudflare.F(int64(0)),
 						TLSTimeout:             cloudflare.F(int64(0)),
 					}),
-					Path:    cloudflare.F("subpath"),
-					Service: cloudflare.F("https://localhost:8001"),
+					Path: cloudflare.F("subpath"),
 				}, {
 					Hostname: cloudflare.F("tunnel.example.com"),
+					Service:  cloudflare.F("https://localhost:8001"),
 					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
 						Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess{
 							AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
-							Required: cloudflare.F(true),
 							TeamName: cloudflare.F("teamName"),
+							Required: cloudflare.F(true),
 						}),
 						CAPool:                 cloudflare.F("caPool"),
 						ConnectTimeout:         cloudflare.F(int64(0)),
@@ -103,14 +104,13 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 						TCPKeepAlive:           cloudflare.F(int64(0)),
 						TLSTimeout:             cloudflare.F(int64(0)),
 					}),
-					Path:    cloudflare.F("subpath"),
-					Service: cloudflare.F("https://localhost:8001"),
+					Path: cloudflare.F("subpath"),
 				}}),
 				OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigOriginRequest{
 					Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigOriginRequestAccess{
 						AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
-						Required: cloudflare.F(true),
 						TeamName: cloudflare.F("teamName"),
+						Required: cloudflare.F(true),
 					}),
 					CAPool:                 cloudflare.F("caPool"),
 					ConnectTimeout:         cloudflare.F(int64(0)),

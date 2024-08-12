@@ -41,9 +41,9 @@ func TestJobNewWithOptionalParams(t *testing.T) {
 		MaxUploadRecords:         cloudflare.F(int64(1000)),
 		Name:                     cloudflare.F("example.com"),
 		OutputOptions: cloudflare.F(logpush.OutputOptionsParam{
-			Cve2021_4428:    cloudflare.F(true),
 			BatchPrefix:     cloudflare.F("batch_prefix"),
 			BatchSuffix:     cloudflare.F("batch_suffix"),
+			Cve2021_4428:    cloudflare.F(true),
 			FieldDelimiter:  cloudflare.F("field_delimiter"),
 			FieldNames:      cloudflare.F([]string{"ClientIP", "EdgeStartTimestamp", "RayID"}),
 			OutputType:      cloudflare.F(logpush.OutputOptionsOutputTypeNdjson),
@@ -93,9 +93,9 @@ func TestJobUpdateWithOptionalParams(t *testing.T) {
 			MaxUploadIntervalSeconds: cloudflare.F(int64(30)),
 			MaxUploadRecords:         cloudflare.F(int64(1000)),
 			OutputOptions: cloudflare.F(logpush.OutputOptionsParam{
-				Cve2021_4428:    cloudflare.F(true),
 				BatchPrefix:     cloudflare.F("batch_prefix"),
 				BatchSuffix:     cloudflare.F("batch_suffix"),
+				Cve2021_4428:    cloudflare.F(true),
 				FieldDelimiter:  cloudflare.F("field_delimiter"),
 				FieldNames:      cloudflare.F([]string{"ClientIP", "EdgeStartTimestamp", "RayID"}),
 				OutputType:      cloudflare.F(logpush.OutputOptionsOutputTypeNdjson),

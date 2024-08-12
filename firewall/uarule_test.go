@@ -36,7 +36,7 @@ func TestUARuleNewWithOptionalParams(t *testing.T) {
 				Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
 			}),
-			Mode: cloudflare.F(firewall.UARuleNewParamsModeChallenge),
+			Mode: cloudflare.F(firewall.UARuleNewParamsModeBlock),
 		},
 	)
 	if err != nil {
@@ -71,7 +71,7 @@ func TestUARuleUpdateWithOptionalParams(t *testing.T) {
 				Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
 			}),
-			Mode: cloudflare.F(firewall.UARuleUpdateParamsModeChallenge),
+			Mode: cloudflare.F(firewall.UARuleUpdateParamsModeBlock),
 		},
 	)
 	if err != nil {

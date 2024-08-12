@@ -60,9 +60,9 @@ func TestPeerUpdateWithOptionalParams(t *testing.T) {
 		secondary_dns.PeerUpdateParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			Peer: secondary_dns.PeerParam{
+				Name:       cloudflare.F("my-peer-1"),
 				IP:         cloudflare.F("192.0.2.53"),
 				IxfrEnable: cloudflare.F(false),
-				Name:       cloudflare.F("my-peer-1"),
 				Port:       cloudflare.F(53.000000),
 				TSIGID:     cloudflare.F("69cd1e104af3e6ed3cb344f263fd0d5a"),
 			},

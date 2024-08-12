@@ -33,10 +33,10 @@ func TestWAFPackageRuleListWithOptionalParams(t *testing.T) {
 		firewall.WAFPackageRuleListParams{
 			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Description: cloudflare.F("SQL injection prevention for SELECT statements"),
-			Direction:   cloudflare.F(firewall.WAFPackageRuleListParamsDirectionDesc),
+			Direction:   cloudflare.F(firewall.WAFPackageRuleListParamsDirectionAsc),
 			GroupID:     cloudflare.F("de677e5818985db1285d0e80225f06e5"),
 			Match:       cloudflare.F(firewall.WAFPackageRuleListParamsMatchAny),
-			Mode:        cloudflare.F(firewall.WAFPackageRuleListParamsModeChl),
+			Mode:        cloudflare.F(firewall.WAFPackageRuleListParamsModeDis),
 			Order:       cloudflare.F(firewall.WAFPackageRuleListParamsOrderPriority),
 			Page:        cloudflare.F(1.000000),
 			PerPage:     cloudflare.F(5.000000),
@@ -71,7 +71,7 @@ func TestWAFPackageRuleEditWithOptionalParams(t *testing.T) {
 		"a25a9a7e9c00afc1fb2e0245519d725b",
 		firewall.WAFPackageRuleEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Mode:   cloudflare.F(firewall.WAFPackageRuleEditParamsModeOn),
+			Mode:   cloudflare.F(firewall.WAFPackageRuleEditParamsModeDefault),
 		},
 	)
 	if err != nil {
