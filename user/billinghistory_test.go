@@ -32,7 +32,7 @@ func TestBillingHistoryListWithOptionalParams(t *testing.T) {
 		Action:     cloudflare.F("subscription"),
 		OccuredAt:  cloudflare.F(time.Now()),
 		OccurredAt: cloudflare.F(time.Now()),
-		Order:      cloudflare.F(user.BillingHistoryListParamsOrderOccuredAt),
+		Order:      cloudflare.F(user.BillingHistoryListParamsOrderType),
 		Page:       cloudflare.F(1.000000),
 		PerPage:    cloudflare.F(5.000000),
 		Type:       cloudflare.F("charge"),

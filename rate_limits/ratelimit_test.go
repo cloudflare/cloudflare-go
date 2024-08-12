@@ -33,7 +33,7 @@ func TestRateLimitNewWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		rate_limits.RateLimitNewParams{
 			Action: cloudflare.F(rate_limits.RateLimitNewParamsAction{
-				Mode: cloudflare.F(rate_limits.RateLimitNewParamsActionModeChallenge),
+				Mode: cloudflare.F(rate_limits.RateLimitNewParamsActionModeSimulate),
 				Response: cloudflare.F(rate_limits.RateLimitNewParamsActionResponse{
 					Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
 					ContentType: cloudflare.F("text/xml"),
@@ -43,15 +43,15 @@ func TestRateLimitNewWithOptionalParams(t *testing.T) {
 			Match: cloudflare.F(rate_limits.RateLimitNewParamsMatch{
 				Headers: cloudflare.F([]rate_limits.RateLimitNewParamsMatchHeader{{
 					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpNe),
+					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
 					Value: cloudflare.F("HIT"),
 				}, {
 					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpNe),
+					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
 					Value: cloudflare.F("HIT"),
 				}, {
 					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpNe),
+					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
 					Value: cloudflare.F("HIT"),
 				}}),
 				Request: cloudflare.F(rate_limits.RateLimitNewParamsMatchRequest{
@@ -153,7 +153,7 @@ func TestRateLimitEditWithOptionalParams(t *testing.T) {
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		rate_limits.RateLimitEditParams{
 			Action: cloudflare.F(rate_limits.RateLimitEditParamsAction{
-				Mode: cloudflare.F(rate_limits.RateLimitEditParamsActionModeChallenge),
+				Mode: cloudflare.F(rate_limits.RateLimitEditParamsActionModeSimulate),
 				Response: cloudflare.F(rate_limits.RateLimitEditParamsActionResponse{
 					Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
 					ContentType: cloudflare.F("text/xml"),
@@ -163,15 +163,15 @@ func TestRateLimitEditWithOptionalParams(t *testing.T) {
 			Match: cloudflare.F(rate_limits.RateLimitEditParamsMatch{
 				Headers: cloudflare.F([]rate_limits.RateLimitEditParamsMatchHeader{{
 					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpNe),
+					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpEq),
 					Value: cloudflare.F("HIT"),
 				}, {
 					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpNe),
+					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpEq),
 					Value: cloudflare.F("HIT"),
 				}, {
 					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpNe),
+					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpEq),
 					Value: cloudflare.F("HIT"),
 				}}),
 				Request: cloudflare.F(rate_limits.RateLimitEditParamsMatchRequest{

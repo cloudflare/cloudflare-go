@@ -30,14 +30,14 @@ func TestWidgetNewWithOptionalParams(t *testing.T) {
 	_, err := client.Challenges.Widgets.New(context.TODO(), challenges.WidgetNewParams{
 		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Domains:        cloudflare.F([]challenges.WidgetDomainParam{"203.0.113.1", "cloudflare.com", "blog.example.com"}),
-		Mode:           cloudflare.F(challenges.WidgetNewParamsModeInvisible),
+		Mode:           cloudflare.F(challenges.WidgetNewParamsModeNonInteractive),
 		Name:           cloudflare.F("blog.cloudflare.com login form"),
 		Direction:      cloudflare.F(challenges.WidgetNewParamsDirectionAsc),
 		Order:          cloudflare.F(challenges.WidgetNewParamsOrderID),
 		Page:           cloudflare.F(1.000000),
 		PerPage:        cloudflare.F(5.000000),
 		BotFightMode:   cloudflare.F(false),
-		ClearanceLevel: cloudflare.F(challenges.WidgetNewParamsClearanceLevelInteractive),
+		ClearanceLevel: cloudflare.F(challenges.WidgetNewParamsClearanceLevelNoClearance),
 		Offlabel:       cloudflare.F(false),
 		Region:         cloudflare.F(challenges.WidgetNewParamsRegionWorld),
 	})
@@ -69,10 +69,10 @@ func TestWidgetUpdateWithOptionalParams(t *testing.T) {
 		challenges.WidgetUpdateParams{
 			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Domains:        cloudflare.F([]challenges.WidgetDomainParam{"203.0.113.1", "cloudflare.com", "blog.example.com"}),
-			Mode:           cloudflare.F(challenges.WidgetUpdateParamsModeInvisible),
+			Mode:           cloudflare.F(challenges.WidgetUpdateParamsModeNonInteractive),
 			Name:           cloudflare.F("blog.cloudflare.com login form"),
 			BotFightMode:   cloudflare.F(false),
-			ClearanceLevel: cloudflare.F(challenges.WidgetUpdateParamsClearanceLevelInteractive),
+			ClearanceLevel: cloudflare.F(challenges.WidgetUpdateParamsClearanceLevelNoClearance),
 			Offlabel:       cloudflare.F(false),
 		},
 	)

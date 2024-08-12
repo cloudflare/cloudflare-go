@@ -120,15 +120,7 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 		map[string]interface{}{},
 		user.TokenUpdateParams{
 			Token: user.TokenParam{
-				Condition: cloudflare.F(user.TokenConditionParam{
-					RequestIP: cloudflare.F(user.TokenConditionRequestIPParam{
-						In:    cloudflare.F([]user.CIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
-						NotIn: cloudflare.F([]user.CIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
-					}),
-				}),
-				ExpiresOn: cloudflare.F(time.Now()),
-				Name:      cloudflare.F("readonly token"),
-				NotBefore: cloudflare.F(time.Now()),
+				Name: cloudflare.F("readonly token"),
 				Policies: cloudflare.F([]user.PolicyParam{{
 					Effect: cloudflare.F(user.PolicyEffectAllow),
 					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
@@ -182,6 +174,14 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 					}),
 				}}),
 				Status: cloudflare.F(user.TokenStatusActive),
+				Condition: cloudflare.F(user.TokenConditionParam{
+					RequestIP: cloudflare.F(user.TokenConditionRequestIPParam{
+						In:    cloudflare.F([]user.CIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
+						NotIn: cloudflare.F([]user.CIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
+					}),
+				}),
+				ExpiresOn: cloudflare.F(time.Now()),
+				NotBefore: cloudflare.F(time.Now()),
 			},
 		},
 	)
@@ -208,7 +208,7 @@ func TestTokenListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Tokens.List(context.TODO(), user.TokenListParams{
-		Direction: cloudflare.F(user.TokenListParamsDirectionDesc),
+		Direction: cloudflare.F(user.TokenListParamsDirectionAsc),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 	})

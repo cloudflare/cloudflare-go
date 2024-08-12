@@ -67,19 +67,19 @@ func TestRuleUpdate(t *testing.T) {
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: []waiting_rooms.RuleUpdateParamsBody{{
 				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
+				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 			}, {
 				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
+				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 			}, {
 				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsBodyActionBypassWaitingRoom),
+				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 			}},
 		},
 	)

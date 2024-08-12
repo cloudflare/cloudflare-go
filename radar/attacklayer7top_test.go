@@ -42,7 +42,7 @@ func TestAttackLayer7TopAttacksWithOptionalParams(t *testing.T) {
 		LimitDirection:    cloudflare.F(radar.AttackLayer7TopAttacksParamsLimitDirectionOrigin),
 		LimitPerLocation:  cloudflare.F(int64(10)),
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
-		Magnitude:         cloudflare.F(radar.AttackLayer7TopAttacksParamsMagnitudeMitigatedRequests),
+		Magnitude:         cloudflare.F(radar.AttackLayer7TopAttacksParamsMagnitudeAffectedZones),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TopAttacksParamsMitigationProduct{radar.AttackLayer7TopAttacksParamsMitigationProductDDoS, radar.AttackLayer7TopAttacksParamsMitigationProductWAF, radar.AttackLayer7TopAttacksParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
 		Normalization:     cloudflare.F(radar.AttackLayer7TopAttacksParamsNormalizationPercentage),

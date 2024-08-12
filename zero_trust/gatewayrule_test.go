@@ -29,7 +29,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Gateway.Rules.New(context.TODO(), zero_trust.GatewayRuleNewParams{
 		AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Action:        cloudflare.F(zero_trust.GatewayRuleNewParamsActionAllow),
+		Action:        cloudflare.F(zero_trust.GatewayRuleNewParamsActionOn),
 		Name:          cloudflare.F("block bad websites"),
 		Description:   cloudflare.F("Block bad websites based on their host name."),
 		DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
@@ -118,7 +118,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
 			UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
-				Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionError),
+				Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionPassThrough),
 			}),
 		}),
 		Schedule: cloudflare.F(zero_trust.ScheduleParam{
@@ -160,7 +160,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.GatewayRuleUpdateParams{
 			AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Action:        cloudflare.F(zero_trust.GatewayRuleUpdateParamsActionAllow),
+			Action:        cloudflare.F(zero_trust.GatewayRuleUpdateParamsActionOn),
 			Name:          cloudflare.F("block bad websites"),
 			Description:   cloudflare.F("Block bad websites based on their host name."),
 			DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
@@ -249,7 +249,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
 				UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
-					Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionError),
+					Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionPassThrough),
 				}),
 			}),
 			Schedule: cloudflare.F(zero_trust.ScheduleParam{

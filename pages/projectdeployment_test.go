@@ -63,7 +63,7 @@ func TestProjectDeploymentListWithOptionalParams(t *testing.T) {
 		"this-is-my-project-01",
 		pages.ProjectDeploymentListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Env:       cloudflare.F(pages.ProjectDeploymentListParamsEnvPreview),
+			Env:       cloudflare.F(pages.ProjectDeploymentListParamsEnvProduction),
 		},
 	)
 	if err != nil {

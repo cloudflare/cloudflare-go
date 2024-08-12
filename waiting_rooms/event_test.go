@@ -33,12 +33,12 @@ func TestEventNewWithOptionalParams(t *testing.T) {
 		waiting_rooms.EventNewParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EventQuery: waiting_rooms.EventQueryParam{
-				CustomPageHTML:        cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}"),
-				Description:           cloudflare.F("Production event - DO NOT MODIFY"),
-				DisableSessionRenewal: cloudflare.F(true),
 				EventEndTime:          cloudflare.F("2021-09-28T17:00:00.000Z"),
 				EventStartTime:        cloudflare.F("2021-09-28T15:30:00.000Z"),
 				Name:                  cloudflare.F("production_webinar_event"),
+				CustomPageHTML:        cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}"),
+				Description:           cloudflare.F("Production event - DO NOT MODIFY"),
+				DisableSessionRenewal: cloudflare.F(true),
 				NewUsersPerMinute:     cloudflare.F(int64(200)),
 				PrequeueStartTime:     cloudflare.F("2021-09-28T15:00:00.000Z"),
 				QueueingMethod:        cloudflare.F("random"),
@@ -78,12 +78,12 @@ func TestEventUpdateWithOptionalParams(t *testing.T) {
 		waiting_rooms.EventUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EventQuery: waiting_rooms.EventQueryParam{
-				CustomPageHTML:        cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}"),
-				Description:           cloudflare.F("Production event - DO NOT MODIFY"),
-				DisableSessionRenewal: cloudflare.F(true),
 				EventEndTime:          cloudflare.F("2021-09-28T17:00:00.000Z"),
 				EventStartTime:        cloudflare.F("2021-09-28T15:30:00.000Z"),
 				Name:                  cloudflare.F("production_webinar_event"),
+				CustomPageHTML:        cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}"),
+				Description:           cloudflare.F("Production event - DO NOT MODIFY"),
+				DisableSessionRenewal: cloudflare.F(true),
 				NewUsersPerMinute:     cloudflare.F(int64(200)),
 				PrequeueStartTime:     cloudflare.F("2021-09-28T15:00:00.000Z"),
 				QueueingMethod:        cloudflare.F("random"),
@@ -184,12 +184,12 @@ func TestEventEditWithOptionalParams(t *testing.T) {
 		waiting_rooms.EventEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EventQuery: waiting_rooms.EventQueryParam{
-				CustomPageHTML:        cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}"),
-				Description:           cloudflare.F("Production event - DO NOT MODIFY"),
-				DisableSessionRenewal: cloudflare.F(true),
 				EventEndTime:          cloudflare.F("2021-09-28T17:00:00.000Z"),
 				EventStartTime:        cloudflare.F("2021-09-28T15:30:00.000Z"),
 				Name:                  cloudflare.F("production_webinar_event"),
+				CustomPageHTML:        cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}"),
+				Description:           cloudflare.F("Production event - DO NOT MODIFY"),
+				DisableSessionRenewal: cloudflare.F(true),
 				NewUsersPerMinute:     cloudflare.F(int64(200)),
 				PrequeueStartTime:     cloudflare.F("2021-09-28T15:00:00.000Z"),
 				QueueingMethod:        cloudflare.F("random"),

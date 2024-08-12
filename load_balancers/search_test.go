@@ -34,7 +34,7 @@ func TestSearchGetWithOptionalParams(t *testing.T) {
 		PerPage:   cloudflare.F[any](map[string]interface{}{}),
 		SearchParams: cloudflare.F(load_balancers.SearchGetParamsSearchParams{
 			Query:      cloudflare.F("primary"),
-			References: cloudflare.F(load_balancers.SearchGetParamsSearchParamsReferencesStar),
+			References: cloudflare.F(load_balancers.SearchGetParamsSearchParamsReferencesEmpty),
 		}),
 	})
 	if err != nil {

@@ -30,7 +30,7 @@ func TestPolicyNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Alerting.Policies.New(context.TODO(), alerting.PolicyNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		AlertType: cloudflare.F(alerting.PolicyNewParamsAlertTypeUniversalSSLEventType),
+		AlertType: cloudflare.F(alerting.PolicyNewParamsAlertTypeAccessCustomCertificateExpirationType),
 		Enabled:   cloudflare.F(true),
 		Mechanisms: cloudflare.F(alerting.MechanismParam{
 			"email": []alerting.MechanismItemParam{{
@@ -118,7 +118,7 @@ func TestPolicyUpdateWithOptionalParams(t *testing.T) {
 		alerting.PolicyUpdateParams{
 			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AlertInterval: cloudflare.F("30m"),
-			AlertType:     cloudflare.F(alerting.PolicyUpdateParamsAlertTypeUniversalSSLEventType),
+			AlertType:     cloudflare.F(alerting.PolicyUpdateParamsAlertTypeAccessCustomCertificateExpirationType),
 			Description:   cloudflare.F("Something describing the policy."),
 			Enabled:       cloudflare.F(true),
 			Filters: cloudflare.F(alerting.PolicyFilterParam{

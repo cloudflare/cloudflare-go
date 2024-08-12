@@ -42,8 +42,8 @@ func TestBGPHijackEventListWithOptionalParams(t *testing.T) {
 		Page:            cloudflare.F(int64(0)),
 		PerPage:         cloudflare.F(int64(0)),
 		Prefix:          cloudflare.F("1.1.1.0/24"),
-		SortBy:          cloudflare.F(radar.BGPHijackEventListParamsSortByTime),
-		SortOrder:       cloudflare.F(radar.BGPHijackEventListParamsSortOrderDesc),
+		SortBy:          cloudflare.F(radar.BGPHijackEventListParamsSortByID),
+		SortOrder:       cloudflare.F(radar.BGPHijackEventListParamsSortOrderAsc),
 		VictimASN:       cloudflare.F(int64(0)),
 	})
 	if err != nil {

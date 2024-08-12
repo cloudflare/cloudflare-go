@@ -31,7 +31,8 @@ func TestHealthcheckNewWithOptionalParams(t *testing.T) {
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		QueryHealthcheck: healthchecks.QueryHealthcheckParam{
 			Address:              cloudflare.F("www.example.com"),
-			CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWeu, healthchecks.CheckRegionEnam}),
+			Name:                 cloudflare.F("server-1"),
+			CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWnam, healthchecks.CheckRegionEnam}),
 			ConsecutiveFails:     cloudflare.F(int64(0)),
 			ConsecutiveSuccesses: cloudflare.F(int64(0)),
 			Description:          cloudflare.F("Health check for www.example.com"),
@@ -49,7 +50,6 @@ func TestHealthcheckNewWithOptionalParams(t *testing.T) {
 				Port:   cloudflare.F(int64(0)),
 			}),
 			Interval:  cloudflare.F(int64(0)),
-			Name:      cloudflare.F("server-1"),
 			Retries:   cloudflare.F(int64(0)),
 			Suspended: cloudflare.F(true),
 			TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{
@@ -89,7 +89,8 @@ func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			QueryHealthcheck: healthchecks.QueryHealthcheckParam{
 				Address:              cloudflare.F("www.example.com"),
-				CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWeu, healthchecks.CheckRegionEnam}),
+				Name:                 cloudflare.F("server-1"),
+				CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWnam, healthchecks.CheckRegionEnam}),
 				ConsecutiveFails:     cloudflare.F(int64(0)),
 				ConsecutiveSuccesses: cloudflare.F(int64(0)),
 				Description:          cloudflare.F("Health check for www.example.com"),
@@ -107,7 +108,6 @@ func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
 					Port:   cloudflare.F(int64(0)),
 				}),
 				Interval:  cloudflare.F(int64(0)),
-				Name:      cloudflare.F("server-1"),
 				Retries:   cloudflare.F(int64(0)),
 				Suspended: cloudflare.F(true),
 				TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{
@@ -204,7 +204,8 @@ func TestHealthcheckEditWithOptionalParams(t *testing.T) {
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			QueryHealthcheck: healthchecks.QueryHealthcheckParam{
 				Address:              cloudflare.F("www.example.com"),
-				CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWeu, healthchecks.CheckRegionEnam}),
+				Name:                 cloudflare.F("server-1"),
+				CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWnam, healthchecks.CheckRegionEnam}),
 				ConsecutiveFails:     cloudflare.F(int64(0)),
 				ConsecutiveSuccesses: cloudflare.F(int64(0)),
 				Description:          cloudflare.F("Health check for www.example.com"),
@@ -222,7 +223,6 @@ func TestHealthcheckEditWithOptionalParams(t *testing.T) {
 					Port:   cloudflare.F(int64(0)),
 				}),
 				Interval:  cloudflare.F(int64(0)),
-				Name:      cloudflare.F("server-1"),
 				Retries:   cloudflare.F(int64(0)),
 				Suspended: cloudflare.F(true),
 				TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{

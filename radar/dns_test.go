@@ -29,7 +29,7 @@ func TestDNSTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.Timeseries(context.TODO(), radar.DNSTimeseriesParams{
-		AggInterval: cloudflare.F(radar.DNSTimeseriesParamsAggInterval1h),
+		AggInterval: cloudflare.F(radar.DNSTimeseriesParamsAggInterval15m),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

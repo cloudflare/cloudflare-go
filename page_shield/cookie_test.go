@@ -40,7 +40,7 @@ func TestCookieListWithOptionalParams(t *testing.T) {
 		PageURL:   cloudflare.F("example.com/page,*/checkout,example.com/*,*checkout*"),
 		Path:      cloudflare.F("/"),
 		PerPage:   cloudflare.F(100.000000),
-		SameSite:  cloudflare.F(page_shield.CookieListParamsSameSiteStrict),
+		SameSite:  cloudflare.F(page_shield.CookieListParamsSameSiteLax),
 		Secure:    cloudflare.F(true),
 		Type:      cloudflare.F(page_shield.CookieListParamsTypeFirstParty),
 	})

@@ -50,7 +50,7 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 			}),
 			IPFirewall:    cloudflare.F(true),
 			ProxyProtocol: cloudflare.F(spectrum.AppNewParamsProxyProtocolOff),
-			TLS:           cloudflare.F(spectrum.AppNewParamsTLSFull),
+			TLS:           cloudflare.F(spectrum.AppNewParamsTLSOff),
 			TrafficType:   cloudflare.F(spectrum.AppNewParamsTrafficTypeDirect),
 		},
 	)
@@ -99,7 +99,7 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 			}),
 			IPFirewall:    cloudflare.F(true),
 			ProxyProtocol: cloudflare.F(spectrum.AppUpdateParamsProxyProtocolOff),
-			TLS:           cloudflare.F(spectrum.AppUpdateParamsTLSFull),
+			TLS:           cloudflare.F(spectrum.AppUpdateParamsTLSOff),
 			TrafficType:   cloudflare.F(spectrum.AppUpdateParamsTrafficTypeDirect),
 		},
 	)
@@ -129,7 +129,7 @@ func TestAppListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		spectrum.AppListParams{
-			Direction: cloudflare.F(spectrum.AppListParamsDirectionDesc),
+			Direction: cloudflare.F(spectrum.AppListParamsDirectionAsc),
 			Order:     cloudflare.F(spectrum.AppListParamsOrderProtocol),
 			Page:      cloudflare.F(1.000000),
 			PerPage:   cloudflare.F(1.000000),
