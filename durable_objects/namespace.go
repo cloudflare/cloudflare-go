@@ -64,10 +64,10 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, query NamespaceLi
 }
 
 type Namespace struct {
-	ID     interface{}   `json:"id"`
-	Class  interface{}   `json:"class"`
-	Name   interface{}   `json:"name"`
-	Script interface{}   `json:"script"`
+	ID     string        `json:"id"`
+	Class  string        `json:"class"`
+	Name   string        `json:"name"`
+	Script string        `json:"script"`
 	JSON   namespaceJSON `json:"-"`
 }
 

@@ -156,6 +156,7 @@ func (r domainJSON) RawJSON() string {
 }
 
 type DomainUpdateParams struct {
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Worker environment associated with the zone and hostname.
 	Environment param.Field[string] `json:"environment,required"`
@@ -215,6 +216,7 @@ func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DomainListParams struct {
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Worker environment associated with the zone and hostname.
 	Environment param.Field[string] `query:"environment"`
@@ -237,10 +239,12 @@ func (r DomainListParams) URLQuery() (v url.Values) {
 }
 
 type DomainDeleteParams struct {
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DomainGetParams struct {
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
