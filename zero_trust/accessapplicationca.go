@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // AccessApplicationCAService contains methods and other services that help with
@@ -38,7 +36,7 @@ func NewAccessApplicationCAService(opts ...option.RequestOption) (r *AccessAppli
 }
 
 // Generates a new short-lived certificate CA and public key.
-func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *AccessApplicationCANewResponseUnion, err error) {
+func (r *AccessApplicationCAService) New(ctx context.Context, appID string, body AccessApplicationCANewParams, opts ...option.RequestOption) (res *AccessApplicationCANewResponse, err error) {
 	var env AccessApplicationCANewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -149,7 +147,7 @@ func (r *AccessApplicationCAService) Delete(ctx context.Context, appID string, b
 }
 
 // Fetches a short-lived certificate CA and its public key.
-func (r *AccessApplicationCAService) Get(ctx context.Context, appID string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *AccessApplicationCAGetResponseUnion, err error) {
+func (r *AccessApplicationCAService) Get(ctx context.Context, appID string, query AccessApplicationCAGetParams, opts ...option.RequestOption) (res *AccessApplicationCAGetResponse, err error) {
 	var env AccessApplicationCAGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -211,22 +209,7 @@ func (r caJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [zero_trust.AccessApplicationCANewResponseUnknown] or
-// [shared.UnionString].
-type AccessApplicationCANewResponseUnion interface {
-	ImplementsZeroTrustAccessApplicationCANewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationCANewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type AccessApplicationCANewResponse = interface{}
 
 type AccessApplicationCADeleteResponse struct {
 	// The ID of the CA.
@@ -250,22 +233,7 @@ func (r accessApplicationCADeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [zero_trust.AccessApplicationCAGetResponseUnknown] or
-// [shared.UnionString].
-type AccessApplicationCAGetResponseUnion interface {
-	ImplementsZeroTrustAccessApplicationCAGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationCAGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type AccessApplicationCAGetResponse = interface{}
 
 type AccessApplicationCANewParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
@@ -279,7 +247,7 @@ type AccessApplicationCANewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCANewResponseEnvelopeSuccess `json:"success,required"`
-	Result  AccessApplicationCANewResponseUnion           `json:"result"`
+	Result  AccessApplicationCANewResponse                `json:"result"`
 	JSON    accessApplicationCANewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -386,7 +354,7 @@ type AccessApplicationCAGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationCAGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  AccessApplicationCAGetResponseUnion           `json:"result"`
+	Result  AccessApplicationCAGetResponse                `json:"result"`
 	JSON    accessApplicationCAGetResponseEnvelopeJSON    `json:"-"`
 }
 
