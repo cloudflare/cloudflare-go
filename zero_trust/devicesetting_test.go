@@ -30,6 +30,7 @@ func TestDeviceSettingUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Devices.Settings.Update(context.TODO(), zero_trust.DeviceSettingUpdateParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		DeviceSettings: zero_trust.DeviceSettingsParam{
+			DisableForTime:                     cloudflare.F(0.000000),
 			GatewayProxyEnabled:                cloudflare.F(true),
 			GatewayUdpProxyEnabled:             cloudflare.F(true),
 			RootCertificateInstallationEnabled: cloudflare.F(true),
