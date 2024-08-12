@@ -149,15 +149,15 @@ func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetPa
 }
 
 type Queue struct {
-	Consumers           interface{} `json:"consumers"`
-	ConsumersTotalCount float64     `json:"consumers_total_count"`
-	CreatedOn           string      `json:"created_on"`
-	ModifiedOn          string      `json:"modified_on"`
-	Producers           interface{} `json:"producers"`
-	ProducersTotalCount float64     `json:"producers_total_count"`
-	QueueID             string      `json:"queue_id"`
-	QueueName           string      `json:"queue_name"`
-	JSON                queueJSON   `json:"-"`
+	Consumers           []Consumer    `json:"consumers"`
+	ConsumersTotalCount float64       `json:"consumers_total_count"`
+	CreatedOn           string        `json:"created_on"`
+	ModifiedOn          string        `json:"modified_on"`
+	Producers           []interface{} `json:"producers"`
+	ProducersTotalCount float64       `json:"producers_total_count"`
+	QueueID             string        `json:"queue_id"`
+	QueueName           string        `json:"queue_name"`
+	JSON                queueJSON     `json:"-"`
 }
 
 // queueJSON contains the JSON metadata for the struct [Queue]
@@ -260,7 +260,7 @@ type QueueDeleteResponseArray []interface{}
 func (r QueueDeleteResponseArray) ImplementsQueuesQueueDeleteResponseUnion() {}
 
 type QueueNewParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	QueueName param.Field[string] `json:"queue_name,required"`
 }
@@ -273,7 +273,7 @@ type QueueNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   QueueCreated          `json:"result,required,nullable"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success    QueueNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       queueNewResponseEnvelopeJSON       `json:"-"`
@@ -299,7 +299,7 @@ func (r queueNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type QueueNewResponseEnvelopeSuccess bool
 
 const (
@@ -346,7 +346,7 @@ func (r queueNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type QueueUpdateParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	Body      interface{}         `json:"body,required"`
 }
@@ -359,7 +359,7 @@ type QueueUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   QueueUpdated          `json:"result,required,nullable"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success    QueueUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       queueUpdateResponseEnvelopeJSON       `json:"-"`
@@ -385,7 +385,7 @@ func (r queueUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type QueueUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -432,12 +432,12 @@ func (r queueUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type QueueListParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type QueueDeleteParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -445,7 +445,7 @@ type QueueDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo    `json:"errors,required"`
 	Messages []shared.ResponseInfo    `json:"messages,required"`
 	Result   QueueDeleteResponseUnion `json:"result,required,nullable"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success    QueueDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       queueDeleteResponseEnvelopeJSON       `json:"-"`
@@ -471,7 +471,7 @@ func (r queueDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type QueueDeleteResponseEnvelopeSuccess bool
 
 const (
@@ -518,7 +518,7 @@ func (r queueDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type QueueGetParams struct {
-	// Identifier.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -526,7 +526,7 @@ type QueueGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   Queue                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
+	// Whether the API call was successful
 	Success    QueueGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       queueGetResponseEnvelopeJSON       `json:"-"`
@@ -552,7 +552,7 @@ func (r queueGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Whether the API call was successful
 type QueueGetResponseEnvelopeSuccess bool
 
 const (

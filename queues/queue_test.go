@@ -29,7 +29,7 @@ func TestQueueNew(t *testing.T) {
 	)
 	_, err := client.Queues.New(context.TODO(), queues.QueueNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		QueueName: cloudflare.F("queue_name"),
+		QueueName: cloudflare.F("example-queue"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
