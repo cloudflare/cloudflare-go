@@ -11,7 +11,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
@@ -22,7 +21,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // UserSchemaService contains methods and other services that help with interacting
@@ -91,8 +89,7 @@ func (r *UserSchemaService) ListAutoPaging(ctx context.Context, params UserSchem
 }
 
 // Delete a schema
-func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body UserSchemaDeleteParams, opts ...option.RequestOption) (res *UserSchemaDeleteResponseUnion, err error) {
-	var env UserSchemaDeleteResponseEnvelope
+func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body UserSchemaDeleteParams, opts ...option.RequestOption) (res *UserSchemaDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -103,11 +100,7 @@ func (r *UserSchemaService) Delete(ctx context.Context, schemaID string, body Us
 		return
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/user_schemas/%s", body.ZoneID, schemaID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -280,21 +273,45 @@ func (r schemaUploadUploadDetailsWarningJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [api_gateway.UserSchemaDeleteResponseUnknown] or
-// [shared.UnionString].
-type UserSchemaDeleteResponseUnion interface {
-	ImplementsAPIGatewayUserSchemaDeleteResponseUnion()
+type UserSchemaDeleteResponse struct {
+	Errors   Message `json:"errors,required"`
+	Messages Message `json:"messages,required"`
+	// Whether the API call was successful
+	Success UserSchemaDeleteResponseSuccess `json:"success,required"`
+	JSON    userSchemaDeleteResponseJSON    `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UserSchemaDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// userSchemaDeleteResponseJSON contains the JSON metadata for the struct
+// [UserSchemaDeleteResponse]
+type userSchemaDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserSchemaDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userSchemaDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type UserSchemaDeleteResponseSuccess bool
+
+const (
+	UserSchemaDeleteResponseSuccessTrue UserSchemaDeleteResponseSuccess = true
+)
+
+func (r UserSchemaDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case UserSchemaDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type UserSchemaNewParams struct {
@@ -423,49 +440,6 @@ func (r UserSchemaListParams) URLQuery() (v url.Values) {
 type UserSchemaDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type UserSchemaDeleteResponseEnvelope struct {
-	Errors   Message `json:"errors,required"`
-	Messages Message `json:"messages,required"`
-	// Whether the API call was successful
-	Success UserSchemaDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  UserSchemaDeleteResponseUnion           `json:"result"`
-	JSON    userSchemaDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// userSchemaDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [UserSchemaDeleteResponseEnvelope]
-type userSchemaDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserSchemaDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userSchemaDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type UserSchemaDeleteResponseEnvelopeSuccess bool
-
-const (
-	UserSchemaDeleteResponseEnvelopeSuccessTrue UserSchemaDeleteResponseEnvelopeSuccess = true
-)
-
-func (r UserSchemaDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case UserSchemaDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type UserSchemaEditParams struct {
