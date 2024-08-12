@@ -69,14 +69,14 @@ func (r *SubdomainService) Get(ctx context.Context, query SubdomainGetParams, op
 }
 
 type SubdomainUpdateResponse struct {
-	Name interface{}                 `json:"name"`
-	JSON subdomainUpdateResponseJSON `json:"-"`
+	Subdomain string                      `json:"subdomain"`
+	JSON      subdomainUpdateResponseJSON `json:"-"`
 }
 
 // subdomainUpdateResponseJSON contains the JSON metadata for the struct
 // [SubdomainUpdateResponse]
 type subdomainUpdateResponseJSON struct {
-	Name        apijson.Field
+	Subdomain   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -90,14 +90,14 @@ func (r subdomainUpdateResponseJSON) RawJSON() string {
 }
 
 type SubdomainGetResponse struct {
-	Name interface{}              `json:"name"`
-	JSON subdomainGetResponseJSON `json:"-"`
+	Subdomain string                   `json:"subdomain"`
+	JSON      subdomainGetResponseJSON `json:"-"`
 }
 
 // subdomainGetResponseJSON contains the JSON metadata for the struct
 // [SubdomainGetResponse]
 type subdomainGetResponseJSON struct {
-	Name        apijson.Field
+	Subdomain   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -113,11 +113,11 @@ func (r subdomainGetResponseJSON) RawJSON() string {
 type SubdomainUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      string              `json:"body,required"`
+	Subdomain param.Field[string] `json:"subdomain"`
 }
 
 func (r SubdomainUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type SubdomainUpdateResponseEnvelope struct {

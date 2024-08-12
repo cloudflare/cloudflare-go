@@ -139,9 +139,9 @@ func (r ConsumerScriptParam) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailNewResponse struct {
-	ID        interface{}               `json:"id"`
-	ExpiresAt interface{}               `json:"expires_at"`
-	URL       interface{}               `json:"url"`
+	ID        string                    `json:"id"`
+	ExpiresAt string                    `json:"expires_at"`
+	URL       string                    `json:"url"`
 	JSON      scriptTailNewResponseJSON `json:"-"`
 }
 
@@ -205,9 +205,9 @@ func (r ScriptTailDeleteResponseSuccess) IsKnown() bool {
 }
 
 type ScriptTailGetResponse struct {
-	ID        interface{}               `json:"id"`
-	ExpiresAt interface{}               `json:"expires_at"`
-	URL       interface{}               `json:"url"`
+	ID        string                    `json:"id"`
+	ExpiresAt string                    `json:"expires_at"`
+	URL       string                    `json:"url"`
 	JSON      scriptTailGetResponseJSON `json:"-"`
 }
 
