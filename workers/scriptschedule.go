@@ -77,9 +77,9 @@ func (r *ScriptScheduleService) Get(ctx context.Context, scriptName string, quer
 }
 
 type Schedule struct {
-	CreatedOn  interface{}  `json:"created_on"`
-	Cron       interface{}  `json:"cron"`
-	ModifiedOn interface{}  `json:"modified_on"`
+	CreatedOn  string       `json:"created_on"`
+	Cron       string       `json:"cron"`
+	ModifiedOn string       `json:"modified_on"`
 	JSON       scheduleJSON `json:"-"`
 }
 
@@ -98,6 +98,14 @@ func (r *Schedule) UnmarshalJSON(data []byte) (err error) {
 
 func (r scheduleJSON) RawJSON() string {
 	return r.raw
+}
+
+type ScheduleParam struct {
+	Cron param.Field[string] `json:"cron"`
+}
+
+func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type ScriptScheduleUpdateResponse struct {
@@ -145,7 +153,7 @@ func (r scriptScheduleGetResponseJSON) RawJSON() string {
 type ScriptScheduleUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      string              `json:"body,required"`
+	Body      []ScheduleParam     `json:"body,required"`
 }
 
 func (r ScriptScheduleUpdateParams) MarshalJSON() (data []byte, err error) {
