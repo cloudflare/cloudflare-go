@@ -139,7 +139,7 @@ func TestPageruleListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Pagerules.List(context.TODO(), pagerules.PageruleListParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction: cloudflare.F(pagerules.PageruleListParamsDirectionDesc),
+		Direction: cloudflare.F(pagerules.PageruleListParamsDirectionAsc),
 		Match:     cloudflare.F(pagerules.PageruleListParamsMatchAny),
 		Order:     cloudflare.F(pagerules.PageruleListParamsOrderStatus),
 		Status:    cloudflare.F(pagerules.PageruleListParamsStatusActive),

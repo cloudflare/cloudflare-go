@@ -30,11 +30,11 @@ func TestSettingTrustedDomainNewWithOptionalParams(t *testing.T) {
 	_, err := client.EmailSecurity.Settings.TrustedDomains.New(context.TODO(), email_security.SettingTrustedDomainNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: email_security.SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain{
-			Comments:     cloudflare.Null[string](),
 			IsRecent:     cloudflare.F(true),
 			IsRegex:      cloudflare.F(false),
 			IsSimilarity: cloudflare.F(false),
 			Pattern:      cloudflare.F("example.com"),
+			Comments:     cloudflare.Null[string](),
 		},
 	})
 	if err != nil {

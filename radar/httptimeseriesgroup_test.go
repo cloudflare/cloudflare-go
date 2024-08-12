@@ -29,7 +29,7 @@ func TestHTTPTimeseriesGroupBotClassWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.BotClass(context.TODO(), radar.HTTPTimeseriesGroupBotClassParams{
-		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupBotClassParamsAggInterval1h),
+		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupBotClassParamsAggInterval15m),
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		Continent:    cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -68,7 +68,7 @@ func TestHTTPTimeseriesGroupBrowserWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.Browser(context.TODO(), radar.HTTPTimeseriesGroupBrowserParams{
-		AggInterval:   cloudflare.F(radar.HTTPTimeseriesGroupBrowserParamsAggInterval1h),
+		AggInterval:   cloudflare.F(radar.HTTPTimeseriesGroupBrowserParamsAggInterval15m),
 		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:      cloudflare.F([]radar.HTTPTimeseriesGroupBrowserParamsBotClass{radar.HTTPTimeseriesGroupBrowserParamsBotClassLikelyAutomated, radar.HTTPTimeseriesGroupBrowserParamsBotClassLikelyHuman}),
 		Continent:     cloudflare.F([]string{"string", "string", "string"}),
@@ -109,7 +109,7 @@ func TestHTTPTimeseriesGroupBrowserFamilyWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.BrowserFamily(context.TODO(), radar.HTTPTimeseriesGroupBrowserFamilyParams{
-		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupBrowserFamilyParamsAggInterval1h),
+		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupBrowserFamilyParamsAggInterval15m),
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]radar.HTTPTimeseriesGroupBrowserFamilyParamsBotClass{radar.HTTPTimeseriesGroupBrowserFamilyParamsBotClassLikelyAutomated, radar.HTTPTimeseriesGroupBrowserFamilyParamsBotClassLikelyHuman}),
 		Continent:    cloudflare.F([]string{"string", "string", "string"}),
@@ -149,7 +149,7 @@ func TestHTTPTimeseriesGroupDeviceTypeWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.DeviceType(context.TODO(), radar.HTTPTimeseriesGroupDeviceTypeParams{
-		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupDeviceTypeParamsAggInterval1h),
+		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupDeviceTypeParamsAggInterval15m),
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]radar.HTTPTimeseriesGroupDeviceTypeParamsBotClass{radar.HTTPTimeseriesGroupDeviceTypeParamsBotClassLikelyAutomated, radar.HTTPTimeseriesGroupDeviceTypeParamsBotClassLikelyHuman}),
 		Continent:    cloudflare.F([]string{"string", "string", "string"}),
@@ -188,7 +188,7 @@ func TestHTTPTimeseriesGroupHTTPProtocolWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.HTTPProtocol(context.TODO(), radar.HTTPTimeseriesGroupHTTPProtocolParams{
-		AggInterval: cloudflare.F(radar.HTTPTimeseriesGroupHTTPProtocolParamsAggInterval1h),
+		AggInterval: cloudflare.F(radar.HTTPTimeseriesGroupHTTPProtocolParamsAggInterval15m),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:    cloudflare.F([]radar.HTTPTimeseriesGroupHTTPProtocolParamsBotClass{radar.HTTPTimeseriesGroupHTTPProtocolParamsBotClassLikelyAutomated, radar.HTTPTimeseriesGroupHTTPProtocolParamsBotClassLikelyHuman}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
@@ -227,7 +227,7 @@ func TestHTTPTimeseriesGroupHTTPVersionWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.HTTPVersion(context.TODO(), radar.HTTPTimeseriesGroupHTTPVersionParams{
-		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupHTTPVersionParamsAggInterval1h),
+		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupHTTPVersionParamsAggInterval15m),
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]radar.HTTPTimeseriesGroupHTTPVersionParamsBotClass{radar.HTTPTimeseriesGroupHTTPVersionParamsBotClassLikelyAutomated, radar.HTTPTimeseriesGroupHTTPVersionParamsBotClassLikelyHuman}),
 		Continent:    cloudflare.F([]string{"string", "string", "string"}),
@@ -266,7 +266,7 @@ func TestHTTPTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.IPVersion(context.TODO(), radar.HTTPTimeseriesGroupIPVersionParams{
-		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupIPVersionParamsAggInterval1h),
+		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupIPVersionParamsAggInterval15m),
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]radar.HTTPTimeseriesGroupIPVersionParamsBotClass{radar.HTTPTimeseriesGroupIPVersionParamsBotClassLikelyAutomated, radar.HTTPTimeseriesGroupIPVersionParamsBotClassLikelyHuman}),
 		Continent:    cloudflare.F([]string{"string", "string", "string"}),
@@ -305,7 +305,7 @@ func TestHTTPTimeseriesGroupOSWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.OS(context.TODO(), radar.HTTPTimeseriesGroupOSParams{
-		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupOSParamsAggInterval1h),
+		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupOSParamsAggInterval15m),
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]radar.HTTPTimeseriesGroupOSParamsBotClass{radar.HTTPTimeseriesGroupOSParamsBotClassLikelyAutomated, radar.HTTPTimeseriesGroupOSParamsBotClassLikelyHuman}),
 		Continent:    cloudflare.F([]string{"string", "string", "string"}),
@@ -344,7 +344,7 @@ func TestHTTPTimeseriesGroupPostQuantumWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.PostQuantum(context.TODO(), radar.HTTPTimeseriesGroupPostQuantumParams{
-		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupPostQuantumParamsAggInterval1h),
+		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupPostQuantumParamsAggInterval15m),
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]radar.HTTPTimeseriesGroupPostQuantumParamsBotClass{radar.HTTPTimeseriesGroupPostQuantumParamsBotClassLikelyAutomated, radar.HTTPTimeseriesGroupPostQuantumParamsBotClassLikelyHuman}),
 		Continent:    cloudflare.F([]string{"string", "string", "string"}),
@@ -384,7 +384,7 @@ func TestHTTPTimeseriesGroupTLSVersionWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.TLSVersion(context.TODO(), radar.HTTPTimeseriesGroupTLSVersionParams{
-		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupTLSVersionParamsAggInterval1h),
+		AggInterval:  cloudflare.F(radar.HTTPTimeseriesGroupTLSVersionParamsAggInterval15m),
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]radar.HTTPTimeseriesGroupTLSVersionParamsBotClass{radar.HTTPTimeseriesGroupTLSVersionParamsBotClassLikelyAutomated, radar.HTTPTimeseriesGroupTLSVersionParamsBotClassLikelyHuman}),
 		Continent:    cloudflare.F([]string{"string", "string", "string"}),

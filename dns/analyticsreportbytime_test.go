@@ -36,7 +36,7 @@ func TestAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
 		Metrics:    cloudflare.F("queryCount,uncachedCount"),
 		Since:      cloudflare.F(time.Now()),
 		Sort:       cloudflare.F("+responseCode,-queryName"),
-		TimeDelta:  cloudflare.F(dns.DeltaHour),
+		TimeDelta:  cloudflare.F(dns.DeltaAll),
 		Until:      cloudflare.F(time.Now()),
 	})
 	if err != nil {

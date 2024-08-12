@@ -30,7 +30,7 @@ func TestPhaseVersionListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.Phases.Versions.List(
 		context.TODO(),
-		rulesets.PhaseHTTPRequestFirewallCustom,
+		rulesets.PhaseDDoSL4,
 		rulesets.PhaseVersionListParams{
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -60,7 +60,7 @@ func TestPhaseVersionGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.Phases.Versions.Get(
 		context.TODO(),
-		rulesets.PhaseHTTPRequestFirewallCustom,
+		rulesets.PhaseDDoSL4,
 		"1",
 		rulesets.PhaseVersionGetParams{
 			AccountID: cloudflare.F("account_id"),

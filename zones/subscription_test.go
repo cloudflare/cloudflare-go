@@ -52,11 +52,11 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 					Price:   cloudflare.F(5.000000),
 					Value:   cloudflare.F(20.000000),
 				}}),
-				Frequency: cloudflare.F(user.SubscriptionFrequencyMonthly),
+				Frequency: cloudflare.F(user.SubscriptionFrequencyWeekly),
 				RatePlan: cloudflare.F(user.RatePlanParam{
+					ID:                cloudflare.F("free"),
 					Currency:          cloudflare.F("USD"),
 					ExternallyManaged: cloudflare.F(false),
-					ID:                cloudflare.F("free"),
 					IsContract:        cloudflare.F(false),
 					PublicName:        cloudflare.F("Business Plan"),
 					Scope:             cloudflare.F("zone"),

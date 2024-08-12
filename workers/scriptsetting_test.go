@@ -35,17 +35,17 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 			ScriptSetting: workers.ScriptSettingParam{
 				Logpush: cloudflare.F(false),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
+					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
 				}, {
+					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
 				}, {
+					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
 				}}),
 			},
 		},

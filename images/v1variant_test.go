@@ -33,7 +33,7 @@ func TestV1VariantNewWithOptionalParams(t *testing.T) {
 		Options: cloudflare.F(images.V1VariantNewParamsOptions{
 			Fit:      cloudflare.F(images.V1VariantNewParamsOptionsFitScaleDown),
 			Height:   cloudflare.F(768.000000),
-			Metadata: cloudflare.F(images.V1VariantNewParamsOptionsMetadataNone),
+			Metadata: cloudflare.F(images.V1VariantNewParamsOptionsMetadataKeep),
 			Width:    cloudflare.F(1366.000000),
 		}),
 		NeverRequireSignedURLs: cloudflare.F(true),
@@ -122,7 +122,7 @@ func TestV1VariantEditWithOptionalParams(t *testing.T) {
 			Options: cloudflare.F(images.V1VariantEditParamsOptions{
 				Fit:      cloudflare.F(images.V1VariantEditParamsOptionsFitScaleDown),
 				Height:   cloudflare.F(768.000000),
-				Metadata: cloudflare.F(images.V1VariantEditParamsOptionsMetadataNone),
+				Metadata: cloudflare.F(images.V1VariantEditParamsOptionsMetadataKeep),
 				Width:    cloudflare.F(1366.000000),
 			}),
 			NeverRequireSignedURLs: cloudflare.F(true),

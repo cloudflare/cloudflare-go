@@ -52,10 +52,10 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					Logpush:            cloudflare.F(false),
 					MainModule:         cloudflare.F("worker.js"),
 					Migrations: cloudflare.F[workers.ScriptUpdateParamsBodyObjectMetadataMigrationsUnion](workers.SingleStepMigrationParam{
-						NewTag:         cloudflare.F("v2"),
-						OldTag:         cloudflare.F("v1"),
 						DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 						NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
+						NewTag:         cloudflare.F("v2"),
+						OldTag:         cloudflare.F("v1"),
 						RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
 							From: cloudflare.F("from"),
 							To:   cloudflare.F("to"),
@@ -85,17 +85,17 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					}),
 					Tags: cloudflare.F([]string{"string", "string", "string"}),
 					TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
+						Service:     cloudflare.F("my-log-consumer"),
 						Environment: cloudflare.F("production"),
 						Namespace:   cloudflare.F("my-namespace"),
-						Service:     cloudflare.F("my-log-consumer"),
 					}, {
+						Service:     cloudflare.F("my-log-consumer"),
 						Environment: cloudflare.F("production"),
 						Namespace:   cloudflare.F("my-namespace"),
-						Service:     cloudflare.F("my-log-consumer"),
 					}, {
+						Service:     cloudflare.F("my-log-consumer"),
 						Environment: cloudflare.F("production"),
 						Namespace:   cloudflare.F("my-namespace"),
-						Service:     cloudflare.F("my-log-consumer"),
 					}}),
 					UsageModel:  cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataUsageModelBundled),
 					VersionTags: cloudflare.F[any](map[string]interface{}{}),

@@ -34,8 +34,8 @@ func TestAuditLogListWithOptionalParams(t *testing.T) {
 			Type: cloudflare.F("add"),
 		}),
 		Actor: cloudflare.F(user.AuditLogListParamsActor{
-			IP:    cloudflare.F("17.168.228.63"),
 			Email: cloudflare.F("alice@example.com"),
+			IP:    cloudflare.F("17.168.228.63"),
 		}),
 		Before:       cloudflare.F(time.Now()),
 		Direction:    cloudflare.F(user.AuditLogListParamsDirectionDesc),

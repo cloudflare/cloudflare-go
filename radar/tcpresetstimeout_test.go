@@ -61,7 +61,7 @@ func TestTCPResetsTimeoutTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.TCPResetsTimeouts.TimeseriesGroups(context.TODO(), radar.TCPResetsTimeoutTimeseriesGroupsParams{
-		AggInterval: cloudflare.F(radar.TCPResetsTimeoutTimeseriesGroupsParamsAggInterval1h),
+		AggInterval: cloudflare.F(radar.TCPResetsTimeoutTimeseriesGroupsParamsAggInterval15m),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

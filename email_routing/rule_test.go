@@ -32,13 +32,13 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		email_routing.RuleNewParams{
 			Actions: cloudflare.F([]email_routing.ActionParam{{
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+				Type:  cloudflare.F(email_routing.ActionTypeDrop),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}, {
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+				Type:  cloudflare.F(email_routing.ActionTypeDrop),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}, {
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+				Type:  cloudflare.F(email_routing.ActionTypeDrop),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}}),
 			Matchers: cloudflare.F([]email_routing.MatcherParam{{
@@ -87,13 +87,13 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 		"a7e6fb77503c41d8a7f3113c6918f10c",
 		email_routing.RuleUpdateParams{
 			Actions: cloudflare.F([]email_routing.ActionParam{{
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+				Type:  cloudflare.F(email_routing.ActionTypeDrop),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}, {
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+				Type:  cloudflare.F(email_routing.ActionTypeDrop),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}, {
-				Type:  cloudflare.F(email_routing.ActionTypeForward),
+				Type:  cloudflare.F(email_routing.ActionTypeDrop),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}}),
 			Matchers: cloudflare.F([]email_routing.MatcherParam{{

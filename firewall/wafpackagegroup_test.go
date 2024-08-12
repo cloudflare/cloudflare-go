@@ -32,7 +32,7 @@ func TestWAFPackageGroupListWithOptionalParams(t *testing.T) {
 		"a25a9a7e9c00afc1fb2e0245519d725b",
 		firewall.WAFPackageGroupListParams{
 			ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Direction:  cloudflare.F(firewall.WAFPackageGroupListParamsDirectionDesc),
+			Direction:  cloudflare.F(firewall.WAFPackageGroupListParamsDirectionAsc),
 			Match:      cloudflare.F(firewall.WAFPackageGroupListParamsMatchAny),
 			Mode:       cloudflare.F(firewall.WAFPackageGroupListParamsModeOn),
 			Name:       cloudflare.F("Project Honey Pot"),

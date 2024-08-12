@@ -67,7 +67,7 @@ func TestOperationListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.APIGateway.Operations.List(context.TODO(), api_gateway.OperationListParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction: cloudflare.F(api_gateway.OperationListParamsDirectionDesc),
+		Direction: cloudflare.F(api_gateway.OperationListParamsDirectionAsc),
 		Endpoint:  cloudflare.F("/api/v1"),
 		Feature:   cloudflare.F([]api_gateway.OperationListParamsFeature{api_gateway.OperationListParamsFeatureThresholds}),
 		Host:      cloudflare.F([]string{"api.cloudflare.com"}),

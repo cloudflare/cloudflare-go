@@ -31,8 +31,8 @@ func TestBGPRouteAsesWithOptionalParams(t *testing.T) {
 		Format:    cloudflare.F(radar.BGPRouteAsesParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F("US"),
-		SortBy:    cloudflare.F(radar.BGPRouteAsesParamsSortByIPV4),
-		SortOrder: cloudflare.F(radar.BGPRouteAsesParamsSortOrderDesc),
+		SortBy:    cloudflare.F(radar.BGPRouteAsesParamsSortByCone),
+		SortOrder: cloudflare.F(radar.BGPRouteAsesParamsSortOrderAsc),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -89,7 +89,7 @@ func TestBGPRoutePfx2asWithOptionalParams(t *testing.T) {
 		LongestPrefixMatch: cloudflare.F(true),
 		Origin:             cloudflare.F(int64(0)),
 		Prefix:             cloudflare.F("1.1.1.0/24"),
-		RPKIStatus:         cloudflare.F(radar.BGPRoutePfx2asParamsRPKIStatusInvalid),
+		RPKIStatus:         cloudflare.F(radar.BGPRoutePfx2asParamsRPKIStatusValid),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

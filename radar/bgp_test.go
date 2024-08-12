@@ -29,7 +29,7 @@ func TestBGPTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Timeseries(context.TODO(), radar.BGPTimeseriesParams{
-		AggInterval: cloudflare.F(radar.BGPTimeseriesParamsAggInterval1h),
+		AggInterval: cloudflare.F(radar.BGPTimeseriesParamsAggInterval15m),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),

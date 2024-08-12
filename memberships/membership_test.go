@@ -60,9 +60,9 @@ func TestMembershipListWithOptionalParams(t *testing.T) {
 		Account: cloudflare.F(memberships.MembershipListParamsAccount{
 			Name: cloudflare.F("Demo Account"),
 		}),
-		Direction: cloudflare.F(memberships.MembershipListParamsDirectionDesc),
+		Direction: cloudflare.F(memberships.MembershipListParamsDirectionAsc),
 		Name:      cloudflare.F("Demo Account"),
-		Order:     cloudflare.F(memberships.MembershipListParamsOrderStatus),
+		Order:     cloudflare.F(memberships.MembershipListParamsOrderID),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 		Status:    cloudflare.F(memberships.MembershipListParamsStatusAccepted),

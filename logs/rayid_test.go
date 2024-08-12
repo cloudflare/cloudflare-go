@@ -33,7 +33,7 @@ func TestRayIDGetWithOptionalParams(t *testing.T) {
 		logs.RayIDGetParams{
 			ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Fields:     cloudflare.F("ClientIP,RayID,EdgeStartTimestamp"),
-			Timestamps: cloudflare.F(logs.RayIDGetParamsTimestampsUnixnano),
+			Timestamps: cloudflare.F(logs.RayIDGetParamsTimestampsUnix),
 		},
 	)
 	if err != nil {

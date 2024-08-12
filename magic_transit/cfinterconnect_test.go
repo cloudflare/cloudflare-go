@@ -40,7 +40,7 @@ func TestCfInterconnectUpdateWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 				Rate:    cloudflare.F(magic_transit.HealthCheckRateLow),
 				Target:  cloudflare.F("203.0.113.1"),
-				Type:    cloudflare.F(magic_transit.HealthCheckTypeRequest),
+				Type:    cloudflare.F(magic_transit.HealthCheckTypeReply),
 			}),
 			InterfaceAddress: cloudflare.F("192.0.2.0/31"),
 			Mtu:              cloudflare.F(int64(0)),

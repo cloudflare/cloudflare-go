@@ -61,7 +61,7 @@ func TestPageTrendWithOptionalParams(t *testing.T) {
 			ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			DeviceType: cloudflare.F(speed.PageTrendParamsDeviceTypeDesktop),
 			Metrics:    cloudflare.F("performanceScore,ttfb,fcp,si,lcp,tti,tbt,cls"),
-			Region:     cloudflare.F(speed.PageTrendParamsRegionUsCentral1),
+			Region:     cloudflare.F(speed.PageTrendParamsRegionAsiaEast1),
 			Start:      cloudflare.F(time.Now()),
 			Tz:         cloudflare.F("tz"),
 			End:        cloudflare.F(time.Now()),

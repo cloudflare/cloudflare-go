@@ -30,7 +30,6 @@ func TestSettingAllowPatternNewWithOptionalParams(t *testing.T) {
 	_, err := client.EmailSecurity.Settings.AllowPatterns.New(context.TODO(), email_security.SettingAllowPatternNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: email_security.SettingAllowPatternNewParamsBodyEmailSecurityCreateAllowPattern{
-			Comments:     cloudflare.F("Trust all messages send from test@example.com"),
 			IsRecipient:  cloudflare.F(false),
 			IsRegex:      cloudflare.F(false),
 			IsSender:     cloudflare.F(true),
@@ -38,6 +37,7 @@ func TestSettingAllowPatternNewWithOptionalParams(t *testing.T) {
 			Pattern:      cloudflare.F("test@example.com"),
 			PatternType:  cloudflare.F(email_security.SettingAllowPatternNewParamsBodyEmailSecurityCreateAllowPatternPatternTypeEmail),
 			VerifySender: cloudflare.F(true),
+			Comments:     cloudflare.F("Trust all messages send from test@example.com"),
 		},
 	})
 	if err != nil {

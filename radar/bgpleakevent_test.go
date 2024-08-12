@@ -39,8 +39,8 @@ func TestBGPLeakEventListWithOptionalParams(t *testing.T) {
 		LeakASN:         cloudflare.F(int64(0)),
 		Page:            cloudflare.F(int64(0)),
 		PerPage:         cloudflare.F(int64(0)),
-		SortBy:          cloudflare.F(radar.BGPLeakEventListParamsSortByTime),
-		SortOrder:       cloudflare.F(radar.BGPLeakEventListParamsSortOrderDesc),
+		SortBy:          cloudflare.F(radar.BGPLeakEventListParamsSortByID),
+		SortOrder:       cloudflare.F(radar.BGPLeakEventListParamsSortOrderAsc),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
