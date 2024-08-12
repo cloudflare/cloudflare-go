@@ -69,6 +69,9 @@ func (r *DeviceSettingService) List(ctx context.Context, query DeviceSettingList
 }
 
 type DeviceSettings struct {
+	// Sets the time limit, in seconds, that a user can use an override code to bypass
+	// WARP.
+	DisableForTime float64 `json:"disable_for_time"`
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
@@ -82,6 +85,7 @@ type DeviceSettings struct {
 
 // deviceSettingsJSON contains the JSON metadata for the struct [DeviceSettings]
 type deviceSettingsJSON struct {
+	DisableForTime                     apijson.Field
 	GatewayProxyEnabled                apijson.Field
 	GatewayUdpProxyEnabled             apijson.Field
 	RootCertificateInstallationEnabled apijson.Field
@@ -99,6 +103,9 @@ func (r deviceSettingsJSON) RawJSON() string {
 }
 
 type DeviceSettingsParam struct {
+	// Sets the time limit, in seconds, that a user can use an override code to bypass
+	// WARP.
+	DisableForTime param.Field[float64] `json:"disable_for_time"`
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled param.Field[bool] `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.

@@ -116,7 +116,7 @@ type FallbackDomain struct {
 	// A description of the fallback domain, displayed in the client UI.
 	Description string `json:"description"`
 	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}      `json:"dns_server"`
+	DNSServer []string           `json:"dns_server"`
 	JSON      fallbackDomainJSON `json:"-"`
 }
 
@@ -143,7 +143,7 @@ type FallbackDomainParam struct {
 	// A description of the fallback domain, displayed in the client UI.
 	Description param.Field[string] `json:"description"`
 	// A list of IP addresses to handle domain resolution.
-	DNSServer param.Field[[]interface{}] `json:"dns_server"`
+	DNSServer param.Field[[]string] `json:"dns_server"`
 }
 
 func (r FallbackDomainParam) MarshalJSON() (data []byte, err error) {
