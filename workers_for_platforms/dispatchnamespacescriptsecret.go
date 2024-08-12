@@ -60,7 +60,7 @@ func (r *DispatchNamespaceScriptSecretService) Update(ctx context.Context, dispa
 	return
 }
 
-// Fetch secrets from a script uploaded to a Workers for Platforms namespace.
+// List secrets from a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) List(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSecretListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DispatchNamespaceScriptSecretListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -90,15 +90,16 @@ func (r *DispatchNamespaceScriptSecretService) List(ctx context.Context, dispatc
 	return res, nil
 }
 
-// Fetch secrets from a script uploaded to a Workers for Platforms namespace.
+// List secrets from a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptSecretService) ListAutoPaging(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptSecretListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DispatchNamespaceScriptSecretListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, dispatchNamespace, scriptName, query, opts...))
 }
 
 type DispatchNamespaceScriptSecretUpdateResponse struct {
-	// The name of this secret, this is what will be to access it inside the Worker.
+	// The name of this secret, this is what will be used to access it inside the
+	// Worker.
 	Name string `json:"name"`
-	// The type of secret to put.
+	// The type of secret.
 	Type DispatchNamespaceScriptSecretUpdateResponseType `json:"type"`
 	JSON dispatchNamespaceScriptSecretUpdateResponseJSON `json:"-"`
 }
@@ -120,7 +121,7 @@ func (r dispatchNamespaceScriptSecretUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The type of secret to put.
+// The type of secret.
 type DispatchNamespaceScriptSecretUpdateResponseType string
 
 const (
@@ -136,9 +137,10 @@ func (r DispatchNamespaceScriptSecretUpdateResponseType) IsKnown() bool {
 }
 
 type DispatchNamespaceScriptSecretListResponse struct {
-	// The name of this secret, this is what will be to access it inside the Worker.
+	// The name of this secret, this is what will be used to access it inside the
+	// Worker.
 	Name string `json:"name"`
-	// The type of secret to put.
+	// The type of secret.
 	Type DispatchNamespaceScriptSecretListResponseType `json:"type"`
 	JSON dispatchNamespaceScriptSecretListResponseJSON `json:"-"`
 }
@@ -160,7 +162,7 @@ func (r dispatchNamespaceScriptSecretListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The type of secret to put.
+// The type of secret.
 type DispatchNamespaceScriptSecretListResponseType string
 
 const (
@@ -178,7 +180,8 @@ func (r DispatchNamespaceScriptSecretListResponseType) IsKnown() bool {
 type DispatchNamespaceScriptSecretUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The name of this secret, this is what will be to access it inside the Worker.
+	// The name of this secret, this is what will be used to access it inside the
+	// Worker.
 	Name param.Field[string] `json:"name"`
 	// The value of the secret.
 	Text param.Field[string] `json:"text"`
