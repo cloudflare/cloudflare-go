@@ -110,11 +110,6 @@ func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnr
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
-func (UnionString) ImplementsZeroTrustAccessApplicationCANewResponseUnion()      {}
-func (UnionString) ImplementsZeroTrustAccessApplicationCAGetResponseUnion()      {}
-func (UnionString) ImplementsZeroTrustAccessKeyUpdateResponseUnion()             {}
-func (UnionString) ImplementsZeroTrustAccessKeyGetResponseUnion()                {}
-func (UnionString) ImplementsZeroTrustAccessKeyRotateResponseUnion()             {}
 func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion()   {}
 func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponseUnion()      {}
 func (UnionString) ImplementsZeroTrustTunnelConnectionDeleteResponseUnion()      {}

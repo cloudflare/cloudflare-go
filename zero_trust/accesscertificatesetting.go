@@ -160,7 +160,7 @@ type AccessCertificateSettingUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CertificateSettings                                    `json:"result,nullable"`
+	Result     []CertificateSettings                                    `json:"result"`
 	ResultInfo AccessCertificateSettingUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       accessCertificateSettingUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -244,7 +244,7 @@ type AccessCertificateSettingGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CertificateSettings                                 `json:"result,nullable"`
+	Result     []CertificateSettings                                 `json:"result"`
 	ResultInfo AccessCertificateSettingGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       accessCertificateSettingGetResponseEnvelopeJSON       `json:"-"`
 }
