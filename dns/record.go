@@ -261,6 +261,8 @@ type ARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
@@ -274,6 +276,8 @@ type ARecord struct {
 	Proxied bool `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -283,20 +287,22 @@ type ARecord struct {
 
 // aRecordJSON contains the JSON metadata for the struct [ARecord]
 type aRecordJSON struct {
-	Content     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Content           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Proxied           apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ARecord) UnmarshalJSON(data []byte) (err error) {
@@ -365,6 +371,8 @@ type AAAARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
@@ -378,6 +386,8 @@ type AAAARecord struct {
 	Proxied bool `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -387,20 +397,22 @@ type AAAARecord struct {
 
 // aaaaRecordJSON contains the JSON metadata for the struct [AAAARecord]
 type aaaaRecordJSON struct {
-	Content     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Content           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Proxied           apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *AAAARecord) UnmarshalJSON(data []byte) (err error) {
@@ -469,6 +481,8 @@ type CAARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted CAA content. See 'data' to set CAA properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -481,6 +495,8 @@ type CAARecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -490,20 +506,22 @@ type CAARecord struct {
 
 // caaRecordJSON contains the JSON metadata for the struct [CAARecord]
 type caaRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CAARecord) UnmarshalJSON(data []byte) (err error) {
@@ -611,6 +629,8 @@ type CERTRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted CERT content. See 'data' to set CERT properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -623,6 +643,8 @@ type CERTRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -632,20 +654,22 @@ type CERTRecord struct {
 
 // certRecordJSON contains the JSON metadata for the struct [CERTRecord]
 type certRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CERTRecord) UnmarshalJSON(data []byte) (err error) {
@@ -758,6 +782,8 @@ type CNAMERecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
@@ -771,6 +797,8 @@ type CNAMERecord struct {
 	Proxied bool `json:"proxied"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -780,20 +808,22 @@ type CNAMERecord struct {
 
 // cnameRecordJSON contains the JSON metadata for the struct [CNAMERecord]
 type cnameRecordJSON struct {
-	Content     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Content           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Proxied           apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *CNAMERecord) UnmarshalJSON(data []byte) (err error) {
@@ -862,6 +892,8 @@ type DNSKEYRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted DNSKEY content. See 'data' to set DNSKEY properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -874,6 +906,8 @@ type DNSKEYRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -883,20 +917,22 @@ type DNSKEYRecord struct {
 
 // dnskeyRecordJSON contains the JSON metadata for the struct [DNSKEYRecord]
 type dnskeyRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *DNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
@@ -1010,6 +1046,8 @@ type DSRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted DS content. See 'data' to set DS properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -1022,6 +1060,8 @@ type DSRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1031,20 +1071,22 @@ type DSRecord struct {
 
 // dsRecordJSON contains the JSON metadata for the struct [DSRecord]
 type dsRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *DSRecord) UnmarshalJSON(data []byte) (err error) {
@@ -1157,6 +1199,8 @@ type HTTPSRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted HTTPS content. See 'data' to set HTTPS properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -1169,6 +1213,8 @@ type HTTPSRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1178,20 +1224,22 @@ type HTTPSRecord struct {
 
 // httpsRecordJSON contains the JSON metadata for the struct [HTTPSRecord]
 type httpsRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *HTTPSRecord) UnmarshalJSON(data []byte) (err error) {
@@ -1299,6 +1347,8 @@ type LOCRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted LOC content. See 'data' to set LOC properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -1311,6 +1361,8 @@ type LOCRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1320,20 +1372,22 @@ type LOCRecord struct {
 
 // locRecordJSON contains the JSON metadata for the struct [LOCRecord]
 type locRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *LOCRecord) UnmarshalJSON(data []byte) (err error) {
@@ -1521,6 +1575,8 @@ type MXRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
@@ -1531,6 +1587,8 @@ type MXRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1540,20 +1598,22 @@ type MXRecord struct {
 
 // mxRecordJSON contains the JSON metadata for the struct [MXRecord]
 type mxRecordJSON struct {
-	Content     apijson.Field
-	Name        apijson.Field
-	Priority    apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Content           apijson.Field
+	Name              apijson.Field
+	Priority          apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *MXRecord) UnmarshalJSON(data []byte) (err error) {
@@ -1622,6 +1682,8 @@ type NAPTRRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted NAPTR content. See 'data' to set NAPTR properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -1634,6 +1696,8 @@ type NAPTRRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1643,20 +1707,22 @@ type NAPTRRecord struct {
 
 // naptrRecordJSON contains the JSON metadata for the struct [NAPTRRecord]
 type naptrRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *NAPTRRecord) UnmarshalJSON(data []byte) (err error) {
@@ -1779,6 +1845,8 @@ type NSRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
@@ -1789,6 +1857,8 @@ type NSRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1798,19 +1868,21 @@ type NSRecord struct {
 
 // nsRecordJSON contains the JSON metadata for the struct [NSRecord]
 type nsRecordJSON struct {
-	Content     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Content           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *NSRecord) UnmarshalJSON(data []byte) (err error) {
@@ -1876,6 +1948,8 @@ type PTRRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
@@ -1886,6 +1960,8 @@ type PTRRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -1895,19 +1971,21 @@ type PTRRecord struct {
 
 // ptrRecordJSON contains the JSON metadata for the struct [PTRRecord]
 type ptrRecordJSON struct {
-	Content     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Content           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *PTRRecord) UnmarshalJSON(data []byte) (err error) {
@@ -1974,6 +2052,8 @@ type Record struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Identifier
@@ -1986,6 +2066,8 @@ type Record struct {
 	Proxiable bool `json:"proxiable"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags,required"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2004,22 +2086,24 @@ type Record struct {
 
 // recordJSON contains the JSON metadata for the struct [Record]
 type recordJSON struct {
-	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Type        apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	ID          apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	Data        apijson.Field
-	Priority    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Content           apijson.Field
+	Name              apijson.Field
+	Proxied           apijson.Field
+	Type              apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	ID                apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	Data              apijson.Field
+	Priority          apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r recordJSON) RawJSON() string {
@@ -2325,6 +2409,8 @@ type SMIMEARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted SMIMEA content. See 'data' to set SMIMEA properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -2337,6 +2423,8 @@ type SMIMEARecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2346,20 +2434,22 @@ type SMIMEARecord struct {
 
 // smimeaRecordJSON contains the JSON metadata for the struct [SMIMEARecord]
 type smimeaRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *SMIMEARecord) UnmarshalJSON(data []byte) (err error) {
@@ -2475,6 +2565,8 @@ type SRVRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Priority, weight, port, and SRV target. See 'data' for setting the individual
 	// component values.
 	Content string `json:"content"`
@@ -2488,6 +2580,8 @@ type SRVRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2497,20 +2591,22 @@ type SRVRecord struct {
 
 // srvRecordJSON contains the JSON metadata for the struct [SRVRecord]
 type srvRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *SRVRecord) UnmarshalJSON(data []byte) (err error) {
@@ -2654,6 +2750,8 @@ type SSHFPRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted SSHFP content. See 'data' to set SSHFP properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -2666,6 +2764,8 @@ type SSHFPRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2675,20 +2775,22 @@ type SSHFPRecord struct {
 
 // sshfpRecordJSON contains the JSON metadata for the struct [SSHFPRecord]
 type sshfpRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *SSHFPRecord) UnmarshalJSON(data []byte) (err error) {
@@ -2796,6 +2898,8 @@ type SVCBRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted SVCB content. See 'data' to set SVCB properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -2808,6 +2912,8 @@ type SVCBRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2817,20 +2923,22 @@ type SVCBRecord struct {
 
 // svcbRecordJSON contains the JSON metadata for the struct [SVCBRecord]
 type svcbRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *SVCBRecord) UnmarshalJSON(data []byte) (err error) {
@@ -2938,6 +3046,8 @@ type TLSARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted TLSA content. See 'data' to set TLSA properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -2950,6 +3060,8 @@ type TLSARecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2959,20 +3071,22 @@ type TLSARecord struct {
 
 // tlsaRecordJSON contains the JSON metadata for the struct [TLSARecord]
 type tlsaRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *TLSARecord) UnmarshalJSON(data []byte) (err error) {
@@ -3099,6 +3213,8 @@ type TXTRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
@@ -3109,6 +3225,8 @@ type TXTRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3118,19 +3236,21 @@ type TXTRecord struct {
 
 // txtRecordJSON contains the JSON metadata for the struct [TXTRecord]
 type txtRecordJSON struct {
-	Content     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Content           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *TXTRecord) UnmarshalJSON(data []byte) (err error) {
@@ -3199,6 +3319,8 @@ type URIRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
 	// Formatted URI content. See 'data' to set URI properties.
 	Content string `json:"content"`
 	// When the record was created.
@@ -3211,6 +3333,8 @@ type URIRecord struct {
 	Proxiable bool `json:"proxiable"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -3220,21 +3344,23 @@ type URIRecord struct {
 
 // uriRecordJSON contains the JSON metadata for the struct [URIRecord]
 type uriRecordJSON struct {
-	Data        apijson.Field
-	Name        apijson.Field
-	Priority    apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	Comment     apijson.Field
-	Content     apijson.Field
-	CreatedOn   apijson.Field
-	Meta        apijson.Field
-	ModifiedOn  apijson.Field
-	Proxiable   apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Data              apijson.Field
+	Name              apijson.Field
+	Priority          apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	Content           apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *URIRecord) UnmarshalJSON(data []byte) (err error) {
