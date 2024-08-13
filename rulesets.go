@@ -854,7 +854,7 @@ func (api *API) UpdateRuleset(ctx context.Context, rc *ResourceContainer, params
 //
 // API reference: https://developers.cloudflare.com/api/operations/deleteZoneRulesetRule
 func (api *API) DeleteRulesetRule(ctx context.Context, rc *ResourceContainer, params DeleteRulesetRuleParams) error {
-	uri := fmt.Sprintf("/%s/%s/rulesets/%s/rules/%s", rc.Level, rc.Identifier, params.rulesetID, params.rulesetRuleID)
+	uri := fmt.Sprintf("/%s/%s/rulesets/%s/rules/%s", rc.Level, rc.Identifier, params.RulesetID, params.RulesetRuleID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err
