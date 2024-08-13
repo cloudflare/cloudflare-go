@@ -35,8 +35,7 @@ func NewAddressMapAccountService(opts ...option.RequestOption) (r *AddressMapAcc
 }
 
 // Add an account as a member of a particular address map.
-func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, params AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *[]AddressMapAccountUpdateResponse, err error) {
-	var env AddressMapAccountUpdateResponseEnvelope
+func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID string, params AddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressMapAccountUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -47,17 +46,12 @@ func (r *AddressMapAccountService) Update(ctx context.Context, addressMapID stri
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", params.AccountID, addressMapID, params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
 }
 
 // Remove an account as a member of a particular address map.
-func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, body AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *[]AddressMapAccountDeleteResponse, err error) {
-	var env AddressMapAccountDeleteResponseEnvelope
+func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID string, body AddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressMapAccountDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -68,17 +62,157 @@ func (r *AddressMapAccountService) Delete(ctx context.Context, addressMapID stri
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", body.AccountID, addressMapID, body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
-type AddressMapAccountUpdateResponse = interface{}
+type AddressMapAccountUpdateResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success    AddressMapAccountUpdateResponseSuccess    `json:"success,required"`
+	ResultInfo AddressMapAccountUpdateResponseResultInfo `json:"result_info"`
+	JSON       addressMapAccountUpdateResponseJSON       `json:"-"`
+}
 
-type AddressMapAccountDeleteResponse = interface{}
+// addressMapAccountUpdateResponseJSON contains the JSON metadata for the struct
+// [AddressMapAccountUpdateResponse]
+type addressMapAccountUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapAccountUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AddressMapAccountUpdateResponseSuccess bool
+
+const (
+	AddressMapAccountUpdateResponseSuccessTrue AddressMapAccountUpdateResponseSuccess = true
+)
+
+func (r AddressMapAccountUpdateResponseSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapAccountUpdateResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type AddressMapAccountUpdateResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                       `json:"total_count"`
+	JSON       addressMapAccountUpdateResponseResultInfoJSON `json:"-"`
+}
+
+// addressMapAccountUpdateResponseResultInfoJSON contains the JSON metadata for the
+// struct [AddressMapAccountUpdateResponseResultInfo]
+type addressMapAccountUpdateResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapAccountUpdateResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountUpdateResponseResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type AddressMapAccountDeleteResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success    AddressMapAccountDeleteResponseSuccess    `json:"success,required"`
+	ResultInfo AddressMapAccountDeleteResponseResultInfo `json:"result_info"`
+	JSON       addressMapAccountDeleteResponseJSON       `json:"-"`
+}
+
+// addressMapAccountDeleteResponseJSON contains the JSON metadata for the struct
+// [AddressMapAccountDeleteResponse]
+type addressMapAccountDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapAccountDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AddressMapAccountDeleteResponseSuccess bool
+
+const (
+	AddressMapAccountDeleteResponseSuccessTrue AddressMapAccountDeleteResponseSuccess = true
+)
+
+func (r AddressMapAccountDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapAccountDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type AddressMapAccountDeleteResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                       `json:"total_count"`
+	JSON       addressMapAccountDeleteResponseResultInfoJSON `json:"-"`
+}
+
+// addressMapAccountDeleteResponseResultInfoJSON contains the JSON metadata for the
+// struct [AddressMapAccountDeleteResponseResultInfo]
+type addressMapAccountDeleteResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapAccountDeleteResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapAccountDeleteResponseResultInfoJSON) RawJSON() string {
+	return r.raw
+}
 
 type AddressMapAccountUpdateParams struct {
 	// Identifier
@@ -90,159 +224,7 @@ func (r AddressMapAccountUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type AddressMapAccountUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    AddressMapAccountUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []AddressMapAccountUpdateResponse                 `json:"result,nullable"`
-	ResultInfo AddressMapAccountUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       addressMapAccountUpdateResponseEnvelopeJSON       `json:"-"`
-}
-
-// addressMapAccountUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AddressMapAccountUpdateResponseEnvelope]
-type addressMapAccountUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapAccountUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapAccountUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AddressMapAccountUpdateResponseEnvelopeSuccess bool
-
-const (
-	AddressMapAccountUpdateResponseEnvelopeSuccessTrue AddressMapAccountUpdateResponseEnvelopeSuccess = true
-)
-
-func (r AddressMapAccountUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AddressMapAccountUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AddressMapAccountUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                               `json:"total_count"`
-	JSON       addressMapAccountUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// addressMapAccountUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [AddressMapAccountUpdateResponseEnvelopeResultInfo]
-type addressMapAccountUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapAccountUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapAccountUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type AddressMapAccountDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type AddressMapAccountDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    AddressMapAccountDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []AddressMapAccountDeleteResponse                 `json:"result,nullable"`
-	ResultInfo AddressMapAccountDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       addressMapAccountDeleteResponseEnvelopeJSON       `json:"-"`
-}
-
-// addressMapAccountDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AddressMapAccountDeleteResponseEnvelope]
-type addressMapAccountDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapAccountDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapAccountDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AddressMapAccountDeleteResponseEnvelopeSuccess bool
-
-const (
-	AddressMapAccountDeleteResponseEnvelopeSuccessTrue AddressMapAccountDeleteResponseEnvelopeSuccess = true
-)
-
-func (r AddressMapAccountDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AddressMapAccountDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AddressMapAccountDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                               `json:"total_count"`
-	JSON       addressMapAccountDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// addressMapAccountDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [AddressMapAccountDeleteResponseEnvelopeResultInfo]
-type addressMapAccountDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapAccountDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapAccountDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
