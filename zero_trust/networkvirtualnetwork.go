@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -18,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // NetworkVirtualNetworkService contains methods and other services that help with
@@ -41,7 +39,7 @@ func NewNetworkVirtualNetworkService(opts ...option.RequestOption) (r *NetworkVi
 }
 
 // Adds a new virtual network to an account.
-func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVirtualNetworkNewParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkNewResponseUnion, err error) {
+func (r *NetworkVirtualNetworkService) New(ctx context.Context, params NetworkVirtualNetworkNewParams, opts ...option.RequestOption) (res *VirtualNetwork, err error) {
 	var env NetworkVirtualNetworkNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -85,7 +83,7 @@ func (r *NetworkVirtualNetworkService) ListAutoPaging(ctx context.Context, param
 }
 
 // Deletes an existing virtual network.
-func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, body NetworkVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkDeleteResponseUnion, err error) {
+func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, body NetworkVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *VirtualNetwork, err error) {
 	var env NetworkVirtualNetworkDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -106,7 +104,7 @@ func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetwor
 }
 
 // Updates an existing virtual network.
-func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkID string, params NetworkVirtualNetworkEditParams, opts ...option.RequestOption) (res *NetworkVirtualNetworkEditResponseUnion, err error) {
+func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkID string, params NetworkVirtualNetworkEditParams, opts ...option.RequestOption) (res *VirtualNetwork, err error) {
 	var env NetworkVirtualNetworkEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -163,84 +161,6 @@ func (r virtualNetworkJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [zero_trust.NetworkVirtualNetworkNewResponseUnknown],
-// [zero_trust.NetworkVirtualNetworkNewResponseArray] or [shared.UnionString].
-type NetworkVirtualNetworkNewResponseUnion interface {
-	ImplementsZeroTrustNetworkVirtualNetworkNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NetworkVirtualNetworkNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NetworkVirtualNetworkNewResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type NetworkVirtualNetworkNewResponseArray []interface{}
-
-func (r NetworkVirtualNetworkNewResponseArray) ImplementsZeroTrustNetworkVirtualNetworkNewResponseUnion() {
-}
-
-// Union satisfied by [zero_trust.NetworkVirtualNetworkDeleteResponseUnknown],
-// [zero_trust.NetworkVirtualNetworkDeleteResponseArray] or [shared.UnionString].
-type NetworkVirtualNetworkDeleteResponseUnion interface {
-	ImplementsZeroTrustNetworkVirtualNetworkDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NetworkVirtualNetworkDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NetworkVirtualNetworkDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type NetworkVirtualNetworkDeleteResponseArray []interface{}
-
-func (r NetworkVirtualNetworkDeleteResponseArray) ImplementsZeroTrustNetworkVirtualNetworkDeleteResponseUnion() {
-}
-
-// Union satisfied by [zero_trust.NetworkVirtualNetworkEditResponseUnknown],
-// [zero_trust.NetworkVirtualNetworkEditResponseArray] or [shared.UnionString].
-type NetworkVirtualNetworkEditResponseUnion interface {
-	ImplementsZeroTrustNetworkVirtualNetworkEditResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*NetworkVirtualNetworkEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NetworkVirtualNetworkEditResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type NetworkVirtualNetworkEditResponseArray []interface{}
-
-func (r NetworkVirtualNetworkEditResponseArray) ImplementsZeroTrustNetworkVirtualNetworkEditResponseUnion() {
-}
-
 type NetworkVirtualNetworkNewParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -257,9 +177,9 @@ func (r NetworkVirtualNetworkNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type NetworkVirtualNetworkNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                 `json:"errors,required"`
-	Messages []shared.ResponseInfo                 `json:"messages,required"`
-	Result   NetworkVirtualNetworkNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   VirtualNetwork        `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkVirtualNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -329,9 +249,9 @@ type NetworkVirtualNetworkDeleteParams struct {
 }
 
 type NetworkVirtualNetworkDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                    `json:"errors,required"`
-	Messages []shared.ResponseInfo                    `json:"messages,required"`
-	Result   NetworkVirtualNetworkDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   VirtualNetwork        `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkVirtualNetworkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -387,9 +307,9 @@ func (r NetworkVirtualNetworkEditParams) MarshalJSON() (data []byte, err error) 
 }
 
 type NetworkVirtualNetworkEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   NetworkVirtualNetworkEditResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   VirtualNetwork        `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkVirtualNetworkEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkVirtualNetworkEditResponseEnvelopeJSON    `json:"-"`

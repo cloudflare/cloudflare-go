@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // TunnelConnectionService contains methods and other services that help with
@@ -34,28 +32,6 @@ type TunnelConnectionService struct {
 func NewTunnelConnectionService(opts ...option.RequestOption) (r *TunnelConnectionService) {
 	r = &TunnelConnectionService{}
 	r.Options = opts
-	return
-}
-
-// Removes connections that are in a disconnected or pending reconnect state. We
-// recommend running this command after shutting down a tunnel.
-func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, body TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponseUnion, err error) {
-	var env TunnelConnectionDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if body.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if tunnelID == "" {
-		err = errors.New("missing required tunnel_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/tunnels/%s/connections", body.AccountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
 	return
 }
 
@@ -165,80 +141,6 @@ func (r *ClientConn) UnmarshalJSON(data []byte) (err error) {
 
 func (r clientConnJSON) RawJSON() string {
 	return r.raw
-}
-
-// Union satisfied by [zero_trust.TunnelConnectionDeleteResponseUnknown],
-// [zero_trust.TunnelConnectionDeleteResponseArray] or [shared.UnionString].
-type TunnelConnectionDeleteResponseUnion interface {
-	ImplementsZeroTrustTunnelConnectionDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelConnectionDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TunnelConnectionDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type TunnelConnectionDeleteResponseArray []interface{}
-
-func (r TunnelConnectionDeleteResponseArray) ImplementsZeroTrustTunnelConnectionDeleteResponseUnion() {
-}
-
-type TunnelConnectionDeleteParams struct {
-	// Cloudflare account ID
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type TunnelConnectionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo               `json:"errors,required"`
-	Messages []shared.ResponseInfo               `json:"messages,required"`
-	Result   TunnelConnectionDeleteResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success TunnelConnectionDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    tunnelConnectionDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// tunnelConnectionDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [TunnelConnectionDeleteResponseEnvelope]
-type tunnelConnectionDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelConnectionDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tunnelConnectionDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type TunnelConnectionDeleteResponseEnvelopeSuccess bool
-
-const (
-	TunnelConnectionDeleteResponseEnvelopeSuccessTrue TunnelConnectionDeleteResponseEnvelopeSuccess = true
-)
-
-func (r TunnelConnectionDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TunnelConnectionDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type TunnelConnectionGetParams struct {
