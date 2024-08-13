@@ -110,19 +110,15 @@ func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnr
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
-func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion()   {}
-func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponseUnion()      {}
-func (UnionString) ImplementsZeroTrustTunnelConnectionDeleteResponseUnion()      {}
-func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()              {}
-func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()         {}
-func (UnionString) ImplementsZeroTrustDLPProfileCustomDeleteResponseUnion()      {}
-func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkNewResponseUnion()    {}
-func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkDeleteResponseUnion() {}
-func (UnionString) ImplementsZeroTrustNetworkVirtualNetworkEditResponseUnion()   {}
-func (UnionString) ImplementsZeroTrustRiskScoringResetResponseUnion()            {}
-func (UnionString) ImplementsHyperdriveConfigDeleteResponseUnion()               {}
-func (UnionString) ImplementsVectorizeIndexDeleteResponseUnion()                 {}
-func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()   {}
+func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion() {}
+func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponseUnion()    {}
+func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()            {}
+func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()       {}
+func (UnionString) ImplementsZeroTrustDLPProfileCustomDeleteResponseUnion()    {}
+func (UnionString) ImplementsZeroTrustRiskScoringResetResponseUnion()          {}
+func (UnionString) ImplementsHyperdriveConfigDeleteResponseUnion()             {}
+func (UnionString) ImplementsVectorizeIndexDeleteResponseUnion()               {}
+func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
 func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncryptionUpdateResponseUnion() {
 }
 func (UnionString) ImplementsOriginPostQuantumEncryptionOriginPostQuantumEncryptionGetResponseUnion() {
