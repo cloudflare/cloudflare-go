@@ -208,6 +208,9 @@ type LiveInputRecording struct {
 	// allowed origin domains in an array and use `*` for wildcard subdomains. An empty
 	// array allows videos to be viewed on any origin.
 	AllowedOrigins []string `json:"allowedOrigins"`
+	// Disables reporting the number of live viewers when this property is set to
+	// `true`.
+	HideLiveViewerCount bool `json:"hideLiveViewerCount"`
 	// Specifies the recording behavior for the live input. Set this value to `off` to
 	// prevent a recording. Set the value to `automatic` to begin a recording and
 	// transition to on-demand after Stream Live stops receiving input.
@@ -226,12 +229,13 @@ type LiveInputRecording struct {
 // liveInputRecordingJSON contains the JSON metadata for the struct
 // [LiveInputRecording]
 type liveInputRecordingJSON struct {
-	AllowedOrigins    apijson.Field
-	Mode              apijson.Field
-	RequireSignedURLs apijson.Field
-	TimeoutSeconds    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	AllowedOrigins      apijson.Field
+	HideLiveViewerCount apijson.Field
+	Mode                apijson.Field
+	RequireSignedURLs   apijson.Field
+	TimeoutSeconds      apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *LiveInputRecording) UnmarshalJSON(data []byte) (err error) {
@@ -533,6 +537,9 @@ type LiveInputNewParamsRecording struct {
 	// allowed origin domains in an array and use `*` for wildcard subdomains. An empty
 	// array allows videos to be viewed on any origin.
 	AllowedOrigins param.Field[[]string] `json:"allowedOrigins"`
+	// Disables reporting the number of live viewers when this property is set to
+	// `true`.
+	HideLiveViewerCount param.Field[bool] `json:"hideLiveViewerCount"`
 	// Specifies the recording behavior for the live input. Set this value to `off` to
 	// prevent a recording. Set the value to `automatic` to begin a recording and
 	// transition to on-demand after Stream Live stops receiving input.
@@ -645,6 +652,9 @@ type LiveInputUpdateParamsRecording struct {
 	// allowed origin domains in an array and use `*` for wildcard subdomains. An empty
 	// array allows videos to be viewed on any origin.
 	AllowedOrigins param.Field[[]string] `json:"allowedOrigins"`
+	// Disables reporting the number of live viewers when this property is set to
+	// `true`.
+	HideLiveViewerCount param.Field[bool] `json:"hideLiveViewerCount"`
 	// Specifies the recording behavior for the live input. Set this value to `off` to
 	// prevent a recording. Set the value to `automatic` to begin a recording and
 	// transition to on-demand after Stream Live stops receiving input.
