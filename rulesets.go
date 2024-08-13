@@ -742,8 +742,8 @@ type UpdateEntrypointRulesetParams struct {
 }
 
 type DeleteRulesetRuleParams struct {
-	rulesetID     string `json:"-"`
-	rulesetRuleID string `json:"-"`
+	RulesetID     string `json:"-"`
+	RulesetRuleID string `json:"-"`
 }
 
 // ListRulesets lists all Rulesets in a given zone or account depending on the
