@@ -140,6 +140,7 @@ type TeamsDeviceSettings struct {
 	GatewayProxyUDPEnabled             bool  `json:"gateway_udp_proxy_enabled"`
 	RootCertificateInstallationEnabled bool  `json:"root_certificate_installation_enabled"`
 	UseZTVirtualIP                     *bool `json:"use_zt_virtual_ip"`
+	DisableForTime                     int32 `json:"disable_for_time"`
 }
 
 type TeamsDeviceSettingsResponse struct {
