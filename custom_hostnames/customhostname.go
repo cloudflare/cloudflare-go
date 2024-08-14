@@ -232,7 +232,7 @@ type CustomHostnameNewResponse struct {
 	// Status of the hostname's activation.
 	Status CustomHostnameNewResponseStatus `json:"status"`
 	// These are errors that were encountered while trying to activate a hostname.
-	VerificationErrors []interface{}                 `json:"verification_errors"`
+	VerificationErrors []string                      `json:"verification_errors"`
 	JSON               customHostnameNewResponseJSON `json:"-"`
 }
 
@@ -282,7 +282,7 @@ type CustomHostnameNewResponseSSL struct {
 	// The time the custom certificate expires on.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
+	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
@@ -506,7 +506,7 @@ func (r customHostnameNewResponseSSLValidationErrorJSON) RawJSON() string {
 type CustomHostnameNewResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
-	Emails []interface{} `json:"emails"`
+	Emails []string `json:"emails"`
 	// The content that the certificate authority (CA) will expect to find at the
 	// http_url during the domain validation.
 	HTTPBody string `json:"http_body"`
@@ -694,7 +694,7 @@ type CustomHostnameListResponse struct {
 	// Status of the hostname's activation.
 	Status CustomHostnameListResponseStatus `json:"status"`
 	// These are errors that were encountered while trying to activate a hostname.
-	VerificationErrors []interface{}                  `json:"verification_errors"`
+	VerificationErrors []string                       `json:"verification_errors"`
 	JSON               customHostnameListResponseJSON `json:"-"`
 }
 
@@ -744,7 +744,7 @@ type CustomHostnameListResponseSSL struct {
 	// The time the custom certificate expires on.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
+	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
@@ -968,7 +968,7 @@ func (r customHostnameListResponseSSLValidationErrorJSON) RawJSON() string {
 type CustomHostnameListResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
-	Emails []interface{} `json:"emails"`
+	Emails []string `json:"emails"`
 	// The content that the certificate authority (CA) will expect to find at the
 	// http_url during the domain validation.
 	HTTPBody string `json:"http_body"`
@@ -1178,7 +1178,7 @@ type CustomHostnameEditResponse struct {
 	// Status of the hostname's activation.
 	Status CustomHostnameEditResponseStatus `json:"status"`
 	// These are errors that were encountered while trying to activate a hostname.
-	VerificationErrors []interface{}                  `json:"verification_errors"`
+	VerificationErrors []string                       `json:"verification_errors"`
 	JSON               customHostnameEditResponseJSON `json:"-"`
 }
 
@@ -1228,7 +1228,7 @@ type CustomHostnameEditResponseSSL struct {
 	// The time the custom certificate expires on.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
+	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
@@ -1452,7 +1452,7 @@ func (r customHostnameEditResponseSSLValidationErrorJSON) RawJSON() string {
 type CustomHostnameEditResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
-	Emails []interface{} `json:"emails"`
+	Emails []string `json:"emails"`
 	// The content that the certificate authority (CA) will expect to find at the
 	// http_url during the domain validation.
 	HTTPBody string `json:"http_body"`
@@ -1640,7 +1640,7 @@ type CustomHostnameGetResponse struct {
 	// Status of the hostname's activation.
 	Status CustomHostnameGetResponseStatus `json:"status"`
 	// These are errors that were encountered while trying to activate a hostname.
-	VerificationErrors []interface{}                 `json:"verification_errors"`
+	VerificationErrors []string                      `json:"verification_errors"`
 	JSON               customHostnameGetResponseJSON `json:"-"`
 }
 
@@ -1690,7 +1690,7 @@ type CustomHostnameGetResponseSSL struct {
 	// The time the custom certificate expires on.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
+	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
@@ -1914,7 +1914,7 @@ func (r customHostnameGetResponseSSLValidationErrorJSON) RawJSON() string {
 type CustomHostnameGetResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
-	Emails []interface{} `json:"emails"`
+	Emails []string `json:"emails"`
 	// The content that the certificate authority (CA) will expect to find at the
 	// http_url during the domain validation.
 	HTTPBody string `json:"http_body"`

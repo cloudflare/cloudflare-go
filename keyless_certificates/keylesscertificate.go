@@ -160,7 +160,7 @@ type KeylessCertificate struct {
 	Name string `json:"name,required"`
 	// Available permissions for the Keyless SSL for the current user requesting the
 	// item.
-	Permissions []interface{} `json:"permissions,required"`
+	Permissions []string `json:"permissions,required"`
 	// The keyless SSL port used to communicate between Cloudflare and the client's
 	// Keyless SSL server.
 	Port float64 `json:"port,required"`

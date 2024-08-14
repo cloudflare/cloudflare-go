@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -17,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // CertificatePackService contains methods and other services that help with
@@ -115,7 +113,7 @@ func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID str
 }
 
 // For a given zone, get a certificate pack.
-func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *CertificatePackGetResponseUnion, err error) {
+func (r *CertificatePackService) Get(ctx context.Context, certificatePackID string, query CertificatePackGetParams, opts ...option.RequestOption) (res *CertificatePackGetResponse, err error) {
 	var env CertificatePackGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
@@ -352,22 +350,7 @@ func (r CertificatePackEditResponseValidityDays) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [ssl.CertificatePackGetResponseUnknown] or
-// [shared.UnionString].
-type CertificatePackGetResponseUnion interface {
-	ImplementsSSLCertificatePackGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CertificatePackGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type CertificatePackGetResponse = interface{}
 
 type CertificatePackListParams struct {
 	// Identifier
@@ -511,7 +494,7 @@ type CertificatePackGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CertificatePackGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  CertificatePackGetResponseUnion           `json:"result"`
+	Result  CertificatePackGetResponse                `json:"result"`
 	JSON    certificatePackGetResponseEnvelopeJSON    `json:"-"`
 }
 
