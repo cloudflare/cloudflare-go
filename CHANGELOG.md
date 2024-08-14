@@ -1,5 +1,14 @@
 ## 0.102.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* rulesets: Add `DeleteRulesetRule` ([#2833](https://github.com/cloudflare/cloudflare-go/issues/2833))
+* rulesets: Export `DeleteRulesetRuleParams` fields ([#2886](https://github.com/cloudflare/cloudflare-go/issues/2886))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.27.0 to 0.28.0 ([#2835](https://github.com/cloudflare/cloudflare-go/issues/2835))
+
 ## 0.101.0 (July 31st, 2024)
 
 ENHANCEMENTS:
