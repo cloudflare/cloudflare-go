@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/custom_hostnames"
@@ -20,7 +19,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/keyless_certificates"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // CustomCertificateService contains methods and other services that help with
@@ -45,7 +43,7 @@ func NewCustomCertificateService(opts ...option.RequestOption) (r *CustomCertifi
 }
 
 // Upload a new SSL certificate for a zone.
-func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificateNewResponseUnion, err error) {
+func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificate, err error) {
 	var env CustomCertificateNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -116,7 +114,7 @@ func (r *CustomCertificateService) Delete(ctx context.Context, customCertificate
 // Upload a new private key and/or PEM/CRT for the SSL certificate. Note: PATCHing
 // a configuration for sni_custom certificates will result in a new resource id
 // being returned, and the previous one being deleted.
-func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificateEditResponseUnion, err error) {
+func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificate, err error) {
 	var env CustomCertificateEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -137,7 +135,7 @@ func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID
 }
 
 // SSL Configuration Details
-func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateGetResponseUnion, err error) {
+func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificate, err error) {
 	var env CustomCertificateGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
@@ -332,23 +330,6 @@ func (r Status) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [custom_certificates.CustomCertificateNewResponseUnknown] or
-// [shared.UnionString].
-type CustomCertificateNewResponseUnion interface {
-	ImplementsCustomCertificatesCustomCertificateNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomCertificateNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type CustomCertificateDeleteResponse struct {
 	// Identifier
 	ID   string                              `json:"id"`
@@ -369,40 +350,6 @@ func (r *CustomCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error)
 
 func (r customCertificateDeleteResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// Union satisfied by [custom_certificates.CustomCertificateEditResponseUnknown] or
-// [shared.UnionString].
-type CustomCertificateEditResponseUnion interface {
-	ImplementsCustomCertificatesCustomCertificateEditResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomCertificateEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [custom_certificates.CustomCertificateGetResponseUnknown] or
-// [shared.UnionString].
-type CustomCertificateGetResponseUnion interface {
-	ImplementsCustomCertificatesCustomCertificateGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomCertificateGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type CustomCertificateNewParams struct {
@@ -466,7 +413,7 @@ type CustomCertificateNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  CustomCertificateNewResponseUnion           `json:"result"`
+	Result  CustomCertificate                           `json:"result"`
 	JSON    customCertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -650,7 +597,7 @@ type CustomCertificateEditResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  CustomCertificateEditResponseUnion           `json:"result"`
+	Result  CustomCertificate                            `json:"result"`
 	JSON    customCertificateEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -698,7 +645,7 @@ type CustomCertificateGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success CustomCertificateGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  CustomCertificateGetResponseUnion           `json:"result"`
+	Result  CustomCertificate                           `json:"result"`
 	JSON    customCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
