@@ -83,7 +83,7 @@ type PrioritizeUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    PrioritizeUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CustomCertificate                        `json:"result,nullable"`
+	Result     []CustomCertificate                        `json:"result"`
 	ResultInfo PrioritizeUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       prioritizeUpdateResponseEnvelopeJSON       `json:"-"`
 }

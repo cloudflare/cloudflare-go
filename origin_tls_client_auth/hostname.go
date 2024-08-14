@@ -214,7 +214,7 @@ type HostnameUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    HostnameUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []AuthenticatedOriginPull                `json:"result,nullable"`
+	Result     []AuthenticatedOriginPull                `json:"result"`
 	ResultInfo HostnameUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       hostnameUpdateResponseEnvelopeJSON       `json:"-"`
 }

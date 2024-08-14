@@ -90,7 +90,7 @@ type AssociationGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AssociationGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CertificateAsssociation                `json:"result,nullable"`
+	Result     []CertificateAsssociation                `json:"result"`
 	ResultInfo AssociationGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       associationGetResponseEnvelopeJSON       `json:"-"`
 }

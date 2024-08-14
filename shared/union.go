@@ -4,36 +4,26 @@ package shared
 
 type UnionString string
 
-func (UnionString) ImplementsOriginCACertificatesOriginCACertificateNewResponseUnion() {}
-func (UnionString) ImplementsOriginCACertificatesOriginCACertificateGetResponseUnion() {}
-func (UnionString) ImplementsUserBillingProfileGetResponseUnion()                      {}
-func (UnionString) ImplementsUserSubscriptionUpdateResponseUnion()                     {}
-func (UnionString) ImplementsUserSubscriptionEditResponseUnion()                       {}
-func (UnionString) ImplementsZonesSubscriptionNewResponseUnion()                       {}
-func (UnionString) ImplementsZonesSubscriptionGetResponseUnion()                       {}
-func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()                 {}
-func (UnionString) ImplementsLoadBalancersRegionListResponseUnion()                    {}
-func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()                     {}
-func (UnionString) ImplementsSSLAnalyzeNewResponseUnion()                              {}
-func (UnionString) ImplementsSSLCertificatePackGetResponseUnion()                      {}
-func (UnionString) ImplementsSubscriptionsSubscriptionNewResponseUnion()               {}
-func (UnionString) ImplementsSubscriptionsSubscriptionUpdateResponseUnion()            {}
-func (UnionString) ImplementsSubscriptionsSubscriptionGetResponseUnion()               {}
-func (UnionString) ImplementsArgoSmartRoutingEditResponseUnion()                       {}
-func (UnionString) ImplementsArgoSmartRoutingGetResponseUnion()                        {}
-func (UnionString) ImplementsCustomCertificatesCustomCertificateNewResponseUnion()     {}
-func (UnionString) ImplementsCustomCertificatesCustomCertificateEditResponseUnion()    {}
-func (UnionString) ImplementsCustomCertificatesCustomCertificateGetResponseUnion()     {}
-func (UnionString) ImplementsCustomHostnamesFallbackOriginUpdateResponseUnion()        {}
-func (UnionString) ImplementsCustomHostnamesFallbackOriginDeleteResponseUnion()        {}
-func (UnionString) ImplementsCustomHostnamesFallbackOriginGetResponseUnion()           {}
-func (UnionString) ImplementsDNSSECDNSSECDeleteResponseUnion()                         {}
-func (UnionString) ImplementsFirewallAccessRuleNewResponseUnion()                      {}
-func (UnionString) ImplementsFirewallAccessRuleEditResponseUnion()                     {}
-func (UnionString) ImplementsFirewallAccessRuleGetResponseUnion()                      {}
-func (UnionString) ImplementsFirewallUARuleNewResponseUnion()                          {}
-func (UnionString) ImplementsFirewallUARuleUpdateResponseUnion()                       {}
-func (UnionString) ImplementsFirewallUARuleGetResponseUnion()                          {}
+func (UnionString) ImplementsUserBillingProfileGetResponseUnion()           {}
+func (UnionString) ImplementsUserSubscriptionUpdateResponseUnion()          {}
+func (UnionString) ImplementsUserSubscriptionEditResponseUnion()            {}
+func (UnionString) ImplementsZonesSubscriptionNewResponseUnion()            {}
+func (UnionString) ImplementsZonesSubscriptionGetResponseUnion()            {}
+func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()      {}
+func (UnionString) ImplementsLoadBalancersRegionListResponseUnion()         {}
+func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()          {}
+func (UnionString) ImplementsSubscriptionsSubscriptionNewResponseUnion()    {}
+func (UnionString) ImplementsSubscriptionsSubscriptionUpdateResponseUnion() {}
+func (UnionString) ImplementsSubscriptionsSubscriptionGetResponseUnion()    {}
+func (UnionString) ImplementsArgoSmartRoutingEditResponseUnion()            {}
+func (UnionString) ImplementsArgoSmartRoutingGetResponseUnion()             {}
+func (UnionString) ImplementsDNSSECDNSSECDeleteResponseUnion()              {}
+func (UnionString) ImplementsFirewallAccessRuleNewResponseUnion()           {}
+func (UnionString) ImplementsFirewallAccessRuleEditResponseUnion()          {}
+func (UnionString) ImplementsFirewallAccessRuleGetResponseUnion()           {}
+func (UnionString) ImplementsFirewallUARuleNewResponseUnion()               {}
+func (UnionString) ImplementsFirewallUARuleUpdateResponseUnion()            {}
+func (UnionString) ImplementsFirewallUARuleGetResponseUnion()               {}
 func (UnionString) ImplementsFirewallWAFPackageListResponseFirewallAPIResponseCollectionResultUnion() {
 }
 func (UnionString) ImplementsFirewallWAFPackageGetResponseFirewallAPIResponseSingleResultUnion() {}
@@ -44,9 +34,6 @@ func (UnionString) ImplementsLogsRayIDGetResponseUnion()                        
 func (UnionString) ImplementsLogsReceivedGetResponseUnion()                                      {}
 func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                                     {}
 func (UnionString) ImplementsLogsReceivedGetParamsStartUnion()                                   {}
-func (UnionString) ImplementsOriginTLSClientAuthOriginTLSClientAuthNewResponseUnion()            {}
-func (UnionString) ImplementsOriginTLSClientAuthOriginTLSClientAuthDeleteResponseUnion()         {}
-func (UnionString) ImplementsOriginTLSClientAuthOriginTLSClientAuthGetResponseUnion()            {}
 func (UnionString) ImplementsPagerulesPageruleNewResponseUnion()                                 {}
 func (UnionString) ImplementsPagerulesPageruleUpdateResponseUnion()                              {}
 func (UnionString) ImplementsPagerulesPageruleEditResponseUnion()                                {}
