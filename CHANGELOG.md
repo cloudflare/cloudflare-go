@@ -4,6 +4,7 @@ ENHANCEMENTS:
 
 * rulesets: Add `DeleteRulesetRule` ([#2833](https://github.com/cloudflare/cloudflare-go/issues/2833))
 * rulesets: Export `DeleteRulesetRuleParams` fields ([#2886](https://github.com/cloudflare/cloudflare-go/issues/2886))
+* teams_accounts: Add `disable_for_time` attribute ([#2797](https://github.com/cloudflare/cloudflare-go/issues/2797))
 
 DEPENDENCIES:
 
