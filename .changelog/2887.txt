@@ -1,0 +1,3 @@
+```release-notes:bug
+cosmetic: Fix CRLF in changelog and test fixtures
+```

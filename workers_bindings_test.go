@@ -35,7 +35,7 @@ func TestListWorkerBindings(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, successResponse, res.Response)
-	assert.Equal(t, 9, len(res.BindingList))
+	assert.Equal(t, 10, len(res.BindingList))
 
 	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
 		Name: "MY_KV",
@@ -106,6 +106,14 @@ func TestListWorkerBindings(t *testing.T) {
 		},
 	})
 	assert.Equal(t, WorkerD1DataseBindingType, res.BindingList[8].Binding.Type())
+
+	assert.Equal(t, res.BindingList[9], WorkerBindingListItem{
+		Name: "MY_HYPERDRIVE",
+		Binding: WorkerHyperdriveBinding{
+			ConfigID: "aaf4609248cc493cbc8d3e446e38fdfa",
+		},
+	})
+	assert.Equal(t, WorkerHyperdriveBindingType, res.BindingList[9].Binding.Type())
 }
 
 func TestListWorkerBindings_Wfp(t *testing.T) {
@@ -125,7 +133,7 @@ func TestListWorkerBindings_Wfp(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, successResponse, res.Response)
-	assert.Equal(t, 9, len(res.BindingList))
+	assert.Equal(t, 10, len(res.BindingList))
 
 	assert.Equal(t, res.BindingList[0], WorkerBindingListItem{
 		Name: "MY_KV",
@@ -191,6 +199,14 @@ func TestListWorkerBindings_Wfp(t *testing.T) {
 		},
 	})
 	assert.Equal(t, WorkerD1DataseBindingType, res.BindingList[8].Binding.Type())
+
+	assert.Equal(t, res.BindingList[9], WorkerBindingListItem{
+		Name: "MY_HYPERDRIVE",
+		Binding: WorkerHyperdriveBinding{
+			ConfigID: "aaf4609248cc493cbc8d3e446e38fdfa",
+		},
+	})
+	assert.Equal(t, WorkerHyperdriveBindingType, res.BindingList[9].Binding.Type())
 }
 
 func ExampleUnsafeBinding() {
