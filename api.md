@@ -2746,77 +2746,19 @@ Methods:
 
 # Spectrum
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#DNSParam">DNSParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#EdgeIPsUnionParam">EdgeIPsUnionParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#OriginDNSParam">OriginDNSParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#OriginPortUnionParam">OriginPortUnionParam</a>
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#DNS">DNS</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#EdgeIPs">EdgeIPs</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#OriginDNS">OriginDNS</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#OriginPortUnion">OriginPortUnion</a>
-
 ## Analytics
 
 ### Aggregates
 
 #### Currents
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsAggregateCurrentGetResponse">AnalyticsAggregateCurrentGetResponse</a>
-
-Methods:
-
-- <code title="get /zones/{zone}/spectrum/analytics/aggregate/current">client.Spectrum.Analytics.Aggregates.Currents.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsAggregateCurrentService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zone <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsAggregateCurrentGetParams">AnalyticsAggregateCurrentGetParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsAggregateCurrentGetResponse">AnalyticsAggregateCurrentGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Events
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#Dimension">Dimension</a>
 
 #### Bytimes
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventBytimeGetResponseUnion">AnalyticsEventBytimeGetResponseUnion</a>
-
-Methods:
-
-- <code title="get /zones/{zone}/spectrum/analytics/events/bytime">client.Spectrum.Analytics.Events.Bytimes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventBytimeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zone <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventBytimeGetParams">AnalyticsEventBytimeGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventBytimeGetResponseUnion">AnalyticsEventBytimeGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 #### Summaries
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventSummaryGetResponseUnion">AnalyticsEventSummaryGetResponseUnion</a>
-
-Methods:
-
-- <code title="get /zones/{zone}/spectrum/analytics/events/summary">client.Spectrum.Analytics.Events.Summaries.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventSummaryService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zone <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventSummaryGetParams">AnalyticsEventSummaryGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventSummaryGetResponseUnion">AnalyticsEventSummaryGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Apps
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppNewResponse">AppNewResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppUpdateResponse">AppUpdateResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppListResponse">AppListResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppDeleteResponse">AppDeleteResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppGetResponseUnion">AppGetResponseUnion</a>
-
-Methods:
-
-- <code title="post /zones/{zone}/spectrum/apps">client.Spectrum.Apps.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zone <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppNewParams">AppNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppNewResponse">AppNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="put /zones/{zone}/spectrum/apps/{app_id}">client.Spectrum.Apps.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zone <a href="https://pkg.go.dev/builtin#string">string</a>, appID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppUpdateParams">AppUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppUpdateResponse">AppUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone}/spectrum/apps">client.Spectrum.Apps.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zone <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppListParams">AppListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppListResponse">AppListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="delete /zones/{zone}/spectrum/apps/{app_id}">client.Spectrum.Apps.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zone <a href="https://pkg.go.dev/builtin#string">string</a>, appID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppDeleteResponse">AppDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone}/spectrum/apps/{app_id}">client.Spectrum.Apps.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zone <a href="https://pkg.go.dev/builtin#string">string</a>, appID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppGetResponseUnion">AppGetResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Addressing
 
