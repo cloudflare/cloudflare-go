@@ -107,7 +107,7 @@ type PoolReferenceGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// List of resources that reference a given pool.
-	Result []PoolReferenceGetResponse `json:"result,required,nullable"`
+	Result []PoolReferenceGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success    PoolReferenceGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PoolReferenceGetResponseEnvelopeResultInfo `json:"result_info"`

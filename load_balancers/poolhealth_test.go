@@ -39,13 +39,9 @@ func TestPoolHealthNewWithOptionalParams(t *testing.T) {
 			Description:     cloudflare.F("Login page monitor"),
 			ExpectedBody:    cloudflare.F("alive"),
 			FollowRedirects: cloudflare.F(true),
-			Header: cloudflare.F[any](map[string]interface{}{
-				"Host": map[string]interface{}{
-					"0": "example.com",
-				},
-				"X-App-ID": map[string]interface{}{
-					"0": "abc123",
-				},
+			Header: cloudflare.F(map[string][]string{
+				"Host":     {"example.com"},
+				"X-App-ID": {"abc123"},
 			}),
 			Interval:  cloudflare.F(int64(0)),
 			Method:    cloudflare.F("GET"),

@@ -107,7 +107,7 @@ type MonitorReferenceGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// List of resources that reference a given monitor.
-	Result []MonitorReferenceGetResponse `json:"result,required,nullable"`
+	Result []MonitorReferenceGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success    MonitorReferenceGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo MonitorReferenceGetResponseEnvelopeResultInfo `json:"result_info"`
