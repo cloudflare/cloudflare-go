@@ -149,15 +149,15 @@ func (r *QueueService) Get(ctx context.Context, queueID string, query QueueGetPa
 }
 
 type Queue struct {
-	Consumers           []Consumer    `json:"consumers"`
-	ConsumersTotalCount float64       `json:"consumers_total_count"`
-	CreatedOn           string        `json:"created_on"`
-	ModifiedOn          string        `json:"modified_on"`
-	Producers           []interface{} `json:"producers"`
-	ProducersTotalCount float64       `json:"producers_total_count"`
-	QueueID             string        `json:"queue_id"`
-	QueueName           string        `json:"queue_name"`
-	JSON                queueJSON     `json:"-"`
+	Consumers           []Consumer      `json:"consumers"`
+	ConsumersTotalCount float64         `json:"consumers_total_count"`
+	CreatedOn           string          `json:"created_on"`
+	ModifiedOn          string          `json:"modified_on"`
+	Producers           []QueueProducer `json:"producers"`
+	ProducersTotalCount float64         `json:"producers_total_count"`
+	QueueID             string          `json:"queue_id"`
+	QueueName           string          `json:"queue_name"`
+	JSON                queueJSON       `json:"-"`
 }
 
 // queueJSON contains the JSON metadata for the struct [Queue]
@@ -179,6 +179,28 @@ func (r *Queue) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queueJSON) RawJSON() string {
+	return r.raw
+}
+
+type QueueProducer struct {
+	Environment string            `json:"environment"`
+	Service     string            `json:"service"`
+	JSON        queueProducerJSON `json:"-"`
+}
+
+// queueProducerJSON contains the JSON metadata for the struct [QueueProducer]
+type queueProducerJSON struct {
+	Environment apijson.Field
+	Service     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueProducer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueProducerJSON) RawJSON() string {
 	return r.raw
 }
 

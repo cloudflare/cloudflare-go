@@ -276,7 +276,7 @@ func TestIndexQueryWithOptionalParams(t *testing.T) {
 				},
 				"streaming_platform": "netflix",
 			}),
-			ReturnMetadata: cloudflare.F(true),
+			ReturnMetadata: cloudflare.F(vectorize.IndexQueryParamsReturnMetadataNone),
 			ReturnValues:   cloudflare.F(true),
 			TopK:           cloudflare.F(5.000000),
 		},

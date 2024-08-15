@@ -30,7 +30,6 @@ func TestBillingHistoryListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.User.Billing.History.List(context.TODO(), user.BillingHistoryListParams{
 		Action:     cloudflare.F("subscription"),
-		OccuredAt:  cloudflare.F(time.Now()),
 		OccurredAt: cloudflare.F(time.Now()),
 		Order:      cloudflare.F(user.BillingHistoryListParamsOrderType),
 		Page:       cloudflare.F(1.000000),
