@@ -12349,7 +12349,7 @@ func (r AccessApplicationNewParamsBodySelfHostedApplication) implementsZeroTrust
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -12366,16 +12366,16 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -12583,7 +12583,7 @@ func (r AccessApplicationNewParamsBodySaaSApplication) implementsZeroTrustAccess
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -12600,16 +12600,16 @@ type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -12943,7 +12943,7 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplication) implementsZeroTrust
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -12960,16 +12960,16 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -13219,7 +13219,7 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplication) implementsZeroTrust
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -13236,16 +13236,16 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy struct {
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -13486,7 +13486,7 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign) M
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -13503,16 +13503,16 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -13753,7 +13753,7 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLand
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -13770,16 +13770,16 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy 
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -14020,7 +14020,7 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLand
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -14037,16 +14037,16 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy 
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -14556,7 +14556,7 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplication) implementsZeroTr
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -14573,16 +14573,16 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -14790,7 +14790,7 @@ func (r AccessApplicationUpdateParamsBodySaaSApplication) implementsZeroTrustAcc
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -14807,16 +14807,16 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -15150,7 +15150,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) implementsZeroTr
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -15167,16 +15167,16 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -15426,7 +15426,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) implementsZeroTr
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -15443,16 +15443,16 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy struct {
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -15693,7 +15693,7 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -15710,16 +15710,16 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -15960,7 +15960,7 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationL
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -15977,16 +15977,16 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicy) MarshalJSON() (data []byte, err error) {
@@ -16227,7 +16227,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationL
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[shared.UnionString] `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
 	// app.
 	Precedence     param.Field[int64]       `json:"precedence"`
@@ -16244,16 +16244,16 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
-	Name param.Field[shared.UnionString] `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[shared.UnionString] `json:"purpose_justification_prompt"`
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
 	Require                      param.Field[interface{}] `json:"require,required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
-	SessionDuration param.Field[shared.UnionString] `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicy) MarshalJSON() (data []byte, err error) {
