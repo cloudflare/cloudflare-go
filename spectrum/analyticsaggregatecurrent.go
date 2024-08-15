@@ -3,18 +3,7 @@
 package spectrum
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"net/http"
-	"net/url"
-
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // AnalyticsAggregateCurrentService contains methods and other services that help
@@ -34,87 +23,4 @@ func NewAnalyticsAggregateCurrentService(opts ...option.RequestOption) (r *Analy
 	r = &AnalyticsAggregateCurrentService{}
 	r.Options = opts
 	return
-}
-
-// Retrieves analytics aggregated from the last minute of usage on Spectrum
-// applications underneath a given zone.
-func (r *AnalyticsAggregateCurrentService) Get(ctx context.Context, zone string, query AnalyticsAggregateCurrentGetParams, opts ...option.RequestOption) (res *[]AnalyticsAggregateCurrentGetResponse, err error) {
-	var env AnalyticsAggregateCurrentGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if zone == "" {
-		err = errors.New("missing required zone parameter")
-		return
-	}
-	path := fmt.Sprintf("zones/%s/spectrum/analytics/aggregate/current", zone)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-type AnalyticsAggregateCurrentGetResponse = interface{}
-
-type AnalyticsAggregateCurrentGetParams struct {
-	// Comma-delimited list of Spectrum Application Id(s). If provided, the response
-	// will be limited to Spectrum Application Id(s) that match.
-	AppIDParam param.Field[string] `query:"app_id_param"`
-	// Comma-delimited list of Spectrum Application Id(s). If provided, the response
-	// will be limited to Spectrum Application Id(s) that match.
-	AppID param.Field[string] `query:"appID"`
-	// Co-location identifier.
-	ColoName param.Field[string] `query:"colo_name"`
-}
-
-// URLQuery serializes [AnalyticsAggregateCurrentGetParams]'s query parameters as
-// `url.Values`.
-func (r AnalyticsAggregateCurrentGetParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-type AnalyticsAggregateCurrentGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   []AnalyticsAggregateCurrentGetResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success AnalyticsAggregateCurrentGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    analyticsAggregateCurrentGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// analyticsAggregateCurrentGetResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AnalyticsAggregateCurrentGetResponseEnvelope]
-type analyticsAggregateCurrentGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AnalyticsAggregateCurrentGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r analyticsAggregateCurrentGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AnalyticsAggregateCurrentGetResponseEnvelopeSuccess bool
-
-const (
-	AnalyticsAggregateCurrentGetResponseEnvelopeSuccessTrue AnalyticsAggregateCurrentGetResponseEnvelopeSuccess = true
-)
-
-func (r AnalyticsAggregateCurrentGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AnalyticsAggregateCurrentGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }

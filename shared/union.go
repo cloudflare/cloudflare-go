@@ -44,11 +44,6 @@ func (UnionString) ImplementsWorkersAIRunResponseUnion()                        
 func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion()                     {}
 func (UnionString) ImplementsQueuesQueueDeleteResponseUnion()                                    {}
 func (UnionString) ImplementsQueuesConsumerDeleteResponseUnion()                                 {}
-func (UnionString) ImplementsSpectrumOriginPortUnionParam()                                      {}
-func (UnionString) ImplementsSpectrumOriginPortUnion()                                           {}
-func (UnionString) ImplementsSpectrumAnalyticsEventBytimeGetResponseUnion()                      {}
-func (UnionString) ImplementsSpectrumAnalyticsEventSummaryGetResponseUnion()                     {}
-func (UnionString) ImplementsSpectrumAppGetResponseUnion()                                       {}
 func (UnionString) ImplementsImagesV1DeleteResponseUnion()                                       {}
 func (UnionString) ImplementsImagesV1VariantDeleteResponseUnion()                                {}
 func (UnionString) ImplementsIntelAttackSurfaceReportIssueDismissResponseUnion()                 {}
@@ -107,8 +102,6 @@ type UnionInt int64
 
 func (UnionInt) ImplementsLogsReceivedGetParamsEndUnion()   {}
 func (UnionInt) ImplementsLogsReceivedGetParamsStartUnion() {}
-func (UnionInt) ImplementsSpectrumOriginPortUnionParam()    {}
-func (UnionInt) ImplementsSpectrumOriginPortUnion()         {}
 func (UnionInt) ImplementsRulesListItemGetResponseUnion()   {}
 
 type UnionFloat float64
