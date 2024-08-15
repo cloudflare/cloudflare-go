@@ -49,7 +49,7 @@ func (r *AccessBookmarkService) New(ctx context.Context, bookmarkID string, para
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", params.AccountID, bookmarkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -70,7 +70,7 @@ func (r *AccessBookmarkService) Update(ctx context.Context, bookmarkID string, p
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/access/bookmarks/%s", params.AccountID, bookmarkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}

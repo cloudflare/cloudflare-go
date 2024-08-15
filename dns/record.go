@@ -241,7 +241,7 @@ func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts 
 		return
 	}
 	path := fmt.Sprintf("zones/%s/dns_records/scan", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
