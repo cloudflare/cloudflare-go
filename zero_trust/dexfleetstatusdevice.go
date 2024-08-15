@@ -105,19 +105,13 @@ func (r dexFleetStatusDeviceListResponseJSON) RawJSON() string {
 
 type DEXFleetStatusDeviceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Timestamp in ISO format
+	// Time range beginning in ISO format
 	From param.Field[string] `query:"from,required"`
-	// Page number of paginated results
+	// Page number
 	Page param.Field[float64] `query:"page,required"`
-	// Number of items per page
+	// Number of results per page
 	PerPage param.Field[float64] `query:"per_page,required"`
-	// Source:
-	//
-	// - `hourly` - device details aggregated hourly, up to 7 days prior
-	// - `last_seen` - device details, up to 24 hours prior
-	// - `raw` - device details, up to 7 days prior
-	Source param.Field[DEXFleetStatusDeviceListParamsSource] `query:"source,required"`
-	// Timestamp in ISO format
+	// Time range end in ISO format
 	To param.Field[string] `query:"to,required"`
 	// Cloudflare colo
 	Colo param.Field[string] `query:"colo"`
@@ -129,6 +123,12 @@ type DEXFleetStatusDeviceListParams struct {
 	Platform param.Field[string] `query:"platform"`
 	// Dimension to sort results by
 	SortBy param.Field[DEXFleetStatusDeviceListParamsSortBy] `query:"sort_by"`
+	// Source:
+	//
+	// - `hourly` - device details aggregated hourly, up to 7 days prior
+	// - `last_seen` - device details, up to 24 hours prior
+	// - `raw` - device details, up to 7 days prior
+	Source param.Field[DEXFleetStatusDeviceListParamsSource] `query:"source"`
 	// Network status
 	Status param.Field[string] `query:"status"`
 	// WARP client version
@@ -142,27 +142,6 @@ func (r DEXFleetStatusDeviceListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Source:
-//
-// - `hourly` - device details aggregated hourly, up to 7 days prior
-// - `last_seen` - device details, up to 24 hours prior
-// - `raw` - device details, up to 7 days prior
-type DEXFleetStatusDeviceListParamsSource string
-
-const (
-	DEXFleetStatusDeviceListParamsSourceLastSeen DEXFleetStatusDeviceListParamsSource = "last_seen"
-	DEXFleetStatusDeviceListParamsSourceHourly   DEXFleetStatusDeviceListParamsSource = "hourly"
-	DEXFleetStatusDeviceListParamsSourceRaw      DEXFleetStatusDeviceListParamsSource = "raw"
-)
-
-func (r DEXFleetStatusDeviceListParamsSource) IsKnown() bool {
-	switch r {
-	case DEXFleetStatusDeviceListParamsSourceLastSeen, DEXFleetStatusDeviceListParamsSourceHourly, DEXFleetStatusDeviceListParamsSourceRaw:
-		return true
-	}
-	return false
 }
 
 // Dimension to sort results by
@@ -181,6 +160,27 @@ const (
 func (r DEXFleetStatusDeviceListParamsSortBy) IsKnown() bool {
 	switch r {
 	case DEXFleetStatusDeviceListParamsSortByColo, DEXFleetStatusDeviceListParamsSortByDeviceID, DEXFleetStatusDeviceListParamsSortByMode, DEXFleetStatusDeviceListParamsSortByPlatform, DEXFleetStatusDeviceListParamsSortByStatus, DEXFleetStatusDeviceListParamsSortByTimestamp, DEXFleetStatusDeviceListParamsSortByVersion:
+		return true
+	}
+	return false
+}
+
+// Source:
+//
+// - `hourly` - device details aggregated hourly, up to 7 days prior
+// - `last_seen` - device details, up to 24 hours prior
+// - `raw` - device details, up to 7 days prior
+type DEXFleetStatusDeviceListParamsSource string
+
+const (
+	DEXFleetStatusDeviceListParamsSourceLastSeen DEXFleetStatusDeviceListParamsSource = "last_seen"
+	DEXFleetStatusDeviceListParamsSourceHourly   DEXFleetStatusDeviceListParamsSource = "hourly"
+	DEXFleetStatusDeviceListParamsSourceRaw      DEXFleetStatusDeviceListParamsSource = "raw"
+)
+
+func (r DEXFleetStatusDeviceListParamsSource) IsKnown() bool {
+	switch r {
+	case DEXFleetStatusDeviceListParamsSourceLastSeen, DEXFleetStatusDeviceListParamsSourceHourly, DEXFleetStatusDeviceListParamsSourceRaw:
 		return true
 	}
 	return false

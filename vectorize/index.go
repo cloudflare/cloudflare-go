@@ -1024,8 +1024,9 @@ type IndexQueryParams struct {
 	Vector param.Field[[]float64] `json:"vector,required"`
 	// A metadata filter expression used to limit nearest neighbor results.
 	Filter param.Field[interface{}] `json:"filter"`
-	// Whether to return the metadata associated with the closest vectors.
-	ReturnMetadata param.Field[bool] `json:"returnMetadata"`
+	// Whether to return no metadata, indexed metadata or all metadata associated with
+	// the closest vectors.
+	ReturnMetadata param.Field[IndexQueryParamsReturnMetadata] `json:"returnMetadata"`
 	// Whether to return the values associated with the closest vectors.
 	ReturnValues param.Field[bool] `json:"returnValues"`
 	// The number of nearest neighbors to find.
@@ -1034,6 +1035,24 @@ type IndexQueryParams struct {
 
 func (r IndexQueryParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Whether to return no metadata, indexed metadata or all metadata associated with
+// the closest vectors.
+type IndexQueryParamsReturnMetadata string
+
+const (
+	IndexQueryParamsReturnMetadataNone    IndexQueryParamsReturnMetadata = "none"
+	IndexQueryParamsReturnMetadataIndexed IndexQueryParamsReturnMetadata = "indexed"
+	IndexQueryParamsReturnMetadataAll     IndexQueryParamsReturnMetadata = "all"
+)
+
+func (r IndexQueryParamsReturnMetadata) IsKnown() bool {
+	switch r {
+	case IndexQueryParamsReturnMetadataNone, IndexQueryParamsReturnMetadataIndexed, IndexQueryParamsReturnMetadataAll:
+		return true
+	}
+	return false
 }
 
 type IndexQueryResponseEnvelope struct {
