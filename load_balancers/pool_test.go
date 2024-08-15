@@ -69,7 +69,7 @@ func TestPoolNewWithOptionalParams(t *testing.T) {
 		}),
 		Longitude:         cloudflare.F(0.000000),
 		MinimumOrigins:    cloudflare.F(int64(0)),
-		Monitor:           cloudflare.F[any](map[string]interface{}{}),
+		Monitor:           cloudflare.F("monitor"),
 		NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 		NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
 			Origin: cloudflare.F(load_balancers.FilterOptionsParam{
@@ -153,7 +153,7 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 			}),
 			Longitude:         cloudflare.F(0.000000),
 			MinimumOrigins:    cloudflare.F(int64(0)),
-			Monitor:           cloudflare.F[any](map[string]interface{}{}),
+			Monitor:           cloudflare.F("monitor"),
 			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 			NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
 				Origin: cloudflare.F(load_balancers.FilterOptionsParam{
@@ -194,7 +194,7 @@ func TestPoolListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Pools.List(context.TODO(), load_balancers.PoolListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Monitor:   cloudflare.F[any](map[string]interface{}{}),
+		Monitor:   cloudflare.F("monitor"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -264,7 +264,7 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 			}),
 			Longitude:         cloudflare.F(0.000000),
 			MinimumOrigins:    cloudflare.F(int64(0)),
-			Monitor:           cloudflare.F[any](map[string]interface{}{}),
+			Monitor:           cloudflare.F("monitor"),
 			Name:              cloudflare.F("primary-dc-1"),
 			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 			NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{

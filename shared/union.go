@@ -8,7 +8,6 @@ func (UnionString) ImplementsUserSubscriptionUpdateResponseUnion()          {}
 func (UnionString) ImplementsUserSubscriptionEditResponseUnion()            {}
 func (UnionString) ImplementsZonesSubscriptionNewResponseUnion()            {}
 func (UnionString) ImplementsZonesSubscriptionGetResponseUnion()            {}
-func (UnionString) ImplementsLoadBalancersPoolHealthGetResponseUnion()      {}
 func (UnionString) ImplementsLoadBalancersRegionListResponseUnion()         {}
 func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()          {}
 func (UnionString) ImplementsSubscriptionsSubscriptionNewResponseUnion()    {}

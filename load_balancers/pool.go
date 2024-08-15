@@ -200,7 +200,7 @@ type Pool struct {
 	ModifiedOn     time.Time `json:"modified_on" format:"date-time"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	Monitor interface{} `json:"monitor"`
+	Monitor string `json:"monitor"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name string `json:"name"`
@@ -303,7 +303,7 @@ type PoolNewParams struct {
 	MinimumOrigins param.Field[int64] `json:"minimum_origins"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	Monitor param.Field[interface{}] `json:"monitor"`
+	Monitor param.Field[string] `json:"monitor"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -397,7 +397,7 @@ type PoolUpdateParams struct {
 	MinimumOrigins param.Field[int64] `json:"minimum_origins"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	Monitor param.Field[interface{}] `json:"monitor"`
+	Monitor param.Field[string] `json:"monitor"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -464,7 +464,7 @@ type PoolListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	Monitor param.Field[interface{}] `query:"monitor"`
+	Monitor param.Field[string] `query:"monitor"`
 }
 
 // URLQuery serializes [PoolListParams]'s query parameters as `url.Values`.
@@ -549,7 +549,7 @@ type PoolEditParams struct {
 	MinimumOrigins param.Field[int64] `json:"minimum_origins"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	Monitor param.Field[interface{}] `json:"monitor"`
+	Monitor param.Field[string] `json:"monitor"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name param.Field[string] `json:"name"`
