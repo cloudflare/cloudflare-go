@@ -377,28 +377,16 @@ func (r BrandProtectionSubmitResponseEnvelopeSuccess) IsKnown() bool {
 
 type BrandProtectionURLInfoParams struct {
 	// Identifier
-	AccountID  param.Field[string]                                 `path:"account_id,required"`
-	URL        param.Field[string]                                 `query:"url"`
-	URLIDParam param.Field[BrandProtectionURLInfoParamsURLIDParam] `query:"url_id_param"`
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Submission URL(s) to filter submission results by.
+	URL param.Field[[]string] `query:"url"`
+	// Submission ID(s) to filter submission results by.
+	URLID param.Field[[]int64] `query:"url_id"`
 }
 
 // URLQuery serializes [BrandProtectionURLInfoParams]'s query parameters as
 // `url.Values`.
 func (r BrandProtectionURLInfoParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-type BrandProtectionURLInfoParamsURLIDParam struct {
-	// Submission ID(s) to filter submission results by.
-	URLID param.Field[int64] `query:"url_id"`
-}
-
-// URLQuery serializes [BrandProtectionURLInfoParamsURLIDParam]'s query parameters
-// as `url.Values`.
-func (r BrandProtectionURLInfoParamsURLIDParam) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,

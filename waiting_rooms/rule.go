@@ -240,7 +240,7 @@ type RuleNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []WaitingRoomRule                 `json:"result,nullable"`
+	Result     []WaitingRoomRule                 `json:"result"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleNewResponseEnvelopeJSON       `json:"-"`
 }
@@ -356,7 +356,7 @@ type RuleUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    RuleUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []WaitingRoomRule                    `json:"result,nullable"`
+	Result     []WaitingRoomRule                    `json:"result"`
 	ResultInfo RuleUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -437,7 +437,7 @@ type RuleDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    RuleDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []WaitingRoomRule                    `json:"result,nullable"`
+	Result     []WaitingRoomRule                    `json:"result"`
 	ResultInfo RuleDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -615,7 +615,7 @@ type RuleEditResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []WaitingRoomRule                  `json:"result,nullable"`
+	Result     []WaitingRoomRule                  `json:"result"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleEditResponseEnvelopeJSON       `json:"-"`
 }
@@ -696,7 +696,7 @@ type RuleGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    RuleGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []WaitingRoomRule                 `json:"result,nullable"`
+	Result     []WaitingRoomRule                 `json:"result"`
 	ResultInfo RuleGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       ruleGetResponseEnvelopeJSON       `json:"-"`
 }

@@ -29,12 +29,12 @@ func TestMiscategorizationNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Intel.Miscategorizations.New(context.TODO(), intel.MiscategorizationNewParams{
 		AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ContentAdds:     cloudflare.F([]float64{82.000000}),
-		ContentRemoves:  cloudflare.F([]float64{155.000000}),
+		ContentAdds:     cloudflare.F([]int64{int64(82)}),
+		ContentRemoves:  cloudflare.F([]int64{int64(155)}),
 		IndicatorType:   cloudflare.F(intel.MiscategorizationNewParamsIndicatorTypeDomain),
-		IP:              cloudflare.F[any](map[string]interface{}{}),
-		SecurityAdds:    cloudflare.F([]float64{117.000000, 131.000000}),
-		SecurityRemoves: cloudflare.F([]float64{83.000000}),
+		IP:              cloudflare.F("ip"),
+		SecurityAdds:    cloudflare.F([]int64{int64(117), int64(131)}),
+		SecurityRemoves: cloudflare.F([]int64{int64(83)}),
 		URL:             cloudflare.F("url"),
 	})
 	if err != nil {

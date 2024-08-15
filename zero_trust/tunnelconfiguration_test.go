@@ -31,57 +31,9 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		zero_trust.TunnelConfigurationUpdateParams{
-			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Config: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfig{
 				Ingress: cloudflare.F([]zero_trust.TunnelConfigurationUpdateParamsConfigIngress{{
-					Hostname: cloudflare.F("tunnel.example.com"),
-					Service:  cloudflare.F("https://localhost:8001"),
-					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
-						Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess{
-							AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
-							TeamName: cloudflare.F("teamName"),
-							Required: cloudflare.F(true),
-						}),
-						CAPool:                 cloudflare.F("caPool"),
-						ConnectTimeout:         cloudflare.F(int64(0)),
-						DisableChunkedEncoding: cloudflare.F(true),
-						HTTP2Origin:            cloudflare.F(true),
-						HTTPHostHeader:         cloudflare.F("httpHostHeader"),
-						KeepAliveConnections:   cloudflare.F(int64(0)),
-						KeepAliveTimeout:       cloudflare.F(int64(0)),
-						NoHappyEyeballs:        cloudflare.F(true),
-						NoTLSVerify:            cloudflare.F(true),
-						OriginServerName:       cloudflare.F("originServerName"),
-						ProxyType:              cloudflare.F("proxyType"),
-						TCPKeepAlive:           cloudflare.F(int64(0)),
-						TLSTimeout:             cloudflare.F(int64(0)),
-					}),
-					Path: cloudflare.F("subpath"),
-				}, {
-					Hostname: cloudflare.F("tunnel.example.com"),
-					Service:  cloudflare.F("https://localhost:8001"),
-					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
-						Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess{
-							AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
-							TeamName: cloudflare.F("teamName"),
-							Required: cloudflare.F(true),
-						}),
-						CAPool:                 cloudflare.F("caPool"),
-						ConnectTimeout:         cloudflare.F(int64(0)),
-						DisableChunkedEncoding: cloudflare.F(true),
-						HTTP2Origin:            cloudflare.F(true),
-						HTTPHostHeader:         cloudflare.F("httpHostHeader"),
-						KeepAliveConnections:   cloudflare.F(int64(0)),
-						KeepAliveTimeout:       cloudflare.F(int64(0)),
-						NoHappyEyeballs:        cloudflare.F(true),
-						NoTLSVerify:            cloudflare.F(true),
-						OriginServerName:       cloudflare.F("originServerName"),
-						ProxyType:              cloudflare.F("proxyType"),
-						TCPKeepAlive:           cloudflare.F(int64(0)),
-						TLSTimeout:             cloudflare.F(int64(0)),
-					}),
-					Path: cloudflare.F("subpath"),
-				}, {
 					Hostname: cloudflare.F("tunnel.example.com"),
 					Service:  cloudflare.F("https://localhost:8001"),
 					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
@@ -126,9 +78,6 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 					TCPKeepAlive:           cloudflare.F(int64(0)),
 					TLSTimeout:             cloudflare.F(int64(0)),
 				}),
-				WARPRouting: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigWARPRouting{
-					Enabled: cloudflare.F(true),
-				}),
 			}),
 		},
 	)
@@ -158,7 +107,7 @@ func TestTunnelConfigurationGet(t *testing.T) {
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		zero_trust.TunnelConfigurationGetParams{
-			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

@@ -4,7 +4,6 @@ package shared
 
 type UnionString string
 
-func (UnionString) ImplementsUserBillingProfileGetResponseUnion()           {}
 func (UnionString) ImplementsUserSubscriptionUpdateResponseUnion()          {}
 func (UnionString) ImplementsUserSubscriptionEditResponseUnion()            {}
 func (UnionString) ImplementsZonesSubscriptionNewResponseUnion()            {}
@@ -50,17 +49,9 @@ func (UnionString) ImplementsSpectrumOriginPortUnion()                          
 func (UnionString) ImplementsSpectrumAnalyticsEventBytimeGetResponseUnion()                      {}
 func (UnionString) ImplementsSpectrumAnalyticsEventSummaryGetResponseUnion()                     {}
 func (UnionString) ImplementsSpectrumAppGetResponseUnion()                                       {}
-func (UnionString) ImplementsBillingProfileGetResponseUnion()                                    {}
 func (UnionString) ImplementsImagesV1DeleteResponseUnion()                                       {}
 func (UnionString) ImplementsImagesV1VariantDeleteResponseUnion()                                {}
-func (UnionString) ImplementsIntelMiscategorizationNewResponseUnion()                            {}
 func (UnionString) ImplementsIntelAttackSurfaceReportIssueDismissResponseUnion()                 {}
-func (UnionString) ImplementsPagesProjectNewResponseUnion()                                      {}
-func (UnionString) ImplementsPagesProjectEditResponseUnion()                                     {}
-func (UnionString) ImplementsPagesProjectDeploymentHistoryLogGetResponseUnion()                  {}
-func (UnionString) ImplementsPagesProjectDomainNewResponseUnion()                                {}
-func (UnionString) ImplementsPagesProjectDomainEditResponseUnion()                               {}
-func (UnionString) ImplementsPagesProjectDomainGetResponseUnion()                                {}
 func (UnionString) ImplementsRegistrarDomainUpdateResponseUnion()                                {}
 func (UnionString) ImplementsRegistrarDomainListResponseResultUnion()                            {}
 func (UnionString) ImplementsRegistrarDomainGetResponseUnion()                                   {}
@@ -97,8 +88,6 @@ func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnr
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
-func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponseUnion() {}
-func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponseUnion()    {}
 func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()            {}
 func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()       {}
 func (UnionString) ImplementsZeroTrustDLPProfileCustomDeleteResponseUnion()    {}

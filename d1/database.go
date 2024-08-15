@@ -41,7 +41,7 @@ func NewDatabaseService(opts ...option.RequestOption) (r *DatabaseService) {
 }
 
 // Returns the created D1 database.
-func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opts ...option.RequestOption) (res *DatabaseNewResponse, err error) {
+func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opts ...option.RequestOption) (res *D1, err error) {
 	var env DatabaseNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -269,34 +269,6 @@ func (r *QueryResultMeta) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r queryResultMetaJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatabaseNewResponse struct {
-	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt time.Time               `json:"created_at" format:"date-time"`
-	Name      string                  `json:"name"`
-	UUID      string                  `json:"uuid"`
-	Version   string                  `json:"version"`
-	JSON      databaseNewResponseJSON `json:"-"`
-}
-
-// databaseNewResponseJSON contains the JSON metadata for the struct
-// [DatabaseNewResponse]
-type databaseNewResponseJSON struct {
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	UUID        apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -701,7 +673,7 @@ func (r DatabaseNewParamsPrimaryLocationHint) IsKnown() bool {
 type DatabaseNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   DatabaseNewResponse   `json:"result,required"`
+	Result   D1                    `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseNewResponseEnvelopeJSON    `json:"-"`

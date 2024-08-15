@@ -137,7 +137,7 @@ type DNSGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    DNSGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []DNSRecord                      `json:"result,nullable"`
+	Result     []DNSRecord                      `json:"result"`
 	ResultInfo DNSGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       dnsGetResponseEnvelopeJSON       `json:"-"`
 }

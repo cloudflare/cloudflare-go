@@ -97,6 +97,7 @@ func (r *ProjectDeploymentService) ListAutoPaging(ctx context.Context, projectNa
 
 // Delete a deployment.
 func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, body ProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *ProjectDeploymentDeleteResponse, err error) {
+	var env ProjectDeploymentDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -111,7 +112,11 @@ func (r *ProjectDeploymentService) Delete(ctx context.Context, projectName strin
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", body.AccountID, projectName, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -248,12 +253,13 @@ func (r projectDeploymentNewResponseEnvelopeJSON) RawJSON() string {
 type ProjectDeploymentNewResponseEnvelopeSuccess bool
 
 const (
-	ProjectDeploymentNewResponseEnvelopeSuccessTrue ProjectDeploymentNewResponseEnvelopeSuccess = true
+	ProjectDeploymentNewResponseEnvelopeSuccessFalse ProjectDeploymentNewResponseEnvelopeSuccess = false
+	ProjectDeploymentNewResponseEnvelopeSuccessTrue  ProjectDeploymentNewResponseEnvelopeSuccess = true
 )
 
 func (r ProjectDeploymentNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ProjectDeploymentNewResponseEnvelopeSuccessTrue:
+	case ProjectDeploymentNewResponseEnvelopeSuccessFalse, ProjectDeploymentNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
@@ -296,6 +302,50 @@ type ProjectDeploymentDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
+type ProjectDeploymentDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   ProjectDeploymentDeleteResponse `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success ProjectDeploymentDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    projectDeploymentDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// projectDeploymentDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ProjectDeploymentDeleteResponseEnvelope]
+type projectDeploymentDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDeploymentDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDeploymentDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type ProjectDeploymentDeleteResponseEnvelopeSuccess bool
+
+const (
+	ProjectDeploymentDeleteResponseEnvelopeSuccessFalse ProjectDeploymentDeleteResponseEnvelopeSuccess = false
+	ProjectDeploymentDeleteResponseEnvelopeSuccessTrue  ProjectDeploymentDeleteResponseEnvelopeSuccess = true
+)
+
+func (r ProjectDeploymentDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case ProjectDeploymentDeleteResponseEnvelopeSuccessFalse, ProjectDeploymentDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type ProjectDeploymentGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -333,12 +383,13 @@ func (r projectDeploymentGetResponseEnvelopeJSON) RawJSON() string {
 type ProjectDeploymentGetResponseEnvelopeSuccess bool
 
 const (
-	ProjectDeploymentGetResponseEnvelopeSuccessTrue ProjectDeploymentGetResponseEnvelopeSuccess = true
+	ProjectDeploymentGetResponseEnvelopeSuccessFalse ProjectDeploymentGetResponseEnvelopeSuccess = false
+	ProjectDeploymentGetResponseEnvelopeSuccessTrue  ProjectDeploymentGetResponseEnvelopeSuccess = true
 )
 
 func (r ProjectDeploymentGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ProjectDeploymentGetResponseEnvelopeSuccessTrue:
+	case ProjectDeploymentGetResponseEnvelopeSuccessFalse, ProjectDeploymentGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
@@ -386,12 +437,13 @@ func (r projectDeploymentRetryResponseEnvelopeJSON) RawJSON() string {
 type ProjectDeploymentRetryResponseEnvelopeSuccess bool
 
 const (
-	ProjectDeploymentRetryResponseEnvelopeSuccessTrue ProjectDeploymentRetryResponseEnvelopeSuccess = true
+	ProjectDeploymentRetryResponseEnvelopeSuccessFalse ProjectDeploymentRetryResponseEnvelopeSuccess = false
+	ProjectDeploymentRetryResponseEnvelopeSuccessTrue  ProjectDeploymentRetryResponseEnvelopeSuccess = true
 )
 
 func (r ProjectDeploymentRetryResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ProjectDeploymentRetryResponseEnvelopeSuccessTrue:
+	case ProjectDeploymentRetryResponseEnvelopeSuccessFalse, ProjectDeploymentRetryResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
@@ -439,12 +491,13 @@ func (r projectDeploymentRollbackResponseEnvelopeJSON) RawJSON() string {
 type ProjectDeploymentRollbackResponseEnvelopeSuccess bool
 
 const (
-	ProjectDeploymentRollbackResponseEnvelopeSuccessTrue ProjectDeploymentRollbackResponseEnvelopeSuccess = true
+	ProjectDeploymentRollbackResponseEnvelopeSuccessFalse ProjectDeploymentRollbackResponseEnvelopeSuccess = false
+	ProjectDeploymentRollbackResponseEnvelopeSuccessTrue  ProjectDeploymentRollbackResponseEnvelopeSuccess = true
 )
 
 func (r ProjectDeploymentRollbackResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ProjectDeploymentRollbackResponseEnvelopeSuccessTrue:
+	case ProjectDeploymentRollbackResponseEnvelopeSuccessFalse, ProjectDeploymentRollbackResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
