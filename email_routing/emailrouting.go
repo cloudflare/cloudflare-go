@@ -50,7 +50,7 @@ func (r *EmailRoutingService) Disable(ctx context.Context, zoneIdentifier string
 		return
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/disable", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -67,7 +67,7 @@ func (r *EmailRoutingService) Enable(ctx context.Context, zoneIdentifier string,
 		return
 	}
 	path := fmt.Sprintf("zones/%s/email/routing/enable", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

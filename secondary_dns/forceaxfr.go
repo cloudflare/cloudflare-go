@@ -43,7 +43,7 @@ func (r *ForceAXFRService) New(ctx context.Context, params ForceAXFRNewParams, o
 		return
 	}
 	path := fmt.Sprintf("zones/%s/secondary_dns/force_axfr", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

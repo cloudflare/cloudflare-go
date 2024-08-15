@@ -155,7 +155,7 @@ func (r *IPSECTunnelService) PSKGenerate(ctx context.Context, ipsecTunnelID stri
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", params.AccountID, ipsecTunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
