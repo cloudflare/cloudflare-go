@@ -76,7 +76,7 @@ func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ..
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/stream", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
 	return
 }
 

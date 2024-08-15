@@ -47,7 +47,7 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts 
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -133,7 +133,7 @@ func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditPa
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/mnm/rules/%s", params.AccountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
