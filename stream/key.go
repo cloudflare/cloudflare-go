@@ -46,7 +46,7 @@ func (r *KeyService) New(ctx context.Context, params KeyNewParams, opts ...optio
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/stream/keys", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
