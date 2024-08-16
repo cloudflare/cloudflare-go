@@ -86,8 +86,6 @@ func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIs
 }
 func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()            {}
 func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()       {}
-func (UnionString) ImplementsZeroTrustDLPProfileCustomDeleteResponseUnion()    {}
-func (UnionString) ImplementsZeroTrustRiskScoringResetResponseUnion()          {}
 func (UnionString) ImplementsHyperdriveConfigDeleteResponseUnion()             {}
 func (UnionString) ImplementsVectorizeIndexDeleteResponseUnion()               {}
 func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}

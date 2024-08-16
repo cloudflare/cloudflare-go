@@ -55,8 +55,6 @@ func (r *RiskScoringIntegrationService) New(ctx context.Context, params RiskScor
 	return
 }
 
-// Update a risk score integration.
-//
 // Overwrite the reference_id, tenant_url, and active values with the ones provided
 func (r *RiskScoringIntegrationService) Update(ctx context.Context, integrationID string, params RiskScoringIntegrationUpdateParams, opts ...option.RequestOption) (res *RiskScoringIntegrationUpdateResponse, err error) {
 	var env RiskScoringIntegrationUpdateResponseEnvelope
@@ -567,7 +565,7 @@ type RiskScoringIntegrationDeleteResponseEnvelope struct {
 	Errors     []shared.ResponseInfo                                  `json:"errors,required"`
 	Messages   []shared.ResponseInfo                                  `json:"messages,required"`
 	Success    bool                                                   `json:"success,required"`
-	Result     RiskScoringIntegrationDeleteResponse                   `json:"result"`
+	Result     RiskScoringIntegrationDeleteResponse                   `json:"result,nullable"`
 	ResultInfo RiskScoringIntegrationDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       riskScoringIntegrationDeleteResponseEnvelopeJSON       `json:"-"`
 }

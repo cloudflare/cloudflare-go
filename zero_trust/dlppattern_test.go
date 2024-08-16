@@ -28,8 +28,8 @@ func TestDLPPatternValidate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Patterns.Validate(context.TODO(), zero_trust.DLPPatternValidateParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Regex:     cloudflare.F("^4[0-9]{6,}$"),
+		AccountID: cloudflare.F("account_id"),
+		Regex:     cloudflare.F("regex"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -28,7 +28,7 @@ func TestDLPProfileList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.List(context.TODO(), zero_trust.DLPProfileListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -54,9 +54,9 @@ func TestDLPProfileGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Get(
 		context.TODO(),
-		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPProfileGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
