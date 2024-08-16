@@ -2657,12 +2657,10 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#BlockRuleParam">BlockRuleParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#ChallengeRuleParam">ChallengeRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#CompressResponseRuleParam">CompressResponseRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#DDoSDynamicRuleParam">DDoSDynamicRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#ExecuteRuleParam">ExecuteRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#ForceConnectionCloseRuleParam">ForceConnectionCloseRuleParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#JSChallengeRuleParam">JSChallengeRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#LogCustomFieldRuleParam">LogCustomFieldRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#LogRuleParam">LogRuleParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#LoggingParam">LoggingParam</a>
@@ -2680,12 +2678,10 @@ Params Types:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#BlockRule">BlockRule</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#ChallengeRule">ChallengeRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#CompressResponseRule">CompressResponseRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#DDoSDynamicRule">DDoSDynamicRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#ExecuteRule">ExecuteRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#ForceConnectionCloseRule">ForceConnectionCloseRule</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#JSChallengeRule">JSChallengeRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#LogCustomFieldRule">LogCustomFieldRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#LogRule">LogRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets">rulesets</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rulesets#Logging">Logging</a>
@@ -2746,19 +2742,81 @@ Methods:
 
 # Spectrum
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#DNSParam">DNSParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#EdgeIPsUnionParam">EdgeIPsUnionParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#OriginDNSParam">OriginDNSParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#OriginPortUnionParam">OriginPortUnionParam</a>
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#DNS">DNS</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#EdgeIPs">EdgeIPs</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#OriginDNS">OriginDNS</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#OriginPortUnion">OriginPortUnion</a>
+
 ## Analytics
 
 ### Aggregates
 
 #### Currents
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsAggregateCurrentGetResponse">AnalyticsAggregateCurrentGetResponse</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/spectrum/analytics/aggregate/current">client.Spectrum.Analytics.Aggregates.Currents.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsAggregateCurrentService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsAggregateCurrentGetParams">AnalyticsAggregateCurrentGetParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsAggregateCurrentGetResponse">AnalyticsAggregateCurrentGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Events
+
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#Dimension">Dimension</a>
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#Dimension">Dimension</a>
 
 #### Bytimes
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventBytimeGetResponse">AnalyticsEventBytimeGetResponse</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/spectrum/analytics/events/bytime">client.Spectrum.Analytics.Events.Bytimes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventBytimeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventBytimeGetParams">AnalyticsEventBytimeGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventBytimeGetResponse">AnalyticsEventBytimeGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 #### Summaries
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventSummaryGetResponse">AnalyticsEventSummaryGetResponse</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/spectrum/analytics/events/summary">client.Spectrum.Analytics.Events.Summaries.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventSummaryService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventSummaryGetParams">AnalyticsEventSummaryGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AnalyticsEventSummaryGetResponse">AnalyticsEventSummaryGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Apps
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppNewResponse">AppNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppUpdateResponse">AppUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppListResponseUnion">AppListResponseUnion</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppDeleteResponse">AppDeleteResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppGetResponse">AppGetResponse</a>
+
+Methods:
+
+- <code title="post /zones/{zone_id}/spectrum/apps">client.Spectrum.Apps.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppNewParams">AppNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppNewResponse">AppNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /zones/{zone_id}/spectrum/apps/{app_id}">client.Spectrum.Apps.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, appID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppUpdateParams">AppUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppUpdateResponse">AppUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/spectrum/apps">client.Spectrum.Apps.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppListParams">AppListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppListResponseUnion">AppListResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /zones/{zone_id}/spectrum/apps/{app_id}">client.Spectrum.Apps.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, appID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppDeleteParams">AppDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppDeleteResponse">AppDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/spectrum/apps/{app_id}">client.Spectrum.Apps.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, appID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppGetParams">AppGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum">spectrum</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/spectrum#AppGetResponse">AppGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Addressing
 
@@ -3557,23 +3615,27 @@ Methods:
 
 ## Projects
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#DeploymentParam">DeploymentParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectParam">ProjectParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#StageParam">StageParam</a>
+
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#Deployment">Deployment</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#Project">Project</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#Stage">Stage</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectNewResponse">ProjectNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectDeleteResponse">ProjectDeleteResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectEditResponse">ProjectEditResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectGetResponse">ProjectGetResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectPurgeBuildCacheResponse">ProjectPurgeBuildCacheResponse</a>
 
 Methods:
 
-- <code title="post /accounts/{account_id}/pages/projects">client.Pages.Projects.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectNewParams">ProjectNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectNewResponse">ProjectNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/pages/projects">client.Pages.Projects.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectNewParams">ProjectNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#Project">Project</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/pages/projects">client.Pages.Projects.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectListParams">ProjectListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#Deployment">Deployment</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="delete /accounts/{account_id}/pages/projects/{project_name}">client.Pages.Projects.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectDeleteParams">ProjectDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectDeleteResponse">ProjectDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="patch /accounts/{account_id}/pages/projects/{project_name}">client.Pages.Projects.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectEditParams">ProjectEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectEditResponse">ProjectEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_id}/pages/projects/{project_name}">client.Pages.Projects.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectGetParams">ProjectGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectGetResponse">ProjectGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /accounts/{account_id}/pages/projects/{project_name}">client.Pages.Projects.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectEditParams">ProjectEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#Project">Project</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/pages/projects/{project_name}">client.Pages.Projects.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectGetParams">ProjectGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#Project">Project</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="post /accounts/{account_id}/pages/projects/{project_name}/purge_build_cache">client.Pages.Projects.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectService.PurgeBuildCache">PurgeBuildCache</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectPurgeBuildCacheParams">ProjectPurgeBuildCacheParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages">pages</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/pages#ProjectPurgeBuildCacheResponse">ProjectPurgeBuildCacheResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Deployments

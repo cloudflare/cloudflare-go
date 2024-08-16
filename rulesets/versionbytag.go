@@ -177,9 +177,10 @@ func (r *VersionByTagGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 // cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
-// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
-// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.VersionByTagGetResponseRulesRulesetsChallengeRule],
+// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
+// [rulesets.VersionByTagGetResponseRulesRulesetsJSChallengeRule],
+// [rulesets.LogRule], [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
 // [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
 // [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
 // [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
@@ -188,14 +189,15 @@ func (r VersionByTagGetResponseRule) AsUnion() VersionByTagGetResponseRulesUnion
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
+// Union satisfied by [rulesets.BlockRule],
+// [rulesets.VersionByTagGetResponseRulesRulesetsChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
-// [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
-// [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.LogCustomFieldRule], [rulesets.DDoSDynamicRule] or
-// [rulesets.ForceConnectionCloseRule].
+// [rulesets.VersionByTagGetResponseRulesRulesetsJSChallengeRule],
+// [rulesets.LogRule], [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
+// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type VersionByTagGetResponseRulesUnion interface {
 	implementsRulesetsVersionByTagGetResponseRule()
 }
@@ -211,7 +213,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ChallengeRule{}),
+			Type:               reflect.TypeOf(VersionByTagGetResponseRulesRulesetsChallengeRule{}),
 			DiscriminatorValue: "challenge",
 		},
 		apijson.UnionVariant{
@@ -226,7 +228,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JSChallengeRule{}),
+			Type:               reflect.TypeOf(VersionByTagGetResponseRulesRulesetsJSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -295,6 +297,146 @@ func init() {
 			DiscriminatorValue: "force_connection_close",
 		},
 	)
+}
+
+type VersionByTagGetResponseRulesRulesetsChallengeRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action VersionByTagGetResponseRulesRulesetsChallengeRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters interface{} `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                                `json:"ref"`
+	JSON versionByTagGetResponseRulesRulesetsChallengeRuleJSON `json:"-"`
+}
+
+// versionByTagGetResponseRulesRulesetsChallengeRuleJSON contains the JSON metadata
+// for the struct [VersionByTagGetResponseRulesRulesetsChallengeRule]
+type versionByTagGetResponseRulesRulesetsChallengeRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *VersionByTagGetResponseRulesRulesetsChallengeRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionByTagGetResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionByTagGetResponseRulesRulesetsChallengeRule) implementsRulesetsVersionByTagGetResponseRule() {
+}
+
+// The action to perform when the rule matches.
+type VersionByTagGetResponseRulesRulesetsChallengeRuleAction string
+
+const (
+	VersionByTagGetResponseRulesRulesetsChallengeRuleActionChallenge VersionByTagGetResponseRulesRulesetsChallengeRuleAction = "challenge"
+)
+
+func (r VersionByTagGetResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case VersionByTagGetResponseRulesRulesetsChallengeRuleActionChallenge:
+		return true
+	}
+	return false
+}
+
+type VersionByTagGetResponseRulesRulesetsJSChallengeRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action VersionByTagGetResponseRulesRulesetsJSChallengeRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters interface{} `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                                  `json:"ref"`
+	JSON versionByTagGetResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
+}
+
+// versionByTagGetResponseRulesRulesetsJSChallengeRuleJSON contains the JSON
+// metadata for the struct [VersionByTagGetResponseRulesRulesetsJSChallengeRule]
+type versionByTagGetResponseRulesRulesetsJSChallengeRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *VersionByTagGetResponseRulesRulesetsJSChallengeRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r versionByTagGetResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r VersionByTagGetResponseRulesRulesetsJSChallengeRule) implementsRulesetsVersionByTagGetResponseRule() {
+}
+
+// The action to perform when the rule matches.
+type VersionByTagGetResponseRulesRulesetsJSChallengeRuleAction string
+
+const (
+	VersionByTagGetResponseRulesRulesetsJSChallengeRuleActionJSChallenge VersionByTagGetResponseRulesRulesetsJSChallengeRuleAction = "js_challenge"
+)
+
+func (r VersionByTagGetResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case VersionByTagGetResponseRulesRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
 }
 
 // The action to perform when the rule matches.
