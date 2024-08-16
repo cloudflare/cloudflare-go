@@ -54,7 +54,7 @@ func TestRoleGet(t *testing.T) {
 	)
 	_, err := client.Accounts.Roles.Get(
 		context.TODO(),
-		map[string]interface{}{},
+		"3536bcfad5faccb999b47003c79917fb",
 		accounts.RoleGetParams{
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		},

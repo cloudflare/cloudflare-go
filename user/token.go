@@ -4,6 +4,7 @@ package user
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -42,7 +43,7 @@ func NewTokenService(opts ...option.RequestOption) (r *TokenService) {
 }
 
 // Create a new access token.
-func (r *TokenService) New(ctx context.Context, body TokenNewParams, opts ...option.RequestOption) (res *TokenNewResponse, err error) {
+func (r *TokenService) New(ctx context.Context, body TokenNewParams, opts ...option.RequestOption) (res *[]TokenNewResponse, err error) {
 	var env TokenNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	path := "user/tokens"
@@ -55,10 +56,14 @@ func (r *TokenService) New(ctx context.Context, body TokenNewParams, opts ...opt
 }
 
 // Update an existing token.
-func (r *TokenService) Update(ctx context.Context, tokenID interface{}, body TokenUpdateParams, opts ...option.RequestOption) (res *TokenUpdateResponse, err error) {
+func (r *TokenService) Update(ctx context.Context, tokenID string, body TokenUpdateParams, opts ...option.RequestOption) (res *[]TokenUpdateResponse, err error) {
 	var env TokenUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("user/tokens/%v", tokenID)
+	if tokenID == "" {
+		err = errors.New("missing required token_id parameter")
+		return
+	}
+	path := fmt.Sprintf("user/tokens/%s", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -91,10 +96,14 @@ func (r *TokenService) ListAutoPaging(ctx context.Context, query TokenListParams
 }
 
 // Destroy a token.
-func (r *TokenService) Delete(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
+func (r *TokenService) Delete(ctx context.Context, tokenID string, opts ...option.RequestOption) (res *TokenDeleteResponse, err error) {
 	var env TokenDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("user/tokens/%v", tokenID)
+	if tokenID == "" {
+		err = errors.New("missing required token_id parameter")
+		return
+	}
+	path := fmt.Sprintf("user/tokens/%s", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -104,10 +113,14 @@ func (r *TokenService) Delete(ctx context.Context, tokenID interface{}, opts ...
 }
 
 // Get information about a specific token.
-func (r *TokenService) Get(ctx context.Context, tokenID interface{}, opts ...option.RequestOption) (res *TokenGetResponse, err error) {
+func (r *TokenService) Get(ctx context.Context, tokenID string, opts ...option.RequestOption) (res *[]TokenGetResponse, err error) {
 	var env TokenGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("user/tokens/%v", tokenID)
+	if tokenID == "" {
+		err = errors.New("missing required token_id parameter")
+		return
+	}
+	path := fmt.Sprintf("user/tokens/%s", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -129,19 +142,38 @@ func (r *TokenService) Verify(ctx context.Context, opts ...option.RequestOption)
 	return
 }
 
+type CIDRList = string
+
 type CIDRListParam = string
 
-type PolicyParam struct {
+type Policy struct {
+	// Policy identifier.
+	ID string `json:"id,required"`
 	// Allow or deny operations against the resources.
-	Effect param.Field[PolicyEffect] `json:"effect,required"`
+	Effect PolicyEffect `json:"effect,required"`
 	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]PolicyPermissionGroupParam] `json:"permission_groups,required"`
+	PermissionGroups []PolicyPermissionGroup `json:"permission_groups,required"`
 	// A list of resource names that the policy applies to.
-	Resources param.Field[interface{}] `json:"resources,required"`
+	Resources interface{} `json:"resources,required"`
+	JSON      policyJSON  `json:"-"`
 }
 
-func (r PolicyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// policyJSON contains the JSON metadata for the struct [Policy]
+type policyJSON struct {
+	ID               apijson.Field
+	Effect           apijson.Field
+	PermissionGroups apijson.Field
+	Resources        apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *Policy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Allow or deny operations against the resources.
@@ -162,6 +194,49 @@ func (r PolicyEffect) IsKnown() bool {
 
 // A named group of permissions that map to a group of operations against
 // resources.
+type PolicyPermissionGroup struct {
+	// Identifier of the group.
+	ID string `json:"id,required"`
+	// Attributes associated to the permission group.
+	Meta interface{} `json:"meta"`
+	// Name of the group.
+	Name string                    `json:"name"`
+	JSON policyPermissionGroupJSON `json:"-"`
+}
+
+// policyPermissionGroupJSON contains the JSON metadata for the struct
+// [PolicyPermissionGroup]
+type policyPermissionGroupJSON struct {
+	ID          apijson.Field
+	Meta        apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PolicyPermissionGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r policyPermissionGroupJSON) RawJSON() string {
+	return r.raw
+}
+
+type PolicyParam struct {
+	// Allow or deny operations against the resources.
+	Effect param.Field[PolicyEffect] `json:"effect,required"`
+	// A set of permission groups that are specified to the policy.
+	PermissionGroups param.Field[[]PolicyPermissionGroupParam] `json:"permission_groups,required"`
+	// A list of resource names that the policy applies to.
+	Resources param.Field[interface{}] `json:"resources,required"`
+}
+
+func (r PolicyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A named group of permissions that map to a group of operations against
+// resources.
 type PolicyPermissionGroupParam struct {
 	// Attributes associated to the permission group.
 	Meta param.Field[interface{}] `json:"meta"`
@@ -171,88 +246,123 @@ func (r PolicyPermissionGroupParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type TokenParam struct {
-	// Token name.
-	Name param.Field[string] `json:"name,required"`
-	// List of access policies assigned to the token.
-	Policies param.Field[[]PolicyParam] `json:"policies,required"`
-	// Status of the token.
-	Status    param.Field[TokenStatus]         `json:"status,required"`
-	Condition param.Field[TokenConditionParam] `json:"condition"`
+type TokenNewResponse = interface{}
+
+type TokenUpdateResponse = interface{}
+
+type TokenListResponse struct {
+	// Token identifier tag.
+	ID        string                     `json:"id"`
+	Condition TokenListResponseCondition `json:"condition"`
 	// The expiration time on or after which the JWT MUST NOT be accepted for
 	// processing.
-	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// The time on which the token was created.
+	IssuedOn time.Time `json:"issued_on" format:"date-time"`
+	// Last time the token was used.
+	LastUsedOn time.Time `json:"last_used_on" format:"date-time"`
+	// Last time the token was modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Token name.
+	Name string `json:"name"`
 	// The time before which the token MUST NOT be accepted for processing.
-	NotBefore param.Field[time.Time] `json:"not_before" format:"date-time"`
+	NotBefore time.Time `json:"not_before" format:"date-time"`
+	// List of access policies assigned to the token.
+	Policies []Policy `json:"policies"`
+	// Status of the token.
+	Status TokenListResponseStatus `json:"status"`
+	JSON   tokenListResponseJSON   `json:"-"`
 }
 
-func (r TokenParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Status of the token.
-type TokenStatus string
-
-const (
-	TokenStatusActive   TokenStatus = "active"
-	TokenStatusDisabled TokenStatus = "disabled"
-	TokenStatusExpired  TokenStatus = "expired"
-)
-
-func (r TokenStatus) IsKnown() bool {
-	switch r {
-	case TokenStatusActive, TokenStatusDisabled, TokenStatusExpired:
-		return true
-	}
-	return false
-}
-
-type TokenConditionParam struct {
-	// Client IP restrictions.
-	RequestIP param.Field[TokenConditionRequestIPParam] `json:"request.ip"`
-}
-
-func (r TokenConditionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Client IP restrictions.
-type TokenConditionRequestIPParam struct {
-	// List of IPv4/IPv6 CIDR addresses.
-	In param.Field[[]CIDRListParam] `json:"in"`
-	// List of IPv4/IPv6 CIDR addresses.
-	NotIn param.Field[[]CIDRListParam] `json:"not_in"`
-}
-
-func (r TokenConditionRequestIPParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type TokenNewResponse struct {
-	// The token value.
-	Value Value                `json:"value"`
-	JSON  tokenNewResponseJSON `json:"-"`
-}
-
-// tokenNewResponseJSON contains the JSON metadata for the struct
-// [TokenNewResponse]
-type tokenNewResponseJSON struct {
-	Value       apijson.Field
+// tokenListResponseJSON contains the JSON metadata for the struct
+// [TokenListResponse]
+type tokenListResponseJSON struct {
+	ID          apijson.Field
+	Condition   apijson.Field
+	ExpiresOn   apijson.Field
+	IssuedOn    apijson.Field
+	LastUsedOn  apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	NotBefore   apijson.Field
+	Policies    apijson.Field
+	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TokenNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TokenListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tokenNewResponseJSON) RawJSON() string {
+func (r tokenListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type TokenUpdateResponse = interface{}
+type TokenListResponseCondition struct {
+	// Client IP restrictions.
+	RequestIP TokenListResponseConditionRequestIP `json:"request.ip"`
+	JSON      tokenListResponseConditionJSON      `json:"-"`
+}
 
-type TokenListResponse = interface{}
+// tokenListResponseConditionJSON contains the JSON metadata for the struct
+// [TokenListResponseCondition]
+type tokenListResponseConditionJSON struct {
+	RequestIP   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenListResponseCondition) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenListResponseConditionJSON) RawJSON() string {
+	return r.raw
+}
+
+// Client IP restrictions.
+type TokenListResponseConditionRequestIP struct {
+	// List of IPv4/IPv6 CIDR addresses.
+	In []CIDRList `json:"in"`
+	// List of IPv4/IPv6 CIDR addresses.
+	NotIn []CIDRList                              `json:"not_in"`
+	JSON  tokenListResponseConditionRequestIPJSON `json:"-"`
+}
+
+// tokenListResponseConditionRequestIPJSON contains the JSON metadata for the
+// struct [TokenListResponseConditionRequestIP]
+type tokenListResponseConditionRequestIPJSON struct {
+	In          apijson.Field
+	NotIn       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenListResponseConditionRequestIP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenListResponseConditionRequestIPJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the token.
+type TokenListResponseStatus string
+
+const (
+	TokenListResponseStatusActive   TokenListResponseStatus = "active"
+	TokenListResponseStatusDisabled TokenListResponseStatus = "disabled"
+	TokenListResponseStatusExpired  TokenListResponseStatus = "expired"
+)
+
+func (r TokenListResponseStatus) IsKnown() bool {
+	switch r {
+	case TokenListResponseStatusActive, TokenListResponseStatusDisabled, TokenListResponseStatusExpired:
+		return true
+	}
+	return false
+}
 
 type TokenDeleteResponse struct {
 	// Identifier
@@ -369,9 +479,10 @@ type TokenNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success TokenNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  TokenNewResponse                `json:"result"`
-	JSON    tokenNewResponseEnvelopeJSON    `json:"-"`
+	Success    TokenNewResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []TokenNewResponse                 `json:"result,nullable"`
+	ResultInfo TokenNewResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       tokenNewResponseEnvelopeJSON       `json:"-"`
 }
 
 // tokenNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -381,6 +492,7 @@ type tokenNewResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -408,21 +520,102 @@ func (r TokenNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type TokenNewResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                `json:"total_count"`
+	JSON       tokenNewResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// tokenNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
+// [TokenNewResponseEnvelopeResultInfo]
+type tokenNewResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenNewResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type TokenUpdateParams struct {
-	Token TokenParam `json:"token,required"`
+	// Token name.
+	Name param.Field[string] `json:"name,required"`
+	// List of access policies assigned to the token.
+	Policies param.Field[[]PolicyParam] `json:"policies,required"`
+	// Status of the token.
+	Status    param.Field[TokenUpdateParamsStatus]    `json:"status,required"`
+	Condition param.Field[TokenUpdateParamsCondition] `json:"condition"`
+	// The expiration time on or after which the JWT MUST NOT be accepted for
+	// processing.
+	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
+	// The time before which the token MUST NOT be accepted for processing.
+	NotBefore param.Field[time.Time] `json:"not_before" format:"date-time"`
 }
 
 func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Token)
+	return apijson.MarshalRoot(r)
+}
+
+// Status of the token.
+type TokenUpdateParamsStatus string
+
+const (
+	TokenUpdateParamsStatusActive   TokenUpdateParamsStatus = "active"
+	TokenUpdateParamsStatusDisabled TokenUpdateParamsStatus = "disabled"
+	TokenUpdateParamsStatusExpired  TokenUpdateParamsStatus = "expired"
+)
+
+func (r TokenUpdateParamsStatus) IsKnown() bool {
+	switch r {
+	case TokenUpdateParamsStatusActive, TokenUpdateParamsStatusDisabled, TokenUpdateParamsStatusExpired:
+		return true
+	}
+	return false
+}
+
+type TokenUpdateParamsCondition struct {
+	// Client IP restrictions.
+	RequestIP param.Field[TokenUpdateParamsConditionRequestIP] `json:"request.ip"`
+}
+
+func (r TokenUpdateParamsCondition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Client IP restrictions.
+type TokenUpdateParamsConditionRequestIP struct {
+	// List of IPv4/IPv6 CIDR addresses.
+	In param.Field[[]CIDRListParam] `json:"in"`
+	// List of IPv4/IPv6 CIDR addresses.
+	NotIn param.Field[[]CIDRListParam] `json:"not_in"`
+}
+
+func (r TokenUpdateParamsConditionRequestIP) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type TokenUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success TokenUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  TokenUpdateResponse                `json:"result"`
-	JSON    tokenUpdateResponseEnvelopeJSON    `json:"-"`
+	Success    TokenUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []TokenUpdateResponse                 `json:"result,nullable"`
+	ResultInfo TokenUpdateResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       tokenUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
 // tokenUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -432,6 +625,7 @@ type tokenUpdateResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -457,6 +651,37 @@ func (r TokenUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type TokenUpdateResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                   `json:"total_count"`
+	JSON       tokenUpdateResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// tokenUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [TokenUpdateResponseEnvelopeResultInfo]
+type tokenUpdateResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type TokenListParams struct {
@@ -539,9 +764,10 @@ type TokenGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success TokenGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  TokenGetResponse                `json:"result"`
-	JSON    tokenGetResponseEnvelopeJSON    `json:"-"`
+	Success    TokenGetResponseEnvelopeSuccess    `json:"success,required"`
+	Result     []TokenGetResponse                 `json:"result,nullable"`
+	ResultInfo TokenGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       tokenGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // tokenGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -551,6 +777,7 @@ type tokenGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -576,6 +803,37 @@ func (r TokenGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type TokenGetResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                `json:"total_count"`
+	JSON       tokenGetResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// tokenGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
+// [TokenGetResponseEnvelopeResultInfo]
+type tokenGetResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TokenGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tokenGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type TokenVerifyResponseEnvelope struct {

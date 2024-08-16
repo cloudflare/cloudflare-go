@@ -29,7 +29,7 @@ func TestTokenValueUpdate(t *testing.T) {
 	)
 	_, err := client.User.Tokens.Value.Update(
 		context.TODO(),
-		map[string]interface{}{},
+		"ed17574386854bf78a67040be0a770b0",
 		user.TokenValueUpdateParams{
 			Body: map[string]interface{}{},
 		},
