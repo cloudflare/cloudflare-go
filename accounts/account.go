@@ -4,6 +4,7 @@ package accounts
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -45,7 +46,11 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponse, err error) {
 	var env AccountUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v", params.AccountID)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -81,7 +86,11 @@ func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListPa
 func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *AccountGetResponse, err error) {
 	var env AccountGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v", query.AccountID)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -237,8 +246,9 @@ type AccountListResponse = interface{}
 type AccountGetResponse = interface{}
 
 type AccountUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
-	Account   AccountParam             `json:"account,required"`
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+	Account   AccountParam        `json:"account,required"`
 }
 
 func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -324,7 +334,8 @@ func (r AccountListParamsDirection) IsKnown() bool {
 }
 
 type AccountGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccountGetResponseEnvelope struct {

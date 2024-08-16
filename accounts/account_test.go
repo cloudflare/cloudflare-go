@@ -28,7 +28,7 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Update(context.TODO(), accounts.AccountUpdateParams{
-		AccountID: cloudflare.F[any](map[string]interface{}{}),
+		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		Account: accounts.AccountParam{
 			Name: cloudflare.F("Demo Account"),
 			Settings: cloudflare.F(accounts.AccountSettingsParam{
@@ -90,7 +90,7 @@ func TestAccountGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Get(context.TODO(), accounts.AccountGetParams{
-		AccountID: cloudflare.F[any](map[string]interface{}{}),
+		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

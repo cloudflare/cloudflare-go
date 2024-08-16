@@ -4,6 +4,7 @@ package user
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -33,10 +34,14 @@ func NewTokenValueService(opts ...option.RequestOption) (r *TokenValueService) {
 }
 
 // Roll the token secret.
-func (r *TokenValueService) Update(ctx context.Context, tokenID interface{}, body TokenValueUpdateParams, opts ...option.RequestOption) (res *Value, err error) {
+func (r *TokenValueService) Update(ctx context.Context, tokenID string, body TokenValueUpdateParams, opts ...option.RequestOption) (res *Value, err error) {
 	var env TokenValueUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("user/tokens/%v/value", tokenID)
+	if tokenID == "" {
+		err = errors.New("missing required token_id parameter")
+		return
+	}
+	path := fmt.Sprintf("user/tokens/%s/value", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
