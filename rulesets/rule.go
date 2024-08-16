@@ -343,123 +343,6 @@ func (r BlockRuleActionParametersResponseParam) MarshalJSON() (data []byte, err 
 	return apijson.MarshalRoot(r)
 }
 
-type ChallengeRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action ChallengeRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string            `json:"ref"`
-	JSON challengeRuleJSON `json:"-"`
-}
-
-// challengeRuleJSON contains the JSON metadata for the struct [ChallengeRule]
-type challengeRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ChallengeRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r challengeRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r ChallengeRule) implementsRulesetsRulesetNewResponseRule() {}
-
-func (r ChallengeRule) implementsRulesetsRulesetUpdateResponseRule() {}
-
-func (r ChallengeRule) implementsRulesetsRulesetGetResponseRule() {}
-
-func (r ChallengeRule) implementsRulesetsPhaseUpdateResponseRule() {}
-
-func (r ChallengeRule) implementsRulesetsPhaseGetResponseRule() {}
-
-func (r ChallengeRule) implementsRulesetsPhaseVersionGetResponseRule() {}
-
-func (r ChallengeRule) implementsRulesetsRuleNewResponseRule() {}
-
-func (r ChallengeRule) implementsRulesetsRuleDeleteResponseRule() {}
-
-func (r ChallengeRule) implementsRulesetsRuleEditResponseRule() {}
-
-func (r ChallengeRule) implementsRulesetsVersionGetResponseRule() {}
-
-func (r ChallengeRule) implementsRulesetsVersionByTagGetResponseRule() {}
-
-// The action to perform when the rule matches.
-type ChallengeRuleAction string
-
-const (
-	ChallengeRuleActionChallenge ChallengeRuleAction = "challenge"
-)
-
-func (r ChallengeRuleAction) IsKnown() bool {
-	switch r {
-	case ChallengeRuleActionChallenge:
-		return true
-	}
-	return false
-}
-
-type ChallengeRuleParam struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[ChallengeRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r ChallengeRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ChallengeRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
-
-func (r ChallengeRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
-
-func (r ChallengeRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
-
 type CompressResponseRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -1307,123 +1190,6 @@ func (r ForceConnectionCloseRuleParam) implementsRulesetsRulesetNewParamsRuleUni
 func (r ForceConnectionCloseRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ForceConnectionCloseRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
-
-type JSChallengeRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action JSChallengeRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string              `json:"ref"`
-	JSON jsChallengeRuleJSON `json:"-"`
-}
-
-// jsChallengeRuleJSON contains the JSON metadata for the struct [JSChallengeRule]
-type jsChallengeRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *JSChallengeRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r jsChallengeRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r JSChallengeRule) implementsRulesetsRulesetNewResponseRule() {}
-
-func (r JSChallengeRule) implementsRulesetsRulesetUpdateResponseRule() {}
-
-func (r JSChallengeRule) implementsRulesetsRulesetGetResponseRule() {}
-
-func (r JSChallengeRule) implementsRulesetsPhaseUpdateResponseRule() {}
-
-func (r JSChallengeRule) implementsRulesetsPhaseGetResponseRule() {}
-
-func (r JSChallengeRule) implementsRulesetsPhaseVersionGetResponseRule() {}
-
-func (r JSChallengeRule) implementsRulesetsRuleNewResponseRule() {}
-
-func (r JSChallengeRule) implementsRulesetsRuleDeleteResponseRule() {}
-
-func (r JSChallengeRule) implementsRulesetsRuleEditResponseRule() {}
-
-func (r JSChallengeRule) implementsRulesetsVersionGetResponseRule() {}
-
-func (r JSChallengeRule) implementsRulesetsVersionByTagGetResponseRule() {}
-
-// The action to perform when the rule matches.
-type JSChallengeRuleAction string
-
-const (
-	JSChallengeRuleActionJSChallenge JSChallengeRuleAction = "js_challenge"
-)
-
-func (r JSChallengeRuleAction) IsKnown() bool {
-	switch r {
-	case JSChallengeRuleActionJSChallenge:
-		return true
-	}
-	return false
-}
-
-type JSChallengeRuleParam struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[JSChallengeRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r JSChallengeRuleParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r JSChallengeRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
-
-func (r JSChallengeRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
-
-func (r JSChallengeRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
 type LogCustomFieldRule struct {
 	// The timestamp of when the rule was last modified.
@@ -5202,8 +4968,9 @@ func (r *RuleNewResponseRule) UnmarshalJSON(data []byte) (err error) {
 // the specific types for more type safety.
 //
 // Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
-// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.RuleNewResponseRulesRulesetsChallengeRule],
+// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
+// [rulesets.RuleNewResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
 // [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
 // [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
 // [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
@@ -5213,14 +4980,15 @@ func (r RuleNewResponseRule) AsUnion() RuleNewResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
+// Union satisfied by [rulesets.BlockRule],
+// [rulesets.RuleNewResponseRulesRulesetsChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
-// [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
-// [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.LogCustomFieldRule], [rulesets.DDoSDynamicRule] or
-// [rulesets.ForceConnectionCloseRule].
+// [rulesets.RuleNewResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
+// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RuleNewResponseRulesUnion interface {
 	implementsRulesetsRuleNewResponseRule()
 }
@@ -5236,7 +5004,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ChallengeRule{}),
+			Type:               reflect.TypeOf(RuleNewResponseRulesRulesetsChallengeRule{}),
 			DiscriminatorValue: "challenge",
 		},
 		apijson.UnionVariant{
@@ -5251,7 +5019,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JSChallengeRule{}),
+			Type:               reflect.TypeOf(RuleNewResponseRulesRulesetsJSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -5320,6 +5088,144 @@ func init() {
 			DiscriminatorValue: "force_connection_close",
 		},
 	)
+}
+
+type RuleNewResponseRulesRulesetsChallengeRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleNewResponseRulesRulesetsChallengeRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters interface{} `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                        `json:"ref"`
+	JSON ruleNewResponseRulesRulesetsChallengeRuleJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsChallengeRuleJSON contains the JSON metadata for the
+// struct [RuleNewResponseRulesRulesetsChallengeRule]
+type ruleNewResponseRulesRulesetsChallengeRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsChallengeRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsChallengeRule) implementsRulesetsRuleNewResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleNewResponseRulesRulesetsChallengeRuleAction string
+
+const (
+	RuleNewResponseRulesRulesetsChallengeRuleActionChallenge RuleNewResponseRulesRulesetsChallengeRuleAction = "challenge"
+)
+
+func (r RuleNewResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsChallengeRuleActionChallenge:
+		return true
+	}
+	return false
+}
+
+type RuleNewResponseRulesRulesetsJSChallengeRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleNewResponseRulesRulesetsJSChallengeRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters interface{} `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                          `json:"ref"`
+	JSON ruleNewResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
+}
+
+// ruleNewResponseRulesRulesetsJSChallengeRuleJSON contains the JSON metadata for
+// the struct [RuleNewResponseRulesRulesetsJSChallengeRule]
+type ruleNewResponseRulesRulesetsJSChallengeRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RuleNewResponseRulesRulesetsJSChallengeRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleNewResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleNewResponseRulesRulesetsJSChallengeRule) implementsRulesetsRuleNewResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleNewResponseRulesRulesetsJSChallengeRuleAction string
+
+const (
+	RuleNewResponseRulesRulesetsJSChallengeRuleActionJSChallenge RuleNewResponseRulesRulesetsJSChallengeRuleAction = "js_challenge"
+)
+
+func (r RuleNewResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case RuleNewResponseRulesRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
 }
 
 // The action to perform when the rule matches.
@@ -5466,8 +5372,9 @@ func (r *RuleDeleteResponseRule) UnmarshalJSON(data []byte) (err error) {
 // the specific types for more type safety.
 //
 // Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
-// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.RuleDeleteResponseRulesRulesetsChallengeRule],
+// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
+// [rulesets.RuleDeleteResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
 // [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
 // [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
 // [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
@@ -5477,14 +5384,15 @@ func (r RuleDeleteResponseRule) AsUnion() RuleDeleteResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
+// Union satisfied by [rulesets.BlockRule],
+// [rulesets.RuleDeleteResponseRulesRulesetsChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
-// [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
-// [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.LogCustomFieldRule], [rulesets.DDoSDynamicRule] or
-// [rulesets.ForceConnectionCloseRule].
+// [rulesets.RuleDeleteResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
+// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RuleDeleteResponseRulesUnion interface {
 	implementsRulesetsRuleDeleteResponseRule()
 }
@@ -5500,7 +5408,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ChallengeRule{}),
+			Type:               reflect.TypeOf(RuleDeleteResponseRulesRulesetsChallengeRule{}),
 			DiscriminatorValue: "challenge",
 		},
 		apijson.UnionVariant{
@@ -5515,7 +5423,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JSChallengeRule{}),
+			Type:               reflect.TypeOf(RuleDeleteResponseRulesRulesetsJSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -5584,6 +5492,144 @@ func init() {
 			DiscriminatorValue: "force_connection_close",
 		},
 	)
+}
+
+type RuleDeleteResponseRulesRulesetsChallengeRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleDeleteResponseRulesRulesetsChallengeRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters interface{} `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                           `json:"ref"`
+	JSON ruleDeleteResponseRulesRulesetsChallengeRuleJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsChallengeRuleJSON contains the JSON metadata for
+// the struct [RuleDeleteResponseRulesRulesetsChallengeRule]
+type ruleDeleteResponseRulesRulesetsChallengeRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsChallengeRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsChallengeRule) implementsRulesetsRuleDeleteResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleDeleteResponseRulesRulesetsChallengeRuleAction string
+
+const (
+	RuleDeleteResponseRulesRulesetsChallengeRuleActionChallenge RuleDeleteResponseRulesRulesetsChallengeRuleAction = "challenge"
+)
+
+func (r RuleDeleteResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsChallengeRuleActionChallenge:
+		return true
+	}
+	return false
+}
+
+type RuleDeleteResponseRulesRulesetsJSChallengeRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleDeleteResponseRulesRulesetsJSChallengeRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters interface{} `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                             `json:"ref"`
+	JSON ruleDeleteResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
+}
+
+// ruleDeleteResponseRulesRulesetsJSChallengeRuleJSON contains the JSON metadata
+// for the struct [RuleDeleteResponseRulesRulesetsJSChallengeRule]
+type ruleDeleteResponseRulesRulesetsJSChallengeRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponseRulesRulesetsJSChallengeRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleDeleteResponseRulesRulesetsJSChallengeRule) implementsRulesetsRuleDeleteResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleDeleteResponseRulesRulesetsJSChallengeRuleAction string
+
+const (
+	RuleDeleteResponseRulesRulesetsJSChallengeRuleActionJSChallenge RuleDeleteResponseRulesRulesetsJSChallengeRuleAction = "js_challenge"
+)
+
+func (r RuleDeleteResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseRulesRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
 }
 
 // The action to perform when the rule matches.
@@ -5730,8 +5776,9 @@ func (r *RuleEditResponseRule) UnmarshalJSON(data []byte) (err error) {
 // the specific types for more type safety.
 //
 // Possible runtime types of the union are [rulesets.BlockRule],
-// [rulesets.ChallengeRule], [rulesets.CompressResponseRule],
-// [rulesets.ExecuteRule], [rulesets.JSChallengeRule], [rulesets.LogRule],
+// [rulesets.RuleEditResponseRulesRulesetsChallengeRule],
+// [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
+// [rulesets.RuleEditResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
 // [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
 // [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
 // [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
@@ -5741,14 +5788,15 @@ func (r RuleEditResponseRule) AsUnion() RuleEditResponseRulesUnion {
 	return r.union
 }
 
-// Union satisfied by [rulesets.BlockRule], [rulesets.ChallengeRule],
+// Union satisfied by [rulesets.BlockRule],
+// [rulesets.RuleEditResponseRulesRulesetsChallengeRule],
 // [rulesets.CompressResponseRule], [rulesets.ExecuteRule],
-// [rulesets.JSChallengeRule], [rulesets.LogRule], [rulesets.ManagedChallengeRule],
-// [rulesets.RedirectRule], [rulesets.RewriteRule], [rulesets.RouteRule],
-// [rulesets.ScoreRule], [rulesets.ServeErrorRule], [rulesets.SetConfigRule],
-// [rulesets.SkipRule], [rulesets.SetCacheSettingsRule],
-// [rulesets.LogCustomFieldRule], [rulesets.DDoSDynamicRule] or
-// [rulesets.ForceConnectionCloseRule].
+// [rulesets.RuleEditResponseRulesRulesetsJSChallengeRule], [rulesets.LogRule],
+// [rulesets.ManagedChallengeRule], [rulesets.RedirectRule],
+// [rulesets.RewriteRule], [rulesets.RouteRule], [rulesets.ScoreRule],
+// [rulesets.ServeErrorRule], [rulesets.SetConfigRule], [rulesets.SkipRule],
+// [rulesets.SetCacheSettingsRule], [rulesets.LogCustomFieldRule],
+// [rulesets.DDoSDynamicRule] or [rulesets.ForceConnectionCloseRule].
 type RuleEditResponseRulesUnion interface {
 	implementsRulesetsRuleEditResponseRule()
 }
@@ -5764,7 +5812,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ChallengeRule{}),
+			Type:               reflect.TypeOf(RuleEditResponseRulesRulesetsChallengeRule{}),
 			DiscriminatorValue: "challenge",
 		},
 		apijson.UnionVariant{
@@ -5779,7 +5827,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(JSChallengeRule{}),
+			Type:               reflect.TypeOf(RuleEditResponseRulesRulesetsJSChallengeRule{}),
 			DiscriminatorValue: "js_challenge",
 		},
 		apijson.UnionVariant{
@@ -5848,6 +5896,144 @@ func init() {
 			DiscriminatorValue: "force_connection_close",
 		},
 	)
+}
+
+type RuleEditResponseRulesRulesetsChallengeRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleEditResponseRulesRulesetsChallengeRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters interface{} `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                         `json:"ref"`
+	JSON ruleEditResponseRulesRulesetsChallengeRuleJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsChallengeRuleJSON contains the JSON metadata for
+// the struct [RuleEditResponseRulesRulesetsChallengeRule]
+type ruleEditResponseRulesRulesetsChallengeRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsChallengeRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsChallengeRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsChallengeRule) implementsRulesetsRuleEditResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleEditResponseRulesRulesetsChallengeRuleAction string
+
+const (
+	RuleEditResponseRulesRulesetsChallengeRuleActionChallenge RuleEditResponseRulesRulesetsChallengeRuleAction = "challenge"
+)
+
+func (r RuleEditResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsChallengeRuleActionChallenge:
+		return true
+	}
+	return false
+}
+
+type RuleEditResponseRulesRulesetsJSChallengeRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleEditResponseRulesRulesetsJSChallengeRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters interface{} `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                           `json:"ref"`
+	JSON ruleEditResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
+}
+
+// ruleEditResponseRulesRulesetsJSChallengeRuleJSON contains the JSON metadata for
+// the struct [RuleEditResponseRulesRulesetsJSChallengeRule]
+type ruleEditResponseRulesRulesetsJSChallengeRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RuleEditResponseRulesRulesetsJSChallengeRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseRulesRulesetsJSChallengeRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RuleEditResponseRulesRulesetsJSChallengeRule) implementsRulesetsRuleEditResponseRule() {}
+
+// The action to perform when the rule matches.
+type RuleEditResponseRulesRulesetsJSChallengeRuleAction string
+
+const (
+	RuleEditResponseRulesRulesetsJSChallengeRuleActionJSChallenge RuleEditResponseRulesRulesetsJSChallengeRuleAction = "js_challenge"
+)
+
+func (r RuleEditResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case RuleEditResponseRulesRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
 }
 
 // The action to perform when the rule matches.

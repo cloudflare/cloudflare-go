@@ -29,166 +29,168 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Pages.Projects.New(context.TODO(), pages.ProjectNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		BuildConfig: cloudflare.F(pages.ProjectNewParamsBuildConfig{
-			BuildCaching:      cloudflare.F(true),
-			BuildCommand:      cloudflare.F("npm run build"),
-			DestinationDir:    cloudflare.F("build"),
-			RootDir:           cloudflare.F("/"),
-			WebAnalyticsTag:   cloudflare.F("cee1c73f6e4743d0b5e6bb1a0bcaabcc"),
-			WebAnalyticsToken: cloudflare.F("021e1057c18547eca7b79f2516f06o7x"),
-		}),
-		DeploymentConfigs: cloudflare.F(pages.ProjectNewParamsDeploymentConfigs{
-			Preview: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreview{
-				AIBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewAIBindings{
-					AIBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewAIBindingsAIBinding{
-						ProjectID: cloudflare.F("project_id"),
+		Project: pages.ProjectParam{
+			BuildConfig: cloudflare.F(pages.ProjectBuildConfigParam{
+				BuildCaching:      cloudflare.F(true),
+				BuildCommand:      cloudflare.F("npm run build"),
+				DestinationDir:    cloudflare.F("build"),
+				RootDir:           cloudflare.F("/"),
+				WebAnalyticsTag:   cloudflare.F("cee1c73f6e4743d0b5e6bb1a0bcaabcc"),
+				WebAnalyticsToken: cloudflare.F("021e1057c18547eca7b79f2516f06o7x"),
+			}),
+			DeploymentConfigs: cloudflare.F(pages.ProjectDeploymentConfigsParam{
+				Preview: cloudflare.F(pages.ProjectDeploymentConfigsPreviewParam{
+					AIBindings: cloudflare.F(pages.ProjectDeploymentConfigsPreviewAIBindingsParam{
+						AIBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewAIBindingsAIBindingParam{
+							ProjectID: cloudflare.F("project_id"),
+						}),
+					}),
+					AnalyticsEngineDatasets: cloudflare.F(pages.ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsParam{
+						AnalyticsEngineBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingParam{
+							Dataset: cloudflare.F("api_analytics"),
+						}),
+					}),
+					Browsers: cloudflare.F(pages.ProjectDeploymentConfigsPreviewBrowsersParam{
+						Browser: cloudflare.F[any](map[string]interface{}{}),
+					}),
+					CompatibilityDate:  cloudflare.F("2022-01-01"),
+					CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
+					D1Databases: cloudflare.F(pages.ProjectDeploymentConfigsPreviewD1DatabasesParam{
+						D1Binding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewD1DatabasesD1BindingParam{
+							ID: cloudflare.F("445e2955-951a-43f8-a35b-a4d0c8138f63"),
+						}),
+					}),
+					DurableObjectNamespaces: cloudflare.F(pages.ProjectDeploymentConfigsPreviewDurableObjectNamespacesParam{
+						DoBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingParam{
+							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+						}),
+					}),
+					EnvVars: cloudflare.F(pages.ProjectDeploymentConfigsPreviewEnvVarsParam{
+						EnvironmentVariable: cloudflare.F(pages.ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableParam{
+							Type:  cloudflare.F(pages.ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText),
+							Value: cloudflare.F("hello world"),
+						}),
+					}),
+					HyperdriveBindings: cloudflare.F(pages.ProjectDeploymentConfigsPreviewHyperdriveBindingsParam{
+						Hyperdrive: cloudflare.F(pages.ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveParam{
+							ID: cloudflare.F("a76a99bc342644deb02c38d66082262a"),
+						}),
+					}),
+					KVNamespaces: cloudflare.F(pages.ProjectDeploymentConfigsPreviewKVNamespacesParam{
+						KVBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewKVNamespacesKVBindingParam{
+							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+						}),
+					}),
+					MTLSCertificates: cloudflare.F(pages.ProjectDeploymentConfigsPreviewMTLSCertificatesParam{
+						MTLS: cloudflare.F(pages.ProjectDeploymentConfigsPreviewMTLSCertificatesMTLSParam{
+							CertificateID: cloudflare.F("d7cdd17c-916f-4cb7-aabe-585eb382ec4e"),
+						}),
+					}),
+					Placement: cloudflare.F(pages.ProjectDeploymentConfigsPreviewPlacementParam{
+						Mode: cloudflare.F("smart"),
+					}),
+					QueueProducers: cloudflare.F(pages.ProjectDeploymentConfigsPreviewQueueProducersParam{
+						QueueProducerBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBindingParam{
+							Name: cloudflare.F("some-queue"),
+						}),
+					}),
+					R2Buckets: cloudflare.F(pages.ProjectDeploymentConfigsPreviewR2BucketsParam{
+						R2Binding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam{
+							Jurisdiction: cloudflare.F("eu"),
+							Name:         cloudflare.F("some-bucket"),
+						}),
+					}),
+					Services: cloudflare.F(pages.ProjectDeploymentConfigsPreviewServicesParam{
+						ServiceBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewServicesServiceBindingParam{
+							Entrypoint:  cloudflare.F("MyHandler"),
+							Environment: cloudflare.F("production"),
+							Service:     cloudflare.F("example-worker"),
+						}),
+					}),
+					VectorizeBindings: cloudflare.F(pages.ProjectDeploymentConfigsPreviewVectorizeBindingsParam{
+						Vectorize: cloudflare.F(pages.ProjectDeploymentConfigsPreviewVectorizeBindingsVectorizeParam{
+							IndexName: cloudflare.F("my_index"),
+						}),
 					}),
 				}),
-				AnalyticsEngineDatasets: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasets{
-					AnalyticsEngineBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding{
-						Dataset: cloudflare.F("api_analytics"),
+				Production: cloudflare.F(pages.ProjectDeploymentConfigsProductionParam{
+					AIBindings: cloudflare.F(pages.ProjectDeploymentConfigsProductionAIBindingsParam{
+						AIBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionAIBindingsAIBindingParam{
+							ProjectID: cloudflare.F("project_id"),
+						}),
 					}),
-				}),
-				Browsers: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewBrowsers{
-					Browser: cloudflare.F[any](map[string]interface{}{}),
-				}),
-				CompatibilityDate:  cloudflare.F("2022-01-01"),
-				CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
-				D1Databases: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewD1Databases{
-					D1Binding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewD1DatabasesD1Binding{
-						ID: cloudflare.F("445e2955-951a-43f8-a35b-a4d0c8138f63"),
+					AnalyticsEngineDatasets: cloudflare.F(pages.ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsParam{
+						AnalyticsEngineBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingParam{
+							Dataset: cloudflare.F("api_analytics"),
+						}),
 					}),
-				}),
-				DurableObjectNamespaces: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespaces{
-					DoBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewDurableObjectNamespacesDoBinding{
-						NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+					Browsers: cloudflare.F(pages.ProjectDeploymentConfigsProductionBrowsersParam{
+						Browser: cloudflare.F[any](map[string]interface{}{}),
 					}),
-				}),
-				EnvVars: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewEnvVars{
-					EnvironmentVariable: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariable{
-						Type:  cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText),
-						Value: cloudflare.F("hello world"),
+					CompatibilityDate:  cloudflare.F("2022-01-01"),
+					CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
+					D1Databases: cloudflare.F(pages.ProjectDeploymentConfigsProductionD1DatabasesParam{
+						D1Binding: cloudflare.F(pages.ProjectDeploymentConfigsProductionD1DatabasesD1BindingParam{
+							ID: cloudflare.F("445e2955-951a-43f8-a35b-a4d0c8138f63"),
+						}),
 					}),
-				}),
-				HyperdriveBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindings{
-					Hyperdrive: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindingsHyperdrive{
-						ID: cloudflare.F("a76a99bc342644deb02c38d66082262a"),
+					DurableObjectNamespaces: cloudflare.F(pages.ProjectDeploymentConfigsProductionDurableObjectNamespacesParam{
+						DoBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBindingParam{
+							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+						}),
 					}),
-				}),
-				KVNamespaces: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewKVNamespaces{
-					KVBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewKVNamespacesKVBinding{
-						NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+					EnvVars: cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsParam{
+						EnvironmentVariable: cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableParam{
+							Type:  cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText),
+							Value: cloudflare.F("hello world"),
+						}),
 					}),
-				}),
-				MTLSCertificates: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewMTLSCertificates{
-					MTLS: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewMTLSCertificatesMTLS{
-						CertificateID: cloudflare.F("d7cdd17c-916f-4cb7-aabe-585eb382ec4e"),
+					HyperdriveBindings: cloudflare.F(pages.ProjectDeploymentConfigsProductionHyperdriveBindingsParam{
+						Hyperdrive: cloudflare.F(pages.ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdriveParam{
+							ID: cloudflare.F("a76a99bc342644deb02c38d66082262a"),
+						}),
 					}),
-				}),
-				Placement: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewPlacement{
-					Mode: cloudflare.F("smart"),
-				}),
-				QueueProducers: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewQueueProducers{
-					QueueProducerBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewQueueProducersQueueProducerBinding{
-						Name: cloudflare.F("some-queue"),
+					KVNamespaces: cloudflare.F(pages.ProjectDeploymentConfigsProductionKVNamespacesParam{
+						KVBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionKVNamespacesKVBindingParam{
+							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+						}),
 					}),
-				}),
-				R2Buckets: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewR2Buckets{
-					R2Binding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewR2BucketsR2Binding{
-						Jurisdiction: cloudflare.F("eu"),
-						Name:         cloudflare.F("some-bucket"),
+					MTLSCertificates: cloudflare.F(pages.ProjectDeploymentConfigsProductionMTLSCertificatesParam{
+						MTLS: cloudflare.F(pages.ProjectDeploymentConfigsProductionMTLSCertificatesMTLSParam{
+							CertificateID: cloudflare.F("d7cdd17c-916f-4cb7-aabe-585eb382ec4e"),
+						}),
 					}),
-				}),
-				Services: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewServices{
-					ServiceBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewServicesServiceBinding{
-						Entrypoint:  cloudflare.F("MyHandler"),
-						Environment: cloudflare.F("production"),
-						Service:     cloudflare.F("example-worker"),
+					Placement: cloudflare.F(pages.ProjectDeploymentConfigsProductionPlacementParam{
+						Mode: cloudflare.F("smart"),
 					}),
-				}),
-				VectorizeBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewVectorizeBindings{
-					Vectorize: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewVectorizeBindingsVectorize{
-						IndexName: cloudflare.F("my_index"),
+					QueueProducers: cloudflare.F(pages.ProjectDeploymentConfigsProductionQueueProducersParam{
+						QueueProducerBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionQueueProducersQueueProducerBindingParam{
+							Name: cloudflare.F("some-queue"),
+						}),
+					}),
+					R2Buckets: cloudflare.F(pages.ProjectDeploymentConfigsProductionR2BucketsParam{
+						R2Binding: cloudflare.F(pages.ProjectDeploymentConfigsProductionR2BucketsR2BindingParam{
+							Jurisdiction: cloudflare.F("eu"),
+							Name:         cloudflare.F("some-bucket"),
+						}),
+					}),
+					Services: cloudflare.F(pages.ProjectDeploymentConfigsProductionServicesParam{
+						ServiceBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionServicesServiceBindingParam{
+							Entrypoint:  cloudflare.F("MyHandler"),
+							Environment: cloudflare.F("production"),
+							Service:     cloudflare.F("example-worker"),
+						}),
+					}),
+					VectorizeBindings: cloudflare.F(pages.ProjectDeploymentConfigsProductionVectorizeBindingsParam{
+						Vectorize: cloudflare.F(pages.ProjectDeploymentConfigsProductionVectorizeBindingsVectorizeParam{
+							IndexName: cloudflare.F("my_index"),
+						}),
 					}),
 				}),
 			}),
-			Production: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProduction{
-				AIBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionAIBindings{
-					AIBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionAIBindingsAIBinding{
-						ProjectID: cloudflare.F("project_id"),
-					}),
-				}),
-				AnalyticsEngineDatasets: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasets{
-					AnalyticsEngineBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding{
-						Dataset: cloudflare.F("api_analytics"),
-					}),
-				}),
-				Browsers: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionBrowsers{
-					Browser: cloudflare.F[any](map[string]interface{}{}),
-				}),
-				CompatibilityDate:  cloudflare.F("2022-01-01"),
-				CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
-				D1Databases: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionD1Databases{
-					D1Binding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionD1DatabasesD1Binding{
-						ID: cloudflare.F("445e2955-951a-43f8-a35b-a4d0c8138f63"),
-					}),
-				}),
-				DurableObjectNamespaces: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespaces{
-					DoBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionDurableObjectNamespacesDoBinding{
-						NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
-					}),
-				}),
-				EnvVars: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionEnvVars{
-					EnvironmentVariable: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariable{
-						Type:  cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText),
-						Value: cloudflare.F("hello world"),
-					}),
-				}),
-				HyperdriveBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionHyperdriveBindings{
-					Hyperdrive: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionHyperdriveBindingsHyperdrive{
-						ID: cloudflare.F("a76a99bc342644deb02c38d66082262a"),
-					}),
-				}),
-				KVNamespaces: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionKVNamespaces{
-					KVBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionKVNamespacesKVBinding{
-						NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
-					}),
-				}),
-				MTLSCertificates: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionMTLSCertificates{
-					MTLS: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionMTLSCertificatesMTLS{
-						CertificateID: cloudflare.F("d7cdd17c-916f-4cb7-aabe-585eb382ec4e"),
-					}),
-				}),
-				Placement: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionPlacement{
-					Mode: cloudflare.F("smart"),
-				}),
-				QueueProducers: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionQueueProducers{
-					QueueProducerBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionQueueProducersQueueProducerBinding{
-						Name: cloudflare.F("some-queue"),
-					}),
-				}),
-				R2Buckets: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionR2Buckets{
-					R2Binding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionR2BucketsR2Binding{
-						Jurisdiction: cloudflare.F("eu"),
-						Name:         cloudflare.F("some-bucket"),
-					}),
-				}),
-				Services: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionServices{
-					ServiceBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionServicesServiceBinding{
-						Entrypoint:  cloudflare.F("MyHandler"),
-						Environment: cloudflare.F("production"),
-						Service:     cloudflare.F("example-worker"),
-					}),
-				}),
-				VectorizeBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionVectorizeBindings{
-					Vectorize: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionVectorizeBindingsVectorize{
-						IndexName: cloudflare.F("my_index"),
-					}),
-				}),
-			}),
-		}),
-		Name:             cloudflare.F("NextJS Blog"),
-		ProductionBranch: cloudflare.F("main"),
+			Name:             cloudflare.F("NextJS Blog"),
+			ProductionBranch: cloudflare.F("main"),
+		},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -271,166 +273,168 @@ func TestProjectEditWithOptionalParams(t *testing.T) {
 		"this-is-my-project-01",
 		pages.ProjectEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			BuildConfig: cloudflare.F(pages.ProjectEditParamsBuildConfig{
-				BuildCaching:      cloudflare.F(true),
-				BuildCommand:      cloudflare.F("npm run build"),
-				DestinationDir:    cloudflare.F("build"),
-				RootDir:           cloudflare.F("/"),
-				WebAnalyticsTag:   cloudflare.F("cee1c73f6e4743d0b5e6bb1a0bcaabcc"),
-				WebAnalyticsToken: cloudflare.F("021e1057c18547eca7b79f2516f06o7x"),
-			}),
-			DeploymentConfigs: cloudflare.F(pages.ProjectEditParamsDeploymentConfigs{
-				Preview: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreview{
-					AIBindings: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewAIBindings{
-						AIBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewAIBindingsAIBinding{
-							ProjectID: cloudflare.F("project_id"),
+			Project: pages.ProjectParam{
+				BuildConfig: cloudflare.F(pages.ProjectBuildConfigParam{
+					BuildCaching:      cloudflare.F(true),
+					BuildCommand:      cloudflare.F("npm run build"),
+					DestinationDir:    cloudflare.F("build"),
+					RootDir:           cloudflare.F("/"),
+					WebAnalyticsTag:   cloudflare.F("cee1c73f6e4743d0b5e6bb1a0bcaabcc"),
+					WebAnalyticsToken: cloudflare.F("021e1057c18547eca7b79f2516f06o7x"),
+				}),
+				DeploymentConfigs: cloudflare.F(pages.ProjectDeploymentConfigsParam{
+					Preview: cloudflare.F(pages.ProjectDeploymentConfigsPreviewParam{
+						AIBindings: cloudflare.F(pages.ProjectDeploymentConfigsPreviewAIBindingsParam{
+							AIBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewAIBindingsAIBindingParam{
+								ProjectID: cloudflare.F("project_id"),
+							}),
+						}),
+						AnalyticsEngineDatasets: cloudflare.F(pages.ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsParam{
+							AnalyticsEngineBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingParam{
+								Dataset: cloudflare.F("api_analytics"),
+							}),
+						}),
+						Browsers: cloudflare.F(pages.ProjectDeploymentConfigsPreviewBrowsersParam{
+							Browser: cloudflare.F[any](map[string]interface{}{}),
+						}),
+						CompatibilityDate:  cloudflare.F("2022-01-01"),
+						CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
+						D1Databases: cloudflare.F(pages.ProjectDeploymentConfigsPreviewD1DatabasesParam{
+							D1Binding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewD1DatabasesD1BindingParam{
+								ID: cloudflare.F("445e2955-951a-43f8-a35b-a4d0c8138f63"),
+							}),
+						}),
+						DurableObjectNamespaces: cloudflare.F(pages.ProjectDeploymentConfigsPreviewDurableObjectNamespacesParam{
+							DoBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingParam{
+								NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+							}),
+						}),
+						EnvVars: cloudflare.F(pages.ProjectDeploymentConfigsPreviewEnvVarsParam{
+							EnvironmentVariable: cloudflare.F(pages.ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableParam{
+								Type:  cloudflare.F(pages.ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText),
+								Value: cloudflare.F("hello world"),
+							}),
+						}),
+						HyperdriveBindings: cloudflare.F(pages.ProjectDeploymentConfigsPreviewHyperdriveBindingsParam{
+							Hyperdrive: cloudflare.F(pages.ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveParam{
+								ID: cloudflare.F("a76a99bc342644deb02c38d66082262a"),
+							}),
+						}),
+						KVNamespaces: cloudflare.F(pages.ProjectDeploymentConfigsPreviewKVNamespacesParam{
+							KVBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewKVNamespacesKVBindingParam{
+								NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+							}),
+						}),
+						MTLSCertificates: cloudflare.F(pages.ProjectDeploymentConfigsPreviewMTLSCertificatesParam{
+							MTLS: cloudflare.F(pages.ProjectDeploymentConfigsPreviewMTLSCertificatesMTLSParam{
+								CertificateID: cloudflare.F("d7cdd17c-916f-4cb7-aabe-585eb382ec4e"),
+							}),
+						}),
+						Placement: cloudflare.F(pages.ProjectDeploymentConfigsPreviewPlacementParam{
+							Mode: cloudflare.F("smart"),
+						}),
+						QueueProducers: cloudflare.F(pages.ProjectDeploymentConfigsPreviewQueueProducersParam{
+							QueueProducerBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBindingParam{
+								Name: cloudflare.F("some-queue"),
+							}),
+						}),
+						R2Buckets: cloudflare.F(pages.ProjectDeploymentConfigsPreviewR2BucketsParam{
+							R2Binding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam{
+								Jurisdiction: cloudflare.F("eu"),
+								Name:         cloudflare.F("some-bucket"),
+							}),
+						}),
+						Services: cloudflare.F(pages.ProjectDeploymentConfigsPreviewServicesParam{
+							ServiceBinding: cloudflare.F(pages.ProjectDeploymentConfigsPreviewServicesServiceBindingParam{
+								Entrypoint:  cloudflare.F("MyHandler"),
+								Environment: cloudflare.F("production"),
+								Service:     cloudflare.F("example-worker"),
+							}),
+						}),
+						VectorizeBindings: cloudflare.F(pages.ProjectDeploymentConfigsPreviewVectorizeBindingsParam{
+							Vectorize: cloudflare.F(pages.ProjectDeploymentConfigsPreviewVectorizeBindingsVectorizeParam{
+								IndexName: cloudflare.F("my_index"),
+							}),
 						}),
 					}),
-					AnalyticsEngineDatasets: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewAnalyticsEngineDatasets{
-						AnalyticsEngineBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding{
-							Dataset: cloudflare.F("api_analytics"),
+					Production: cloudflare.F(pages.ProjectDeploymentConfigsProductionParam{
+						AIBindings: cloudflare.F(pages.ProjectDeploymentConfigsProductionAIBindingsParam{
+							AIBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionAIBindingsAIBindingParam{
+								ProjectID: cloudflare.F("project_id"),
+							}),
 						}),
-					}),
-					Browsers: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewBrowsers{
-						Browser: cloudflare.F[any](map[string]interface{}{}),
-					}),
-					CompatibilityDate:  cloudflare.F("2022-01-01"),
-					CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
-					D1Databases: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewD1Databases{
-						D1Binding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewD1DatabasesD1Binding{
-							ID: cloudflare.F("445e2955-951a-43f8-a35b-a4d0c8138f63"),
+						AnalyticsEngineDatasets: cloudflare.F(pages.ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsParam{
+							AnalyticsEngineBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingParam{
+								Dataset: cloudflare.F("api_analytics"),
+							}),
 						}),
-					}),
-					DurableObjectNamespaces: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewDurableObjectNamespaces{
-						DoBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewDurableObjectNamespacesDoBinding{
-							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+						Browsers: cloudflare.F(pages.ProjectDeploymentConfigsProductionBrowsersParam{
+							Browser: cloudflare.F[any](map[string]interface{}{}),
 						}),
-					}),
-					EnvVars: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewEnvVars{
-						EnvironmentVariable: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariable{
-							Type:  cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText),
-							Value: cloudflare.F("hello world"),
+						CompatibilityDate:  cloudflare.F("2022-01-01"),
+						CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
+						D1Databases: cloudflare.F(pages.ProjectDeploymentConfigsProductionD1DatabasesParam{
+							D1Binding: cloudflare.F(pages.ProjectDeploymentConfigsProductionD1DatabasesD1BindingParam{
+								ID: cloudflare.F("445e2955-951a-43f8-a35b-a4d0c8138f63"),
+							}),
 						}),
-					}),
-					HyperdriveBindings: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewHyperdriveBindings{
-						Hyperdrive: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewHyperdriveBindingsHyperdrive{
-							ID: cloudflare.F("a76a99bc342644deb02c38d66082262a"),
+						DurableObjectNamespaces: cloudflare.F(pages.ProjectDeploymentConfigsProductionDurableObjectNamespacesParam{
+							DoBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBindingParam{
+								NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+							}),
 						}),
-					}),
-					KVNamespaces: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewKVNamespaces{
-						KVBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewKVNamespacesKVBinding{
-							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+						EnvVars: cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsParam{
+							EnvironmentVariable: cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableParam{
+								Type:  cloudflare.F(pages.ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText),
+								Value: cloudflare.F("hello world"),
+							}),
 						}),
-					}),
-					MTLSCertificates: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewMTLSCertificates{
-						MTLS: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewMTLSCertificatesMTLS{
-							CertificateID: cloudflare.F("d7cdd17c-916f-4cb7-aabe-585eb382ec4e"),
+						HyperdriveBindings: cloudflare.F(pages.ProjectDeploymentConfigsProductionHyperdriveBindingsParam{
+							Hyperdrive: cloudflare.F(pages.ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdriveParam{
+								ID: cloudflare.F("a76a99bc342644deb02c38d66082262a"),
+							}),
 						}),
-					}),
-					Placement: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewPlacement{
-						Mode: cloudflare.F("smart"),
-					}),
-					QueueProducers: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewQueueProducers{
-						QueueProducerBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewQueueProducersQueueProducerBinding{
-							Name: cloudflare.F("some-queue"),
+						KVNamespaces: cloudflare.F(pages.ProjectDeploymentConfigsProductionKVNamespacesParam{
+							KVBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionKVNamespacesKVBindingParam{
+								NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+							}),
 						}),
-					}),
-					R2Buckets: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewR2Buckets{
-						R2Binding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewR2BucketsR2Binding{
-							Jurisdiction: cloudflare.F("eu"),
-							Name:         cloudflare.F("some-bucket"),
+						MTLSCertificates: cloudflare.F(pages.ProjectDeploymentConfigsProductionMTLSCertificatesParam{
+							MTLS: cloudflare.F(pages.ProjectDeploymentConfigsProductionMTLSCertificatesMTLSParam{
+								CertificateID: cloudflare.F("d7cdd17c-916f-4cb7-aabe-585eb382ec4e"),
+							}),
 						}),
-					}),
-					Services: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewServices{
-						ServiceBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewServicesServiceBinding{
-							Entrypoint:  cloudflare.F("MyHandler"),
-							Environment: cloudflare.F("production"),
-							Service:     cloudflare.F("example-worker"),
+						Placement: cloudflare.F(pages.ProjectDeploymentConfigsProductionPlacementParam{
+							Mode: cloudflare.F("smart"),
 						}),
-					}),
-					VectorizeBindings: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewVectorizeBindings{
-						Vectorize: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsPreviewVectorizeBindingsVectorize{
-							IndexName: cloudflare.F("my_index"),
+						QueueProducers: cloudflare.F(pages.ProjectDeploymentConfigsProductionQueueProducersParam{
+							QueueProducerBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionQueueProducersQueueProducerBindingParam{
+								Name: cloudflare.F("some-queue"),
+							}),
+						}),
+						R2Buckets: cloudflare.F(pages.ProjectDeploymentConfigsProductionR2BucketsParam{
+							R2Binding: cloudflare.F(pages.ProjectDeploymentConfigsProductionR2BucketsR2BindingParam{
+								Jurisdiction: cloudflare.F("eu"),
+								Name:         cloudflare.F("some-bucket"),
+							}),
+						}),
+						Services: cloudflare.F(pages.ProjectDeploymentConfigsProductionServicesParam{
+							ServiceBinding: cloudflare.F(pages.ProjectDeploymentConfigsProductionServicesServiceBindingParam{
+								Entrypoint:  cloudflare.F("MyHandler"),
+								Environment: cloudflare.F("production"),
+								Service:     cloudflare.F("example-worker"),
+							}),
+						}),
+						VectorizeBindings: cloudflare.F(pages.ProjectDeploymentConfigsProductionVectorizeBindingsParam{
+							Vectorize: cloudflare.F(pages.ProjectDeploymentConfigsProductionVectorizeBindingsVectorizeParam{
+								IndexName: cloudflare.F("my_index"),
+							}),
 						}),
 					}),
 				}),
-				Production: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProduction{
-					AIBindings: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionAIBindings{
-						AIBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionAIBindingsAIBinding{
-							ProjectID: cloudflare.F("project_id"),
-						}),
-					}),
-					AnalyticsEngineDatasets: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionAnalyticsEngineDatasets{
-						AnalyticsEngineBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding{
-							Dataset: cloudflare.F("api_analytics"),
-						}),
-					}),
-					Browsers: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionBrowsers{
-						Browser: cloudflare.F[any](map[string]interface{}{}),
-					}),
-					CompatibilityDate:  cloudflare.F("2022-01-01"),
-					CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
-					D1Databases: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionD1Databases{
-						D1Binding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionD1DatabasesD1Binding{
-							ID: cloudflare.F("445e2955-951a-43f8-a35b-a4d0c8138f63"),
-						}),
-					}),
-					DurableObjectNamespaces: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionDurableObjectNamespaces{
-						DoBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionDurableObjectNamespacesDoBinding{
-							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
-						}),
-					}),
-					EnvVars: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionEnvVars{
-						EnvironmentVariable: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionEnvVarsEnvironmentVariable{
-							Type:  cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText),
-							Value: cloudflare.F("hello world"),
-						}),
-					}),
-					HyperdriveBindings: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionHyperdriveBindings{
-						Hyperdrive: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionHyperdriveBindingsHyperdrive{
-							ID: cloudflare.F("a76a99bc342644deb02c38d66082262a"),
-						}),
-					}),
-					KVNamespaces: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionKVNamespaces{
-						KVBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionKVNamespacesKVBinding{
-							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
-						}),
-					}),
-					MTLSCertificates: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionMTLSCertificates{
-						MTLS: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionMTLSCertificatesMTLS{
-							CertificateID: cloudflare.F("d7cdd17c-916f-4cb7-aabe-585eb382ec4e"),
-						}),
-					}),
-					Placement: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionPlacement{
-						Mode: cloudflare.F("smart"),
-					}),
-					QueueProducers: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionQueueProducers{
-						QueueProducerBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionQueueProducersQueueProducerBinding{
-							Name: cloudflare.F("some-queue"),
-						}),
-					}),
-					R2Buckets: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionR2Buckets{
-						R2Binding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionR2BucketsR2Binding{
-							Jurisdiction: cloudflare.F("eu"),
-							Name:         cloudflare.F("some-bucket"),
-						}),
-					}),
-					Services: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionServices{
-						ServiceBinding: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionServicesServiceBinding{
-							Entrypoint:  cloudflare.F("MyHandler"),
-							Environment: cloudflare.F("production"),
-							Service:     cloudflare.F("example-worker"),
-						}),
-					}),
-					VectorizeBindings: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionVectorizeBindings{
-						Vectorize: cloudflare.F(pages.ProjectEditParamsDeploymentConfigsProductionVectorizeBindingsVectorize{
-							IndexName: cloudflare.F("my_index"),
-						}),
-					}),
-				}),
-			}),
-			Name:             cloudflare.F("NextJS Blog"),
-			ProductionBranch: cloudflare.F("main"),
+				Name:             cloudflare.F("NextJS Blog"),
+				ProductionBranch: cloudflare.F("main"),
+			},
 		},
 	)
 	if err != nil {
