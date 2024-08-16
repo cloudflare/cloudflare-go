@@ -356,8 +356,8 @@ type LoadBalancer struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools LoadBalancerCountryPools `json:"country_pools"`
-	CreatedOn    time.Time                `json:"created_on" format:"date-time"`
+	CountryPools map[string][]string `json:"country_pools"`
+	CreatedOn    time.Time           `json:"created_on" format:"date-time"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools []DefaultPools `json:"default_pools"`
@@ -379,7 +379,7 @@ type LoadBalancer struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools LoadBalancerPopPools `json:"pop_pools"`
+	PopPools map[string][]string `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied bool `json:"proxied"`
 	// Configures pool weights.
@@ -394,7 +394,7 @@ type LoadBalancer struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools LoadBalancerRegionPools `json:"region_pools"`
+	RegionPools map[string][]string `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules []Rules `json:"rules"`
@@ -496,80 +496,6 @@ func (r *LoadBalancer) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r loadBalancerJSON) RawJSON() string {
-	return r.raw
-}
-
-// A mapping of country codes to a list of pool IDs (ordered by their failover
-// priority) for the given country. Any country not explicitly defined will fall
-// back to using the corresponding region_pool mapping if it exists else to
-// default_pools.
-type LoadBalancerCountryPools struct {
-	CountryCode []string                     `json:"country_code"`
-	JSON        loadBalancerCountryPoolsJSON `json:"-"`
-}
-
-// loadBalancerCountryPoolsJSON contains the JSON metadata for the struct
-// [LoadBalancerCountryPools]
-type loadBalancerCountryPoolsJSON struct {
-	CountryCode apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerCountryPools) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerCountryPoolsJSON) RawJSON() string {
-	return r.raw
-}
-
-// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
-// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
-// explicitly defined will fall back to using the corresponding country_pool, then
-// region_pool mapping if it exists else to default_pools.
-type LoadBalancerPopPools struct {
-	Pop  []string                 `json:"pop"`
-	JSON loadBalancerPopPoolsJSON `json:"-"`
-}
-
-// loadBalancerPopPoolsJSON contains the JSON metadata for the struct
-// [LoadBalancerPopPools]
-type loadBalancerPopPoolsJSON struct {
-	Pop         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPopPools) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerPopPoolsJSON) RawJSON() string {
-	return r.raw
-}
-
-// A mapping of region codes to a list of pool IDs (ordered by their failover
-// priority) for the given region. Any regions not explicitly defined will fall
-// back to using default_pools.
-type LoadBalancerRegionPools struct {
-	RegionCode []string                    `json:"region_code"`
-	JSON       loadBalancerRegionPoolsJSON `json:"-"`
-}
-
-// loadBalancerRegionPoolsJSON contains the JSON metadata for the struct
-// [LoadBalancerRegionPools]
-type loadBalancerRegionPoolsJSON struct {
-	RegionCode  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerRegionPools) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r loadBalancerRegionPoolsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1188,7 +1114,7 @@ type RulesOverrides struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools RulesOverridesCountryPools `json:"country_pools"`
+	CountryPools map[string][]string `json:"country_pools"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools []DefaultPools `json:"default_pools"`
@@ -1201,7 +1127,7 @@ type RulesOverrides struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools RulesOverridesPopPools `json:"pop_pools"`
+	PopPools map[string][]string `json:"pop_pools"`
 	// Configures pool weights.
 	//
 	//   - `steering_policy="random"`: A random pool is selected with probability
@@ -1214,7 +1140,7 @@ type RulesOverrides struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools RulesOverridesRegionPools `json:"region_pools"`
+	RegionPools map[string][]string `json:"region_pools"`
 	// Specifies the type of session affinity the load balancer should use unless
 	// specified as `"none"` or "" (default). The supported types are:
 	//
@@ -1308,80 +1234,6 @@ func (r rulesOverridesJSON) RawJSON() string {
 	return r.raw
 }
 
-// A mapping of country codes to a list of pool IDs (ordered by their failover
-// priority) for the given country. Any country not explicitly defined will fall
-// back to using the corresponding region_pool mapping if it exists else to
-// default_pools.
-type RulesOverridesCountryPools struct {
-	CountryCode []string                       `json:"country_code"`
-	JSON        rulesOverridesCountryPoolsJSON `json:"-"`
-}
-
-// rulesOverridesCountryPoolsJSON contains the JSON metadata for the struct
-// [RulesOverridesCountryPools]
-type rulesOverridesCountryPoolsJSON struct {
-	CountryCode apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesOverridesCountryPools) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesOverridesCountryPoolsJSON) RawJSON() string {
-	return r.raw
-}
-
-// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
-// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
-// explicitly defined will fall back to using the corresponding country_pool, then
-// region_pool mapping if it exists else to default_pools.
-type RulesOverridesPopPools struct {
-	Pop  []string                   `json:"pop"`
-	JSON rulesOverridesPopPoolsJSON `json:"-"`
-}
-
-// rulesOverridesPopPoolsJSON contains the JSON metadata for the struct
-// [RulesOverridesPopPools]
-type rulesOverridesPopPoolsJSON struct {
-	Pop         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesOverridesPopPools) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesOverridesPopPoolsJSON) RawJSON() string {
-	return r.raw
-}
-
-// A mapping of region codes to a list of pool IDs (ordered by their failover
-// priority) for the given region. Any regions not explicitly defined will fall
-// back to using default_pools.
-type RulesOverridesRegionPools struct {
-	RegionCode []string                      `json:"region_code"`
-	JSON       rulesOverridesRegionPoolsJSON `json:"-"`
-}
-
-// rulesOverridesRegionPoolsJSON contains the JSON metadata for the struct
-// [RulesOverridesRegionPools]
-type rulesOverridesRegionPoolsJSON struct {
-	RegionCode  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesOverridesRegionPools) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r rulesOverridesRegionPoolsJSON) RawJSON() string {
-	return r.raw
-}
-
 // A rule object containing conditions and overrides for this load balancer to
 // evaluate.
 type RulesParam struct {
@@ -1448,7 +1300,7 @@ type RulesOverridesParam struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools param.Field[RulesOverridesCountryPoolsParam] `json:"country_pools"`
+	CountryPools param.Field[map[string][]string] `json:"country_pools"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools"`
@@ -1461,7 +1313,7 @@ type RulesOverridesParam struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[RulesOverridesPopPoolsParam] `json:"pop_pools"`
+	PopPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Configures pool weights.
 	//
 	//   - `steering_policy="random"`: A random pool is selected with probability
@@ -1474,7 +1326,7 @@ type RulesOverridesParam struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools param.Field[RulesOverridesRegionPoolsParam] `json:"region_pools"`
+	RegionPools param.Field[map[string][]string] `json:"region_pools"`
 	// Specifies the type of session affinity the load balancer should use unless
 	// specified as `"none"` or "" (default). The supported types are:
 	//
@@ -1541,41 +1393,6 @@ type RulesOverridesParam struct {
 }
 
 func (r RulesOverridesParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A mapping of country codes to a list of pool IDs (ordered by their failover
-// priority) for the given country. Any country not explicitly defined will fall
-// back to using the corresponding region_pool mapping if it exists else to
-// default_pools.
-type RulesOverridesCountryPoolsParam struct {
-	CountryCode param.Field[[]string] `json:"country_code"`
-}
-
-func (r RulesOverridesCountryPoolsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
-// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
-// explicitly defined will fall back to using the corresponding country_pool, then
-// region_pool mapping if it exists else to default_pools.
-type RulesOverridesPopPoolsParam struct {
-	Pop param.Field[[]string] `json:"pop"`
-}
-
-func (r RulesOverridesPopPoolsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A mapping of region codes to a list of pool IDs (ordered by their failover
-// priority) for the given region. Any regions not explicitly defined will fall
-// back to using default_pools.
-type RulesOverridesRegionPoolsParam struct {
-	RegionCode param.Field[[]string] `json:"region_code"`
-}
-
-func (r RulesOverridesRegionPoolsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1895,7 +1712,7 @@ type LoadBalancerNewParams struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools param.Field[LoadBalancerNewParamsCountryPools] `json:"country_pools"`
+	CountryPools param.Field[map[string][]string] `json:"country_pools"`
 	// Object description.
 	Description param.Field[string] `json:"description"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
@@ -1905,7 +1722,7 @@ type LoadBalancerNewParams struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[LoadBalancerNewParamsPopPools] `json:"pop_pools"`
+	PopPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -1920,7 +1737,7 @@ type LoadBalancerNewParams struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools param.Field[LoadBalancerNewParamsRegionPools] `json:"region_pools"`
+	RegionPools param.Field[map[string][]string] `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
@@ -1993,41 +1810,6 @@ func (r LoadBalancerNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A mapping of country codes to a list of pool IDs (ordered by their failover
-// priority) for the given country. Any country not explicitly defined will fall
-// back to using the corresponding region_pool mapping if it exists else to
-// default_pools.
-type LoadBalancerNewParamsCountryPools struct {
-	CountryCode param.Field[[]string] `json:"country_code"`
-}
-
-func (r LoadBalancerNewParamsCountryPools) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
-// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
-// explicitly defined will fall back to using the corresponding country_pool, then
-// region_pool mapping if it exists else to default_pools.
-type LoadBalancerNewParamsPopPools struct {
-	Pop param.Field[[]string] `json:"pop"`
-}
-
-func (r LoadBalancerNewParamsPopPools) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A mapping of region codes to a list of pool IDs (ordered by their failover
-// priority) for the given region. Any regions not explicitly defined will fall
-// back to using default_pools.
-type LoadBalancerNewParamsRegionPools struct {
-	RegionCode param.Field[[]string] `json:"region_code"`
-}
-
-func (r LoadBalancerNewParamsRegionPools) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type LoadBalancerNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
@@ -2093,7 +1875,7 @@ type LoadBalancerUpdateParams struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools param.Field[LoadBalancerUpdateParamsCountryPools] `json:"country_pools"`
+	CountryPools param.Field[map[string][]string] `json:"country_pools"`
 	// Object description.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) this load balancer.
@@ -2105,7 +1887,7 @@ type LoadBalancerUpdateParams struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[LoadBalancerUpdateParamsPopPools] `json:"pop_pools"`
+	PopPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -2120,7 +1902,7 @@ type LoadBalancerUpdateParams struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools param.Field[LoadBalancerUpdateParamsRegionPools] `json:"region_pools"`
+	RegionPools param.Field[map[string][]string] `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
@@ -2190,41 +1972,6 @@ type LoadBalancerUpdateParams struct {
 }
 
 func (r LoadBalancerUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A mapping of country codes to a list of pool IDs (ordered by their failover
-// priority) for the given country. Any country not explicitly defined will fall
-// back to using the corresponding region_pool mapping if it exists else to
-// default_pools.
-type LoadBalancerUpdateParamsCountryPools struct {
-	CountryCode param.Field[[]string] `json:"country_code"`
-}
-
-func (r LoadBalancerUpdateParamsCountryPools) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
-// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
-// explicitly defined will fall back to using the corresponding country_pool, then
-// region_pool mapping if it exists else to default_pools.
-type LoadBalancerUpdateParamsPopPools struct {
-	Pop param.Field[[]string] `json:"pop"`
-}
-
-func (r LoadBalancerUpdateParamsPopPools) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A mapping of region codes to a list of pool IDs (ordered by their failover
-// priority) for the given region. Any regions not explicitly defined will fall
-// back to using default_pools.
-type LoadBalancerUpdateParamsRegionPools struct {
-	RegionCode param.Field[[]string] `json:"region_code"`
-}
-
-func (r LoadBalancerUpdateParamsRegionPools) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2335,7 +2082,7 @@ type LoadBalancerEditParams struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools param.Field[LoadBalancerEditParamsCountryPools] `json:"country_pools"`
+	CountryPools param.Field[map[string][]string] `json:"country_pools"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools"`
@@ -2356,7 +2103,7 @@ type LoadBalancerEditParams struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[LoadBalancerEditParamsPopPools] `json:"pop_pools"`
+	PopPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -2371,7 +2118,7 @@ type LoadBalancerEditParams struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools param.Field[LoadBalancerEditParamsRegionPools] `json:"region_pools"`
+	RegionPools param.Field[map[string][]string] `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
@@ -2441,41 +2188,6 @@ type LoadBalancerEditParams struct {
 }
 
 func (r LoadBalancerEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A mapping of country codes to a list of pool IDs (ordered by their failover
-// priority) for the given country. Any country not explicitly defined will fall
-// back to using the corresponding region_pool mapping if it exists else to
-// default_pools.
-type LoadBalancerEditParamsCountryPools struct {
-	CountryCode param.Field[[]string] `json:"country_code"`
-}
-
-func (r LoadBalancerEditParamsCountryPools) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
-// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
-// explicitly defined will fall back to using the corresponding country_pool, then
-// region_pool mapping if it exists else to default_pools.
-type LoadBalancerEditParamsPopPools struct {
-	Pop param.Field[[]string] `json:"pop"`
-}
-
-func (r LoadBalancerEditParamsPopPools) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A mapping of region codes to a list of pool IDs (ordered by their failover
-// priority) for the given region. Any regions not explicitly defined will fall
-// back to using default_pools.
-type LoadBalancerEditParamsRegionPools struct {
-	RegionCode param.Field[[]string] `json:"region_code"`
-}
-
-func (r LoadBalancerEditParamsRegionPools) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
