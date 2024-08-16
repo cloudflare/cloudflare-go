@@ -28,107 +28,7 @@ func TestDLPProfileCustomNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Custom.New(context.TODO(), zero_trust.DLPProfileCustomNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Profiles: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsProfile{{
-			AllowedMatchCount: cloudflare.F(5.000000),
-			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
-				Enabled: cloudflare.F(true),
-				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
-					Files: cloudflare.F(true),
-				}),
-			}),
-			Description: cloudflare.F("A standard CVV card number"),
-			Entries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsProfilesEntry{{
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}, {
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}, {
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}}),
-			Name:       cloudflare.F("Generic CVV Card Number"),
-			OCREnabled: cloudflare.F(true),
-		}, {
-			AllowedMatchCount: cloudflare.F(5.000000),
-			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
-				Enabled: cloudflare.F(true),
-				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
-					Files: cloudflare.F(true),
-				}),
-			}),
-			Description: cloudflare.F("A standard CVV card number"),
-			Entries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsProfilesEntry{{
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}, {
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}, {
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}}),
-			Name:       cloudflare.F("Generic CVV Card Number"),
-			OCREnabled: cloudflare.F(true),
-		}, {
-			AllowedMatchCount: cloudflare.F(5.000000),
-			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
-				Enabled: cloudflare.F(true),
-				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
-					Files: cloudflare.F(true),
-				}),
-			}),
-			Description: cloudflare.F("A standard CVV card number"),
-			Entries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsProfilesEntry{{
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}, {
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}, {
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}}),
-			Name:       cloudflare.F("Generic CVV Card Number"),
-			OCREnabled: cloudflare.F(true),
-		}}),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -139,7 +39,7 @@ func TestDLPProfileCustomNew(t *testing.T) {
 	}
 }
 
-func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
+func TestDLPProfileCustomUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -154,48 +54,9 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Custom.Update(
 		context.TODO(),
-		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPProfileCustomUpdateParams{
-			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AllowedMatchCount: cloudflare.F(5.000000),
-			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
-				Enabled: cloudflare.F(true),
-				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
-					Files: cloudflare.F(true),
-				}),
-			}),
-			Description: cloudflare.F("A standard CVV card number"),
-			Entries: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsEntry{{
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}, {
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}, {
-				Enabled: cloudflare.F(true),
-				Name:    cloudflare.F("Credit card (Visa)"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("^4[0-9]{6,14}$"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}}),
-			Name:       cloudflare.F("Generic CVV Card Number"),
-			OCREnabled: cloudflare.F(true),
-			SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsSharedEntryUnion{zero_trust.DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined{
-				Enabled: cloudflare.F(true),
-			}, zero_trust.DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined{
-				Enabled: cloudflare.F(true),
-			}, zero_trust.DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined{
-				Enabled: cloudflare.F(true),
-			}}),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -222,9 +83,9 @@ func TestDLPProfileCustomDelete(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Custom.Delete(
 		context.TODO(),
-		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPProfileCustomDeleteParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -251,9 +112,9 @@ func TestDLPProfileCustomGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Custom.Get(
 		context.TODO(),
-		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPProfileCustomGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

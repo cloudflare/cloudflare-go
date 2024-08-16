@@ -34,7 +34,7 @@ func NewDLPDatasetUploadService(opts ...option.RequestOption) (r *DLPDatasetUplo
 	return
 }
 
-// Prepare to upload a new version of a dataset.
+// Prepare to upload a new version of a dataset
 func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *NewVersion, err error) {
 	var env DLPDatasetUploadNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -55,7 +55,10 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, bod
 	return
 }
 
-// Upload a new version of a dataset.
+// This is used for single-column EDMv1 and Custom Word Lists. The EDM format can
+// only be created in the Cloudflare dashboard. For other clients, this operation
+// can only be used for non-secret Custom Word Lists. The body must be a UTF-8
+// encoded, newline (NL or CRNL) separated list of words to be matched.
 func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	var env DLPDatasetUploadEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -77,19 +80,23 @@ func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, ve
 }
 
 type NewVersion struct {
-	MaxCells int64          `json:"max_cells,required"`
-	Version  int64          `json:"version,required"`
-	Secret   string         `json:"secret" format:"password"`
-	JSON     newVersionJSON `json:"-"`
+	EncodingVersion int64              `json:"encoding_version,required"`
+	MaxCells        int64              `json:"max_cells,required"`
+	Version         int64              `json:"version,required"`
+	Columns         []NewVersionColumn `json:"columns"`
+	Secret          string             `json:"secret" format:"password"`
+	JSON            newVersionJSON     `json:"-"`
 }
 
 // newVersionJSON contains the JSON metadata for the struct [NewVersion]
 type newVersionJSON struct {
-	MaxCells    apijson.Field
-	Version     apijson.Field
-	Secret      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	EncodingVersion apijson.Field
+	MaxCells        apijson.Field
+	Version         apijson.Field
+	Columns         apijson.Field
+	Secret          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NewVersion) UnmarshalJSON(data []byte) (err error) {
@@ -98,6 +105,51 @@ func (r *NewVersion) UnmarshalJSON(data []byte) (err error) {
 
 func (r newVersionJSON) RawJSON() string {
 	return r.raw
+}
+
+type NewVersionColumn struct {
+	EntryID      string                        `json:"entry_id,required" format:"uuid"`
+	HeaderName   string                        `json:"header_name,required"`
+	NumCells     int64                         `json:"num_cells,required"`
+	UploadStatus NewVersionColumnsUploadStatus `json:"upload_status,required"`
+	JSON         newVersionColumnJSON          `json:"-"`
+}
+
+// newVersionColumnJSON contains the JSON metadata for the struct
+// [NewVersionColumn]
+type newVersionColumnJSON struct {
+	EntryID      apijson.Field
+	HeaderName   apijson.Field
+	NumCells     apijson.Field
+	UploadStatus apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *NewVersionColumn) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r newVersionColumnJSON) RawJSON() string {
+	return r.raw
+}
+
+type NewVersionColumnsUploadStatus string
+
+const (
+	NewVersionColumnsUploadStatusEmpty      NewVersionColumnsUploadStatus = "empty"
+	NewVersionColumnsUploadStatusUploading  NewVersionColumnsUploadStatus = "uploading"
+	NewVersionColumnsUploadStatusProcessing NewVersionColumnsUploadStatus = "processing"
+	NewVersionColumnsUploadStatusFailed     NewVersionColumnsUploadStatus = "failed"
+	NewVersionColumnsUploadStatusComplete   NewVersionColumnsUploadStatus = "complete"
+)
+
+func (r NewVersionColumnsUploadStatus) IsKnown() bool {
+	switch r {
+	case NewVersionColumnsUploadStatusEmpty, NewVersionColumnsUploadStatusUploading, NewVersionColumnsUploadStatusProcessing, NewVersionColumnsUploadStatusFailed, NewVersionColumnsUploadStatusComplete:
+		return true
+	}
+	return false
 }
 
 type DLPDatasetUploadNewParams struct {

@@ -11,9 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/logpush"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // DLPPatternService contains methods and other services that help with interacting
@@ -36,75 +34,46 @@ func NewDLPPatternService(opts ...option.RequestOption) (r *DLPPatternService) {
 }
 
 // Validates whether this pattern is a valid regular expression. Rejects it if the
-// regular expression is too complex or can match an unbounded-length string. Your
-// regex will be rejected if it uses the Kleene Star -- be sure to bound the
-// maximum number of characters that can be matched.
-func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *logpush.OwnershipValidation, err error) {
-	var env DLPPatternValidateResponseEnvelope
+// regular expression is too complex or can match an unbounded-length string. The
+// regex will be rejected if it uses `*` or `+`. Bound the maximum number of
+// characters that can be matched using a range, e.g. `{1,100}`.
+func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *DLPPatternValidateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/dlp/patterns/validate", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
-type DLPPatternValidateParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The regex pattern.
-	Regex param.Field[string] `json:"regex,required"`
+type DLPPatternValidateResponse struct {
+	Valid bool                           `json:"valid,required"`
+	JSON  dlpPatternValidateResponseJSON `json:"-"`
 }
 
-func (r DLPPatternValidateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DLPPatternValidateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   logpush.OwnershipValidation `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success DLPPatternValidateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dlpPatternValidateResponseEnvelopeJSON    `json:"-"`
-}
-
-// dlpPatternValidateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DLPPatternValidateResponseEnvelope]
-type dlpPatternValidateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+// dlpPatternValidateResponseJSON contains the JSON metadata for the struct
+// [DLPPatternValidateResponse]
+type dlpPatternValidateResponseJSON struct {
+	Valid       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPPatternValidateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPPatternValidateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpPatternValidateResponseEnvelopeJSON) RawJSON() string {
+func (r dlpPatternValidateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
-type DLPPatternValidateResponseEnvelopeSuccess bool
+type DLPPatternValidateParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+	Regex     param.Field[string] `json:"regex,required"`
+}
 
-const (
-	DLPPatternValidateResponseEnvelopeSuccessTrue DLPPatternValidateResponseEnvelopeSuccess = true
-)
-
-func (r DLPPatternValidateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case DLPPatternValidateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
+func (r DLPPatternValidateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }

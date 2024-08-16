@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestDLPPayloadLogUpdate(t *testing.T) {
+func TestDLPPayloadLogUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,8 +28,8 @@ func TestDLPPayloadLogUpdate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.PayloadLogs.Update(context.TODO(), zero_trust.DLPPayloadLogUpdateParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		PublicKey: cloudflare.F("EmpOvSXw8BfbrGCi0fhGiD/3yXk2SiV1Nzg2lru3oj0="),
+		AccountID: cloudflare.F("account_id"),
+		PublicKey: cloudflare.F("public_key"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -54,7 +54,7 @@ func TestDLPPayloadLogGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.PayloadLogs.Get(context.TODO(), zero_trust.DLPPayloadLogGetParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
