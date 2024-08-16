@@ -28,10 +28,11 @@ func TestDLPDatasetNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Datasets.New(context.TODO(), zero_trust.DLPDatasetNewParams{
-		AccountID:   cloudflare.F("account_id"),
-		Name:        cloudflare.F("name"),
-		Description: cloudflare.F("description"),
-		Secret:      cloudflare.F(true),
+		AccountID:       cloudflare.F("account_id"),
+		Name:            cloudflare.F("name"),
+		Description:     cloudflare.F("description"),
+		EncodingVersion: cloudflare.F(int64(0)),
+		Secret:          cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
