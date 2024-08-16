@@ -117,72 +117,70 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.User.Tokens.Update(
 		context.TODO(),
-		map[string]interface{}{},
+		"ed17574386854bf78a67040be0a770b0",
 		user.TokenUpdateParams{
-			Token: user.TokenParam{
-				Name: cloudflare.F("readonly token"),
-				Policies: cloudflare.F([]user.PolicyParam{{
-					Effect: cloudflare.F(user.PolicyEffectAllow),
-					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
-						Meta: cloudflare.F[any](map[string]interface{}{
-							"label":  "load_balancer_admin",
-							"scopes": "com.cloudflare.api.account",
-						}),
-					}, {
-						Meta: cloudflare.F[any](map[string]interface{}{
-							"label":  "fbm_user",
-							"scopes": "com.cloudflare.api.account",
-						}),
-					}}),
-					Resources: cloudflare.F[any](map[string]interface{}{
-						"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
-						"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
+			Name: cloudflare.F("readonly token"),
+			Policies: cloudflare.F([]user.PolicyParam{{
+				Effect: cloudflare.F(user.PolicyEffectAllow),
+				PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
+					Meta: cloudflare.F[any](map[string]interface{}{
+						"label":  "load_balancer_admin",
+						"scopes": "com.cloudflare.api.account",
 					}),
 				}, {
-					Effect: cloudflare.F(user.PolicyEffectAllow),
-					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
-						Meta: cloudflare.F[any](map[string]interface{}{
-							"label":  "load_balancer_admin",
-							"scopes": "com.cloudflare.api.account",
-						}),
-					}, {
-						Meta: cloudflare.F[any](map[string]interface{}{
-							"label":  "fbm_user",
-							"scopes": "com.cloudflare.api.account",
-						}),
-					}}),
-					Resources: cloudflare.F[any](map[string]interface{}{
-						"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
-						"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
-					}),
-				}, {
-					Effect: cloudflare.F(user.PolicyEffectAllow),
-					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
-						Meta: cloudflare.F[any](map[string]interface{}{
-							"label":  "load_balancer_admin",
-							"scopes": "com.cloudflare.api.account",
-						}),
-					}, {
-						Meta: cloudflare.F[any](map[string]interface{}{
-							"label":  "fbm_user",
-							"scopes": "com.cloudflare.api.account",
-						}),
-					}}),
-					Resources: cloudflare.F[any](map[string]interface{}{
-						"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
-						"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
+					Meta: cloudflare.F[any](map[string]interface{}{
+						"label":  "fbm_user",
+						"scopes": "com.cloudflare.api.account",
 					}),
 				}}),
-				Status: cloudflare.F(user.TokenStatusActive),
-				Condition: cloudflare.F(user.TokenConditionParam{
-					RequestIP: cloudflare.F(user.TokenConditionRequestIPParam{
-						In:    cloudflare.F([]user.CIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
-						NotIn: cloudflare.F([]user.CIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
-					}),
+				Resources: cloudflare.F[any](map[string]interface{}{
+					"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
+					"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 				}),
-				ExpiresOn: cloudflare.F(time.Now()),
-				NotBefore: cloudflare.F(time.Now()),
-			},
+			}, {
+				Effect: cloudflare.F(user.PolicyEffectAllow),
+				PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
+					Meta: cloudflare.F[any](map[string]interface{}{
+						"label":  "load_balancer_admin",
+						"scopes": "com.cloudflare.api.account",
+					}),
+				}, {
+					Meta: cloudflare.F[any](map[string]interface{}{
+						"label":  "fbm_user",
+						"scopes": "com.cloudflare.api.account",
+					}),
+				}}),
+				Resources: cloudflare.F[any](map[string]interface{}{
+					"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
+					"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
+				}),
+			}, {
+				Effect: cloudflare.F(user.PolicyEffectAllow),
+				PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
+					Meta: cloudflare.F[any](map[string]interface{}{
+						"label":  "load_balancer_admin",
+						"scopes": "com.cloudflare.api.account",
+					}),
+				}, {
+					Meta: cloudflare.F[any](map[string]interface{}{
+						"label":  "fbm_user",
+						"scopes": "com.cloudflare.api.account",
+					}),
+				}}),
+				Resources: cloudflare.F[any](map[string]interface{}{
+					"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
+					"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
+				}),
+			}}),
+			Status: cloudflare.F(user.TokenUpdateParamsStatusActive),
+			Condition: cloudflare.F(user.TokenUpdateParamsCondition{
+				RequestIP: cloudflare.F(user.TokenUpdateParamsConditionRequestIP{
+					In:    cloudflare.F([]user.CIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
+					NotIn: cloudflare.F([]user.CIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
+				}),
+			}),
+			ExpiresOn: cloudflare.F(time.Now()),
+			NotBefore: cloudflare.F(time.Now()),
 		},
 	)
 	if err != nil {
@@ -234,7 +232,7 @@ func TestTokenDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Tokens.Delete(context.TODO(), map[string]interface{}{})
+	_, err := client.User.Tokens.Delete(context.TODO(), "ed17574386854bf78a67040be0a770b0")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -257,7 +255,7 @@ func TestTokenGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Tokens.Get(context.TODO(), map[string]interface{}{})
+	_, err := client.User.Tokens.Get(context.TODO(), "ed17574386854bf78a67040be0a770b0")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
