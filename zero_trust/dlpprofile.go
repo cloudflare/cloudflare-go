@@ -43,7 +43,7 @@ func NewDLPProfileService(opts ...option.RequestOption) (r *DLPProfileService) {
 }
 
 // Lists all DLP profiles in an account.
-func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[DLPProfileListResponse], err error) {
+func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Profile], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -65,12 +65,12 @@ func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams
 }
 
 // Lists all DLP profiles in an account.
-func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[DLPProfileListResponse] {
+func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Profile] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Fetches a DLP profile by ID
-func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLPProfileGetParams, opts ...option.RequestOption) (res *DLPProfileGetResponse, err error) {
+func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLPProfileGetParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfileGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -118,6 +118,1370 @@ func (r contextAwarenessJSON) RawJSON() string {
 	return r.raw
 }
 
+type Profile struct {
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount int64 `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness ContextAwareness `json:"context_awareness"`
+	// When the profile was created
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The description of the profile
+	Description string `json:"description,nullable"`
+	// This field can have the runtime type of [[]ProfileCustomEntry],
+	// [[]ProfilePredefinedEntry], [[]ProfileIntegrationEntry].
+	Entries interface{} `json:"entries"`
+	// The id of the profile (uuid)
+	ID string `json:"id,required" format:"uuid"`
+	// The name of the profile
+	Name       string `json:"name,required"`
+	OCREnabled bool   `json:"ocr_enabled"`
+	// When the profile was lasted updated
+	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
+	Type       ProfileType `json:"type,required"`
+	OpenAccess bool        `json:"open_access"`
+	JSON       profileJSON `json:"-"`
+	union      ProfileUnion
+}
+
+// profileJSON contains the JSON metadata for the struct [Profile]
+type profileJSON struct {
+	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
+	CreatedAt         apijson.Field
+	Description       apijson.Field
+	Entries           apijson.Field
+	ID                apijson.Field
+	Name              apijson.Field
+	OCREnabled        apijson.Field
+	UpdatedAt         apijson.Field
+	Type              apijson.Field
+	OpenAccess        apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r profileJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *Profile) UnmarshalJSON(data []byte) (err error) {
+	*r = Profile{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ProfileUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.ProfileCustom],
+// [zero_trust.ProfilePredefined], [zero_trust.ProfileIntegration].
+func (r Profile) AsUnion() ProfileUnion {
+	return r.union
+}
+
+// Union satisfied by [zero_trust.ProfileCustom], [zero_trust.ProfilePredefined] or
+// [zero_trust.ProfileIntegration].
+type ProfileUnion interface {
+	implementsZeroTrustProfile()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProfileUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileCustom{}),
+			DiscriminatorValue: "custom",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfilePredefined{}),
+			DiscriminatorValue: "predefined",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileIntegration{}),
+			DiscriminatorValue: "integration",
+		},
+	)
+}
+
+type ProfileCustom struct {
+	// The id of the profile (uuid)
+	ID string `json:"id,required" format:"uuid"`
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount int64 `json:"allowed_match_count,required"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness ContextAwareness `json:"context_awareness,required"`
+	// When the profile was created
+	CreatedAt time.Time            `json:"created_at,required" format:"date-time"`
+	Entries   []ProfileCustomEntry `json:"entries,required"`
+	// The name of the profile
+	Name       string            `json:"name,required"`
+	OCREnabled bool              `json:"ocr_enabled,required"`
+	Type       ProfileCustomType `json:"type,required"`
+	// When the profile was lasted updated
+	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	// The description of the profile
+	Description string            `json:"description,nullable"`
+	JSON        profileCustomJSON `json:"-"`
+}
+
+// profileCustomJSON contains the JSON metadata for the struct [ProfileCustom]
+type profileCustomJSON struct {
+	ID                apijson.Field
+	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
+	CreatedAt         apijson.Field
+	Entries           apijson.Field
+	Name              apijson.Field
+	OCREnabled        apijson.Field
+	Type              apijson.Field
+	UpdatedAt         apijson.Field
+	Description       apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ProfileCustom) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileCustom) implementsZeroTrustProfile() {}
+
+type ProfileCustomEntry struct {
+	CreatedAt time.Time                `json:"created_at" format:"date-time"`
+	Enabled   bool                     `json:"enabled,required"`
+	ID        string                   `json:"id,required" format:"uuid"`
+	Name      string                   `json:"name,required"`
+	Pattern   Pattern                  `json:"pattern"`
+	ProfileID string                   `json:"profile_id,nullable" format:"uuid"`
+	UpdatedAt time.Time                `json:"updated_at" format:"date-time"`
+	Type      ProfileCustomEntriesType `json:"type,required"`
+	Secret    bool                     `json:"secret"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}            `json:"word_list,required"`
+	JSON     profileCustomEntryJSON `json:"-"`
+	union    ProfileCustomEntriesUnion
+}
+
+// profileCustomEntryJSON contains the JSON metadata for the struct
+// [ProfileCustomEntry]
+type profileCustomEntryJSON struct {
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	ID          apijson.Field
+	Name        apijson.Field
+	Pattern     apijson.Field
+	ProfileID   apijson.Field
+	UpdatedAt   apijson.Field
+	Type        apijson.Field
+	Secret      apijson.Field
+	WordList    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r profileCustomEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ProfileCustomEntry) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfileCustomEntry{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ProfileCustomEntriesUnion] interface which you can cast to
+// the specific types for more type safety.
+//
+// Possible runtime types of the union are [zero_trust.ProfileCustomEntriesCustom],
+// [zero_trust.ProfileCustomEntriesPredefined],
+// [zero_trust.ProfileCustomEntriesIntegration],
+// [zero_trust.ProfileCustomEntriesExactData],
+// [zero_trust.ProfileCustomEntriesWordList].
+func (r ProfileCustomEntry) AsUnion() ProfileCustomEntriesUnion {
+	return r.union
+}
+
+// Union satisfied by [zero_trust.ProfileCustomEntriesCustom],
+// [zero_trust.ProfileCustomEntriesPredefined],
+// [zero_trust.ProfileCustomEntriesIntegration],
+// [zero_trust.ProfileCustomEntriesExactData] or
+// [zero_trust.ProfileCustomEntriesWordList].
+type ProfileCustomEntriesUnion interface {
+	implementsZeroTrustProfileCustomEntry()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProfileCustomEntriesUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileCustomEntriesCustom{}),
+			DiscriminatorValue: "custom",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileCustomEntriesPredefined{}),
+			DiscriminatorValue: "predefined",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileCustomEntriesIntegration{}),
+			DiscriminatorValue: "integration",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileCustomEntriesExactData{}),
+			DiscriminatorValue: "exact_data",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileCustomEntriesWordList{}),
+			DiscriminatorValue: "word_list",
+		},
+	)
+}
+
+type ProfileCustomEntriesCustom struct {
+	ID        string                         `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                      `json:"created_at,required" format:"date-time"`
+	Enabled   bool                           `json:"enabled,required"`
+	Name      string                         `json:"name,required"`
+	Pattern   Pattern                        `json:"pattern,required"`
+	Type      ProfileCustomEntriesCustomType `json:"type,required"`
+	UpdatedAt time.Time                      `json:"updated_at,required" format:"date-time"`
+	ProfileID string                         `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileCustomEntriesCustomJSON `json:"-"`
+}
+
+// profileCustomEntriesCustomJSON contains the JSON metadata for the struct
+// [ProfileCustomEntriesCustom]
+type profileCustomEntriesCustomJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Pattern     apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomEntriesCustom) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomEntriesCustomJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileCustomEntriesCustom) implementsZeroTrustProfileCustomEntry() {}
+
+type ProfileCustomEntriesCustomType string
+
+const (
+	ProfileCustomEntriesCustomTypeCustom ProfileCustomEntriesCustomType = "custom"
+)
+
+func (r ProfileCustomEntriesCustomType) IsKnown() bool {
+	switch r {
+	case ProfileCustomEntriesCustomTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomEntriesPredefined struct {
+	ID        string                             `json:"id,required" format:"uuid"`
+	Enabled   bool                               `json:"enabled,required"`
+	Name      string                             `json:"name,required"`
+	Type      ProfileCustomEntriesPredefinedType `json:"type,required"`
+	ProfileID string                             `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileCustomEntriesPredefinedJSON `json:"-"`
+}
+
+// profileCustomEntriesPredefinedJSON contains the JSON metadata for the struct
+// [ProfileCustomEntriesPredefined]
+type profileCustomEntriesPredefinedJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomEntriesPredefinedJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileCustomEntriesPredefined) implementsZeroTrustProfileCustomEntry() {}
+
+type ProfileCustomEntriesPredefinedType string
+
+const (
+	ProfileCustomEntriesPredefinedTypePredefined ProfileCustomEntriesPredefinedType = "predefined"
+)
+
+func (r ProfileCustomEntriesPredefinedType) IsKnown() bool {
+	switch r {
+	case ProfileCustomEntriesPredefinedTypePredefined:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomEntriesIntegration struct {
+	ID        string                              `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                           `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                `json:"enabled,required"`
+	Name      string                              `json:"name,required"`
+	Type      ProfileCustomEntriesIntegrationType `json:"type,required"`
+	UpdatedAt time.Time                           `json:"updated_at,required" format:"date-time"`
+	ProfileID string                              `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileCustomEntriesIntegrationJSON `json:"-"`
+}
+
+// profileCustomEntriesIntegrationJSON contains the JSON metadata for the struct
+// [ProfileCustomEntriesIntegration]
+type profileCustomEntriesIntegrationJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomEntriesIntegrationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileCustomEntriesIntegration) implementsZeroTrustProfileCustomEntry() {}
+
+type ProfileCustomEntriesIntegrationType string
+
+const (
+	ProfileCustomEntriesIntegrationTypeIntegration ProfileCustomEntriesIntegrationType = "integration"
+)
+
+func (r ProfileCustomEntriesIntegrationType) IsKnown() bool {
+	switch r {
+	case ProfileCustomEntriesIntegrationTypeIntegration:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomEntriesExactData struct {
+	ID        string                            `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                         `json:"created_at,required" format:"date-time"`
+	Enabled   bool                              `json:"enabled,required"`
+	Name      string                            `json:"name,required"`
+	Secret    bool                              `json:"secret,required"`
+	Type      ProfileCustomEntriesExactDataType `json:"type,required"`
+	UpdatedAt time.Time                         `json:"updated_at,required" format:"date-time"`
+	JSON      profileCustomEntriesExactDataJSON `json:"-"`
+}
+
+// profileCustomEntriesExactDataJSON contains the JSON metadata for the struct
+// [ProfileCustomEntriesExactData]
+type profileCustomEntriesExactDataJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Secret      apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomEntriesExactData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomEntriesExactDataJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileCustomEntriesExactData) implementsZeroTrustProfileCustomEntry() {}
+
+type ProfileCustomEntriesExactDataType string
+
+const (
+	ProfileCustomEntriesExactDataTypeExactData ProfileCustomEntriesExactDataType = "exact_data"
+)
+
+func (r ProfileCustomEntriesExactDataType) IsKnown() bool {
+	switch r {
+	case ProfileCustomEntriesExactDataTypeExactData:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomEntriesWordList struct {
+	ID        string                           `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                        `json:"created_at,required" format:"date-time"`
+	Enabled   bool                             `json:"enabled,required"`
+	Name      string                           `json:"name,required"`
+	Type      ProfileCustomEntriesWordListType `json:"type,required"`
+	UpdatedAt time.Time                        `json:"updated_at,required" format:"date-time"`
+	WordList  interface{}                      `json:"word_list,required"`
+	ProfileID string                           `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileCustomEntriesWordListJSON `json:"-"`
+}
+
+// profileCustomEntriesWordListJSON contains the JSON metadata for the struct
+// [ProfileCustomEntriesWordList]
+type profileCustomEntriesWordListJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	WordList    apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomEntriesWordList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomEntriesWordListJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileCustomEntriesWordList) implementsZeroTrustProfileCustomEntry() {}
+
+type ProfileCustomEntriesWordListType string
+
+const (
+	ProfileCustomEntriesWordListTypeWordList ProfileCustomEntriesWordListType = "word_list"
+)
+
+func (r ProfileCustomEntriesWordListType) IsKnown() bool {
+	switch r {
+	case ProfileCustomEntriesWordListTypeWordList:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomEntriesType string
+
+const (
+	ProfileCustomEntriesTypeCustom      ProfileCustomEntriesType = "custom"
+	ProfileCustomEntriesTypePredefined  ProfileCustomEntriesType = "predefined"
+	ProfileCustomEntriesTypeIntegration ProfileCustomEntriesType = "integration"
+	ProfileCustomEntriesTypeExactData   ProfileCustomEntriesType = "exact_data"
+	ProfileCustomEntriesTypeWordList    ProfileCustomEntriesType = "word_list"
+)
+
+func (r ProfileCustomEntriesType) IsKnown() bool {
+	switch r {
+	case ProfileCustomEntriesTypeCustom, ProfileCustomEntriesTypePredefined, ProfileCustomEntriesTypeIntegration, ProfileCustomEntriesTypeExactData, ProfileCustomEntriesTypeWordList:
+		return true
+	}
+	return false
+}
+
+type ProfileCustomType string
+
+const (
+	ProfileCustomTypeCustom ProfileCustomType = "custom"
+)
+
+func (r ProfileCustomType) IsKnown() bool {
+	switch r {
+	case ProfileCustomTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefined struct {
+	// The id of the predefined profile (uuid)
+	ID                string                   `json:"id,required" format:"uuid"`
+	AllowedMatchCount int64                    `json:"allowed_match_count,required"`
+	Entries           []ProfilePredefinedEntry `json:"entries,required"`
+	// The name of the predefined profile
+	Name string                `json:"name,required"`
+	Type ProfilePredefinedType `json:"type,required"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness ContextAwareness      `json:"context_awareness"`
+	OCREnabled       bool                  `json:"ocr_enabled"`
+	OpenAccess       bool                  `json:"open_access"`
+	JSON             profilePredefinedJSON `json:"-"`
+}
+
+// profilePredefinedJSON contains the JSON metadata for the struct
+// [ProfilePredefined]
+type profilePredefinedJSON struct {
+	ID                apijson.Field
+	AllowedMatchCount apijson.Field
+	Entries           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ContextAwareness  apijson.Field
+	OCREnabled        apijson.Field
+	OpenAccess        apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ProfilePredefined) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfilePredefined) implementsZeroTrustProfile() {}
+
+type ProfilePredefinedEntry struct {
+	CreatedAt time.Time                    `json:"created_at" format:"date-time"`
+	Enabled   bool                         `json:"enabled,required"`
+	ID        string                       `json:"id,required" format:"uuid"`
+	Name      string                       `json:"name,required"`
+	Pattern   Pattern                      `json:"pattern"`
+	ProfileID string                       `json:"profile_id,nullable" format:"uuid"`
+	UpdatedAt time.Time                    `json:"updated_at" format:"date-time"`
+	Type      ProfilePredefinedEntriesType `json:"type,required"`
+	Secret    bool                         `json:"secret"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}                `json:"word_list,required"`
+	JSON     profilePredefinedEntryJSON `json:"-"`
+	union    ProfilePredefinedEntriesUnion
+}
+
+// profilePredefinedEntryJSON contains the JSON metadata for the struct
+// [ProfilePredefinedEntry]
+type profilePredefinedEntryJSON struct {
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	ID          apijson.Field
+	Name        apijson.Field
+	Pattern     apijson.Field
+	ProfileID   apijson.Field
+	UpdatedAt   apijson.Field
+	Type        apijson.Field
+	Secret      apijson.Field
+	WordList    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r profilePredefinedEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ProfilePredefinedEntry) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfilePredefinedEntry{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ProfilePredefinedEntriesUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.ProfilePredefinedEntriesCustom],
+// [zero_trust.ProfilePredefinedEntriesPredefined],
+// [zero_trust.ProfilePredefinedEntriesIntegration],
+// [zero_trust.ProfilePredefinedEntriesExactData],
+// [zero_trust.ProfilePredefinedEntriesWordList].
+func (r ProfilePredefinedEntry) AsUnion() ProfilePredefinedEntriesUnion {
+	return r.union
+}
+
+// Union satisfied by [zero_trust.ProfilePredefinedEntriesCustom],
+// [zero_trust.ProfilePredefinedEntriesPredefined],
+// [zero_trust.ProfilePredefinedEntriesIntegration],
+// [zero_trust.ProfilePredefinedEntriesExactData] or
+// [zero_trust.ProfilePredefinedEntriesWordList].
+type ProfilePredefinedEntriesUnion interface {
+	implementsZeroTrustProfilePredefinedEntry()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProfilePredefinedEntriesUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfilePredefinedEntriesCustom{}),
+			DiscriminatorValue: "custom",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfilePredefinedEntriesPredefined{}),
+			DiscriminatorValue: "predefined",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfilePredefinedEntriesIntegration{}),
+			DiscriminatorValue: "integration",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfilePredefinedEntriesExactData{}),
+			DiscriminatorValue: "exact_data",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfilePredefinedEntriesWordList{}),
+			DiscriminatorValue: "word_list",
+		},
+	)
+}
+
+type ProfilePredefinedEntriesCustom struct {
+	ID        string                             `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                          `json:"created_at,required" format:"date-time"`
+	Enabled   bool                               `json:"enabled,required"`
+	Name      string                             `json:"name,required"`
+	Pattern   Pattern                            `json:"pattern,required"`
+	Type      ProfilePredefinedEntriesCustomType `json:"type,required"`
+	UpdatedAt time.Time                          `json:"updated_at,required" format:"date-time"`
+	ProfileID string                             `json:"profile_id,nullable" format:"uuid"`
+	JSON      profilePredefinedEntriesCustomJSON `json:"-"`
+}
+
+// profilePredefinedEntriesCustomJSON contains the JSON metadata for the struct
+// [ProfilePredefinedEntriesCustom]
+type profilePredefinedEntriesCustomJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Pattern     apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfilePredefinedEntriesCustom) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedEntriesCustomJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfilePredefinedEntriesCustom) implementsZeroTrustProfilePredefinedEntry() {}
+
+type ProfilePredefinedEntriesCustomType string
+
+const (
+	ProfilePredefinedEntriesCustomTypeCustom ProfilePredefinedEntriesCustomType = "custom"
+)
+
+func (r ProfilePredefinedEntriesCustomType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedEntriesCustomTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedEntriesPredefined struct {
+	ID        string                                 `json:"id,required" format:"uuid"`
+	Enabled   bool                                   `json:"enabled,required"`
+	Name      string                                 `json:"name,required"`
+	Type      ProfilePredefinedEntriesPredefinedType `json:"type,required"`
+	ProfileID string                                 `json:"profile_id,nullable" format:"uuid"`
+	JSON      profilePredefinedEntriesPredefinedJSON `json:"-"`
+}
+
+// profilePredefinedEntriesPredefinedJSON contains the JSON metadata for the struct
+// [ProfilePredefinedEntriesPredefined]
+type profilePredefinedEntriesPredefinedJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfilePredefinedEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedEntriesPredefinedJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfilePredefinedEntriesPredefined) implementsZeroTrustProfilePredefinedEntry() {}
+
+type ProfilePredefinedEntriesPredefinedType string
+
+const (
+	ProfilePredefinedEntriesPredefinedTypePredefined ProfilePredefinedEntriesPredefinedType = "predefined"
+)
+
+func (r ProfilePredefinedEntriesPredefinedType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedEntriesPredefinedTypePredefined:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedEntriesIntegration struct {
+	ID        string                                  `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                               `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                    `json:"enabled,required"`
+	Name      string                                  `json:"name,required"`
+	Type      ProfilePredefinedEntriesIntegrationType `json:"type,required"`
+	UpdatedAt time.Time                               `json:"updated_at,required" format:"date-time"`
+	ProfileID string                                  `json:"profile_id,nullable" format:"uuid"`
+	JSON      profilePredefinedEntriesIntegrationJSON `json:"-"`
+}
+
+// profilePredefinedEntriesIntegrationJSON contains the JSON metadata for the
+// struct [ProfilePredefinedEntriesIntegration]
+type profilePredefinedEntriesIntegrationJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfilePredefinedEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedEntriesIntegrationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfilePredefinedEntriesIntegration) implementsZeroTrustProfilePredefinedEntry() {}
+
+type ProfilePredefinedEntriesIntegrationType string
+
+const (
+	ProfilePredefinedEntriesIntegrationTypeIntegration ProfilePredefinedEntriesIntegrationType = "integration"
+)
+
+func (r ProfilePredefinedEntriesIntegrationType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedEntriesIntegrationTypeIntegration:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedEntriesExactData struct {
+	ID        string                                `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                             `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                  `json:"enabled,required"`
+	Name      string                                `json:"name,required"`
+	Secret    bool                                  `json:"secret,required"`
+	Type      ProfilePredefinedEntriesExactDataType `json:"type,required"`
+	UpdatedAt time.Time                             `json:"updated_at,required" format:"date-time"`
+	JSON      profilePredefinedEntriesExactDataJSON `json:"-"`
+}
+
+// profilePredefinedEntriesExactDataJSON contains the JSON metadata for the struct
+// [ProfilePredefinedEntriesExactData]
+type profilePredefinedEntriesExactDataJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Secret      apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfilePredefinedEntriesExactData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedEntriesExactDataJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfilePredefinedEntriesExactData) implementsZeroTrustProfilePredefinedEntry() {}
+
+type ProfilePredefinedEntriesExactDataType string
+
+const (
+	ProfilePredefinedEntriesExactDataTypeExactData ProfilePredefinedEntriesExactDataType = "exact_data"
+)
+
+func (r ProfilePredefinedEntriesExactDataType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedEntriesExactDataTypeExactData:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedEntriesWordList struct {
+	ID        string                               `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                            `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                 `json:"enabled,required"`
+	Name      string                               `json:"name,required"`
+	Type      ProfilePredefinedEntriesWordListType `json:"type,required"`
+	UpdatedAt time.Time                            `json:"updated_at,required" format:"date-time"`
+	WordList  interface{}                          `json:"word_list,required"`
+	ProfileID string                               `json:"profile_id,nullable" format:"uuid"`
+	JSON      profilePredefinedEntriesWordListJSON `json:"-"`
+}
+
+// profilePredefinedEntriesWordListJSON contains the JSON metadata for the struct
+// [ProfilePredefinedEntriesWordList]
+type profilePredefinedEntriesWordListJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	WordList    apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfilePredefinedEntriesWordList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedEntriesWordListJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfilePredefinedEntriesWordList) implementsZeroTrustProfilePredefinedEntry() {}
+
+type ProfilePredefinedEntriesWordListType string
+
+const (
+	ProfilePredefinedEntriesWordListTypeWordList ProfilePredefinedEntriesWordListType = "word_list"
+)
+
+func (r ProfilePredefinedEntriesWordListType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedEntriesWordListTypeWordList:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedEntriesType string
+
+const (
+	ProfilePredefinedEntriesTypeCustom      ProfilePredefinedEntriesType = "custom"
+	ProfilePredefinedEntriesTypePredefined  ProfilePredefinedEntriesType = "predefined"
+	ProfilePredefinedEntriesTypeIntegration ProfilePredefinedEntriesType = "integration"
+	ProfilePredefinedEntriesTypeExactData   ProfilePredefinedEntriesType = "exact_data"
+	ProfilePredefinedEntriesTypeWordList    ProfilePredefinedEntriesType = "word_list"
+)
+
+func (r ProfilePredefinedEntriesType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedEntriesTypeCustom, ProfilePredefinedEntriesTypePredefined, ProfilePredefinedEntriesTypeIntegration, ProfilePredefinedEntriesTypeExactData, ProfilePredefinedEntriesTypeWordList:
+		return true
+	}
+	return false
+}
+
+type ProfilePredefinedType string
+
+const (
+	ProfilePredefinedTypePredefined ProfilePredefinedType = "predefined"
+)
+
+func (r ProfilePredefinedType) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedTypePredefined:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegration struct {
+	ID        string                    `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                 `json:"created_at,required" format:"date-time"`
+	Entries   []ProfileIntegrationEntry `json:"entries,required"`
+	Name      string                    `json:"name,required"`
+	Type      ProfileIntegrationType    `json:"type,required"`
+	UpdatedAt time.Time                 `json:"updated_at,required" format:"date-time"`
+	// The description of the profile
+	Description string                 `json:"description,nullable"`
+	JSON        profileIntegrationJSON `json:"-"`
+}
+
+// profileIntegrationJSON contains the JSON metadata for the struct
+// [ProfileIntegration]
+type profileIntegrationJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Entries     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileIntegration) implementsZeroTrustProfile() {}
+
+type ProfileIntegrationEntry struct {
+	CreatedAt time.Time                     `json:"created_at" format:"date-time"`
+	Enabled   bool                          `json:"enabled,required"`
+	ID        string                        `json:"id,required" format:"uuid"`
+	Name      string                        `json:"name,required"`
+	Pattern   Pattern                       `json:"pattern"`
+	ProfileID string                        `json:"profile_id,nullable" format:"uuid"`
+	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
+	Type      ProfileIntegrationEntriesType `json:"type,required"`
+	Secret    bool                          `json:"secret"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}                 `json:"word_list,required"`
+	JSON     profileIntegrationEntryJSON `json:"-"`
+	union    ProfileIntegrationEntriesUnion
+}
+
+// profileIntegrationEntryJSON contains the JSON metadata for the struct
+// [ProfileIntegrationEntry]
+type profileIntegrationEntryJSON struct {
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	ID          apijson.Field
+	Name        apijson.Field
+	Pattern     apijson.Field
+	ProfileID   apijson.Field
+	UpdatedAt   apijson.Field
+	Type        apijson.Field
+	Secret      apijson.Field
+	WordList    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r profileIntegrationEntryJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ProfileIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfileIntegrationEntry{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ProfileIntegrationEntriesUnion] interface which you can cast
+// to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.ProfileIntegrationEntriesCustom],
+// [zero_trust.ProfileIntegrationEntriesPredefined],
+// [zero_trust.ProfileIntegrationEntriesIntegration],
+// [zero_trust.ProfileIntegrationEntriesExactData],
+// [zero_trust.ProfileIntegrationEntriesWordList].
+func (r ProfileIntegrationEntry) AsUnion() ProfileIntegrationEntriesUnion {
+	return r.union
+}
+
+// Union satisfied by [zero_trust.ProfileIntegrationEntriesCustom],
+// [zero_trust.ProfileIntegrationEntriesPredefined],
+// [zero_trust.ProfileIntegrationEntriesIntegration],
+// [zero_trust.ProfileIntegrationEntriesExactData] or
+// [zero_trust.ProfileIntegrationEntriesWordList].
+type ProfileIntegrationEntriesUnion interface {
+	implementsZeroTrustProfileIntegrationEntry()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ProfileIntegrationEntriesUnion)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileIntegrationEntriesCustom{}),
+			DiscriminatorValue: "custom",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileIntegrationEntriesPredefined{}),
+			DiscriminatorValue: "predefined",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileIntegrationEntriesIntegration{}),
+			DiscriminatorValue: "integration",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileIntegrationEntriesExactData{}),
+			DiscriminatorValue: "exact_data",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ProfileIntegrationEntriesWordList{}),
+			DiscriminatorValue: "word_list",
+		},
+	)
+}
+
+type ProfileIntegrationEntriesCustom struct {
+	ID        string                              `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                           `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                `json:"enabled,required"`
+	Name      string                              `json:"name,required"`
+	Pattern   Pattern                             `json:"pattern,required"`
+	Type      ProfileIntegrationEntriesCustomType `json:"type,required"`
+	UpdatedAt time.Time                           `json:"updated_at,required" format:"date-time"`
+	ProfileID string                              `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileIntegrationEntriesCustomJSON `json:"-"`
+}
+
+// profileIntegrationEntriesCustomJSON contains the JSON metadata for the struct
+// [ProfileIntegrationEntriesCustom]
+type profileIntegrationEntriesCustomJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Pattern     apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationEntriesCustom) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationEntriesCustomJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileIntegrationEntriesCustom) implementsZeroTrustProfileIntegrationEntry() {}
+
+type ProfileIntegrationEntriesCustomType string
+
+const (
+	ProfileIntegrationEntriesCustomTypeCustom ProfileIntegrationEntriesCustomType = "custom"
+)
+
+func (r ProfileIntegrationEntriesCustomType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationEntriesCustomTypeCustom:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationEntriesPredefined struct {
+	ID        string                                  `json:"id,required" format:"uuid"`
+	Enabled   bool                                    `json:"enabled,required"`
+	Name      string                                  `json:"name,required"`
+	Type      ProfileIntegrationEntriesPredefinedType `json:"type,required"`
+	ProfileID string                                  `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileIntegrationEntriesPredefinedJSON `json:"-"`
+}
+
+// profileIntegrationEntriesPredefinedJSON contains the JSON metadata for the
+// struct [ProfileIntegrationEntriesPredefined]
+type profileIntegrationEntriesPredefinedJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationEntriesPredefinedJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileIntegrationEntriesPredefined) implementsZeroTrustProfileIntegrationEntry() {}
+
+type ProfileIntegrationEntriesPredefinedType string
+
+const (
+	ProfileIntegrationEntriesPredefinedTypePredefined ProfileIntegrationEntriesPredefinedType = "predefined"
+)
+
+func (r ProfileIntegrationEntriesPredefinedType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationEntriesPredefinedTypePredefined:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationEntriesIntegration struct {
+	ID        string                                   `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                     `json:"enabled,required"`
+	Name      string                                   `json:"name,required"`
+	Type      ProfileIntegrationEntriesIntegrationType `json:"type,required"`
+	UpdatedAt time.Time                                `json:"updated_at,required" format:"date-time"`
+	ProfileID string                                   `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileIntegrationEntriesIntegrationJSON `json:"-"`
+}
+
+// profileIntegrationEntriesIntegrationJSON contains the JSON metadata for the
+// struct [ProfileIntegrationEntriesIntegration]
+type profileIntegrationEntriesIntegrationJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationEntriesIntegrationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileIntegrationEntriesIntegration) implementsZeroTrustProfileIntegrationEntry() {}
+
+type ProfileIntegrationEntriesIntegrationType string
+
+const (
+	ProfileIntegrationEntriesIntegrationTypeIntegration ProfileIntegrationEntriesIntegrationType = "integration"
+)
+
+func (r ProfileIntegrationEntriesIntegrationType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationEntriesIntegrationTypeIntegration:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationEntriesExactData struct {
+	ID        string                                 `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                              `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                   `json:"enabled,required"`
+	Name      string                                 `json:"name,required"`
+	Secret    bool                                   `json:"secret,required"`
+	Type      ProfileIntegrationEntriesExactDataType `json:"type,required"`
+	UpdatedAt time.Time                              `json:"updated_at,required" format:"date-time"`
+	JSON      profileIntegrationEntriesExactDataJSON `json:"-"`
+}
+
+// profileIntegrationEntriesExactDataJSON contains the JSON metadata for the struct
+// [ProfileIntegrationEntriesExactData]
+type profileIntegrationEntriesExactDataJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Secret      apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationEntriesExactData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationEntriesExactDataJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileIntegrationEntriesExactData) implementsZeroTrustProfileIntegrationEntry() {}
+
+type ProfileIntegrationEntriesExactDataType string
+
+const (
+	ProfileIntegrationEntriesExactDataTypeExactData ProfileIntegrationEntriesExactDataType = "exact_data"
+)
+
+func (r ProfileIntegrationEntriesExactDataType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationEntriesExactDataTypeExactData:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationEntriesWordList struct {
+	ID        string                                `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                             `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                  `json:"enabled,required"`
+	Name      string                                `json:"name,required"`
+	Type      ProfileIntegrationEntriesWordListType `json:"type,required"`
+	UpdatedAt time.Time                             `json:"updated_at,required" format:"date-time"`
+	WordList  interface{}                           `json:"word_list,required"`
+	ProfileID string                                `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileIntegrationEntriesWordListJSON `json:"-"`
+}
+
+// profileIntegrationEntriesWordListJSON contains the JSON metadata for the struct
+// [ProfileIntegrationEntriesWordList]
+type profileIntegrationEntriesWordListJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	WordList    apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationEntriesWordList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationEntriesWordListJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ProfileIntegrationEntriesWordList) implementsZeroTrustProfileIntegrationEntry() {}
+
+type ProfileIntegrationEntriesWordListType string
+
+const (
+	ProfileIntegrationEntriesWordListTypeWordList ProfileIntegrationEntriesWordListType = "word_list"
+)
+
+func (r ProfileIntegrationEntriesWordListType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationEntriesWordListTypeWordList:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationEntriesType string
+
+const (
+	ProfileIntegrationEntriesTypeCustom      ProfileIntegrationEntriesType = "custom"
+	ProfileIntegrationEntriesTypePredefined  ProfileIntegrationEntriesType = "predefined"
+	ProfileIntegrationEntriesTypeIntegration ProfileIntegrationEntriesType = "integration"
+	ProfileIntegrationEntriesTypeExactData   ProfileIntegrationEntriesType = "exact_data"
+	ProfileIntegrationEntriesTypeWordList    ProfileIntegrationEntriesType = "word_list"
+)
+
+func (r ProfileIntegrationEntriesType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationEntriesTypeCustom, ProfileIntegrationEntriesTypePredefined, ProfileIntegrationEntriesTypeIntegration, ProfileIntegrationEntriesTypeExactData, ProfileIntegrationEntriesTypeWordList:
+		return true
+	}
+	return false
+}
+
+type ProfileIntegrationType string
+
+const (
+	ProfileIntegrationTypeIntegration ProfileIntegrationType = "integration"
+)
+
+func (r ProfileIntegrationType) IsKnown() bool {
+	switch r {
+	case ProfileIntegrationTypeIntegration:
+		return true
+	}
+	return false
+}
+
+type ProfileType string
+
+const (
+	ProfileTypeCustom      ProfileType = "custom"
+	ProfileTypePredefined  ProfileType = "predefined"
+	ProfileTypeIntegration ProfileType = "integration"
+)
+
+func (r ProfileType) IsKnown() bool {
+	switch r {
+	case ProfileTypeCustom, ProfileTypePredefined, ProfileTypeIntegration:
+		return true
+	}
+	return false
+}
+
 // Content types to exclude from context analysis and return all matches.
 type SkipConfiguration struct {
 	// If the content type is a file, skip context analysis and return all matches.
@@ -141,3012 +1505,6 @@ func (r skipConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPProfileListResponse struct {
-	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount int64 `json:"allowed_match_count"`
-	// Scan the context of predefined entries to only return matches surrounded by
-	// keywords.
-	ContextAwareness ContextAwareness `json:"context_awareness"`
-	// When the profile was created
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The description of the profile
-	Description string `json:"description,nullable"`
-	// This field can have the runtime type of [[]DLPProfileListResponseCustomEntry],
-	// [[]DLPProfileListResponsePredefinedEntry],
-	// [[]DLPProfileListResponseIntegrationEntry].
-	Entries interface{} `json:"entries"`
-	// The id of the profile (uuid)
-	ID string `json:"id,required" format:"uuid"`
-	// The name of the profile
-	Name       string `json:"name,required"`
-	OCREnabled bool   `json:"ocr_enabled"`
-	// When the profile was lasted updated
-	UpdatedAt  time.Time                  `json:"updated_at" format:"date-time"`
-	Type       DLPProfileListResponseType `json:"type,required"`
-	OpenAccess bool                       `json:"open_access"`
-	JSON       dlpProfileListResponseJSON `json:"-"`
-	union      DLPProfileListResponseUnion
-}
-
-// dlpProfileListResponseJSON contains the JSON metadata for the struct
-// [DLPProfileListResponse]
-type dlpProfileListResponseJSON struct {
-	AllowedMatchCount apijson.Field
-	ContextAwareness  apijson.Field
-	CreatedAt         apijson.Field
-	Description       apijson.Field
-	Entries           apijson.Field
-	ID                apijson.Field
-	Name              apijson.Field
-	OCREnabled        apijson.Field
-	UpdatedAt         apijson.Field
-	Type              apijson.Field
-	OpenAccess        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r dlpProfileListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *DLPProfileListResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = DLPProfileListResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [DLPProfileListResponseUnion] interface which you can cast to
-// the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.DLPProfileListResponseCustom],
-// [zero_trust.DLPProfileListResponsePredefined],
-// [zero_trust.DLPProfileListResponseIntegration].
-func (r DLPProfileListResponse) AsUnion() DLPProfileListResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [zero_trust.DLPProfileListResponseCustom],
-// [zero_trust.DLPProfileListResponsePredefined] or
-// [zero_trust.DLPProfileListResponseIntegration].
-type DLPProfileListResponseUnion interface {
-	implementsZeroTrustDLPProfileListResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileListResponseUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseCustom{}),
-			DiscriminatorValue: "custom",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponsePredefined{}),
-			DiscriminatorValue: "predefined",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseIntegration{}),
-			DiscriminatorValue: "integration",
-		},
-	)
-}
-
-type DLPProfileListResponseCustom struct {
-	// The id of the profile (uuid)
-	ID string `json:"id,required" format:"uuid"`
-	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount int64 `json:"allowed_match_count,required"`
-	// Scan the context of predefined entries to only return matches surrounded by
-	// keywords.
-	ContextAwareness ContextAwareness `json:"context_awareness,required"`
-	// When the profile was created
-	CreatedAt time.Time                           `json:"created_at,required" format:"date-time"`
-	Entries   []DLPProfileListResponseCustomEntry `json:"entries,required"`
-	// The name of the profile
-	Name       string                           `json:"name,required"`
-	OCREnabled bool                             `json:"ocr_enabled,required"`
-	Type       DLPProfileListResponseCustomType `json:"type,required"`
-	// When the profile was lasted updated
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
-	// The description of the profile
-	Description string                           `json:"description,nullable"`
-	JSON        dlpProfileListResponseCustomJSON `json:"-"`
-}
-
-// dlpProfileListResponseCustomJSON contains the JSON metadata for the struct
-// [DLPProfileListResponseCustom]
-type dlpProfileListResponseCustomJSON struct {
-	ID                apijson.Field
-	AllowedMatchCount apijson.Field
-	ContextAwareness  apijson.Field
-	CreatedAt         apijson.Field
-	Entries           apijson.Field
-	Name              apijson.Field
-	OCREnabled        apijson.Field
-	Type              apijson.Field
-	UpdatedAt         apijson.Field
-	Description       apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseCustom) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseCustomJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseCustom) implementsZeroTrustDLPProfileListResponse() {}
-
-type DLPProfileListResponseCustomEntry struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	Enabled   bool      `json:"enabled,required"`
-	ID        string    `json:"id,required" format:"uuid"`
-	Name      string    `json:"name,required"`
-	// This field can have the runtime type of
-	// [DLPProfileListResponseCustomEntriesCustomPattern].
-	Pattern   interface{}                             `json:"pattern,required"`
-	ProfileID string                                  `json:"profile_id,nullable" format:"uuid"`
-	UpdatedAt time.Time                               `json:"updated_at" format:"date-time"`
-	Type      DLPProfileListResponseCustomEntriesType `json:"type,required"`
-	Secret    bool                                    `json:"secret"`
-	// This field can have the runtime type of [interface{}].
-	WordList interface{}                           `json:"word_list,required"`
-	JSON     dlpProfileListResponseCustomEntryJSON `json:"-"`
-	union    DLPProfileListResponseCustomEntriesUnion
-}
-
-// dlpProfileListResponseCustomEntryJSON contains the JSON metadata for the struct
-// [DLPProfileListResponseCustomEntry]
-type dlpProfileListResponseCustomEntryJSON struct {
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	ID          apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	UpdatedAt   apijson.Field
-	Type        apijson.Field
-	Secret      apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r dlpProfileListResponseCustomEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *DLPProfileListResponseCustomEntry) UnmarshalJSON(data []byte) (err error) {
-	*r = DLPProfileListResponseCustomEntry{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [DLPProfileListResponseCustomEntriesUnion] interface which you
-// can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.DLPProfileListResponseCustomEntriesCustom],
-// [zero_trust.DLPProfileListResponseCustomEntriesPredefined],
-// [zero_trust.DLPProfileListResponseCustomEntriesIntegration],
-// [zero_trust.DLPProfileListResponseCustomEntriesExactData],
-// [zero_trust.DLPProfileListResponseCustomEntriesWordList].
-func (r DLPProfileListResponseCustomEntry) AsUnion() DLPProfileListResponseCustomEntriesUnion {
-	return r.union
-}
-
-// Union satisfied by [zero_trust.DLPProfileListResponseCustomEntriesCustom],
-// [zero_trust.DLPProfileListResponseCustomEntriesPredefined],
-// [zero_trust.DLPProfileListResponseCustomEntriesIntegration],
-// [zero_trust.DLPProfileListResponseCustomEntriesExactData] or
-// [zero_trust.DLPProfileListResponseCustomEntriesWordList].
-type DLPProfileListResponseCustomEntriesUnion interface {
-	implementsZeroTrustDLPProfileListResponseCustomEntry()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileListResponseCustomEntriesUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseCustomEntriesCustom{}),
-			DiscriminatorValue: "custom",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseCustomEntriesPredefined{}),
-			DiscriminatorValue: "predefined",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseCustomEntriesIntegration{}),
-			DiscriminatorValue: "integration",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseCustomEntriesExactData{}),
-			DiscriminatorValue: "exact_data",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseCustomEntriesWordList{}),
-			DiscriminatorValue: "word_list",
-		},
-	)
-}
-
-type DLPProfileListResponseCustomEntriesCustom struct {
-	ID        string                                           `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                        `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                             `json:"enabled,required"`
-	Name      string                                           `json:"name,required"`
-	Pattern   DLPProfileListResponseCustomEntriesCustomPattern `json:"pattern,required"`
-	Type      DLPProfileListResponseCustomEntriesCustomType    `json:"type,required"`
-	UpdatedAt time.Time                                        `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                           `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponseCustomEntriesCustomJSON    `json:"-"`
-}
-
-// dlpProfileListResponseCustomEntriesCustomJSON contains the JSON metadata for the
-// struct [DLPProfileListResponseCustomEntriesCustom]
-type dlpProfileListResponseCustomEntriesCustomJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseCustomEntriesCustom) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseCustomEntriesCustomJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseCustomEntriesCustom) implementsZeroTrustDLPProfileListResponseCustomEntry() {
-}
-
-type DLPProfileListResponseCustomEntriesCustomPattern struct {
-	Regex      string                                                     `json:"regex,required"`
-	Validation DLPProfileListResponseCustomEntriesCustomPatternValidation `json:"validation"`
-	JSON       dlpProfileListResponseCustomEntriesCustomPatternJSON       `json:"-"`
-}
-
-// dlpProfileListResponseCustomEntriesCustomPatternJSON contains the JSON metadata
-// for the struct [DLPProfileListResponseCustomEntriesCustomPattern]
-type dlpProfileListResponseCustomEntriesCustomPatternJSON struct {
-	Regex       apijson.Field
-	Validation  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseCustomEntriesCustomPattern) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseCustomEntriesCustomPatternJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileListResponseCustomEntriesCustomPatternValidation string
-
-const (
-	DLPProfileListResponseCustomEntriesCustomPatternValidationLuhn DLPProfileListResponseCustomEntriesCustomPatternValidation = "luhn"
-)
-
-func (r DLPProfileListResponseCustomEntriesCustomPatternValidation) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseCustomEntriesCustomPatternValidationLuhn:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseCustomEntriesCustomType string
-
-const (
-	DLPProfileListResponseCustomEntriesCustomTypeCustom DLPProfileListResponseCustomEntriesCustomType = "custom"
-)
-
-func (r DLPProfileListResponseCustomEntriesCustomType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseCustomEntriesCustomTypeCustom:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseCustomEntriesPredefined struct {
-	ID        string                                            `json:"id,required" format:"uuid"`
-	Enabled   bool                                              `json:"enabled,required"`
-	Name      string                                            `json:"name,required"`
-	Type      DLPProfileListResponseCustomEntriesPredefinedType `json:"type,required"`
-	ProfileID string                                            `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponseCustomEntriesPredefinedJSON `json:"-"`
-}
-
-// dlpProfileListResponseCustomEntriesPredefinedJSON contains the JSON metadata for
-// the struct [DLPProfileListResponseCustomEntriesPredefined]
-type dlpProfileListResponseCustomEntriesPredefinedJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseCustomEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseCustomEntriesPredefinedJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseCustomEntriesPredefined) implementsZeroTrustDLPProfileListResponseCustomEntry() {
-}
-
-type DLPProfileListResponseCustomEntriesPredefinedType string
-
-const (
-	DLPProfileListResponseCustomEntriesPredefinedTypePredefined DLPProfileListResponseCustomEntriesPredefinedType = "predefined"
-)
-
-func (r DLPProfileListResponseCustomEntriesPredefinedType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseCustomEntriesPredefinedTypePredefined:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseCustomEntriesIntegration struct {
-	ID        string                                             `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                          `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                               `json:"enabled,required"`
-	Name      string                                             `json:"name,required"`
-	Type      DLPProfileListResponseCustomEntriesIntegrationType `json:"type,required"`
-	UpdatedAt time.Time                                          `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                             `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponseCustomEntriesIntegrationJSON `json:"-"`
-}
-
-// dlpProfileListResponseCustomEntriesIntegrationJSON contains the JSON metadata
-// for the struct [DLPProfileListResponseCustomEntriesIntegration]
-type dlpProfileListResponseCustomEntriesIntegrationJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseCustomEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseCustomEntriesIntegrationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseCustomEntriesIntegration) implementsZeroTrustDLPProfileListResponseCustomEntry() {
-}
-
-type DLPProfileListResponseCustomEntriesIntegrationType string
-
-const (
-	DLPProfileListResponseCustomEntriesIntegrationTypeIntegration DLPProfileListResponseCustomEntriesIntegrationType = "integration"
-)
-
-func (r DLPProfileListResponseCustomEntriesIntegrationType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseCustomEntriesIntegrationTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseCustomEntriesExactData struct {
-	ID        string                                           `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                        `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                             `json:"enabled,required"`
-	Name      string                                           `json:"name,required"`
-	Secret    bool                                             `json:"secret,required"`
-	Type      DLPProfileListResponseCustomEntriesExactDataType `json:"type,required"`
-	UpdatedAt time.Time                                        `json:"updated_at,required" format:"date-time"`
-	JSON      dlpProfileListResponseCustomEntriesExactDataJSON `json:"-"`
-}
-
-// dlpProfileListResponseCustomEntriesExactDataJSON contains the JSON metadata for
-// the struct [DLPProfileListResponseCustomEntriesExactData]
-type dlpProfileListResponseCustomEntriesExactDataJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseCustomEntriesExactData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseCustomEntriesExactDataJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseCustomEntriesExactData) implementsZeroTrustDLPProfileListResponseCustomEntry() {
-}
-
-type DLPProfileListResponseCustomEntriesExactDataType string
-
-const (
-	DLPProfileListResponseCustomEntriesExactDataTypeExactData DLPProfileListResponseCustomEntriesExactDataType = "exact_data"
-)
-
-func (r DLPProfileListResponseCustomEntriesExactDataType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseCustomEntriesExactDataTypeExactData:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseCustomEntriesWordList struct {
-	ID        string                                          `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                       `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                            `json:"enabled,required"`
-	Name      string                                          `json:"name,required"`
-	Type      DLPProfileListResponseCustomEntriesWordListType `json:"type,required"`
-	UpdatedAt time.Time                                       `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                     `json:"word_list,required"`
-	ProfileID string                                          `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponseCustomEntriesWordListJSON `json:"-"`
-}
-
-// dlpProfileListResponseCustomEntriesWordListJSON contains the JSON metadata for
-// the struct [DLPProfileListResponseCustomEntriesWordList]
-type dlpProfileListResponseCustomEntriesWordListJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseCustomEntriesWordList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseCustomEntriesWordListJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseCustomEntriesWordList) implementsZeroTrustDLPProfileListResponseCustomEntry() {
-}
-
-type DLPProfileListResponseCustomEntriesWordListType string
-
-const (
-	DLPProfileListResponseCustomEntriesWordListTypeWordList DLPProfileListResponseCustomEntriesWordListType = "word_list"
-)
-
-func (r DLPProfileListResponseCustomEntriesWordListType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseCustomEntriesWordListTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseCustomEntriesType string
-
-const (
-	DLPProfileListResponseCustomEntriesTypeCustom      DLPProfileListResponseCustomEntriesType = "custom"
-	DLPProfileListResponseCustomEntriesTypePredefined  DLPProfileListResponseCustomEntriesType = "predefined"
-	DLPProfileListResponseCustomEntriesTypeIntegration DLPProfileListResponseCustomEntriesType = "integration"
-	DLPProfileListResponseCustomEntriesTypeExactData   DLPProfileListResponseCustomEntriesType = "exact_data"
-	DLPProfileListResponseCustomEntriesTypeWordList    DLPProfileListResponseCustomEntriesType = "word_list"
-)
-
-func (r DLPProfileListResponseCustomEntriesType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseCustomEntriesTypeCustom, DLPProfileListResponseCustomEntriesTypePredefined, DLPProfileListResponseCustomEntriesTypeIntegration, DLPProfileListResponseCustomEntriesTypeExactData, DLPProfileListResponseCustomEntriesTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseCustomType string
-
-const (
-	DLPProfileListResponseCustomTypeCustom DLPProfileListResponseCustomType = "custom"
-)
-
-func (r DLPProfileListResponseCustomType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseCustomTypeCustom:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponsePredefined struct {
-	// The id of the predefined profile (uuid)
-	ID                string                                  `json:"id,required" format:"uuid"`
-	AllowedMatchCount int64                                   `json:"allowed_match_count,required"`
-	Entries           []DLPProfileListResponsePredefinedEntry `json:"entries,required"`
-	// The name of the predefined profile
-	Name string                               `json:"name,required"`
-	Type DLPProfileListResponsePredefinedType `json:"type,required"`
-	// Scan the context of predefined entries to only return matches surrounded by
-	// keywords.
-	ContextAwareness ContextAwareness                     `json:"context_awareness"`
-	OCREnabled       bool                                 `json:"ocr_enabled"`
-	OpenAccess       bool                                 `json:"open_access"`
-	JSON             dlpProfileListResponsePredefinedJSON `json:"-"`
-}
-
-// dlpProfileListResponsePredefinedJSON contains the JSON metadata for the struct
-// [DLPProfileListResponsePredefined]
-type dlpProfileListResponsePredefinedJSON struct {
-	ID                apijson.Field
-	AllowedMatchCount apijson.Field
-	Entries           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ContextAwareness  apijson.Field
-	OCREnabled        apijson.Field
-	OpenAccess        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponsePredefined) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponsePredefinedJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponsePredefined) implementsZeroTrustDLPProfileListResponse() {}
-
-type DLPProfileListResponsePredefinedEntry struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	Enabled   bool      `json:"enabled,required"`
-	ID        string    `json:"id,required" format:"uuid"`
-	Name      string    `json:"name,required"`
-	// This field can have the runtime type of
-	// [DLPProfileListResponsePredefinedEntriesCustomPattern].
-	Pattern   interface{}                                 `json:"pattern,required"`
-	ProfileID string                                      `json:"profile_id,nullable" format:"uuid"`
-	UpdatedAt time.Time                                   `json:"updated_at" format:"date-time"`
-	Type      DLPProfileListResponsePredefinedEntriesType `json:"type,required"`
-	Secret    bool                                        `json:"secret"`
-	// This field can have the runtime type of [interface{}].
-	WordList interface{}                               `json:"word_list,required"`
-	JSON     dlpProfileListResponsePredefinedEntryJSON `json:"-"`
-	union    DLPProfileListResponsePredefinedEntriesUnion
-}
-
-// dlpProfileListResponsePredefinedEntryJSON contains the JSON metadata for the
-// struct [DLPProfileListResponsePredefinedEntry]
-type dlpProfileListResponsePredefinedEntryJSON struct {
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	ID          apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	UpdatedAt   apijson.Field
-	Type        apijson.Field
-	Secret      apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r dlpProfileListResponsePredefinedEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *DLPProfileListResponsePredefinedEntry) UnmarshalJSON(data []byte) (err error) {
-	*r = DLPProfileListResponsePredefinedEntry{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [DLPProfileListResponsePredefinedEntriesUnion] interface which
-// you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.DLPProfileListResponsePredefinedEntriesCustom],
-// [zero_trust.DLPProfileListResponsePredefinedEntriesPredefined],
-// [zero_trust.DLPProfileListResponsePredefinedEntriesIntegration],
-// [zero_trust.DLPProfileListResponsePredefinedEntriesExactData],
-// [zero_trust.DLPProfileListResponsePredefinedEntriesWordList].
-func (r DLPProfileListResponsePredefinedEntry) AsUnion() DLPProfileListResponsePredefinedEntriesUnion {
-	return r.union
-}
-
-// Union satisfied by [zero_trust.DLPProfileListResponsePredefinedEntriesCustom],
-// [zero_trust.DLPProfileListResponsePredefinedEntriesPredefined],
-// [zero_trust.DLPProfileListResponsePredefinedEntriesIntegration],
-// [zero_trust.DLPProfileListResponsePredefinedEntriesExactData] or
-// [zero_trust.DLPProfileListResponsePredefinedEntriesWordList].
-type DLPProfileListResponsePredefinedEntriesUnion interface {
-	implementsZeroTrustDLPProfileListResponsePredefinedEntry()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileListResponsePredefinedEntriesUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponsePredefinedEntriesCustom{}),
-			DiscriminatorValue: "custom",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponsePredefinedEntriesPredefined{}),
-			DiscriminatorValue: "predefined",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponsePredefinedEntriesIntegration{}),
-			DiscriminatorValue: "integration",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponsePredefinedEntriesExactData{}),
-			DiscriminatorValue: "exact_data",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponsePredefinedEntriesWordList{}),
-			DiscriminatorValue: "word_list",
-		},
-	)
-}
-
-type DLPProfileListResponsePredefinedEntriesCustom struct {
-	ID        string                                               `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                            `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                 `json:"enabled,required"`
-	Name      string                                               `json:"name,required"`
-	Pattern   DLPProfileListResponsePredefinedEntriesCustomPattern `json:"pattern,required"`
-	Type      DLPProfileListResponsePredefinedEntriesCustomType    `json:"type,required"`
-	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                               `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponsePredefinedEntriesCustomJSON    `json:"-"`
-}
-
-// dlpProfileListResponsePredefinedEntriesCustomJSON contains the JSON metadata for
-// the struct [DLPProfileListResponsePredefinedEntriesCustom]
-type dlpProfileListResponsePredefinedEntriesCustomJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponsePredefinedEntriesCustom) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponsePredefinedEntriesCustomJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponsePredefinedEntriesCustom) implementsZeroTrustDLPProfileListResponsePredefinedEntry() {
-}
-
-type DLPProfileListResponsePredefinedEntriesCustomPattern struct {
-	Regex      string                                                         `json:"regex,required"`
-	Validation DLPProfileListResponsePredefinedEntriesCustomPatternValidation `json:"validation"`
-	JSON       dlpProfileListResponsePredefinedEntriesCustomPatternJSON       `json:"-"`
-}
-
-// dlpProfileListResponsePredefinedEntriesCustomPatternJSON contains the JSON
-// metadata for the struct [DLPProfileListResponsePredefinedEntriesCustomPattern]
-type dlpProfileListResponsePredefinedEntriesCustomPatternJSON struct {
-	Regex       apijson.Field
-	Validation  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponsePredefinedEntriesCustomPattern) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponsePredefinedEntriesCustomPatternJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileListResponsePredefinedEntriesCustomPatternValidation string
-
-const (
-	DLPProfileListResponsePredefinedEntriesCustomPatternValidationLuhn DLPProfileListResponsePredefinedEntriesCustomPatternValidation = "luhn"
-)
-
-func (r DLPProfileListResponsePredefinedEntriesCustomPatternValidation) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponsePredefinedEntriesCustomPatternValidationLuhn:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponsePredefinedEntriesCustomType string
-
-const (
-	DLPProfileListResponsePredefinedEntriesCustomTypeCustom DLPProfileListResponsePredefinedEntriesCustomType = "custom"
-)
-
-func (r DLPProfileListResponsePredefinedEntriesCustomType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponsePredefinedEntriesCustomTypeCustom:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponsePredefinedEntriesPredefined struct {
-	ID        string                                                `json:"id,required" format:"uuid"`
-	Enabled   bool                                                  `json:"enabled,required"`
-	Name      string                                                `json:"name,required"`
-	Type      DLPProfileListResponsePredefinedEntriesPredefinedType `json:"type,required"`
-	ProfileID string                                                `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponsePredefinedEntriesPredefinedJSON `json:"-"`
-}
-
-// dlpProfileListResponsePredefinedEntriesPredefinedJSON contains the JSON metadata
-// for the struct [DLPProfileListResponsePredefinedEntriesPredefined]
-type dlpProfileListResponsePredefinedEntriesPredefinedJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponsePredefinedEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponsePredefinedEntriesPredefinedJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponsePredefinedEntriesPredefined) implementsZeroTrustDLPProfileListResponsePredefinedEntry() {
-}
-
-type DLPProfileListResponsePredefinedEntriesPredefinedType string
-
-const (
-	DLPProfileListResponsePredefinedEntriesPredefinedTypePredefined DLPProfileListResponsePredefinedEntriesPredefinedType = "predefined"
-)
-
-func (r DLPProfileListResponsePredefinedEntriesPredefinedType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponsePredefinedEntriesPredefinedTypePredefined:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponsePredefinedEntriesIntegration struct {
-	ID        string                                                 `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                              `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                   `json:"enabled,required"`
-	Name      string                                                 `json:"name,required"`
-	Type      DLPProfileListResponsePredefinedEntriesIntegrationType `json:"type,required"`
-	UpdatedAt time.Time                                              `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                                 `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponsePredefinedEntriesIntegrationJSON `json:"-"`
-}
-
-// dlpProfileListResponsePredefinedEntriesIntegrationJSON contains the JSON
-// metadata for the struct [DLPProfileListResponsePredefinedEntriesIntegration]
-type dlpProfileListResponsePredefinedEntriesIntegrationJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponsePredefinedEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponsePredefinedEntriesIntegrationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponsePredefinedEntriesIntegration) implementsZeroTrustDLPProfileListResponsePredefinedEntry() {
-}
-
-type DLPProfileListResponsePredefinedEntriesIntegrationType string
-
-const (
-	DLPProfileListResponsePredefinedEntriesIntegrationTypeIntegration DLPProfileListResponsePredefinedEntriesIntegrationType = "integration"
-)
-
-func (r DLPProfileListResponsePredefinedEntriesIntegrationType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponsePredefinedEntriesIntegrationTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponsePredefinedEntriesExactData struct {
-	ID        string                                               `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                            `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                 `json:"enabled,required"`
-	Name      string                                               `json:"name,required"`
-	Secret    bool                                                 `json:"secret,required"`
-	Type      DLPProfileListResponsePredefinedEntriesExactDataType `json:"type,required"`
-	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
-	JSON      dlpProfileListResponsePredefinedEntriesExactDataJSON `json:"-"`
-}
-
-// dlpProfileListResponsePredefinedEntriesExactDataJSON contains the JSON metadata
-// for the struct [DLPProfileListResponsePredefinedEntriesExactData]
-type dlpProfileListResponsePredefinedEntriesExactDataJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponsePredefinedEntriesExactData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponsePredefinedEntriesExactDataJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponsePredefinedEntriesExactData) implementsZeroTrustDLPProfileListResponsePredefinedEntry() {
-}
-
-type DLPProfileListResponsePredefinedEntriesExactDataType string
-
-const (
-	DLPProfileListResponsePredefinedEntriesExactDataTypeExactData DLPProfileListResponsePredefinedEntriesExactDataType = "exact_data"
-)
-
-func (r DLPProfileListResponsePredefinedEntriesExactDataType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponsePredefinedEntriesExactDataTypeExactData:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponsePredefinedEntriesWordList struct {
-	ID        string                                              `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                           `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                `json:"enabled,required"`
-	Name      string                                              `json:"name,required"`
-	Type      DLPProfileListResponsePredefinedEntriesWordListType `json:"type,required"`
-	UpdatedAt time.Time                                           `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                         `json:"word_list,required"`
-	ProfileID string                                              `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponsePredefinedEntriesWordListJSON `json:"-"`
-}
-
-// dlpProfileListResponsePredefinedEntriesWordListJSON contains the JSON metadata
-// for the struct [DLPProfileListResponsePredefinedEntriesWordList]
-type dlpProfileListResponsePredefinedEntriesWordListJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponsePredefinedEntriesWordList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponsePredefinedEntriesWordListJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponsePredefinedEntriesWordList) implementsZeroTrustDLPProfileListResponsePredefinedEntry() {
-}
-
-type DLPProfileListResponsePredefinedEntriesWordListType string
-
-const (
-	DLPProfileListResponsePredefinedEntriesWordListTypeWordList DLPProfileListResponsePredefinedEntriesWordListType = "word_list"
-)
-
-func (r DLPProfileListResponsePredefinedEntriesWordListType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponsePredefinedEntriesWordListTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponsePredefinedEntriesType string
-
-const (
-	DLPProfileListResponsePredefinedEntriesTypeCustom      DLPProfileListResponsePredefinedEntriesType = "custom"
-	DLPProfileListResponsePredefinedEntriesTypePredefined  DLPProfileListResponsePredefinedEntriesType = "predefined"
-	DLPProfileListResponsePredefinedEntriesTypeIntegration DLPProfileListResponsePredefinedEntriesType = "integration"
-	DLPProfileListResponsePredefinedEntriesTypeExactData   DLPProfileListResponsePredefinedEntriesType = "exact_data"
-	DLPProfileListResponsePredefinedEntriesTypeWordList    DLPProfileListResponsePredefinedEntriesType = "word_list"
-)
-
-func (r DLPProfileListResponsePredefinedEntriesType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponsePredefinedEntriesTypeCustom, DLPProfileListResponsePredefinedEntriesTypePredefined, DLPProfileListResponsePredefinedEntriesTypeIntegration, DLPProfileListResponsePredefinedEntriesTypeExactData, DLPProfileListResponsePredefinedEntriesTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponsePredefinedType string
-
-const (
-	DLPProfileListResponsePredefinedTypePredefined DLPProfileListResponsePredefinedType = "predefined"
-)
-
-func (r DLPProfileListResponsePredefinedType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponsePredefinedTypePredefined:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseIntegration struct {
-	ID        string                                   `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                `json:"created_at,required" format:"date-time"`
-	Entries   []DLPProfileListResponseIntegrationEntry `json:"entries,required"`
-	Name      string                                   `json:"name,required"`
-	Type      DLPProfileListResponseIntegrationType    `json:"type,required"`
-	UpdatedAt time.Time                                `json:"updated_at,required" format:"date-time"`
-	// The description of the profile
-	Description string                                `json:"description,nullable"`
-	JSON        dlpProfileListResponseIntegrationJSON `json:"-"`
-}
-
-// dlpProfileListResponseIntegrationJSON contains the JSON metadata for the struct
-// [DLPProfileListResponseIntegration]
-type dlpProfileListResponseIntegrationJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Entries     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseIntegration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseIntegrationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseIntegration) implementsZeroTrustDLPProfileListResponse() {}
-
-type DLPProfileListResponseIntegrationEntry struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	Enabled   bool      `json:"enabled,required"`
-	ID        string    `json:"id,required" format:"uuid"`
-	Name      string    `json:"name,required"`
-	// This field can have the runtime type of
-	// [DLPProfileListResponseIntegrationEntriesCustomPattern].
-	Pattern   interface{}                                  `json:"pattern,required"`
-	ProfileID string                                       `json:"profile_id,nullable" format:"uuid"`
-	UpdatedAt time.Time                                    `json:"updated_at" format:"date-time"`
-	Type      DLPProfileListResponseIntegrationEntriesType `json:"type,required"`
-	Secret    bool                                         `json:"secret"`
-	// This field can have the runtime type of [interface{}].
-	WordList interface{}                                `json:"word_list,required"`
-	JSON     dlpProfileListResponseIntegrationEntryJSON `json:"-"`
-	union    DLPProfileListResponseIntegrationEntriesUnion
-}
-
-// dlpProfileListResponseIntegrationEntryJSON contains the JSON metadata for the
-// struct [DLPProfileListResponseIntegrationEntry]
-type dlpProfileListResponseIntegrationEntryJSON struct {
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	ID          apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	UpdatedAt   apijson.Field
-	Type        apijson.Field
-	Secret      apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r dlpProfileListResponseIntegrationEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *DLPProfileListResponseIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
-	*r = DLPProfileListResponseIntegrationEntry{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [DLPProfileListResponseIntegrationEntriesUnion] interface
-// which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.DLPProfileListResponseIntegrationEntriesCustom],
-// [zero_trust.DLPProfileListResponseIntegrationEntriesPredefined],
-// [zero_trust.DLPProfileListResponseIntegrationEntriesIntegration],
-// [zero_trust.DLPProfileListResponseIntegrationEntriesExactData],
-// [zero_trust.DLPProfileListResponseIntegrationEntriesWordList].
-func (r DLPProfileListResponseIntegrationEntry) AsUnion() DLPProfileListResponseIntegrationEntriesUnion {
-	return r.union
-}
-
-// Union satisfied by [zero_trust.DLPProfileListResponseIntegrationEntriesCustom],
-// [zero_trust.DLPProfileListResponseIntegrationEntriesPredefined],
-// [zero_trust.DLPProfileListResponseIntegrationEntriesIntegration],
-// [zero_trust.DLPProfileListResponseIntegrationEntriesExactData] or
-// [zero_trust.DLPProfileListResponseIntegrationEntriesWordList].
-type DLPProfileListResponseIntegrationEntriesUnion interface {
-	implementsZeroTrustDLPProfileListResponseIntegrationEntry()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileListResponseIntegrationEntriesUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseIntegrationEntriesCustom{}),
-			DiscriminatorValue: "custom",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseIntegrationEntriesPredefined{}),
-			DiscriminatorValue: "predefined",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseIntegrationEntriesIntegration{}),
-			DiscriminatorValue: "integration",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseIntegrationEntriesExactData{}),
-			DiscriminatorValue: "exact_data",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileListResponseIntegrationEntriesWordList{}),
-			DiscriminatorValue: "word_list",
-		},
-	)
-}
-
-type DLPProfileListResponseIntegrationEntriesCustom struct {
-	ID        string                                                `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                             `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                  `json:"enabled,required"`
-	Name      string                                                `json:"name,required"`
-	Pattern   DLPProfileListResponseIntegrationEntriesCustomPattern `json:"pattern,required"`
-	Type      DLPProfileListResponseIntegrationEntriesCustomType    `json:"type,required"`
-	UpdatedAt time.Time                                             `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                                `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponseIntegrationEntriesCustomJSON    `json:"-"`
-}
-
-// dlpProfileListResponseIntegrationEntriesCustomJSON contains the JSON metadata
-// for the struct [DLPProfileListResponseIntegrationEntriesCustom]
-type dlpProfileListResponseIntegrationEntriesCustomJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseIntegrationEntriesCustom) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseIntegrationEntriesCustomJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseIntegrationEntriesCustom) implementsZeroTrustDLPProfileListResponseIntegrationEntry() {
-}
-
-type DLPProfileListResponseIntegrationEntriesCustomPattern struct {
-	Regex      string                                                          `json:"regex,required"`
-	Validation DLPProfileListResponseIntegrationEntriesCustomPatternValidation `json:"validation"`
-	JSON       dlpProfileListResponseIntegrationEntriesCustomPatternJSON       `json:"-"`
-}
-
-// dlpProfileListResponseIntegrationEntriesCustomPatternJSON contains the JSON
-// metadata for the struct [DLPProfileListResponseIntegrationEntriesCustomPattern]
-type dlpProfileListResponseIntegrationEntriesCustomPatternJSON struct {
-	Regex       apijson.Field
-	Validation  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseIntegrationEntriesCustomPattern) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseIntegrationEntriesCustomPatternJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileListResponseIntegrationEntriesCustomPatternValidation string
-
-const (
-	DLPProfileListResponseIntegrationEntriesCustomPatternValidationLuhn DLPProfileListResponseIntegrationEntriesCustomPatternValidation = "luhn"
-)
-
-func (r DLPProfileListResponseIntegrationEntriesCustomPatternValidation) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseIntegrationEntriesCustomPatternValidationLuhn:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseIntegrationEntriesCustomType string
-
-const (
-	DLPProfileListResponseIntegrationEntriesCustomTypeCustom DLPProfileListResponseIntegrationEntriesCustomType = "custom"
-)
-
-func (r DLPProfileListResponseIntegrationEntriesCustomType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseIntegrationEntriesCustomTypeCustom:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseIntegrationEntriesPredefined struct {
-	ID        string                                                 `json:"id,required" format:"uuid"`
-	Enabled   bool                                                   `json:"enabled,required"`
-	Name      string                                                 `json:"name,required"`
-	Type      DLPProfileListResponseIntegrationEntriesPredefinedType `json:"type,required"`
-	ProfileID string                                                 `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponseIntegrationEntriesPredefinedJSON `json:"-"`
-}
-
-// dlpProfileListResponseIntegrationEntriesPredefinedJSON contains the JSON
-// metadata for the struct [DLPProfileListResponseIntegrationEntriesPredefined]
-type dlpProfileListResponseIntegrationEntriesPredefinedJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseIntegrationEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseIntegrationEntriesPredefinedJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseIntegrationEntriesPredefined) implementsZeroTrustDLPProfileListResponseIntegrationEntry() {
-}
-
-type DLPProfileListResponseIntegrationEntriesPredefinedType string
-
-const (
-	DLPProfileListResponseIntegrationEntriesPredefinedTypePredefined DLPProfileListResponseIntegrationEntriesPredefinedType = "predefined"
-)
-
-func (r DLPProfileListResponseIntegrationEntriesPredefinedType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseIntegrationEntriesPredefinedTypePredefined:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseIntegrationEntriesIntegration struct {
-	ID        string                                                  `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                               `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                    `json:"enabled,required"`
-	Name      string                                                  `json:"name,required"`
-	Type      DLPProfileListResponseIntegrationEntriesIntegrationType `json:"type,required"`
-	UpdatedAt time.Time                                               `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                                  `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponseIntegrationEntriesIntegrationJSON `json:"-"`
-}
-
-// dlpProfileListResponseIntegrationEntriesIntegrationJSON contains the JSON
-// metadata for the struct [DLPProfileListResponseIntegrationEntriesIntegration]
-type dlpProfileListResponseIntegrationEntriesIntegrationJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseIntegrationEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseIntegrationEntriesIntegrationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseIntegrationEntriesIntegration) implementsZeroTrustDLPProfileListResponseIntegrationEntry() {
-}
-
-type DLPProfileListResponseIntegrationEntriesIntegrationType string
-
-const (
-	DLPProfileListResponseIntegrationEntriesIntegrationTypeIntegration DLPProfileListResponseIntegrationEntriesIntegrationType = "integration"
-)
-
-func (r DLPProfileListResponseIntegrationEntriesIntegrationType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseIntegrationEntriesIntegrationTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseIntegrationEntriesExactData struct {
-	ID        string                                                `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                             `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                  `json:"enabled,required"`
-	Name      string                                                `json:"name,required"`
-	Secret    bool                                                  `json:"secret,required"`
-	Type      DLPProfileListResponseIntegrationEntriesExactDataType `json:"type,required"`
-	UpdatedAt time.Time                                             `json:"updated_at,required" format:"date-time"`
-	JSON      dlpProfileListResponseIntegrationEntriesExactDataJSON `json:"-"`
-}
-
-// dlpProfileListResponseIntegrationEntriesExactDataJSON contains the JSON metadata
-// for the struct [DLPProfileListResponseIntegrationEntriesExactData]
-type dlpProfileListResponseIntegrationEntriesExactDataJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseIntegrationEntriesExactData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseIntegrationEntriesExactDataJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseIntegrationEntriesExactData) implementsZeroTrustDLPProfileListResponseIntegrationEntry() {
-}
-
-type DLPProfileListResponseIntegrationEntriesExactDataType string
-
-const (
-	DLPProfileListResponseIntegrationEntriesExactDataTypeExactData DLPProfileListResponseIntegrationEntriesExactDataType = "exact_data"
-)
-
-func (r DLPProfileListResponseIntegrationEntriesExactDataType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseIntegrationEntriesExactDataTypeExactData:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseIntegrationEntriesWordList struct {
-	ID        string                                               `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                            `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                 `json:"enabled,required"`
-	Name      string                                               `json:"name,required"`
-	Type      DLPProfileListResponseIntegrationEntriesWordListType `json:"type,required"`
-	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                          `json:"word_list,required"`
-	ProfileID string                                               `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileListResponseIntegrationEntriesWordListJSON `json:"-"`
-}
-
-// dlpProfileListResponseIntegrationEntriesWordListJSON contains the JSON metadata
-// for the struct [DLPProfileListResponseIntegrationEntriesWordList]
-type dlpProfileListResponseIntegrationEntriesWordListJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileListResponseIntegrationEntriesWordList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileListResponseIntegrationEntriesWordListJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileListResponseIntegrationEntriesWordList) implementsZeroTrustDLPProfileListResponseIntegrationEntry() {
-}
-
-type DLPProfileListResponseIntegrationEntriesWordListType string
-
-const (
-	DLPProfileListResponseIntegrationEntriesWordListTypeWordList DLPProfileListResponseIntegrationEntriesWordListType = "word_list"
-)
-
-func (r DLPProfileListResponseIntegrationEntriesWordListType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseIntegrationEntriesWordListTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseIntegrationEntriesType string
-
-const (
-	DLPProfileListResponseIntegrationEntriesTypeCustom      DLPProfileListResponseIntegrationEntriesType = "custom"
-	DLPProfileListResponseIntegrationEntriesTypePredefined  DLPProfileListResponseIntegrationEntriesType = "predefined"
-	DLPProfileListResponseIntegrationEntriesTypeIntegration DLPProfileListResponseIntegrationEntriesType = "integration"
-	DLPProfileListResponseIntegrationEntriesTypeExactData   DLPProfileListResponseIntegrationEntriesType = "exact_data"
-	DLPProfileListResponseIntegrationEntriesTypeWordList    DLPProfileListResponseIntegrationEntriesType = "word_list"
-)
-
-func (r DLPProfileListResponseIntegrationEntriesType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseIntegrationEntriesTypeCustom, DLPProfileListResponseIntegrationEntriesTypePredefined, DLPProfileListResponseIntegrationEntriesTypeIntegration, DLPProfileListResponseIntegrationEntriesTypeExactData, DLPProfileListResponseIntegrationEntriesTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseIntegrationType string
-
-const (
-	DLPProfileListResponseIntegrationTypeIntegration DLPProfileListResponseIntegrationType = "integration"
-)
-
-func (r DLPProfileListResponseIntegrationType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseIntegrationTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileListResponseType string
-
-const (
-	DLPProfileListResponseTypeCustom      DLPProfileListResponseType = "custom"
-	DLPProfileListResponseTypePredefined  DLPProfileListResponseType = "predefined"
-	DLPProfileListResponseTypeIntegration DLPProfileListResponseType = "integration"
-)
-
-func (r DLPProfileListResponseType) IsKnown() bool {
-	switch r {
-	case DLPProfileListResponseTypeCustom, DLPProfileListResponseTypePredefined, DLPProfileListResponseTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponse struct {
-	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount int64 `json:"allowed_match_count"`
-	// Scan the context of predefined entries to only return matches surrounded by
-	// keywords.
-	ContextAwareness ContextAwareness `json:"context_awareness"`
-	// When the profile was created
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The description of the profile
-	Description string `json:"description,nullable"`
-	// This field can have the runtime type of [[]DLPProfileGetResponseCustomEntry],
-	// [[]DLPProfileGetResponsePredefinedEntry],
-	// [[]DLPProfileGetResponseIntegrationEntry].
-	Entries interface{} `json:"entries"`
-	// The id of the profile (uuid)
-	ID string `json:"id,required" format:"uuid"`
-	// The name of the profile
-	Name       string `json:"name,required"`
-	OCREnabled bool   `json:"ocr_enabled"`
-	// When the profile was lasted updated
-	UpdatedAt  time.Time                 `json:"updated_at" format:"date-time"`
-	Type       DLPProfileGetResponseType `json:"type,required"`
-	OpenAccess bool                      `json:"open_access"`
-	JSON       dlpProfileGetResponseJSON `json:"-"`
-	union      DLPProfileGetResponseUnion
-}
-
-// dlpProfileGetResponseJSON contains the JSON metadata for the struct
-// [DLPProfileGetResponse]
-type dlpProfileGetResponseJSON struct {
-	AllowedMatchCount apijson.Field
-	ContextAwareness  apijson.Field
-	CreatedAt         apijson.Field
-	Description       apijson.Field
-	Entries           apijson.Field
-	ID                apijson.Field
-	Name              apijson.Field
-	OCREnabled        apijson.Field
-	UpdatedAt         apijson.Field
-	Type              apijson.Field
-	OpenAccess        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r dlpProfileGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *DLPProfileGetResponse) UnmarshalJSON(data []byte) (err error) {
-	*r = DLPProfileGetResponse{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [DLPProfileGetResponseUnion] interface which you can cast to
-// the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.DLPProfileGetResponseCustom],
-// [zero_trust.DLPProfileGetResponsePredefined],
-// [zero_trust.DLPProfileGetResponseIntegration].
-func (r DLPProfileGetResponse) AsUnion() DLPProfileGetResponseUnion {
-	return r.union
-}
-
-// Union satisfied by [zero_trust.DLPProfileGetResponseCustom],
-// [zero_trust.DLPProfileGetResponsePredefined] or
-// [zero_trust.DLPProfileGetResponseIntegration].
-type DLPProfileGetResponseUnion interface {
-	implementsZeroTrustDLPProfileGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileGetResponseUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseCustom{}),
-			DiscriminatorValue: "custom",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponsePredefined{}),
-			DiscriminatorValue: "predefined",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseIntegration{}),
-			DiscriminatorValue: "integration",
-		},
-	)
-}
-
-type DLPProfileGetResponseCustom struct {
-	// The id of the profile (uuid)
-	ID string `json:"id,required" format:"uuid"`
-	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount int64 `json:"allowed_match_count,required"`
-	// Scan the context of predefined entries to only return matches surrounded by
-	// keywords.
-	ContextAwareness ContextAwareness `json:"context_awareness,required"`
-	// When the profile was created
-	CreatedAt time.Time                          `json:"created_at,required" format:"date-time"`
-	Entries   []DLPProfileGetResponseCustomEntry `json:"entries,required"`
-	// The name of the profile
-	Name       string                          `json:"name,required"`
-	OCREnabled bool                            `json:"ocr_enabled,required"`
-	Type       DLPProfileGetResponseCustomType `json:"type,required"`
-	// When the profile was lasted updated
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
-	// The description of the profile
-	Description string                          `json:"description,nullable"`
-	JSON        dlpProfileGetResponseCustomJSON `json:"-"`
-}
-
-// dlpProfileGetResponseCustomJSON contains the JSON metadata for the struct
-// [DLPProfileGetResponseCustom]
-type dlpProfileGetResponseCustomJSON struct {
-	ID                apijson.Field
-	AllowedMatchCount apijson.Field
-	ContextAwareness  apijson.Field
-	CreatedAt         apijson.Field
-	Entries           apijson.Field
-	Name              apijson.Field
-	OCREnabled        apijson.Field
-	Type              apijson.Field
-	UpdatedAt         apijson.Field
-	Description       apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseCustom) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseCustomJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseCustom) implementsZeroTrustDLPProfileGetResponse() {}
-
-type DLPProfileGetResponseCustomEntry struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	Enabled   bool      `json:"enabled,required"`
-	ID        string    `json:"id,required" format:"uuid"`
-	Name      string    `json:"name,required"`
-	// This field can have the runtime type of
-	// [DLPProfileGetResponseCustomEntriesCustomPattern].
-	Pattern   interface{}                            `json:"pattern,required"`
-	ProfileID string                                 `json:"profile_id,nullable" format:"uuid"`
-	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
-	Type      DLPProfileGetResponseCustomEntriesType `json:"type,required"`
-	Secret    bool                                   `json:"secret"`
-	// This field can have the runtime type of [interface{}].
-	WordList interface{}                          `json:"word_list,required"`
-	JSON     dlpProfileGetResponseCustomEntryJSON `json:"-"`
-	union    DLPProfileGetResponseCustomEntriesUnion
-}
-
-// dlpProfileGetResponseCustomEntryJSON contains the JSON metadata for the struct
-// [DLPProfileGetResponseCustomEntry]
-type dlpProfileGetResponseCustomEntryJSON struct {
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	ID          apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	UpdatedAt   apijson.Field
-	Type        apijson.Field
-	Secret      apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r dlpProfileGetResponseCustomEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *DLPProfileGetResponseCustomEntry) UnmarshalJSON(data []byte) (err error) {
-	*r = DLPProfileGetResponseCustomEntry{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [DLPProfileGetResponseCustomEntriesUnion] interface which you
-// can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.DLPProfileGetResponseCustomEntriesCustom],
-// [zero_trust.DLPProfileGetResponseCustomEntriesPredefined],
-// [zero_trust.DLPProfileGetResponseCustomEntriesIntegration],
-// [zero_trust.DLPProfileGetResponseCustomEntriesExactData],
-// [zero_trust.DLPProfileGetResponseCustomEntriesWordList].
-func (r DLPProfileGetResponseCustomEntry) AsUnion() DLPProfileGetResponseCustomEntriesUnion {
-	return r.union
-}
-
-// Union satisfied by [zero_trust.DLPProfileGetResponseCustomEntriesCustom],
-// [zero_trust.DLPProfileGetResponseCustomEntriesPredefined],
-// [zero_trust.DLPProfileGetResponseCustomEntriesIntegration],
-// [zero_trust.DLPProfileGetResponseCustomEntriesExactData] or
-// [zero_trust.DLPProfileGetResponseCustomEntriesWordList].
-type DLPProfileGetResponseCustomEntriesUnion interface {
-	implementsZeroTrustDLPProfileGetResponseCustomEntry()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileGetResponseCustomEntriesUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseCustomEntriesCustom{}),
-			DiscriminatorValue: "custom",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseCustomEntriesPredefined{}),
-			DiscriminatorValue: "predefined",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseCustomEntriesIntegration{}),
-			DiscriminatorValue: "integration",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseCustomEntriesExactData{}),
-			DiscriminatorValue: "exact_data",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseCustomEntriesWordList{}),
-			DiscriminatorValue: "word_list",
-		},
-	)
-}
-
-type DLPProfileGetResponseCustomEntriesCustom struct {
-	ID        string                                          `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                       `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                            `json:"enabled,required"`
-	Name      string                                          `json:"name,required"`
-	Pattern   DLPProfileGetResponseCustomEntriesCustomPattern `json:"pattern,required"`
-	Type      DLPProfileGetResponseCustomEntriesCustomType    `json:"type,required"`
-	UpdatedAt time.Time                                       `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                          `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponseCustomEntriesCustomJSON    `json:"-"`
-}
-
-// dlpProfileGetResponseCustomEntriesCustomJSON contains the JSON metadata for the
-// struct [DLPProfileGetResponseCustomEntriesCustom]
-type dlpProfileGetResponseCustomEntriesCustomJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseCustomEntriesCustom) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseCustomEntriesCustomJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseCustomEntriesCustom) implementsZeroTrustDLPProfileGetResponseCustomEntry() {
-}
-
-type DLPProfileGetResponseCustomEntriesCustomPattern struct {
-	Regex      string                                                    `json:"regex,required"`
-	Validation DLPProfileGetResponseCustomEntriesCustomPatternValidation `json:"validation"`
-	JSON       dlpProfileGetResponseCustomEntriesCustomPatternJSON       `json:"-"`
-}
-
-// dlpProfileGetResponseCustomEntriesCustomPatternJSON contains the JSON metadata
-// for the struct [DLPProfileGetResponseCustomEntriesCustomPattern]
-type dlpProfileGetResponseCustomEntriesCustomPatternJSON struct {
-	Regex       apijson.Field
-	Validation  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseCustomEntriesCustomPattern) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseCustomEntriesCustomPatternJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileGetResponseCustomEntriesCustomPatternValidation string
-
-const (
-	DLPProfileGetResponseCustomEntriesCustomPatternValidationLuhn DLPProfileGetResponseCustomEntriesCustomPatternValidation = "luhn"
-)
-
-func (r DLPProfileGetResponseCustomEntriesCustomPatternValidation) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseCustomEntriesCustomPatternValidationLuhn:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseCustomEntriesCustomType string
-
-const (
-	DLPProfileGetResponseCustomEntriesCustomTypeCustom DLPProfileGetResponseCustomEntriesCustomType = "custom"
-)
-
-func (r DLPProfileGetResponseCustomEntriesCustomType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseCustomEntriesCustomTypeCustom:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseCustomEntriesPredefined struct {
-	ID        string                                           `json:"id,required" format:"uuid"`
-	Enabled   bool                                             `json:"enabled,required"`
-	Name      string                                           `json:"name,required"`
-	Type      DLPProfileGetResponseCustomEntriesPredefinedType `json:"type,required"`
-	ProfileID string                                           `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponseCustomEntriesPredefinedJSON `json:"-"`
-}
-
-// dlpProfileGetResponseCustomEntriesPredefinedJSON contains the JSON metadata for
-// the struct [DLPProfileGetResponseCustomEntriesPredefined]
-type dlpProfileGetResponseCustomEntriesPredefinedJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseCustomEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseCustomEntriesPredefinedJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseCustomEntriesPredefined) implementsZeroTrustDLPProfileGetResponseCustomEntry() {
-}
-
-type DLPProfileGetResponseCustomEntriesPredefinedType string
-
-const (
-	DLPProfileGetResponseCustomEntriesPredefinedTypePredefined DLPProfileGetResponseCustomEntriesPredefinedType = "predefined"
-)
-
-func (r DLPProfileGetResponseCustomEntriesPredefinedType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseCustomEntriesPredefinedTypePredefined:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseCustomEntriesIntegration struct {
-	ID        string                                            `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                         `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                              `json:"enabled,required"`
-	Name      string                                            `json:"name,required"`
-	Type      DLPProfileGetResponseCustomEntriesIntegrationType `json:"type,required"`
-	UpdatedAt time.Time                                         `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                            `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponseCustomEntriesIntegrationJSON `json:"-"`
-}
-
-// dlpProfileGetResponseCustomEntriesIntegrationJSON contains the JSON metadata for
-// the struct [DLPProfileGetResponseCustomEntriesIntegration]
-type dlpProfileGetResponseCustomEntriesIntegrationJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseCustomEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseCustomEntriesIntegrationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseCustomEntriesIntegration) implementsZeroTrustDLPProfileGetResponseCustomEntry() {
-}
-
-type DLPProfileGetResponseCustomEntriesIntegrationType string
-
-const (
-	DLPProfileGetResponseCustomEntriesIntegrationTypeIntegration DLPProfileGetResponseCustomEntriesIntegrationType = "integration"
-)
-
-func (r DLPProfileGetResponseCustomEntriesIntegrationType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseCustomEntriesIntegrationTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseCustomEntriesExactData struct {
-	ID        string                                          `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                       `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                            `json:"enabled,required"`
-	Name      string                                          `json:"name,required"`
-	Secret    bool                                            `json:"secret,required"`
-	Type      DLPProfileGetResponseCustomEntriesExactDataType `json:"type,required"`
-	UpdatedAt time.Time                                       `json:"updated_at,required" format:"date-time"`
-	JSON      dlpProfileGetResponseCustomEntriesExactDataJSON `json:"-"`
-}
-
-// dlpProfileGetResponseCustomEntriesExactDataJSON contains the JSON metadata for
-// the struct [DLPProfileGetResponseCustomEntriesExactData]
-type dlpProfileGetResponseCustomEntriesExactDataJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseCustomEntriesExactData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseCustomEntriesExactDataJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseCustomEntriesExactData) implementsZeroTrustDLPProfileGetResponseCustomEntry() {
-}
-
-type DLPProfileGetResponseCustomEntriesExactDataType string
-
-const (
-	DLPProfileGetResponseCustomEntriesExactDataTypeExactData DLPProfileGetResponseCustomEntriesExactDataType = "exact_data"
-)
-
-func (r DLPProfileGetResponseCustomEntriesExactDataType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseCustomEntriesExactDataTypeExactData:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseCustomEntriesWordList struct {
-	ID        string                                         `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                      `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                           `json:"enabled,required"`
-	Name      string                                         `json:"name,required"`
-	Type      DLPProfileGetResponseCustomEntriesWordListType `json:"type,required"`
-	UpdatedAt time.Time                                      `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                    `json:"word_list,required"`
-	ProfileID string                                         `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponseCustomEntriesWordListJSON `json:"-"`
-}
-
-// dlpProfileGetResponseCustomEntriesWordListJSON contains the JSON metadata for
-// the struct [DLPProfileGetResponseCustomEntriesWordList]
-type dlpProfileGetResponseCustomEntriesWordListJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseCustomEntriesWordList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseCustomEntriesWordListJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseCustomEntriesWordList) implementsZeroTrustDLPProfileGetResponseCustomEntry() {
-}
-
-type DLPProfileGetResponseCustomEntriesWordListType string
-
-const (
-	DLPProfileGetResponseCustomEntriesWordListTypeWordList DLPProfileGetResponseCustomEntriesWordListType = "word_list"
-)
-
-func (r DLPProfileGetResponseCustomEntriesWordListType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseCustomEntriesWordListTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseCustomEntriesType string
-
-const (
-	DLPProfileGetResponseCustomEntriesTypeCustom      DLPProfileGetResponseCustomEntriesType = "custom"
-	DLPProfileGetResponseCustomEntriesTypePredefined  DLPProfileGetResponseCustomEntriesType = "predefined"
-	DLPProfileGetResponseCustomEntriesTypeIntegration DLPProfileGetResponseCustomEntriesType = "integration"
-	DLPProfileGetResponseCustomEntriesTypeExactData   DLPProfileGetResponseCustomEntriesType = "exact_data"
-	DLPProfileGetResponseCustomEntriesTypeWordList    DLPProfileGetResponseCustomEntriesType = "word_list"
-)
-
-func (r DLPProfileGetResponseCustomEntriesType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseCustomEntriesTypeCustom, DLPProfileGetResponseCustomEntriesTypePredefined, DLPProfileGetResponseCustomEntriesTypeIntegration, DLPProfileGetResponseCustomEntriesTypeExactData, DLPProfileGetResponseCustomEntriesTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseCustomType string
-
-const (
-	DLPProfileGetResponseCustomTypeCustom DLPProfileGetResponseCustomType = "custom"
-)
-
-func (r DLPProfileGetResponseCustomType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseCustomTypeCustom:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponsePredefined struct {
-	// The id of the predefined profile (uuid)
-	ID                string                                 `json:"id,required" format:"uuid"`
-	AllowedMatchCount int64                                  `json:"allowed_match_count,required"`
-	Entries           []DLPProfileGetResponsePredefinedEntry `json:"entries,required"`
-	// The name of the predefined profile
-	Name string                              `json:"name,required"`
-	Type DLPProfileGetResponsePredefinedType `json:"type,required"`
-	// Scan the context of predefined entries to only return matches surrounded by
-	// keywords.
-	ContextAwareness ContextAwareness                    `json:"context_awareness"`
-	OCREnabled       bool                                `json:"ocr_enabled"`
-	OpenAccess       bool                                `json:"open_access"`
-	JSON             dlpProfileGetResponsePredefinedJSON `json:"-"`
-}
-
-// dlpProfileGetResponsePredefinedJSON contains the JSON metadata for the struct
-// [DLPProfileGetResponsePredefined]
-type dlpProfileGetResponsePredefinedJSON struct {
-	ID                apijson.Field
-	AllowedMatchCount apijson.Field
-	Entries           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ContextAwareness  apijson.Field
-	OCREnabled        apijson.Field
-	OpenAccess        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponsePredefined) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponsePredefinedJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponsePredefined) implementsZeroTrustDLPProfileGetResponse() {}
-
-type DLPProfileGetResponsePredefinedEntry struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	Enabled   bool      `json:"enabled,required"`
-	ID        string    `json:"id,required" format:"uuid"`
-	Name      string    `json:"name,required"`
-	// This field can have the runtime type of
-	// [DLPProfileGetResponsePredefinedEntriesCustomPattern].
-	Pattern   interface{}                                `json:"pattern,required"`
-	ProfileID string                                     `json:"profile_id,nullable" format:"uuid"`
-	UpdatedAt time.Time                                  `json:"updated_at" format:"date-time"`
-	Type      DLPProfileGetResponsePredefinedEntriesType `json:"type,required"`
-	Secret    bool                                       `json:"secret"`
-	// This field can have the runtime type of [interface{}].
-	WordList interface{}                              `json:"word_list,required"`
-	JSON     dlpProfileGetResponsePredefinedEntryJSON `json:"-"`
-	union    DLPProfileGetResponsePredefinedEntriesUnion
-}
-
-// dlpProfileGetResponsePredefinedEntryJSON contains the JSON metadata for the
-// struct [DLPProfileGetResponsePredefinedEntry]
-type dlpProfileGetResponsePredefinedEntryJSON struct {
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	ID          apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	UpdatedAt   apijson.Field
-	Type        apijson.Field
-	Secret      apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r dlpProfileGetResponsePredefinedEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *DLPProfileGetResponsePredefinedEntry) UnmarshalJSON(data []byte) (err error) {
-	*r = DLPProfileGetResponsePredefinedEntry{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [DLPProfileGetResponsePredefinedEntriesUnion] interface which
-// you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.DLPProfileGetResponsePredefinedEntriesCustom],
-// [zero_trust.DLPProfileGetResponsePredefinedEntriesPredefined],
-// [zero_trust.DLPProfileGetResponsePredefinedEntriesIntegration],
-// [zero_trust.DLPProfileGetResponsePredefinedEntriesExactData],
-// [zero_trust.DLPProfileGetResponsePredefinedEntriesWordList].
-func (r DLPProfileGetResponsePredefinedEntry) AsUnion() DLPProfileGetResponsePredefinedEntriesUnion {
-	return r.union
-}
-
-// Union satisfied by [zero_trust.DLPProfileGetResponsePredefinedEntriesCustom],
-// [zero_trust.DLPProfileGetResponsePredefinedEntriesPredefined],
-// [zero_trust.DLPProfileGetResponsePredefinedEntriesIntegration],
-// [zero_trust.DLPProfileGetResponsePredefinedEntriesExactData] or
-// [zero_trust.DLPProfileGetResponsePredefinedEntriesWordList].
-type DLPProfileGetResponsePredefinedEntriesUnion interface {
-	implementsZeroTrustDLPProfileGetResponsePredefinedEntry()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileGetResponsePredefinedEntriesUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponsePredefinedEntriesCustom{}),
-			DiscriminatorValue: "custom",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponsePredefinedEntriesPredefined{}),
-			DiscriminatorValue: "predefined",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponsePredefinedEntriesIntegration{}),
-			DiscriminatorValue: "integration",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponsePredefinedEntriesExactData{}),
-			DiscriminatorValue: "exact_data",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponsePredefinedEntriesWordList{}),
-			DiscriminatorValue: "word_list",
-		},
-	)
-}
-
-type DLPProfileGetResponsePredefinedEntriesCustom struct {
-	ID        string                                              `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                           `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                `json:"enabled,required"`
-	Name      string                                              `json:"name,required"`
-	Pattern   DLPProfileGetResponsePredefinedEntriesCustomPattern `json:"pattern,required"`
-	Type      DLPProfileGetResponsePredefinedEntriesCustomType    `json:"type,required"`
-	UpdatedAt time.Time                                           `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                              `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponsePredefinedEntriesCustomJSON    `json:"-"`
-}
-
-// dlpProfileGetResponsePredefinedEntriesCustomJSON contains the JSON metadata for
-// the struct [DLPProfileGetResponsePredefinedEntriesCustom]
-type dlpProfileGetResponsePredefinedEntriesCustomJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponsePredefinedEntriesCustom) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponsePredefinedEntriesCustomJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponsePredefinedEntriesCustom) implementsZeroTrustDLPProfileGetResponsePredefinedEntry() {
-}
-
-type DLPProfileGetResponsePredefinedEntriesCustomPattern struct {
-	Regex      string                                                        `json:"regex,required"`
-	Validation DLPProfileGetResponsePredefinedEntriesCustomPatternValidation `json:"validation"`
-	JSON       dlpProfileGetResponsePredefinedEntriesCustomPatternJSON       `json:"-"`
-}
-
-// dlpProfileGetResponsePredefinedEntriesCustomPatternJSON contains the JSON
-// metadata for the struct [DLPProfileGetResponsePredefinedEntriesCustomPattern]
-type dlpProfileGetResponsePredefinedEntriesCustomPatternJSON struct {
-	Regex       apijson.Field
-	Validation  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponsePredefinedEntriesCustomPattern) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponsePredefinedEntriesCustomPatternJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileGetResponsePredefinedEntriesCustomPatternValidation string
-
-const (
-	DLPProfileGetResponsePredefinedEntriesCustomPatternValidationLuhn DLPProfileGetResponsePredefinedEntriesCustomPatternValidation = "luhn"
-)
-
-func (r DLPProfileGetResponsePredefinedEntriesCustomPatternValidation) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponsePredefinedEntriesCustomPatternValidationLuhn:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponsePredefinedEntriesCustomType string
-
-const (
-	DLPProfileGetResponsePredefinedEntriesCustomTypeCustom DLPProfileGetResponsePredefinedEntriesCustomType = "custom"
-)
-
-func (r DLPProfileGetResponsePredefinedEntriesCustomType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponsePredefinedEntriesCustomTypeCustom:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponsePredefinedEntriesPredefined struct {
-	ID        string                                               `json:"id,required" format:"uuid"`
-	Enabled   bool                                                 `json:"enabled,required"`
-	Name      string                                               `json:"name,required"`
-	Type      DLPProfileGetResponsePredefinedEntriesPredefinedType `json:"type,required"`
-	ProfileID string                                               `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponsePredefinedEntriesPredefinedJSON `json:"-"`
-}
-
-// dlpProfileGetResponsePredefinedEntriesPredefinedJSON contains the JSON metadata
-// for the struct [DLPProfileGetResponsePredefinedEntriesPredefined]
-type dlpProfileGetResponsePredefinedEntriesPredefinedJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponsePredefinedEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponsePredefinedEntriesPredefinedJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponsePredefinedEntriesPredefined) implementsZeroTrustDLPProfileGetResponsePredefinedEntry() {
-}
-
-type DLPProfileGetResponsePredefinedEntriesPredefinedType string
-
-const (
-	DLPProfileGetResponsePredefinedEntriesPredefinedTypePredefined DLPProfileGetResponsePredefinedEntriesPredefinedType = "predefined"
-)
-
-func (r DLPProfileGetResponsePredefinedEntriesPredefinedType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponsePredefinedEntriesPredefinedTypePredefined:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponsePredefinedEntriesIntegration struct {
-	ID        string                                                `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                             `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                  `json:"enabled,required"`
-	Name      string                                                `json:"name,required"`
-	Type      DLPProfileGetResponsePredefinedEntriesIntegrationType `json:"type,required"`
-	UpdatedAt time.Time                                             `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                                `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponsePredefinedEntriesIntegrationJSON `json:"-"`
-}
-
-// dlpProfileGetResponsePredefinedEntriesIntegrationJSON contains the JSON metadata
-// for the struct [DLPProfileGetResponsePredefinedEntriesIntegration]
-type dlpProfileGetResponsePredefinedEntriesIntegrationJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponsePredefinedEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponsePredefinedEntriesIntegrationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponsePredefinedEntriesIntegration) implementsZeroTrustDLPProfileGetResponsePredefinedEntry() {
-}
-
-type DLPProfileGetResponsePredefinedEntriesIntegrationType string
-
-const (
-	DLPProfileGetResponsePredefinedEntriesIntegrationTypeIntegration DLPProfileGetResponsePredefinedEntriesIntegrationType = "integration"
-)
-
-func (r DLPProfileGetResponsePredefinedEntriesIntegrationType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponsePredefinedEntriesIntegrationTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponsePredefinedEntriesExactData struct {
-	ID        string                                              `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                           `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                `json:"enabled,required"`
-	Name      string                                              `json:"name,required"`
-	Secret    bool                                                `json:"secret,required"`
-	Type      DLPProfileGetResponsePredefinedEntriesExactDataType `json:"type,required"`
-	UpdatedAt time.Time                                           `json:"updated_at,required" format:"date-time"`
-	JSON      dlpProfileGetResponsePredefinedEntriesExactDataJSON `json:"-"`
-}
-
-// dlpProfileGetResponsePredefinedEntriesExactDataJSON contains the JSON metadata
-// for the struct [DLPProfileGetResponsePredefinedEntriesExactData]
-type dlpProfileGetResponsePredefinedEntriesExactDataJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponsePredefinedEntriesExactData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponsePredefinedEntriesExactDataJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponsePredefinedEntriesExactData) implementsZeroTrustDLPProfileGetResponsePredefinedEntry() {
-}
-
-type DLPProfileGetResponsePredefinedEntriesExactDataType string
-
-const (
-	DLPProfileGetResponsePredefinedEntriesExactDataTypeExactData DLPProfileGetResponsePredefinedEntriesExactDataType = "exact_data"
-)
-
-func (r DLPProfileGetResponsePredefinedEntriesExactDataType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponsePredefinedEntriesExactDataTypeExactData:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponsePredefinedEntriesWordList struct {
-	ID        string                                             `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                          `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                               `json:"enabled,required"`
-	Name      string                                             `json:"name,required"`
-	Type      DLPProfileGetResponsePredefinedEntriesWordListType `json:"type,required"`
-	UpdatedAt time.Time                                          `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                        `json:"word_list,required"`
-	ProfileID string                                             `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponsePredefinedEntriesWordListJSON `json:"-"`
-}
-
-// dlpProfileGetResponsePredefinedEntriesWordListJSON contains the JSON metadata
-// for the struct [DLPProfileGetResponsePredefinedEntriesWordList]
-type dlpProfileGetResponsePredefinedEntriesWordListJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponsePredefinedEntriesWordList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponsePredefinedEntriesWordListJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponsePredefinedEntriesWordList) implementsZeroTrustDLPProfileGetResponsePredefinedEntry() {
-}
-
-type DLPProfileGetResponsePredefinedEntriesWordListType string
-
-const (
-	DLPProfileGetResponsePredefinedEntriesWordListTypeWordList DLPProfileGetResponsePredefinedEntriesWordListType = "word_list"
-)
-
-func (r DLPProfileGetResponsePredefinedEntriesWordListType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponsePredefinedEntriesWordListTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponsePredefinedEntriesType string
-
-const (
-	DLPProfileGetResponsePredefinedEntriesTypeCustom      DLPProfileGetResponsePredefinedEntriesType = "custom"
-	DLPProfileGetResponsePredefinedEntriesTypePredefined  DLPProfileGetResponsePredefinedEntriesType = "predefined"
-	DLPProfileGetResponsePredefinedEntriesTypeIntegration DLPProfileGetResponsePredefinedEntriesType = "integration"
-	DLPProfileGetResponsePredefinedEntriesTypeExactData   DLPProfileGetResponsePredefinedEntriesType = "exact_data"
-	DLPProfileGetResponsePredefinedEntriesTypeWordList    DLPProfileGetResponsePredefinedEntriesType = "word_list"
-)
-
-func (r DLPProfileGetResponsePredefinedEntriesType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponsePredefinedEntriesTypeCustom, DLPProfileGetResponsePredefinedEntriesTypePredefined, DLPProfileGetResponsePredefinedEntriesTypeIntegration, DLPProfileGetResponsePredefinedEntriesTypeExactData, DLPProfileGetResponsePredefinedEntriesTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponsePredefinedType string
-
-const (
-	DLPProfileGetResponsePredefinedTypePredefined DLPProfileGetResponsePredefinedType = "predefined"
-)
-
-func (r DLPProfileGetResponsePredefinedType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponsePredefinedTypePredefined:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseIntegration struct {
-	ID        string                                  `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                               `json:"created_at,required" format:"date-time"`
-	Entries   []DLPProfileGetResponseIntegrationEntry `json:"entries,required"`
-	Name      string                                  `json:"name,required"`
-	Type      DLPProfileGetResponseIntegrationType    `json:"type,required"`
-	UpdatedAt time.Time                               `json:"updated_at,required" format:"date-time"`
-	// The description of the profile
-	Description string                               `json:"description,nullable"`
-	JSON        dlpProfileGetResponseIntegrationJSON `json:"-"`
-}
-
-// dlpProfileGetResponseIntegrationJSON contains the JSON metadata for the struct
-// [DLPProfileGetResponseIntegration]
-type dlpProfileGetResponseIntegrationJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Entries     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseIntegration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseIntegrationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseIntegration) implementsZeroTrustDLPProfileGetResponse() {}
-
-type DLPProfileGetResponseIntegrationEntry struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	Enabled   bool      `json:"enabled,required"`
-	ID        string    `json:"id,required" format:"uuid"`
-	Name      string    `json:"name,required"`
-	// This field can have the runtime type of
-	// [DLPProfileGetResponseIntegrationEntriesCustomPattern].
-	Pattern   interface{}                                 `json:"pattern,required"`
-	ProfileID string                                      `json:"profile_id,nullable" format:"uuid"`
-	UpdatedAt time.Time                                   `json:"updated_at" format:"date-time"`
-	Type      DLPProfileGetResponseIntegrationEntriesType `json:"type,required"`
-	Secret    bool                                        `json:"secret"`
-	// This field can have the runtime type of [interface{}].
-	WordList interface{}                               `json:"word_list,required"`
-	JSON     dlpProfileGetResponseIntegrationEntryJSON `json:"-"`
-	union    DLPProfileGetResponseIntegrationEntriesUnion
-}
-
-// dlpProfileGetResponseIntegrationEntryJSON contains the JSON metadata for the
-// struct [DLPProfileGetResponseIntegrationEntry]
-type dlpProfileGetResponseIntegrationEntryJSON struct {
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	ID          apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	UpdatedAt   apijson.Field
-	Type        apijson.Field
-	Secret      apijson.Field
-	WordList    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r dlpProfileGetResponseIntegrationEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *DLPProfileGetResponseIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
-	*r = DLPProfileGetResponseIntegrationEntry{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [DLPProfileGetResponseIntegrationEntriesUnion] interface which
-// you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.DLPProfileGetResponseIntegrationEntriesCustom],
-// [zero_trust.DLPProfileGetResponseIntegrationEntriesPredefined],
-// [zero_trust.DLPProfileGetResponseIntegrationEntriesIntegration],
-// [zero_trust.DLPProfileGetResponseIntegrationEntriesExactData],
-// [zero_trust.DLPProfileGetResponseIntegrationEntriesWordList].
-func (r DLPProfileGetResponseIntegrationEntry) AsUnion() DLPProfileGetResponseIntegrationEntriesUnion {
-	return r.union
-}
-
-// Union satisfied by [zero_trust.DLPProfileGetResponseIntegrationEntriesCustom],
-// [zero_trust.DLPProfileGetResponseIntegrationEntriesPredefined],
-// [zero_trust.DLPProfileGetResponseIntegrationEntriesIntegration],
-// [zero_trust.DLPProfileGetResponseIntegrationEntriesExactData] or
-// [zero_trust.DLPProfileGetResponseIntegrationEntriesWordList].
-type DLPProfileGetResponseIntegrationEntriesUnion interface {
-	implementsZeroTrustDLPProfileGetResponseIntegrationEntry()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DLPProfileGetResponseIntegrationEntriesUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseIntegrationEntriesCustom{}),
-			DiscriminatorValue: "custom",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseIntegrationEntriesPredefined{}),
-			DiscriminatorValue: "predefined",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseIntegrationEntriesIntegration{}),
-			DiscriminatorValue: "integration",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseIntegrationEntriesExactData{}),
-			DiscriminatorValue: "exact_data",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DLPProfileGetResponseIntegrationEntriesWordList{}),
-			DiscriminatorValue: "word_list",
-		},
-	)
-}
-
-type DLPProfileGetResponseIntegrationEntriesCustom struct {
-	ID        string                                               `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                            `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                 `json:"enabled,required"`
-	Name      string                                               `json:"name,required"`
-	Pattern   DLPProfileGetResponseIntegrationEntriesCustomPattern `json:"pattern,required"`
-	Type      DLPProfileGetResponseIntegrationEntriesCustomType    `json:"type,required"`
-	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                               `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponseIntegrationEntriesCustomJSON    `json:"-"`
-}
-
-// dlpProfileGetResponseIntegrationEntriesCustomJSON contains the JSON metadata for
-// the struct [DLPProfileGetResponseIntegrationEntriesCustom]
-type dlpProfileGetResponseIntegrationEntriesCustomJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseIntegrationEntriesCustom) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseIntegrationEntriesCustomJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseIntegrationEntriesCustom) implementsZeroTrustDLPProfileGetResponseIntegrationEntry() {
-}
-
-type DLPProfileGetResponseIntegrationEntriesCustomPattern struct {
-	Regex      string                                                         `json:"regex,required"`
-	Validation DLPProfileGetResponseIntegrationEntriesCustomPatternValidation `json:"validation"`
-	JSON       dlpProfileGetResponseIntegrationEntriesCustomPatternJSON       `json:"-"`
-}
-
-// dlpProfileGetResponseIntegrationEntriesCustomPatternJSON contains the JSON
-// metadata for the struct [DLPProfileGetResponseIntegrationEntriesCustomPattern]
-type dlpProfileGetResponseIntegrationEntriesCustomPatternJSON struct {
-	Regex       apijson.Field
-	Validation  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseIntegrationEntriesCustomPattern) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseIntegrationEntriesCustomPatternJSON) RawJSON() string {
-	return r.raw
-}
-
-type DLPProfileGetResponseIntegrationEntriesCustomPatternValidation string
-
-const (
-	DLPProfileGetResponseIntegrationEntriesCustomPatternValidationLuhn DLPProfileGetResponseIntegrationEntriesCustomPatternValidation = "luhn"
-)
-
-func (r DLPProfileGetResponseIntegrationEntriesCustomPatternValidation) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseIntegrationEntriesCustomPatternValidationLuhn:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseIntegrationEntriesCustomType string
-
-const (
-	DLPProfileGetResponseIntegrationEntriesCustomTypeCustom DLPProfileGetResponseIntegrationEntriesCustomType = "custom"
-)
-
-func (r DLPProfileGetResponseIntegrationEntriesCustomType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseIntegrationEntriesCustomTypeCustom:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseIntegrationEntriesPredefined struct {
-	ID        string                                                `json:"id,required" format:"uuid"`
-	Enabled   bool                                                  `json:"enabled,required"`
-	Name      string                                                `json:"name,required"`
-	Type      DLPProfileGetResponseIntegrationEntriesPredefinedType `json:"type,required"`
-	ProfileID string                                                `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponseIntegrationEntriesPredefinedJSON `json:"-"`
-}
-
-// dlpProfileGetResponseIntegrationEntriesPredefinedJSON contains the JSON metadata
-// for the struct [DLPProfileGetResponseIntegrationEntriesPredefined]
-type dlpProfileGetResponseIntegrationEntriesPredefinedJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseIntegrationEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseIntegrationEntriesPredefinedJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseIntegrationEntriesPredefined) implementsZeroTrustDLPProfileGetResponseIntegrationEntry() {
-}
-
-type DLPProfileGetResponseIntegrationEntriesPredefinedType string
-
-const (
-	DLPProfileGetResponseIntegrationEntriesPredefinedTypePredefined DLPProfileGetResponseIntegrationEntriesPredefinedType = "predefined"
-)
-
-func (r DLPProfileGetResponseIntegrationEntriesPredefinedType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseIntegrationEntriesPredefinedTypePredefined:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseIntegrationEntriesIntegration struct {
-	ID        string                                                 `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                              `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                   `json:"enabled,required"`
-	Name      string                                                 `json:"name,required"`
-	Type      DLPProfileGetResponseIntegrationEntriesIntegrationType `json:"type,required"`
-	UpdatedAt time.Time                                              `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                                 `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponseIntegrationEntriesIntegrationJSON `json:"-"`
-}
-
-// dlpProfileGetResponseIntegrationEntriesIntegrationJSON contains the JSON
-// metadata for the struct [DLPProfileGetResponseIntegrationEntriesIntegration]
-type dlpProfileGetResponseIntegrationEntriesIntegrationJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseIntegrationEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseIntegrationEntriesIntegrationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseIntegrationEntriesIntegration) implementsZeroTrustDLPProfileGetResponseIntegrationEntry() {
-}
-
-type DLPProfileGetResponseIntegrationEntriesIntegrationType string
-
-const (
-	DLPProfileGetResponseIntegrationEntriesIntegrationTypeIntegration DLPProfileGetResponseIntegrationEntriesIntegrationType = "integration"
-)
-
-func (r DLPProfileGetResponseIntegrationEntriesIntegrationType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseIntegrationEntriesIntegrationTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseIntegrationEntriesExactData struct {
-	ID        string                                               `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                            `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                 `json:"enabled,required"`
-	Name      string                                               `json:"name,required"`
-	Secret    bool                                                 `json:"secret,required"`
-	Type      DLPProfileGetResponseIntegrationEntriesExactDataType `json:"type,required"`
-	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
-	JSON      dlpProfileGetResponseIntegrationEntriesExactDataJSON `json:"-"`
-}
-
-// dlpProfileGetResponseIntegrationEntriesExactDataJSON contains the JSON metadata
-// for the struct [DLPProfileGetResponseIntegrationEntriesExactData]
-type dlpProfileGetResponseIntegrationEntriesExactDataJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseIntegrationEntriesExactData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseIntegrationEntriesExactDataJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseIntegrationEntriesExactData) implementsZeroTrustDLPProfileGetResponseIntegrationEntry() {
-}
-
-type DLPProfileGetResponseIntegrationEntriesExactDataType string
-
-const (
-	DLPProfileGetResponseIntegrationEntriesExactDataTypeExactData DLPProfileGetResponseIntegrationEntriesExactDataType = "exact_data"
-)
-
-func (r DLPProfileGetResponseIntegrationEntriesExactDataType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseIntegrationEntriesExactDataTypeExactData:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseIntegrationEntriesWordList struct {
-	ID        string                                              `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                           `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                                `json:"enabled,required"`
-	Name      string                                              `json:"name,required"`
-	Type      DLPProfileGetResponseIntegrationEntriesWordListType `json:"type,required"`
-	UpdatedAt time.Time                                           `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                                         `json:"word_list,required"`
-	ProfileID string                                              `json:"profile_id,nullable" format:"uuid"`
-	JSON      dlpProfileGetResponseIntegrationEntriesWordListJSON `json:"-"`
-}
-
-// dlpProfileGetResponseIntegrationEntriesWordListJSON contains the JSON metadata
-// for the struct [DLPProfileGetResponseIntegrationEntriesWordList]
-type dlpProfileGetResponseIntegrationEntriesWordListJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	WordList    apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileGetResponseIntegrationEntriesWordList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseIntegrationEntriesWordListJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DLPProfileGetResponseIntegrationEntriesWordList) implementsZeroTrustDLPProfileGetResponseIntegrationEntry() {
-}
-
-type DLPProfileGetResponseIntegrationEntriesWordListType string
-
-const (
-	DLPProfileGetResponseIntegrationEntriesWordListTypeWordList DLPProfileGetResponseIntegrationEntriesWordListType = "word_list"
-)
-
-func (r DLPProfileGetResponseIntegrationEntriesWordListType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseIntegrationEntriesWordListTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseIntegrationEntriesType string
-
-const (
-	DLPProfileGetResponseIntegrationEntriesTypeCustom      DLPProfileGetResponseIntegrationEntriesType = "custom"
-	DLPProfileGetResponseIntegrationEntriesTypePredefined  DLPProfileGetResponseIntegrationEntriesType = "predefined"
-	DLPProfileGetResponseIntegrationEntriesTypeIntegration DLPProfileGetResponseIntegrationEntriesType = "integration"
-	DLPProfileGetResponseIntegrationEntriesTypeExactData   DLPProfileGetResponseIntegrationEntriesType = "exact_data"
-	DLPProfileGetResponseIntegrationEntriesTypeWordList    DLPProfileGetResponseIntegrationEntriesType = "word_list"
-)
-
-func (r DLPProfileGetResponseIntegrationEntriesType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseIntegrationEntriesTypeCustom, DLPProfileGetResponseIntegrationEntriesTypePredefined, DLPProfileGetResponseIntegrationEntriesTypeIntegration, DLPProfileGetResponseIntegrationEntriesTypeExactData, DLPProfileGetResponseIntegrationEntriesTypeWordList:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseIntegrationType string
-
-const (
-	DLPProfileGetResponseIntegrationTypeIntegration DLPProfileGetResponseIntegrationType = "integration"
-)
-
-func (r DLPProfileGetResponseIntegrationType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseIntegrationTypeIntegration:
-		return true
-	}
-	return false
-}
-
-type DLPProfileGetResponseType string
-
-const (
-	DLPProfileGetResponseTypeCustom      DLPProfileGetResponseType = "custom"
-	DLPProfileGetResponseTypePredefined  DLPProfileGetResponseType = "predefined"
-	DLPProfileGetResponseTypeIntegration DLPProfileGetResponseType = "integration"
-)
-
-func (r DLPProfileGetResponseType) IsKnown() bool {
-	switch r {
-	case DLPProfileGetResponseTypeCustom, DLPProfileGetResponseTypePredefined, DLPProfileGetResponseTypeIntegration:
-		return true
-	}
-	return false
-}
-
 type DLPProfileListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
@@ -3159,7 +1517,7 @@ type DLPProfileGetResponseEnvelope struct {
 	Errors     []shared.ResponseInfo                   `json:"errors,required"`
 	Messages   []shared.ResponseInfo                   `json:"messages,required"`
 	Success    bool                                    `json:"success,required"`
-	Result     DLPProfileGetResponse                   `json:"result"`
+	Result     Profile                                 `json:"result"`
 	ResultInfo DLPProfileGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       dlpProfileGetResponseEnvelopeJSON       `json:"-"`
 }
