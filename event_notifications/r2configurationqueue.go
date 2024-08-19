@@ -138,7 +138,7 @@ func (r R2ConfigurationQueueDeleteResponseArray) ImplementsEventNotificationsR2C
 }
 
 type R2ConfigurationQueueUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Array of rules to drive notifications
 	Rules param.Field[[]R2ConfigurationQueueUpdateParamsRule] `json:"rules"`
@@ -183,7 +183,7 @@ type R2ConfigurationQueueUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo              `json:"errors,required"`
 	Messages []shared.ResponseInfo              `json:"messages,required"`
 	Result   R2ConfigurationQueueUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success R2ConfigurationQueueUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    r2ConfigurationQueueUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -207,7 +207,7 @@ func (r r2ConfigurationQueueUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type R2ConfigurationQueueUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -223,7 +223,7 @@ func (r R2ConfigurationQueueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type R2ConfigurationQueueDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -231,7 +231,7 @@ type R2ConfigurationQueueDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                   `json:"errors,required"`
 	Messages []shared.ResponseInfo                   `json:"messages,required"`
 	Result   R2ConfigurationQueueDeleteResponseUnion `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success R2ConfigurationQueueDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    r2ConfigurationQueueDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -255,7 +255,7 @@ func (r r2ConfigurationQueueDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type R2ConfigurationQueueDeleteResponseEnvelopeSuccess bool
 
 const (
