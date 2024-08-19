@@ -141,9 +141,8 @@ func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts .
 	return
 }
 
-// Union satisfied by
-// [subscriptions.SubscriptionNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [subscriptions.SubscriptionNewResponseUnknown] or
+// [shared.UnionString].
 type SubscriptionNewResponseUnion interface {
 	ImplementsSubscriptionsSubscriptionNewResponseUnion()
 }
@@ -159,9 +158,8 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [subscriptions.SubscriptionUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [subscriptions.SubscriptionUpdateResponseUnknown] or
+// [shared.UnionString].
 type SubscriptionUpdateResponseUnion interface {
 	ImplementsSubscriptionsSubscriptionUpdateResponseUnion()
 }
@@ -199,9 +197,8 @@ func (r subscriptionDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by
-// [subscriptions.SubscriptionGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [subscriptions.SubscriptionGetResponseUnknown] or
+// [shared.UnionString].
 type SubscriptionGetResponseUnion interface {
 	ImplementsSubscriptionsSubscriptionGetResponseUnion()
 }

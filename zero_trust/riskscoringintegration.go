@@ -565,7 +565,7 @@ type RiskScoringIntegrationDeleteResponseEnvelope struct {
 	Errors     []shared.ResponseInfo                                  `json:"errors,required"`
 	Messages   []shared.ResponseInfo                                  `json:"messages,required"`
 	Success    bool                                                   `json:"success,required"`
-	Result     RiskScoringIntegrationDeleteResponse                   `json:"result"`
+	Result     RiskScoringIntegrationDeleteResponse                   `json:"result,nullable"`
 	ResultInfo RiskScoringIntegrationDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       riskScoringIntegrationDeleteResponseEnvelopeJSON       `json:"-"`
 }
