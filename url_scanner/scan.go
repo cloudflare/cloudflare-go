@@ -37,8 +37,8 @@ func NewScanService(opts ...option.RequestOption) (r *ScanService) {
 }
 
 // Submit a URL to scan. You can also set some options, like the visibility level
-// and custom headers. Accounts are limited to 1 new scan every 10 seconds and 8000
-// per month. If you need more, please reach out.
+// and custom headers. Check limits at
+// https://developers.cloudflare.com/security-center/investigate/scan-limits/.
 func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewParams, opts ...option.RequestOption) (res *ScanNewResponse, err error) {
 	var env ScanNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
