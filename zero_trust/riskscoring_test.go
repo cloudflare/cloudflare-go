@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestTunnelConnectionDeleteWithOptionalParams(t *testing.T) {
+func TestRiskScoringGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,12 +27,11 @@ func TestTunnelConnectionDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Tunnels.Connections.Delete(
+	_, err := client.ZeroTrust.RiskScoring.Get(
 		context.TODO(),
-		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		zero_trust.TunnelConnectionDeleteParams{
-			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			ClientID:  cloudflare.F("1bedc50d-42b3-473c-b108-ff3d10c0d925"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		zero_trust.RiskScoringGetParams{
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {
@@ -44,7 +43,7 @@ func TestTunnelConnectionDeleteWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestTunnelConnectionGet(t *testing.T) {
+func TestRiskScoringReset(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -57,11 +56,11 @@ func TestTunnelConnectionGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Tunnels.Connections.Get(
+	_, err := client.ZeroTrust.RiskScoring.Reset(
 		context.TODO(),
-		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		zero_trust.TunnelConnectionGetParams{
-			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		zero_trust.RiskScoringResetParams{
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

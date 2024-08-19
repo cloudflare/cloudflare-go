@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -32,6 +34,30 @@ type TunnelConnectionService struct {
 func NewTunnelConnectionService(opts ...option.RequestOption) (r *TunnelConnectionService) {
 	r = &TunnelConnectionService{}
 	r.Options = opts
+	return
+}
+
+// Removes a connection (aka Cloudflare Tunnel Connector) from a Cloudflare Tunnel
+// independently of its current state. If no connector id (client_id) is provided
+// all connectors will be removed. We recommend running this command after rotating
+// tokens.
+func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, params TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponse, err error) {
+	var env TunnelConnectionDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if tunnelID == "" {
+		err = errors.New("missing required tunnel_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connections", params.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -141,6 +167,67 @@ func (r *ClientConn) UnmarshalJSON(data []byte) (err error) {
 
 func (r clientConnJSON) RawJSON() string {
 	return r.raw
+}
+
+type TunnelConnectionDeleteResponse = interface{}
+
+type TunnelConnectionDeleteParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+	// UUID of the Cloudflare Tunnel connector.
+	ClientID param.Field[string] `query:"client_id" format:"uuid"`
+}
+
+// URLQuery serializes [TunnelConnectionDeleteParams]'s query parameters as
+// `url.Values`.
+func (r TunnelConnectionDeleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type TunnelConnectionDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   TunnelConnectionDeleteResponse `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success TunnelConnectionDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    tunnelConnectionDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// tunnelConnectionDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [TunnelConnectionDeleteResponseEnvelope]
+type tunnelConnectionDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelConnectionDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tunnelConnectionDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type TunnelConnectionDeleteResponseEnvelopeSuccess bool
+
+const (
+	TunnelConnectionDeleteResponseEnvelopeSuccessTrue TunnelConnectionDeleteResponseEnvelopeSuccess = true
+)
+
+func (r TunnelConnectionDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case TunnelConnectionDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type TunnelConnectionGetParams struct {

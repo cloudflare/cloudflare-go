@@ -3,6 +3,15 @@
 package zero_trust
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -23,4 +32,88 @@ func NewRiskScoringSummaryService(opts ...option.RequestOption) (r *RiskScoringS
 	r = &RiskScoringSummaryService{}
 	r.Options = opts
 	return
+}
+
+// Get risk score info for all users in the account
+func (r *RiskScoringSummaryService) Get(ctx context.Context, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/summary", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+type RiskScoringSummaryGetResponse struct {
+	Users []RiskScoringSummaryGetResponseUser `json:"users,required"`
+	JSON  riskScoringSummaryGetResponseJSON   `json:"-"`
+}
+
+// riskScoringSummaryGetResponseJSON contains the JSON metadata for the struct
+// [RiskScoringSummaryGetResponse]
+type riskScoringSummaryGetResponseJSON struct {
+	Users       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringSummaryGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringSummaryGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RiskScoringSummaryGetResponseUser struct {
+	Email        string                                         `json:"email,required"`
+	EventCount   int64                                          `json:"event_count,required"`
+	LastEvent    time.Time                                      `json:"last_event,required" format:"date-time"`
+	MaxRiskLevel RiskScoringSummaryGetResponseUsersMaxRiskLevel `json:"max_risk_level,required"`
+	Name         string                                         `json:"name,required"`
+	UserID       string                                         `json:"user_id,required" format:"uuid"`
+	JSON         riskScoringSummaryGetResponseUserJSON          `json:"-"`
+}
+
+// riskScoringSummaryGetResponseUserJSON contains the JSON metadata for the struct
+// [RiskScoringSummaryGetResponseUser]
+type riskScoringSummaryGetResponseUserJSON struct {
+	Email        apijson.Field
+	EventCount   apijson.Field
+	LastEvent    apijson.Field
+	MaxRiskLevel apijson.Field
+	Name         apijson.Field
+	UserID       apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *RiskScoringSummaryGetResponseUser) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringSummaryGetResponseUserJSON) RawJSON() string {
+	return r.raw
+}
+
+type RiskScoringSummaryGetResponseUsersMaxRiskLevel string
+
+const (
+	RiskScoringSummaryGetResponseUsersMaxRiskLevelLow    RiskScoringSummaryGetResponseUsersMaxRiskLevel = "low"
+	RiskScoringSummaryGetResponseUsersMaxRiskLevelMedium RiskScoringSummaryGetResponseUsersMaxRiskLevel = "medium"
+	RiskScoringSummaryGetResponseUsersMaxRiskLevelHigh   RiskScoringSummaryGetResponseUsersMaxRiskLevel = "high"
+)
+
+func (r RiskScoringSummaryGetResponseUsersMaxRiskLevel) IsKnown() bool {
+	switch r {
+	case RiskScoringSummaryGetResponseUsersMaxRiskLevelLow, RiskScoringSummaryGetResponseUsersMaxRiskLevelMedium, RiskScoringSummaryGetResponseUsersMaxRiskLevelHigh:
+		return true
+	}
+	return false
+}
+
+type RiskScoringSummaryGetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 }

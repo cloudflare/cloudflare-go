@@ -285,9 +285,15 @@ func (r CloudflareTunnel) ImplementsWARPConnectorWARPConnectorEditResponse() {}
 
 func (r CloudflareTunnel) ImplementsWARPConnectorWARPConnectorGetResponse() {}
 
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelNewResponse() {}
+
 func (r CloudflareTunnel) ImplementsZeroTrustTunnelListResponse() {}
 
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelDeleteResponse() {}
+
 func (r CloudflareTunnel) ImplementsZeroTrustTunnelEditResponse() {}
+
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelGetResponse() {}
 
 type CloudflareTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
