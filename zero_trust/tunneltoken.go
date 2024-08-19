@@ -57,8 +57,7 @@ func (r *TunnelTokenService) Get(ctx context.Context, tunnelID string, query Tun
 	return
 }
 
-// Union satisfied by
-// [zero_trust.TunnelTokenGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
+// Union satisfied by [zero_trust.TunnelTokenGetResponseUnknown],
 // [zero_trust.TunnelTokenGetResponseArray] or [shared.UnionString].
 type TunnelTokenGetResponseUnion interface {
 	ImplementsZeroTrustTunnelTokenGetResponseUnion()

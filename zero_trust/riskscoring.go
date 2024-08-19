@@ -182,7 +182,7 @@ type RiskScoringResetResponseEnvelope struct {
 	Errors     []shared.ResponseInfo                      `json:"errors,required"`
 	Messages   []shared.ResponseInfo                      `json:"messages,required"`
 	Success    bool                                       `json:"success,required"`
-	Result     RiskScoringResetResponse                   `json:"result"`
+	Result     RiskScoringResetResponse                   `json:"result,nullable"`
 	ResultInfo RiskScoringResetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       riskScoringResetResponseEnvelopeJSON       `json:"-"`
 }
