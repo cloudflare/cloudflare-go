@@ -55,6 +55,27 @@ func (r *IndexMetadataIndexService) New(ctx context.Context, indexName string, p
 	return
 }
 
+// List Metadata Indexes for the specified Vectorize Index.
+func (r *IndexMetadataIndexService) List(ctx context.Context, indexName string, query IndexMetadataIndexListParams, opts ...option.RequestOption) (res *IndexMetadataIndexListResponse, err error) {
+	var env IndexMetadataIndexListResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if indexName == "" {
+		err = errors.New("missing required index_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/vectorize/v2/indexes/%s/metadata_index/list", query.AccountID, indexName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Allow Vectorize to delete the specified metadata index.
 func (r *IndexMetadataIndexService) Delete(ctx context.Context, indexName string, params IndexMetadataIndexDeleteParams, opts ...option.RequestOption) (res *IndexMetadataIndexDeleteResponse, err error) {
 	var env IndexMetadataIndexDeleteResponseEnvelope
@@ -96,6 +117,70 @@ func (r *IndexMetadataIndexNewResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r indexMetadataIndexNewResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type IndexMetadataIndexListResponse struct {
+	// Array of indexed metadata properties.
+	MetadataIndexes []IndexMetadataIndexListResponseMetadataIndex `json:"metadataIndexes"`
+	JSON            indexMetadataIndexListResponseJSON            `json:"-"`
+}
+
+// indexMetadataIndexListResponseJSON contains the JSON metadata for the struct
+// [IndexMetadataIndexListResponse]
+type indexMetadataIndexListResponseJSON struct {
+	MetadataIndexes apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *IndexMetadataIndexListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexMetadataIndexListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type IndexMetadataIndexListResponseMetadataIndex struct {
+	// Specifies the type of indexed metadata property.
+	IndexType IndexMetadataIndexListResponseMetadataIndexesIndexType `json:"indexType"`
+	// Specifies the indexed metadata property.
+	PropertyName string                                          `json:"propertyName"`
+	JSON         indexMetadataIndexListResponseMetadataIndexJSON `json:"-"`
+}
+
+// indexMetadataIndexListResponseMetadataIndexJSON contains the JSON metadata for
+// the struct [IndexMetadataIndexListResponseMetadataIndex]
+type indexMetadataIndexListResponseMetadataIndexJSON struct {
+	IndexType    apijson.Field
+	PropertyName apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *IndexMetadataIndexListResponseMetadataIndex) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexMetadataIndexListResponseMetadataIndexJSON) RawJSON() string {
+	return r.raw
+}
+
+// Specifies the type of indexed metadata property.
+type IndexMetadataIndexListResponseMetadataIndexesIndexType string
+
+const (
+	IndexMetadataIndexListResponseMetadataIndexesIndexTypeString  IndexMetadataIndexListResponseMetadataIndexesIndexType = "string"
+	IndexMetadataIndexListResponseMetadataIndexesIndexTypeNumber  IndexMetadataIndexListResponseMetadataIndexesIndexType = "number"
+	IndexMetadataIndexListResponseMetadataIndexesIndexTypeBoolean IndexMetadataIndexListResponseMetadataIndexesIndexType = "boolean"
+)
+
+func (r IndexMetadataIndexListResponseMetadataIndexesIndexType) IsKnown() bool {
+	switch r {
+	case IndexMetadataIndexListResponseMetadataIndexesIndexTypeString, IndexMetadataIndexListResponseMetadataIndexesIndexTypeNumber, IndexMetadataIndexListResponseMetadataIndexesIndexTypeBoolean:
+		return true
+	}
+	return false
 }
 
 type IndexMetadataIndexDeleteResponse struct {
@@ -188,6 +273,54 @@ const (
 func (r IndexMetadataIndexNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case IndexMetadataIndexNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type IndexMetadataIndexListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type IndexMetadataIndexListResponseEnvelope struct {
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   IndexMetadataIndexListResponse `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success IndexMetadataIndexListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    indexMetadataIndexListResponseEnvelopeJSON    `json:"-"`
+}
+
+// indexMetadataIndexListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [IndexMetadataIndexListResponseEnvelope]
+type indexMetadataIndexListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IndexMetadataIndexListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r indexMetadataIndexListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type IndexMetadataIndexListResponseEnvelopeSuccess bool
+
+const (
+	IndexMetadataIndexListResponseEnvelopeSuccessTrue IndexMetadataIndexListResponseEnvelopeSuccess = true
+)
+
+func (r IndexMetadataIndexListResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IndexMetadataIndexListResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
