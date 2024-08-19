@@ -1535,7 +1535,6 @@ func (r dnsSummaryResponseCodesResponseMetaConfidenceInfoAnnotationJSON) RawJSON
 }
 
 type DNSSummaryResponseCodesResponseSummary0 struct {
-	Formerr  string                                      `json:"FORMERR,required"`
 	Noerror  string                                      `json:"NOERROR,required"`
 	Notimp   string                                      `json:"NOTIMP,required"`
 	Nxdomain string                                      `json:"NXDOMAIN,required"`
@@ -1547,7 +1546,6 @@ type DNSSummaryResponseCodesResponseSummary0 struct {
 // dnsSummaryResponseCodesResponseSummary0JSON contains the JSON metadata for the
 // struct [DNSSummaryResponseCodesResponseSummary0]
 type dnsSummaryResponseCodesResponseSummary0JSON struct {
-	Formerr     apijson.Field
 	Noerror     apijson.Field
 	Notimp      apijson.Field
 	Nxdomain    apijson.Field
