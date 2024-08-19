@@ -288,7 +288,7 @@ type DLPProfileCustomDeleteResponseEnvelope struct {
 	Errors     []shared.ResponseInfo                            `json:"errors,required"`
 	Messages   []shared.ResponseInfo                            `json:"messages,required"`
 	Success    bool                                             `json:"success,required"`
-	Result     DLPProfileCustomDeleteResponse                   `json:"result,nullable"`
+	Result     DLPProfileCustomDeleteResponse                   `json:"result"`
 	ResultInfo DLPProfileCustomDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       dlpProfileCustomDeleteResponseEnvelopeJSON       `json:"-"`
 }
