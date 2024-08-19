@@ -571,7 +571,6 @@ func (r dnsTimeseriesGroupResponseCodesResponseJSON) RawJSON() (string) {
 }
 
 type DNSTimeseriesGroupResponseCodesResponseSerie0 struct {
-Formerr []string `json:"FORMERR,required"`
 Noerror []string `json:"NOERROR,required"`
 Notimp []string `json:"NOTIMP,required"`
 Nxdomain []string `json:"NXDOMAIN,required"`
@@ -583,7 +582,6 @@ JSON dnsTimeseriesGroupResponseCodesResponseSerie0JSON `json:"-"`
 // dnsTimeseriesGroupResponseCodesResponseSerie0JSON contains the JSON metadata for
 // the struct [DNSTimeseriesGroupResponseCodesResponseSerie0]
 type dnsTimeseriesGroupResponseCodesResponseSerie0JSON struct {
-Formerr apijson.Field
 Noerror apijson.Field
 Notimp apijson.Field
 Nxdomain apijson.Field
