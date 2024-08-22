@@ -437,6 +437,7 @@ func (b WorkerD1DatabaseBinding) serialize(bindingName string) (workerBindingMet
 
 // WorkerHyperdriveBinding is a binding to a Hyperdrive config.
 type WorkerHyperdriveBinding struct {
+	Binding  string
 	ConfigID string
 }
 
@@ -446,12 +447,15 @@ func (b WorkerHyperdriveBinding) Type() WorkerBindingType {
 }
 
 func (b WorkerHyperdriveBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.Binding == "" {
+		return nil, nil, fmt.Errorf(`binding name for binding "%s" cannot be empty`, bindingName)
+	}
 	if b.ConfigID == "" {
 		return nil, nil, fmt.Errorf(`config ID for binding "%s" cannot be empty`, bindingName)
 	}
 
 	return workerBindingMeta{
-		"name": bindingName,
+		"name": b.Binding,
 		"type": b.Type(),
 		"id":   b.ConfigID,
 	}, nil, nil
@@ -589,6 +593,7 @@ func (api *API) ListWorkerBindings(ctx context.Context, rc *ResourceContainer, p
 		case WorkerHyperdriveBindingType:
 			id := jsonBinding["id"].(string)
 			bindingListItem.Binding = WorkerHyperdriveBinding{
+				Binding:  name,
 				ConfigID: id,
 			}
 		default:
