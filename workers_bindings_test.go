@@ -110,6 +110,7 @@ func TestListWorkerBindings(t *testing.T) {
 	assert.Equal(t, res.BindingList[9], WorkerBindingListItem{
 		Name: "MY_HYPERDRIVE",
 		Binding: WorkerHyperdriveBinding{
+			Binding:  "MY_HYPERDRIVE",
 			ConfigID: "aaf4609248cc493cbc8d3e446e38fdfa",
 		},
 	})
@@ -203,6 +204,7 @@ func TestListWorkerBindings_Wfp(t *testing.T) {
 	assert.Equal(t, res.BindingList[9], WorkerBindingListItem{
 		Name: "MY_HYPERDRIVE",
 		Binding: WorkerHyperdriveBinding{
+			Binding:  "MY_HYPERDRIVE",
 			ConfigID: "aaf4609248cc493cbc8d3e446e38fdfa",
 		},
 	})

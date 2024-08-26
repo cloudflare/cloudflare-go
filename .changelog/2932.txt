@@ -1,0 +1,3 @@
+```release-notes:enhancement
+worker_bindings: Adjust struct of `hyperdrive` bindings to better align with wrangler.toml syntax
+```
