@@ -39,7 +39,7 @@ type WaitingRoom struct {
 	CookieSuffix               string              `json:"cookie_suffix"`
 	AdditionalRoutes           []*WaitingRoomRoute `json:"additional_routes,omitempty"`
 	QueueingStatusCode         int                 `json:"queueing_status_code"`
-	EnabledOriginCommands      []string            `json:"enabled_origin_commands"`
+	EnabledOriginCommands      []string            `json:"enabled_origin_commands,omitempty"`
 }
 
 // WaitingRoomStatus describes the status of a waiting room.
