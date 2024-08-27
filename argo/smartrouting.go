@@ -70,8 +70,9 @@ func (r *SmartRoutingService) Get(ctx context.Context, query SmartRoutingGetPara
 	return
 }
 
-// Union satisfied by [argo.SmartRoutingEditResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [argo.SmartRoutingEditResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type SmartRoutingEditResponseUnion interface {
 	ImplementsArgoSmartRoutingEditResponseUnion()
 }
@@ -87,8 +88,9 @@ func init() {
 	)
 }
 
-// Union satisfied by [argo.SmartRoutingGetResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [argo.SmartRoutingGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type SmartRoutingGetResponseUnion interface {
 	ImplementsArgoSmartRoutingGetResponseUnion()
 }
