@@ -334,7 +334,8 @@ type RulesetRuleActionParametersCustomKey struct {
 
 type RulesetRuleActionParametersCustomKeyHeader struct {
 	RulesetRuleActionParametersCustomKeyFields
-	ExcludeOrigin *bool `json:"exclude_origin,omitempty"`
+	ExcludeOrigin *bool               `json:"exclude_origin,omitempty"`
+	Contains      map[string][]string `json:"contains,omitempty"`
 }
 
 type RulesetRuleActionParametersCustomKeyCookie RulesetRuleActionParametersCustomKeyFields
