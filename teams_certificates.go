@@ -10,7 +10,7 @@ import (
 )
 
 type TeamsCertificate struct {
-	Enabled       *bool      `json:"enabled"`
+	InUse         *bool      `json:"in_use"`
 	ID            string     `json:"id"`
 	BindingStatus string     `json:"binding_status"`
 	QsPackId      string     `json:"qs_pack_id"`

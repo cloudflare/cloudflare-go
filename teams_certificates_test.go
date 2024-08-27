@@ -23,7 +23,7 @@ func TestTeamsCertificate(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": {
-				"enabled": false,
+				"in_use": false,
 				"id": "80c8a54e-d55c-46c6-86bb-e8a3c90472f4",
 				"binding_status": "inactive",
 				"qs_pack_id": "00000000-0000-0000-0000-000000000000",
@@ -42,7 +42,7 @@ func TestTeamsCertificate(t *testing.T) {
 	actual, err := client.TeamsCertificate(context.Background(), testAccountID, testCertID)
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, *actual.Enabled, false)
+		assert.Equal(t, *actual.InUse, false)
 		assert.Equal(t, actual.ID, testCertID)
 		assert.Equal(t, actual.BindingStatus, "inactive")
 		assert.Equal(t, actual.Type, "gateway_managed")
@@ -62,7 +62,7 @@ func TestTeamsCertificatesList(t *testing.T) {
 			"messages": [],
 			"result": [
 				{
-					"enabled": false,
+					"in_use": false,
 					"id": "43a36083-987b-4321-95ab-4052771c4e6f",
 					"binding_status": "inactive",
 					"qs_pack_id": "00000000-0000-0000-0000-000000000000",
@@ -73,7 +73,7 @@ func TestTeamsCertificatesList(t *testing.T) {
 					"expires_on": "2122-10-29T16:59:47Z"
 				},
 				{
-					"enabled": false,
+					"in_use": false,
 					"id": "4a9d6ecf-0fdd-4676-818a-ee6b45f17f9b",
 					"binding_status": "inactive",
 					"qs_pack_id": "00000000-0000-0000-0000-000000000000",
@@ -111,7 +111,7 @@ func TestTeamsAccountGenerateCertificate(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": {
-				"enabled": false,
+				"in_use": false,
 				"id": "80c8a54e-d55c-46c6-86bb-e8a3c90472f4",
 				"binding_status": "inactive",
 				"qs_pack_id": "00000000-0000-0000-0000-000000000000",
@@ -149,7 +149,7 @@ func TestTeamsActivateCertificate(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": {
-				"enabled": false,
+				"in_use": false,
 				"id": "80c8a54e-d55c-46c6-86bb-e8a3c90472f4",
 				"binding_status": "pending_deployment",
 				"qs_pack_id": "00000000-0000-0000-0000-000000000000",
@@ -183,7 +183,7 @@ func TestTeamsDeactivateCertificate(t *testing.T) {
 			"errors": [],
 			"messages": [],
 			"result": {
-				"enabled": false,
+				"in_use": false,
 				"id": "80c8a54e-d55c-46c6-86bb-e8a3c90472f4",
 				"binding_status": "pending_deletion",
 				"qs_pack_id": "00000000-0000-0000-0000-000000000000",
