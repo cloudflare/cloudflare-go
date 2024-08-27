@@ -121,12 +121,12 @@ type RiskScoringIntegrationReferenceGetParams struct {
 }
 
 type RiskScoringIntegrationReferenceGetResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                                        `json:"errors,required"`
-	Messages   []shared.ResponseInfo                                        `json:"messages,required"`
-	Success    bool                                                         `json:"success,required"`
-	Result     RiskScoringIntegrationReferenceGetResponse                   `json:"result"`
-	ResultInfo RiskScoringIntegrationReferenceGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       riskScoringIntegrationReferenceGetResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success RiskScoringIntegrationReferenceGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  RiskScoringIntegrationReferenceGetResponse                `json:"result"`
+	JSON    riskScoringIntegrationReferenceGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // riskScoringIntegrationReferenceGetResponseEnvelopeJSON contains the JSON
@@ -136,7 +136,6 @@ type riskScoringIntegrationReferenceGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -149,34 +148,17 @@ func (r riskScoringIntegrationReferenceGetResponseEnvelopeJSON) RawJSON() string
 	return r.raw
 }
 
-type RiskScoringIntegrationReferenceGetResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                                            `json:"total_count,required"`
-	JSON       riskScoringIntegrationReferenceGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type RiskScoringIntegrationReferenceGetResponseEnvelopeSuccess bool
 
-// riskScoringIntegrationReferenceGetResponseEnvelopeResultInfoJSON contains the
-// JSON metadata for the struct
-// [RiskScoringIntegrationReferenceGetResponseEnvelopeResultInfo]
-type riskScoringIntegrationReferenceGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	RiskScoringIntegrationReferenceGetResponseEnvelopeSuccessTrue RiskScoringIntegrationReferenceGetResponseEnvelopeSuccess = true
+)
 
-func (r *RiskScoringIntegrationReferenceGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r riskScoringIntegrationReferenceGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r RiskScoringIntegrationReferenceGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RiskScoringIntegrationReferenceGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

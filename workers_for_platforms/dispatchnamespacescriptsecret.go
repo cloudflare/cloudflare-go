@@ -95,6 +95,35 @@ func (r *DispatchNamespaceScriptSecretService) ListAutoPaging(ctx context.Contex
 	return pagination.NewSinglePageAutoPager(r.List(ctx, dispatchNamespace, scriptName, query, opts...))
 }
 
+// Get secret from a script uploaded to a Workers for Platforms namespace.
+func (r *DispatchNamespaceScriptSecretService) Get(ctx context.Context, dispatchNamespace string, scriptName string, secretName string, query DispatchNamespaceScriptSecretGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptSecretGetResponse, err error) {
+	var env DispatchNamespaceScriptSecretGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if dispatchNamespace == "" {
+		err = errors.New("missing required dispatch_namespace parameter")
+		return
+	}
+	if scriptName == "" {
+		err = errors.New("missing required script_name parameter")
+		return
+	}
+	if secretName == "" {
+		err = errors.New("missing required secret_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/secrets/%s", query.AccountID, dispatchNamespace, scriptName, secretName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type DispatchNamespaceScriptSecretUpdateResponse struct {
 	// The name of this secret, this is what will be used to access it inside the
 	// Worker.
@@ -177,6 +206,47 @@ func (r DispatchNamespaceScriptSecretListResponseType) IsKnown() bool {
 	return false
 }
 
+type DispatchNamespaceScriptSecretGetResponse struct {
+	// The name of this secret, this is what will be used to access it inside the
+	// Worker.
+	Name string `json:"name"`
+	// The type of secret.
+	Type DispatchNamespaceScriptSecretGetResponseType `json:"type"`
+	JSON dispatchNamespaceScriptSecretGetResponseJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretGetResponseJSON contains the JSON metadata for the
+// struct [DispatchNamespaceScriptSecretGetResponse]
+type dispatchNamespaceScriptSecretGetResponseJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of secret.
+type DispatchNamespaceScriptSecretGetResponseType string
+
+const (
+	DispatchNamespaceScriptSecretGetResponseTypeSecretText DispatchNamespaceScriptSecretGetResponseType = "secret_text"
+)
+
+func (r DispatchNamespaceScriptSecretGetResponseType) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSecretGetResponseTypeSecretText:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptSecretUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -254,4 +324,52 @@ func (r DispatchNamespaceScriptSecretUpdateResponseEnvelopeSuccess) IsKnown() bo
 type DispatchNamespaceScriptSecretListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DispatchNamespaceScriptSecretGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DispatchNamespaceScriptSecretGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DispatchNamespaceScriptSecretGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DispatchNamespaceScriptSecretGetResponse                `json:"result"`
+	JSON    dispatchNamespaceScriptSecretGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// dispatchNamespaceScriptSecretGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [DispatchNamespaceScriptSecretGetResponseEnvelope]
+type dispatchNamespaceScriptSecretGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSecretGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSecretGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DispatchNamespaceScriptSecretGetResponseEnvelopeSuccess bool
+
+const (
+	DispatchNamespaceScriptSecretGetResponseEnvelopeSuccessTrue DispatchNamespaceScriptSecretGetResponseEnvelopeSuccess = true
+)
+
+func (r DispatchNamespaceScriptSecretGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSecretGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

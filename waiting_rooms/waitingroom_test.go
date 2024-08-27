@@ -53,6 +53,7 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 			DefaultTemplateLanguage: cloudflare.F(waiting_rooms.QueryDefaultTemplateLanguageEnUs),
 			Description:             cloudflare.F("Production - DO NOT MODIFY"),
 			DisableSessionRenewal:   cloudflare.F(false),
+			EnabledOriginCommands:   cloudflare.F([]waiting_rooms.QueryEnabledOriginCommand{waiting_rooms.QueryEnabledOriginCommandRevoke}),
 			JsonResponseEnabled:     cloudflare.F(false),
 			Path:                    cloudflare.F("/shop/checkout"),
 			QueueAll:                cloudflare.F(true),
@@ -113,6 +114,7 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 				DefaultTemplateLanguage: cloudflare.F(waiting_rooms.QueryDefaultTemplateLanguageEnUs),
 				Description:             cloudflare.F("Production - DO NOT MODIFY"),
 				DisableSessionRenewal:   cloudflare.F(false),
+				EnabledOriginCommands:   cloudflare.F([]waiting_rooms.QueryEnabledOriginCommand{waiting_rooms.QueryEnabledOriginCommandRevoke}),
 				JsonResponseEnabled:     cloudflare.F(false),
 				Path:                    cloudflare.F("/shop/checkout"),
 				QueueAll:                cloudflare.F(true),
@@ -147,8 +149,8 @@ func TestWaitingRoomListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.WaitingRooms.List(context.TODO(), waiting_rooms.WaitingRoomListParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Page:    cloudflare.F[any](map[string]interface{}{}),
-		PerPage: cloudflare.F[any](map[string]interface{}{}),
+		Page:    cloudflare.F(1.000000),
+		PerPage: cloudflare.F(5.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -230,6 +232,7 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 				DefaultTemplateLanguage: cloudflare.F(waiting_rooms.QueryDefaultTemplateLanguageEnUs),
 				Description:             cloudflare.F("Production - DO NOT MODIFY"),
 				DisableSessionRenewal:   cloudflare.F(false),
+				EnabledOriginCommands:   cloudflare.F([]waiting_rooms.QueryEnabledOriginCommand{waiting_rooms.QueryEnabledOriginCommandRevoke}),
 				JsonResponseEnabled:     cloudflare.F(false),
 				Path:                    cloudflare.F("/shop/checkout"),
 				QueueAll:                cloudflare.F(true),

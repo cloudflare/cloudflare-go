@@ -121,8 +121,8 @@ func TestEventListWithOptionalParams(t *testing.T) {
 		"699d98642c564d2e855e9661899b7252",
 		waiting_rooms.EventListParams{
 			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Page:    cloudflare.F[any](map[string]interface{}{}),
-			PerPage: cloudflare.F[any](map[string]interface{}{}),
+			Page:    cloudflare.F(1.000000),
+			PerPage: cloudflare.F(5.000000),
 		},
 	)
 	if err != nil {

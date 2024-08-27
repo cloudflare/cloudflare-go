@@ -81,12 +81,12 @@ type DLPProfilePredefinedUpdateParams struct {
 }
 
 type DLPProfilePredefinedUpdateResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                                `json:"errors,required"`
-	Messages   []shared.ResponseInfo                                `json:"messages,required"`
-	Success    bool                                                 `json:"success,required"`
-	Result     Profile                                              `json:"result"`
-	ResultInfo DLPProfilePredefinedUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpProfilePredefinedUpdateResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DLPProfilePredefinedUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Profile                                           `json:"result"`
+	JSON    dlpProfilePredefinedUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // dlpProfilePredefinedUpdateResponseEnvelopeJSON contains the JSON metadata for
@@ -96,7 +96,6 @@ type dlpProfilePredefinedUpdateResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -109,35 +108,19 @@ func (r dlpProfilePredefinedUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPProfilePredefinedUpdateResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                                    `json:"total_count,required"`
-	JSON       dlpProfilePredefinedUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type DLPProfilePredefinedUpdateResponseEnvelopeSuccess bool
 
-// dlpProfilePredefinedUpdateResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [DLPProfilePredefinedUpdateResponseEnvelopeResultInfo]
-type dlpProfilePredefinedUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	DLPProfilePredefinedUpdateResponseEnvelopeSuccessTrue DLPProfilePredefinedUpdateResponseEnvelopeSuccess = true
+)
 
-func (r *DLPProfilePredefinedUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfilePredefinedUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r DLPProfilePredefinedUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfilePredefinedUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type DLPProfilePredefinedGetParams struct {
@@ -145,12 +128,12 @@ type DLPProfilePredefinedGetParams struct {
 }
 
 type DLPProfilePredefinedGetResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                             `json:"errors,required"`
-	Messages   []shared.ResponseInfo                             `json:"messages,required"`
-	Success    bool                                              `json:"success,required"`
-	Result     Profile                                           `json:"result"`
-	ResultInfo DLPProfilePredefinedGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpProfilePredefinedGetResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DLPProfilePredefinedGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Profile                                        `json:"result"`
+	JSON    dlpProfilePredefinedGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // dlpProfilePredefinedGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -160,7 +143,6 @@ type dlpProfilePredefinedGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -173,33 +155,17 @@ func (r dlpProfilePredefinedGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPProfilePredefinedGetResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                                 `json:"total_count,required"`
-	JSON       dlpProfilePredefinedGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type DLPProfilePredefinedGetResponseEnvelopeSuccess bool
 
-// dlpProfilePredefinedGetResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [DLPProfilePredefinedGetResponseEnvelopeResultInfo]
-type dlpProfilePredefinedGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	DLPProfilePredefinedGetResponseEnvelopeSuccessTrue DLPProfilePredefinedGetResponseEnvelopeSuccess = true
+)
 
-func (r *DLPProfilePredefinedGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfilePredefinedGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r DLPProfilePredefinedGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfilePredefinedGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

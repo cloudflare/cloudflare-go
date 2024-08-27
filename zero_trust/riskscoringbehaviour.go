@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // RiskScoringBehaviourService contains methods and other services that help with
@@ -35,25 +36,35 @@ func NewRiskScoringBehaviourService(opts ...option.RequestOption) (r *RiskScorin
 
 // Update configuration for risk behaviors
 func (r *RiskScoringBehaviourService) Update(ctx context.Context, params RiskScoringBehaviourUpdateParams, opts ...option.RequestOption) (res *RiskScoringBehaviourUpdateResponse, err error) {
+	var env RiskScoringBehaviourUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/behaviors", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Get all behaviors and associated configuration
 func (r *RiskScoringBehaviourService) Get(ctx context.Context, query RiskScoringBehaviourGetParams, opts ...option.RequestOption) (res *RiskScoringBehaviourGetResponse, err error) {
+	var env RiskScoringBehaviourGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/behaviors", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -215,6 +226,92 @@ func (r RiskScoringBehaviourUpdateParamsBehaviorsRiskLevel) IsKnown() bool {
 	return false
 }
 
+type RiskScoringBehaviourUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success RiskScoringBehaviourUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  RiskScoringBehaviourUpdateResponse                `json:"result"`
+	JSON    riskScoringBehaviourUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// riskScoringBehaviourUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [RiskScoringBehaviourUpdateResponseEnvelope]
+type riskScoringBehaviourUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringBehaviourUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringBehaviourUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RiskScoringBehaviourUpdateResponseEnvelopeSuccess bool
+
+const (
+	RiskScoringBehaviourUpdateResponseEnvelopeSuccessTrue RiskScoringBehaviourUpdateResponseEnvelopeSuccess = true
+)
+
+func (r RiskScoringBehaviourUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RiskScoringBehaviourUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type RiskScoringBehaviourGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type RiskScoringBehaviourGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success RiskScoringBehaviourGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  RiskScoringBehaviourGetResponse                `json:"result"`
+	JSON    riskScoringBehaviourGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// riskScoringBehaviourGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RiskScoringBehaviourGetResponseEnvelope]
+type riskScoringBehaviourGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringBehaviourGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringBehaviourGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RiskScoringBehaviourGetResponseEnvelopeSuccess bool
+
+const (
+	RiskScoringBehaviourGetResponseEnvelopeSuccessTrue RiskScoringBehaviourGetResponseEnvelopeSuccess = true
+)
+
+func (r RiskScoringBehaviourGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RiskScoringBehaviourGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

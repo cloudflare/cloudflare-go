@@ -129,6 +129,27 @@ func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params N
 	return
 }
 
+// Get a private network route in an account.
+func (r *NetworkRouteService) Get(ctx context.Context, routeID string, query NetworkRouteGetParams, opts ...option.RequestOption) (res *Route, err error) {
+	var env NetworkRouteGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if routeID == "" {
+		err = errors.New("missing required route_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", query.AccountID, routeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type Route struct {
 	// UUID of the route.
 	ID string `json:"id"`
@@ -437,6 +458,54 @@ const (
 func (r NetworkRouteEditResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case NetworkRouteEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type NetworkRouteGetParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type NetworkRouteGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Route                 `json:"result,required"`
+	// Whether the API call was successful
+	Success NetworkRouteGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    networkRouteGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// networkRouteGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [NetworkRouteGetResponseEnvelope]
+type networkRouteGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkRouteGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkRouteGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type NetworkRouteGetResponseEnvelopeSuccess bool
+
+const (
+	NetworkRouteGetResponseEnvelopeSuccessTrue NetworkRouteGetResponseEnvelopeSuccess = true
+)
+
+func (r NetworkRouteGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkRouteGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

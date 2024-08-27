@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // RiskScoringSummaryService contains methods and other services that help with
@@ -36,13 +37,18 @@ func NewRiskScoringSummaryService(opts ...option.RequestOption) (r *RiskScoringS
 
 // Get risk score info for all users in the account
 func (r *RiskScoringSummaryService) Get(ctx context.Context, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
+	var env RiskScoringSummaryGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/summary", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -116,4 +122,80 @@ func (r RiskScoringSummaryGetResponseUsersMaxRiskLevel) IsKnown() bool {
 
 type RiskScoringSummaryGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type RiskScoringSummaryGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success    RiskScoringSummaryGetResponseEnvelopeSuccess    `json:"success,required"`
+	Result     RiskScoringSummaryGetResponse                   `json:"result"`
+	ResultInfo RiskScoringSummaryGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       riskScoringSummaryGetResponseEnvelopeJSON       `json:"-"`
+}
+
+// riskScoringSummaryGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RiskScoringSummaryGetResponseEnvelope]
+type riskScoringSummaryGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringSummaryGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringSummaryGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RiskScoringSummaryGetResponseEnvelopeSuccess bool
+
+const (
+	RiskScoringSummaryGetResponseEnvelopeSuccessTrue RiskScoringSummaryGetResponseEnvelopeSuccess = true
+)
+
+func (r RiskScoringSummaryGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RiskScoringSummaryGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RiskScoringSummaryGetResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                             `json:"total_count"`
+	JSON       riskScoringSummaryGetResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// riskScoringSummaryGetResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [RiskScoringSummaryGetResponseEnvelopeResultInfo]
+type riskScoringSummaryGetResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringSummaryGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringSummaryGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
