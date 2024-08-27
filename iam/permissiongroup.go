@@ -87,7 +87,7 @@ type PermissionGroupGetResponse struct {
 	// Identifier of the group.
 	ID string `json:"id,required"`
 	// Attributes associated to the permission group.
-	Meta interface{} `json:"meta"`
+	Meta PermissionGroupGetResponseMeta `json:"meta"`
 	// Name of the group.
 	Name string                         `json:"name"`
 	JSON permissionGroupGetResponseJSON `json:"-"`
@@ -108,6 +108,30 @@ func (r *PermissionGroupGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r permissionGroupGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes associated to the permission group.
+type PermissionGroupGetResponseMeta struct {
+	Key   string                             `json:"key"`
+	Value string                             `json:"value"`
+	JSON  permissionGroupGetResponseMetaJSON `json:"-"`
+}
+
+// permissionGroupGetResponseMetaJSON contains the JSON metadata for the struct
+// [PermissionGroupGetResponseMeta]
+type permissionGroupGetResponseMetaJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PermissionGroupGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r permissionGroupGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 

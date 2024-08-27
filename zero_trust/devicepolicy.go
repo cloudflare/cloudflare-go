@@ -24,6 +24,7 @@ import (
 // the [NewDevicePolicyService] method instead.
 type DevicePolicyService struct {
 	Options         []option.RequestOption
+	Certificates    *DevicePolicyCertificateService
 	DefaultPolicy   *DevicePolicyDefaultPolicyService
 	Excludes        *DevicePolicyExcludeService
 	FallbackDomains *DevicePolicyFallbackDomainService
@@ -36,6 +37,7 @@ type DevicePolicyService struct {
 func NewDevicePolicyService(opts ...option.RequestOption) (r *DevicePolicyService) {
 	r = &DevicePolicyService{}
 	r.Options = opts
+	r.Certificates = NewDevicePolicyCertificateService(opts...)
 	r.DefaultPolicy = NewDevicePolicyDefaultPolicyService(opts...)
 	r.Excludes = NewDevicePolicyExcludeService(opts...)
 	r.FallbackDomains = NewDevicePolicyFallbackDomainService(opts...)
@@ -297,12 +299,6 @@ func (r settingsPolicyTargetTestJSON) RawJSON() string {
 	return r.raw
 }
 
-type DevicePolicyNewResponse = interface{}
-
-type DevicePolicyEditResponse = interface{}
-
-type DevicePolicyGetResponse = interface{}
-
 type DevicePolicyNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The wirefilter expression to match devices.
@@ -370,9 +366,8 @@ type DevicePolicyNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success    DevicePolicyNewResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyNewResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyNewResponseEnvelopeJSON       `json:"-"`
+	Success DevicePolicyNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    devicePolicyNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // devicePolicyNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -382,7 +377,6 @@ type devicePolicyNewResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -408,37 +402,6 @@ func (r DevicePolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type DevicePolicyNewResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                       `json:"total_count"`
-	JSON       devicePolicyNewResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DevicePolicyNewResponseEnvelopeResultInfo]
-type devicePolicyNewResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyNewResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type DevicePolicyListParams struct {
@@ -584,9 +547,8 @@ type DevicePolicyEditResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success    DevicePolicyEditResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyEditResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyEditResponseEnvelopeJSON       `json:"-"`
+	Success DevicePolicyEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    devicePolicyEditResponseEnvelopeJSON    `json:"-"`
 }
 
 // devicePolicyEditResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -596,7 +558,6 @@ type devicePolicyEditResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -624,37 +585,6 @@ func (r DevicePolicyEditResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type DevicePolicyEditResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       devicePolicyEditResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyEditResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [DevicePolicyEditResponseEnvelopeResultInfo]
-type devicePolicyEditResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyEditResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type DevicePolicyGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
@@ -664,9 +594,8 @@ type DevicePolicyGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   SettingsPolicy        `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success    DevicePolicyGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyGetResponseEnvelopeJSON       `json:"-"`
+	Success DevicePolicyGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    devicePolicyGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // devicePolicyGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -676,7 +605,6 @@ type devicePolicyGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -702,35 +630,4 @@ func (r DevicePolicyGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type DevicePolicyGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                       `json:"total_count"`
-	JSON       devicePolicyGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DevicePolicyGetResponseEnvelopeResultInfo]
-type devicePolicyGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

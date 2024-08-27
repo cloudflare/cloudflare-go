@@ -55,6 +55,8 @@ func (UnionString) ImplementsRulesListItemGetResponseUnion()                    
 func (UnionString) ImplementsD1DatabaseRawResponseResultsRowsUnion()                             {}
 func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                      {}
 func (UnionString) ImplementsZeroTrustDeviceGetResponseUnion()                                   {}
+func (UnionString) ImplementsZeroTrustDevicePolicyCertificateUpdateResponseUnion()               {}
+func (UnionString) ImplementsZeroTrustDevicePolicyCertificateGetResponseUnion()                  {}
 func (UnionString) ImplementsZeroTrustDevicePostureIntegrationDeleteResponseUnion()              {}
 func (UnionString) ImplementsZeroTrustDeviceRevokeNewResponseUnion()                             {}
 func (UnionString) ImplementsZeroTrustDeviceUnrevokeNewResponseUnion()                           {}

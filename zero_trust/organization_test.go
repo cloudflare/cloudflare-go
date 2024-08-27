@@ -44,7 +44,7 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 		}),
 		SessionDuration:                cloudflare.F("24h"),
 		UIReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
-		UserSeatExpirationInactiveTime: cloudflare.F("720h"),
+		UserSeatExpirationInactiveTime: cloudflare.F("730h"),
 		WARPAuthSessionDuration:        cloudflare.F("24h"),
 	})
 	if err != nil {
@@ -90,7 +90,7 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 		Name:                           cloudflare.F("Widget Corps Internal Applications"),
 		SessionDuration:                cloudflare.F("24h"),
 		UIReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
-		UserSeatExpirationInactiveTime: cloudflare.F("720h"),
+		UserSeatExpirationInactiveTime: cloudflare.F("730h"),
 		WARPAuthSessionDuration:        cloudflare.F("24h"),
 	})
 	if err != nil {

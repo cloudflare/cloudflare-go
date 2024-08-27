@@ -24,8 +24,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDLPDatasetService] method instead.
 type DLPDatasetService struct {
-	Options []option.RequestOption
-	Upload  *DLPDatasetUploadService
+	Options  []option.RequestOption
+	Upload   *DLPDatasetUploadService
+	Versions *DLPDatasetVersionService
 }
 
 // NewDLPDatasetService generates a new service that applies the given options to
@@ -35,6 +36,7 @@ func NewDLPDatasetService(opts ...option.RequestOption) (r *DLPDatasetService) {
 	r = &DLPDatasetService{}
 	r.Options = opts
 	r.Upload = NewDLPDatasetUploadService(opts...)
+	r.Versions = NewDLPDatasetVersionService(opts...)
 	return
 }
 
@@ -344,12 +346,12 @@ func (r DLPDatasetNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPDatasetNewResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                   `json:"errors,required"`
-	Messages   []shared.ResponseInfo                   `json:"messages,required"`
-	Success    bool                                    `json:"success,required"`
-	Result     DatasetCreation                         `json:"result"`
-	ResultInfo DLPDatasetNewResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpDatasetNewResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DLPDatasetNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  DatasetCreation                      `json:"result"`
+	JSON    dlpDatasetNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // dlpDatasetNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -359,7 +361,6 @@ type dlpDatasetNewResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -372,35 +373,19 @@ func (r dlpDatasetNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetNewResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                       `json:"total_count,required"`
-	JSON       dlpDatasetNewResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type DLPDatasetNewResponseEnvelopeSuccess bool
 
-// dlpDatasetNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DLPDatasetNewResponseEnvelopeResultInfo]
-type dlpDatasetNewResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	DLPDatasetNewResponseEnvelopeSuccessTrue DLPDatasetNewResponseEnvelopeSuccess = true
+)
 
-func (r *DLPDatasetNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetNewResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r DLPDatasetNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPDatasetNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type DLPDatasetUpdateParams struct {
@@ -416,12 +401,12 @@ func (r DLPDatasetUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPDatasetUpdateResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                      `json:"errors,required"`
-	Messages   []shared.ResponseInfo                      `json:"messages,required"`
-	Success    bool                                       `json:"success,required"`
-	Result     Dataset                                    `json:"result"`
-	ResultInfo DLPDatasetUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpDatasetUpdateResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DLPDatasetUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Dataset                                 `json:"result"`
+	JSON    dlpDatasetUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // dlpDatasetUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -431,7 +416,6 @@ type dlpDatasetUpdateResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -444,35 +428,19 @@ func (r dlpDatasetUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetUpdateResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                          `json:"total_count,required"`
-	JSON       dlpDatasetUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type DLPDatasetUpdateResponseEnvelopeSuccess bool
 
-// dlpDatasetUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [DLPDatasetUpdateResponseEnvelopeResultInfo]
-type dlpDatasetUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	DLPDatasetUpdateResponseEnvelopeSuccessTrue DLPDatasetUpdateResponseEnvelopeSuccess = true
+)
 
-func (r *DLPDatasetUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r DLPDatasetUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPDatasetUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type DLPDatasetListParams struct {
@@ -488,12 +456,12 @@ type DLPDatasetGetParams struct {
 }
 
 type DLPDatasetGetResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                   `json:"errors,required"`
-	Messages   []shared.ResponseInfo                   `json:"messages,required"`
-	Success    bool                                    `json:"success,required"`
-	Result     Dataset                                 `json:"result"`
-	ResultInfo DLPDatasetGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpDatasetGetResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DLPDatasetGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Dataset                              `json:"result"`
+	JSON    dlpDatasetGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // dlpDatasetGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -503,7 +471,6 @@ type dlpDatasetGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -516,33 +483,17 @@ func (r dlpDatasetGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetGetResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                       `json:"total_count,required"`
-	JSON       dlpDatasetGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type DLPDatasetGetResponseEnvelopeSuccess bool
 
-// dlpDatasetGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DLPDatasetGetResponseEnvelopeResultInfo]
-type dlpDatasetGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	DLPDatasetGetResponseEnvelopeSuccessTrue DLPDatasetGetResponseEnvelopeSuccess = true
+)
 
-func (r *DLPDatasetGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r DLPDatasetGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPDatasetGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

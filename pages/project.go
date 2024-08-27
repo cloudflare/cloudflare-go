@@ -181,7 +181,7 @@ type Deployment struct {
 	// Info about what caused the deployment.
 	DeploymentTrigger DeploymentDeploymentTrigger `json:"deployment_trigger"`
 	// A dict of env variables to build this deploy.
-	EnvVars interface{} `json:"env_vars"`
+	EnvVars map[string]DeploymentEnvVar `json:"env_vars"`
 	// Type of deploy.
 	Environment string `json:"environment"`
 	// If the deployment has been skipped.
@@ -327,6 +327,32 @@ func (r deploymentDeploymentTriggerMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Environment variable.
+type DeploymentEnvVar struct {
+	// Environment variable value.
+	Value string `json:"value,required"`
+	// The type of environment variable.
+	Type string               `json:"type"`
+	JSON deploymentEnvVarJSON `json:"-"`
+}
+
+// deploymentEnvVarJSON contains the JSON metadata for the struct
+// [DeploymentEnvVar]
+type deploymentEnvVarJSON struct {
+	Value       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeploymentEnvVar) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deploymentEnvVarJSON) RawJSON() string {
+	return r.raw
+}
+
 type DeploymentSource struct {
 	Config DeploymentSourceConfig `json:"config"`
 	Type   string                 `json:"type"`
@@ -451,6 +477,18 @@ type DeploymentDeploymentTriggerMetadataParam struct {
 }
 
 func (r DeploymentDeploymentTriggerMetadataParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Environment variable.
+type DeploymentEnvVarParam struct {
+	// Environment variable value.
+	Value param.Field[string] `json:"value,required"`
+	// The type of environment variable.
+	Type param.Field[string] `json:"type"`
+}
+
+func (r DeploymentEnvVarParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -598,38 +636,38 @@ func (r projectDeploymentConfigsJSON) RawJSON() string {
 // Configs for preview deploys.
 type ProjectDeploymentConfigsPreview struct {
 	// Constellation bindings used for Pages Functions.
-	AIBindings ProjectDeploymentConfigsPreviewAIBindings `json:"ai_bindings,nullable"`
+	AIBindings map[string]ProjectDeploymentConfigsPreviewAIBinding `json:"ai_bindings,nullable"`
 	// Analytics Engine bindings used for Pages Functions.
-	AnalyticsEngineDatasets ProjectDeploymentConfigsPreviewAnalyticsEngineDatasets `json:"analytics_engine_datasets,nullable"`
+	AnalyticsEngineDatasets map[string]ProjectDeploymentConfigsPreviewAnalyticsEngineDataset `json:"analytics_engine_datasets,nullable"`
 	// Browser bindings used for Pages Functions.
-	Browsers ProjectDeploymentConfigsPreviewBrowsers `json:"browsers,nullable"`
+	Browsers map[string]interface{} `json:"browsers,nullable"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate string `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
 	CompatibilityFlags []string `json:"compatibility_flags"`
 	// D1 databases used for Pages Functions.
-	D1Databases ProjectDeploymentConfigsPreviewD1Databases `json:"d1_databases,nullable"`
+	D1Databases map[string]ProjectDeploymentConfigsPreviewD1Database `json:"d1_databases,nullable"`
 	// Durabble Object namespaces used for Pages Functions.
-	DurableObjectNamespaces ProjectDeploymentConfigsPreviewDurableObjectNamespaces `json:"durable_object_namespaces,nullable"`
+	DurableObjectNamespaces map[string]ProjectDeploymentConfigsPreviewDurableObjectNamespace `json:"durable_object_namespaces,nullable"`
 	// Environment variables for build configs.
-	EnvVars ProjectDeploymentConfigsPreviewEnvVars `json:"env_vars,nullable"`
+	EnvVars map[string]ProjectDeploymentConfigsPreviewEnvVar `json:"env_vars,nullable"`
 	// Hyperdrive bindings used for Pages Functions.
-	HyperdriveBindings ProjectDeploymentConfigsPreviewHyperdriveBindings `json:"hyperdrive_bindings,nullable"`
+	HyperdriveBindings map[string]ProjectDeploymentConfigsPreviewHyperdriveBinding `json:"hyperdrive_bindings,nullable"`
 	// KV namespaces used for Pages Functions.
-	KVNamespaces ProjectDeploymentConfigsPreviewKVNamespaces `json:"kv_namespaces"`
+	KVNamespaces map[string]ProjectDeploymentConfigsPreviewKVNamespace `json:"kv_namespaces,nullable"`
 	// mTLS bindings used for Pages Functions.
-	MTLSCertificates ProjectDeploymentConfigsPreviewMTLSCertificates `json:"mtls_certificates,nullable"`
+	MTLSCertificates map[string]ProjectDeploymentConfigsPreviewMTLSCertificate `json:"mtls_certificates,nullable"`
 	// Placement setting used for Pages Functions.
 	Placement ProjectDeploymentConfigsPreviewPlacement `json:"placement,nullable"`
 	// Queue Producer bindings used for Pages Functions.
-	QueueProducers ProjectDeploymentConfigsPreviewQueueProducers `json:"queue_producers,nullable"`
+	QueueProducers map[string]ProjectDeploymentConfigsPreviewQueueProducer `json:"queue_producers,nullable"`
 	// R2 buckets used for Pages Functions.
-	R2Buckets ProjectDeploymentConfigsPreviewR2Buckets `json:"r2_buckets,nullable"`
+	R2Buckets map[string]ProjectDeploymentConfigsPreviewR2Bucket `json:"r2_buckets,nullable"`
 	// Services used for Pages Functions.
-	Services ProjectDeploymentConfigsPreviewServices `json:"services,nullable"`
+	Services map[string]ProjectDeploymentConfigsPreviewService `json:"services,nullable"`
 	// Vectorize bindings used for Pages Functions.
-	VectorizeBindings ProjectDeploymentConfigsPreviewVectorizeBindings `json:"vectorize_bindings,nullable"`
-	JSON              projectDeploymentConfigsPreviewJSON              `json:"-"`
+	VectorizeBindings map[string]ProjectDeploymentConfigsPreviewVectorizeBinding `json:"vectorize_bindings,nullable"`
+	JSON              projectDeploymentConfigsPreviewJSON                        `json:"-"`
 }
 
 // projectDeploymentConfigsPreviewJSON contains the JSON metadata for the struct
@@ -663,414 +701,203 @@ func (r projectDeploymentConfigsPreviewJSON) RawJSON() string {
 	return r.raw
 }
 
-// Constellation bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewAIBindings struct {
-	// AI binding.
-	AIBinding ProjectDeploymentConfigsPreviewAIBindingsAIBinding `json:"AI_BINDING"`
-	JSON      projectDeploymentConfigsPreviewAIBindingsJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewAIBindingsJSON contains the JSON metadata for the
-// struct [ProjectDeploymentConfigsPreviewAIBindings]
-type projectDeploymentConfigsPreviewAIBindingsJSON struct {
-	AIBinding   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewAIBindings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewAIBindingsJSON) RawJSON() string {
-	return r.raw
-}
-
 // AI binding.
-type ProjectDeploymentConfigsPreviewAIBindingsAIBinding struct {
-	ProjectID string                                                 `json:"project_id"`
-	JSON      projectDeploymentConfigsPreviewAIBindingsAIBindingJSON `json:"-"`
+type ProjectDeploymentConfigsPreviewAIBinding struct {
+	ProjectID string                                       `json:"project_id"`
+	JSON      projectDeploymentConfigsPreviewAIBindingJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewAIBindingsAIBindingJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsPreviewAIBindingsAIBinding]
-type projectDeploymentConfigsPreviewAIBindingsAIBindingJSON struct {
+// projectDeploymentConfigsPreviewAIBindingJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsPreviewAIBinding]
+type projectDeploymentConfigsPreviewAIBindingJSON struct {
 	ProjectID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewAIBindingsAIBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewAIBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewAIBindingsAIBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Analytics Engine bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewAnalyticsEngineDatasets struct {
-	// Analytics Engine binding.
-	AnalyticsEngineBinding ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding `json:"ANALYTICS_ENGINE_BINDING"`
-	JSON                   projectDeploymentConfigsPreviewAnalyticsEngineDatasetsJSON                   `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewAnalyticsEngineDatasetsJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsPreviewAnalyticsEngineDatasets]
-type projectDeploymentConfigsPreviewAnalyticsEngineDatasetsJSON struct {
-	AnalyticsEngineBinding apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewAnalyticsEngineDatasets) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewAnalyticsEngineDatasetsJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewAIBindingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Analytics Engine binding.
-type ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding struct {
+type ProjectDeploymentConfigsPreviewAnalyticsEngineDataset struct {
 	// Name of the dataset.
-	Dataset string                                                                           `json:"dataset"`
-	JSON    projectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingJSON `json:"-"`
+	Dataset string                                                    `json:"dataset"`
+	JSON    projectDeploymentConfigsPreviewAnalyticsEngineDatasetJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingJSON
-// contains the JSON metadata for the struct
-// [ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding]
-type projectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingJSON struct {
+// projectDeploymentConfigsPreviewAnalyticsEngineDatasetJSON contains the JSON
+// metadata for the struct [ProjectDeploymentConfigsPreviewAnalyticsEngineDataset]
+type projectDeploymentConfigsPreviewAnalyticsEngineDatasetJSON struct {
 	Dataset     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewAnalyticsEngineDataset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Browser bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewBrowsers struct {
-	// Browser binding.
-	Browser interface{}                                 `json:"BROWSER"`
-	JSON    projectDeploymentConfigsPreviewBrowsersJSON `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewBrowsersJSON contains the JSON metadata for the
-// struct [ProjectDeploymentConfigsPreviewBrowsers]
-type projectDeploymentConfigsPreviewBrowsersJSON struct {
-	Browser     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewBrowsers) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewBrowsersJSON) RawJSON() string {
-	return r.raw
-}
-
-// D1 databases used for Pages Functions.
-type ProjectDeploymentConfigsPreviewD1Databases struct {
-	// D1 binding.
-	D1Binding ProjectDeploymentConfigsPreviewD1DatabasesD1Binding `json:"D1_BINDING"`
-	JSON      projectDeploymentConfigsPreviewD1DatabasesJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewD1DatabasesJSON contains the JSON metadata for
-// the struct [ProjectDeploymentConfigsPreviewD1Databases]
-type projectDeploymentConfigsPreviewD1DatabasesJSON struct {
-	D1Binding   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewD1Databases) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewD1DatabasesJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewAnalyticsEngineDatasetJSON) RawJSON() string {
 	return r.raw
 }
 
 // D1 binding.
-type ProjectDeploymentConfigsPreviewD1DatabasesD1Binding struct {
+type ProjectDeploymentConfigsPreviewD1Database struct {
 	// UUID of the D1 database.
-	ID   string                                                  `json:"id"`
-	JSON projectDeploymentConfigsPreviewD1DatabasesD1BindingJSON `json:"-"`
+	ID   string                                        `json:"id"`
+	JSON projectDeploymentConfigsPreviewD1DatabaseJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewD1DatabasesD1BindingJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsPreviewD1DatabasesD1Binding]
-type projectDeploymentConfigsPreviewD1DatabasesD1BindingJSON struct {
+// projectDeploymentConfigsPreviewD1DatabaseJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsPreviewD1Database]
+type projectDeploymentConfigsPreviewD1DatabaseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewD1DatabasesD1Binding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewD1Database) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewD1DatabasesD1BindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Durabble Object namespaces used for Pages Functions.
-type ProjectDeploymentConfigsPreviewDurableObjectNamespaces struct {
-	// Durabble Object binding.
-	DoBinding ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBinding `json:"DO_BINDING"`
-	JSON      projectDeploymentConfigsPreviewDurableObjectNamespacesJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewDurableObjectNamespacesJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsPreviewDurableObjectNamespaces]
-type projectDeploymentConfigsPreviewDurableObjectNamespacesJSON struct {
-	DoBinding   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewDurableObjectNamespaces) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewDurableObjectNamespacesJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewD1DatabaseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Durabble Object binding.
-type ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBinding struct {
+type ProjectDeploymentConfigsPreviewDurableObjectNamespace struct {
 	// ID of the Durabble Object namespace.
-	NamespaceID string                                                              `json:"namespace_id"`
-	JSON        projectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON `json:"-"`
+	NamespaceID string                                                    `json:"namespace_id"`
+	JSON        projectDeploymentConfigsPreviewDurableObjectNamespaceJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON contains the
-// JSON metadata for the struct
-// [ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBinding]
-type projectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON struct {
+// projectDeploymentConfigsPreviewDurableObjectNamespaceJSON contains the JSON
+// metadata for the struct [ProjectDeploymentConfigsPreviewDurableObjectNamespace]
+type projectDeploymentConfigsPreviewDurableObjectNamespaceJSON struct {
 	NamespaceID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Environment variables for build configs.
-type ProjectDeploymentConfigsPreviewEnvVars struct {
-	// Environment variable.
-	EnvironmentVariable ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariable `json:"ENVIRONMENT_VARIABLE"`
-	JSON                projectDeploymentConfigsPreviewEnvVarsJSON                `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewEnvVarsJSON contains the JSON metadata for the
-// struct [ProjectDeploymentConfigsPreviewEnvVars]
-type projectDeploymentConfigsPreviewEnvVarsJSON struct {
-	EnvironmentVariable apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewEnvVars) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewEnvVarsJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewDurableObjectNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
 // Environment variable.
-type ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariable struct {
-	// The type of environment variable (plain text or secret)
-	Type ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableType `json:"type"`
+type ProjectDeploymentConfigsPreviewEnvVar struct {
 	// Environment variable value.
-	Value string                                                        `json:"value"`
-	JSON  projectDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON `json:"-"`
+	Value string `json:"value,required"`
+	// The type of environment variable.
+	Type ProjectDeploymentConfigsPreviewEnvVarsType `json:"type"`
+	JSON projectDeploymentConfigsPreviewEnvVarJSON  `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON contains the JSON
-// metadata for the struct
-// [ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariable]
-type projectDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON struct {
-	Type        apijson.Field
+// projectDeploymentConfigsPreviewEnvVarJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsPreviewEnvVar]
+type projectDeploymentConfigsPreviewEnvVarJSON struct {
 	Value       apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariable) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewEnvVar) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewEnvVarJSON) RawJSON() string {
 	return r.raw
 }
 
-// The type of environment variable (plain text or secret)
-type ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableType string
+// The type of environment variable.
+type ProjectDeploymentConfigsPreviewEnvVarsType string
 
 const (
-	ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText  ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableType = "plain_text"
-	ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypeSecretText ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableType = "secret_text"
+	ProjectDeploymentConfigsPreviewEnvVarsTypePlainText  ProjectDeploymentConfigsPreviewEnvVarsType = "plain_text"
+	ProjectDeploymentConfigsPreviewEnvVarsTypeSecretText ProjectDeploymentConfigsPreviewEnvVarsType = "secret_text"
 )
 
-func (r ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableType) IsKnown() bool {
+func (r ProjectDeploymentConfigsPreviewEnvVarsType) IsKnown() bool {
 	switch r {
-	case ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypePlainText, ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableTypeSecretText:
+	case ProjectDeploymentConfigsPreviewEnvVarsTypePlainText, ProjectDeploymentConfigsPreviewEnvVarsTypeSecretText:
 		return true
 	}
 	return false
 }
 
-// Hyperdrive bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewHyperdriveBindings struct {
-	// Hyperdrive binding.
-	Hyperdrive ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdrive `json:"HYPERDRIVE"`
-	JSON       projectDeploymentConfigsPreviewHyperdriveBindingsJSON       `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewHyperdriveBindingsJSON contains the JSON metadata
-// for the struct [ProjectDeploymentConfigsPreviewHyperdriveBindings]
-type projectDeploymentConfigsPreviewHyperdriveBindingsJSON struct {
-	Hyperdrive  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewHyperdriveBindings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewHyperdriveBindingsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Hyperdrive binding.
-type ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdrive struct {
-	ID   string                                                          `json:"id"`
-	JSON projectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveJSON `json:"-"`
+type ProjectDeploymentConfigsPreviewHyperdriveBinding struct {
+	ID   string                                               `json:"id"`
+	JSON projectDeploymentConfigsPreviewHyperdriveBindingJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveJSON contains the
-// JSON metadata for the struct
-// [ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdrive]
-type projectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveJSON struct {
+// projectDeploymentConfigsPreviewHyperdriveBindingJSON contains the JSON metadata
+// for the struct [ProjectDeploymentConfigsPreviewHyperdriveBinding]
+type projectDeploymentConfigsPreviewHyperdriveBindingJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdrive) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewHyperdriveBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewHyperdriveBindingJSON) RawJSON() string {
 	return r.raw
 }
 
-// KV namespaces used for Pages Functions.
-type ProjectDeploymentConfigsPreviewKVNamespaces struct {
-	// KV binding.
-	KVBinding ProjectDeploymentConfigsPreviewKVNamespacesKVBinding `json:"KV_BINDING"`
-	JSON      projectDeploymentConfigsPreviewKVNamespacesJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewKVNamespacesJSON contains the JSON metadata for
-// the struct [ProjectDeploymentConfigsPreviewKVNamespaces]
-type projectDeploymentConfigsPreviewKVNamespacesJSON struct {
-	KVBinding   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewKVNamespaces) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewKVNamespacesJSON) RawJSON() string {
-	return r.raw
-}
-
-// KV binding.
-type ProjectDeploymentConfigsPreviewKVNamespacesKVBinding struct {
+// KV namespace binding.
+type ProjectDeploymentConfigsPreviewKVNamespace struct {
 	// ID of the KV namespace.
-	NamespaceID string                                                   `json:"namespace_id"`
-	JSON        projectDeploymentConfigsPreviewKVNamespacesKVBindingJSON `json:"-"`
+	NamespaceID string                                         `json:"namespace_id"`
+	JSON        projectDeploymentConfigsPreviewKVNamespaceJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewKVNamespacesKVBindingJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsPreviewKVNamespacesKVBinding]
-type projectDeploymentConfigsPreviewKVNamespacesKVBindingJSON struct {
+// projectDeploymentConfigsPreviewKVNamespaceJSON contains the JSON metadata for
+// the struct [ProjectDeploymentConfigsPreviewKVNamespace]
+type projectDeploymentConfigsPreviewKVNamespaceJSON struct {
 	NamespaceID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewKVNamespacesKVBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewKVNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewKVNamespacesKVBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// mTLS bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewMTLSCertificates struct {
-	// mTLS binding.
-	MTLS ProjectDeploymentConfigsPreviewMTLSCertificatesMTLS `json:"MTLS"`
-	JSON projectDeploymentConfigsPreviewMTLSCertificatesJSON `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewMTLSCertificatesJSON contains the JSON metadata
-// for the struct [ProjectDeploymentConfigsPreviewMTLSCertificates]
-type projectDeploymentConfigsPreviewMTLSCertificatesJSON struct {
-	MTLS        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewMTLSCertificates) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewMTLSCertificatesJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewKVNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
 // mTLS binding.
-type ProjectDeploymentConfigsPreviewMTLSCertificatesMTLS struct {
-	CertificateID string                                                  `json:"certificate_id"`
-	JSON          projectDeploymentConfigsPreviewMTLSCertificatesMTLSJSON `json:"-"`
+type ProjectDeploymentConfigsPreviewMTLSCertificate struct {
+	CertificateID string                                             `json:"certificate_id"`
+	JSON          projectDeploymentConfigsPreviewMTLSCertificateJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewMTLSCertificatesMTLSJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsPreviewMTLSCertificatesMTLS]
-type projectDeploymentConfigsPreviewMTLSCertificatesMTLSJSON struct {
+// projectDeploymentConfigsPreviewMTLSCertificateJSON contains the JSON metadata
+// for the struct [ProjectDeploymentConfigsPreviewMTLSCertificate]
+type projectDeploymentConfigsPreviewMTLSCertificateJSON struct {
 	CertificateID apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewMTLSCertificatesMTLS) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewMTLSCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewMTLSCertificatesMTLSJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewMTLSCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1097,139 +924,69 @@ func (r projectDeploymentConfigsPreviewPlacementJSON) RawJSON() string {
 	return r.raw
 }
 
-// Queue Producer bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewQueueProducers struct {
-	// Queue Producer binding.
-	QueueProducerBinding ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBinding `json:"QUEUE_PRODUCER_BINDING"`
-	JSON                 projectDeploymentConfigsPreviewQueueProducersJSON                 `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewQueueProducersJSON contains the JSON metadata for
-// the struct [ProjectDeploymentConfigsPreviewQueueProducers]
-type projectDeploymentConfigsPreviewQueueProducersJSON struct {
-	QueueProducerBinding apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewQueueProducers) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewQueueProducersJSON) RawJSON() string {
-	return r.raw
-}
-
 // Queue Producer binding.
-type ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBinding struct {
+type ProjectDeploymentConfigsPreviewQueueProducer struct {
 	// Name of the Queue.
-	Name string                                                                `json:"name"`
-	JSON projectDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON `json:"-"`
+	Name string                                           `json:"name"`
+	JSON projectDeploymentConfigsPreviewQueueProducerJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON contains
-// the JSON metadata for the struct
-// [ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBinding]
-type projectDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON struct {
+// projectDeploymentConfigsPreviewQueueProducerJSON contains the JSON metadata for
+// the struct [ProjectDeploymentConfigsPreviewQueueProducer]
+type projectDeploymentConfigsPreviewQueueProducerJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewQueueProducer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// R2 buckets used for Pages Functions.
-type ProjectDeploymentConfigsPreviewR2Buckets struct {
-	// R2 binding.
-	R2Binding ProjectDeploymentConfigsPreviewR2BucketsR2Binding `json:"R2_BINDING"`
-	JSON      projectDeploymentConfigsPreviewR2BucketsJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewR2BucketsJSON contains the JSON metadata for the
-// struct [ProjectDeploymentConfigsPreviewR2Buckets]
-type projectDeploymentConfigsPreviewR2BucketsJSON struct {
-	R2Binding   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewR2Buckets) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewR2BucketsJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewQueueProducerJSON) RawJSON() string {
 	return r.raw
 }
 
 // R2 binding.
-type ProjectDeploymentConfigsPreviewR2BucketsR2Binding struct {
+type ProjectDeploymentConfigsPreviewR2Bucket struct {
 	// Jurisdiction of the R2 bucket.
 	Jurisdiction string `json:"jurisdiction,nullable"`
 	// Name of the R2 bucket.
-	Name string                                                `json:"name"`
-	JSON projectDeploymentConfigsPreviewR2BucketsR2BindingJSON `json:"-"`
+	Name string                                      `json:"name"`
+	JSON projectDeploymentConfigsPreviewR2BucketJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewR2BucketsR2BindingJSON contains the JSON metadata
-// for the struct [ProjectDeploymentConfigsPreviewR2BucketsR2Binding]
-type projectDeploymentConfigsPreviewR2BucketsR2BindingJSON struct {
+// projectDeploymentConfigsPreviewR2BucketJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsPreviewR2Bucket]
+type projectDeploymentConfigsPreviewR2BucketJSON struct {
 	Jurisdiction apijson.Field
 	Name         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewR2BucketsR2Binding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewR2Bucket) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewR2BucketsR2BindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Services used for Pages Functions.
-type ProjectDeploymentConfigsPreviewServices struct {
-	// Service binding.
-	ServiceBinding ProjectDeploymentConfigsPreviewServicesServiceBinding `json:"SERVICE_BINDING"`
-	JSON           projectDeploymentConfigsPreviewServicesJSON           `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewServicesJSON contains the JSON metadata for the
-// struct [ProjectDeploymentConfigsPreviewServices]
-type projectDeploymentConfigsPreviewServicesJSON struct {
-	ServiceBinding apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewServices) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewServicesJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewR2BucketJSON) RawJSON() string {
 	return r.raw
 }
 
 // Service binding.
-type ProjectDeploymentConfigsPreviewServicesServiceBinding struct {
+type ProjectDeploymentConfigsPreviewService struct {
 	// The entrypoint to bind to.
 	Entrypoint string `json:"entrypoint,nullable"`
 	// The Service environment.
 	Environment string `json:"environment"`
 	// The Service name.
-	Service string                                                    `json:"service"`
-	JSON    projectDeploymentConfigsPreviewServicesServiceBindingJSON `json:"-"`
+	Service string                                     `json:"service"`
+	JSON    projectDeploymentConfigsPreviewServiceJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewServicesServiceBindingJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsPreviewServicesServiceBinding]
-type projectDeploymentConfigsPreviewServicesServiceBindingJSON struct {
+// projectDeploymentConfigsPreviewServiceJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsPreviewService]
+type projectDeploymentConfigsPreviewServiceJSON struct {
 	Entrypoint  apijson.Field
 	Environment apijson.Field
 	Service     apijson.Field
@@ -1237,95 +994,71 @@ type projectDeploymentConfigsPreviewServicesServiceBindingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewServicesServiceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewService) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewServicesServiceBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Vectorize bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewVectorizeBindings struct {
-	// Vectorize binding.
-	Vectorize ProjectDeploymentConfigsPreviewVectorizeBindingsVectorize `json:"VECTORIZE"`
-	JSON      projectDeploymentConfigsPreviewVectorizeBindingsJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsPreviewVectorizeBindingsJSON contains the JSON metadata
-// for the struct [ProjectDeploymentConfigsPreviewVectorizeBindings]
-type projectDeploymentConfigsPreviewVectorizeBindingsJSON struct {
-	Vectorize   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsPreviewVectorizeBindings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsPreviewVectorizeBindingsJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewServiceJSON) RawJSON() string {
 	return r.raw
 }
 
 // Vectorize binding.
-type ProjectDeploymentConfigsPreviewVectorizeBindingsVectorize struct {
-	IndexName string                                                        `json:"index_name"`
-	JSON      projectDeploymentConfigsPreviewVectorizeBindingsVectorizeJSON `json:"-"`
+type ProjectDeploymentConfigsPreviewVectorizeBinding struct {
+	IndexName string                                              `json:"index_name"`
+	JSON      projectDeploymentConfigsPreviewVectorizeBindingJSON `json:"-"`
 }
 
-// projectDeploymentConfigsPreviewVectorizeBindingsVectorizeJSON contains the JSON
-// metadata for the struct
-// [ProjectDeploymentConfigsPreviewVectorizeBindingsVectorize]
-type projectDeploymentConfigsPreviewVectorizeBindingsVectorizeJSON struct {
+// projectDeploymentConfigsPreviewVectorizeBindingJSON contains the JSON metadata
+// for the struct [ProjectDeploymentConfigsPreviewVectorizeBinding]
+type projectDeploymentConfigsPreviewVectorizeBindingJSON struct {
 	IndexName   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsPreviewVectorizeBindingsVectorize) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsPreviewVectorizeBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsPreviewVectorizeBindingsVectorizeJSON) RawJSON() string {
+func (r projectDeploymentConfigsPreviewVectorizeBindingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Configs for production deploys.
 type ProjectDeploymentConfigsProduction struct {
 	// Constellation bindings used for Pages Functions.
-	AIBindings ProjectDeploymentConfigsProductionAIBindings `json:"ai_bindings,nullable"`
+	AIBindings map[string]ProjectDeploymentConfigsProductionAIBinding `json:"ai_bindings,nullable"`
 	// Analytics Engine bindings used for Pages Functions.
-	AnalyticsEngineDatasets ProjectDeploymentConfigsProductionAnalyticsEngineDatasets `json:"analytics_engine_datasets,nullable"`
+	AnalyticsEngineDatasets map[string]ProjectDeploymentConfigsProductionAnalyticsEngineDataset `json:"analytics_engine_datasets,nullable"`
 	// Browser bindings used for Pages Functions.
-	Browsers ProjectDeploymentConfigsProductionBrowsers `json:"browsers,nullable"`
+	Browsers map[string]interface{} `json:"browsers,nullable"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate string `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
 	CompatibilityFlags []string `json:"compatibility_flags"`
 	// D1 databases used for Pages Functions.
-	D1Databases ProjectDeploymentConfigsProductionD1Databases `json:"d1_databases,nullable"`
+	D1Databases map[string]ProjectDeploymentConfigsProductionD1Database `json:"d1_databases,nullable"`
 	// Durabble Object namespaces used for Pages Functions.
-	DurableObjectNamespaces ProjectDeploymentConfigsProductionDurableObjectNamespaces `json:"durable_object_namespaces,nullable"`
+	DurableObjectNamespaces map[string]ProjectDeploymentConfigsProductionDurableObjectNamespace `json:"durable_object_namespaces,nullable"`
 	// Environment variables for build configs.
-	EnvVars ProjectDeploymentConfigsProductionEnvVars `json:"env_vars,nullable"`
+	EnvVars map[string]ProjectDeploymentConfigsProductionEnvVar `json:"env_vars,nullable"`
 	// Hyperdrive bindings used for Pages Functions.
-	HyperdriveBindings ProjectDeploymentConfigsProductionHyperdriveBindings `json:"hyperdrive_bindings,nullable"`
+	HyperdriveBindings map[string]ProjectDeploymentConfigsProductionHyperdriveBinding `json:"hyperdrive_bindings,nullable"`
 	// KV namespaces used for Pages Functions.
-	KVNamespaces ProjectDeploymentConfigsProductionKVNamespaces `json:"kv_namespaces"`
+	KVNamespaces map[string]ProjectDeploymentConfigsProductionKVNamespace `json:"kv_namespaces,nullable"`
 	// mTLS bindings used for Pages Functions.
-	MTLSCertificates ProjectDeploymentConfigsProductionMTLSCertificates `json:"mtls_certificates,nullable"`
+	MTLSCertificates map[string]ProjectDeploymentConfigsProductionMTLSCertificate `json:"mtls_certificates,nullable"`
 	// Placement setting used for Pages Functions.
 	Placement ProjectDeploymentConfigsProductionPlacement `json:"placement,nullable"`
 	// Queue Producer bindings used for Pages Functions.
-	QueueProducers ProjectDeploymentConfigsProductionQueueProducers `json:"queue_producers,nullable"`
+	QueueProducers map[string]ProjectDeploymentConfigsProductionQueueProducer `json:"queue_producers,nullable"`
 	// R2 buckets used for Pages Functions.
-	R2Buckets ProjectDeploymentConfigsProductionR2Buckets `json:"r2_buckets,nullable"`
+	R2Buckets map[string]ProjectDeploymentConfigsProductionR2Bucket `json:"r2_buckets,nullable"`
 	// Services used for Pages Functions.
-	Services ProjectDeploymentConfigsProductionServices `json:"services,nullable"`
+	Services map[string]ProjectDeploymentConfigsProductionService `json:"services,nullable"`
 	// Vectorize bindings used for Pages Functions.
-	VectorizeBindings ProjectDeploymentConfigsProductionVectorizeBindings `json:"vectorize_bindings,nullable"`
-	JSON              projectDeploymentConfigsProductionJSON              `json:"-"`
+	VectorizeBindings map[string]ProjectDeploymentConfigsProductionVectorizeBinding `json:"vectorize_bindings,nullable"`
+	JSON              projectDeploymentConfigsProductionJSON                        `json:"-"`
 }
 
 // projectDeploymentConfigsProductionJSON contains the JSON metadata for the struct
@@ -1359,417 +1092,205 @@ func (r projectDeploymentConfigsProductionJSON) RawJSON() string {
 	return r.raw
 }
 
-// Constellation bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionAIBindings struct {
-	// AI binding.
-	AIBinding ProjectDeploymentConfigsProductionAIBindingsAIBinding `json:"AI_BINDING"`
-	JSON      projectDeploymentConfigsProductionAIBindingsJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsProductionAIBindingsJSON contains the JSON metadata for
-// the struct [ProjectDeploymentConfigsProductionAIBindings]
-type projectDeploymentConfigsProductionAIBindingsJSON struct {
-	AIBinding   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionAIBindings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionAIBindingsJSON) RawJSON() string {
-	return r.raw
-}
-
 // AI binding.
-type ProjectDeploymentConfigsProductionAIBindingsAIBinding struct {
-	ProjectID string                                                    `json:"project_id"`
-	JSON      projectDeploymentConfigsProductionAIBindingsAIBindingJSON `json:"-"`
+type ProjectDeploymentConfigsProductionAIBinding struct {
+	ProjectID string                                          `json:"project_id"`
+	JSON      projectDeploymentConfigsProductionAIBindingJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionAIBindingsAIBindingJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsProductionAIBindingsAIBinding]
-type projectDeploymentConfigsProductionAIBindingsAIBindingJSON struct {
+// projectDeploymentConfigsProductionAIBindingJSON contains the JSON metadata for
+// the struct [ProjectDeploymentConfigsProductionAIBinding]
+type projectDeploymentConfigsProductionAIBindingJSON struct {
 	ProjectID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionAIBindingsAIBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionAIBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionAIBindingsAIBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Analytics Engine bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionAnalyticsEngineDatasets struct {
-	// Analytics Engine binding.
-	AnalyticsEngineBinding ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding `json:"ANALYTICS_ENGINE_BINDING"`
-	JSON                   projectDeploymentConfigsProductionAnalyticsEngineDatasetsJSON                   `json:"-"`
-}
-
-// projectDeploymentConfigsProductionAnalyticsEngineDatasetsJSON contains the JSON
-// metadata for the struct
-// [ProjectDeploymentConfigsProductionAnalyticsEngineDatasets]
-type projectDeploymentConfigsProductionAnalyticsEngineDatasetsJSON struct {
-	AnalyticsEngineBinding apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionAnalyticsEngineDatasets) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionAnalyticsEngineDatasetsJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionAIBindingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Analytics Engine binding.
-type ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding struct {
+type ProjectDeploymentConfigsProductionAnalyticsEngineDataset struct {
 	// Name of the dataset.
-	Dataset string                                                                              `json:"dataset"`
-	JSON    projectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingJSON `json:"-"`
+	Dataset string                                                       `json:"dataset"`
+	JSON    projectDeploymentConfigsProductionAnalyticsEngineDatasetJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingJSON
-// contains the JSON metadata for the struct
-// [ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding]
-type projectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingJSON struct {
+// projectDeploymentConfigsProductionAnalyticsEngineDatasetJSON contains the JSON
+// metadata for the struct
+// [ProjectDeploymentConfigsProductionAnalyticsEngineDataset]
+type projectDeploymentConfigsProductionAnalyticsEngineDatasetJSON struct {
 	Dataset     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionAnalyticsEngineDataset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Browser bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionBrowsers struct {
-	// Browser binding.
-	Browser interface{}                                    `json:"BROWSER"`
-	JSON    projectDeploymentConfigsProductionBrowsersJSON `json:"-"`
-}
-
-// projectDeploymentConfigsProductionBrowsersJSON contains the JSON metadata for
-// the struct [ProjectDeploymentConfigsProductionBrowsers]
-type projectDeploymentConfigsProductionBrowsersJSON struct {
-	Browser     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionBrowsers) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionBrowsersJSON) RawJSON() string {
-	return r.raw
-}
-
-// D1 databases used for Pages Functions.
-type ProjectDeploymentConfigsProductionD1Databases struct {
-	// D1 binding.
-	D1Binding ProjectDeploymentConfigsProductionD1DatabasesD1Binding `json:"D1_BINDING"`
-	JSON      projectDeploymentConfigsProductionD1DatabasesJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsProductionD1DatabasesJSON contains the JSON metadata for
-// the struct [ProjectDeploymentConfigsProductionD1Databases]
-type projectDeploymentConfigsProductionD1DatabasesJSON struct {
-	D1Binding   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionD1Databases) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionD1DatabasesJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionAnalyticsEngineDatasetJSON) RawJSON() string {
 	return r.raw
 }
 
 // D1 binding.
-type ProjectDeploymentConfigsProductionD1DatabasesD1Binding struct {
+type ProjectDeploymentConfigsProductionD1Database struct {
 	// UUID of the D1 database.
-	ID   string                                                     `json:"id"`
-	JSON projectDeploymentConfigsProductionD1DatabasesD1BindingJSON `json:"-"`
+	ID   string                                           `json:"id"`
+	JSON projectDeploymentConfigsProductionD1DatabaseJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionD1DatabasesD1BindingJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsProductionD1DatabasesD1Binding]
-type projectDeploymentConfigsProductionD1DatabasesD1BindingJSON struct {
+// projectDeploymentConfigsProductionD1DatabaseJSON contains the JSON metadata for
+// the struct [ProjectDeploymentConfigsProductionD1Database]
+type projectDeploymentConfigsProductionD1DatabaseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionD1DatabasesD1Binding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionD1Database) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionD1DatabasesD1BindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Durabble Object namespaces used for Pages Functions.
-type ProjectDeploymentConfigsProductionDurableObjectNamespaces struct {
-	// Durabble Object binding.
-	DoBinding ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBinding `json:"DO_BINDING"`
-	JSON      projectDeploymentConfigsProductionDurableObjectNamespacesJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsProductionDurableObjectNamespacesJSON contains the JSON
-// metadata for the struct
-// [ProjectDeploymentConfigsProductionDurableObjectNamespaces]
-type projectDeploymentConfigsProductionDurableObjectNamespacesJSON struct {
-	DoBinding   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionDurableObjectNamespaces) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionDurableObjectNamespacesJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionD1DatabaseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Durabble Object binding.
-type ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBinding struct {
+type ProjectDeploymentConfigsProductionDurableObjectNamespace struct {
 	// ID of the Durabble Object namespace.
-	NamespaceID string                                                                 `json:"namespace_id"`
-	JSON        projectDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON `json:"-"`
+	NamespaceID string                                                       `json:"namespace_id"`
+	JSON        projectDeploymentConfigsProductionDurableObjectNamespaceJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON contains
-// the JSON metadata for the struct
-// [ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBinding]
-type projectDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON struct {
+// projectDeploymentConfigsProductionDurableObjectNamespaceJSON contains the JSON
+// metadata for the struct
+// [ProjectDeploymentConfigsProductionDurableObjectNamespace]
+type projectDeploymentConfigsProductionDurableObjectNamespaceJSON struct {
 	NamespaceID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionDurableObjectNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Environment variables for build configs.
-type ProjectDeploymentConfigsProductionEnvVars struct {
-	// Environment variable.
-	EnvironmentVariable ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariable `json:"ENVIRONMENT_VARIABLE"`
-	JSON                projectDeploymentConfigsProductionEnvVarsJSON                `json:"-"`
-}
-
-// projectDeploymentConfigsProductionEnvVarsJSON contains the JSON metadata for the
-// struct [ProjectDeploymentConfigsProductionEnvVars]
-type projectDeploymentConfigsProductionEnvVarsJSON struct {
-	EnvironmentVariable apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionEnvVars) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionEnvVarsJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionDurableObjectNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
 // Environment variable.
-type ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariable struct {
-	// The type of environment variable (plain text or secret)
-	Type ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableType `json:"type"`
+type ProjectDeploymentConfigsProductionEnvVar struct {
 	// Environment variable value.
-	Value string                                                           `json:"value"`
-	JSON  projectDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON `json:"-"`
+	Value string `json:"value,required"`
+	// The type of environment variable.
+	Type ProjectDeploymentConfigsProductionEnvVarsType `json:"type"`
+	JSON projectDeploymentConfigsProductionEnvVarJSON  `json:"-"`
 }
 
-// projectDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON contains the
-// JSON metadata for the struct
-// [ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariable]
-type projectDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON struct {
-	Type        apijson.Field
+// projectDeploymentConfigsProductionEnvVarJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsProductionEnvVar]
+type projectDeploymentConfigsProductionEnvVarJSON struct {
 	Value       apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariable) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionEnvVar) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionEnvVarJSON) RawJSON() string {
 	return r.raw
 }
 
-// The type of environment variable (plain text or secret)
-type ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableType string
+// The type of environment variable.
+type ProjectDeploymentConfigsProductionEnvVarsType string
 
 const (
-	ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText  ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableType = "plain_text"
-	ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableTypeSecretText ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableType = "secret_text"
+	ProjectDeploymentConfigsProductionEnvVarsTypePlainText  ProjectDeploymentConfigsProductionEnvVarsType = "plain_text"
+	ProjectDeploymentConfigsProductionEnvVarsTypeSecretText ProjectDeploymentConfigsProductionEnvVarsType = "secret_text"
 )
 
-func (r ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableType) IsKnown() bool {
+func (r ProjectDeploymentConfigsProductionEnvVarsType) IsKnown() bool {
 	switch r {
-	case ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableTypePlainText, ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableTypeSecretText:
+	case ProjectDeploymentConfigsProductionEnvVarsTypePlainText, ProjectDeploymentConfigsProductionEnvVarsTypeSecretText:
 		return true
 	}
 	return false
 }
 
-// Hyperdrive bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionHyperdriveBindings struct {
-	// Hyperdrive binding.
-	Hyperdrive ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdrive `json:"HYPERDRIVE"`
-	JSON       projectDeploymentConfigsProductionHyperdriveBindingsJSON       `json:"-"`
-}
-
-// projectDeploymentConfigsProductionHyperdriveBindingsJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsProductionHyperdriveBindings]
-type projectDeploymentConfigsProductionHyperdriveBindingsJSON struct {
-	Hyperdrive  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionHyperdriveBindings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionHyperdriveBindingsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Hyperdrive binding.
-type ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdrive struct {
-	ID   string                                                             `json:"id"`
-	JSON projectDeploymentConfigsProductionHyperdriveBindingsHyperdriveJSON `json:"-"`
+type ProjectDeploymentConfigsProductionHyperdriveBinding struct {
+	ID   string                                                  `json:"id"`
+	JSON projectDeploymentConfigsProductionHyperdriveBindingJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionHyperdriveBindingsHyperdriveJSON contains the
-// JSON metadata for the struct
-// [ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdrive]
-type projectDeploymentConfigsProductionHyperdriveBindingsHyperdriveJSON struct {
+// projectDeploymentConfigsProductionHyperdriveBindingJSON contains the JSON
+// metadata for the struct [ProjectDeploymentConfigsProductionHyperdriveBinding]
+type projectDeploymentConfigsProductionHyperdriveBindingJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdrive) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionHyperdriveBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionHyperdriveBindingsHyperdriveJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionHyperdriveBindingJSON) RawJSON() string {
 	return r.raw
 }
 
-// KV namespaces used for Pages Functions.
-type ProjectDeploymentConfigsProductionKVNamespaces struct {
-	// KV binding.
-	KVBinding ProjectDeploymentConfigsProductionKVNamespacesKVBinding `json:"KV_BINDING"`
-	JSON      projectDeploymentConfigsProductionKVNamespacesJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsProductionKVNamespacesJSON contains the JSON metadata
-// for the struct [ProjectDeploymentConfigsProductionKVNamespaces]
-type projectDeploymentConfigsProductionKVNamespacesJSON struct {
-	KVBinding   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionKVNamespaces) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionKVNamespacesJSON) RawJSON() string {
-	return r.raw
-}
-
-// KV binding.
-type ProjectDeploymentConfigsProductionKVNamespacesKVBinding struct {
+// KV namespace binding.
+type ProjectDeploymentConfigsProductionKVNamespace struct {
 	// ID of the KV namespace.
-	NamespaceID string                                                      `json:"namespace_id"`
-	JSON        projectDeploymentConfigsProductionKVNamespacesKVBindingJSON `json:"-"`
+	NamespaceID string                                            `json:"namespace_id"`
+	JSON        projectDeploymentConfigsProductionKVNamespaceJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionKVNamespacesKVBindingJSON contains the JSON
-// metadata for the struct
-// [ProjectDeploymentConfigsProductionKVNamespacesKVBinding]
-type projectDeploymentConfigsProductionKVNamespacesKVBindingJSON struct {
+// projectDeploymentConfigsProductionKVNamespaceJSON contains the JSON metadata for
+// the struct [ProjectDeploymentConfigsProductionKVNamespace]
+type projectDeploymentConfigsProductionKVNamespaceJSON struct {
 	NamespaceID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionKVNamespacesKVBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionKVNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionKVNamespacesKVBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// mTLS bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionMTLSCertificates struct {
-	// mTLS binding.
-	MTLS ProjectDeploymentConfigsProductionMTLSCertificatesMTLS `json:"MTLS"`
-	JSON projectDeploymentConfigsProductionMTLSCertificatesJSON `json:"-"`
-}
-
-// projectDeploymentConfigsProductionMTLSCertificatesJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsProductionMTLSCertificates]
-type projectDeploymentConfigsProductionMTLSCertificatesJSON struct {
-	MTLS        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionMTLSCertificates) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionMTLSCertificatesJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionKVNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
 // mTLS binding.
-type ProjectDeploymentConfigsProductionMTLSCertificatesMTLS struct {
-	CertificateID string                                                     `json:"certificate_id"`
-	JSON          projectDeploymentConfigsProductionMTLSCertificatesMTLSJSON `json:"-"`
+type ProjectDeploymentConfigsProductionMTLSCertificate struct {
+	CertificateID string                                                `json:"certificate_id"`
+	JSON          projectDeploymentConfigsProductionMTLSCertificateJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionMTLSCertificatesMTLSJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsProductionMTLSCertificatesMTLS]
-type projectDeploymentConfigsProductionMTLSCertificatesMTLSJSON struct {
+// projectDeploymentConfigsProductionMTLSCertificateJSON contains the JSON metadata
+// for the struct [ProjectDeploymentConfigsProductionMTLSCertificate]
+type projectDeploymentConfigsProductionMTLSCertificateJSON struct {
 	CertificateID apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionMTLSCertificatesMTLS) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionMTLSCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionMTLSCertificatesMTLSJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionMTLSCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1796,140 +1317,69 @@ func (r projectDeploymentConfigsProductionPlacementJSON) RawJSON() string {
 	return r.raw
 }
 
-// Queue Producer bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionQueueProducers struct {
-	// Queue Producer binding.
-	QueueProducerBinding ProjectDeploymentConfigsProductionQueueProducersQueueProducerBinding `json:"QUEUE_PRODUCER_BINDING"`
-	JSON                 projectDeploymentConfigsProductionQueueProducersJSON                 `json:"-"`
-}
-
-// projectDeploymentConfigsProductionQueueProducersJSON contains the JSON metadata
-// for the struct [ProjectDeploymentConfigsProductionQueueProducers]
-type projectDeploymentConfigsProductionQueueProducersJSON struct {
-	QueueProducerBinding apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionQueueProducers) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionQueueProducersJSON) RawJSON() string {
-	return r.raw
-}
-
 // Queue Producer binding.
-type ProjectDeploymentConfigsProductionQueueProducersQueueProducerBinding struct {
+type ProjectDeploymentConfigsProductionQueueProducer struct {
 	// Name of the Queue.
-	Name string                                                                   `json:"name"`
-	JSON projectDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON `json:"-"`
+	Name string                                              `json:"name"`
+	JSON projectDeploymentConfigsProductionQueueProducerJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON
-// contains the JSON metadata for the struct
-// [ProjectDeploymentConfigsProductionQueueProducersQueueProducerBinding]
-type projectDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON struct {
+// projectDeploymentConfigsProductionQueueProducerJSON contains the JSON metadata
+// for the struct [ProjectDeploymentConfigsProductionQueueProducer]
+type projectDeploymentConfigsProductionQueueProducerJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionQueueProducersQueueProducerBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionQueueProducer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// R2 buckets used for Pages Functions.
-type ProjectDeploymentConfigsProductionR2Buckets struct {
-	// R2 binding.
-	R2Binding ProjectDeploymentConfigsProductionR2BucketsR2Binding `json:"R2_BINDING"`
-	JSON      projectDeploymentConfigsProductionR2BucketsJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsProductionR2BucketsJSON contains the JSON metadata for
-// the struct [ProjectDeploymentConfigsProductionR2Buckets]
-type projectDeploymentConfigsProductionR2BucketsJSON struct {
-	R2Binding   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionR2Buckets) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionR2BucketsJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionQueueProducerJSON) RawJSON() string {
 	return r.raw
 }
 
 // R2 binding.
-type ProjectDeploymentConfigsProductionR2BucketsR2Binding struct {
+type ProjectDeploymentConfigsProductionR2Bucket struct {
 	// Jurisdiction of the R2 bucket.
 	Jurisdiction string `json:"jurisdiction,nullable"`
 	// Name of the R2 bucket.
-	Name string                                                   `json:"name"`
-	JSON projectDeploymentConfigsProductionR2BucketsR2BindingJSON `json:"-"`
+	Name string                                         `json:"name"`
+	JSON projectDeploymentConfigsProductionR2BucketJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionR2BucketsR2BindingJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsProductionR2BucketsR2Binding]
-type projectDeploymentConfigsProductionR2BucketsR2BindingJSON struct {
+// projectDeploymentConfigsProductionR2BucketJSON contains the JSON metadata for
+// the struct [ProjectDeploymentConfigsProductionR2Bucket]
+type projectDeploymentConfigsProductionR2BucketJSON struct {
 	Jurisdiction apijson.Field
 	Name         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionR2BucketsR2Binding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionR2Bucket) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionR2BucketsR2BindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Services used for Pages Functions.
-type ProjectDeploymentConfigsProductionServices struct {
-	// Service binding.
-	ServiceBinding ProjectDeploymentConfigsProductionServicesServiceBinding `json:"SERVICE_BINDING"`
-	JSON           projectDeploymentConfigsProductionServicesJSON           `json:"-"`
-}
-
-// projectDeploymentConfigsProductionServicesJSON contains the JSON metadata for
-// the struct [ProjectDeploymentConfigsProductionServices]
-type projectDeploymentConfigsProductionServicesJSON struct {
-	ServiceBinding apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionServices) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionServicesJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionR2BucketJSON) RawJSON() string {
 	return r.raw
 }
 
 // Service binding.
-type ProjectDeploymentConfigsProductionServicesServiceBinding struct {
+type ProjectDeploymentConfigsProductionService struct {
 	// The entrypoint to bind to.
 	Entrypoint string `json:"entrypoint,nullable"`
 	// The Service environment.
 	Environment string `json:"environment"`
 	// The Service name.
-	Service string                                                       `json:"service"`
-	JSON    projectDeploymentConfigsProductionServicesServiceBindingJSON `json:"-"`
+	Service string                                        `json:"service"`
+	JSON    projectDeploymentConfigsProductionServiceJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionServicesServiceBindingJSON contains the JSON
-// metadata for the struct
-// [ProjectDeploymentConfigsProductionServicesServiceBinding]
-type projectDeploymentConfigsProductionServicesServiceBindingJSON struct {
+// projectDeploymentConfigsProductionServiceJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsProductionService]
+type projectDeploymentConfigsProductionServiceJSON struct {
 	Entrypoint  apijson.Field
 	Environment apijson.Field
 	Service     apijson.Field
@@ -1937,57 +1387,33 @@ type projectDeploymentConfigsProductionServicesServiceBindingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionServicesServiceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionService) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionServicesServiceBindingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Vectorize bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionVectorizeBindings struct {
-	// Vectorize binding.
-	Vectorize ProjectDeploymentConfigsProductionVectorizeBindingsVectorize `json:"VECTORIZE"`
-	JSON      projectDeploymentConfigsProductionVectorizeBindingsJSON      `json:"-"`
-}
-
-// projectDeploymentConfigsProductionVectorizeBindingsJSON contains the JSON
-// metadata for the struct [ProjectDeploymentConfigsProductionVectorizeBindings]
-type projectDeploymentConfigsProductionVectorizeBindingsJSON struct {
-	Vectorize   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ProjectDeploymentConfigsProductionVectorizeBindings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r projectDeploymentConfigsProductionVectorizeBindingsJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionServiceJSON) RawJSON() string {
 	return r.raw
 }
 
 // Vectorize binding.
-type ProjectDeploymentConfigsProductionVectorizeBindingsVectorize struct {
-	IndexName string                                                           `json:"index_name"`
-	JSON      projectDeploymentConfigsProductionVectorizeBindingsVectorizeJSON `json:"-"`
+type ProjectDeploymentConfigsProductionVectorizeBinding struct {
+	IndexName string                                                 `json:"index_name"`
+	JSON      projectDeploymentConfigsProductionVectorizeBindingJSON `json:"-"`
 }
 
-// projectDeploymentConfigsProductionVectorizeBindingsVectorizeJSON contains the
-// JSON metadata for the struct
-// [ProjectDeploymentConfigsProductionVectorizeBindingsVectorize]
-type projectDeploymentConfigsProductionVectorizeBindingsVectorizeJSON struct {
+// projectDeploymentConfigsProductionVectorizeBindingJSON contains the JSON
+// metadata for the struct [ProjectDeploymentConfigsProductionVectorizeBinding]
+type projectDeploymentConfigsProductionVectorizeBindingJSON struct {
 	IndexName   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProjectDeploymentConfigsProductionVectorizeBindingsVectorize) UnmarshalJSON(data []byte) (err error) {
+func (r *ProjectDeploymentConfigsProductionVectorizeBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r projectDeploymentConfigsProductionVectorizeBindingsVectorizeJSON) RawJSON() string {
+func (r projectDeploymentConfigsProductionVectorizeBindingJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2120,209 +1546,119 @@ func (r ProjectDeploymentConfigsParam) MarshalJSON() (data []byte, err error) {
 // Configs for preview deploys.
 type ProjectDeploymentConfigsPreviewParam struct {
 	// Constellation bindings used for Pages Functions.
-	AIBindings param.Field[ProjectDeploymentConfigsPreviewAIBindingsParam] `json:"ai_bindings"`
+	AIBindings param.Field[map[string]ProjectDeploymentConfigsPreviewAIBindingParam] `json:"ai_bindings"`
 	// Analytics Engine bindings used for Pages Functions.
-	AnalyticsEngineDatasets param.Field[ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsParam] `json:"analytics_engine_datasets"`
+	AnalyticsEngineDatasets param.Field[map[string]ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetParam] `json:"analytics_engine_datasets"`
 	// Browser bindings used for Pages Functions.
-	Browsers param.Field[ProjectDeploymentConfigsPreviewBrowsersParam] `json:"browsers"`
+	Browsers param.Field[map[string]interface{}] `json:"browsers"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
 	CompatibilityFlags param.Field[[]string] `json:"compatibility_flags"`
 	// D1 databases used for Pages Functions.
-	D1Databases param.Field[ProjectDeploymentConfigsPreviewD1DatabasesParam] `json:"d1_databases"`
+	D1Databases param.Field[map[string]ProjectDeploymentConfigsPreviewD1DatabaseParam] `json:"d1_databases"`
 	// Durabble Object namespaces used for Pages Functions.
-	DurableObjectNamespaces param.Field[ProjectDeploymentConfigsPreviewDurableObjectNamespacesParam] `json:"durable_object_namespaces"`
+	DurableObjectNamespaces param.Field[map[string]ProjectDeploymentConfigsPreviewDurableObjectNamespaceParam] `json:"durable_object_namespaces"`
 	// Environment variables for build configs.
-	EnvVars param.Field[ProjectDeploymentConfigsPreviewEnvVarsParam] `json:"env_vars"`
+	EnvVars param.Field[map[string]ProjectDeploymentConfigsPreviewEnvVarParam] `json:"env_vars"`
 	// Hyperdrive bindings used for Pages Functions.
-	HyperdriveBindings param.Field[ProjectDeploymentConfigsPreviewHyperdriveBindingsParam] `json:"hyperdrive_bindings"`
+	HyperdriveBindings param.Field[map[string]ProjectDeploymentConfigsPreviewHyperdriveBindingParam] `json:"hyperdrive_bindings"`
 	// KV namespaces used for Pages Functions.
-	KVNamespaces param.Field[ProjectDeploymentConfigsPreviewKVNamespacesParam] `json:"kv_namespaces"`
+	KVNamespaces param.Field[map[string]ProjectDeploymentConfigsPreviewKVNamespaceParam] `json:"kv_namespaces"`
 	// mTLS bindings used for Pages Functions.
-	MTLSCertificates param.Field[ProjectDeploymentConfigsPreviewMTLSCertificatesParam] `json:"mtls_certificates"`
+	MTLSCertificates param.Field[map[string]ProjectDeploymentConfigsPreviewMTLSCertificateParam] `json:"mtls_certificates"`
 	// Placement setting used for Pages Functions.
 	Placement param.Field[ProjectDeploymentConfigsPreviewPlacementParam] `json:"placement"`
 	// Queue Producer bindings used for Pages Functions.
-	QueueProducers param.Field[ProjectDeploymentConfigsPreviewQueueProducersParam] `json:"queue_producers"`
+	QueueProducers param.Field[map[string]ProjectDeploymentConfigsPreviewQueueProducerParam] `json:"queue_producers"`
 	// R2 buckets used for Pages Functions.
-	R2Buckets param.Field[ProjectDeploymentConfigsPreviewR2BucketsParam] `json:"r2_buckets"`
+	R2Buckets param.Field[map[string]ProjectDeploymentConfigsPreviewR2BucketParam] `json:"r2_buckets"`
 	// Services used for Pages Functions.
-	Services param.Field[ProjectDeploymentConfigsPreviewServicesParam] `json:"services"`
+	Services param.Field[map[string]ProjectDeploymentConfigsPreviewServiceParam] `json:"services"`
 	// Vectorize bindings used for Pages Functions.
-	VectorizeBindings param.Field[ProjectDeploymentConfigsPreviewVectorizeBindingsParam] `json:"vectorize_bindings"`
+	VectorizeBindings param.Field[map[string]ProjectDeploymentConfigsPreviewVectorizeBindingParam] `json:"vectorize_bindings"`
 }
 
 func (r ProjectDeploymentConfigsPreviewParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Constellation bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewAIBindingsParam struct {
-	// AI binding.
-	AIBinding param.Field[ProjectDeploymentConfigsPreviewAIBindingsAIBindingParam] `json:"AI_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsPreviewAIBindingsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // AI binding.
-type ProjectDeploymentConfigsPreviewAIBindingsAIBindingParam struct {
+type ProjectDeploymentConfigsPreviewAIBindingParam struct {
 	ProjectID param.Field[string] `json:"project_id"`
 }
 
-func (r ProjectDeploymentConfigsPreviewAIBindingsAIBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Analytics Engine bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsParam struct {
-	// Analytics Engine binding.
-	AnalyticsEngineBinding param.Field[ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingParam] `json:"ANALYTICS_ENGINE_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewAIBindingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Analytics Engine binding.
-type ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingParam struct {
+type ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetParam struct {
 	// Name of the dataset.
 	Dataset param.Field[string] `json:"dataset"`
 }
 
-func (r ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Browser bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewBrowsersParam struct {
-	// Browser binding.
-	Browser param.Field[interface{}] `json:"BROWSER"`
-}
-
-func (r ProjectDeploymentConfigsPreviewBrowsersParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// D1 databases used for Pages Functions.
-type ProjectDeploymentConfigsPreviewD1DatabasesParam struct {
-	// D1 binding.
-	D1Binding param.Field[ProjectDeploymentConfigsPreviewD1DatabasesD1BindingParam] `json:"D1_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsPreviewD1DatabasesParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // D1 binding.
-type ProjectDeploymentConfigsPreviewD1DatabasesD1BindingParam struct {
+type ProjectDeploymentConfigsPreviewD1DatabaseParam struct {
 	// UUID of the D1 database.
 	ID param.Field[string] `json:"id"`
 }
 
-func (r ProjectDeploymentConfigsPreviewD1DatabasesD1BindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Durabble Object namespaces used for Pages Functions.
-type ProjectDeploymentConfigsPreviewDurableObjectNamespacesParam struct {
-	// Durabble Object binding.
-	DoBinding param.Field[ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingParam] `json:"DO_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsPreviewDurableObjectNamespacesParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewD1DatabaseParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Durabble Object binding.
-type ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingParam struct {
+type ProjectDeploymentConfigsPreviewDurableObjectNamespaceParam struct {
 	// ID of the Durabble Object namespace.
 	NamespaceID param.Field[string] `json:"namespace_id"`
 }
 
-func (r ProjectDeploymentConfigsPreviewDurableObjectNamespacesDoBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Environment variables for build configs.
-type ProjectDeploymentConfigsPreviewEnvVarsParam struct {
-	// Environment variable.
-	EnvironmentVariable param.Field[ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableParam] `json:"ENVIRONMENT_VARIABLE"`
-}
-
-func (r ProjectDeploymentConfigsPreviewEnvVarsParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewDurableObjectNamespaceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Environment variable.
-type ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableParam struct {
-	// The type of environment variable (plain text or secret)
-	Type param.Field[ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableType] `json:"type"`
+type ProjectDeploymentConfigsPreviewEnvVarParam struct {
 	// Environment variable value.
-	Value param.Field[string] `json:"value"`
+	Value param.Field[string] `json:"value,required"`
+	// The type of environment variable.
+	Type param.Field[ProjectDeploymentConfigsPreviewEnvVarsType] `json:"type"`
 }
 
-func (r ProjectDeploymentConfigsPreviewEnvVarsEnvironmentVariableParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Hyperdrive bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewHyperdriveBindingsParam struct {
-	// Hyperdrive binding.
-	Hyperdrive param.Field[ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveParam] `json:"HYPERDRIVE"`
-}
-
-func (r ProjectDeploymentConfigsPreviewHyperdriveBindingsParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewEnvVarParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Hyperdrive binding.
-type ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveParam struct {
+type ProjectDeploymentConfigsPreviewHyperdriveBindingParam struct {
 	ID param.Field[string] `json:"id"`
 }
 
-func (r ProjectDeploymentConfigsPreviewHyperdriveBindingsHyperdriveParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewHyperdriveBindingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// KV namespaces used for Pages Functions.
-type ProjectDeploymentConfigsPreviewKVNamespacesParam struct {
-	// KV binding.
-	KVBinding param.Field[ProjectDeploymentConfigsPreviewKVNamespacesKVBindingParam] `json:"KV_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsPreviewKVNamespacesParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// KV binding.
-type ProjectDeploymentConfigsPreviewKVNamespacesKVBindingParam struct {
+// KV namespace binding.
+type ProjectDeploymentConfigsPreviewKVNamespaceParam struct {
 	// ID of the KV namespace.
 	NamespaceID param.Field[string] `json:"namespace_id"`
 }
 
-func (r ProjectDeploymentConfigsPreviewKVNamespacesKVBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// mTLS bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewMTLSCertificatesParam struct {
-	// mTLS binding.
-	MTLS param.Field[ProjectDeploymentConfigsPreviewMTLSCertificatesMTLSParam] `json:"MTLS"`
-}
-
-func (r ProjectDeploymentConfigsPreviewMTLSCertificatesParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewKVNamespaceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // mTLS binding.
-type ProjectDeploymentConfigsPreviewMTLSCertificatesMTLSParam struct {
+type ProjectDeploymentConfigsPreviewMTLSCertificateParam struct {
 	CertificateID param.Field[string] `json:"certificate_id"`
 }
 
-func (r ProjectDeploymentConfigsPreviewMTLSCertificatesMTLSParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewMTLSCertificateParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2336,60 +1672,30 @@ func (r ProjectDeploymentConfigsPreviewPlacementParam) MarshalJSON() (data []byt
 	return apijson.MarshalRoot(r)
 }
 
-// Queue Producer bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewQueueProducersParam struct {
-	// Queue Producer binding.
-	QueueProducerBinding param.Field[ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBindingParam] `json:"QUEUE_PRODUCER_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsPreviewQueueProducersParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // Queue Producer binding.
-type ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBindingParam struct {
+type ProjectDeploymentConfigsPreviewQueueProducerParam struct {
 	// Name of the Queue.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r ProjectDeploymentConfigsPreviewQueueProducersQueueProducerBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// R2 buckets used for Pages Functions.
-type ProjectDeploymentConfigsPreviewR2BucketsParam struct {
-	// R2 binding.
-	R2Binding param.Field[ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam] `json:"R2_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsPreviewR2BucketsParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewQueueProducerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // R2 binding.
-type ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam struct {
+type ProjectDeploymentConfigsPreviewR2BucketParam struct {
 	// Jurisdiction of the R2 bucket.
 	Jurisdiction param.Field[string] `json:"jurisdiction"`
 	// Name of the R2 bucket.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r ProjectDeploymentConfigsPreviewR2BucketsR2BindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Services used for Pages Functions.
-type ProjectDeploymentConfigsPreviewServicesParam struct {
-	// Service binding.
-	ServiceBinding param.Field[ProjectDeploymentConfigsPreviewServicesServiceBindingParam] `json:"SERVICE_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsPreviewServicesParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewR2BucketParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Service binding.
-type ProjectDeploymentConfigsPreviewServicesServiceBindingParam struct {
+type ProjectDeploymentConfigsPreviewServiceParam struct {
 	// The entrypoint to bind to.
 	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The Service environment.
@@ -2398,235 +1704,135 @@ type ProjectDeploymentConfigsPreviewServicesServiceBindingParam struct {
 	Service param.Field[string] `json:"service"`
 }
 
-func (r ProjectDeploymentConfigsPreviewServicesServiceBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Vectorize bindings used for Pages Functions.
-type ProjectDeploymentConfigsPreviewVectorizeBindingsParam struct {
-	// Vectorize binding.
-	Vectorize param.Field[ProjectDeploymentConfigsPreviewVectorizeBindingsVectorizeParam] `json:"VECTORIZE"`
-}
-
-func (r ProjectDeploymentConfigsPreviewVectorizeBindingsParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewServiceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Vectorize binding.
-type ProjectDeploymentConfigsPreviewVectorizeBindingsVectorizeParam struct {
+type ProjectDeploymentConfigsPreviewVectorizeBindingParam struct {
 	IndexName param.Field[string] `json:"index_name"`
 }
 
-func (r ProjectDeploymentConfigsPreviewVectorizeBindingsVectorizeParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsPreviewVectorizeBindingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configs for production deploys.
 type ProjectDeploymentConfigsProductionParam struct {
 	// Constellation bindings used for Pages Functions.
-	AIBindings param.Field[ProjectDeploymentConfigsProductionAIBindingsParam] `json:"ai_bindings"`
+	AIBindings param.Field[map[string]ProjectDeploymentConfigsProductionAIBindingParam] `json:"ai_bindings"`
 	// Analytics Engine bindings used for Pages Functions.
-	AnalyticsEngineDatasets param.Field[ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsParam] `json:"analytics_engine_datasets"`
+	AnalyticsEngineDatasets param.Field[map[string]ProjectDeploymentConfigsProductionAnalyticsEngineDatasetParam] `json:"analytics_engine_datasets"`
 	// Browser bindings used for Pages Functions.
-	Browsers param.Field[ProjectDeploymentConfigsProductionBrowsersParam] `json:"browsers"`
+	Browsers param.Field[map[string]interface{}] `json:"browsers"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
 	CompatibilityFlags param.Field[[]string] `json:"compatibility_flags"`
 	// D1 databases used for Pages Functions.
-	D1Databases param.Field[ProjectDeploymentConfigsProductionD1DatabasesParam] `json:"d1_databases"`
+	D1Databases param.Field[map[string]ProjectDeploymentConfigsProductionD1DatabaseParam] `json:"d1_databases"`
 	// Durabble Object namespaces used for Pages Functions.
-	DurableObjectNamespaces param.Field[ProjectDeploymentConfigsProductionDurableObjectNamespacesParam] `json:"durable_object_namespaces"`
+	DurableObjectNamespaces param.Field[map[string]ProjectDeploymentConfigsProductionDurableObjectNamespaceParam] `json:"durable_object_namespaces"`
 	// Environment variables for build configs.
-	EnvVars param.Field[ProjectDeploymentConfigsProductionEnvVarsParam] `json:"env_vars"`
+	EnvVars param.Field[map[string]ProjectDeploymentConfigsProductionEnvVarParam] `json:"env_vars"`
 	// Hyperdrive bindings used for Pages Functions.
-	HyperdriveBindings param.Field[ProjectDeploymentConfigsProductionHyperdriveBindingsParam] `json:"hyperdrive_bindings"`
+	HyperdriveBindings param.Field[map[string]ProjectDeploymentConfigsProductionHyperdriveBindingParam] `json:"hyperdrive_bindings"`
 	// KV namespaces used for Pages Functions.
-	KVNamespaces param.Field[ProjectDeploymentConfigsProductionKVNamespacesParam] `json:"kv_namespaces"`
+	KVNamespaces param.Field[map[string]ProjectDeploymentConfigsProductionKVNamespaceParam] `json:"kv_namespaces"`
 	// mTLS bindings used for Pages Functions.
-	MTLSCertificates param.Field[ProjectDeploymentConfigsProductionMTLSCertificatesParam] `json:"mtls_certificates"`
+	MTLSCertificates param.Field[map[string]ProjectDeploymentConfigsProductionMTLSCertificateParam] `json:"mtls_certificates"`
 	// Placement setting used for Pages Functions.
 	Placement param.Field[ProjectDeploymentConfigsProductionPlacementParam] `json:"placement"`
 	// Queue Producer bindings used for Pages Functions.
-	QueueProducers param.Field[ProjectDeploymentConfigsProductionQueueProducersParam] `json:"queue_producers"`
+	QueueProducers param.Field[map[string]ProjectDeploymentConfigsProductionQueueProducerParam] `json:"queue_producers"`
 	// R2 buckets used for Pages Functions.
-	R2Buckets param.Field[ProjectDeploymentConfigsProductionR2BucketsParam] `json:"r2_buckets"`
+	R2Buckets param.Field[map[string]ProjectDeploymentConfigsProductionR2BucketParam] `json:"r2_buckets"`
 	// Services used for Pages Functions.
-	Services param.Field[ProjectDeploymentConfigsProductionServicesParam] `json:"services"`
+	Services param.Field[map[string]ProjectDeploymentConfigsProductionServiceParam] `json:"services"`
 	// Vectorize bindings used for Pages Functions.
-	VectorizeBindings param.Field[ProjectDeploymentConfigsProductionVectorizeBindingsParam] `json:"vectorize_bindings"`
+	VectorizeBindings param.Field[map[string]ProjectDeploymentConfigsProductionVectorizeBindingParam] `json:"vectorize_bindings"`
 }
 
 func (r ProjectDeploymentConfigsProductionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Constellation bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionAIBindingsParam struct {
-	// AI binding.
-	AIBinding param.Field[ProjectDeploymentConfigsProductionAIBindingsAIBindingParam] `json:"AI_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsProductionAIBindingsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // AI binding.
-type ProjectDeploymentConfigsProductionAIBindingsAIBindingParam struct {
+type ProjectDeploymentConfigsProductionAIBindingParam struct {
 	ProjectID param.Field[string] `json:"project_id"`
 }
 
-func (r ProjectDeploymentConfigsProductionAIBindingsAIBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Analytics Engine bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsParam struct {
-	// Analytics Engine binding.
-	AnalyticsEngineBinding param.Field[ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingParam] `json:"ANALYTICS_ENGINE_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionAIBindingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Analytics Engine binding.
-type ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingParam struct {
+type ProjectDeploymentConfigsProductionAnalyticsEngineDatasetParam struct {
 	// Name of the dataset.
 	Dataset param.Field[string] `json:"dataset"`
 }
 
-func (r ProjectDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Browser bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionBrowsersParam struct {
-	// Browser binding.
-	Browser param.Field[interface{}] `json:"BROWSER"`
-}
-
-func (r ProjectDeploymentConfigsProductionBrowsersParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// D1 databases used for Pages Functions.
-type ProjectDeploymentConfigsProductionD1DatabasesParam struct {
-	// D1 binding.
-	D1Binding param.Field[ProjectDeploymentConfigsProductionD1DatabasesD1BindingParam] `json:"D1_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsProductionD1DatabasesParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionAnalyticsEngineDatasetParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // D1 binding.
-type ProjectDeploymentConfigsProductionD1DatabasesD1BindingParam struct {
+type ProjectDeploymentConfigsProductionD1DatabaseParam struct {
 	// UUID of the D1 database.
 	ID param.Field[string] `json:"id"`
 }
 
-func (r ProjectDeploymentConfigsProductionD1DatabasesD1BindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Durabble Object namespaces used for Pages Functions.
-type ProjectDeploymentConfigsProductionDurableObjectNamespacesParam struct {
-	// Durabble Object binding.
-	DoBinding param.Field[ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBindingParam] `json:"DO_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsProductionDurableObjectNamespacesParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionD1DatabaseParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Durabble Object binding.
-type ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBindingParam struct {
+type ProjectDeploymentConfigsProductionDurableObjectNamespaceParam struct {
 	// ID of the Durabble Object namespace.
 	NamespaceID param.Field[string] `json:"namespace_id"`
 }
 
-func (r ProjectDeploymentConfigsProductionDurableObjectNamespacesDoBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Environment variables for build configs.
-type ProjectDeploymentConfigsProductionEnvVarsParam struct {
-	// Environment variable.
-	EnvironmentVariable param.Field[ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableParam] `json:"ENVIRONMENT_VARIABLE"`
-}
-
-func (r ProjectDeploymentConfigsProductionEnvVarsParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionDurableObjectNamespaceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Environment variable.
-type ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableParam struct {
-	// The type of environment variable (plain text or secret)
-	Type param.Field[ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableType] `json:"type"`
+type ProjectDeploymentConfigsProductionEnvVarParam struct {
 	// Environment variable value.
-	Value param.Field[string] `json:"value"`
+	Value param.Field[string] `json:"value,required"`
+	// The type of environment variable.
+	Type param.Field[ProjectDeploymentConfigsProductionEnvVarsType] `json:"type"`
 }
 
-func (r ProjectDeploymentConfigsProductionEnvVarsEnvironmentVariableParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Hyperdrive bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionHyperdriveBindingsParam struct {
-	// Hyperdrive binding.
-	Hyperdrive param.Field[ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdriveParam] `json:"HYPERDRIVE"`
-}
-
-func (r ProjectDeploymentConfigsProductionHyperdriveBindingsParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionEnvVarParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Hyperdrive binding.
-type ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdriveParam struct {
+type ProjectDeploymentConfigsProductionHyperdriveBindingParam struct {
 	ID param.Field[string] `json:"id"`
 }
 
-func (r ProjectDeploymentConfigsProductionHyperdriveBindingsHyperdriveParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionHyperdriveBindingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// KV namespaces used for Pages Functions.
-type ProjectDeploymentConfigsProductionKVNamespacesParam struct {
-	// KV binding.
-	KVBinding param.Field[ProjectDeploymentConfigsProductionKVNamespacesKVBindingParam] `json:"KV_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsProductionKVNamespacesParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// KV binding.
-type ProjectDeploymentConfigsProductionKVNamespacesKVBindingParam struct {
+// KV namespace binding.
+type ProjectDeploymentConfigsProductionKVNamespaceParam struct {
 	// ID of the KV namespace.
 	NamespaceID param.Field[string] `json:"namespace_id"`
 }
 
-func (r ProjectDeploymentConfigsProductionKVNamespacesKVBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// mTLS bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionMTLSCertificatesParam struct {
-	// mTLS binding.
-	MTLS param.Field[ProjectDeploymentConfigsProductionMTLSCertificatesMTLSParam] `json:"MTLS"`
-}
-
-func (r ProjectDeploymentConfigsProductionMTLSCertificatesParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionKVNamespaceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // mTLS binding.
-type ProjectDeploymentConfigsProductionMTLSCertificatesMTLSParam struct {
+type ProjectDeploymentConfigsProductionMTLSCertificateParam struct {
 	CertificateID param.Field[string] `json:"certificate_id"`
 }
 
-func (r ProjectDeploymentConfigsProductionMTLSCertificatesMTLSParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionMTLSCertificateParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2640,60 +1846,30 @@ func (r ProjectDeploymentConfigsProductionPlacementParam) MarshalJSON() (data []
 	return apijson.MarshalRoot(r)
 }
 
-// Queue Producer bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionQueueProducersParam struct {
-	// Queue Producer binding.
-	QueueProducerBinding param.Field[ProjectDeploymentConfigsProductionQueueProducersQueueProducerBindingParam] `json:"QUEUE_PRODUCER_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsProductionQueueProducersParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // Queue Producer binding.
-type ProjectDeploymentConfigsProductionQueueProducersQueueProducerBindingParam struct {
+type ProjectDeploymentConfigsProductionQueueProducerParam struct {
 	// Name of the Queue.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r ProjectDeploymentConfigsProductionQueueProducersQueueProducerBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// R2 buckets used for Pages Functions.
-type ProjectDeploymentConfigsProductionR2BucketsParam struct {
-	// R2 binding.
-	R2Binding param.Field[ProjectDeploymentConfigsProductionR2BucketsR2BindingParam] `json:"R2_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsProductionR2BucketsParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionQueueProducerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // R2 binding.
-type ProjectDeploymentConfigsProductionR2BucketsR2BindingParam struct {
+type ProjectDeploymentConfigsProductionR2BucketParam struct {
 	// Jurisdiction of the R2 bucket.
 	Jurisdiction param.Field[string] `json:"jurisdiction"`
 	// Name of the R2 bucket.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r ProjectDeploymentConfigsProductionR2BucketsR2BindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Services used for Pages Functions.
-type ProjectDeploymentConfigsProductionServicesParam struct {
-	// Service binding.
-	ServiceBinding param.Field[ProjectDeploymentConfigsProductionServicesServiceBindingParam] `json:"SERVICE_BINDING"`
-}
-
-func (r ProjectDeploymentConfigsProductionServicesParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionR2BucketParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Service binding.
-type ProjectDeploymentConfigsProductionServicesServiceBindingParam struct {
+type ProjectDeploymentConfigsProductionServiceParam struct {
 	// The entrypoint to bind to.
 	Entrypoint param.Field[string] `json:"entrypoint"`
 	// The Service environment.
@@ -2702,26 +1878,16 @@ type ProjectDeploymentConfigsProductionServicesServiceBindingParam struct {
 	Service param.Field[string] `json:"service"`
 }
 
-func (r ProjectDeploymentConfigsProductionServicesServiceBindingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Vectorize bindings used for Pages Functions.
-type ProjectDeploymentConfigsProductionVectorizeBindingsParam struct {
-	// Vectorize binding.
-	Vectorize param.Field[ProjectDeploymentConfigsProductionVectorizeBindingsVectorizeParam] `json:"VECTORIZE"`
-}
-
-func (r ProjectDeploymentConfigsProductionVectorizeBindingsParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionServiceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Vectorize binding.
-type ProjectDeploymentConfigsProductionVectorizeBindingsVectorizeParam struct {
+type ProjectDeploymentConfigsProductionVectorizeBindingParam struct {
 	IndexName param.Field[string] `json:"index_name"`
 }
 
-func (r ProjectDeploymentConfigsProductionVectorizeBindingsVectorizeParam) MarshalJSON() (data []byte, err error) {
+func (r ProjectDeploymentConfigsProductionVectorizeBindingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

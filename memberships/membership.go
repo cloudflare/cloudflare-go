@@ -346,7 +346,7 @@ type MembershipUpdateResponsePoliciesPermissionGroup struct {
 	// Identifier of the group.
 	ID string `json:"id,required"`
 	// Attributes associated to the permission group.
-	Meta interface{} `json:"meta"`
+	Meta MembershipUpdateResponsePoliciesPermissionGroupsMeta `json:"meta"`
 	// Name of the group.
 	Name string                                              `json:"name"`
 	JSON membershipUpdateResponsePoliciesPermissionGroupJSON `json:"-"`
@@ -370,6 +370,30 @@ func (r membershipUpdateResponsePoliciesPermissionGroupJSON) RawJSON() string {
 	return r.raw
 }
 
+// Attributes associated to the permission group.
+type MembershipUpdateResponsePoliciesPermissionGroupsMeta struct {
+	Key   string                                                   `json:"key"`
+	Value string                                                   `json:"value"`
+	JSON  membershipUpdateResponsePoliciesPermissionGroupsMetaJSON `json:"-"`
+}
+
+// membershipUpdateResponsePoliciesPermissionGroupsMetaJSON contains the JSON
+// metadata for the struct [MembershipUpdateResponsePoliciesPermissionGroupsMeta]
+type membershipUpdateResponsePoliciesPermissionGroupsMetaJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUpdateResponsePoliciesPermissionGroupsMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r membershipUpdateResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 // A group of scoped resources.
 type MembershipUpdateResponsePoliciesResourceGroup struct {
 	// Identifier of the group.
@@ -377,7 +401,7 @@ type MembershipUpdateResponsePoliciesResourceGroup struct {
 	// The scope associated to the resource group
 	Scope []MembershipUpdateResponsePoliciesResourceGroupsScope `json:"scope,required"`
 	// Attributes associated to the resource group.
-	Meta interface{} `json:"meta"`
+	Meta MembershipUpdateResponsePoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.
 	Name string                                            `json:"name"`
 	JSON membershipUpdateResponsePoliciesResourceGroupJSON `json:"-"`
@@ -452,6 +476,30 @@ func (r *MembershipUpdateResponsePoliciesResourceGroupsScopeObject) UnmarshalJSO
 }
 
 func (r membershipUpdateResponsePoliciesResourceGroupsScopeObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes associated to the resource group.
+type MembershipUpdateResponsePoliciesResourceGroupsMeta struct {
+	Key   string                                                 `json:"key"`
+	Value string                                                 `json:"value"`
+	JSON  membershipUpdateResponsePoliciesResourceGroupsMetaJSON `json:"-"`
+}
+
+// membershipUpdateResponsePoliciesResourceGroupsMetaJSON contains the JSON
+// metadata for the struct [MembershipUpdateResponsePoliciesResourceGroupsMeta]
+type membershipUpdateResponsePoliciesResourceGroupsMetaJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipUpdateResponsePoliciesResourceGroupsMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r membershipUpdateResponsePoliciesResourceGroupsMetaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -631,7 +679,7 @@ type MembershipGetResponsePoliciesPermissionGroup struct {
 	// Identifier of the group.
 	ID string `json:"id,required"`
 	// Attributes associated to the permission group.
-	Meta interface{} `json:"meta"`
+	Meta MembershipGetResponsePoliciesPermissionGroupsMeta `json:"meta"`
 	// Name of the group.
 	Name string                                           `json:"name"`
 	JSON membershipGetResponsePoliciesPermissionGroupJSON `json:"-"`
@@ -655,6 +703,30 @@ func (r membershipGetResponsePoliciesPermissionGroupJSON) RawJSON() string {
 	return r.raw
 }
 
+// Attributes associated to the permission group.
+type MembershipGetResponsePoliciesPermissionGroupsMeta struct {
+	Key   string                                                `json:"key"`
+	Value string                                                `json:"value"`
+	JSON  membershipGetResponsePoliciesPermissionGroupsMetaJSON `json:"-"`
+}
+
+// membershipGetResponsePoliciesPermissionGroupsMetaJSON contains the JSON metadata
+// for the struct [MembershipGetResponsePoliciesPermissionGroupsMeta]
+type membershipGetResponsePoliciesPermissionGroupsMetaJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipGetResponsePoliciesPermissionGroupsMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r membershipGetResponsePoliciesPermissionGroupsMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 // A group of scoped resources.
 type MembershipGetResponsePoliciesResourceGroup struct {
 	// Identifier of the group.
@@ -662,7 +734,7 @@ type MembershipGetResponsePoliciesResourceGroup struct {
 	// The scope associated to the resource group
 	Scope []MembershipGetResponsePoliciesResourceGroupsScope `json:"scope,required"`
 	// Attributes associated to the resource group.
-	Meta interface{} `json:"meta"`
+	Meta MembershipGetResponsePoliciesResourceGroupsMeta `json:"meta"`
 	// Name of the resource group.
 	Name string                                         `json:"name"`
 	JSON membershipGetResponsePoliciesResourceGroupJSON `json:"-"`
@@ -736,6 +808,30 @@ func (r *MembershipGetResponsePoliciesResourceGroupsScopeObject) UnmarshalJSON(d
 }
 
 func (r membershipGetResponsePoliciesResourceGroupsScopeObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes associated to the resource group.
+type MembershipGetResponsePoliciesResourceGroupsMeta struct {
+	Key   string                                              `json:"key"`
+	Value string                                              `json:"value"`
+	JSON  membershipGetResponsePoliciesResourceGroupsMetaJSON `json:"-"`
+}
+
+// membershipGetResponsePoliciesResourceGroupsMetaJSON contains the JSON metadata
+// for the struct [MembershipGetResponsePoliciesResourceGroupsMeta]
+type membershipGetResponsePoliciesResourceGroupsMetaJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipGetResponsePoliciesResourceGroupsMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r membershipGetResponsePoliciesResourceGroupsMetaJSON) RawJSON() string {
 	return r.raw
 }
 

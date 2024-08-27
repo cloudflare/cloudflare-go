@@ -235,8 +235,9 @@ type Organization struct {
 	UpdatedAt              time.Time `json:"updated_at" format:"date-time"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
 	// exceeds the set time of inactivity, the user is removed as an active seat and no
-	// longer counts against your Teams seat count. Must be in the format `300ms` or
-	// `2h45m`. Valid time units are: `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
+	// longer counts against your Teams seat count. Minimum value for this setting is 1
+	// month (730h). Must be in the format `300ms` or `2h45m`. Valid time units are:
+	// `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
@@ -339,8 +340,9 @@ type OrganizationNewParams struct {
 	UIReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
 	// exceeds the set time of inactivity, the user is removed as an active seat and no
-	// longer counts against your Teams seat count. Must be in the format `300ms` or
-	// `2h45m`. Valid time units are: `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
+	// longer counts against your Teams seat count. Minimum value for this setting is 1
+	// month (730h). Must be in the format `300ms` or `2h45m`. Valid time units are:
+	// `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 	UserSeatExpirationInactiveTime param.Field[string] `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
@@ -422,8 +424,9 @@ type OrganizationUpdateParams struct {
 	UIReadOnlyToggleReason param.Field[string] `json:"ui_read_only_toggle_reason"`
 	// The amount of time a user seat is inactive before it expires. When the user seat
 	// exceeds the set time of inactivity, the user is removed as an active seat and no
-	// longer counts against your Teams seat count. Must be in the format `300ms` or
-	// `2h45m`. Valid time units are: `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
+	// longer counts against your Teams seat count. Minimum value for this setting is 1
+	// month (730h). Must be in the format `300ms` or `2h45m`. Valid time units are:
+	// `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
 	UserSeatExpirationInactiveTime param.Field[string] `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.

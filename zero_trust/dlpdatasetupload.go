@@ -157,12 +157,12 @@ type DLPDatasetUploadNewParams struct {
 }
 
 type DLPDatasetUploadNewResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                         `json:"errors,required"`
-	Messages   []shared.ResponseInfo                         `json:"messages,required"`
-	Success    bool                                          `json:"success,required"`
-	Result     NewVersion                                    `json:"result"`
-	ResultInfo DLPDatasetUploadNewResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpDatasetUploadNewResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DLPDatasetUploadNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  NewVersion                                 `json:"result"`
+	JSON    dlpDatasetUploadNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // dlpDatasetUploadNewResponseEnvelopeJSON contains the JSON metadata for the
@@ -172,7 +172,6 @@ type dlpDatasetUploadNewResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -185,35 +184,19 @@ func (r dlpDatasetUploadNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetUploadNewResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                             `json:"total_count,required"`
-	JSON       dlpDatasetUploadNewResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type DLPDatasetUploadNewResponseEnvelopeSuccess bool
 
-// dlpDatasetUploadNewResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [DLPDatasetUploadNewResponseEnvelopeResultInfo]
-type dlpDatasetUploadNewResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	DLPDatasetUploadNewResponseEnvelopeSuccessTrue DLPDatasetUploadNewResponseEnvelopeSuccess = true
+)
 
-func (r *DLPDatasetUploadNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetUploadNewResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r DLPDatasetUploadNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPDatasetUploadNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type DLPDatasetUploadEditParams struct {
@@ -226,12 +209,12 @@ func (r DLPDatasetUploadEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPDatasetUploadEditResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                          `json:"errors,required"`
-	Messages   []shared.ResponseInfo                          `json:"messages,required"`
-	Success    bool                                           `json:"success,required"`
-	Result     Dataset                                        `json:"result"`
-	ResultInfo DLPDatasetUploadEditResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpDatasetUploadEditResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DLPDatasetUploadEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  Dataset                                     `json:"result"`
+	JSON    dlpDatasetUploadEditResponseEnvelopeJSON    `json:"-"`
 }
 
 // dlpDatasetUploadEditResponseEnvelopeJSON contains the JSON metadata for the
@@ -241,7 +224,6 @@ type dlpDatasetUploadEditResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -254,33 +236,17 @@ func (r dlpDatasetUploadEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetUploadEditResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                              `json:"total_count,required"`
-	JSON       dlpDatasetUploadEditResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type DLPDatasetUploadEditResponseEnvelopeSuccess bool
 
-// dlpDatasetUploadEditResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [DLPDatasetUploadEditResponseEnvelopeResultInfo]
-type dlpDatasetUploadEditResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	DLPDatasetUploadEditResponseEnvelopeSuccessTrue DLPDatasetUploadEditResponseEnvelopeSuccess = true
+)
 
-func (r *DLPDatasetUploadEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetUploadEditResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r DLPDatasetUploadEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPDatasetUploadEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

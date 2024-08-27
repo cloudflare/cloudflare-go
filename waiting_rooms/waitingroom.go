@@ -86,7 +86,7 @@ func (r *WaitingRoomService) Update(ctx context.Context, waitingRoomID string, p
 }
 
 // Lists waiting rooms.
-func (r *WaitingRoomService) List(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) (res *pagination.SinglePage[WaitingRoom], err error) {
+func (r *WaitingRoomService) List(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WaitingRoom], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -108,8 +108,8 @@ func (r *WaitingRoomService) List(ctx context.Context, params WaitingRoomListPar
 }
 
 // Lists waiting rooms.
-func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[WaitingRoom] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *WaitingRoomService) ListAutoPaging(ctx context.Context, params WaitingRoomListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WaitingRoom] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a waiting room.
@@ -379,6 +379,8 @@ type QueryParam struct {
 	// through the waiting room again. If `false`, a user's session cookie will be
 	// automatically renewed on every request.
 	DisableSessionRenewal param.Field[bool] `json:"disable_session_renewal"`
+	// A list of enabled origin commands.
+	EnabledOriginCommands param.Field[[]QueryEnabledOriginCommand] `json:"enabled_origin_commands"`
 	// Only available for the Waiting Room Advanced subscription. If `true`, requests
 	// to the waiting room with the header `Accept: application/json` will receive a
 	// JSON response object with information on the user's status in the waiting room
@@ -609,6 +611,20 @@ func (r QueryDefaultTemplateLanguage) IsKnown() bool {
 	return false
 }
 
+type QueryEnabledOriginCommand string
+
+const (
+	QueryEnabledOriginCommandRevoke QueryEnabledOriginCommand = "revoke"
+)
+
+func (r QueryEnabledOriginCommand) IsKnown() bool {
+	switch r {
+	case QueryEnabledOriginCommandRevoke:
+		return true
+	}
+	return false
+}
+
 // Sets the queueing method used by the waiting room. Changing this parameter from
 // the **default** queueing method is only available for the Waiting Room Advanced
 // subscription. Regardless of the queueing method, if `queue_all` is enabled or an
@@ -718,6 +734,8 @@ type WaitingRoom struct {
 	// through the waiting room again. If `false`, a user's session cookie will be
 	// automatically renewed on every request.
 	DisableSessionRenewal bool `json:"disable_session_renewal"`
+	// A list of enabled origin commands.
+	EnabledOriginCommands []WaitingRoomEnabledOriginCommand `json:"enabled_origin_commands"`
 	// The host name to which the waiting room will be applied (no wildcards). Please
 	// do not include the scheme (http:// or https://). The host and path combination
 	// must be unique.
@@ -948,6 +966,7 @@ type waitingRoomJSON struct {
 	DefaultTemplateLanguage    apijson.Field
 	Description                apijson.Field
 	DisableSessionRenewal      apijson.Field
+	EnabledOriginCommands      apijson.Field
 	Host                       apijson.Field
 	JsonResponseEnabled        apijson.Field
 	ModifiedOn                 apijson.Field
@@ -1001,6 +1020,20 @@ const (
 func (r WaitingRoomDefaultTemplateLanguage) IsKnown() bool {
 	switch r {
 	case WaitingRoomDefaultTemplateLanguageEnUs, WaitingRoomDefaultTemplateLanguageEsEs, WaitingRoomDefaultTemplateLanguageDeDe, WaitingRoomDefaultTemplateLanguageFrFr, WaitingRoomDefaultTemplateLanguageItIt, WaitingRoomDefaultTemplateLanguageJaJp, WaitingRoomDefaultTemplateLanguageKoKr, WaitingRoomDefaultTemplateLanguagePtBr, WaitingRoomDefaultTemplateLanguageZhCn, WaitingRoomDefaultTemplateLanguageZhTw, WaitingRoomDefaultTemplateLanguageNlNl, WaitingRoomDefaultTemplateLanguagePlPl, WaitingRoomDefaultTemplateLanguageIDID, WaitingRoomDefaultTemplateLanguageTrTr, WaitingRoomDefaultTemplateLanguageArEg, WaitingRoomDefaultTemplateLanguageRuRu, WaitingRoomDefaultTemplateLanguageFaIr:
+		return true
+	}
+	return false
+}
+
+type WaitingRoomEnabledOriginCommand string
+
+const (
+	WaitingRoomEnabledOriginCommandRevoke WaitingRoomEnabledOriginCommand = "revoke"
+)
+
+func (r WaitingRoomEnabledOriginCommand) IsKnown() bool {
+	switch r {
+	case WaitingRoomEnabledOriginCommandRevoke:
 		return true
 	}
 	return false
@@ -1154,9 +1187,9 @@ type WaitingRoomListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Page number of paginated results.
-	Page param.Field[interface{}] `query:"page"`
+	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page. Must be a multiple of 5.
-	PerPage param.Field[interface{}] `query:"per_page"`
+	PerPage param.Field[float64] `query:"per_page"`
 }
 
 // URLQuery serializes [WaitingRoomListParams]'s query parameters as `url.Values`.

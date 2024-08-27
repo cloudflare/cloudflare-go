@@ -43,6 +43,7 @@ func NewRiskScoringService(opts ...option.RequestOption) (r *RiskScoringService)
 
 // Get risk event/score information for a specific user
 func (r *RiskScoringService) Get(ctx context.Context, userID string, query RiskScoringGetParams, opts ...option.RequestOption) (res *RiskScoringGetResponse, err error) {
+	var env RiskScoringGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -53,7 +54,11 @@ func (r *RiskScoringService) Get(ctx context.Context, userID string, query RiskS
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s", query.AccountID, userID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -174,17 +179,93 @@ type RiskScoringGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
+type RiskScoringGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success    RiskScoringGetResponseEnvelopeSuccess    `json:"success,required"`
+	Result     RiskScoringGetResponse                   `json:"result"`
+	ResultInfo RiskScoringGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       riskScoringGetResponseEnvelopeJSON       `json:"-"`
+}
+
+// riskScoringGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RiskScoringGetResponseEnvelope]
+type riskScoringGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RiskScoringGetResponseEnvelopeSuccess bool
+
+const (
+	RiskScoringGetResponseEnvelopeSuccessTrue RiskScoringGetResponseEnvelopeSuccess = true
+)
+
+func (r RiskScoringGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RiskScoringGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RiskScoringGetResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                      `json:"total_count"`
+	JSON       riskScoringGetResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// riskScoringGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [RiskScoringGetResponseEnvelopeResultInfo]
+type riskScoringGetResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RiskScoringGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r riskScoringGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type RiskScoringResetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RiskScoringResetResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                      `json:"errors,required"`
-	Messages   []shared.ResponseInfo                      `json:"messages,required"`
-	Success    bool                                       `json:"success,required"`
-	Result     RiskScoringResetResponse                   `json:"result,nullable"`
-	ResultInfo RiskScoringResetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       riskScoringResetResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success RiskScoringResetResponseEnvelopeSuccess `json:"success,required"`
+	Result  RiskScoringResetResponse                `json:"result,nullable"`
+	JSON    riskScoringResetResponseEnvelopeJSON    `json:"-"`
 }
 
 // riskScoringResetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -194,7 +275,6 @@ type riskScoringResetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -207,33 +287,17 @@ func (r riskScoringResetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type RiskScoringResetResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                          `json:"total_count,required"`
-	JSON       riskScoringResetResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type RiskScoringResetResponseEnvelopeSuccess bool
 
-// riskScoringResetResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [RiskScoringResetResponseEnvelopeResultInfo]
-type riskScoringResetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	RiskScoringResetResponseEnvelopeSuccessTrue RiskScoringResetResponseEnvelopeSuccess = true
+)
 
-func (r *RiskScoringResetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r riskScoringResetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r RiskScoringResetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RiskScoringResetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

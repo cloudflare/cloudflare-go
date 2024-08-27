@@ -17,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/audit_logs"
 	"github.com/cloudflare/cloudflare-go/v2/billing"
 	"github.com/cloudflare/cloudflare-go/v2/bot_management"
+	"github.com/cloudflare/cloudflare-go/v2/botnet_feed"
 	"github.com/cloudflare/cloudflare-go/v2/brand_protection"
 	"github.com/cloudflare/cloudflare-go/v2/cache"
 	"github.com/cloudflare/cloudflare-go/v2/calls"
@@ -188,6 +189,7 @@ type Client struct {
 	AIGateway                   *ai_gateway.AIGatewayService
 	IAM                         *iam.IAMService
 	CloudConnector              *cloud_connector.CloudConnectorService
+	BotnetFeed                  *botnet_feed.BotnetFeedService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -299,6 +301,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
 	r.IAM = iam.NewIAMService(opts...)
 	r.CloudConnector = cloud_connector.NewCloudConnectorService(opts...)
+	r.BotnetFeed = botnet_feed.NewBotnetFeedService(opts...)
 
 	return
 }

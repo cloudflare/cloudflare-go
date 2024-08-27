@@ -124,6 +124,27 @@ func (r *NetworkVirtualNetworkService) Edit(ctx context.Context, virtualNetworkI
 	return
 }
 
+// Get a virtual network.
+func (r *NetworkVirtualNetworkService) Get(ctx context.Context, virtualNetworkID string, query NetworkVirtualNetworkGetParams, opts ...option.RequestOption) (res *VirtualNetwork, err error) {
+	var env NetworkVirtualNetworkGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if virtualNetworkID == "" {
+		err = errors.New("missing required virtual_network_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", query.AccountID, virtualNetworkID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type VirtualNetwork struct {
 	// UUID of the virtual network.
 	ID string `json:"id,required" format:"uuid"`
@@ -344,6 +365,54 @@ const (
 func (r NetworkVirtualNetworkEditResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case NetworkVirtualNetworkEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type NetworkVirtualNetworkGetParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type NetworkVirtualNetworkGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   VirtualNetwork        `json:"result,required"`
+	// Whether the API call was successful
+	Success NetworkVirtualNetworkGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    networkVirtualNetworkGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// networkVirtualNetworkGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [NetworkVirtualNetworkGetResponseEnvelope]
+type networkVirtualNetworkGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NetworkVirtualNetworkGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r networkVirtualNetworkGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type NetworkVirtualNetworkGetResponseEnvelopeSuccess bool
+
+const (
+	NetworkVirtualNetworkGetResponseEnvelopeSuccessTrue NetworkVirtualNetworkGetResponseEnvelopeSuccess = true
+)
+
+func (r NetworkVirtualNetworkGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case NetworkVirtualNetworkGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

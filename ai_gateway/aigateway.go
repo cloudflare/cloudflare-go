@@ -523,8 +523,10 @@ type AIGatewayListParams struct {
 	ID param.Field[string] `query:"id"`
 	// Order By Column Name
 	OrderBy param.Field[string] `query:"order_by"`
-	Page    param.Field[int64]  `query:"page"`
-	PerPage param.Field[int64]  `query:"per_page"`
+	// Order By Direction
+	OrderByDirection param.Field[AIGatewayListParamsOrderByDirection] `query:"order_by_direction"`
+	Page             param.Field[int64]                               `query:"page"`
+	PerPage          param.Field[int64]                               `query:"per_page"`
 }
 
 // URLQuery serializes [AIGatewayListParams]'s query parameters as `url.Values`.
@@ -533,6 +535,22 @@ func (r AIGatewayListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Order By Direction
+type AIGatewayListParamsOrderByDirection string
+
+const (
+	AIGatewayListParamsOrderByDirectionAsc  AIGatewayListParamsOrderByDirection = "ASC"
+	AIGatewayListParamsOrderByDirectionDesc AIGatewayListParamsOrderByDirection = "DESC"
+)
+
+func (r AIGatewayListParamsOrderByDirection) IsKnown() bool {
+	switch r {
+	case AIGatewayListParamsOrderByDirectionAsc, AIGatewayListParamsOrderByDirectionDesc:
+		return true
+	}
+	return false
 }
 
 type AIGatewayDeleteParams struct {

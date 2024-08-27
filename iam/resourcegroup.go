@@ -218,7 +218,7 @@ type ResourceGroupUpdateResponse struct {
 	// The scope associated to the resource group
 	Scope []ResourceGroupUpdateResponseScope `json:"scope,required"`
 	// Attributes associated to the resource group.
-	Meta interface{} `json:"meta"`
+	Meta ResourceGroupUpdateResponseMeta `json:"meta"`
 	// Name of the resource group.
 	Name string                          `json:"name"`
 	JSON resourceGroupUpdateResponseJSON `json:"-"`
@@ -295,6 +295,30 @@ func (r resourceGroupUpdateResponseScopeObjectJSON) RawJSON() string {
 	return r.raw
 }
 
+// Attributes associated to the resource group.
+type ResourceGroupUpdateResponseMeta struct {
+	Key   string                              `json:"key"`
+	Value string                              `json:"value"`
+	JSON  resourceGroupUpdateResponseMetaJSON `json:"-"`
+}
+
+// resourceGroupUpdateResponseMetaJSON contains the JSON metadata for the struct
+// [ResourceGroupUpdateResponseMeta]
+type resourceGroupUpdateResponseMetaJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupUpdateResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupUpdateResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type ResourceGroupListResponse = interface{}
 
 type ResourceGroupDeleteResponse struct {
@@ -326,7 +350,7 @@ type ResourceGroupGetResponse struct {
 	// The scope associated to the resource group
 	Scope []ResourceGroupGetResponseScope `json:"scope,required"`
 	// Attributes associated to the resource group.
-	Meta interface{} `json:"meta"`
+	Meta ResourceGroupGetResponseMeta `json:"meta"`
 	// Name of the resource group.
 	Name string                       `json:"name"`
 	JSON resourceGroupGetResponseJSON `json:"-"`
@@ -400,6 +424,30 @@ func (r *ResourceGroupGetResponseScopeObject) UnmarshalJSON(data []byte) (err er
 }
 
 func (r resourceGroupGetResponseScopeObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes associated to the resource group.
+type ResourceGroupGetResponseMeta struct {
+	Key   string                           `json:"key"`
+	Value string                           `json:"value"`
+	JSON  resourceGroupGetResponseMetaJSON `json:"-"`
+}
+
+// resourceGroupGetResponseMetaJSON contains the JSON metadata for the struct
+// [ResourceGroupGetResponseMeta]
+type resourceGroupGetResponseMetaJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceGroupGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceGroupGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 

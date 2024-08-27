@@ -23,7 +23,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewGatewayConfigurationService] method instead.
 type GatewayConfigurationService struct {
-	Options []option.RequestOption
+	Options           []option.RequestOption
+	CustomCertificate *GatewayConfigurationCustomCertificateService
 }
 
 // NewGatewayConfigurationService generates a new service that applies the given
@@ -32,6 +33,7 @@ type GatewayConfigurationService struct {
 func NewGatewayConfigurationService(opts ...option.RequestOption) (r *GatewayConfigurationService) {
 	r = &GatewayConfigurationService{}
 	r.Options = opts
+	r.CustomCertificate = NewGatewayConfigurationCustomCertificateService(opts...)
 	return
 }
 
@@ -488,7 +490,7 @@ func (r gatewayConfigurationSettingsJSON) RawJSON() string {
 // Cloudflare Root CA will be used.
 type GatewayConfigurationSettingsCertificate struct {
 	// UUID of certificate to be used for interception. Certificate must be active on
-	// the edge.
+	// the edge. A nil UUID will indicate the Cloudflare Root CA should be used.
 	ID   string                                      `json:"id,required"`
 	JSON gatewayConfigurationSettingsCertificateJSON `json:"-"`
 }
@@ -545,7 +547,7 @@ func (r GatewayConfigurationSettingsParam) MarshalJSON() (data []byte, err error
 // Cloudflare Root CA will be used.
 type GatewayConfigurationSettingsCertificateParam struct {
 	// UUID of certificate to be used for interception. Certificate must be active on
-	// the edge.
+	// the edge. A nil UUID will indicate the Cloudflare Root CA should be used.
 	ID param.Field[string] `json:"id,required"`
 }
 
