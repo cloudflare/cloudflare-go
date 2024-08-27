@@ -334,7 +334,7 @@ func (r ScriptUpdateParamsBodyObject) implementsWorkersScriptUpdateParamsBodyUni
 // JSON encoded metadata about the uploaded parts and Worker configuration.
 type ScriptUpdateParamsBodyObjectMetadata struct {
 	// List of bindings available to the worker.
-	Bindings param.Field[[]interface{}] `json:"bindings"`
+	Bindings param.Field[[]ScriptUpdateParamsBodyObjectMetadataBinding] `json:"bindings"`
 	// Name of the part in the multipart request that contains the script (e.g. the
 	// file adding a listener to the `fetch` event). Indicates a
 	// `service worker syntax` Worker.
@@ -363,10 +363,23 @@ type ScriptUpdateParamsBodyObjectMetadata struct {
 	// Usage model to apply to invocations.
 	UsageModel param.Field[ScriptUpdateParamsBodyObjectMetadataUsageModel] `json:"usage_model"`
 	// Key-value pairs to use as tags for this version of this Worker
-	VersionTags param.Field[interface{}] `json:"version_tags"`
+	VersionTags param.Field[map[string]string] `json:"version_tags"`
 }
 
 func (r ScriptUpdateParamsBodyObjectMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ScriptUpdateParamsBodyObjectMetadataBinding struct {
+	// Name of the binding variable.
+	Name param.Field[string] `json:"name"`
+	// Type of binding. You can find more about bindings on our docs:
+	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
+	Type        param.Field[string]    `json:"type"`
+	ExtraFields map[string]interface{} `json:"-,extras"`
+}
+
+func (r ScriptUpdateParamsBodyObjectMetadataBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

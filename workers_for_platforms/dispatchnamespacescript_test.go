@@ -40,10 +40,9 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 			Body: workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObject{
 				AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 				Metadata: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadata{
-					Bindings: cloudflare.F([]interface{}{map[string]interface{}{
-						"name": "MY_ENV_VAR",
-						"text": "my_data",
-						"type": "plain_text",
+					Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataBinding{{
+						Name: cloudflare.F("MY_ENV_VAR"),
+						Type: cloudflare.F("plain_text"),
 					}}),
 					BodyPart:           cloudflare.F("worker.js"),
 					CompatibilityDate:  cloudflare.F("2023-07-25"),
@@ -97,8 +96,10 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						Environment: cloudflare.F("production"),
 						Namespace:   cloudflare.F("my-namespace"),
 					}}),
-					UsageModel:  cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModelBundled),
-					VersionTags: cloudflare.F[any](map[string]interface{}{}),
+					UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModelBundled),
+					VersionTags: cloudflare.F(map[string]string{
+						"foo": "string",
+					}),
 				}),
 			},
 		},

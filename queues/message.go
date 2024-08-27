@@ -135,7 +135,7 @@ func (r messagePullResponseJSON) RawJSON() string {
 }
 
 type MessageAckParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string]                  `path:"account_id,required"`
 	Acks      param.Field[[]MessageAckParamsAck]   `json:"acks"`
 	Retries   param.Field[[]MessageAckParamsRetry] `json:"retries"`
@@ -170,7 +170,7 @@ type MessageAckResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   MessageAckResponse    `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    MessageAckResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo MessageAckResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       messageAckResponseEnvelopeJSON       `json:"-"`
@@ -196,7 +196,7 @@ func (r messageAckResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type MessageAckResponseEnvelopeSuccess bool
 
 const (
@@ -243,13 +243,13 @@ func (r messageAckResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type MessagePullParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The maximum number of messages to include in a batch.
 	BatchSize param.Field[float64] `json:"batch_size"`
 	// The number of milliseconds that a message is exclusively leased. After the
 	// timeout, the message becomes available for another attempt.
-	VisibilityTimeoutMs param.Field[float64] `json:"visibility_timeout_ms"`
+	VisibilityTimeout param.Field[float64] `json:"visibility_timeout"`
 }
 
 func (r MessagePullParams) MarshalJSON() (data []byte, err error) {
@@ -260,7 +260,7 @@ type MessagePullResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	Result   []MessagePullResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success    MessagePullResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo MessagePullResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       messagePullResponseEnvelopeJSON       `json:"-"`
@@ -286,7 +286,7 @@ func (r messagePullResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type MessagePullResponseEnvelopeSuccess bool
 
 const (

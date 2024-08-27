@@ -33,6 +33,58 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	return
 }
 
+// Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
+func (r *DNSService) New(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *Settings, err error) {
+	var env DNSNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/email/routing/dns", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Disable your Email Routing zone. Also removes additional MX records previously
+// required for Email Routing to work.
+func (r *DNSService) Delete(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *Settings, err error) {
+	var env DNSDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/email/routing/dns", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Unlock MX Records previously locked by Email Routing.
+func (r *DNSService) Edit(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *Settings, err error) {
+	var env DNSEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if zoneIdentifier == "" {
+		err = errors.New("missing required zone_identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/email/routing/dns", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Show the DNS records needed to configure your Email Routing zone.
 func (r *DNSService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]DNSRecord, err error) {
 	var env DNSGetResponseEnvelope
@@ -127,6 +179,135 @@ const (
 func (r DNSRecordType) IsKnown() bool {
 	switch r {
 	case DNSRecordTypeA, DNSRecordTypeAAAA, DNSRecordTypeCNAME, DNSRecordTypeHTTPS, DNSRecordTypeTXT, DNSRecordTypeSRV, DNSRecordTypeLOC, DNSRecordTypeMX, DNSRecordTypeNS, DNSRecordTypeCERT, DNSRecordTypeDNSKEY, DNSRecordTypeDS, DNSRecordTypeNAPTR, DNSRecordTypeSMIMEA, DNSRecordTypeSSHFP, DNSRecordTypeSVCB, DNSRecordTypeTLSA, DNSRecordTypeURI:
+		return true
+	}
+	return false
+}
+
+type DNSNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DNSNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Settings                      `json:"result"`
+	JSON    dnsNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnsNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSNewResponseEnvelope]
+type dnsNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DNSNewResponseEnvelopeSuccess bool
+
+const (
+	DNSNewResponseEnvelopeSuccessTrue DNSNewResponseEnvelopeSuccess = true
+)
+
+func (r DNSNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DNSDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DNSDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  Settings                         `json:"result"`
+	JSON    dnsDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnsDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSDeleteResponseEnvelope]
+type dnsDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DNSDeleteResponseEnvelopeSuccess bool
+
+const (
+	DNSDeleteResponseEnvelopeSuccessTrue DNSDeleteResponseEnvelopeSuccess = true
+)
+
+func (r DNSDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DNSEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DNSEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  Settings                       `json:"result"`
+	JSON    dnsEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnsEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSEditResponseEnvelope]
+type dnsEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DNSEditResponseEnvelopeSuccess bool
+
+const (
+	DNSEditResponseEnvelopeSuccessTrue DNSEditResponseEnvelopeSuccess = true
+)
+
+func (r DNSEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

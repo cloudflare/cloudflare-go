@@ -2125,9 +2125,9 @@ func (r *Record) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
 // [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
 // [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord], [dns.PTRRecord], [dns.SMIMEARecord],
-// [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord], [dns.TLSARecord],
-// [dns.TXTRecord], [dns.URIRecord].
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordOpenpgpkey], [dns.PTRRecord],
+// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
+// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
 func (r Record) AsUnion() RecordUnion {
 	return r.union
 }
@@ -2135,9 +2135,9 @@ func (r Record) AsUnion() RecordUnion {
 // Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
 // [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
 // [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord],
-// [dns.SSHFPRecord], [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord] or
-// [dns.URIRecord].
+// [dns.NSRecord], [dns.RecordOpenpgpkey], [dns.PTRRecord], [dns.SMIMEARecord],
+// [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord], [dns.TLSARecord],
+// [dns.TXTRecord] or [dns.URIRecord].
 type RecordUnion interface {
 	implementsDNSRecord()
 }
@@ -2208,6 +2208,11 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(PTRRecord{}),
 			DiscriminatorValue: "PTR",
 		},
@@ -2249,35 +2254,114 @@ func init() {
 	)
 }
 
+type RecordOpenpgpkey struct {
+	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+	Content string `json:"content,required"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name string `json:"name,required"`
+	// Record type.
+	Type RecordOpenpgpkeyType `json:"type,required"`
+	// Identifier
+	ID string `json:"id"`
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment string `json:"comment"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
+	// When the record was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Extra Cloudflare-specific information about the record.
+	Meta RecordMetadata `json:"meta"`
+	// When the record was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Whether the record can be proxied by Cloudflare or not.
+	Proxiable bool `json:"proxiable"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags []RecordTags `json:"tags"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL  TTL                  `json:"ttl"`
+	JSON recordOpenpgpkeyJSON `json:"-"`
+}
+
+// recordOpenpgpkeyJSON contains the JSON metadata for the struct
+// [RecordOpenpgpkey]
+type recordOpenpgpkeyJSON struct {
+	Content           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Proxiable         apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *RecordOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordOpenpgpkeyJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r RecordOpenpgpkey) implementsDNSRecord() {}
+
+// Record type.
+type RecordOpenpgpkeyType string
+
+const (
+	RecordOpenpgpkeyTypeOpenpgpkey RecordOpenpgpkeyType = "OPENPGPKEY"
+)
+
+func (r RecordOpenpgpkeyType) IsKnown() bool {
+	switch r {
+	case RecordOpenpgpkeyTypeOpenpgpkey:
+		return true
+	}
+	return false
+}
+
 // Record type.
 type RecordType string
 
 const (
-	RecordTypeA      RecordType = "A"
-	RecordTypeAAAA   RecordType = "AAAA"
-	RecordTypeCAA    RecordType = "CAA"
-	RecordTypeCERT   RecordType = "CERT"
-	RecordTypeCNAME  RecordType = "CNAME"
-	RecordTypeDNSKEY RecordType = "DNSKEY"
-	RecordTypeDS     RecordType = "DS"
-	RecordTypeHTTPS  RecordType = "HTTPS"
-	RecordTypeLOC    RecordType = "LOC"
-	RecordTypeMX     RecordType = "MX"
-	RecordTypeNAPTR  RecordType = "NAPTR"
-	RecordTypeNS     RecordType = "NS"
-	RecordTypePTR    RecordType = "PTR"
-	RecordTypeSMIMEA RecordType = "SMIMEA"
-	RecordTypeSRV    RecordType = "SRV"
-	RecordTypeSSHFP  RecordType = "SSHFP"
-	RecordTypeSVCB   RecordType = "SVCB"
-	RecordTypeTLSA   RecordType = "TLSA"
-	RecordTypeTXT    RecordType = "TXT"
-	RecordTypeURI    RecordType = "URI"
+	RecordTypeA          RecordType = "A"
+	RecordTypeAAAA       RecordType = "AAAA"
+	RecordTypeCAA        RecordType = "CAA"
+	RecordTypeCERT       RecordType = "CERT"
+	RecordTypeCNAME      RecordType = "CNAME"
+	RecordTypeDNSKEY     RecordType = "DNSKEY"
+	RecordTypeDS         RecordType = "DS"
+	RecordTypeHTTPS      RecordType = "HTTPS"
+	RecordTypeLOC        RecordType = "LOC"
+	RecordTypeMX         RecordType = "MX"
+	RecordTypeNAPTR      RecordType = "NAPTR"
+	RecordTypeNS         RecordType = "NS"
+	RecordTypeOpenpgpkey RecordType = "OPENPGPKEY"
+	RecordTypePTR        RecordType = "PTR"
+	RecordTypeSMIMEA     RecordType = "SMIMEA"
+	RecordTypeSRV        RecordType = "SRV"
+	RecordTypeSSHFP      RecordType = "SSHFP"
+	RecordTypeSVCB       RecordType = "SVCB"
+	RecordTypeTLSA       RecordType = "TLSA"
+	RecordTypeTXT        RecordType = "TXT"
+	RecordTypeURI        RecordType = "URI"
 )
 
 func (r RecordType) IsKnown() bool {
 	switch r {
-	case RecordTypeA, RecordTypeAAAA, RecordTypeCAA, RecordTypeCERT, RecordTypeCNAME, RecordTypeDNSKEY, RecordTypeDS, RecordTypeHTTPS, RecordTypeLOC, RecordTypeMX, RecordTypeNAPTR, RecordTypeNS, RecordTypePTR, RecordTypeSMIMEA, RecordTypeSRV, RecordTypeSSHFP, RecordTypeSVCB, RecordTypeTLSA, RecordTypeTXT, RecordTypeURI:
+	case RecordTypeA, RecordTypeAAAA, RecordTypeCAA, RecordTypeCERT, RecordTypeCNAME, RecordTypeDNSKEY, RecordTypeDS, RecordTypeHTTPS, RecordTypeLOC, RecordTypeMX, RecordTypeNAPTR, RecordTypeNS, RecordTypeOpenpgpkey, RecordTypePTR, RecordTypeSMIMEA, RecordTypeSRV, RecordTypeSSHFP, RecordTypeSVCB, RecordTypeTLSA, RecordTypeTXT, RecordTypeURI:
 		return true
 	}
 	return false
@@ -2319,12 +2403,39 @@ func (r RecordParam) implementsDNSRecordUnionParam() {}
 // [dns.CERTRecordParam], [dns.CNAMERecordParam], [dns.DNSKEYRecordParam],
 // [dns.DSRecordParam], [dns.HTTPSRecordParam], [dns.LOCRecordParam],
 // [dns.MXRecordParam], [dns.NAPTRRecordParam], [dns.NSRecordParam],
-// [dns.PTRRecordParam], [dns.SMIMEARecordParam], [dns.SRVRecordParam],
-// [dns.SSHFPRecordParam], [dns.SVCBRecordParam], [dns.TLSARecordParam],
-// [dns.TXTRecordParam], [dns.URIRecordParam], [RecordParam].
+// [dns.RecordOpenpgpkeyParam], [dns.PTRRecordParam], [dns.SMIMEARecordParam],
+// [dns.SRVRecordParam], [dns.SSHFPRecordParam], [dns.SVCBRecordParam],
+// [dns.TLSARecordParam], [dns.TXTRecordParam], [dns.URIRecordParam],
+// [RecordParam].
 type RecordUnionParam interface {
 	implementsDNSRecordUnionParam()
 }
+
+type RecordOpenpgpkeyParam struct {
+	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+	Content param.Field[string] `json:"content,required"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name,required"`
+	// Record type.
+	Type param.Field[RecordOpenpgpkeyType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment param.Field[string] `json:"comment"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL param.Field[TTL] `json:"ttl"`
+}
+
+func (r RecordOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RecordOpenpgpkeyParam) implementsDNSRecordUnionParam() {}
 
 // Extra Cloudflare-specific information about the record.
 type RecordMetadata struct {
@@ -3798,31 +3909,32 @@ func (r RecordListParamsTagMatch) IsKnown() bool {
 type RecordListParamsType string
 
 const (
-	RecordListParamsTypeA      RecordListParamsType = "A"
-	RecordListParamsTypeAAAA   RecordListParamsType = "AAAA"
-	RecordListParamsTypeCAA    RecordListParamsType = "CAA"
-	RecordListParamsTypeCERT   RecordListParamsType = "CERT"
-	RecordListParamsTypeCNAME  RecordListParamsType = "CNAME"
-	RecordListParamsTypeDNSKEY RecordListParamsType = "DNSKEY"
-	RecordListParamsTypeDS     RecordListParamsType = "DS"
-	RecordListParamsTypeHTTPS  RecordListParamsType = "HTTPS"
-	RecordListParamsTypeLOC    RecordListParamsType = "LOC"
-	RecordListParamsTypeMX     RecordListParamsType = "MX"
-	RecordListParamsTypeNAPTR  RecordListParamsType = "NAPTR"
-	RecordListParamsTypeNS     RecordListParamsType = "NS"
-	RecordListParamsTypePTR    RecordListParamsType = "PTR"
-	RecordListParamsTypeSMIMEA RecordListParamsType = "SMIMEA"
-	RecordListParamsTypeSRV    RecordListParamsType = "SRV"
-	RecordListParamsTypeSSHFP  RecordListParamsType = "SSHFP"
-	RecordListParamsTypeSVCB   RecordListParamsType = "SVCB"
-	RecordListParamsTypeTLSA   RecordListParamsType = "TLSA"
-	RecordListParamsTypeTXT    RecordListParamsType = "TXT"
-	RecordListParamsTypeURI    RecordListParamsType = "URI"
+	RecordListParamsTypeA          RecordListParamsType = "A"
+	RecordListParamsTypeAAAA       RecordListParamsType = "AAAA"
+	RecordListParamsTypeCAA        RecordListParamsType = "CAA"
+	RecordListParamsTypeCERT       RecordListParamsType = "CERT"
+	RecordListParamsTypeCNAME      RecordListParamsType = "CNAME"
+	RecordListParamsTypeDNSKEY     RecordListParamsType = "DNSKEY"
+	RecordListParamsTypeDS         RecordListParamsType = "DS"
+	RecordListParamsTypeHTTPS      RecordListParamsType = "HTTPS"
+	RecordListParamsTypeLOC        RecordListParamsType = "LOC"
+	RecordListParamsTypeMX         RecordListParamsType = "MX"
+	RecordListParamsTypeNAPTR      RecordListParamsType = "NAPTR"
+	RecordListParamsTypeNS         RecordListParamsType = "NS"
+	RecordListParamsTypeOpenpgpkey RecordListParamsType = "OPENPGPKEY"
+	RecordListParamsTypePTR        RecordListParamsType = "PTR"
+	RecordListParamsTypeSMIMEA     RecordListParamsType = "SMIMEA"
+	RecordListParamsTypeSRV        RecordListParamsType = "SRV"
+	RecordListParamsTypeSSHFP      RecordListParamsType = "SSHFP"
+	RecordListParamsTypeSVCB       RecordListParamsType = "SVCB"
+	RecordListParamsTypeTLSA       RecordListParamsType = "TLSA"
+	RecordListParamsTypeTXT        RecordListParamsType = "TXT"
+	RecordListParamsTypeURI        RecordListParamsType = "URI"
 )
 
 func (r RecordListParamsType) IsKnown() bool {
 	switch r {
-	case RecordListParamsTypeA, RecordListParamsTypeAAAA, RecordListParamsTypeCAA, RecordListParamsTypeCERT, RecordListParamsTypeCNAME, RecordListParamsTypeDNSKEY, RecordListParamsTypeDS, RecordListParamsTypeHTTPS, RecordListParamsTypeLOC, RecordListParamsTypeMX, RecordListParamsTypeNAPTR, RecordListParamsTypeNS, RecordListParamsTypePTR, RecordListParamsTypeSMIMEA, RecordListParamsTypeSRV, RecordListParamsTypeSSHFP, RecordListParamsTypeSVCB, RecordListParamsTypeTLSA, RecordListParamsTypeTXT, RecordListParamsTypeURI:
+	case RecordListParamsTypeA, RecordListParamsTypeAAAA, RecordListParamsTypeCAA, RecordListParamsTypeCERT, RecordListParamsTypeCNAME, RecordListParamsTypeDNSKEY, RecordListParamsTypeDS, RecordListParamsTypeHTTPS, RecordListParamsTypeLOC, RecordListParamsTypeMX, RecordListParamsTypeNAPTR, RecordListParamsTypeNS, RecordListParamsTypeOpenpgpkey, RecordListParamsTypePTR, RecordListParamsTypeSMIMEA, RecordListParamsTypeSRV, RecordListParamsTypeSSHFP, RecordListParamsTypeSVCB, RecordListParamsTypeTLSA, RecordListParamsTypeTXT, RecordListParamsTypeURI:
 		return true
 	}
 	return false

@@ -143,8 +143,8 @@ func TestHealthcheckListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Healthchecks.List(context.TODO(), healthchecks.HealthcheckListParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Page:    cloudflare.F[any](map[string]interface{}{}),
-		PerPage: cloudflare.F[any](map[string]interface{}{}),
+		Page:    cloudflare.F(1.000000),
+		PerPage: cloudflare.F(5.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

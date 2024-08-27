@@ -171,8 +171,8 @@ You can use `.ListAutoPaging()` methods to iterate through items across all page
 iter := client.Accounts.ListAutoPaging(context.TODO(), accounts.AccountListParams{})
 // Automatically fetches more pages as needed.
 for iter.Next() {
-	accountListResponse := iter.Current()
-	fmt.Printf("%+v\n", accountListResponse)
+	account := iter.Current()
+	fmt.Printf("%+v\n", account)
 }
 if err := iter.Err(); err != nil {
 	panic(err.Error())

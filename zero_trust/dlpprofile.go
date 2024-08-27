@@ -7,10 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
@@ -43,16 +45,16 @@ func NewDLPProfileService(opts ...option.RequestOption) (r *DLPProfileService) {
 }
 
 // Lists all DLP profiles in an account.
-func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Profile], err error) {
+func (r *DLPProfileService) List(ctx context.Context, params DLPProfileListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Profile], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dlp/profiles", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +67,8 @@ func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams
 }
 
 // Lists all DLP profiles in an account.
-func (r *DLPProfileService) ListAutoPaging(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Profile] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *DLPProfileService) ListAutoPaging(ctx context.Context, params DLPProfileListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Profile] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Fetches a DLP profile by ID
@@ -137,8 +139,9 @@ type Profile struct {
 	Name       string `json:"name,required"`
 	OCREnabled bool   `json:"ocr_enabled"`
 	// When the profile was lasted updated
-	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	Type       ProfileType `json:"type,required"`
+	UpdatedAt time.Time   `json:"updated_at" format:"date-time"`
+	Type      ProfileType `json:"type,required"`
+	// Whether this profile can be accessed by anyone
 	OpenAccess bool        `json:"open_access"`
 	JSON       profileJSON `json:"-"`
 	union      ProfileUnion
@@ -645,10 +648,11 @@ type ProfilePredefined struct {
 	Type ProfilePredefinedType `json:"type,required"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
-	ContextAwareness ContextAwareness      `json:"context_awareness"`
-	OCREnabled       bool                  `json:"ocr_enabled"`
-	OpenAccess       bool                  `json:"open_access"`
-	JSON             profilePredefinedJSON `json:"-"`
+	ContextAwareness ContextAwareness `json:"context_awareness"`
+	OCREnabled       bool             `json:"ocr_enabled"`
+	// Whether this profile can be accessed by anyone
+	OpenAccess bool                  `json:"open_access"`
+	JSON       profilePredefinedJSON `json:"-"`
 }
 
 // profilePredefinedJSON contains the JSON metadata for the struct
@@ -1507,6 +1511,17 @@ func (r skipConfigurationJSON) RawJSON() string {
 
 type DLPProfileListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Return all profiles, including those that current account does not have access
+	// to.
+	All param.Field[bool] `query:"all"`
+}
+
+// URLQuery serializes [DLPProfileListParams]'s query parameters as `url.Values`.
+func (r DLPProfileListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type DLPProfileGetParams struct {
@@ -1514,12 +1529,12 @@ type DLPProfileGetParams struct {
 }
 
 type DLPProfileGetResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                   `json:"errors,required"`
-	Messages   []shared.ResponseInfo                   `json:"messages,required"`
-	Success    bool                                    `json:"success,required"`
-	Result     Profile                                 `json:"result"`
-	ResultInfo DLPProfileGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpProfileGetResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DLPProfileGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Profile                              `json:"result"`
+	JSON    dlpProfileGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // dlpProfileGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1529,7 +1544,6 @@ type dlpProfileGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1542,33 +1556,17 @@ func (r dlpProfileGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPProfileGetResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                       `json:"total_count,required"`
-	JSON       dlpProfileGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type DLPProfileGetResponseEnvelopeSuccess bool
 
-// dlpProfileGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DLPProfileGetResponseEnvelopeResultInfo]
-type dlpProfileGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	DLPProfileGetResponseEnvelopeSuccessTrue DLPProfileGetResponseEnvelopeSuccess = true
+)
 
-func (r *DLPProfileGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfileGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r DLPProfileGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPProfileGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

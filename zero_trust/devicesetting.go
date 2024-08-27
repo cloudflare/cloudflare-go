@@ -68,6 +68,23 @@ func (r *DeviceSettingService) List(ctx context.Context, query DeviceSettingList
 	return
 }
 
+// Patches the current device settings for a Zero Trust account.
+func (r *DeviceSettingService) Edit(ctx context.Context, params DeviceSettingEditParams, opts ...option.RequestOption) (res *DeviceSettings, err error) {
+	var env DeviceSettingEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/devices/settings", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type DeviceSettings struct {
 	// Sets the time limit, in seconds, that a user can use an override code to bypass
 	// WARP.
@@ -214,6 +231,58 @@ const (
 func (r DeviceSettingListResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case DeviceSettingListResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DeviceSettingEditParams struct {
+	AccountID      param.Field[string] `path:"account_id,required"`
+	DeviceSettings DeviceSettingsParam `json:"device_settings,required"`
+}
+
+func (r DeviceSettingEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.DeviceSettings)
+}
+
+type DeviceSettingEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   DeviceSettings        `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success DeviceSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    deviceSettingEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// deviceSettingEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DeviceSettingEditResponseEnvelope]
+type deviceSettingEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceSettingEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful.
+type DeviceSettingEditResponseEnvelopeSuccess bool
+
+const (
+	DeviceSettingEditResponseEnvelopeSuccessTrue DeviceSettingEditResponseEnvelopeSuccess = true
+)
+
+func (r DeviceSettingEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DeviceSettingEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestDLPProfileList(t *testing.T) {
+func TestDLPProfileListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -29,6 +29,7 @@ func TestDLPProfileList(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.List(context.TODO(), zero_trust.DLPProfileListParams{
 		AccountID: cloudflare.F("account_id"),
+		All:       cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

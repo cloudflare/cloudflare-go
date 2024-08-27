@@ -40,10 +40,9 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 			Body: workers.ScriptUpdateParamsBodyObject{
 				AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 				Metadata: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadata{
-					Bindings: cloudflare.F([]interface{}{map[string]interface{}{
-						"name": "MY_ENV_VAR",
-						"text": "my_data",
-						"type": "plain_text",
+					Bindings: cloudflare.F([]workers.ScriptUpdateParamsBodyObjectMetadataBinding{{
+						Name: cloudflare.F("MY_ENV_VAR"),
+						Type: cloudflare.F("plain_text"),
 					}}),
 					BodyPart:           cloudflare.F("worker.js"),
 					CompatibilityDate:  cloudflare.F("2023-07-25"),
@@ -97,8 +96,10 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						Environment: cloudflare.F("production"),
 						Namespace:   cloudflare.F("my-namespace"),
 					}}),
-					UsageModel:  cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataUsageModelBundled),
-					VersionTags: cloudflare.F[any](map[string]interface{}{}),
+					UsageModel: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataUsageModelBundled),
+					VersionTags: cloudflare.F(map[string]string{
+						"foo": "string",
+					}),
 				}),
 			},
 			RollbackTo: cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
