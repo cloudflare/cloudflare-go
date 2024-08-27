@@ -375,6 +375,8 @@ type LoadBalancer struct {
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
 	Name string `json:"name"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks []string `json:"networks"`
 	// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -477,6 +479,7 @@ type loadBalancerJSON struct {
 	LocationStrategy          apijson.Field
 	ModifiedOn                apijson.Field
 	Name                      apijson.Field
+	Networks                  apijson.Field
 	PopPools                  apijson.Field
 	Proxied                   apijson.Field
 	RandomSteering            apijson.Field

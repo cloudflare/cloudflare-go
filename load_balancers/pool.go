@@ -204,6 +204,8 @@ type Pool struct {
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name string `json:"name"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks []string `json:"networks"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -237,6 +239,7 @@ type poolJSON struct {
 	ModifiedOn         apijson.Field
 	Monitor            apijson.Field
 	Name               apijson.Field
+	Networks           apijson.Field
 	NotificationEmail  apijson.Field
 	NotificationFilter apijson.Field
 	OriginSteering     apijson.Field

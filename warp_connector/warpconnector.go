@@ -1624,7 +1624,8 @@ func (r WARPConnectorGetResponseTunType) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [warp_connector.WARPConnectorTokenResponseUnknown],
+// Union satisfied by
+// [warp_connector.WARPConnectorTokenResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
 // [warp_connector.WARPConnectorTokenResponseArray] or [shared.UnionString].
 type WARPConnectorTokenResponseUnion interface {
 	ImplementsWARPConnectorWARPConnectorTokenResponseUnion()
