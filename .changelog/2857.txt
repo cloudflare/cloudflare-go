@@ -1,0 +1,3 @@
+```release-note:enhancement
+errors: implement the Unwrap method for custom error types to access the wrapped errors via errors.Is and errors.As
+```
