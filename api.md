@@ -978,7 +978,6 @@ Params Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#NSRecordParam">NSRecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#PTRRecordParam">PTRRecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#RecordUnionParam">RecordUnionParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#RecordMetadataParam">RecordMetadataParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#RecordTagsParam">RecordTagsParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#SMIMEARecordParam">SMIMEARecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#SRVRecordParam">SRVRecordParam</a>
@@ -1005,7 +1004,6 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#NSRecord">NSRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#PTRRecord">PTRRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#Record">Record</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#RecordMetadata">RecordMetadata</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#RecordProcessTiming">RecordProcessTiming</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#RecordTags">RecordTags</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/dns#SMIMEARecord">SMIMEARecord</a>
