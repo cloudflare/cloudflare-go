@@ -211,9 +211,8 @@ func (r GroupAllowedMode) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by
-// [firewall.WAFPackageGroupEditResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [firewall.WAFPackageGroupEditResponseUnknown] or
+// [shared.UnionString].
 type WAFPackageGroupEditResponseUnion interface {
 	ImplementsFirewallWAFPackageGroupEditResponseUnion()
 }
@@ -229,9 +228,8 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [firewall.WAFPackageGroupGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [firewall.WAFPackageGroupGetResponseUnknown] or
+// [shared.UnionString].
 type WAFPackageGroupGetResponseUnion interface {
 	ImplementsFirewallWAFPackageGroupGetResponseUnion()
 }
