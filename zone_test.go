@@ -1520,20 +1520,26 @@ func TestUpdateZoneAutomaticSSLModeSetting(t *testing.T) {
 		// JSON data from: https://api.cloudflare.com/#zone-settings-properties
 		_, _ = fmt.Fprintf(w, `{
 			"result": {
-				"id": "ssl_automatic_mode",
+				"id": "ssl_tls_configuration_mode",
 				"value": "auto",
 				"editable": true,
-				"modified_on": "2014-01-01T05:20:00.12345Z"
+				"modified_on": "2014-01-01T05:20:00.12345Z",
+				"next_scheduled_scan": "2014-01-01T05:20:00.12345Z"
 			}
 		}`)
 	}
 	mux.HandleFunc("/zones/foo/settings/ssl_automatic_mode", handler)
-	s, err := client.UpdateZoneAutomaticSSLSettingMode(context.Background(), "foo", "auto")
+	s, err := client.UpdateZoneSetting(context.Background(), ZoneIdentifier("foo"), UpdateZoneSettingParams{
+		Name:  "ssl_automatic_mode",
+		Value: "auto",
+	})
+
 	if assert.NoError(t, err) {
-		assert.Equal(t, s.ID, "ssl_automatic_mode")
+		assert.Equal(t, s.ID, "ssl_tls_configuration_mode")
 		assert.Equal(t, s.Value, "auto")
 		assert.Equal(t, s.Editable, true)
 		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
+		assert.Equal(t, s.NextScheduledScan, "2014-01-01T05:20:00.12345Z")
 	}
 }
 
@@ -1545,7 +1551,7 @@ func TestGetZoneAutomaticSSLModeSetting(t *testing.T) {
 		w.Header().Set("content-type", "application/json")
 		_, _ = fmt.Fprintf(w, `{
 			"result": {
-				"id": "ssl_automatic_mode",
+				"id": "ssl_tls_configuration_mode",
 				"value": "custom",
 				"editable": true,
 				"modified_on": "2014-01-01T05:20:00.12345Z",
@@ -1554,9 +1560,9 @@ func TestGetZoneAutomaticSSLModeSetting(t *testing.T) {
 		}`)
 	}
 	mux.HandleFunc("/zones/foo/settings/ssl_automatic_mode", handler)
-	s, err := client.ZoneAutomaticSSLModeSetting(context.Background(), "foo")
+	s, err := client.GetZoneSetting(context.Background(), ZoneIdentifier("foo"), GetZoneSettingParams{Name: "ssl_automatic_mode"})
 	if assert.NoError(t, err) {
-		assert.Equal(t, s.ID, "ssl_automatic_mode")
+		assert.Equal(t, s.ID, "ssl_tls_configuration_mode")
 		assert.Equal(t, s.Value, "custom")
 		assert.Equal(t, s.Editable, true)
 		assert.Equal(t, s.ModifiedOn, "2014-01-01T05:20:00.12345Z")
