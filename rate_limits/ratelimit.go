@@ -524,8 +524,9 @@ func (r rateLimitMatchResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [rate_limits.RateLimitNewResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [rate_limits.RateLimitNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type RateLimitNewResponseUnion interface {
 	ImplementsRateLimitsRateLimitNewResponseUnion()
 }
@@ -563,8 +564,9 @@ func (r rateLimitDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [rate_limits.RateLimitEditResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [rate_limits.RateLimitEditResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type RateLimitEditResponseUnion interface {
 	ImplementsRateLimitsRateLimitEditResponseUnion()
 }
@@ -580,8 +582,9 @@ func init() {
 	)
 }
 
-// Union satisfied by [rate_limits.RateLimitGetResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [rate_limits.RateLimitGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type RateLimitGetResponseUnion interface {
 	ImplementsRateLimitsRateLimitGetResponseUnion()
 }
