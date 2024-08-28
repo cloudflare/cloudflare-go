@@ -229,7 +229,7 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
 					"ignore_query_strings_order":true,
 					"custom_key": {
 						"query_string":{"include":"*"},
-						"header":{"include":["habc","hdef"],"check_presence":["hfizz","hbuzz"],"exclude_origin":true},
+						"header":{"include":["habc","hdef"],"check_presence":["hfizz","hbuzz"],"exclude_origin":true,"contains":{"accept":["image/web", "image/png"]}},
 						"cookie":{"include":["cabc","cdef"],"check_presence":["cfizz","cbuzz"]},
 						"user":{
 							"device_type":true,
@@ -316,6 +316,9 @@ func TestGetRuleset_SetCacheSettings(t *testing.T) {
 							CheckPresence: []string{"hfizz", "hbuzz"},
 						},
 						ExcludeOrigin: BoolPtr(true),
+						Contains: map[string][]string{
+							"accept": {"image/web", "image/png"},
+						},
 					},
 					Cookie: &RulesetRuleActionParametersCustomKeyCookie{
 						Include:       []string{"cabc", "cdef"},
