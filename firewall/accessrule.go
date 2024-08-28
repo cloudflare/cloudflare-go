@@ -412,9 +412,8 @@ func (r IPV6ConfigurationTarget) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by
-// [firewall.AccessRuleNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [firewall.AccessRuleNewResponseUnknown] or
+// [shared.UnionString].
 type AccessRuleNewResponseUnion interface {
 	ImplementsFirewallAccessRuleNewResponseUnion()
 }
@@ -454,9 +453,8 @@ func (r accessRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by
-// [firewall.AccessRuleEditResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [firewall.AccessRuleEditResponseUnknown] or
+// [shared.UnionString].
 type AccessRuleEditResponseUnion interface {
 	ImplementsFirewallAccessRuleEditResponseUnion()
 }
@@ -472,9 +470,8 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [firewall.AccessRuleGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [firewall.AccessRuleGetResponseUnknown] or
+// [shared.UnionString].
 type AccessRuleGetResponseUnion interface {
 	ImplementsFirewallAccessRuleGetResponseUnion()
 }
