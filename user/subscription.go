@@ -376,9 +376,8 @@ func (r SubscriptionZoneParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by
-// [user.SubscriptionUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [user.SubscriptionUpdateResponseUnknown] or
+// [shared.UnionString].
 type SubscriptionUpdateResponseUnion interface {
 	ImplementsUserSubscriptionUpdateResponseUnion()
 }
@@ -416,9 +415,8 @@ func (r subscriptionDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by
-// [user.SubscriptionEditResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [user.SubscriptionEditResponseUnknown] or
+// [shared.UnionString].
 type SubscriptionEditResponseUnion interface {
 	ImplementsUserSubscriptionEditResponseUnion()
 }
