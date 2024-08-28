@@ -532,7 +532,7 @@ type RiskScoringIntegrationDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RiskScoringIntegrationDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  RiskScoringIntegrationDeleteResponse                `json:"result"`
+	Result  RiskScoringIntegrationDeleteResponse                `json:"result,nullable"`
 	JSON    riskScoringIntegrationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
