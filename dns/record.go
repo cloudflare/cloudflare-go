@@ -337,8 +337,6 @@ type ARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[ARecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -447,8 +445,6 @@ type AAAARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[AAAARecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -584,8 +580,6 @@ type CAARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CAARecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -735,8 +729,6 @@ type CERTRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CERTRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -858,8 +850,6 @@ type CNAMERecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CNAMERecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -999,8 +989,6 @@ type DNSKEYRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[DNSKEYRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1152,8 +1140,6 @@ type DSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[DSRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1302,8 +1288,6 @@ type HTTPSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[HTTPSRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1509,8 +1493,6 @@ type LOCRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[LOCRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1651,8 +1633,6 @@ type MXRecordParam struct {
 	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[MXRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1794,8 +1774,6 @@ type NAPTRRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[NAPTRRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1917,8 +1895,6 @@ type NSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[NSRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2020,8 +1996,6 @@ type PTRRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[PTRRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2379,10 +2353,8 @@ type RecordParam struct {
 	Type param.Field[RecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Identifier
-	ID   param.Field[string]      `json:"id"`
-	Tags param.Field[interface{}] `json:"tags,required"`
+	Comment param.Field[string]      `json:"comment"`
+	Tags    param.Field[interface{}] `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2418,8 +2390,6 @@ type RecordOpenpgpkeyParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[RecordOpenpgpkeyType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2627,8 +2597,6 @@ type SMIMEARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SMIMEARecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2801,8 +2769,6 @@ type SRVRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SRVRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2964,8 +2930,6 @@ type SSHFPRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SSHFPRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3112,8 +3076,6 @@ type SVCBRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SVCBRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3263,8 +3225,6 @@ type TLSARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[TLSARecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3396,8 +3356,6 @@ type TXTRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[TXTRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3534,8 +3492,6 @@ type URIRecordParam struct {
 	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[URIRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
