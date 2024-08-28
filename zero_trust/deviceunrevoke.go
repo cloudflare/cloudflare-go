@@ -53,8 +53,9 @@ func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNe
 	return
 }
 
-// Union satisfied by [zero_trust.DeviceUnrevokeNewResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [zero_trust.DeviceUnrevokeNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type DeviceUnrevokeNewResponseUnion interface {
 	ImplementsZeroTrustDeviceUnrevokeNewResponseUnion()
 }
@@ -83,7 +84,7 @@ func (r DeviceUnrevokeNewParams) MarshalJSON() (data []byte, err error) {
 type DeviceUnrevokeNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo          `json:"errors,required"`
 	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   DeviceUnrevokeNewResponseUnion `json:"result,required"`
+	Result   DeviceUnrevokeNewResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceUnrevokeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceUnrevokeNewResponseEnvelopeJSON    `json:"-"`
