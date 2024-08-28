@@ -1,3 +1,3 @@
 ```release-note:enhancement
-GIN-341: renamed enabled to in use for gateway certificates
+teams_certificates: renamed `enabled` to `in_use`
 ```
