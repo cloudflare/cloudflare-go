@@ -29,7 +29,7 @@ func TestAuditLogListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.AuditLogs.List(context.TODO(), audit_logs.AuditLogListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31b8372d0c353"),
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		ID:        cloudflare.F("f174be97-19b1-40d6-954d-70cd5fbd52db"),
 		Action: cloudflare.F(audit_logs.AuditLogListParamsAction{
 			Type: cloudflare.F("add"),
