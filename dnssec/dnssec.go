@@ -177,7 +177,9 @@ func (r DNSSECStatus) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [dnssec.DNSSECDeleteResponseUnknown] or [shared.UnionString].
+// Union satisfied by
+// [dnssec.DNSSECDeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a] or
+// [shared.UnionString].
 type DNSSECDeleteResponseUnion interface {
 	ImplementsDNSSECDNSSECDeleteResponseUnion()
 }

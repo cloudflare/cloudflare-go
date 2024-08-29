@@ -106,7 +106,8 @@ func (r *DomainService) Get(ctx context.Context, domainName string, query Domain
 	return
 }
 
-// Union satisfied by [registrar.DomainUpdateResponseUnknown],
+// Union satisfied by
+// [registrar.DomainUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
 // [registrar.DomainUpdateResponseArray] or [shared.UnionString].
 type DomainUpdateResponseUnion interface {
 	ImplementsRegistrarDomainUpdateResponseUnion()
@@ -161,7 +162,8 @@ func (r domainListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [registrar.DomainListResponseResultUnknown],
+// Union satisfied by
+// [registrar.DomainListResponseResultUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
 // [registrar.DomainListResponseResultArray] or [shared.UnionString].
 type DomainListResponseResultUnion interface {
 	ImplementsRegistrarDomainListResponseResultUnion()
@@ -232,7 +234,8 @@ func (r domainListResponseResultInfoJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [registrar.DomainGetResponseUnknown],
+// Union satisfied by
+// [registrar.DomainGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
 // [registrar.DomainGetResponseArray] or [shared.UnionString].
 type DomainGetResponseUnion interface {
 	ImplementsRegistrarDomainGetResponseUnion()
