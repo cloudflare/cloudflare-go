@@ -30,8 +30,9 @@ func TestBotManagementUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.BotManagement.Update(context.TODO(), bot_management.BotManagementUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: bot_management.BotFightModeConfigurationParam{
-			EnableJS:  cloudflare.F(true),
-			FightMode: cloudflare.F(true),
+			AIBotsProtection: cloudflare.F(bot_management.BotFightModeConfigurationAIBotsProtectionBlock),
+			EnableJS:         cloudflare.F(true),
+			FightMode:        cloudflare.F(true),
 		},
 	})
 	if err != nil {
