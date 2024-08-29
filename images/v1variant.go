@@ -390,8 +390,9 @@ func (r V1VariantNewResponseVariantOptionsMetadata) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [images.V1VariantDeleteResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [images.V1VariantDeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type V1VariantDeleteResponseUnion interface {
 	ImplementsImagesV1VariantDeleteResponseUnion()
 }
