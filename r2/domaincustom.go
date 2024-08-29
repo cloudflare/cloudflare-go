@@ -322,16 +322,11 @@ type DomainCustomNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Name of the custom domain to be added
 	Domain param.Field[string] `json:"domain,required"`
-	// Zone name of the custom domain. Note that `zoneName` must be a suffix of
-	// `domain`.
-	ZoneName param.Field[string] `json:"zoneName,required"`
-	// Zone tag of the custom domain
-	ZoneTag param.Field[string] `json:"zoneTag,required"`
+	// Zone ID of the custom domain
+	ZoneID param.Field[string] `json:"zoneId,required"`
 	// Whether to enable public bucket access at the custom domain. If undefined, the
 	// domain will be enabled.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Zone ID of the custom domain
-	ZoneID param.Field[string] `json:"zoneId"`
 }
 
 func (r DomainCustomNewParams) MarshalJSON() (data []byte, err error) {

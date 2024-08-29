@@ -33,10 +33,8 @@ func TestDomainCustomNewWithOptionalParams(t *testing.T) {
 		r2.DomainCustomNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Domain:    cloudflare.F("prefix.example-domain.com"),
-			ZoneName:  cloudflare.F("example-domain.com"),
-			ZoneTag:   cloudflare.F("36ca64a6d92827b8a6b90be344bb1bfd"),
+			ZoneID:    cloudflare.F("36ca64a6d92827b8a6b90be344bb1bfd"),
 			Enabled:   cloudflare.F(true),
-			ZoneID:    cloudflare.F("zoneId"),
 		},
 	)
 	if err != nil {
