@@ -1429,7 +1429,7 @@ const (
 	SessionAffinityCookie   SessionAffinity = "cookie"
 	SessionAffinityIPCookie SessionAffinity = "ip_cookie"
 	SessionAffinityHeader   SessionAffinity = "header"
-	SessionAffinityEmpty    SessionAffinity = "\"\""
+	SessionAffinityEmpty    SessionAffinity = ""
 )
 
 func (r SessionAffinity) IsKnown() bool {
@@ -1661,7 +1661,7 @@ const (
 	SteeringPolicyProximity                SteeringPolicy = "proximity"
 	SteeringPolicyLeastOutstandingRequests SteeringPolicy = "least_outstanding_requests"
 	SteeringPolicyLeastConnections         SteeringPolicy = "least_connections"
-	SteeringPolicyEmpty                    SteeringPolicy = "\"\""
+	SteeringPolicyEmpty                    SteeringPolicy = ""
 )
 
 func (r SteeringPolicy) IsKnown() bool {
@@ -1721,6 +1721,8 @@ type LoadBalancerNewParams struct {
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks param.Field[[]string] `json:"networks"`
 	// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -1886,6 +1888,8 @@ type LoadBalancerUpdateParams struct {
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks param.Field[[]string] `json:"networks"`
 	// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
