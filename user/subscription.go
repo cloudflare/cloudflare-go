@@ -66,23 +66,6 @@ func (r *SubscriptionService) Delete(ctx context.Context, identifier string, opt
 	return
 }
 
-// Updates zone subscriptions, either plan or add-ons.
-func (r *SubscriptionService) Edit(ctx context.Context, identifier string, body SubscriptionEditParams, opts ...option.RequestOption) (res *SubscriptionEditResponseUnion, err error) {
-	var env SubscriptionEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if identifier == "" {
-		err = errors.New("missing required identifier parameter")
-		return
-	}
-	path := fmt.Sprintf("zones/%s/subscription", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Lists all of a user's subscriptions.
 func (r *SubscriptionService) Get(ctx context.Context, opts ...option.RequestOption) (res *[]Subscription, err error) {
 	var env SubscriptionGetResponseEnvelope
@@ -415,23 +398,6 @@ func (r subscriptionDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [user.SubscriptionEditResponseUnknown] or
-// [shared.UnionString].
-type SubscriptionEditResponseUnion interface {
-	ImplementsUserSubscriptionEditResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type SubscriptionUpdateParams struct {
 	Subscription SubscriptionParam `json:"subscription,required"`
 }
@@ -478,57 +444,6 @@ const (
 func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SubscriptionUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type SubscriptionEditParams struct {
-	Subscription SubscriptionParam `json:"subscription,required"`
-}
-
-func (r SubscriptionEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Subscription)
-}
-
-type SubscriptionEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   SubscriptionEditResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success SubscriptionEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    subscriptionEditResponseEnvelopeJSON    `json:"-"`
-}
-
-// subscriptionEditResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SubscriptionEditResponseEnvelope]
-type subscriptionEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type SubscriptionEditResponseEnvelopeSuccess bool
-
-const (
-	SubscriptionEditResponseEnvelopeSuccessTrue SubscriptionEditResponseEnvelopeSuccess = true
-)
-
-func (r SubscriptionEditResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SubscriptionEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

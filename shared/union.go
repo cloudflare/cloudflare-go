@@ -5,8 +5,8 @@ package shared
 type UnionString string
 
 func (UnionString) ImplementsUserSubscriptionUpdateResponseUnion()          {}
-func (UnionString) ImplementsUserSubscriptionEditResponseUnion()            {}
 func (UnionString) ImplementsZonesSubscriptionNewResponseUnion()            {}
+func (UnionString) ImplementsZonesSubscriptionEditResponseUnion()           {}
 func (UnionString) ImplementsZonesSubscriptionGetResponseUnion()            {}
 func (UnionString) ImplementsLoadBalancersRegionListResponseUnion()         {}
 func (UnionString) ImplementsLoadBalancersRegionGetResponseUnion()          {}
