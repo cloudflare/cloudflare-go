@@ -228,9 +228,8 @@ func (r IntegrationType) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by
-// [zero_trust.DevicePostureIntegrationDeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [zero_trust.DevicePostureIntegrationDeleteResponseUnknown] or
+// [shared.UnionString].
 type DevicePostureIntegrationDeleteResponseUnion interface {
 	ImplementsZeroTrustDevicePostureIntegrationDeleteResponseUnion()
 }
@@ -500,7 +499,7 @@ type DevicePostureIntegrationDeleteParams struct {
 type DevicePostureIntegrationDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                       `json:"errors,required"`
 	Messages []shared.ResponseInfo                       `json:"messages,required"`
-	Result   DevicePostureIntegrationDeleteResponseUnion `json:"result,required,nullable"`
+	Result   DevicePostureIntegrationDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationDeleteResponseEnvelopeJSON    `json:"-"`
