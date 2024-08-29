@@ -35,10 +35,10 @@ func NewDLPProfilePredefinedService(opts ...option.RequestOption) (r *DLPProfile
 }
 
 // Updates a DLP predefined profile. Only supports enabling/disabling entries.
-func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, body DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *Profile, err error) {
+func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, params DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *Profile, err error) {
 	var env DLPProfilePredefinedUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -46,8 +46,8 @@ func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID stri
 		err = errors.New("missing required profile_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", body.AccountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", params.AccountID, profileID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -77,7 +77,26 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 }
 
 type DLPProfilePredefinedUpdateParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string]                                  `path:"account_id,required"`
+	Entries           param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries,required"`
+	AllowedMatchCount param.Field[int64]                                   `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
+	OCREnabled       param.Field[bool]                  `json:"ocr_enabled"`
+}
+
+func (r DLPProfilePredefinedUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DLPProfilePredefinedUpdateParamsEntry struct {
+	ID      param.Field[string] `json:"id,required" format:"uuid"`
+	Enabled param.Field[bool]   `json:"enabled,required"`
+}
+
+func (r DLPProfilePredefinedUpdateParamsEntry) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type DLPProfilePredefinedUpdateResponseEnvelope struct {

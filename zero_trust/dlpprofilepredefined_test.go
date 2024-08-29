@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestDLPProfilePredefinedUpdate(t *testing.T) {
+func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -32,6 +32,24 @@ func TestDLPProfilePredefinedUpdate(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPProfilePredefinedUpdateParams{
 			AccountID: cloudflare.F("account_id"),
+			Entries: cloudflare.F([]zero_trust.DLPProfilePredefinedUpdateParamsEntry{{
+				ID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				Enabled: cloudflare.F(true),
+			}, {
+				ID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				Enabled: cloudflare.F(true),
+			}, {
+				ID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				Enabled: cloudflare.F(true),
+			}}),
+			AllowedMatchCount: cloudflare.F(int64(0)),
+			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
+				Enabled: cloudflare.F(true),
+				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
+					Files: cloudflare.F(true),
+				}),
+			}),
+			OCREnabled: cloudflare.F(true),
 		},
 	)
 	if err != nil {
