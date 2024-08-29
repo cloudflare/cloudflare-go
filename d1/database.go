@@ -616,7 +616,7 @@ func (r databaseRawResponseResultsJSON) RawJSON() string {
 }
 
 // Union satisfied by [shared.UnionFloat], [shared.UnionString] or
-// [d1.DatabaseRawResponseResultsRowsUnknown].
+// [d1.DatabaseRawResponseResultsRowsUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a].
 type DatabaseRawResponseResultsRowsUnion interface {
 	ImplementsD1DatabaseRawResponseResultsRowsUnion()
 }

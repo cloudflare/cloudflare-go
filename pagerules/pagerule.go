@@ -465,8 +465,9 @@ func (r TargetConstraintParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by [pagerules.PageruleNewResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [pagerules.PageruleNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type PageruleNewResponseUnion interface {
 	ImplementsPagerulesPageruleNewResponseUnion()
 }
@@ -482,8 +483,9 @@ func init() {
 	)
 }
 
-// Union satisfied by [pagerules.PageruleUpdateResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [pagerules.PageruleUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type PageruleUpdateResponseUnion interface {
 	ImplementsPagerulesPageruleUpdateResponseUnion()
 }
@@ -521,8 +523,9 @@ func (r pageruleDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [pagerules.PageruleEditResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [pagerules.PageruleEditResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type PageruleEditResponseUnion interface {
 	ImplementsPagerulesPageruleEditResponseUnion()
 }
@@ -538,8 +541,9 @@ func init() {
 	)
 }
 
-// Union satisfied by [pagerules.PageruleGetResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [pagerules.PageruleGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type PageruleGetResponseUnion interface {
 	ImplementsPagerulesPageruleGetResponseUnion()
 }

@@ -326,8 +326,9 @@ func (r attackSurfaceReportIssueClassResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [intel.AttackSurfaceReportIssueDismissResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [intel.AttackSurfaceReportIssueDismissResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type AttackSurfaceReportIssueDismissResponseUnion interface {
 	ImplementsIntelAttackSurfaceReportIssueDismissResponseUnion()
 }
