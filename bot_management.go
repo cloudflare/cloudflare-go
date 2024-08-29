@@ -20,6 +20,7 @@ type BotManagement struct {
 	SuppressSessionScore         *bool   `json:"suppress_session_score,omitempty"`
 	AutoUpdateModel              *bool   `json:"auto_update_model,omitempty"`
 	UsingLatestModel             *bool   `json:"using_latest_model,omitempty"`
+	AIBotsProtection             *string `json:"ai_bots_protection,omitempty"`
 }
 
 // BotManagementResponse represents the response from the bot_management endpoint.
@@ -38,6 +39,7 @@ type UpdateBotManagementParams struct {
 	OptimizeWordpress            *bool   `json:"optimize_wordpress,omitempty"`
 	SuppressSessionScore         *bool   `json:"suppress_session_score,omitempty"`
 	AutoUpdateModel              *bool   `json:"auto_update_model,omitempty"`
+	AIBotsProtection             *string `json:"ai_bots_protection,omitempty"`
 }
 
 // GetBotManagement gets a zone API shield configuration.
