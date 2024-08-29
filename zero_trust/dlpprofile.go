@@ -120,6 +120,20 @@ func (r contextAwarenessJSON) RawJSON() string {
 	return r.raw
 }
 
+// Scan the context of predefined entries to only return matches surrounded by
+// keywords.
+type ContextAwarenessParam struct {
+	// If true, scan the context of predefined entries to only return matches
+	// surrounded by keywords.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Content types to exclude from context analysis and return all matches.
+	Skip param.Field[SkipConfigurationParam] `json:"skip,required"`
+}
+
+func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type Profile struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount int64 `json:"allowed_match_count"`
@@ -1507,6 +1521,16 @@ func (r *SkipConfiguration) UnmarshalJSON(data []byte) (err error) {
 
 func (r skipConfigurationJSON) RawJSON() string {
 	return r.raw
+}
+
+// Content types to exclude from context analysis and return all matches.
+type SkipConfigurationParam struct {
+	// If the content type is a file, skip context analysis and return all matches.
+	Files param.Field[bool] `json:"files,required"`
+}
+
+func (r SkipConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type DLPProfileListParams struct {
