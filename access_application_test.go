@@ -1011,7 +1011,7 @@ func TestCreateSAMLSaasAccessApplications(t *testing.T) {
 			SPEntityID:         "dash.example.com",
 			NameIDFormat:       "id",
 			DefaultRelayState:  "https://saas.example.com",
-			CustomAttributes: []SAMLAttributeConfig{
+			CustomAttributes: &[]SAMLAttributeConfig{
 				{
 					Name:       "test1",
 					NameFormat: "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified",
@@ -1166,7 +1166,7 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 			AppLauncherURL:               "https://saas.example.com",
 			GroupFilterRegex:             ".*",
 			AllowPKCEWithoutClientSecret: BoolPtr(false),
-			CustomClaims: []OIDCClaimConfig{
+			CustomClaims: &[]OIDCClaimConfig{
 				{
 					Name:     "test1",
 					Source:   SourceConfig{Name: "test1"},
@@ -1197,7 +1197,7 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 			AppLauncherURL:               "https://saas.example.com",
 			GroupFilterRegex:             ".*",
 			AllowPKCEWithoutClientSecret: BoolPtr(false),
-			CustomClaims: []OIDCClaimConfig{
+			CustomClaims: &[]OIDCClaimConfig{
 				{
 					Name:     "test1",
 					Source:   SourceConfig{Name: "test1"},
@@ -1229,7 +1229,7 @@ func TestCreateOIDCSaasAccessApplications(t *testing.T) {
 			AppLauncherURL:               "https://saas.example.com",
 			GroupFilterRegex:             ".*",
 			AllowPKCEWithoutClientSecret: BoolPtr(false),
-			CustomClaims: []OIDCClaimConfig{
+			CustomClaims: &[]OIDCClaimConfig{
 				{
 					Name:     "test1",
 					Source:   SourceConfig{Name: "test1"},

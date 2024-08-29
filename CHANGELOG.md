@@ -1,4 +1,29 @@
-## 0.102.0 (Unreleased)
+## 0.104.0 (Unreleased)
+
+## 0.103.0 (August 28th, 2024)
+
+ENHANCEMENTS:
+
+* errors: implement the Unwrap method for custom error types to access the wrapped errors via errors.Is and errors.As ([#2857](https://github.com/cloudflare/cloudflare-go/issues/2857))
+* rulesets: add "contains" field to custom cache key header ([#2935](https://github.com/cloudflare/cloudflare-go/issues/2935))
+* teams_certificates: renamed `enabled` to `in_use` ([#2937](https://github.com/cloudflare/cloudflare-go/issues/2937))
+* waiting_room: add support for `enabled_origin_commands` ([#2931](https://github.com/cloudflare/cloudflare-go/issues/2931))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.27.3 to 2.27.4 ([#2863](https://github.com/cloudflare/cloudflare-go/issues/2863))
+
+## 0.102.0 (August 14th, 2024)
+
+ENHANCEMENTS:
+
+* rulesets: Add `DeleteRulesetRule` ([#2833](https://github.com/cloudflare/cloudflare-go/issues/2833))
+* rulesets: Export `DeleteRulesetRuleParams` fields ([#2886](https://github.com/cloudflare/cloudflare-go/issues/2886))
+* teams_accounts: Add `disable_for_time` attribute ([#2797](https://github.com/cloudflare/cloudflare-go/issues/2797))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.27.0 to 0.28.0 ([#2835](https://github.com/cloudflare/cloudflare-go/issues/2835))
 
 ## 0.101.0 (July 31st, 2024)
 

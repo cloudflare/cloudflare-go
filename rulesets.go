@@ -334,7 +334,8 @@ type RulesetRuleActionParametersCustomKey struct {
 
 type RulesetRuleActionParametersCustomKeyHeader struct {
 	RulesetRuleActionParametersCustomKeyFields
-	ExcludeOrigin *bool `json:"exclude_origin,omitempty"`
+	ExcludeOrigin *bool               `json:"exclude_origin,omitempty"`
+	Contains      map[string][]string `json:"contains,omitempty"`
 }
 
 type RulesetRuleActionParametersCustomKeyCookie RulesetRuleActionParametersCustomKeyFields
@@ -741,6 +742,11 @@ type UpdateEntrypointRulesetParams struct {
 	Rules       []RulesetRule `json:"rules"`
 }
 
+type DeleteRulesetRuleParams struct {
+	RulesetID     string `json:"-"`
+	RulesetRuleID string `json:"-"`
+}
+
 // ListRulesets lists all Rulesets in a given zone or account depending on the
 // ResourceContainer type provided.
 //
@@ -842,6 +848,27 @@ func (api *API) UpdateRuleset(ctx context.Context, rc *ResourceContainer, params
 	}
 
 	return result.Result, nil
+}
+
+// DeleteRulesetRule removes a ruleset rule based on the ruleset ID +
+// ruleset rule ID.
+//
+// API reference: https://developers.cloudflare.com/api/operations/deleteZoneRulesetRule
+func (api *API) DeleteRulesetRule(ctx context.Context, rc *ResourceContainer, params DeleteRulesetRuleParams) error {
+	uri := fmt.Sprintf("/%s/%s/rulesets/%s/rules/%s", rc.Level, rc.Identifier, params.RulesetID, params.RulesetRuleID)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+	if err != nil {
+		return err
+	}
+
+	// The API is not implementing the standard response blob but returns an
+	// empty response (204) in case of a success. So we are checking for the
+	// response body size here.
+	if len(res) > 0 {
+		return fmt.Errorf(errMakeRequestError+": %w", errors.New(string(res)))
+	}
+
+	return nil
 }
 
 // GetEntrypointRuleset returns an entry point ruleset base on the phase.
