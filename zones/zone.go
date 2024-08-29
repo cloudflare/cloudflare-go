@@ -184,6 +184,14 @@ type Zone struct {
 	OriginalRegistrar string `json:"original_registrar,required,nullable"`
 	// The owner of the zone
 	Owner ZoneOwner `json:"owner,required"`
+	// Indicates whether the zone is only using Cloudflare DNS services. A true value
+	// means the zone will not receive security or performance benefits.
+	Paused bool `json:"paused"`
+	// The zone status on Cloudflare.
+	Status ZoneStatus `json:"status"`
+	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
+	// typically a partner-hosted zone or a CNAME setup.
+	Type Type `json:"type"`
 	// An array of domains used for custom name servers. This is only available for
 	// Business and Enterprise plans.
 	VanityNameServers []string `json:"vanity_name_servers" format:"hostname"`
@@ -205,6 +213,9 @@ type zoneJSON struct {
 	OriginalNameServers apijson.Field
 	OriginalRegistrar   apijson.Field
 	Owner               apijson.Field
+	Paused              apijson.Field
+	Status              apijson.Field
+	Type                apijson.Field
 	VanityNameServers   apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -308,6 +319,24 @@ func (r *ZoneOwner) UnmarshalJSON(data []byte) (err error) {
 
 func (r zoneOwnerJSON) RawJSON() string {
 	return r.raw
+}
+
+// The zone status on Cloudflare.
+type ZoneStatus string
+
+const (
+	ZoneStatusInitializing ZoneStatus = "initializing"
+	ZoneStatusPending      ZoneStatus = "pending"
+	ZoneStatusActive       ZoneStatus = "active"
+	ZoneStatusMoved        ZoneStatus = "moved"
+)
+
+func (r ZoneStatus) IsKnown() bool {
+	switch r {
+	case ZoneStatusInitializing, ZoneStatusPending, ZoneStatusActive, ZoneStatusMoved:
+		return true
+	}
+	return false
 }
 
 type ZoneDeleteResponse struct {
