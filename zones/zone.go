@@ -576,10 +576,6 @@ func (r zoneDeleteResponseEnvelopeJSON) RawJSON() string {
 type ZoneEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// (Deprecated) Please use the `/zones/{zone_id}/subscription` API to update a
-	// zone's plan. Changing this value will create/cancel associated subscriptions. To
-	// view available plans for this zone, see Zone Plans.
-	Plan param.Field[ZoneEditParamsPlan] `json:"plan"`
 	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
 	// typically a partner-hosted zone or a CNAME setup. This parameter is only
 	// available to Enterprise customers or if it has been explicitly enabled on a
@@ -591,18 +587,6 @@ type ZoneEditParams struct {
 }
 
 func (r ZoneEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// (Deprecated) Please use the `/zones/{zone_id}/subscription` API to update a
-// zone's plan. Changing this value will create/cancel associated subscriptions. To
-// view available plans for this zone, see Zone Plans.
-type ZoneEditParamsPlan struct {
-	// Identifier
-	ID param.Field[string] `json:"id"`
-}
-
-func (r ZoneEditParamsPlan) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
