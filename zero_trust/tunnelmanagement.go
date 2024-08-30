@@ -58,8 +58,7 @@ func (r *TunnelManagementService) New(ctx context.Context, tunnelID string, para
 	return
 }
 
-// Union satisfied by
-// [zero_trust.TunnelManagementNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
+// Union satisfied by [zero_trust.TunnelManagementNewResponseUnknown],
 // [zero_trust.TunnelManagementNewResponseArray] or [shared.UnionString].
 type TunnelManagementNewResponseUnion interface {
 	ImplementsZeroTrustTunnelManagementNewResponseUnion()
