@@ -82,9 +82,8 @@ func (r DevicePolicyCertificatesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by
-// [zero_trust.DevicePolicyCertificateUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [zero_trust.DevicePolicyCertificateUpdateResponseUnknown] or
+// [shared.UnionString].
 type DevicePolicyCertificateUpdateResponseUnion interface {
 	ImplementsZeroTrustDevicePolicyCertificateUpdateResponseUnion()
 }
@@ -100,9 +99,8 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [zero_trust.DevicePolicyCertificateGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [zero_trust.DevicePolicyCertificateGetResponseUnknown] or
+// [shared.UnionString].
 type DevicePolicyCertificateGetResponseUnion interface {
 	ImplementsZeroTrustDevicePolicyCertificateGetResponseUnion()
 }
@@ -129,7 +127,7 @@ func (r DevicePolicyCertificateUpdateParams) MarshalJSON() (data []byte, err err
 type DevicePolicyCertificateUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                      `json:"errors,required"`
 	Messages []shared.ResponseInfo                      `json:"messages,required"`
-	Result   DevicePolicyCertificateUpdateResponseUnion `json:"result,required,nullable"`
+	Result   DevicePolicyCertificateUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful.
 	Success DevicePolicyCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCertificateUpdateResponseEnvelopeJSON    `json:"-"`
@@ -172,7 +170,7 @@ func (r DevicePolicyCertificateUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DevicePolicyCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                   `json:"errors,required"`
 	Messages []shared.ResponseInfo                   `json:"messages,required"`
-	Result   DevicePolicyCertificateGetResponseUnion `json:"result,required,nullable"`
+	Result   DevicePolicyCertificateGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful.
 	Success DevicePolicyCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCertificateGetResponseEnvelopeJSON    `json:"-"`
