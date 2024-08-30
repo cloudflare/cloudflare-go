@@ -166,9 +166,8 @@ func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query Conf
 	return
 }
 
-// Union satisfied by
-// [hyperdrive.ConfigDeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [hyperdrive.ConfigDeleteResponseUnknown] or
+// [shared.UnionString].
 type ConfigDeleteResponseUnion interface {
 	ImplementsHyperdriveConfigDeleteResponseUnion()
 }
@@ -303,7 +302,7 @@ type ConfigDeleteParams struct {
 type ConfigDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo     `json:"errors,required"`
 	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   ConfigDeleteResponseUnion `json:"result,required,nullable"`
+	Result   ConfigDeleteResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configDeleteResponseEnvelopeJSON    `json:"-"`
