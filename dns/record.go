@@ -266,7 +266,7 @@ type ARecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta ARecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -330,32 +330,6 @@ func (r ARecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type ARecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string          `json:"source"`
-	JSON   aRecordMetaJSON `json:"-"`
-}
-
-// aRecordMetaJSON contains the JSON metadata for the struct [ARecordMeta]
-type aRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ARecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type ARecordParam struct {
 	// A valid IPv4 address.
 	Content param.Field[string] `json:"content,required" format:"ipv4"`
@@ -363,6 +337,8 @@ type ARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[ARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -383,19 +359,6 @@ func (r ARecordParam) MarshalJSON() (data []byte, err error) {
 
 func (r ARecordParam) implementsDNSRecordUnionParam() {}
 
-// Extra Cloudflare-specific information about the record.
-type ARecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r ARecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type AAAARecord struct {
 	// A valid IPv6 address.
 	Content string `json:"content,required" format:"ipv6"`
@@ -413,7 +376,7 @@ type AAAARecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta AAAARecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -477,32 +440,6 @@ func (r AAAARecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type AAAARecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string             `json:"source"`
-	JSON   aaaaRecordMetaJSON `json:"-"`
-}
-
-// aaaaRecordMetaJSON contains the JSON metadata for the struct [AAAARecordMeta]
-type aaaaRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AAAARecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aaaaRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type AAAARecordParam struct {
 	// A valid IPv6 address.
 	Content param.Field[string] `json:"content,required" format:"ipv6"`
@@ -510,6 +447,8 @@ type AAAARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[AAAARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -530,19 +469,6 @@ func (r AAAARecordParam) MarshalJSON() (data []byte, err error) {
 
 func (r AAAARecordParam) implementsDNSRecordUnionParam() {}
 
-// Extra Cloudflare-specific information about the record.
-type AAAARecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r AAAARecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type CAARecord struct {
 	// Components of a CAA record.
 	Data CAARecordData `json:"data,required"`
@@ -562,7 +488,7 @@ type CAARecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta CAARecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -651,32 +577,6 @@ func (r CAARecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type CAARecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string            `json:"source"`
-	JSON   caaRecordMetaJSON `json:"-"`
-}
-
-// caaRecordMetaJSON contains the JSON metadata for the struct [CAARecordMeta]
-type caaRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CAARecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r caaRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type CAARecordParam struct {
 	// Components of a CAA record.
 	Data param.Field[CAARecordDataParam] `json:"data,required"`
@@ -684,6 +584,8 @@ type CAARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CAARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -715,19 +617,6 @@ func (r CAARecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type CAARecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r CAARecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type CERTRecord struct {
 	// Components of a CERT record.
 	Data CERTRecordData `json:"data,required"`
@@ -747,7 +636,7 @@ type CERTRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta CERTRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -839,32 +728,6 @@ func (r CERTRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type CERTRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string             `json:"source"`
-	JSON   certRecordMetaJSON `json:"-"`
-}
-
-// certRecordMetaJSON contains the JSON metadata for the struct [CERTRecordMeta]
-type certRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CERTRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type CERTRecordParam struct {
 	// Components of a CERT record.
 	Data param.Field[CERTRecordDataParam] `json:"data,required"`
@@ -872,6 +735,8 @@ type CERTRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CERTRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -905,19 +770,6 @@ func (r CERTRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type CERTRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r CERTRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type CNAMERecord struct {
 	// A valid hostname. Must not match the record's name.
 	Content string `json:"content,required"`
@@ -935,7 +787,7 @@ type CNAMERecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta CNAMERecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -999,32 +851,6 @@ func (r CNAMERecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type CNAMERecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string              `json:"source"`
-	JSON   cnameRecordMetaJSON `json:"-"`
-}
-
-// cnameRecordMetaJSON contains the JSON metadata for the struct [CNAMERecordMeta]
-type cnameRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CNAMERecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cnameRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type CNAMERecordParam struct {
 	// A valid hostname. Must not match the record's name.
 	Content param.Field[string] `json:"content,required"`
@@ -1032,6 +858,8 @@ type CNAMERecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[CNAMERecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1052,19 +880,6 @@ func (r CNAMERecordParam) MarshalJSON() (data []byte, err error) {
 
 func (r CNAMERecordParam) implementsDNSRecordUnionParam() {}
 
-// Extra Cloudflare-specific information about the record.
-type CNAMERecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r CNAMERecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type DNSKEYRecord struct {
 	// Components of a DNSKEY record.
 	Data DNSKEYRecordData `json:"data,required"`
@@ -1084,7 +899,7 @@ type DNSKEYRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSKEYRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1177,33 +992,6 @@ func (r DNSKEYRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSKEYRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string               `json:"source"`
-	JSON   dnskeyRecordMetaJSON `json:"-"`
-}
-
-// dnskeyRecordMetaJSON contains the JSON metadata for the struct
-// [DNSKEYRecordMeta]
-type dnskeyRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSKEYRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnskeyRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type DNSKEYRecordParam struct {
 	// Components of a DNSKEY record.
 	Data param.Field[DNSKEYRecordDataParam] `json:"data,required"`
@@ -1211,6 +999,8 @@ type DNSKEYRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[DNSKEYRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1244,19 +1034,6 @@ func (r DNSKEYRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type DNSKEYRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r DNSKEYRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type DSRecord struct {
 	// Components of a DS record.
 	Data DSRecordData `json:"data,required"`
@@ -1276,7 +1053,7 @@ type DSRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DSRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1368,32 +1145,6 @@ func (r DSRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type DSRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string           `json:"source"`
-	JSON   dsRecordMetaJSON `json:"-"`
-}
-
-// dsRecordMetaJSON contains the JSON metadata for the struct [DSRecordMeta]
-type dsRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DSRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dsRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type DSRecordParam struct {
 	// Components of a DS record.
 	Data param.Field[DSRecordDataParam] `json:"data,required"`
@@ -1401,6 +1152,8 @@ type DSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[DSRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1434,19 +1187,6 @@ func (r DSRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type DSRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r DSRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type HTTPSRecord struct {
 	// Components of a HTTPS record.
 	Data HTTPSRecordData `json:"data,required"`
@@ -1466,7 +1206,7 @@ type HTTPSRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta HTTPSRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1555,32 +1295,6 @@ func (r HTTPSRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type HTTPSRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string              `json:"source"`
-	JSON   httpsRecordMetaJSON `json:"-"`
-}
-
-// httpsRecordMetaJSON contains the JSON metadata for the struct [HTTPSRecordMeta]
-type httpsRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPSRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpsRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type HTTPSRecordParam struct {
 	// Components of a HTTPS record.
 	Data param.Field[HTTPSRecordDataParam] `json:"data,required"`
@@ -1588,6 +1302,8 @@ type HTTPSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[HTTPSRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1619,19 +1335,6 @@ func (r HTTPSRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type HTTPSRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r HTTPSRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type LOCRecord struct {
 	// Components of a LOC record.
 	Data LOCRecordData `json:"data,required"`
@@ -1651,7 +1354,7 @@ type LOCRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta LOCRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1799,32 +1502,6 @@ func (r LOCRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type LOCRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string            `json:"source"`
-	JSON   locRecordMetaJSON `json:"-"`
-}
-
-// locRecordMetaJSON contains the JSON metadata for the struct [LOCRecordMeta]
-type locRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LOCRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type LOCRecordParam struct {
 	// Components of a LOC record.
 	Data param.Field[LOCRecordDataParam] `json:"data,required"`
@@ -1832,6 +1509,8 @@ type LOCRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[LOCRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -1881,19 +1560,6 @@ func (r LOCRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type LOCRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r LOCRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type MXRecord struct {
 	// A valid mail server hostname.
 	Content string `json:"content,required" format:"hostname"`
@@ -1914,7 +1580,7 @@ type MXRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta MXRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1975,32 +1641,6 @@ func (r MXRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type MXRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string           `json:"source"`
-	JSON   mxRecordMetaJSON `json:"-"`
-}
-
-// mxRecordMetaJSON contains the JSON metadata for the struct [MXRecordMeta]
-type mxRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MXRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mxRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type MXRecordParam struct {
 	// A valid mail server hostname.
 	Content param.Field[string] `json:"content,required" format:"hostname"`
@@ -2011,6 +1651,8 @@ type MXRecordParam struct {
 	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[MXRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2027,19 +1669,6 @@ func (r MXRecordParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r MXRecordParam) implementsDNSRecordUnionParam() {}
-
-// Extra Cloudflare-specific information about the record.
-type MXRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r MXRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 type NAPTRRecord struct {
 	// Components of a NAPTR record.
@@ -2060,7 +1689,7 @@ type NAPTRRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta NAPTRRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2158,32 +1787,6 @@ func (r NAPTRRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type NAPTRRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string              `json:"source"`
-	JSON   naptrRecordMetaJSON `json:"-"`
-}
-
-// naptrRecordMetaJSON contains the JSON metadata for the struct [NAPTRRecordMeta]
-type naptrRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NAPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r naptrRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type NAPTRRecordParam struct {
 	// Components of a NAPTR record.
 	Data param.Field[NAPTRRecordDataParam] `json:"data,required"`
@@ -2191,6 +1794,8 @@ type NAPTRRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[NAPTRRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2228,19 +1833,6 @@ func (r NAPTRRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type NAPTRRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r NAPTRRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type NSRecord struct {
 	// A valid name server host name.
 	Content string `json:"content,required"`
@@ -2258,7 +1850,7 @@ type NSRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta NSRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2318,32 +1910,6 @@ func (r NSRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type NSRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string           `json:"source"`
-	JSON   nsRecordMetaJSON `json:"-"`
-}
-
-// nsRecordMetaJSON contains the JSON metadata for the struct [NSRecordMeta]
-type nsRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NSRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r nsRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type NSRecordParam struct {
 	// A valid name server host name.
 	Content param.Field[string] `json:"content,required"`
@@ -2351,6 +1917,8 @@ type NSRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[NSRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2367,19 +1935,6 @@ func (r NSRecordParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r NSRecordParam) implementsDNSRecordUnionParam() {}
-
-// Extra Cloudflare-specific information about the record.
-type NSRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r NSRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 type PTRRecord struct {
 	// Domain name pointing to the address.
@@ -2398,7 +1953,7 @@ type PTRRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta PTRRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2458,32 +2013,6 @@ func (r PTRRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type PTRRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string            `json:"source"`
-	JSON   ptrRecordMetaJSON `json:"-"`
-}
-
-// ptrRecordMetaJSON contains the JSON metadata for the struct [PTRRecordMeta]
-type ptrRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ptrRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type PTRRecordParam struct {
 	// Domain name pointing to the address.
 	Content param.Field[string] `json:"content,required"`
@@ -2491,6 +2020,8 @@ type PTRRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[PTRRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2507,19 +2038,6 @@ func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r PTRRecordParam) implementsDNSRecordUnionParam() {}
-
-// Extra Cloudflare-specific information about the record.
-type PTRRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r PTRRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 type Record struct {
 	// A valid IPv4 address.
@@ -2540,13 +2058,8 @@ type Record struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Identifier
 	ID string `json:"id"`
-	// This field can have the runtime type of [ARecordMeta], [AAAARecordMeta],
-	// [CAARecordMeta], [CERTRecordMeta], [CNAMERecordMeta], [DNSKEYRecordMeta],
-	// [DSRecordMeta], [HTTPSRecordMeta], [LOCRecordMeta], [MXRecordMeta],
-	// [NAPTRRecordMeta], [NSRecordMeta], [RecordOpenpgpkeyMeta], [PTRRecordMeta],
-	// [SMIMEARecordMeta], [SRVRecordMeta], [SSHFPRecordMeta], [SVCBRecordMeta],
-	// [TLSARecordMeta], [TXTRecordMeta], [URIRecordMeta].
-	Meta interface{} `json:"meta,required"`
+	// Extra Cloudflare-specific information about the record.
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2758,7 +2271,7 @@ type RecordOpenpgpkey struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta RecordOpenpgpkeyMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2819,33 +2332,6 @@ func (r RecordOpenpgpkeyType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type RecordOpenpgpkeyMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string                   `json:"source"`
-	JSON   recordOpenpgpkeyMetaJSON `json:"-"`
-}
-
-// recordOpenpgpkeyMetaJSON contains the JSON metadata for the struct
-// [RecordOpenpgpkeyMeta]
-type recordOpenpgpkeyMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordOpenpgpkeyMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordOpenpgpkeyMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 // Record type.
 type RecordType string
 
@@ -2893,9 +2379,10 @@ type RecordParam struct {
 	Type param.Field[RecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment param.Field[string]      `json:"comment"`
-	Meta    param.Field[interface{}] `json:"meta,required"`
-	Tags    param.Field[interface{}] `json:"tags,required"`
+	Comment param.Field[string] `json:"comment"`
+	// Identifier
+	ID   param.Field[string]      `json:"id"`
+	Tags param.Field[interface{}] `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
@@ -2931,6 +2418,8 @@ type RecordOpenpgpkeyParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[RecordOpenpgpkeyType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -2949,7 +2438,33 @@ func (r RecordOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
 func (r RecordOpenpgpkeyParam) implementsDNSRecordUnionParam() {}
 
 // Extra Cloudflare-specific information about the record.
-type RecordOpenpgpkeyMetaParam struct {
+type RecordMetadata struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool `json:"auto_added"`
+	// Where the record originated from.
+	Source string             `json:"source"`
+	JSON   recordMetadataJSON `json:"-"`
+}
+
+// recordMetadataJSON contains the JSON metadata for the struct [RecordMetadata]
+type recordMetadataJSON struct {
+	AutoAdded   apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
+// Extra Cloudflare-specific information about the record.
+type RecordMetadataParam struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded param.Field[bool] `json:"auto_added"`
@@ -2957,7 +2472,7 @@ type RecordOpenpgpkeyMetaParam struct {
 	Source param.Field[string] `json:"source"`
 }
 
-func (r RecordOpenpgpkeyMetaParam) MarshalJSON() (data []byte, err error) {
+func (r RecordMetadataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -3012,7 +2527,7 @@ type SMIMEARecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta SMIMEARecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3105,33 +2620,6 @@ func (r SMIMEARecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type SMIMEARecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string               `json:"source"`
-	JSON   smimeaRecordMetaJSON `json:"-"`
-}
-
-// smimeaRecordMetaJSON contains the JSON metadata for the struct
-// [SMIMEARecordMeta]
-type smimeaRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SMIMEARecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r smimeaRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type SMIMEARecordParam struct {
 	// Components of a SMIMEA record.
 	Data param.Field[SMIMEARecordDataParam] `json:"data,required"`
@@ -3139,6 +2627,8 @@ type SMIMEARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SMIMEARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3172,19 +2662,6 @@ func (r SMIMEARecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type SMIMEARecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r SMIMEARecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type SRVRecord struct {
 	// Components of a SRV record.
 	Data SRVRecordData `json:"data,required"`
@@ -3207,7 +2684,7 @@ type SRVRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta SRVRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3315,32 +2792,6 @@ func (r SRVRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type SRVRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string            `json:"source"`
-	JSON   srvRecordMetaJSON `json:"-"`
-}
-
-// srvRecordMetaJSON contains the JSON metadata for the struct [SRVRecordMeta]
-type srvRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SRVRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r srvRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type SRVRecordParam struct {
 	// Components of a SRV record.
 	Data param.Field[SRVRecordDataParam] `json:"data,required"`
@@ -3350,6 +2801,8 @@ type SRVRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SRVRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3396,19 +2849,6 @@ func (r SRVRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type SRVRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r SRVRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type SSHFPRecord struct {
 	// Components of a SSHFP record.
 	Data SSHFPRecordData `json:"data,required"`
@@ -3428,7 +2868,7 @@ type SSHFPRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta SSHFPRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3517,32 +2957,6 @@ func (r SSHFPRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type SSHFPRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string              `json:"source"`
-	JSON   sshfpRecordMetaJSON `json:"-"`
-}
-
-// sshfpRecordMetaJSON contains the JSON metadata for the struct [SSHFPRecordMeta]
-type sshfpRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSHFPRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sshfpRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type SSHFPRecordParam struct {
 	// Components of a SSHFP record.
 	Data param.Field[SSHFPRecordDataParam] `json:"data,required"`
@@ -3550,6 +2964,8 @@ type SSHFPRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SSHFPRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3581,19 +2997,6 @@ func (r SSHFPRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type SSHFPRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r SSHFPRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type SVCBRecord struct {
 	// Components of a SVCB record.
 	Data SVCBRecordData `json:"data,required"`
@@ -3613,7 +3016,7 @@ type SVCBRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta SVCBRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3702,32 +3105,6 @@ func (r SVCBRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type SVCBRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string             `json:"source"`
-	JSON   svcbRecordMetaJSON `json:"-"`
-}
-
-// svcbRecordMetaJSON contains the JSON metadata for the struct [SVCBRecordMeta]
-type svcbRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SVCBRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r svcbRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type SVCBRecordParam struct {
 	// Components of a SVCB record.
 	Data param.Field[SVCBRecordDataParam] `json:"data,required"`
@@ -3735,6 +3112,8 @@ type SVCBRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[SVCBRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3766,19 +3145,6 @@ func (r SVCBRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Extra Cloudflare-specific information about the record.
-type SVCBRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r SVCBRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type TLSARecord struct {
 	// Components of a TLSA record.
 	Data TLSARecordData `json:"data,required"`
@@ -3798,7 +3164,7 @@ type TLSARecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta TLSARecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3890,32 +3256,6 @@ func (r TLSARecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type TLSARecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string             `json:"source"`
-	JSON   tlsaRecordMetaJSON `json:"-"`
-}
-
-// tlsaRecordMetaJSON contains the JSON metadata for the struct [TLSARecordMeta]
-type tlsaRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TLSARecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tlsaRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type TLSARecordParam struct {
 	// Components of a TLSA record.
 	Data param.Field[TLSARecordDataParam] `json:"data,required"`
@@ -3923,6 +3263,8 @@ type TLSARecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[TLSARecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -3953,19 +3295,6 @@ type TLSARecordDataParam struct {
 }
 
 func (r TLSARecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Extra Cloudflare-specific information about the record.
-type TLSARecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r TLSARecordMetaParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -4000,7 +3329,7 @@ type TXTRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta TXTRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4060,32 +3389,6 @@ func (r TXTRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type TXTRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string            `json:"source"`
-	JSON   txtRecordMetaJSON `json:"-"`
-}
-
-// txtRecordMetaJSON contains the JSON metadata for the struct [TXTRecordMeta]
-type txtRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TXTRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r txtRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type TXTRecordParam struct {
 	// Text content for the record.
 	Content param.Field[string] `json:"content,required"`
@@ -4093,6 +3396,8 @@ type TXTRecordParam struct {
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
 	Type param.Field[TXTRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -4109,19 +3414,6 @@ func (r TXTRecordParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r TXTRecordParam) implementsDNSRecordUnionParam() {}
-
-// Extra Cloudflare-specific information about the record.
-type TXTRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r TXTRecordMetaParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 type URIRecord struct {
 	// Components of a URI record.
@@ -4145,7 +3437,7 @@ type URIRecord struct {
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta URIRecordMeta `json:"meta"`
+	Meta RecordMetadata `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4232,32 +3524,6 @@ func (r URIRecordType) IsKnown() bool {
 	return false
 }
 
-// Extra Cloudflare-specific information about the record.
-type URIRecordMeta struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string            `json:"source"`
-	JSON   uriRecordMetaJSON `json:"-"`
-}
-
-// uriRecordMetaJSON contains the JSON metadata for the struct [URIRecordMeta]
-type uriRecordMetaJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URIRecordMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uriRecordMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type URIRecordParam struct {
 	// Components of a URI record.
 	Data param.Field[URIRecordDataParam] `json:"data,required"`
@@ -4268,6 +3534,8 @@ type URIRecordParam struct {
 	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[URIRecordType] `json:"type,required"`
+	// Identifier
+	ID param.Field[string] `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
@@ -4294,19 +3562,6 @@ type URIRecordDataParam struct {
 }
 
 func (r URIRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Extra Cloudflare-specific information about the record.
-type URIRecordMetaParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r URIRecordMetaParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
