@@ -32,25 +32,6 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		"506e3185e9c882d175a2d0cb0093d9f2",
 		user.SubscriptionUpdateParams{
 			Subscription: user.SubscriptionParam{
-				App: cloudflare.F(user.SubscriptionAppParam{
-					InstallID: cloudflare.F("install_id"),
-				}),
-				ComponentValues: cloudflare.F([]user.SubscriptionComponentParam{{
-					Default: cloudflare.F(5.000000),
-					Name:    cloudflare.F("page_rules"),
-					Price:   cloudflare.F(5.000000),
-					Value:   cloudflare.F(20.000000),
-				}, {
-					Default: cloudflare.F(5.000000),
-					Name:    cloudflare.F("page_rules"),
-					Price:   cloudflare.F(5.000000),
-					Value:   cloudflare.F(20.000000),
-				}, {
-					Default: cloudflare.F(5.000000),
-					Name:    cloudflare.F("page_rules"),
-					Price:   cloudflare.F(5.000000),
-					Value:   cloudflare.F(20.000000),
-				}}),
 				Frequency: cloudflare.F(user.SubscriptionFrequencyWeekly),
 				RatePlan: cloudflare.F(user.RatePlanParam{
 					ID:                cloudflare.F("free"),
@@ -61,7 +42,6 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 					Scope:             cloudflare.F("zone"),
 					Sets:              cloudflare.F([]string{"string", "string", "string"}),
 				}),
-				Zone: cloudflare.F(user.SubscriptionZoneParam{}),
 			},
 		},
 	)

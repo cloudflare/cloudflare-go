@@ -143,10 +143,7 @@ func (r RatePlanParam) MarshalJSON() (data []byte, err error) {
 
 type Subscription struct {
 	// Subscription identifier tag.
-	ID  string          `json:"id"`
-	App SubscriptionApp `json:"app"`
-	// The list of add-ons subscribed to.
-	ComponentValues []SubscriptionComponent `json:"component_values"`
+	ID string `json:"id"`
 	// The monetary unit in which pricing information is displayed.
 	Currency string `json:"currency"`
 	// The end of the current period and also when the next billing is due.
@@ -162,16 +159,12 @@ type Subscription struct {
 	RatePlan RatePlan `json:"rate_plan"`
 	// The state that the subscription is in.
 	State SubscriptionState `json:"state"`
-	// A simple zone object. May have null properties if not a zone subscription.
-	Zone SubscriptionZone `json:"zone"`
-	JSON subscriptionJSON `json:"-"`
+	JSON  subscriptionJSON  `json:"-"`
 }
 
 // subscriptionJSON contains the JSON metadata for the struct [Subscription]
 type subscriptionJSON struct {
 	ID                 apijson.Field
-	App                apijson.Field
-	ComponentValues    apijson.Field
 	Currency           apijson.Field
 	CurrentPeriodEnd   apijson.Field
 	CurrentPeriodStart apijson.Field
@@ -179,7 +172,6 @@ type subscriptionJSON struct {
 	Price              apijson.Field
 	RatePlan           apijson.Field
 	State              apijson.Field
-	Zone               apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -189,27 +181,6 @@ func (r *Subscription) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r subscriptionJSON) RawJSON() string {
-	return r.raw
-}
-
-type SubscriptionApp struct {
-	// app install id.
-	InstallID string              `json:"install_id"`
-	JSON      subscriptionAppJSON `json:"-"`
-}
-
-// subscriptionAppJSON contains the JSON metadata for the struct [SubscriptionApp]
-type subscriptionAppJSON struct {
-	InstallID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionApp) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionAppJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -253,109 +224,13 @@ func (r SubscriptionState) IsKnown() bool {
 }
 
 type SubscriptionParam struct {
-	App param.Field[SubscriptionAppParam] `json:"app"`
-	// The list of add-ons subscribed to.
-	ComponentValues param.Field[[]SubscriptionComponentParam] `json:"component_values"`
 	// How often the subscription is renewed automatically.
 	Frequency param.Field[SubscriptionFrequency] `json:"frequency"`
 	// The rate plan applied to the subscription.
 	RatePlan param.Field[RatePlanParam] `json:"rate_plan"`
-	// A simple zone object. May have null properties if not a zone subscription.
-	Zone param.Field[SubscriptionZoneParam] `json:"zone"`
 }
 
 func (r SubscriptionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SubscriptionAppParam struct {
-	// app install id.
-	InstallID param.Field[string] `json:"install_id"`
-}
-
-func (r SubscriptionAppParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A component value for a subscription.
-type SubscriptionComponent struct {
-	// The default amount assigned.
-	Default float64 `json:"default"`
-	// The name of the component value.
-	Name string `json:"name"`
-	// The unit price for the component value.
-	Price float64 `json:"price"`
-	// The amount of the component value assigned.
-	Value float64                   `json:"value"`
-	JSON  subscriptionComponentJSON `json:"-"`
-}
-
-// subscriptionComponentJSON contains the JSON metadata for the struct
-// [SubscriptionComponent]
-type subscriptionComponentJSON struct {
-	Default     apijson.Field
-	Name        apijson.Field
-	Price       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionComponent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionComponentJSON) RawJSON() string {
-	return r.raw
-}
-
-// A component value for a subscription.
-type SubscriptionComponentParam struct {
-	// The default amount assigned.
-	Default param.Field[float64] `json:"default"`
-	// The name of the component value.
-	Name param.Field[string] `json:"name"`
-	// The unit price for the component value.
-	Price param.Field[float64] `json:"price"`
-	// The amount of the component value assigned.
-	Value param.Field[float64] `json:"value"`
-}
-
-func (r SubscriptionComponentParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A simple zone object. May have null properties if not a zone subscription.
-type SubscriptionZone struct {
-	// Identifier
-	ID string `json:"id"`
-	// The domain name
-	Name string               `json:"name"`
-	JSON subscriptionZoneJSON `json:"-"`
-}
-
-// subscriptionZoneJSON contains the JSON metadata for the struct
-// [SubscriptionZone]
-type subscriptionZoneJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SubscriptionZone) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r subscriptionZoneJSON) RawJSON() string {
-	return r.raw
-}
-
-// A simple zone object. May have null properties if not a zone subscription.
-type SubscriptionZoneParam struct {
-}
-
-func (r SubscriptionZoneParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
