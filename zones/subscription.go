@@ -53,6 +53,23 @@ func (r *SubscriptionService) New(ctx context.Context, identifier string, body S
 	return
 }
 
+// Updates zone subscriptions, either plan or add-ons.
+func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponseUnion, err error) {
+	var env SubscriptionUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/subscription", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists zone subscription details.
 func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionGetResponseUnion, err error) {
 	var env SubscriptionGetResponseEnvelope
@@ -80,6 +97,24 @@ type SubscriptionNewResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*SubscriptionNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by
+// [zones.SubscriptionUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
+type SubscriptionUpdateResponseUnion interface {
+	ImplementsZonesSubscriptionUpdateResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SubscriptionUpdateResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -152,6 +187,57 @@ const (
 func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case SubscriptionNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type SubscriptionUpdateParams struct {
+	Subscription user.SubscriptionParam `json:"subscription,required"`
+}
+
+func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Subscription)
+}
+
+type SubscriptionUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo           `json:"errors,required"`
+	Messages []shared.ResponseInfo           `json:"messages,required"`
+	Result   SubscriptionUpdateResponseUnion `json:"result,required"`
+	// Whether the API call was successful
+	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// subscriptionUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SubscriptionUpdateResponseEnvelope]
+type subscriptionUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubscriptionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SubscriptionUpdateResponseEnvelopeSuccess bool
+
+const (
+	SubscriptionUpdateResponseEnvelopeSuccessTrue SubscriptionUpdateResponseEnvelopeSuccess = true
+)
+
+func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubscriptionUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
