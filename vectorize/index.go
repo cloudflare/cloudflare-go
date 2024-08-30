@@ -346,8 +346,9 @@ func (r IndexDimensionConfigurationParam) MarshalJSON() (data []byte, err error)
 
 func (r IndexDimensionConfigurationParam) implementsVectorizeIndexNewParamsConfigUnion() {}
 
-// Union satisfied by [vectorize.IndexDeleteResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [vectorize.IndexDeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type IndexDeleteResponseUnion interface {
 	ImplementsVectorizeIndexDeleteResponseUnion()
 }
@@ -469,7 +470,7 @@ func (r indexQueryResponseJSON) RawJSON() string {
 type IndexQueryResponseMatch struct {
 	// Identifier for a Vector
 	ID        string      `json:"id"`
-	Metadata  interface{} `json:"metadata,nullable"`
+	Metadata  interface{} `json:"metadata"`
 	Namespace string      `json:"namespace,nullable"`
 	// The score of the vector according to the index's distance metric
 	Score  float64                     `json:"score"`
@@ -681,7 +682,7 @@ type IndexDeleteParams struct {
 type IndexDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo    `json:"errors,required"`
 	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   IndexDeleteResponseUnion `json:"result,required"`
+	Result   IndexDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexDeleteResponseEnvelopeJSON    `json:"-"`
