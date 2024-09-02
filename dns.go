@@ -27,8 +27,6 @@ type DNSRecord struct {
 	Meta       interface{} `json:"meta,omitempty"`
 	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
 	ID         string      `json:"id,omitempty"`
-	ZoneID     string      `json:"zone_id,omitempty"`
-	ZoneName   string      `json:"zone_name,omitempty"`
 	Priority   *uint16     `json:"priority,omitempty"`
 	TTL        int         `json:"ttl,omitempty"`
 	Proxied    *bool       `json:"proxied,omitempty"`
@@ -185,8 +183,6 @@ type CreateDNSRecordParams struct {
 	Meta       interface{} `json:"meta,omitempty"`
 	Data       interface{} `json:"data,omitempty"` // data returned by: SRV, LOC
 	ID         string      `json:"id,omitempty"`
-	ZoneID     string      `json:"zone_id,omitempty"`
-	ZoneName   string      `json:"zone_name,omitempty"`
 	Priority   *uint16     `json:"priority,omitempty"`
 	TTL        int         `json:"ttl,omitempty"`
 	Proxied    *bool       `json:"proxied,omitempty" url:"proxied,omitempty"`
