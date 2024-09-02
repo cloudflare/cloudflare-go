@@ -79,26 +79,26 @@ func (r deviceOverrideCodeListResponseJSON) RawJSON() string {
 
 type DeviceOverrideCodeListResponseDisableForTime struct {
 	// Override code that is valid for 1 hour.
-	Number1 string `json:"1"`
+	One string `json:"1"`
 	// Override code that is valid for 12 hour2.
-	Number12 string `json:"12"`
+	Twelve string `json:"12"`
 	// Override code that is valid for 24 hour.2.
-	Number24 string `json:"24"`
+	TwentyFour string `json:"24"`
 	// Override code that is valid for 3 hours.
-	Number3 string `json:"3"`
+	Three string `json:"3"`
 	// Override code that is valid for 6 hours.
-	Number6 string                                           `json:"6"`
-	JSON    deviceOverrideCodeListResponseDisableForTimeJSON `json:"-"`
+	Six  string                                           `json:"6"`
+	JSON deviceOverrideCodeListResponseDisableForTimeJSON `json:"-"`
 }
 
 // deviceOverrideCodeListResponseDisableForTimeJSON contains the JSON metadata for
 // the struct [DeviceOverrideCodeListResponseDisableForTime]
 type deviceOverrideCodeListResponseDisableForTimeJSON struct {
-	Number1     apijson.Field
-	Number12    apijson.Field
-	Number24    apijson.Field
-	Number3     apijson.Field
-	Number6     apijson.Field
+	One         apijson.Field
+	Twelve      apijson.Field
+	TwentyFour  apijson.Field
+	Three       apijson.Field
+	Six         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
