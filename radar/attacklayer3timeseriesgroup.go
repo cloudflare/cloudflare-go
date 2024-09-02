@@ -163,26 +163,26 @@ func (r attackLayer3TimeseriesGroupBitrateResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3TimeseriesGroupBitrateResponseSerie0 struct {
-	Number1GbpsTo10Gbps   []string                                             `json:"_1_GBPS_TO_10_GBPS,required"`
-	Number10GbpsTo100Gbps []string                                             `json:"_10_GBPS_TO_100_GBPS,required"`
-	Number500MbpsTo1Gbps  []string                                             `json:"_500_MBPS_TO_1_GBPS,required"`
-	Over100Gbps           []string                                             `json:"OVER_100_GBPS,required"`
-	Timestamps            []string                                             `json:"timestamps,required"`
-	Under500Mbps          []string                                             `json:"UNDER_500_MBPS,required"`
-	JSON                  attackLayer3TimeseriesGroupBitrateResponseSerie0JSON `json:"-"`
+	OneGBPSToTenGBPS         []string                                             `json:"_1_GBPS_TO_10_GBPS,required"`
+	TenGBPSToOneHundredGBPS  []string                                             `json:"_10_GBPS_TO_100_GBPS,required"`
+	FiveHundredMBPSToOneGBPS []string                                             `json:"_500_MBPS_TO_1_GBPS,required"`
+	Over100Gbps              []string                                             `json:"OVER_100_GBPS,required"`
+	Timestamps               []string                                             `json:"timestamps,required"`
+	Under500Mbps             []string                                             `json:"UNDER_500_MBPS,required"`
+	JSON                     attackLayer3TimeseriesGroupBitrateResponseSerie0JSON `json:"-"`
 }
 
 // attackLayer3TimeseriesGroupBitrateResponseSerie0JSON contains the JSON metadata
 // for the struct [AttackLayer3TimeseriesGroupBitrateResponseSerie0]
 type attackLayer3TimeseriesGroupBitrateResponseSerie0JSON struct {
-	Number1GbpsTo10Gbps   apijson.Field
-	Number10GbpsTo100Gbps apijson.Field
-	Number500MbpsTo1Gbps  apijson.Field
-	Over100Gbps           apijson.Field
-	Timestamps            apijson.Field
-	Under500Mbps          apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
+	OneGBPSToTenGBPS         apijson.Field
+	TenGBPSToOneHundredGBPS  apijson.Field
+	FiveHundredMBPSToOneGBPS apijson.Field
+	Over100Gbps              apijson.Field
+	Timestamps               apijson.Field
+	Under500Mbps             apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AttackLayer3TimeseriesGroupBitrateResponseSerie0) UnmarshalJSON(data []byte) (err error) {
@@ -217,28 +217,28 @@ func (r attackLayer3TimeseriesGroupDurationResponseJSON) RawJSON() string {
 }
 
 type AttackLayer3TimeseriesGroupDurationResponseSerie0 struct {
-	Number1HourTo3Hours  []string                                              `json:"_1_HOUR_TO_3_HOURS,required"`
-	Number10MinsTo20Mins []string                                              `json:"_10_MINS_TO_20_MINS,required"`
-	Number20MinsTo40Mins []string                                              `json:"_20_MINS_TO_40_MINS,required"`
-	Number40MinsTo1Hour  []string                                              `json:"_40_MINS_TO_1_HOUR,required"`
-	Over3Hours           []string                                              `json:"OVER_3_HOURS,required"`
-	Timestamps           []string                                              `json:"timestamps,required"`
-	Under10Mins          []string                                              `json:"UNDER_10_MINS,required"`
-	JSON                 attackLayer3TimeseriesGroupDurationResponseSerie0JSON `json:"-"`
+	OneHourToThreeHours     []string                                              `json:"_1_HOUR_TO_3_HOURS,required"`
+	TenMinsToTwentyMinds    []string                                              `json:"_10_MINS_TO_20_MINS,required"`
+	TwentyMindsToFortyMinds []string                                              `json:"_20_MINS_TO_40_MINS,required"`
+	FortyMinsToOneHour      []string                                              `json:"_40_MINS_TO_1_HOUR,required"`
+	Over3Hours              []string                                              `json:"OVER_3_HOURS,required"`
+	Timestamps              []string                                              `json:"timestamps,required"`
+	Under10Mins             []string                                              `json:"UNDER_10_MINS,required"`
+	JSON                    attackLayer3TimeseriesGroupDurationResponseSerie0JSON `json:"-"`
 }
 
 // attackLayer3TimeseriesGroupDurationResponseSerie0JSON contains the JSON metadata
 // for the struct [AttackLayer3TimeseriesGroupDurationResponseSerie0]
 type attackLayer3TimeseriesGroupDurationResponseSerie0JSON struct {
-	Number1HourTo3Hours  apijson.Field
-	Number10MinsTo20Mins apijson.Field
-	Number20MinsTo40Mins apijson.Field
-	Number40MinsTo1Hour  apijson.Field
-	Over3Hours           apijson.Field
-	Timestamps           apijson.Field
-	Under10Mins          apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	OneHourToThreeHours     apijson.Field
+	TenMinsToTwentyMinds    apijson.Field
+	TwentyMindsToFortyMinds apijson.Field
+	FortyMinsToOneHour      apijson.Field
+	Over3Hours              apijson.Field
+	Timestamps              apijson.Field
+	Under10Mins             apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *AttackLayer3TimeseriesGroupDurationResponseSerie0) UnmarshalJSON(data []byte) (err error) {
