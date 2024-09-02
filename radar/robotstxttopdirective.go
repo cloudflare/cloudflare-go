@@ -179,6 +179,7 @@ func (r robotsTXTTopDirectiveGetResponseMetaConfidenceInfoAnnotationJSON) RawJSO
 }
 
 type RobotsTXTTopDirectiveGetResponseTop0 struct {
+	Date      string                                   `json:"date,required"`
 	Fully     int64                                    `json:"fully,required"`
 	Partially int64                                    `json:"partially,required"`
 	Total     int64                                    `json:"total,required"`
@@ -189,6 +190,7 @@ type RobotsTXTTopDirectiveGetResponseTop0 struct {
 // robotsTXTTopDirectiveGetResponseTop0JSON contains the JSON metadata for the
 // struct [RobotsTXTTopDirectiveGetResponseTop0]
 type robotsTXTTopDirectiveGetResponseTop0JSON struct {
+	Date        apijson.Field
 	Fully       apijson.Field
 	Partially   apijson.Field
 	Total       apijson.Field
