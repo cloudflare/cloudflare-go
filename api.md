@@ -6748,6 +6748,14 @@ Methods:
 
 ## RobotsTXT
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RobotsTXTDomainsResponse">RobotsTXTDomainsResponse</a>
+
+Methods:
+
+- <code title="get /radar/robots_txt/domains">client.Radar.RobotsTXT.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RobotsTXTService.Domains">Domains</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RobotsTXTDomainsParams">RobotsTXTDomainsParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RobotsTXTDomainsResponse">RobotsTXTDomainsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Top
 
 #### Directive
@@ -7052,6 +7060,14 @@ Methods:
 - <code title="get /accounts/{account_id}/ai-gateway/gateways/{id}">client.AIGateway.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#AIGatewayService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, id <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#AIGatewayGetParams">AIGatewayGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#AIGatewayGetResponse">AIGatewayGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Logs
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogListResponse">LogListResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/ai-gateway/gateways/{gateway_id}/logs">client.AIGateway.Logs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, gatewayID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogListParams">LogListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway">ai_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ai_gateway#LogListResponse">LogListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # IAM
 
