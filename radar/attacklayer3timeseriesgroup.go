@@ -166,9 +166,9 @@ type AttackLayer3TimeseriesGroupBitrateResponseSerie0 struct {
 	OneGBPSToTenGBPS         []string                                             `json:"_1_GBPS_TO_10_GBPS,required"`
 	TenGBPSToOneHundredGBPS  []string                                             `json:"_10_GBPS_TO_100_GBPS,required"`
 	FiveHundredMBPSToOneGBPS []string                                             `json:"_500_MBPS_TO_1_GBPS,required"`
-	Over100Gbps              []string                                             `json:"OVER_100_GBPS,required"`
+	Over100GBPS              []string                                             `json:"OVER_100_GBPS,required"`
 	Timestamps               []string                                             `json:"timestamps,required"`
-	Under500Mbps             []string                                             `json:"UNDER_500_MBPS,required"`
+	Under500MBPS             []string                                             `json:"UNDER_500_MBPS,required"`
 	JSON                     attackLayer3TimeseriesGroupBitrateResponseSerie0JSON `json:"-"`
 }
 
@@ -178,9 +178,9 @@ type attackLayer3TimeseriesGroupBitrateResponseSerie0JSON struct {
 	OneGBPSToTenGBPS         apijson.Field
 	TenGBPSToOneHundredGBPS  apijson.Field
 	FiveHundredMBPSToOneGBPS apijson.Field
-	Over100Gbps              apijson.Field
+	Over100GBPS              apijson.Field
 	Timestamps               apijson.Field
-	Under500Mbps             apijson.Field
+	Under500MBPS             apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
