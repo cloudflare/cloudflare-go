@@ -83,7 +83,7 @@ type DeviceOverrideCodeListResponseDisableForTime struct {
 	// Override code that is valid for 12 hour2.
 	Twelve string `json:"12"`
 	// Override code that is valid for 24 hour.2.
-	TwentyFour string `json:"24"`
+	Twenty_four string `json:"24"`
 	// Override code that is valid for 3 hours.
 	Three string `json:"3"`
 	// Override code that is valid for 6 hours.
@@ -96,7 +96,7 @@ type DeviceOverrideCodeListResponseDisableForTime struct {
 type deviceOverrideCodeListResponseDisableForTimeJSON struct {
 	One         apijson.Field
 	Twelve      apijson.Field
-	TwentyFour  apijson.Field
+	Twenty_four apijson.Field
 	Three       apijson.Field
 	Six         apijson.Field
 	raw         string
