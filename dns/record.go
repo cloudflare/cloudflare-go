@@ -10,7 +10,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
@@ -21,7 +20,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // RecordService contains methods and other services that help with interacting
@@ -51,7 +49,7 @@ func NewRecordService(opts ...option.RequestOption) (r *RecordService) {
 //   - NS records cannot exist on the same name as any other record type.
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
-func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ...option.RequestOption) (res *Record, err error) {
+func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ...option.RequestOption) (res *RecordNewResponse, err error) {
 	var env RecordNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -73,7 +71,7 @@ func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ..
 //   - NS records cannot exist on the same name as any other record type.
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
-func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params RecordUpdateParams, opts ...option.RequestOption) (res *Record, err error) {
+func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params RecordUpdateParams, opts ...option.RequestOption) (res *RecordUpdateResponse, err error) {
 	var env RecordUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -94,7 +92,7 @@ func (r *RecordService) Update(ctx context.Context, dnsRecordID string, params R
 }
 
 // List, search, sort, and filter a zones' DNS records.
-func (r *RecordService) List(ctx context.Context, params RecordListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Record], err error) {
+func (r *RecordService) List(ctx context.Context, params RecordListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RecordListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -116,7 +114,7 @@ func (r *RecordService) List(ctx context.Context, params RecordListParams, opts 
 }
 
 // List, search, sort, and filter a zones' DNS records.
-func (r *RecordService) ListAutoPaging(ctx context.Context, params RecordListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Record] {
+func (r *RecordService) ListAutoPaging(ctx context.Context, params RecordListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[RecordListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -147,7 +145,7 @@ func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body Rec
 //   - NS records cannot exist on the same name as any other record type.
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
-func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params RecordEditParams, opts ...option.RequestOption) (res *Record, err error) {
+func (r *RecordService) Edit(ctx context.Context, dnsRecordID string, params RecordEditParams, opts ...option.RequestOption) (res *RecordEditResponse, err error) {
 	var env RecordEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -187,7 +185,7 @@ func (r *RecordService) Export(ctx context.Context, query RecordExportParams, op
 }
 
 // DNS Record Details
-func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query RecordGetParams, opts ...option.RequestOption) (res *Record, err error) {
+func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query RecordGetParams, opts ...option.RequestOption) (res *RecordGetResponse, err error) {
 	var env RecordGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
@@ -249,2230 +247,24 @@ func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts 
 	return
 }
 
-type ARecord struct {
-	// A valid IPv4 address.
-	Content string `json:"content,required" format:"ipv4"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type ARecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL         `json:"ttl"`
-	JSON aRecordJSON `json:"-"`
-}
-
-// aRecordJSON contains the JSON metadata for the struct [ARecord]
-type aRecordJSON struct {
-	Content           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Proxied           apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ARecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r ARecord) implementsDNSRecord() {}
-
-// Record type.
-type ARecordType string
-
-const (
-	ARecordTypeA ARecordType = "A"
-)
-
-func (r ARecordType) IsKnown() bool {
-	switch r {
-	case ARecordTypeA:
-		return true
-	}
-	return false
-}
-
-type ARecordParam struct {
-	// A valid IPv4 address.
-	Content param.Field[string] `json:"content,required" format:"ipv4"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[ARecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r ARecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ARecordParam) implementsDNSRecordUnionParam() {}
-
-type AAAARecord struct {
-	// A valid IPv6 address.
-	Content string `json:"content,required" format:"ipv6"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type AAAARecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL            `json:"ttl"`
-	JSON aaaaRecordJSON `json:"-"`
-}
-
-// aaaaRecordJSON contains the JSON metadata for the struct [AAAARecord]
-type aaaaRecordJSON struct {
-	Content           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Proxied           apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *AAAARecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r aaaaRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AAAARecord) implementsDNSRecord() {}
-
-// Record type.
-type AAAARecordType string
-
-const (
-	AAAARecordTypeAAAA AAAARecordType = "AAAA"
-)
-
-func (r AAAARecordType) IsKnown() bool {
-	switch r {
-	case AAAARecordTypeAAAA:
-		return true
-	}
-	return false
-}
-
-type AAAARecordParam struct {
-	// A valid IPv6 address.
-	Content param.Field[string] `json:"content,required" format:"ipv6"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[AAAARecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r AAAARecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AAAARecordParam) implementsDNSRecordUnionParam() {}
-
-type CAARecord struct {
-	// Components of a CAA record.
-	Data CAARecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type CAARecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted CAA content. See 'data' to set CAA properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
-	JSON caaRecordJSON `json:"-"`
-}
-
-// caaRecordJSON contains the JSON metadata for the struct [CAARecord]
-type caaRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *CAARecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r caaRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r CAARecord) implementsDNSRecord() {}
-
-// Components of a CAA record.
-type CAARecordData struct {
-	// Flags for the CAA record.
-	Flags float64 `json:"flags"`
-	// Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
-	Tag string `json:"tag"`
-	// Value of the record. This field's semantics depend on the chosen tag.
-	Value string            `json:"value"`
-	JSON  caaRecordDataJSON `json:"-"`
-}
-
-// caaRecordDataJSON contains the JSON metadata for the struct [CAARecordData]
-type caaRecordDataJSON struct {
-	Flags       apijson.Field
-	Tag         apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CAARecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r caaRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type CAARecordType string
-
-const (
-	CAARecordTypeCAA CAARecordType = "CAA"
-)
-
-func (r CAARecordType) IsKnown() bool {
-	switch r {
-	case CAARecordTypeCAA:
-		return true
-	}
-	return false
-}
-
-type CAARecordParam struct {
-	// Components of a CAA record.
-	Data param.Field[CAARecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[CAARecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r CAARecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CAARecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a CAA record.
-type CAARecordDataParam struct {
-	// Flags for the CAA record.
-	Flags param.Field[float64] `json:"flags"`
-	// Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
-	Tag param.Field[string] `json:"tag"`
-	// Value of the record. This field's semantics depend on the chosen tag.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r CAARecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CERTRecord struct {
-	// Components of a CERT record.
-	Data CERTRecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type CERTRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted CERT content. See 'data' to set CERT properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL            `json:"ttl"`
-	JSON certRecordJSON `json:"-"`
-}
-
-// certRecordJSON contains the JSON metadata for the struct [CERTRecord]
-type certRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *CERTRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r CERTRecord) implementsDNSRecord() {}
-
-// Components of a CERT record.
-type CERTRecordData struct {
-	// Algorithm.
-	Algorithm float64 `json:"algorithm"`
-	// Certificate.
-	Certificate string `json:"certificate"`
-	// Key Tag.
-	KeyTag float64 `json:"key_tag"`
-	// Type.
-	Type float64            `json:"type"`
-	JSON certRecordDataJSON `json:"-"`
-}
-
-// certRecordDataJSON contains the JSON metadata for the struct [CERTRecordData]
-type certRecordDataJSON struct {
-	Algorithm   apijson.Field
-	Certificate apijson.Field
-	KeyTag      apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CERTRecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r certRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type CERTRecordType string
-
-const (
-	CERTRecordTypeCERT CERTRecordType = "CERT"
-)
-
-func (r CERTRecordType) IsKnown() bool {
-	switch r {
-	case CERTRecordTypeCERT:
-		return true
-	}
-	return false
-}
-
-type CERTRecordParam struct {
-	// Components of a CERT record.
-	Data param.Field[CERTRecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[CERTRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r CERTRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CERTRecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a CERT record.
-type CERTRecordDataParam struct {
-	// Algorithm.
-	Algorithm param.Field[float64] `json:"algorithm"`
-	// Certificate.
-	Certificate param.Field[string] `json:"certificate"`
-	// Key Tag.
-	KeyTag param.Field[float64] `json:"key_tag"`
-	// Type.
-	Type param.Field[float64] `json:"type"`
-}
-
-func (r CERTRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CNAMERecord struct {
-	// A valid hostname. Must not match the record's name.
-	Content string `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type CNAMERecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL             `json:"ttl"`
-	JSON cnameRecordJSON `json:"-"`
-}
-
-// cnameRecordJSON contains the JSON metadata for the struct [CNAMERecord]
-type cnameRecordJSON struct {
-	Content           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Proxied           apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *CNAMERecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cnameRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r CNAMERecord) implementsDNSRecord() {}
-
-// Record type.
-type CNAMERecordType string
-
-const (
-	CNAMERecordTypeCNAME CNAMERecordType = "CNAME"
-)
-
-func (r CNAMERecordType) IsKnown() bool {
-	switch r {
-	case CNAMERecordTypeCNAME:
-		return true
-	}
-	return false
-}
-
-type CNAMERecordParam struct {
-	// A valid hostname. Must not match the record's name.
-	Content param.Field[string] `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[CNAMERecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r CNAMERecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CNAMERecordParam) implementsDNSRecordUnionParam() {}
-
-type DNSKEYRecord struct {
-	// Components of a DNSKEY record.
-	Data DNSKEYRecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type DNSKEYRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted DNSKEY content. See 'data' to set DNSKEY properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL              `json:"ttl"`
-	JSON dnskeyRecordJSON `json:"-"`
-}
-
-// dnskeyRecordJSON contains the JSON metadata for the struct [DNSKEYRecord]
-type dnskeyRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnskeyRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DNSKEYRecord) implementsDNSRecord() {}
-
-// Components of a DNSKEY record.
-type DNSKEYRecordData struct {
-	// Algorithm.
-	Algorithm float64 `json:"algorithm"`
-	// Flags.
-	Flags float64 `json:"flags"`
-	// Protocol.
-	Protocol float64 `json:"protocol"`
-	// Public Key.
-	PublicKey string               `json:"public_key"`
-	JSON      dnskeyRecordDataJSON `json:"-"`
-}
-
-// dnskeyRecordDataJSON contains the JSON metadata for the struct
-// [DNSKEYRecordData]
-type dnskeyRecordDataJSON struct {
-	Algorithm   apijson.Field
-	Flags       apijson.Field
-	Protocol    apijson.Field
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSKEYRecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnskeyRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type DNSKEYRecordType string
-
-const (
-	DNSKEYRecordTypeDNSKEY DNSKEYRecordType = "DNSKEY"
-)
-
-func (r DNSKEYRecordType) IsKnown() bool {
-	switch r {
-	case DNSKEYRecordTypeDNSKEY:
-		return true
-	}
-	return false
-}
-
-type DNSKEYRecordParam struct {
-	// Components of a DNSKEY record.
-	Data param.Field[DNSKEYRecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[DNSKEYRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r DNSKEYRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DNSKEYRecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a DNSKEY record.
-type DNSKEYRecordDataParam struct {
-	// Algorithm.
-	Algorithm param.Field[float64] `json:"algorithm"`
-	// Flags.
-	Flags param.Field[float64] `json:"flags"`
-	// Protocol.
-	Protocol param.Field[float64] `json:"protocol"`
-	// Public Key.
-	PublicKey param.Field[string] `json:"public_key"`
-}
-
-func (r DNSKEYRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DSRecord struct {
-	// Components of a DS record.
-	Data DSRecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type DSRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted DS content. See 'data' to set DS properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL          `json:"ttl"`
-	JSON dsRecordJSON `json:"-"`
-}
-
-// dsRecordJSON contains the JSON metadata for the struct [DSRecord]
-type dsRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DSRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dsRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DSRecord) implementsDNSRecord() {}
-
-// Components of a DS record.
-type DSRecordData struct {
-	// Algorithm.
-	Algorithm float64 `json:"algorithm"`
-	// Digest.
-	Digest string `json:"digest"`
-	// Digest Type.
-	DigestType float64 `json:"digest_type"`
-	// Key Tag.
-	KeyTag float64          `json:"key_tag"`
-	JSON   dsRecordDataJSON `json:"-"`
-}
-
-// dsRecordDataJSON contains the JSON metadata for the struct [DSRecordData]
-type dsRecordDataJSON struct {
-	Algorithm   apijson.Field
-	Digest      apijson.Field
-	DigestType  apijson.Field
-	KeyTag      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DSRecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dsRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type DSRecordType string
-
-const (
-	DSRecordTypeDS DSRecordType = "DS"
-)
-
-func (r DSRecordType) IsKnown() bool {
-	switch r {
-	case DSRecordTypeDS:
-		return true
-	}
-	return false
-}
-
-type DSRecordParam struct {
-	// Components of a DS record.
-	Data param.Field[DSRecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[DSRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r DSRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DSRecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a DS record.
-type DSRecordDataParam struct {
-	// Algorithm.
-	Algorithm param.Field[float64] `json:"algorithm"`
-	// Digest.
-	Digest param.Field[string] `json:"digest"`
-	// Digest Type.
-	DigestType param.Field[float64] `json:"digest_type"`
-	// Key Tag.
-	KeyTag param.Field[float64] `json:"key_tag"`
-}
-
-func (r DSRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type HTTPSRecord struct {
-	// Components of a HTTPS record.
-	Data HTTPSRecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type HTTPSRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted HTTPS content. See 'data' to set HTTPS properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL             `json:"ttl"`
-	JSON httpsRecordJSON `json:"-"`
-}
-
-// httpsRecordJSON contains the JSON metadata for the struct [HTTPSRecord]
-type httpsRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *HTTPSRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpsRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r HTTPSRecord) implementsDNSRecord() {}
-
-// Components of a HTTPS record.
-type HTTPSRecordData struct {
-	// priority.
-	Priority float64 `json:"priority"`
-	// target.
-	Target string `json:"target"`
-	// value.
-	Value string              `json:"value"`
-	JSON  httpsRecordDataJSON `json:"-"`
-}
-
-// httpsRecordDataJSON contains the JSON metadata for the struct [HTTPSRecordData]
-type httpsRecordDataJSON struct {
-	Priority    apijson.Field
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HTTPSRecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r httpsRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type HTTPSRecordType string
-
-const (
-	HTTPSRecordTypeHTTPS HTTPSRecordType = "HTTPS"
-)
-
-func (r HTTPSRecordType) IsKnown() bool {
-	switch r {
-	case HTTPSRecordTypeHTTPS:
-		return true
-	}
-	return false
-}
-
-type HTTPSRecordParam struct {
-	// Components of a HTTPS record.
-	Data param.Field[HTTPSRecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[HTTPSRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r HTTPSRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r HTTPSRecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a HTTPS record.
-type HTTPSRecordDataParam struct {
-	// priority.
-	Priority param.Field[float64] `json:"priority"`
-	// target.
-	Target param.Field[string] `json:"target"`
-	// value.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r HTTPSRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type LOCRecord struct {
-	// Components of a LOC record.
-	Data LOCRecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type LOCRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted LOC content. See 'data' to set LOC properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
-	JSON locRecordJSON `json:"-"`
-}
-
-// locRecordJSON contains the JSON metadata for the struct [LOCRecord]
-type locRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *LOCRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r LOCRecord) implementsDNSRecord() {}
-
-// Components of a LOC record.
-type LOCRecordData struct {
-	// Altitude of location in meters.
-	Altitude float64 `json:"altitude"`
-	// Degrees of latitude.
-	LatDegrees float64 `json:"lat_degrees"`
-	// Latitude direction.
-	LatDirection LOCRecordDataLatDirection `json:"lat_direction"`
-	// Minutes of latitude.
-	LatMinutes float64 `json:"lat_minutes"`
-	// Seconds of latitude.
-	LatSeconds float64 `json:"lat_seconds"`
-	// Degrees of longitude.
-	LongDegrees float64 `json:"long_degrees"`
-	// Longitude direction.
-	LongDirection LOCRecordDataLongDirection `json:"long_direction"`
-	// Minutes of longitude.
-	LongMinutes float64 `json:"long_minutes"`
-	// Seconds of longitude.
-	LongSeconds float64 `json:"long_seconds"`
-	// Horizontal precision of location.
-	PrecisionHorz float64 `json:"precision_horz"`
-	// Vertical precision of location.
-	PrecisionVert float64 `json:"precision_vert"`
-	// Size of location in meters.
-	Size float64           `json:"size"`
-	JSON locRecordDataJSON `json:"-"`
-}
-
-// locRecordDataJSON contains the JSON metadata for the struct [LOCRecordData]
-type locRecordDataJSON struct {
-	Altitude      apijson.Field
-	LatDegrees    apijson.Field
-	LatDirection  apijson.Field
-	LatMinutes    apijson.Field
-	LatSeconds    apijson.Field
-	LongDegrees   apijson.Field
-	LongDirection apijson.Field
-	LongMinutes   apijson.Field
-	LongSeconds   apijson.Field
-	PrecisionHorz apijson.Field
-	PrecisionVert apijson.Field
-	Size          apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *LOCRecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r locRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Latitude direction.
-type LOCRecordDataLatDirection string
-
-const (
-	LOCRecordDataLatDirectionN LOCRecordDataLatDirection = "N"
-	LOCRecordDataLatDirectionS LOCRecordDataLatDirection = "S"
-)
-
-func (r LOCRecordDataLatDirection) IsKnown() bool {
-	switch r {
-	case LOCRecordDataLatDirectionN, LOCRecordDataLatDirectionS:
-		return true
-	}
-	return false
-}
-
-// Longitude direction.
-type LOCRecordDataLongDirection string
-
-const (
-	LOCRecordDataLongDirectionE LOCRecordDataLongDirection = "E"
-	LOCRecordDataLongDirectionW LOCRecordDataLongDirection = "W"
-)
-
-func (r LOCRecordDataLongDirection) IsKnown() bool {
-	switch r {
-	case LOCRecordDataLongDirectionE, LOCRecordDataLongDirectionW:
-		return true
-	}
-	return false
-}
-
-// Record type.
-type LOCRecordType string
-
-const (
-	LOCRecordTypeLOC LOCRecordType = "LOC"
-)
-
-func (r LOCRecordType) IsKnown() bool {
-	switch r {
-	case LOCRecordTypeLOC:
-		return true
-	}
-	return false
-}
-
-type LOCRecordParam struct {
-	// Components of a LOC record.
-	Data param.Field[LOCRecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[LOCRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r LOCRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r LOCRecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a LOC record.
-type LOCRecordDataParam struct {
-	// Altitude of location in meters.
-	Altitude param.Field[float64] `json:"altitude"`
-	// Degrees of latitude.
-	LatDegrees param.Field[float64] `json:"lat_degrees"`
-	// Latitude direction.
-	LatDirection param.Field[LOCRecordDataLatDirection] `json:"lat_direction"`
-	// Minutes of latitude.
-	LatMinutes param.Field[float64] `json:"lat_minutes"`
-	// Seconds of latitude.
-	LatSeconds param.Field[float64] `json:"lat_seconds"`
-	// Degrees of longitude.
-	LongDegrees param.Field[float64] `json:"long_degrees"`
-	// Longitude direction.
-	LongDirection param.Field[LOCRecordDataLongDirection] `json:"long_direction"`
-	// Minutes of longitude.
-	LongMinutes param.Field[float64] `json:"long_minutes"`
-	// Seconds of longitude.
-	LongSeconds param.Field[float64] `json:"long_seconds"`
-	// Horizontal precision of location.
-	PrecisionHorz param.Field[float64] `json:"precision_horz"`
-	// Vertical precision of location.
-	PrecisionVert param.Field[float64] `json:"precision_vert"`
-	// Size of location in meters.
-	Size param.Field[float64] `json:"size"`
-}
-
-func (r LOCRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type MXRecord struct {
-	// A valid mail server hostname.
-	Content string `json:"content,required" format:"hostname"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority float64 `json:"priority,required"`
-	// Record type.
-	Type MXRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL          `json:"ttl"`
-	JSON mxRecordJSON `json:"-"`
-}
-
-// mxRecordJSON contains the JSON metadata for the struct [MXRecord]
-type mxRecordJSON struct {
-	Content           apijson.Field
-	Name              apijson.Field
-	Priority          apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *MXRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mxRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r MXRecord) implementsDNSRecord() {}
-
-// Record type.
-type MXRecordType string
-
-const (
-	MXRecordTypeMX MXRecordType = "MX"
-)
-
-func (r MXRecordType) IsKnown() bool {
-	switch r {
-	case MXRecordTypeMX:
-		return true
-	}
-	return false
-}
-
-type MXRecordParam struct {
-	// A valid mail server hostname.
-	Content param.Field[string] `json:"content,required" format:"hostname"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority param.Field[float64] `json:"priority,required"`
-	// Record type.
-	Type param.Field[MXRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r MXRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r MXRecordParam) implementsDNSRecordUnionParam() {}
-
-type NAPTRRecord struct {
-	// Components of a NAPTR record.
-	Data NAPTRRecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type NAPTRRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted NAPTR content. See 'data' to set NAPTR properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL             `json:"ttl"`
-	JSON naptrRecordJSON `json:"-"`
-}
-
-// naptrRecordJSON contains the JSON metadata for the struct [NAPTRRecord]
-type naptrRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *NAPTRRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r naptrRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r NAPTRRecord) implementsDNSRecord() {}
-
-// Components of a NAPTR record.
-type NAPTRRecordData struct {
-	// Flags.
-	Flags string `json:"flags"`
-	// Order.
-	Order float64 `json:"order"`
-	// Preference.
-	Preference float64 `json:"preference"`
-	// Regex.
-	Regex string `json:"regex"`
-	// Replacement.
-	Replacement string `json:"replacement"`
-	// Service.
-	Service string              `json:"service"`
-	JSON    naptrRecordDataJSON `json:"-"`
-}
-
-// naptrRecordDataJSON contains the JSON metadata for the struct [NAPTRRecordData]
-type naptrRecordDataJSON struct {
-	Flags       apijson.Field
-	Order       apijson.Field
-	Preference  apijson.Field
-	Regex       apijson.Field
-	Replacement apijson.Field
-	Service     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NAPTRRecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r naptrRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type NAPTRRecordType string
-
-const (
-	NAPTRRecordTypeNAPTR NAPTRRecordType = "NAPTR"
-)
-
-func (r NAPTRRecordType) IsKnown() bool {
-	switch r {
-	case NAPTRRecordTypeNAPTR:
-		return true
-	}
-	return false
-}
-
-type NAPTRRecordParam struct {
-	// Components of a NAPTR record.
-	Data param.Field[NAPTRRecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[NAPTRRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r NAPTRRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r NAPTRRecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a NAPTR record.
-type NAPTRRecordDataParam struct {
-	// Flags.
-	Flags param.Field[string] `json:"flags"`
-	// Order.
-	Order param.Field[float64] `json:"order"`
-	// Preference.
-	Preference param.Field[float64] `json:"preference"`
-	// Regex.
-	Regex param.Field[string] `json:"regex"`
-	// Replacement.
-	Replacement param.Field[string] `json:"replacement"`
-	// Service.
-	Service param.Field[string] `json:"service"`
-}
-
-func (r NAPTRRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type NSRecord struct {
-	// A valid name server host name.
-	Content string `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type NSRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL          `json:"ttl"`
-	JSON nsRecordJSON `json:"-"`
-}
-
-// nsRecordJSON contains the JSON metadata for the struct [NSRecord]
-type nsRecordJSON struct {
-	Content           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *NSRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r nsRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r NSRecord) implementsDNSRecord() {}
-
-// Record type.
-type NSRecordType string
-
-const (
-	NSRecordTypeNS NSRecordType = "NS"
-)
-
-func (r NSRecordType) IsKnown() bool {
-	switch r {
-	case NSRecordTypeNS:
-		return true
-	}
-	return false
-}
-
-type NSRecordParam struct {
-	// A valid name server host name.
-	Content param.Field[string] `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[NSRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r NSRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r NSRecordParam) implementsDNSRecordUnionParam() {}
-
-type PTRRecord struct {
-	// Domain name pointing to the address.
-	Content string `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type PTRRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
-	JSON ptrRecordJSON `json:"-"`
-}
-
-// ptrRecordJSON contains the JSON metadata for the struct [PTRRecord]
-type ptrRecordJSON struct {
-	Content           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *PTRRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ptrRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PTRRecord) implementsDNSRecord() {}
-
-// Record type.
-type PTRRecordType string
-
-const (
-	PTRRecordTypePTR PTRRecordType = "PTR"
-)
-
-func (r PTRRecordType) IsKnown() bool {
-	switch r {
-	case PTRRecordTypePTR:
-		return true
-	}
-	return false
-}
-
-type PTRRecordParam struct {
-	// Domain name pointing to the address.
-	Content param.Field[string] `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[PTRRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PTRRecordParam) implementsDNSRecordUnionParam() {}
-
-type Record struct {
-	// A valid IPv4 address.
-	Content string `json:"content" format:"ipv4"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Record type.
-	Type RecordType `json:"type,required"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Identifier
-	ID string `json:"id"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// This field can have the runtime type of [[]RecordTags].
-	Tags interface{} `json:"tags,required"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
-	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
-	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
-	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
-	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
-	Data interface{} `json:"data,required"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority float64    `json:"priority"`
-	JSON     recordJSON `json:"-"`
-	union    RecordUnion
-}
-
-// recordJSON contains the JSON metadata for the struct [Record]
-type recordJSON struct {
-	Content           apijson.Field
-	Name              apijson.Field
-	Proxied           apijson.Field
-	Type              apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	CreatedOn         apijson.Field
-	ID                apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	Data              apijson.Field
-	Priority          apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r recordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *Record) UnmarshalJSON(data []byte) (err error) {
-	*r = Record{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a [RecordUnion] interface which you can cast to the specific
-// types for more type safety.
-//
-// Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
-// [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
-// [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordOpenpgpkey], [dns.PTRRecord],
-// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
-// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
-func (r Record) AsUnion() RecordUnion {
-	return r.union
-}
-
-// Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
-// [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
-// [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.RecordOpenpgpkey], [dns.PTRRecord], [dns.SMIMEARecord],
-// [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord], [dns.TLSARecord],
-// [dns.TXTRecord] or [dns.URIRecord].
-type RecordUnion interface {
-	implementsDNSRecord()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RecordUnion)(nil)).Elem(),
-		"type",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ARecord{}),
-			DiscriminatorValue: "A",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(AAAARecord{}),
-			DiscriminatorValue: "AAAA",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(CAARecord{}),
-			DiscriminatorValue: "CAA",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(CERTRecord{}),
-			DiscriminatorValue: "CERT",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(CNAMERecord{}),
-			DiscriminatorValue: "CNAME",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DNSKEYRecord{}),
-			DiscriminatorValue: "DNSKEY",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(DSRecord{}),
-			DiscriminatorValue: "DS",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(HTTPSRecord{}),
-			DiscriminatorValue: "HTTPS",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(LOCRecord{}),
-			DiscriminatorValue: "LOC",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(MXRecord{}),
-			DiscriminatorValue: "MX",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(NAPTRRecord{}),
-			DiscriminatorValue: "NAPTR",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(NSRecord{}),
-			DiscriminatorValue: "NS",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RecordOpenpgpkey{}),
-			DiscriminatorValue: "OPENPGPKEY",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PTRRecord{}),
-			DiscriminatorValue: "PTR",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SMIMEARecord{}),
-			DiscriminatorValue: "SMIMEA",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SRVRecord{}),
-			DiscriminatorValue: "SRV",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SSHFPRecord{}),
-			DiscriminatorValue: "SSHFP",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(SVCBRecord{}),
-			DiscriminatorValue: "SVCB",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(TLSARecord{}),
-			DiscriminatorValue: "TLSA",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(TXTRecord{}),
-			DiscriminatorValue: "TXT",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(URIRecord{}),
-			DiscriminatorValue: "URI",
-		},
-	)
-}
-
-type RecordOpenpgpkey struct {
-	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
-	Content string `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type RecordOpenpgpkeyType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL                  `json:"ttl"`
-	JSON recordOpenpgpkeyJSON `json:"-"`
-}
-
-// recordOpenpgpkeyJSON contains the JSON metadata for the struct
-// [RecordOpenpgpkey]
-type recordOpenpgpkeyJSON struct {
-	Content           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RecordOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordOpenpgpkeyJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r RecordOpenpgpkey) implementsDNSRecord() {}
-
-// Record type.
-type RecordOpenpgpkeyType string
-
-const (
-	RecordOpenpgpkeyTypeOpenpgpkey RecordOpenpgpkeyType = "OPENPGPKEY"
-)
-
-func (r RecordOpenpgpkeyType) IsKnown() bool {
-	switch r {
-	case RecordOpenpgpkeyTypeOpenpgpkey:
-		return true
-	}
-	return false
-}
-
-// Record type.
-type RecordType string
-
-const (
-	RecordTypeA          RecordType = "A"
-	RecordTypeAAAA       RecordType = "AAAA"
-	RecordTypeCAA        RecordType = "CAA"
-	RecordTypeCERT       RecordType = "CERT"
-	RecordTypeCNAME      RecordType = "CNAME"
-	RecordTypeDNSKEY     RecordType = "DNSKEY"
-	RecordTypeDS         RecordType = "DS"
-	RecordTypeHTTPS      RecordType = "HTTPS"
-	RecordTypeLOC        RecordType = "LOC"
-	RecordTypeMX         RecordType = "MX"
-	RecordTypeNAPTR      RecordType = "NAPTR"
-	RecordTypeNS         RecordType = "NS"
-	RecordTypeOpenpgpkey RecordType = "OPENPGPKEY"
-	RecordTypePTR        RecordType = "PTR"
-	RecordTypeSMIMEA     RecordType = "SMIMEA"
-	RecordTypeSRV        RecordType = "SRV"
-	RecordTypeSSHFP      RecordType = "SSHFP"
-	RecordTypeSVCB       RecordType = "SVCB"
-	RecordTypeTLSA       RecordType = "TLSA"
-	RecordTypeTXT        RecordType = "TXT"
-	RecordTypeURI        RecordType = "URI"
-)
-
-func (r RecordType) IsKnown() bool {
-	switch r {
-	case RecordTypeA, RecordTypeAAAA, RecordTypeCAA, RecordTypeCERT, RecordTypeCNAME, RecordTypeDNSKEY, RecordTypeDS, RecordTypeHTTPS, RecordTypeLOC, RecordTypeMX, RecordTypeNAPTR, RecordTypeNS, RecordTypeOpenpgpkey, RecordTypePTR, RecordTypeSMIMEA, RecordTypeSRV, RecordTypeSSHFP, RecordTypeSVCB, RecordTypeTLSA, RecordTypeTXT, RecordTypeURI:
-		return true
-	}
-	return false
-}
-
 type RecordParam struct {
-	// A valid IPv4 address.
-	Content param.Field[string] `json:"content" format:"ipv4"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Record type.
-	Type param.Field[RecordType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string] `json:"comment"`
-	// Identifier
-	ID   param.Field[string]      `json:"id"`
-	Tags param.Field[interface{}] `json:"tags,required"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `json:"name"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied param.Field[bool] `json:"proxied"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL  param.Field[TTL]         `json:"ttl"`
-	Data param.Field[interface{}] `json:"data,required"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority param.Field[float64] `json:"priority"`
+	TTL param.Field[TTL] `json:"ttl"`
 }
 
 func (r RecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RecordParam) implementsDNSRecordUnionParam() {}
-
-// Satisfied by [dns.ARecordParam], [dns.AAAARecordParam], [dns.CAARecordParam],
-// [dns.CERTRecordParam], [dns.CNAMERecordParam], [dns.DNSKEYRecordParam],
-// [dns.DSRecordParam], [dns.HTTPSRecordParam], [dns.LOCRecordParam],
-// [dns.MXRecordParam], [dns.NAPTRRecordParam], [dns.NSRecordParam],
-// [dns.RecordOpenpgpkeyParam], [dns.PTRRecordParam], [dns.SMIMEARecordParam],
-// [dns.SRVRecordParam], [dns.SSHFPRecordParam], [dns.SVCBRecordParam],
-// [dns.TLSARecordParam], [dns.TXTRecordParam], [dns.URIRecordParam],
-// [RecordParam].
-type RecordUnionParam interface {
-	implementsDNSRecordUnionParam()
-}
-
-type RecordOpenpgpkeyParam struct {
-	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
-	Content param.Field[string] `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[RecordOpenpgpkeyType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r RecordOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RecordOpenpgpkeyParam) implementsDNSRecordUnionParam() {}
-
-// Extra Cloudflare-specific information about the record.
-type RecordMetadata struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded bool `json:"auto_added"`
-	// Where the record originated from.
-	Source string             `json:"source"`
-	JSON   recordMetadataJSON `json:"-"`
-}
-
-// recordMetadataJSON contains the JSON metadata for the struct [RecordMetadata]
-type recordMetadataJSON struct {
-	AutoAdded   apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordMetadataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Extra Cloudflare-specific information about the record.
-type RecordMetadataParam struct {
-	// Will exist if Cloudflare automatically added this DNS record during initial
-	// setup.
-	AutoAdded param.Field[bool] `json:"auto_added"`
-	// Where the record originated from.
-	Source param.Field[string] `json:"source"`
-}
-
-func (r RecordMetadataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2508,796 +300,6 @@ type RecordTags = string
 
 type RecordTagsParam = string
 
-type SMIMEARecord struct {
-	// Components of a SMIMEA record.
-	Data SMIMEARecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type SMIMEARecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted SMIMEA content. See 'data' to set SMIMEA properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL              `json:"ttl"`
-	JSON smimeaRecordJSON `json:"-"`
-}
-
-// smimeaRecordJSON contains the JSON metadata for the struct [SMIMEARecord]
-type smimeaRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SMIMEARecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r smimeaRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SMIMEARecord) implementsDNSRecord() {}
-
-// Components of a SMIMEA record.
-type SMIMEARecordData struct {
-	// Certificate.
-	Certificate string `json:"certificate"`
-	// Matching Type.
-	MatchingType float64 `json:"matching_type"`
-	// Selector.
-	Selector float64 `json:"selector"`
-	// Usage.
-	Usage float64              `json:"usage"`
-	JSON  smimeaRecordDataJSON `json:"-"`
-}
-
-// smimeaRecordDataJSON contains the JSON metadata for the struct
-// [SMIMEARecordData]
-type smimeaRecordDataJSON struct {
-	Certificate  apijson.Field
-	MatchingType apijson.Field
-	Selector     apijson.Field
-	Usage        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *SMIMEARecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r smimeaRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type SMIMEARecordType string
-
-const (
-	SMIMEARecordTypeSMIMEA SMIMEARecordType = "SMIMEA"
-)
-
-func (r SMIMEARecordType) IsKnown() bool {
-	switch r {
-	case SMIMEARecordTypeSMIMEA:
-		return true
-	}
-	return false
-}
-
-type SMIMEARecordParam struct {
-	// Components of a SMIMEA record.
-	Data param.Field[SMIMEARecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[SMIMEARecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r SMIMEARecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SMIMEARecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a SMIMEA record.
-type SMIMEARecordDataParam struct {
-	// Certificate.
-	Certificate param.Field[string] `json:"certificate"`
-	// Matching Type.
-	MatchingType param.Field[float64] `json:"matching_type"`
-	// Selector.
-	Selector param.Field[float64] `json:"selector"`
-	// Usage.
-	Usage param.Field[float64] `json:"usage"`
-}
-
-func (r SMIMEARecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SRVRecord struct {
-	// Components of a SRV record.
-	Data SRVRecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode. For SRV records, the first
-	// label is normally a service and the second a protocol name, each starting with
-	// an underscore.
-	Name string `json:"name,required"`
-	// Record type.
-	Type SRVRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Priority, weight, port, and SRV target. See 'data' for setting the individual
-	// component values.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
-	JSON srvRecordJSON `json:"-"`
-}
-
-// srvRecordJSON contains the JSON metadata for the struct [SRVRecord]
-type srvRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SRVRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r srvRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SRVRecord) implementsDNSRecord() {}
-
-// Components of a SRV record.
-type SRVRecordData struct {
-	// A valid hostname. Deprecated in favor of the regular 'name' outside the data
-	// map. This data map field represents the remainder of the full 'name' after the
-	// service and protocol.
-	Name string `json:"name" format:"hostname"`
-	// The port of the service.
-	Port float64 `json:"port"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority float64 `json:"priority"`
-	// A valid protocol, prefixed with an underscore. Deprecated in favor of the
-	// regular 'name' outside the data map. This data map field normally represents the
-	// second label of that 'name'.
-	Proto string `json:"proto"`
-	// A service type, prefixed with an underscore. Deprecated in favor of the regular
-	// 'name' outside the data map. This data map field normally represents the first
-	// label of that 'name'.
-	Service string `json:"service"`
-	// A valid hostname.
-	Target string `json:"target" format:"hostname"`
-	// The record weight.
-	Weight float64           `json:"weight"`
-	JSON   srvRecordDataJSON `json:"-"`
-}
-
-// srvRecordDataJSON contains the JSON metadata for the struct [SRVRecordData]
-type srvRecordDataJSON struct {
-	Name        apijson.Field
-	Port        apijson.Field
-	Priority    apijson.Field
-	Proto       apijson.Field
-	Service     apijson.Field
-	Target      apijson.Field
-	Weight      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SRVRecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r srvRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type SRVRecordType string
-
-const (
-	SRVRecordTypeSRV SRVRecordType = "SRV"
-)
-
-func (r SRVRecordType) IsKnown() bool {
-	switch r {
-	case SRVRecordTypeSRV:
-		return true
-	}
-	return false
-}
-
-type SRVRecordParam struct {
-	// Components of a SRV record.
-	Data param.Field[SRVRecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode. For SRV records, the first
-	// label is normally a service and the second a protocol name, each starting with
-	// an underscore.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[SRVRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r SRVRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SRVRecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a SRV record.
-type SRVRecordDataParam struct {
-	// A valid hostname. Deprecated in favor of the regular 'name' outside the data
-	// map. This data map field represents the remainder of the full 'name' after the
-	// service and protocol.
-	Name param.Field[string] `json:"name" format:"hostname"`
-	// The port of the service.
-	Port param.Field[float64] `json:"port"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority param.Field[float64] `json:"priority"`
-	// A valid protocol, prefixed with an underscore. Deprecated in favor of the
-	// regular 'name' outside the data map. This data map field normally represents the
-	// second label of that 'name'.
-	Proto param.Field[string] `json:"proto"`
-	// A service type, prefixed with an underscore. Deprecated in favor of the regular
-	// 'name' outside the data map. This data map field normally represents the first
-	// label of that 'name'.
-	Service param.Field[string] `json:"service"`
-	// A valid hostname.
-	Target param.Field[string] `json:"target" format:"hostname"`
-	// The record weight.
-	Weight param.Field[float64] `json:"weight"`
-}
-
-func (r SRVRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SSHFPRecord struct {
-	// Components of a SSHFP record.
-	Data SSHFPRecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type SSHFPRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted SSHFP content. See 'data' to set SSHFP properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL             `json:"ttl"`
-	JSON sshfpRecordJSON `json:"-"`
-}
-
-// sshfpRecordJSON contains the JSON metadata for the struct [SSHFPRecord]
-type sshfpRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SSHFPRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sshfpRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SSHFPRecord) implementsDNSRecord() {}
-
-// Components of a SSHFP record.
-type SSHFPRecordData struct {
-	// algorithm.
-	Algorithm float64 `json:"algorithm"`
-	// fingerprint.
-	Fingerprint string `json:"fingerprint"`
-	// type.
-	Type float64             `json:"type"`
-	JSON sshfpRecordDataJSON `json:"-"`
-}
-
-// sshfpRecordDataJSON contains the JSON metadata for the struct [SSHFPRecordData]
-type sshfpRecordDataJSON struct {
-	Algorithm   apijson.Field
-	Fingerprint apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSHFPRecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sshfpRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type SSHFPRecordType string
-
-const (
-	SSHFPRecordTypeSSHFP SSHFPRecordType = "SSHFP"
-)
-
-func (r SSHFPRecordType) IsKnown() bool {
-	switch r {
-	case SSHFPRecordTypeSSHFP:
-		return true
-	}
-	return false
-}
-
-type SSHFPRecordParam struct {
-	// Components of a SSHFP record.
-	Data param.Field[SSHFPRecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[SSHFPRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r SSHFPRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SSHFPRecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a SSHFP record.
-type SSHFPRecordDataParam struct {
-	// algorithm.
-	Algorithm param.Field[float64] `json:"algorithm"`
-	// fingerprint.
-	Fingerprint param.Field[string] `json:"fingerprint"`
-	// type.
-	Type param.Field[float64] `json:"type"`
-}
-
-func (r SSHFPRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SVCBRecord struct {
-	// Components of a SVCB record.
-	Data SVCBRecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type SVCBRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted SVCB content. See 'data' to set SVCB properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL            `json:"ttl"`
-	JSON svcbRecordJSON `json:"-"`
-}
-
-// svcbRecordJSON contains the JSON metadata for the struct [SVCBRecord]
-type svcbRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SVCBRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r svcbRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SVCBRecord) implementsDNSRecord() {}
-
-// Components of a SVCB record.
-type SVCBRecordData struct {
-	// priority.
-	Priority float64 `json:"priority"`
-	// target.
-	Target string `json:"target"`
-	// value.
-	Value string             `json:"value"`
-	JSON  svcbRecordDataJSON `json:"-"`
-}
-
-// svcbRecordDataJSON contains the JSON metadata for the struct [SVCBRecordData]
-type svcbRecordDataJSON struct {
-	Priority    apijson.Field
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SVCBRecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r svcbRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type SVCBRecordType string
-
-const (
-	SVCBRecordTypeSVCB SVCBRecordType = "SVCB"
-)
-
-func (r SVCBRecordType) IsKnown() bool {
-	switch r {
-	case SVCBRecordTypeSVCB:
-		return true
-	}
-	return false
-}
-
-type SVCBRecordParam struct {
-	// Components of a SVCB record.
-	Data param.Field[SVCBRecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[SVCBRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r SVCBRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SVCBRecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a SVCB record.
-type SVCBRecordDataParam struct {
-	// priority.
-	Priority param.Field[float64] `json:"priority"`
-	// target.
-	Target param.Field[string] `json:"target"`
-	// value.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r SVCBRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type TLSARecord struct {
-	// Components of a TLSA record.
-	Data TLSARecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type TLSARecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted TLSA content. See 'data' to set TLSA properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL            `json:"ttl"`
-	JSON tlsaRecordJSON `json:"-"`
-}
-
-// tlsaRecordJSON contains the JSON metadata for the struct [TLSARecord]
-type tlsaRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *TLSARecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tlsaRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r TLSARecord) implementsDNSRecord() {}
-
-// Components of a TLSA record.
-type TLSARecordData struct {
-	// certificate.
-	Certificate string `json:"certificate"`
-	// Matching Type.
-	MatchingType float64 `json:"matching_type"`
-	// Selector.
-	Selector float64 `json:"selector"`
-	// Usage.
-	Usage float64            `json:"usage"`
-	JSON  tlsaRecordDataJSON `json:"-"`
-}
-
-// tlsaRecordDataJSON contains the JSON metadata for the struct [TLSARecordData]
-type tlsaRecordDataJSON struct {
-	Certificate  apijson.Field
-	MatchingType apijson.Field
-	Selector     apijson.Field
-	Usage        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *TLSARecordData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tlsaRecordDataJSON) RawJSON() string {
-	return r.raw
-}
-
-// Record type.
-type TLSARecordType string
-
-const (
-	TLSARecordTypeTLSA TLSARecordType = "TLSA"
-)
-
-func (r TLSARecordType) IsKnown() bool {
-	switch r {
-	case TLSARecordTypeTLSA:
-		return true
-	}
-	return false
-}
-
-type TLSARecordParam struct {
-	// Components of a TLSA record.
-	Data param.Field[TLSARecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[TLSARecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r TLSARecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r TLSARecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a TLSA record.
-type TLSARecordDataParam struct {
-	// certificate.
-	Certificate param.Field[string] `json:"certificate"`
-	// Matching Type.
-	MatchingType param.Field[float64] `json:"matching_type"`
-	// Selector.
-	Selector param.Field[float64] `json:"selector"`
-	// Usage.
-	Usage param.Field[float64] `json:"usage"`
-}
-
-func (r TLSARecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type TTL float64
 
 const (
@@ -3312,51 +314,50 @@ func (r TTL) IsKnown() bool {
 	return false
 }
 
-type TXTRecord struct {
-	// Text content for the record.
-	Content string `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Record type.
-	Type TXTRecordType `json:"type,required"`
+type RecordNewResponse struct {
 	// Identifier
-	ID string `json:"id"`
+	ID string `json:"id,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment string `json:"comment"`
+	Comment string `json:"comment,required"`
 	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
+	CommentModifiedOn time.Time `json:"comment_modified_on,required" format:"date-time"`
 	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
+	Meta RecordNewResponseMeta `json:"meta,required"`
 	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name string `json:"name,required"`
 	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
+	Proxiable bool `json:"proxiable,required"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied bool `json:"proxied,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
+	Tags []RecordTags `json:"tags,required"`
 	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
+	TagsModifiedOn time.Time `json:"tags_modified_on,required" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
-	JSON txtRecordJSON `json:"-"`
+	TTL  TTL                   `json:"ttl,required"`
+	JSON recordNewResponseJSON `json:"-"`
 }
 
-// txtRecordJSON contains the JSON metadata for the struct [TXTRecord]
-type txtRecordJSON struct {
-	Content           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
+// recordNewResponseJSON contains the JSON metadata for the struct
+// [RecordNewResponse]
+type recordNewResponseJSON struct {
 	ID                apijson.Field
 	Comment           apijson.Field
 	CommentModifiedOn apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
 	ModifiedOn        apijson.Field
+	Name              apijson.Field
 	Proxiable         apijson.Field
+	Proxied           apijson.Field
 	Tags              apijson.Field
 	TagsModifiedOn    apijson.Field
 	TTL               apijson.Field
@@ -3364,205 +365,202 @@ type txtRecordJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *TXTRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r txtRecordJSON) RawJSON() string {
+func (r recordNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TXTRecord) implementsDNSRecord() {}
-
-// Record type.
-type TXTRecordType string
-
-const (
-	TXTRecordTypeTXT TXTRecordType = "TXT"
-)
-
-func (r TXTRecordType) IsKnown() bool {
-	switch r {
-	case TXTRecordTypeTXT:
-		return true
-	}
-	return false
+// Extra Cloudflare-specific information about the record.
+type RecordNewResponseMeta struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool                      `json:"auto_added"`
+	JSON      recordNewResponseMetaJSON `json:"-"`
 }
 
-type TXTRecordParam struct {
-	// Text content for the record.
-	Content param.Field[string] `json:"content,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Record type.
-	Type param.Field[TXTRecordType] `json:"type,required"`
-	// Identifier
-	ID param.Field[string] `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
-}
-
-func (r TXTRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r TXTRecordParam) implementsDNSRecordUnionParam() {}
-
-type URIRecord struct {
-	// Components of a URI record.
-	Data URIRecordData `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name,required"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority float64 `json:"priority,required"`
-	// Record type.
-	Type URIRecordType `json:"type,required"`
-	// Identifier
-	ID string `json:"id"`
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
-	// When the record comment was last modified.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// Formatted URI content. See 'data' to set URI properties.
-	Content string `json:"content"`
-	// When the record was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Extra Cloudflare-specific information about the record.
-	Meta RecordMetadata `json:"meta"`
-	// When the record was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Whether the record can be proxied by Cloudflare or not.
-	Proxiable bool `json:"proxiable"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// When the record tags were last modified.
-	TagsModifiedOn time.Time `json:"tags_modified_on" format:"date-time"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL  TTL           `json:"ttl"`
-	JSON uriRecordJSON `json:"-"`
-}
-
-// uriRecordJSON contains the JSON metadata for the struct [URIRecord]
-type uriRecordJSON struct {
-	Data              apijson.Field
-	Name              apijson.Field
-	Priority          apijson.Field
-	Type              apijson.Field
-	ID                apijson.Field
-	Comment           apijson.Field
-	CommentModifiedOn apijson.Field
-	Content           apijson.Field
-	CreatedOn         apijson.Field
-	Meta              apijson.Field
-	ModifiedOn        apijson.Field
-	Proxiable         apijson.Field
-	Tags              apijson.Field
-	TagsModifiedOn    apijson.Field
-	TTL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *URIRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r uriRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r URIRecord) implementsDNSRecord() {}
-
-// Components of a URI record.
-type URIRecordData struct {
-	// The record content.
-	Target string `json:"target"`
-	// The record weight.
-	Weight float64           `json:"weight"`
-	JSON   uriRecordDataJSON `json:"-"`
-}
-
-// uriRecordDataJSON contains the JSON metadata for the struct [URIRecordData]
-type uriRecordDataJSON struct {
-	Target      apijson.Field
-	Weight      apijson.Field
+// recordNewResponseMetaJSON contains the JSON metadata for the struct
+// [RecordNewResponseMeta]
+type recordNewResponseMetaJSON struct {
+	AutoAdded   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URIRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordNewResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r uriRecordDataJSON) RawJSON() string {
+func (r recordNewResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
-// Record type.
-type URIRecordType string
-
-const (
-	URIRecordTypeURI URIRecordType = "URI"
-)
-
-func (r URIRecordType) IsKnown() bool {
-	switch r {
-	case URIRecordTypeURI:
-		return true
-	}
-	return false
-}
-
-type URIRecordParam struct {
-	// Components of a URI record.
-	Data param.Field[URIRecordDataParam] `json:"data,required"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name,required"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority param.Field[float64] `json:"priority,required"`
-	// Record type.
-	Type param.Field[URIRecordType] `json:"type,required"`
+type RecordUpdateResponse struct {
 	// Identifier
-	ID param.Field[string] `json:"id"`
+	ID string `json:"id,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment param.Field[string] `json:"comment"`
+	Comment string `json:"comment,required"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on,required" format:"date-time"`
+	// When the record was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// Extra Cloudflare-specific information about the record.
+	Meta RecordUpdateResponseMeta `json:"meta,required"`
+	// When the record was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name string `json:"name,required"`
+	// Whether the record can be proxied by Cloudflare or not.
+	Proxiable bool `json:"proxiable,required"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied bool `json:"proxied,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
+	Tags []RecordTags `json:"tags,required"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on,required" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
+	TTL  TTL                      `json:"ttl,required"`
+	JSON recordUpdateResponseJSON `json:"-"`
 }
 
-func (r URIRecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// recordUpdateResponseJSON contains the JSON metadata for the struct
+// [RecordUpdateResponse]
+type recordUpdateResponseJSON struct {
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Name              apijson.Field
+	Proxiable         apijson.Field
+	Proxied           apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
-func (r URIRecordParam) implementsDNSRecordUnionParam() {}
-
-// Components of a URI record.
-type URIRecordDataParam struct {
-	// The record content.
-	Target param.Field[string] `json:"target"`
-	// The record weight.
-	Weight param.Field[float64] `json:"weight"`
+func (r *RecordUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r URIRecordDataParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r recordUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Extra Cloudflare-specific information about the record.
+type RecordUpdateResponseMeta struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool                         `json:"auto_added"`
+	JSON      recordUpdateResponseMetaJSON `json:"-"`
+}
+
+// recordUpdateResponseMetaJSON contains the JSON metadata for the struct
+// [RecordUpdateResponseMeta]
+type recordUpdateResponseMetaJSON struct {
+	AutoAdded   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordListResponse struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment string `json:"comment,required"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on,required" format:"date-time"`
+	// When the record was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// Extra Cloudflare-specific information about the record.
+	Meta RecordListResponseMeta `json:"meta,required"`
+	// When the record was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name string `json:"name,required"`
+	// Whether the record can be proxied by Cloudflare or not.
+	Proxiable bool `json:"proxiable,required"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied bool `json:"proxied,required"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags []RecordTags `json:"tags,required"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on,required" format:"date-time"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL  TTL                    `json:"ttl,required"`
+	JSON recordListResponseJSON `json:"-"`
+}
+
+// recordListResponseJSON contains the JSON metadata for the struct
+// [RecordListResponse]
+type recordListResponseJSON struct {
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Name              apijson.Field
+	Proxiable         apijson.Field
+	Proxied           apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *RecordListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Extra Cloudflare-specific information about the record.
+type RecordListResponseMeta struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool                       `json:"auto_added"`
+	JSON      recordListResponseMetaJSON `json:"-"`
+}
+
+// recordListResponseMetaJSON contains the JSON metadata for the struct
+// [RecordListResponseMeta]
+type recordListResponseMetaJSON struct {
+	AutoAdded   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordListResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordListResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RecordDeleteResponse struct {
@@ -3584,6 +582,172 @@ func (r *RecordDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordEditResponse struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment string `json:"comment,required"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on,required" format:"date-time"`
+	// When the record was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// Extra Cloudflare-specific information about the record.
+	Meta RecordEditResponseMeta `json:"meta,required"`
+	// When the record was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name string `json:"name,required"`
+	// Whether the record can be proxied by Cloudflare or not.
+	Proxiable bool `json:"proxiable,required"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied bool `json:"proxied,required"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags []RecordTags `json:"tags,required"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on,required" format:"date-time"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL  TTL                    `json:"ttl,required"`
+	JSON recordEditResponseJSON `json:"-"`
+}
+
+// recordEditResponseJSON contains the JSON metadata for the struct
+// [RecordEditResponse]
+type recordEditResponseJSON struct {
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Name              apijson.Field
+	Proxiable         apijson.Field
+	Proxied           apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *RecordEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Extra Cloudflare-specific information about the record.
+type RecordEditResponseMeta struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool                       `json:"auto_added"`
+	JSON      recordEditResponseMetaJSON `json:"-"`
+}
+
+// recordEditResponseMetaJSON contains the JSON metadata for the struct
+// [RecordEditResponseMeta]
+type recordEditResponseMetaJSON struct {
+	AutoAdded   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordEditResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type RecordGetResponse struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// Comments or notes about the DNS record. This field has no effect on DNS
+	// responses.
+	Comment string `json:"comment,required"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on,required" format:"date-time"`
+	// When the record was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// Extra Cloudflare-specific information about the record.
+	Meta RecordGetResponseMeta `json:"meta,required"`
+	// When the record was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name string `json:"name,required"`
+	// Whether the record can be proxied by Cloudflare or not.
+	Proxiable bool `json:"proxiable,required"`
+	// Whether the record is receiving the performance and security benefits of
+	// Cloudflare.
+	Proxied bool `json:"proxied,required"`
+	// Custom tags for the DNS record. This field has no effect on DNS responses.
+	Tags []RecordTags `json:"tags,required"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on,required" format:"date-time"`
+	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
+	// Value must be between 60 and 86400, with the minimum reduced to 30 for
+	// Enterprise zones.
+	TTL  TTL                   `json:"ttl,required"`
+	JSON recordGetResponseJSON `json:"-"`
+}
+
+// recordGetResponseJSON contains the JSON metadata for the struct
+// [RecordGetResponse]
+type recordGetResponseJSON struct {
+	ID                apijson.Field
+	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
+	CreatedOn         apijson.Field
+	Meta              apijson.Field
+	ModifiedOn        apijson.Field
+	Name              apijson.Field
+	Proxiable         apijson.Field
+	Proxied           apijson.Field
+	Tags              apijson.Field
+	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *RecordGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Extra Cloudflare-specific information about the record.
+type RecordGetResponseMeta struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool                      `json:"auto_added"`
+	JSON      recordGetResponseMetaJSON `json:"-"`
+}
+
+// recordGetResponseMetaJSON contains the JSON metadata for the struct
+// [RecordGetResponseMeta]
+type recordGetResponseMetaJSON struct {
+	AutoAdded   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -3640,7 +804,7 @@ func (r recordScanResponseJSON) RawJSON() string {
 type RecordNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Record RecordUnionParam    `json:"record,required"`
+	Record RecordParam         `json:"record,required"`
 }
 
 func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
@@ -3652,7 +816,7 @@ type RecordNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RecordNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  Record                           `json:"result"`
+	Result  RecordNewResponse                `json:"result"`
 	JSON    recordNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3693,7 +857,7 @@ func (r RecordNewResponseEnvelopeSuccess) IsKnown() bool {
 type RecordUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Record RecordUnionParam    `json:"record,required"`
+	Record RecordParam         `json:"record,required"`
 }
 
 func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -3705,7 +869,7 @@ type RecordUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RecordUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Record                              `json:"result"`
+	Result  RecordUpdateResponse                `json:"result"`
 	JSON    recordUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -3969,7 +1133,7 @@ func (r recordDeleteResponseEnvelopeJSON) RawJSON() string {
 type RecordEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Record RecordUnionParam    `json:"record,required"`
+	Record RecordParam         `json:"record,required"`
 }
 
 func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
@@ -3981,7 +1145,7 @@ type RecordEditResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RecordEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  Record                            `json:"result"`
+	Result  RecordEditResponse                `json:"result"`
 	JSON    recordEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4034,7 +1198,7 @@ type RecordGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RecordGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  Record                           `json:"result"`
+	Result  RecordGetResponse                `json:"result"`
 	JSON    recordGetResponseEnvelopeJSON    `json:"-"`
 }
 

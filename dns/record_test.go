@@ -31,13 +31,10 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.DNS.Records.New(context.TODO(), dns.RecordNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Record: dns.ARecordParam{
-			Content: cloudflare.F("198.51.100.4"),
+		Record: dns.RecordParam{
 			Name:    cloudflare.F("example.com"),
-			Type:    cloudflare.F(dns.ARecordTypeA),
-			ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Comment: cloudflare.F("Domain verification record"),
-			Proxied: cloudflare.F(false),
+			Proxied: cloudflare.F(true),
 			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
 			TTL:     cloudflare.F(dns.TTL1),
 		},
@@ -70,13 +67,10 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		dns.RecordUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Record: dns.ARecordParam{
-				Content: cloudflare.F("198.51.100.4"),
+			Record: dns.RecordParam{
 				Name:    cloudflare.F("example.com"),
-				Type:    cloudflare.F(dns.ARecordTypeA),
-				ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 				Comment: cloudflare.F("Domain verification record"),
-				Proxied: cloudflare.F(false),
+				Proxied: cloudflare.F(true),
 				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
 				TTL:     cloudflare.F(dns.TTL1),
 			},
@@ -121,7 +115,7 @@ func TestRecordListWithOptionalParams(t *testing.T) {
 		Order:     cloudflare.F(dns.RecordListParamsOrderType),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
-		Proxied:   cloudflare.F(false),
+		Proxied:   cloudflare.F(true),
 		Search:    cloudflare.F("www.cloudflare.com"),
 		Tag: cloudflare.F(dns.RecordListParamsTag{
 			Absent:     cloudflare.F("important"),
@@ -191,13 +185,10 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		dns.RecordEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Record: dns.ARecordParam{
-				Content: cloudflare.F("198.51.100.4"),
-				Name:    cloudflare.F("example.com"),
-				Type:    cloudflare.F(dns.ARecordTypeA),
-				ID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Record: dns.RecordParam{
 				Comment: cloudflare.F("Domain verification record"),
-				Proxied: cloudflare.F(false),
+				Name:    cloudflare.F("example.com"),
+				Proxied: cloudflare.F(true),
 				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
 				TTL:     cloudflare.F(dns.TTL1),
 			},
