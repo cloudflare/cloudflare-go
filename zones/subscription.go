@@ -87,9 +87,8 @@ func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts .
 	return
 }
 
-// Union satisfied by
-// [zones.SubscriptionNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [zones.SubscriptionNewResponseUnknown] or
+// [shared.UnionString].
 type SubscriptionNewResponseUnion interface {
 	ImplementsZonesSubscriptionNewResponseUnion()
 }
@@ -105,9 +104,8 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [zones.SubscriptionUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [zones.SubscriptionUpdateResponseUnknown] or
+// [shared.UnionString].
 type SubscriptionUpdateResponseUnion interface {
 	ImplementsZonesSubscriptionUpdateResponseUnion()
 }
@@ -123,9 +121,8 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [zones.SubscriptionGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [zones.SubscriptionGetResponseUnknown] or
+// [shared.UnionString].
 type SubscriptionGetResponseUnion interface {
 	ImplementsZonesSubscriptionGetResponseUnion()
 }
