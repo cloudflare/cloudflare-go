@@ -59,7 +59,8 @@ func (r *ReceivedService) Get(ctx context.Context, params ReceivedGetParams, opt
 	return
 }
 
-// Union satisfied by [shared.UnionString] or [logs.ReceivedGetResponseUnknown].
+// Union satisfied by [shared.UnionString] or
+// [logs.ReceivedGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a].
 type ReceivedGetResponseUnion interface {
 	ImplementsLogsReceivedGetResponseUnion()
 }
