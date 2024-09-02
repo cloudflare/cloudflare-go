@@ -126,23 +126,19 @@ func TestFirewallEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		dns.FirewallEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Firewall: dns.FirewallParam{
-				ID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-				DeprecateAnyRequests: cloudflare.F(true),
-				DNSFirewallIPs:       cloudflare.F([]dns.FirewallIPsParam{"203.0.113.1", "203.0.113.254", "string", "string"}),
-				ECSFallback:          cloudflare.F(false),
-				MaximumCacheTTL:      cloudflare.F(900.000000),
-				MinimumCacheTTL:      cloudflare.F(60.000000),
-				Name:                 cloudflare.F("My Awesome DNS Firewall cluster"),
-				UpstreamIPs:          cloudflare.F([]dns.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
-				AttackMitigation: cloudflare.F(dns.AttackMitigationParam{
-					Enabled:                   cloudflare.F(true),
-					OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
-				}),
-				NegativeCacheTTL: cloudflare.F(900.000000),
-				Ratelimit:        cloudflare.F(600.000000),
-				Retries:          cloudflare.F(2.000000),
-			},
+			AttackMitigation: cloudflare.F(dns.AttackMitigationParam{
+				Enabled:                   cloudflare.F(true),
+				OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
+			}),
+			DeprecateAnyRequests: cloudflare.F(true),
+			ECSFallback:          cloudflare.F(false),
+			MaximumCacheTTL:      cloudflare.F(900.000000),
+			MinimumCacheTTL:      cloudflare.F(60.000000),
+			Name:                 cloudflare.F("My Awesome DNS Firewall cluster"),
+			NegativeCacheTTL:     cloudflare.F(900.000000),
+			Ratelimit:            cloudflare.F(600.000000),
+			Retries:              cloudflare.F(2.000000),
+			UpstreamIPs:          cloudflare.F([]dns.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
 		},
 	)
 	if err != nil {
