@@ -344,15 +344,15 @@ type VariantDeleteParams struct {
 type VariantDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
 	// Variant support enables caching variants of images with certain file extensions
 	// in addition to the original. This only applies when the origin server sends the
 	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 	// does not serve the variant requested, the response will not be cached. This will
 	// be indicated with BYPASS cache status in the response headers.
-	Result CacheVariant `json:"result,required"`
-	// Whether the API call was successful
-	Success VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    variantDeleteResponseEnvelopeJSON    `json:"-"`
+	Result CacheVariant                      `json:"result"`
+	JSON   variantDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // variantDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -360,8 +360,8 @@ type VariantDeleteResponseEnvelope struct {
 type variantDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -444,15 +444,15 @@ func (r VariantEditParamsValue) MarshalJSON() (data []byte, err error) {
 type VariantEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success VariantEditResponseEnvelopeSuccess `json:"success,required"`
 	// Variant support enables caching variants of images with certain file extensions
 	// in addition to the original. This only applies when the origin server sends the
 	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 	// does not serve the variant requested, the response will not be cached. This will
 	// be indicated with BYPASS cache status in the response headers.
-	Result VariantEditResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success VariantEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    variantEditResponseEnvelopeJSON    `json:"-"`
+	Result VariantEditResponse             `json:"result"`
+	JSON   variantEditResponseEnvelopeJSON `json:"-"`
 }
 
 // variantEditResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -460,8 +460,8 @@ type VariantEditResponseEnvelope struct {
 type variantEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -497,15 +497,15 @@ type VariantGetParams struct {
 type VariantGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success VariantGetResponseEnvelopeSuccess `json:"success,required"`
 	// Variant support enables caching variants of images with certain file extensions
 	// in addition to the original. This only applies when the origin server sends the
 	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 	// does not serve the variant requested, the response will not be cached. This will
 	// be indicated with BYPASS cache status in the response headers.
-	Result VariantGetResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success VariantGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    variantGetResponseEnvelopeJSON    `json:"-"`
+	Result VariantGetResponse             `json:"result"`
+	JSON   variantGetResponseEnvelopeJSON `json:"-"`
 }
 
 // variantGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -513,8 +513,8 @@ type VariantGetResponseEnvelope struct {
 type variantGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
