@@ -72,9 +72,8 @@ func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionI
 	return
 }
 
-// Union satisfied by
-// [load_balancers.RegionListResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [load_balancers.RegionListResponseUnknown] or
+// [shared.UnionString].
 type RegionListResponseUnion interface {
 	ImplementsLoadBalancersRegionListResponseUnion()
 }
@@ -92,9 +91,8 @@ func init() {
 
 // A list of countries and subdivisions mapped to a region.
 //
-// Union satisfied by
-// [load_balancers.RegionGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [load_balancers.RegionGetResponseUnknown] or
+// [shared.UnionString].
 type RegionGetResponseUnion interface {
 	ImplementsLoadBalancersRegionGetResponseUnion()
 }
