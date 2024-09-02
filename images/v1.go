@@ -265,9 +265,7 @@ func (r V1ListResponseSuccess) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by
-// [images.V1DeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a] or
-// [shared.UnionString].
+// Union satisfied by [images.V1DeleteResponseUnknown] or [shared.UnionString].
 type V1DeleteResponseUnion interface {
 	ImplementsImagesV1DeleteResponseUnion()
 }
