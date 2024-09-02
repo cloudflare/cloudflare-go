@@ -13,10 +13,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDNSService] method instead.
 type DNSService struct {
-	Options          []option.RequestOption
-	Top              *DNSTopService
-	Summary          *DNSSummaryService
-	TimeseriesGroups *DNSTimeseriesGroupService
+	Options []option.RequestOption
+	Top     *DNSTopService
 }
 
 // NewDNSService generates a new service that applies the given options to each
@@ -26,7 +24,5 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	r = &DNSService{}
 	r.Options = opts
 	r.Top = NewDNSTopService(opts...)
-	r.Summary = NewDNSSummaryService(opts...)
-	r.TimeseriesGroups = NewDNSTimeseriesGroupService(opts...)
 	return
 }
