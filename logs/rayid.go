@@ -55,7 +55,8 @@ func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetPar
 	return
 }
 
-// Union satisfied by [shared.UnionString] or [logs.RayIDGetResponseUnknown].
+// Union satisfied by [shared.UnionString] or
+// [logs.RayIDGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a].
 type RayIDGetResponseUnion interface {
 	ImplementsLogsRayIDGetResponseUnion()
 }
