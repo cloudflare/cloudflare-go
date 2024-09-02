@@ -5968,10 +5968,6 @@ Methods:
 - <code title="get /radar/dns/top/ases">client.Radar.DNS.Top.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#DNSTopService.Ases">Ases</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#DNSTopAsesParams">DNSTopAsesParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#DNSTopAsesResponse">DNSTopAsesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/dns/top/locations">client.Radar.DNS.Top.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#DNSTopService.Locations">Locations</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#DNSTopLocationsParams">DNSTopLocationsParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#DNSTopLocationsResponse">DNSTopLocationsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-### Summary
-
-### TimeseriesGroups
-
 ## Netflows
 
 Response Types:
@@ -6786,6 +6782,20 @@ Methods:
 
 - <code title="get /radar/tcp_resets_timeouts/summary">client.Radar.TCPResetsTimeouts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#TCPResetsTimeoutService.Summary">Summary</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#TCPResetsTimeoutSummaryParams">TCPResetsTimeoutSummaryParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#TCPResetsTimeoutSummaryResponse">TCPResetsTimeoutSummaryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /radar/tcp_resets_timeouts/timeseries_groups">client.Radar.TCPResetsTimeouts.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#TCPResetsTimeoutService.TimeseriesGroups">TimeseriesGroups</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#TCPResetsTimeoutTimeseriesGroupsParams">TCPResetsTimeoutTimeseriesGroupsParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#TCPResetsTimeoutTimeseriesGroupsResponse">TCPResetsTimeoutTimeseriesGroupsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## RobotsTXT
+
+### Top
+
+#### Directive
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RobotsTXTTopDirectiveGetResponse">RobotsTXTTopDirectiveGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/robots_txt/top/{directive}">client.Radar.RobotsTXT.Top.Directive.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RobotsTXTTopDirectiveService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, directive <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RobotsTXTTopDirectiveGetParamsDirective">RobotsTXTTopDirectiveGetParamsDirective</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RobotsTXTTopDirectiveGetParams">RobotsTXTTopDirectiveGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar">radar</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/radar#RobotsTXTTopDirectiveGetResponse">RobotsTXTTopDirectiveGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # BotManagement
 
