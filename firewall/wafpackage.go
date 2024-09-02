@@ -204,7 +204,7 @@ func (r WAFPackageListResponseFirewallAPIResponseCollection) implementsFirewallW
 }
 
 // Union satisfied by
-// [firewall.WAFPackageListResponseFirewallAPIResponseCollectionResultUnknown],
+// [firewall.WAFPackageListResponseFirewallAPIResponseCollectionResultUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
 // [firewall.WAFPackageListResponseFirewallAPIResponseCollectionResultArray] or
 // [shared.UnionString].
 type WAFPackageListResponseFirewallAPIResponseCollectionResultUnion interface {
@@ -790,8 +790,8 @@ func (r wafPackageGetResponseFirewallAPIResponseSingleJSON) RawJSON() string {
 func (r WAFPackageGetResponseFirewallAPIResponseSingle) implementsFirewallWAFPackageGetResponse() {}
 
 // Union satisfied by
-// [firewall.WAFPackageGetResponseFirewallAPIResponseSingleResultUnknown] or
-// [shared.UnionString].
+// [firewall.WAFPackageGetResponseFirewallAPIResponseSingleResultUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type WAFPackageGetResponseFirewallAPIResponseSingleResultUnion interface {
 	ImplementsFirewallWAFPackageGetResponseFirewallAPIResponseSingleResultUnion()
 }
