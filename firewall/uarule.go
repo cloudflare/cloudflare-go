@@ -148,9 +148,7 @@ func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id strin
 	return
 }
 
-// Union satisfied by
-// [firewall.UARuleNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a] or
-// [shared.UnionString].
+// Union satisfied by [firewall.UARuleNewResponseUnknown] or [shared.UnionString].
 type UARuleNewResponseUnion interface {
 	ImplementsFirewallUARuleNewResponseUnion()
 }
@@ -166,9 +164,8 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [firewall.UARuleUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
+// Union satisfied by [firewall.UARuleUpdateResponseUnknown] or
+// [shared.UnionString].
 type UARuleUpdateResponseUnion interface {
 	ImplementsFirewallUARuleUpdateResponseUnion()
 }
@@ -286,9 +283,7 @@ func (r uaRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by
-// [firewall.UARuleGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a] or
-// [shared.UnionString].
+// Union satisfied by [firewall.UARuleGetResponseUnknown] or [shared.UnionString].
 type UARuleGetResponseUnion interface {
 	ImplementsFirewallUARuleGetResponseUnion()
 }
