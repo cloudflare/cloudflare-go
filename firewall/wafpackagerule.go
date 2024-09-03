@@ -890,8 +890,9 @@ func (r WAFPackageRuleEditResponseDefaultMode) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [firewall.WAFPackageRuleGetResponseUnknown] or
-// [shared.UnionString].
+// Union satisfied by
+// [firewall.WAFPackageRuleGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
 type WAFPackageRuleGetResponseUnion interface {
 	ImplementsFirewallWAFPackageRuleGetResponseUnion()
 }
