@@ -202,13 +202,11 @@ type LogListParamsOrderByDirection string
 const (
 	LogListParamsOrderByDirectionAsc  LogListParamsOrderByDirection = "asc"
 	LogListParamsOrderByDirectionDesc LogListParamsOrderByDirection = "desc"
-	LogListParamsOrderByDirectionAsc  LogListParamsOrderByDirection = "ASC"
-	LogListParamsOrderByDirectionDesc LogListParamsOrderByDirection = "DESC"
 )
 
 func (r LogListParamsOrderByDirection) IsKnown() bool {
 	switch r {
-	case LogListParamsOrderByDirectionAsc, LogListParamsOrderByDirectionDesc, LogListParamsOrderByDirectionAsc, LogListParamsOrderByDirectionDesc:
+	case LogListParamsOrderByDirectionAsc, LogListParamsOrderByDirectionDesc:
 		return true
 	}
 	return false
