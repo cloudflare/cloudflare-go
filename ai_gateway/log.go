@@ -166,13 +166,11 @@ type LogListParamsDirection string
 const (
 	LogListParamsDirectionAsc  LogListParamsDirection = "asc"
 	LogListParamsDirectionDesc LogListParamsDirection = "desc"
-	LogListParamsDirectionAsc  LogListParamsDirection = "ASC"
-	LogListParamsDirectionDesc LogListParamsDirection = "DESC"
 )
 
 func (r LogListParamsDirection) IsKnown() bool {
 	switch r {
-	case LogListParamsDirectionAsc, LogListParamsDirectionDesc, LogListParamsDirectionAsc, LogListParamsDirectionDesc:
+	case LogListParamsDirectionAsc, LogListParamsDirectionDesc:
 		return true
 	}
 	return false
