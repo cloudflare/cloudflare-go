@@ -3,15 +3,15 @@
 package radar
 
 import (
-	"context"
-	"net/http"
-	"net/url"
+  "context"
+  "net/http"
+  "net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+  "github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+  "github.com/cloudflare/cloudflare-go/v2/internal/param"
+  "github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // EntityService contains methods and other services that help with interacting
@@ -21,141 +21,141 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewEntityService] method instead.
 type EntityService struct {
-	Options   []option.RequestOption
-	ASNs      *EntityASNService
-	Locations *EntityLocationService
+Options []option.RequestOption
+ASNs *EntityASNService
+Locations *EntityLocationService
 }
 
 // NewEntityService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewEntityService(opts ...option.RequestOption) (r *EntityService) {
-	r = &EntityService{}
-	r.Options = opts
-	r.ASNs = NewEntityASNService(opts...)
-	r.Locations = NewEntityLocationService(opts...)
-	return
+  r = &EntityService{}
+  r.Options = opts
+  r.ASNs = NewEntityASNService(opts...)
+  r.Locations = NewEntityLocationService(opts...)
+  return
 }
 
 // Get IP address information.
 func (r *EntityService) Get(ctx context.Context, query EntityGetParams, opts ...option.RequestOption) (res *EntityGetResponse, err error) {
-	var env EntityGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	path := "radar/entities/ip"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+  var env EntityGetResponseEnvelope
+  opts = append(r.Options[:], opts...)
+  path := "radar/entities/ip"
+  err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+  if err != nil {
+    return
+  }
+  res = &env.Result
+  return
 }
 
 type EntityGetResponse struct {
-	IP   EntityGetResponseIP   `json:"ip,required"`
-	JSON entityGetResponseJSON `json:"-"`
+IP EntityGetResponseIP `json:"ip,required"`
+JSON entityGetResponseJSON `json:"-"`
 }
 
 // entityGetResponseJSON contains the JSON metadata for the struct
 // [EntityGetResponse]
 type entityGetResponseJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+IP apijson.Field
+raw string
+ExtraFields map[string]apijson.Field
 }
 
 func (r *EntityGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+  return apijson.UnmarshalRoot(data, r)
 }
 
-func (r entityGetResponseJSON) RawJSON() string {
-	return r.raw
+func (r entityGetResponseJSON) RawJSON() (string) {
+  return r.raw
 }
 
 type EntityGetResponseIP struct {
-	ASN          string                  `json:"asn,required"`
-	ASNLocation  string                  `json:"asnLocation,required"`
-	ASNName      string                  `json:"asnName,required"`
-	ASNOrgName   string                  `json:"asnOrgName,required"`
-	IP           string                  `json:"ip,required"`
-	IPVersion    string                  `json:"ipVersion,required"`
-	Location     string                  `json:"location,required"`
-	LocationName string                  `json:"locationName,required"`
-	JSON         entityGetResponseIPJSON `json:"-"`
+ASN string `json:"asn,required"`
+ASNLocation string `json:"asnLocation,required"`
+ASNName string `json:"asnName,required"`
+ASNOrgName string `json:"asnOrgName,required"`
+IP string `json:"ip,required"`
+IPVersion string `json:"ipVersion,required"`
+Location string `json:"location,required"`
+LocationName string `json:"locationName,required"`
+JSON entityGetResponseIPJSON `json:"-"`
 }
 
 // entityGetResponseIPJSON contains the JSON metadata for the struct
 // [EntityGetResponseIP]
 type entityGetResponseIPJSON struct {
-	ASN          apijson.Field
-	ASNLocation  apijson.Field
-	ASNName      apijson.Field
-	ASNOrgName   apijson.Field
-	IP           apijson.Field
-	IPVersion    apijson.Field
-	Location     apijson.Field
-	LocationName apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+ASN apijson.Field
+ASNLocation apijson.Field
+ASNName apijson.Field
+ASNOrgName apijson.Field
+IP apijson.Field
+IPVersion apijson.Field
+Location apijson.Field
+LocationName apijson.Field
+raw string
+ExtraFields map[string]apijson.Field
 }
 
 func (r *EntityGetResponseIP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+  return apijson.UnmarshalRoot(data, r)
 }
 
-func (r entityGetResponseIPJSON) RawJSON() string {
-	return r.raw
+func (r entityGetResponseIPJSON) RawJSON() (string) {
+  return r.raw
 }
 
 type EntityGetParams struct {
-	// IP address.
-	IP param.Field[string] `query:"ip,required"`
-	// Format results are returned in.
-	Format param.Field[EntityGetParamsFormat] `query:"format"`
+// IP address.
+IP param.Field[string] `query:"ip,required"`
+// Format results are returned in.
+Format param.Field[EntityGetParamsFormat] `query:"format"`
 }
 
 // URLQuery serializes [EntityGetParams]'s query parameters as `url.Values`.
 func (r EntityGetParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
+  return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+    ArrayFormat: apiquery.ArrayQueryFormatRepeat,
+    NestedFormat: apiquery.NestedQueryFormatDots,
+  })
 }
 
 // Format results are returned in.
 type EntityGetParamsFormat string
 
 const (
-	EntityGetParamsFormatJson EntityGetParamsFormat = "JSON"
-	EntityGetParamsFormatCsv  EntityGetParamsFormat = "CSV"
+  EntityGetParamsFormatJson EntityGetParamsFormat = "JSON"
+  EntityGetParamsFormatCsv EntityGetParamsFormat = "CSV"
 )
 
-func (r EntityGetParamsFormat) IsKnown() bool {
-	switch r {
-	case EntityGetParamsFormatJson, EntityGetParamsFormatCsv:
-		return true
-	}
-	return false
+func (r EntityGetParamsFormat) IsKnown() (bool) {
+  switch r {
+  case EntityGetParamsFormatJson, EntityGetParamsFormatCsv:
+      return true
+  }
+  return false
 }
 
 type EntityGetResponseEnvelope struct {
-	Result  EntityGetResponse             `json:"result,required"`
-	Success bool                          `json:"success,required"`
-	JSON    entityGetResponseEnvelopeJSON `json:"-"`
+Result EntityGetResponse `json:"result,required"`
+Success bool `json:"success,required"`
+JSON entityGetResponseEnvelopeJSON `json:"-"`
 }
 
 // entityGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [EntityGetResponseEnvelope]
 type entityGetResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+Result apijson.Field
+Success apijson.Field
+raw string
+ExtraFields map[string]apijson.Field
 }
 
 func (r *EntityGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+  return apijson.UnmarshalRoot(data, r)
 }
 
-func (r entityGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
+func (r entityGetResponseEnvelopeJSON) RawJSON() (string) {
+  return r.raw
 }

@@ -3,7 +3,7 @@
 package logpush
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // DatasetService contains methods and other services that help with interacting
@@ -13,18 +13,18 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDatasetService] method instead.
 type DatasetService struct {
-	Options []option.RequestOption
-	Fields  *DatasetFieldService
-	Jobs    *DatasetJobService
+Options []option.RequestOption
+Fields *DatasetFieldService
+Jobs *DatasetJobService
 }
 
 // NewDatasetService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewDatasetService(opts ...option.RequestOption) (r *DatasetService) {
-	r = &DatasetService{}
-	r.Options = opts
-	r.Fields = NewDatasetFieldService(opts...)
-	r.Jobs = NewDatasetJobService(opts...)
-	return
+  r = &DatasetService{}
+  r.Options = opts
+  r.Fields = NewDatasetFieldService(opts...)
+  r.Jobs = NewDatasetJobService(opts...)
+  return
 }

@@ -3,7 +3,7 @@
 package zero_trust
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // DLPService contains methods and other services that help with interacting with
@@ -13,24 +13,24 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDLPService] method instead.
 type DLPService struct {
-	Options     []option.RequestOption
-	Datasets    *DLPDatasetService
-	Patterns    *DLPPatternService
-	PayloadLogs *DLPPayloadLogService
-	Profiles    *DLPProfileService
-	Limits      *DLPLimitService
+Options []option.RequestOption
+Datasets *DLPDatasetService
+Patterns *DLPPatternService
+PayloadLogs *DLPPayloadLogService
+Profiles *DLPProfileService
+Limits *DLPLimitService
 }
 
 // NewDLPService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewDLPService(opts ...option.RequestOption) (r *DLPService) {
-	r = &DLPService{}
-	r.Options = opts
-	r.Datasets = NewDLPDatasetService(opts...)
-	r.Patterns = NewDLPPatternService(opts...)
-	r.PayloadLogs = NewDLPPayloadLogService(opts...)
-	r.Profiles = NewDLPProfileService(opts...)
-	r.Limits = NewDLPLimitService(opts...)
-	return
+  r = &DLPService{}
+  r.Options = opts
+  r.Datasets = NewDLPDatasetService(opts...)
+  r.Patterns = NewDLPPatternService(opts...)
+  r.PayloadLogs = NewDLPPayloadLogService(opts...)
+  r.Profiles = NewDLPProfileService(opts...)
+  r.Limits = NewDLPLimitService(opts...)
+  return
 }

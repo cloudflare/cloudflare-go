@@ -3,7 +3,7 @@
 package radar
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // EmailSecurityService contains methods and other services that help with
@@ -13,20 +13,20 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewEmailSecurityService] method instead.
 type EmailSecurityService struct {
-	Options          []option.RequestOption
-	Top              *EmailSecurityTopService
-	Summary          *EmailSecuritySummaryService
-	TimeseriesGroups *EmailSecurityTimeseriesGroupService
+Options []option.RequestOption
+Top *EmailSecurityTopService
+Summary *EmailSecuritySummaryService
+TimeseriesGroups *EmailSecurityTimeseriesGroupService
 }
 
 // NewEmailSecurityService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewEmailSecurityService(opts ...option.RequestOption) (r *EmailSecurityService) {
-	r = &EmailSecurityService{}
-	r.Options = opts
-	r.Top = NewEmailSecurityTopService(opts...)
-	r.Summary = NewEmailSecuritySummaryService(opts...)
-	r.TimeseriesGroups = NewEmailSecurityTimeseriesGroupService(opts...)
-	return
+  r = &EmailSecurityService{}
+  r.Options = opts
+  r.Top = NewEmailSecurityTopService(opts...)
+  r.Summary = NewEmailSecuritySummaryService(opts...)
+  r.TimeseriesGroups = NewEmailSecurityTimeseriesGroupService(opts...)
+  return
 }

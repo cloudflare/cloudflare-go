@@ -3,14 +3,14 @@
 package zero_trust
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"net/http"
+  "context"
+  "errors"
+  "fmt"
+  "net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/internal/param"
+  "github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // GatewayConfigurationCustomCertificateService contains methods and other services
@@ -20,7 +20,7 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewGatewayConfigurationCustomCertificateService] method instead.
 type GatewayConfigurationCustomCertificateService struct {
-	Options []option.RequestOption
+Options []option.RequestOption
 }
 
 // NewGatewayConfigurationCustomCertificateService generates a new service that
@@ -28,23 +28,23 @@ type GatewayConfigurationCustomCertificateService struct {
 // parent client's options (if there is one), and before any request-specific
 // options.
 func NewGatewayConfigurationCustomCertificateService(opts ...option.RequestOption) (r *GatewayConfigurationCustomCertificateService) {
-	r = &GatewayConfigurationCustomCertificateService{}
-	r.Options = opts
-	return
+  r = &GatewayConfigurationCustomCertificateService{}
+  r.Options = opts
+  return
 }
 
 // Fetches the current Zero Trust certificate configuration.
 func (r *GatewayConfigurationCustomCertificateService) Get(ctx context.Context, query GatewayConfigurationCustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateSettings, err error) {
-	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/gateway/configuration/custom_certificate", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+  opts = append(r.Options[:], opts...)
+  if query.AccountID.Value == "" {
+    err = errors.New("missing required account_id parameter")
+    return
+  }
+  path := fmt.Sprintf("accounts/%s/gateway/configuration/custom_certificate", query.AccountID)
+  err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+  return
 }
 
 type GatewayConfigurationCustomCertificateGetParams struct {
-	AccountID param.Field[string] `path:"account_id,required"`
+AccountID param.Field[string] `path:"account_id,required"`
 }

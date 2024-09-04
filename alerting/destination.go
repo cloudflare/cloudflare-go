@@ -3,7 +3,7 @@
 package alerting
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // DestinationService contains methods and other services that help with
@@ -13,20 +13,20 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDestinationService] method instead.
 type DestinationService struct {
-	Options   []option.RequestOption
-	Eligible  *DestinationEligibleService
-	Pagerduty *DestinationPagerdutyService
-	Webhooks  *DestinationWebhookService
+Options []option.RequestOption
+Eligible *DestinationEligibleService
+Pagerduty *DestinationPagerdutyService
+Webhooks *DestinationWebhookService
 }
 
 // NewDestinationService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewDestinationService(opts ...option.RequestOption) (r *DestinationService) {
-	r = &DestinationService{}
-	r.Options = opts
-	r.Eligible = NewDestinationEligibleService(opts...)
-	r.Pagerduty = NewDestinationPagerdutyService(opts...)
-	r.Webhooks = NewDestinationWebhookService(opts...)
-	return
+  r = &DestinationService{}
+  r.Options = opts
+  r.Eligible = NewDestinationEligibleService(opts...)
+  r.Pagerduty = NewDestinationPagerdutyService(opts...)
+  r.Webhooks = NewDestinationWebhookService(opts...)
+  return
 }

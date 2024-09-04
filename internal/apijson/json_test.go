@@ -424,7 +424,7 @@ var tests = map[string]struct {
 			JSON: EmbeddedStructsJSON{
 				A: Field{raw: `1`, status: valid},
 				ExtraFields: map[string]Field{
-					"b": {raw: `"bar"`, status: valid},
+					"b": Field{raw: `"bar"`, status: valid},
 				},
 				raw: `{"a":1,"b":"bar"}`,
 			},

@@ -3,7 +3,7 @@
 package vectorize
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // VectorizeService contains methods and other services that help with interacting
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewVectorizeService] method instead.
 type VectorizeService struct {
-	Options []option.RequestOption
-	Indexes *IndexService
+Options []option.RequestOption
+Indexes *IndexService
 }
 
 // NewVectorizeService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewVectorizeService(opts ...option.RequestOption) (r *VectorizeService) {
-	r = &VectorizeService{}
-	r.Options = opts
-	r.Indexes = NewIndexService(opts...)
-	return
+  r = &VectorizeService{}
+  r.Options = opts
+  r.Indexes = NewIndexService(opts...)
+  return
 }
