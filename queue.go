@@ -32,7 +32,7 @@ type QueueProducer struct {
 }
 
 type QueueConsumer struct {
-	Name            string                `json:"-"`
+	Name            string                `json:"consumer_id,omitempty"`
 	Service         string                `json:"service,omitempty"`
 	ScriptName      string                `json:"script_name,omitempty"`
 	Environment     string                `json:"environment,omitempty"`
@@ -40,12 +40,15 @@ type QueueConsumer struct {
 	QueueName       string                `json:"queue_name,omitempty"`
 	CreatedOn       *time.Time            `json:"created_on,omitempty"`
 	DeadLetterQueue string                `json:"dead_letter_queue,omitempty"`
+	Type            string                `json:"type,omitempty"`
 }
 
 type QueueConsumerSettings struct {
-	BatchSize   int `json:"batch_size,omitempty"`
-	MaxRetires  int `json:"max_retries,omitempty"`
-	MaxWaitTime int `json:"max_wait_time_ms,omitempty"`
+	BatchSize         int `json:"batch_size,omitempty"`
+	MaxRetires        int `json:"max_retries,omitempty"`
+	MaxWaitTime       int `json:"max_wait_time_ms,omitempty"`
+	RetryDelay        int `json:"retry_delay,omitempty"`
+	VisibilityTimeout int `json:"visibility_timeout_ms,omitempty"`
 }
 
 type QueueListResponse struct {
@@ -125,7 +128,7 @@ func (api *API) ListQueues(ctx context.Context, rc *ResourceContainer, params Li
 	var qResponse QueueListResponse
 	for {
 		qResponse = QueueListResponse{}
-		uri := buildURI(fmt.Sprintf("/accounts/%s/workers/queues", rc.Identifier), params)
+		uri := buildURI(fmt.Sprintf("/accounts/%s/queues", rc.Identifier), params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
@@ -160,7 +163,7 @@ func (api *API) CreateQueue(ctx context.Context, rc *ResourceContainer, queue Cr
 		return Queue{}, ErrMissingQueueName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues", rc.Identifier)
+	uri := fmt.Sprintf("/accounts/%s/queues", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, queue)
 	if err != nil {
 		return Queue{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -185,7 +188,7 @@ func (api *API) DeleteQueue(ctx context.Context, rc *ResourceContainer, queueNam
 		return ErrMissingQueueName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s", rc.Identifier, queueName)
+	uri := fmt.Sprintf("/accounts/%s/queues/%s", rc.Identifier, queueName)
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -205,7 +208,7 @@ func (api *API) GetQueue(ctx context.Context, rc *ResourceContainer, queueName s
 		return Queue{}, ErrMissingQueueName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s", rc.Identifier, queueName)
+	uri := fmt.Sprintf("/accounts/%s/queues/%s", rc.Identifier, queueName)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return Queue{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -232,7 +235,7 @@ func (api *API) UpdateQueue(ctx context.Context, rc *ResourceContainer, params U
 		return Queue{}, ErrMissingQueueName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s", rc.Identifier, params.Name)
+	uri := fmt.Sprintf("/accounts/%s/queues/%s", rc.Identifier, params.Name)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
 		return Queue{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -273,7 +276,7 @@ func (api *API) ListQueueConsumers(ctx context.Context, rc *ResourceContainer, p
 	var qResponse ListQueueConsumersResponse
 	for {
 		qResponse = ListQueueConsumersResponse{}
-		uri := buildURI(fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", rc.Identifier, params.QueueName), params)
+		uri := buildURI(fmt.Sprintf("/accounts/%s/queues/%s/consumers", rc.Identifier, params.QueueName), params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
@@ -308,7 +311,7 @@ func (api *API) CreateQueueConsumer(ctx context.Context, rc *ResourceContainer, 
 		return QueueConsumer{}, ErrMissingQueueName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers", rc.Identifier, params.QueueName)
+	uri := fmt.Sprintf("/accounts/%s/queues/%s/consumers", rc.Identifier, params.QueueName)
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params.Consumer)
 	if err != nil {
 		return QueueConsumer{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -338,7 +341,7 @@ func (api *API) DeleteQueueConsumer(ctx context.Context, rc *ResourceContainer, 
 		return ErrMissingQueueConsumerName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers/%s", rc.Identifier, params.QueueName, params.ConsumerName)
+	uri := fmt.Sprintf("/accounts/%s/queues/%s/consumers/%s", rc.Identifier, params.QueueName, params.ConsumerName)
 	_, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return fmt.Errorf("%s: %w", errMakeRequestError, err)
@@ -363,7 +366,7 @@ func (api *API) UpdateQueueConsumer(ctx context.Context, rc *ResourceContainer, 
 		return QueueConsumer{}, ErrMissingQueueConsumerName
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/workers/queues/%s/consumers/%s", rc.Identifier, params.QueueName, params.Consumer.Name)
+	uri := fmt.Sprintf("/accounts/%s/queues/%s/consumers/%s", rc.Identifier, params.QueueName, params.Consumer.Name)
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Consumer)
 	if err != nil {
 		return QueueConsumer{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
