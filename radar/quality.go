@@ -3,7 +3,7 @@
 package radar
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // QualityService contains methods and other services that help with interacting
@@ -13,18 +13,18 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewQualityService] method instead.
 type QualityService struct {
-	Options []option.RequestOption
-	IQI     *QualityIQIService
-	Speed   *QualitySpeedService
+Options []option.RequestOption
+IQI *QualityIQIService
+Speed *QualitySpeedService
 }
 
 // NewQualityService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewQualityService(opts ...option.RequestOption) (r *QualityService) {
-	r = &QualityService{}
-	r.Options = opts
-	r.IQI = NewQualityIQIService(opts...)
-	r.Speed = NewQualitySpeedService(opts...)
-	return
+  r = &QualityService{}
+  r.Options = opts
+  r.IQI = NewQualityIQIService(opts...)
+  r.Speed = NewQualitySpeedService(opts...)
+  return
 }

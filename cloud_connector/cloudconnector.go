@@ -3,7 +3,7 @@
 package cloud_connector
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // CloudConnectorService contains methods and other services that help with
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewCloudConnectorService] method instead.
 type CloudConnectorService struct {
-	Options []option.RequestOption
-	Rules   *RuleService
+Options []option.RequestOption
+Rules *RuleService
 }
 
 // NewCloudConnectorService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewCloudConnectorService(opts ...option.RequestOption) (r *CloudConnectorService) {
-	r = &CloudConnectorService{}
-	r.Options = opts
-	r.Rules = NewRuleService(opts...)
-	return
+  r = &CloudConnectorService{}
+  r.Options = opts
+  r.Rules = NewRuleService(opts...)
+  return
 }

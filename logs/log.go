@@ -3,7 +3,7 @@
 package logs
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // LogService contains methods and other services that help with interacting with
@@ -13,20 +13,20 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewLogService] method instead.
 type LogService struct {
-	Options  []option.RequestOption
-	Control  *ControlService
-	RayID    *RayIDService
-	Received *ReceivedService
+Options []option.RequestOption
+Control *ControlService
+RayID *RayIDService
+Received *ReceivedService
 }
 
 // NewLogService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewLogService(opts ...option.RequestOption) (r *LogService) {
-	r = &LogService{}
-	r.Options = opts
-	r.Control = NewControlService(opts...)
-	r.RayID = NewRayIDService(opts...)
-	r.Received = NewReceivedService(opts...)
-	return
+  r = &LogService{}
+  r.Options = opts
+  r.Control = NewControlService(opts...)
+  r.RayID = NewRayIDService(opts...)
+  r.Received = NewReceivedService(opts...)
+  return
 }

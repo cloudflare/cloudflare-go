@@ -3,18 +3,18 @@
 package zones
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"net/http"
-	"reflect"
+  "context"
+  "errors"
+  "fmt"
+  "net/http"
+  "reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/cloudflare/cloudflare-go/v2/user"
-	"github.com/tidwall/gjson"
+  "github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+  "github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+  "github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/shared"
+  "github.com/cloudflare/cloudflare-go/v2/user"
+  "github.com/tidwall/gjson"
 )
 
 // SubscriptionService contains methods and other services that help with
@@ -24,264 +24,264 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewSubscriptionService] method instead.
 type SubscriptionService struct {
-	Options []option.RequestOption
+Options []option.RequestOption
 }
 
 // NewSubscriptionService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionService) {
-	r = &SubscriptionService{}
-	r.Options = opts
-	return
+  r = &SubscriptionService{}
+  r.Options = opts
+  return
 }
 
 // Create a zone subscription, either plan or add-ons.
 func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponseUnion, err error) {
-	var env SubscriptionNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if identifier == "" {
-		err = errors.New("missing required identifier parameter")
-		return
-	}
-	path := fmt.Sprintf("zones/%s/subscription", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+  var env SubscriptionNewResponseEnvelope
+  opts = append(r.Options[:], opts...)
+  if identifier == "" {
+    err = errors.New("missing required identifier parameter")
+    return
+  }
+  path := fmt.Sprintf("zones/%s/subscription", identifier)
+  err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+  if err != nil {
+    return
+  }
+  res = &env.Result
+  return
 }
 
 // Updates zone subscriptions, either plan or add-ons.
 func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponseUnion, err error) {
-	var env SubscriptionUpdateResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if identifier == "" {
-		err = errors.New("missing required identifier parameter")
-		return
-	}
-	path := fmt.Sprintf("zones/%s/subscription", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+  var env SubscriptionUpdateResponseEnvelope
+  opts = append(r.Options[:], opts...)
+  if identifier == "" {
+    err = errors.New("missing required identifier parameter")
+    return
+  }
+  path := fmt.Sprintf("zones/%s/subscription", identifier)
+  err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+  if err != nil {
+    return
+  }
+  res = &env.Result
+  return
 }
 
 // Lists zone subscription details.
 func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionGetResponseUnion, err error) {
-	var env SubscriptionGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if identifier == "" {
-		err = errors.New("missing required identifier parameter")
-		return
-	}
-	path := fmt.Sprintf("zones/%s/subscription", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+  var env SubscriptionGetResponseEnvelope
+  opts = append(r.Options[:], opts...)
+  if identifier == "" {
+    err = errors.New("missing required identifier parameter")
+    return
+  }
+  path := fmt.Sprintf("zones/%s/subscription", identifier)
+  err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+  if err != nil {
+    return
+  }
+  res = &env.Result
+  return
 }
 
 // Union satisfied by
 // [zones.SubscriptionNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
 // or [shared.UnionString].
 type SubscriptionNewResponseUnion interface {
-	ImplementsZonesSubscriptionNewResponseUnion()
+  ImplementsZonesSubscriptionNewResponseUnion()
 }
 
 func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+  apijson.RegisterUnion(
+    reflect.TypeOf((*SubscriptionNewResponseUnion)(nil)).Elem(),
+    "",
+    apijson.UnionVariant{
+      TypeFilter: gjson.String,
+      Type: reflect.TypeOf(shared.UnionString("")),
+    },
+  )
 }
 
 // Union satisfied by
 // [zones.SubscriptionUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
 // or [shared.UnionString].
 type SubscriptionUpdateResponseUnion interface {
-	ImplementsZonesSubscriptionUpdateResponseUnion()
+  ImplementsZonesSubscriptionUpdateResponseUnion()
 }
 
 func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+  apijson.RegisterUnion(
+    reflect.TypeOf((*SubscriptionUpdateResponseUnion)(nil)).Elem(),
+    "",
+    apijson.UnionVariant{
+      TypeFilter: gjson.String,
+      Type: reflect.TypeOf(shared.UnionString("")),
+    },
+  )
 }
 
 // Union satisfied by
 // [zones.SubscriptionGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
 // or [shared.UnionString].
 type SubscriptionGetResponseUnion interface {
-	ImplementsZonesSubscriptionGetResponseUnion()
+  ImplementsZonesSubscriptionGetResponseUnion()
 }
 
 func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+  apijson.RegisterUnion(
+    reflect.TypeOf((*SubscriptionGetResponseUnion)(nil)).Elem(),
+    "",
+    apijson.UnionVariant{
+      TypeFilter: gjson.String,
+      Type: reflect.TypeOf(shared.UnionString("")),
+    },
+  )
 }
 
 type SubscriptionNewParams struct {
-	Subscription user.SubscriptionParam `json:"subscription,required"`
+Subscription user.SubscriptionParam `json:"subscription,required"`
 }
 
 func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Subscription)
+  return apijson.MarshalRoot(r.Subscription)
 }
 
 type SubscriptionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   SubscriptionNewResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    subscriptionNewResponseEnvelopeJSON    `json:"-"`
+Errors []shared.ResponseInfo `json:"errors,required"`
+Messages []shared.ResponseInfo `json:"messages,required"`
+Result SubscriptionNewResponseUnion `json:"result,required"`
+// Whether the API call was successful
+Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
+JSON subscriptionNewResponseEnvelopeJSON `json:"-"`
 }
 
 // subscriptionNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SubscriptionNewResponseEnvelope]
 type subscriptionNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+Errors apijson.Field
+Messages apijson.Field
+Result apijson.Field
+Success apijson.Field
+raw string
+ExtraFields map[string]apijson.Field
 }
 
 func (r *SubscriptionNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+  return apijson.UnmarshalRoot(data, r)
 }
 
-func (r subscriptionNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
+func (r subscriptionNewResponseEnvelopeJSON) RawJSON() (string) {
+  return r.raw
 }
 
 // Whether the API call was successful
 type SubscriptionNewResponseEnvelopeSuccess bool
 
 const (
-	SubscriptionNewResponseEnvelopeSuccessTrue SubscriptionNewResponseEnvelopeSuccess = true
+  SubscriptionNewResponseEnvelopeSuccessTrue SubscriptionNewResponseEnvelopeSuccess = true
 )
 
-func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SubscriptionNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
+func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() (bool) {
+  switch r {
+  case SubscriptionNewResponseEnvelopeSuccessTrue:
+      return true
+  }
+  return false
 }
 
 type SubscriptionUpdateParams struct {
-	Subscription user.SubscriptionParam `json:"subscription,required"`
+Subscription user.SubscriptionParam `json:"subscription,required"`
 }
 
 func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Subscription)
+  return apijson.MarshalRoot(r.Subscription)
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   SubscriptionUpdateResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
+Errors []shared.ResponseInfo `json:"errors,required"`
+Messages []shared.ResponseInfo `json:"messages,required"`
+Result SubscriptionUpdateResponseUnion `json:"result,required"`
+// Whether the API call was successful
+Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+JSON subscriptionUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // subscriptionUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SubscriptionUpdateResponseEnvelope]
 type subscriptionUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+Errors apijson.Field
+Messages apijson.Field
+Result apijson.Field
+Success apijson.Field
+raw string
+ExtraFields map[string]apijson.Field
 }
 
 func (r *SubscriptionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+  return apijson.UnmarshalRoot(data, r)
 }
 
-func (r subscriptionUpdateResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
+func (r subscriptionUpdateResponseEnvelopeJSON) RawJSON() (string) {
+  return r.raw
 }
 
 // Whether the API call was successful
 type SubscriptionUpdateResponseEnvelopeSuccess bool
 
 const (
-	SubscriptionUpdateResponseEnvelopeSuccessTrue SubscriptionUpdateResponseEnvelopeSuccess = true
+  SubscriptionUpdateResponseEnvelopeSuccessTrue SubscriptionUpdateResponseEnvelopeSuccess = true
 )
 
-func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SubscriptionUpdateResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
+func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() (bool) {
+  switch r {
+  case SubscriptionUpdateResponseEnvelopeSuccessTrue:
+      return true
+  }
+  return false
 }
 
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   SubscriptionGetResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    subscriptionGetResponseEnvelopeJSON    `json:"-"`
+Errors []shared.ResponseInfo `json:"errors,required"`
+Messages []shared.ResponseInfo `json:"messages,required"`
+Result SubscriptionGetResponseUnion `json:"result,required"`
+// Whether the API call was successful
+Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`
+JSON subscriptionGetResponseEnvelopeJSON `json:"-"`
 }
 
 // subscriptionGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [SubscriptionGetResponseEnvelope]
 type subscriptionGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+Errors apijson.Field
+Messages apijson.Field
+Result apijson.Field
+Success apijson.Field
+raw string
+ExtraFields map[string]apijson.Field
 }
 
 func (r *SubscriptionGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+  return apijson.UnmarshalRoot(data, r)
 }
 
-func (r subscriptionGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
+func (r subscriptionGetResponseEnvelopeJSON) RawJSON() (string) {
+  return r.raw
 }
 
 // Whether the API call was successful
 type SubscriptionGetResponseEnvelopeSuccess bool
 
 const (
-	SubscriptionGetResponseEnvelopeSuccessTrue SubscriptionGetResponseEnvelopeSuccess = true
+  SubscriptionGetResponseEnvelopeSuccessTrue SubscriptionGetResponseEnvelopeSuccess = true
 )
 
-func (r SubscriptionGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case SubscriptionGetResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
+func (r SubscriptionGetResponseEnvelopeSuccess) IsKnown() (bool) {
+  switch r {
+  case SubscriptionGetResponseEnvelopeSuccessTrue:
+      return true
+  }
+  return false
 }

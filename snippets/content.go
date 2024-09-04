@@ -3,14 +3,14 @@
 package snippets
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"net/http"
+  "context"
+  "errors"
+  "fmt"
+  "net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/internal/param"
+  "github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // ContentService contains methods and other services that help with interacting
@@ -20,36 +20,36 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewContentService] method instead.
 type ContentService struct {
-	Options []option.RequestOption
+Options []option.RequestOption
 }
 
 // NewContentService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewContentService(opts ...option.RequestOption) (r *ContentService) {
-	r = &ContentService{}
-	r.Options = opts
-	return
+  r = &ContentService{}
+  r.Options = opts
+  return
 }
 
 // Snippet Content
 func (r *ContentService) Get(ctx context.Context, snippetName string, query ContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "multipart/form-data")}, opts...)
-	if query.ZoneID.Value == "" {
-		err = errors.New("missing required zone_id parameter")
-		return
-	}
-	if snippetName == "" {
-		err = errors.New("missing required snippet_name parameter")
-		return
-	}
-	path := fmt.Sprintf("zones/%s/snippets/%s/content", query.ZoneID, snippetName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+  opts = append(r.Options[:], opts...)
+  opts = append([]option.RequestOption{option.WithHeader("Accept", "multipart/form-data")}, opts...)
+  if query.ZoneID.Value == "" {
+    err = errors.New("missing required zone_id parameter")
+    return
+  }
+  if snippetName == "" {
+    err = errors.New("missing required snippet_name parameter")
+    return
+  }
+  path := fmt.Sprintf("zones/%s/snippets/%s/content", query.ZoneID, snippetName)
+  err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+  return
 }
 
 type ContentGetParams struct {
-	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+// Identifier
+ZoneID param.Field[string] `path:"zone_id,required"`
 }
