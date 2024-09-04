@@ -3,7 +3,7 @@
 package cloudforce_one
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // CloudforceOneService contains methods and other services that help with
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewCloudforceOneService] method instead.
 type CloudforceOneService struct {
-Options []option.RequestOption
-Requests *RequestService
+	Options  []option.RequestOption
+	Requests *RequestService
 }
 
 // NewCloudforceOneService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewCloudforceOneService(opts ...option.RequestOption) (r *CloudforceOneService) {
-  r = &CloudforceOneService{}
-  r.Options = opts
-  r.Requests = NewRequestService(opts...)
-  return
+	r = &CloudforceOneService{}
+	r.Options = opts
+	r.Requests = NewRequestService(opts...)
+	return
 }

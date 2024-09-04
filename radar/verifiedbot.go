@@ -3,7 +3,7 @@
 package radar
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // VerifiedBotService contains methods and other services that help with
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewVerifiedBotService] method instead.
 type VerifiedBotService struct {
-Options []option.RequestOption
-Top *VerifiedBotTopService
+	Options []option.RequestOption
+	Top     *VerifiedBotTopService
 }
 
 // NewVerifiedBotService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewVerifiedBotService(opts ...option.RequestOption) (r *VerifiedBotService) {
-  r = &VerifiedBotService{}
-  r.Options = opts
-  r.Top = NewVerifiedBotTopService(opts...)
-  return
+	r = &VerifiedBotService{}
+	r.Options = opts
+	r.Top = NewVerifiedBotTopService(opts...)
+	return
 }

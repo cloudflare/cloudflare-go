@@ -3,7 +3,7 @@
 package dns
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // AnalyticsService contains methods and other services that help with interacting
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAnalyticsService] method instead.
 type AnalyticsService struct {
-Options []option.RequestOption
-Reports *AnalyticsReportService
+	Options []option.RequestOption
+	Reports *AnalyticsReportService
 }
 
 // NewAnalyticsService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewAnalyticsService(opts ...option.RequestOption) (r *AnalyticsService) {
-  r = &AnalyticsService{}
-  r.Options = opts
-  r.Reports = NewAnalyticsReportService(opts...)
-  return
+	r = &AnalyticsService{}
+	r.Options = opts
+	r.Reports = NewAnalyticsReportService(opts...)
+	return
 }
