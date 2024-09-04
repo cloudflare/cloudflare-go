@@ -3,7 +3,7 @@
 package workers_for_platforms
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // WorkersForPlatformService contains methods and other services that help with
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewWorkersForPlatformService] method instead.
 type WorkersForPlatformService struct {
-Options []option.RequestOption
-Dispatch *DispatchService
+	Options  []option.RequestOption
+	Dispatch *DispatchService
 }
 
 // NewWorkersForPlatformService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
 func NewWorkersForPlatformService(opts ...option.RequestOption) (r *WorkersForPlatformService) {
-  r = &WorkersForPlatformService{}
-  r.Options = opts
-  r.Dispatch = NewDispatchService(opts...)
-  return
+	r = &WorkersForPlatformService{}
+	r.Options = opts
+	r.Dispatch = NewDispatchService(opts...)
+	return
 }

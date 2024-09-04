@@ -3,7 +3,7 @@
 package certificate_authorities
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // CertificateAuthorityService contains methods and other services that help with
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewCertificateAuthorityService] method instead.
 type CertificateAuthorityService struct {
-Options []option.RequestOption
-HostnameAssociations *HostnameAssociationService
+	Options              []option.RequestOption
+	HostnameAssociations *HostnameAssociationService
 }
 
 // NewCertificateAuthorityService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
 func NewCertificateAuthorityService(opts ...option.RequestOption) (r *CertificateAuthorityService) {
-  r = &CertificateAuthorityService{}
-  r.Options = opts
-  r.HostnameAssociations = NewHostnameAssociationService(opts...)
-  return
+	r = &CertificateAuthorityService{}
+	r.Options = opts
+	r.HostnameAssociations = NewHostnameAssociationService(opts...)
+	return
 }

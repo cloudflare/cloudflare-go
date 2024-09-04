@@ -3,7 +3,7 @@
 package images
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // ImageService contains methods and other services that help with interacting with
@@ -13,18 +13,18 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewImageService] method instead.
 type ImageService struct {
-Options []option.RequestOption
-V1 *V1Service
-V2 *V2Service
+	Options []option.RequestOption
+	V1      *V1Service
+	V2      *V2Service
 }
 
 // NewImageService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewImageService(opts ...option.RequestOption) (r *ImageService) {
-  r = &ImageService{}
-  r.Options = opts
-  r.V1 = NewV1Service(opts...)
-  r.V2 = NewV2Service(opts...)
-  return
+	r = &ImageService{}
+	r.Options = opts
+	r.V1 = NewV1Service(opts...)
+	r.V2 = NewV2Service(opts...)
+	return
 }

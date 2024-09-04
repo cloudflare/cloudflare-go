@@ -3,7 +3,7 @@
 package logs
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // ControlCmbService contains methods and other services that help with interacting
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewControlCmbService] method instead.
 type ControlCmbService struct {
-Options []option.RequestOption
-Config *ControlCmbConfigService
+	Options []option.RequestOption
+	Config  *ControlCmbConfigService
 }
 
 // NewControlCmbService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewControlCmbService(opts ...option.RequestOption) (r *ControlCmbService) {
-  r = &ControlCmbService{}
-  r.Options = opts
-  r.Config = NewControlCmbConfigService(opts...)
-  return
+	r = &ControlCmbService{}
+	r.Options = opts
+	r.Config = NewControlCmbConfigService(opts...)
+	return
 }

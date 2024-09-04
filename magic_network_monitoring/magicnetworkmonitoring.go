@@ -3,7 +3,7 @@
 package magic_network_monitoring
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // MagicNetworkMonitoringService contains methods and other services that help with
@@ -13,18 +13,18 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewMagicNetworkMonitoringService] method instead.
 type MagicNetworkMonitoringService struct {
-Options []option.RequestOption
-Configs *ConfigService
-Rules *RuleService
+	Options []option.RequestOption
+	Configs *ConfigService
+	Rules   *RuleService
 }
 
 // NewMagicNetworkMonitoringService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
 func NewMagicNetworkMonitoringService(opts ...option.RequestOption) (r *MagicNetworkMonitoringService) {
-  r = &MagicNetworkMonitoringService{}
-  r.Options = opts
-  r.Configs = NewConfigService(opts...)
-  r.Rules = NewRuleService(opts...)
-  return
+	r = &MagicNetworkMonitoringService{}
+	r.Options = opts
+	r.Configs = NewConfigService(opts...)
+	r.Rules = NewRuleService(opts...)
+	return
 }
