@@ -3,7 +3,7 @@
 package ssl
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // UniversalService contains methods and other services that help with interacting
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewUniversalService] method instead.
 type UniversalService struct {
-Options []option.RequestOption
-Settings *UniversalSettingService
+	Options  []option.RequestOption
+	Settings *UniversalSettingService
 }
 
 // NewUniversalService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewUniversalService(opts ...option.RequestOption) (r *UniversalService) {
-  r = &UniversalService{}
-  r.Options = opts
-  r.Settings = NewUniversalSettingService(opts...)
-  return
+	r = &UniversalService{}
+	r.Options = opts
+	r.Settings = NewUniversalSettingService(opts...)
+	return
 }

@@ -3,7 +3,7 @@
 package workers_for_platforms
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // DispatchService contains methods and other services that help with interacting
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDispatchService] method instead.
 type DispatchService struct {
-Options []option.RequestOption
-Namespaces *DispatchNamespaceService
+	Options    []option.RequestOption
+	Namespaces *DispatchNamespaceService
 }
 
 // NewDispatchService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewDispatchService(opts ...option.RequestOption) (r *DispatchService) {
-  r = &DispatchService{}
-  r.Options = opts
-  r.Namespaces = NewDispatchNamespaceService(opts...)
-  return
+	r = &DispatchService{}
+	r.Options = opts
+	r.Namespaces = NewDispatchNamespaceService(opts...)
+	return
 }

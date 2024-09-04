@@ -3,7 +3,7 @@
 package billing
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // BillingService contains methods and other services that help with interacting
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewBillingService] method instead.
 type BillingService struct {
-Options []option.RequestOption
-Profiles *ProfileService
+	Options  []option.RequestOption
+	Profiles *ProfileService
 }
 
 // NewBillingService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewBillingService(opts ...option.RequestOption) (r *BillingService) {
-  r = &BillingService{}
-  r.Options = opts
-  r.Profiles = NewProfileService(opts...)
-  return
+	r = &BillingService{}
+	r.Options = opts
+	r.Profiles = NewProfileService(opts...)
+	return
 }

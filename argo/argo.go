@@ -3,7 +3,7 @@
 package argo
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // ArgoService contains methods and other services that help with interacting with
@@ -13,18 +13,18 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewArgoService] method instead.
 type ArgoService struct {
-Options []option.RequestOption
-SmartRouting *SmartRoutingService
-TieredCaching *TieredCachingService
+	Options       []option.RequestOption
+	SmartRouting  *SmartRoutingService
+	TieredCaching *TieredCachingService
 }
 
 // NewArgoService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewArgoService(opts ...option.RequestOption) (r *ArgoService) {
-  r = &ArgoService{}
-  r.Options = opts
-  r.SmartRouting = NewSmartRoutingService(opts...)
-  r.TieredCaching = NewTieredCachingService(opts...)
-  return
+	r = &ArgoService{}
+	r.Options = opts
+	r.SmartRouting = NewSmartRoutingService(opts...)
+	r.TieredCaching = NewTieredCachingService(opts...)
+	return
 }

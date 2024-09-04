@@ -3,65 +3,65 @@
 package user_test
 
 import (
-  "context"
-  "errors"
-  "os"
-  "testing"
+	"context"
+	"errors"
+	"os"
+	"testing"
 
-  "github.com/cloudflare/cloudflare-go/v2"
-  "github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-  "github.com/cloudflare/cloudflare-go/v2/option"
-  "github.com/cloudflare/cloudflare-go/v2/user"
+	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 func TestUserEditWithOptionalParams(t *testing.T) {
-  baseURL := "http://localhost:4010"
-  if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-    baseURL = envURL
-  }
-  if !testutil.CheckTestServer(t, baseURL) {
-    return
-  }
-  client := cloudflare.NewClient(
-    option.WithBaseURL(baseURL),
-    option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-    option.WithAPIEmail("user@example.com"),
-  )
-  _, err := client.User.Edit(context.TODO(), user.UserEditParams{
-    Country: cloudflare.F("US"),
-    FirstName: cloudflare.F("John"),
-    LastName: cloudflare.F("Appleseed"),
-    Telephone: cloudflare.F("+1 123-123-1234"),
-    Zipcode: cloudflare.F("12345"),
-  })
-  if err != nil {
-    var apierr *cloudflare.Error
-    if errors.As(err, &apierr) {
-      t.Log(string(apierr.DumpRequest(true)))
-    }
-    t.Fatalf("err should be nil: %s", err.Error())
-  }
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.User.Edit(context.TODO(), user.UserEditParams{
+		Country:   cloudflare.F("US"),
+		FirstName: cloudflare.F("John"),
+		LastName:  cloudflare.F("Appleseed"),
+		Telephone: cloudflare.F("+1 123-123-1234"),
+		Zipcode:   cloudflare.F("12345"),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
 }
 
 func TestUserGet(t *testing.T) {
-  baseURL := "http://localhost:4010"
-  if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-    baseURL = envURL
-  }
-  if !testutil.CheckTestServer(t, baseURL) {
-    return
-  }
-  client := cloudflare.NewClient(
-    option.WithBaseURL(baseURL),
-    option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-    option.WithAPIEmail("user@example.com"),
-  )
-  _, err := client.User.Get(context.TODO())
-  if err != nil {
-    var apierr *cloudflare.Error
-    if errors.As(err, &apierr) {
-      t.Log(string(apierr.DumpRequest(true)))
-    }
-    t.Fatalf("err should be nil: %s", err.Error())
-  }
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.User.Get(context.TODO())
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
 }

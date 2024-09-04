@@ -3,7 +3,7 @@
 package radar
 
 import (
-  "github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // DNSService contains methods and other services that help with interacting with
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDNSService] method instead.
 type DNSService struct {
-Options []option.RequestOption
-Top *DNSTopService
+	Options []option.RequestOption
+	Top     *DNSTopService
 }
 
 // NewDNSService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
-  r = &DNSService{}
-  r.Options = opts
-  r.Top = NewDNSTopService(opts...)
-  return
+	r = &DNSService{}
+	r.Options = opts
+	r.Top = NewDNSTopService(opts...)
+	return
 }

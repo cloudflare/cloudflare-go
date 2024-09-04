@@ -3,16 +3,16 @@
 package ssl
 
 import (
-  "context"
-  "errors"
-  "fmt"
-  "net/http"
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
 
-  "github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-  "github.com/cloudflare/cloudflare-go/v2/internal/param"
-  "github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-  "github.com/cloudflare/cloudflare-go/v2/option"
-  "github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 // CertificatePackOrderService contains methods and other services that help with
@@ -22,80 +22,80 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewCertificatePackOrderService] method instead.
 type CertificatePackOrderService struct {
-Options []option.RequestOption
+	Options []option.RequestOption
 }
 
 // NewCertificatePackOrderService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
 func NewCertificatePackOrderService(opts ...option.RequestOption) (r *CertificatePackOrderService) {
-  r = &CertificatePackOrderService{}
-  r.Options = opts
-  return
+	r = &CertificatePackOrderService{}
+	r.Options = opts
+	return
 }
 
 // For a given zone, order an advanced certificate pack.
 func (r *CertificatePackOrderService) New(ctx context.Context, params CertificatePackOrderNewParams, opts ...option.RequestOption) (res *CertificatePackOrderNewResponse, err error) {
-  var env CertificatePackOrderNewResponseEnvelope
-  opts = append(r.Options[:], opts...)
-  if params.ZoneID.Value == "" {
-    err = errors.New("missing required zone_id parameter")
-    return
-  }
-  path := fmt.Sprintf("zones/%s/ssl/certificate_packs/order", params.ZoneID)
-  err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-  if err != nil {
-    return
-  }
-  res = &env.Result
-  return
+	var env CertificatePackOrderNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/order", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 type CertificatePackOrderNewResponse struct {
-// Identifier
-ID string `json:"id"`
-// Certificate Authority selected for the order. For information on any certificate
-// authority specific details or restrictions
-// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-CertificateAuthority CertificatePackOrderNewResponseCertificateAuthority `json:"certificate_authority"`
-// Whether or not to add Cloudflare Branding for the order. This will add
-// sni.cloudflaressl.com as the Common Name if set true.
-CloudflareBranding bool `json:"cloudflare_branding"`
-// Comma separated list of valid host names for the certificate packs. Must contain
-// the zone apex, may not contain more than 50 hosts, and may not be empty.
-Hosts []Host `json:"hosts"`
-// Status of certificate pack.
-Status Status `json:"status"`
-// Type of certificate pack.
-Type CertificatePackOrderNewResponseType `json:"type"`
-// Validation Method selected for the order.
-ValidationMethod CertificatePackOrderNewResponseValidationMethod `json:"validation_method"`
-// Validity Days selected for the order.
-ValidityDays CertificatePackOrderNewResponseValidityDays `json:"validity_days"`
-JSON certificatePackOrderNewResponseJSON `json:"-"`
+	// Identifier
+	ID string `json:"id"`
+	// Certificate Authority selected for the order. For information on any certificate
+	// authority specific details or restrictions
+	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	CertificateAuthority CertificatePackOrderNewResponseCertificateAuthority `json:"certificate_authority"`
+	// Whether or not to add Cloudflare Branding for the order. This will add
+	// sni.cloudflaressl.com as the Common Name if set true.
+	CloudflareBranding bool `json:"cloudflare_branding"`
+	// Comma separated list of valid host names for the certificate packs. Must contain
+	// the zone apex, may not contain more than 50 hosts, and may not be empty.
+	Hosts []Host `json:"hosts"`
+	// Status of certificate pack.
+	Status Status `json:"status"`
+	// Type of certificate pack.
+	Type CertificatePackOrderNewResponseType `json:"type"`
+	// Validation Method selected for the order.
+	ValidationMethod CertificatePackOrderNewResponseValidationMethod `json:"validation_method"`
+	// Validity Days selected for the order.
+	ValidityDays CertificatePackOrderNewResponseValidityDays `json:"validity_days"`
+	JSON         certificatePackOrderNewResponseJSON         `json:"-"`
 }
 
 // certificatePackOrderNewResponseJSON contains the JSON metadata for the struct
 // [CertificatePackOrderNewResponse]
 type certificatePackOrderNewResponseJSON struct {
-ID apijson.Field
-CertificateAuthority apijson.Field
-CloudflareBranding apijson.Field
-Hosts apijson.Field
-Status apijson.Field
-Type apijson.Field
-ValidationMethod apijson.Field
-ValidityDays apijson.Field
-raw string
-ExtraFields map[string]apijson.Field
+	ID                   apijson.Field
+	CertificateAuthority apijson.Field
+	CloudflareBranding   apijson.Field
+	Hosts                apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	ValidationMethod     apijson.Field
+	ValidityDays         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
 func (r *CertificatePackOrderNewResponse) UnmarshalJSON(data []byte) (err error) {
-  return apijson.UnmarshalRoot(data, r)
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r certificatePackOrderNewResponseJSON) RawJSON() (string) {
-  return r.raw
+func (r certificatePackOrderNewResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Certificate Authority selected for the order. For information on any certificate
@@ -104,92 +104,92 @@ func (r certificatePackOrderNewResponseJSON) RawJSON() (string) {
 type CertificatePackOrderNewResponseCertificateAuthority string
 
 const (
-  CertificatePackOrderNewResponseCertificateAuthorityGoogle CertificatePackOrderNewResponseCertificateAuthority = "google"
-  CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt CertificatePackOrderNewResponseCertificateAuthority = "lets_encrypt"
-  CertificatePackOrderNewResponseCertificateAuthoritySSLCom CertificatePackOrderNewResponseCertificateAuthority = "ssl_com"
+	CertificatePackOrderNewResponseCertificateAuthorityGoogle      CertificatePackOrderNewResponseCertificateAuthority = "google"
+	CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt CertificatePackOrderNewResponseCertificateAuthority = "lets_encrypt"
+	CertificatePackOrderNewResponseCertificateAuthoritySSLCom      CertificatePackOrderNewResponseCertificateAuthority = "ssl_com"
 )
 
-func (r CertificatePackOrderNewResponseCertificateAuthority) IsKnown() (bool) {
-  switch r {
-  case CertificatePackOrderNewResponseCertificateAuthorityGoogle, CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt, CertificatePackOrderNewResponseCertificateAuthoritySSLCom:
-      return true
-  }
-  return false
+func (r CertificatePackOrderNewResponseCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseCertificateAuthorityGoogle, CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt, CertificatePackOrderNewResponseCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
 }
 
 // Type of certificate pack.
 type CertificatePackOrderNewResponseType string
 
 const (
-  CertificatePackOrderNewResponseTypeAdvanced CertificatePackOrderNewResponseType = "advanced"
+	CertificatePackOrderNewResponseTypeAdvanced CertificatePackOrderNewResponseType = "advanced"
 )
 
-func (r CertificatePackOrderNewResponseType) IsKnown() (bool) {
-  switch r {
-  case CertificatePackOrderNewResponseTypeAdvanced:
-      return true
-  }
-  return false
+func (r CertificatePackOrderNewResponseType) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseTypeAdvanced:
+		return true
+	}
+	return false
 }
 
 // Validation Method selected for the order.
 type CertificatePackOrderNewResponseValidationMethod string
 
 const (
-  CertificatePackOrderNewResponseValidationMethodTXT CertificatePackOrderNewResponseValidationMethod = "txt"
-  CertificatePackOrderNewResponseValidationMethodHTTP CertificatePackOrderNewResponseValidationMethod = "http"
-  CertificatePackOrderNewResponseValidationMethodEmail CertificatePackOrderNewResponseValidationMethod = "email"
+	CertificatePackOrderNewResponseValidationMethodTXT   CertificatePackOrderNewResponseValidationMethod = "txt"
+	CertificatePackOrderNewResponseValidationMethodHTTP  CertificatePackOrderNewResponseValidationMethod = "http"
+	CertificatePackOrderNewResponseValidationMethodEmail CertificatePackOrderNewResponseValidationMethod = "email"
 )
 
-func (r CertificatePackOrderNewResponseValidationMethod) IsKnown() (bool) {
-  switch r {
-  case CertificatePackOrderNewResponseValidationMethodTXT, CertificatePackOrderNewResponseValidationMethodHTTP, CertificatePackOrderNewResponseValidationMethodEmail:
-      return true
-  }
-  return false
+func (r CertificatePackOrderNewResponseValidationMethod) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseValidationMethodTXT, CertificatePackOrderNewResponseValidationMethodHTTP, CertificatePackOrderNewResponseValidationMethodEmail:
+		return true
+	}
+	return false
 }
 
 // Validity Days selected for the order.
 type CertificatePackOrderNewResponseValidityDays int64
 
 const (
-  CertificatePackOrderNewResponseValidityDays14 CertificatePackOrderNewResponseValidityDays = 14
-  CertificatePackOrderNewResponseValidityDays30 CertificatePackOrderNewResponseValidityDays = 30
-  CertificatePackOrderNewResponseValidityDays90 CertificatePackOrderNewResponseValidityDays = 90
-  CertificatePackOrderNewResponseValidityDays365 CertificatePackOrderNewResponseValidityDays = 365
+	CertificatePackOrderNewResponseValidityDays14  CertificatePackOrderNewResponseValidityDays = 14
+	CertificatePackOrderNewResponseValidityDays30  CertificatePackOrderNewResponseValidityDays = 30
+	CertificatePackOrderNewResponseValidityDays90  CertificatePackOrderNewResponseValidityDays = 90
+	CertificatePackOrderNewResponseValidityDays365 CertificatePackOrderNewResponseValidityDays = 365
 )
 
-func (r CertificatePackOrderNewResponseValidityDays) IsKnown() (bool) {
-  switch r {
-  case CertificatePackOrderNewResponseValidityDays14, CertificatePackOrderNewResponseValidityDays30, CertificatePackOrderNewResponseValidityDays90, CertificatePackOrderNewResponseValidityDays365:
-      return true
-  }
-  return false
+func (r CertificatePackOrderNewResponseValidityDays) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseValidityDays14, CertificatePackOrderNewResponseValidityDays30, CertificatePackOrderNewResponseValidityDays90, CertificatePackOrderNewResponseValidityDays365:
+		return true
+	}
+	return false
 }
 
 type CertificatePackOrderNewParams struct {
-// Identifier
-ZoneID param.Field[string] `path:"zone_id,required"`
-// Certificate Authority selected for the order. For information on any certificate
-// authority specific details or restrictions
-// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-CertificateAuthority param.Field[CertificatePackOrderNewParamsCertificateAuthority] `json:"certificate_authority,required"`
-// Comma separated list of valid host names for the certificate packs. Must contain
-// the zone apex, may not contain more than 50 hosts, and may not be empty.
-Hosts param.Field[[]HostParam] `json:"hosts,required"`
-// Type of certificate pack.
-Type param.Field[CertificatePackOrderNewParamsType] `json:"type,required"`
-// Validation Method selected for the order.
-ValidationMethod param.Field[CertificatePackOrderNewParamsValidationMethod] `json:"validation_method,required"`
-// Validity Days selected for the order.
-ValidityDays param.Field[CertificatePackOrderNewParamsValidityDays] `json:"validity_days,required"`
-// Whether or not to add Cloudflare Branding for the order. This will add
-// sni.cloudflaressl.com as the Common Name if set true.
-CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Certificate Authority selected for the order. For information on any certificate
+	// authority specific details or restrictions
+	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	CertificateAuthority param.Field[CertificatePackOrderNewParamsCertificateAuthority] `json:"certificate_authority,required"`
+	// Comma separated list of valid host names for the certificate packs. Must contain
+	// the zone apex, may not contain more than 50 hosts, and may not be empty.
+	Hosts param.Field[[]HostParam] `json:"hosts,required"`
+	// Type of certificate pack.
+	Type param.Field[CertificatePackOrderNewParamsType] `json:"type,required"`
+	// Validation Method selected for the order.
+	ValidationMethod param.Field[CertificatePackOrderNewParamsValidationMethod] `json:"validation_method,required"`
+	// Validity Days selected for the order.
+	ValidityDays param.Field[CertificatePackOrderNewParamsValidityDays] `json:"validity_days,required"`
+	// Whether or not to add Cloudflare Branding for the order. This will add
+	// sni.cloudflaressl.com as the Common Name if set true.
+	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
 }
 
 func (r CertificatePackOrderNewParams) MarshalJSON() (data []byte, err error) {
-  return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r)
 }
 
 // Certificate Authority selected for the order. For information on any certificate
@@ -198,108 +198,108 @@ func (r CertificatePackOrderNewParams) MarshalJSON() (data []byte, err error) {
 type CertificatePackOrderNewParamsCertificateAuthority string
 
 const (
-  CertificatePackOrderNewParamsCertificateAuthorityGoogle CertificatePackOrderNewParamsCertificateAuthority = "google"
-  CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt CertificatePackOrderNewParamsCertificateAuthority = "lets_encrypt"
-  CertificatePackOrderNewParamsCertificateAuthoritySSLCom CertificatePackOrderNewParamsCertificateAuthority = "ssl_com"
+	CertificatePackOrderNewParamsCertificateAuthorityGoogle      CertificatePackOrderNewParamsCertificateAuthority = "google"
+	CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt CertificatePackOrderNewParamsCertificateAuthority = "lets_encrypt"
+	CertificatePackOrderNewParamsCertificateAuthoritySSLCom      CertificatePackOrderNewParamsCertificateAuthority = "ssl_com"
 )
 
-func (r CertificatePackOrderNewParamsCertificateAuthority) IsKnown() (bool) {
-  switch r {
-  case CertificatePackOrderNewParamsCertificateAuthorityGoogle, CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt, CertificatePackOrderNewParamsCertificateAuthoritySSLCom:
-      return true
-  }
-  return false
+func (r CertificatePackOrderNewParamsCertificateAuthority) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewParamsCertificateAuthorityGoogle, CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt, CertificatePackOrderNewParamsCertificateAuthoritySSLCom:
+		return true
+	}
+	return false
 }
 
 // Type of certificate pack.
 type CertificatePackOrderNewParamsType string
 
 const (
-  CertificatePackOrderNewParamsTypeAdvanced CertificatePackOrderNewParamsType = "advanced"
+	CertificatePackOrderNewParamsTypeAdvanced CertificatePackOrderNewParamsType = "advanced"
 )
 
-func (r CertificatePackOrderNewParamsType) IsKnown() (bool) {
-  switch r {
-  case CertificatePackOrderNewParamsTypeAdvanced:
-      return true
-  }
-  return false
+func (r CertificatePackOrderNewParamsType) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewParamsTypeAdvanced:
+		return true
+	}
+	return false
 }
 
 // Validation Method selected for the order.
 type CertificatePackOrderNewParamsValidationMethod string
 
 const (
-  CertificatePackOrderNewParamsValidationMethodTXT CertificatePackOrderNewParamsValidationMethod = "txt"
-  CertificatePackOrderNewParamsValidationMethodHTTP CertificatePackOrderNewParamsValidationMethod = "http"
-  CertificatePackOrderNewParamsValidationMethodEmail CertificatePackOrderNewParamsValidationMethod = "email"
+	CertificatePackOrderNewParamsValidationMethodTXT   CertificatePackOrderNewParamsValidationMethod = "txt"
+	CertificatePackOrderNewParamsValidationMethodHTTP  CertificatePackOrderNewParamsValidationMethod = "http"
+	CertificatePackOrderNewParamsValidationMethodEmail CertificatePackOrderNewParamsValidationMethod = "email"
 )
 
-func (r CertificatePackOrderNewParamsValidationMethod) IsKnown() (bool) {
-  switch r {
-  case CertificatePackOrderNewParamsValidationMethodTXT, CertificatePackOrderNewParamsValidationMethodHTTP, CertificatePackOrderNewParamsValidationMethodEmail:
-      return true
-  }
-  return false
+func (r CertificatePackOrderNewParamsValidationMethod) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewParamsValidationMethodTXT, CertificatePackOrderNewParamsValidationMethodHTTP, CertificatePackOrderNewParamsValidationMethodEmail:
+		return true
+	}
+	return false
 }
 
 // Validity Days selected for the order.
 type CertificatePackOrderNewParamsValidityDays int64
 
 const (
-  CertificatePackOrderNewParamsValidityDays14 CertificatePackOrderNewParamsValidityDays = 14
-  CertificatePackOrderNewParamsValidityDays30 CertificatePackOrderNewParamsValidityDays = 30
-  CertificatePackOrderNewParamsValidityDays90 CertificatePackOrderNewParamsValidityDays = 90
-  CertificatePackOrderNewParamsValidityDays365 CertificatePackOrderNewParamsValidityDays = 365
+	CertificatePackOrderNewParamsValidityDays14  CertificatePackOrderNewParamsValidityDays = 14
+	CertificatePackOrderNewParamsValidityDays30  CertificatePackOrderNewParamsValidityDays = 30
+	CertificatePackOrderNewParamsValidityDays90  CertificatePackOrderNewParamsValidityDays = 90
+	CertificatePackOrderNewParamsValidityDays365 CertificatePackOrderNewParamsValidityDays = 365
 )
 
-func (r CertificatePackOrderNewParamsValidityDays) IsKnown() (bool) {
-  switch r {
-  case CertificatePackOrderNewParamsValidityDays14, CertificatePackOrderNewParamsValidityDays30, CertificatePackOrderNewParamsValidityDays90, CertificatePackOrderNewParamsValidityDays365:
-      return true
-  }
-  return false
+func (r CertificatePackOrderNewParamsValidityDays) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewParamsValidityDays14, CertificatePackOrderNewParamsValidityDays30, CertificatePackOrderNewParamsValidityDays90, CertificatePackOrderNewParamsValidityDays365:
+		return true
+	}
+	return false
 }
 
 type CertificatePackOrderNewResponseEnvelope struct {
-Errors []shared.ResponseInfo `json:"errors,required"`
-Messages []shared.ResponseInfo `json:"messages,required"`
-// Whether the API call was successful
-Success CertificatePackOrderNewResponseEnvelopeSuccess `json:"success,required"`
-Result CertificatePackOrderNewResponse `json:"result"`
-JSON certificatePackOrderNewResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success CertificatePackOrderNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  CertificatePackOrderNewResponse                `json:"result"`
+	JSON    certificatePackOrderNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // certificatePackOrderNewResponseEnvelopeJSON contains the JSON metadata for the
 // struct [CertificatePackOrderNewResponseEnvelope]
 type certificatePackOrderNewResponseEnvelopeJSON struct {
-Errors apijson.Field
-Messages apijson.Field
-Success apijson.Field
-Result apijson.Field
-raw string
-ExtraFields map[string]apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *CertificatePackOrderNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-  return apijson.UnmarshalRoot(data, r)
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r certificatePackOrderNewResponseEnvelopeJSON) RawJSON() (string) {
-  return r.raw
+func (r certificatePackOrderNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
 type CertificatePackOrderNewResponseEnvelopeSuccess bool
 
 const (
-  CertificatePackOrderNewResponseEnvelopeSuccessTrue CertificatePackOrderNewResponseEnvelopeSuccess = true
+	CertificatePackOrderNewResponseEnvelopeSuccessTrue CertificatePackOrderNewResponseEnvelopeSuccess = true
 )
 
-func (r CertificatePackOrderNewResponseEnvelopeSuccess) IsKnown() (bool) {
-  switch r {
-  case CertificatePackOrderNewResponseEnvelopeSuccessTrue:
-      return true
-  }
-  return false
+func (r CertificatePackOrderNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case CertificatePackOrderNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
