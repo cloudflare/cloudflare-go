@@ -3,10 +3,10 @@
 package dns
 
 import (
-	"time"
+  "time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // DNSService contains methods and other services that help with interacting with
@@ -16,68 +16,68 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDNSService] method instead.
 type DNSService struct {
-	Options   []option.RequestOption
-	Records   *RecordService
-	Settings  *SettingService
-	Analytics *AnalyticsService
-	Firewall  *FirewallService
+Options []option.RequestOption
+Records *RecordService
+Settings *SettingService
+Analytics *AnalyticsService
+Firewall *FirewallService
 }
 
 // NewDNSService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
 func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
-	r = &DNSService{}
-	r.Options = opts
-	r.Records = NewRecordService(opts...)
-	r.Settings = NewSettingService(opts...)
-	r.Analytics = NewAnalyticsService(opts...)
-	r.Firewall = NewFirewallService(opts...)
-	return
+  r = &DNSService{}
+  r.Options = opts
+  r.Records = NewRecordService(opts...)
+  r.Settings = NewSettingService(opts...)
+  r.Analytics = NewAnalyticsService(opts...)
+  r.Firewall = NewFirewallService(opts...)
+  return
 }
 
 type DNSAnalyticsNominalMetric []interface{}
 
 type DNSAnalyticsQuery struct {
-	// Array of dimension names.
-	Dimensions []string `json:"dimensions,required"`
-	// Limit number of returned metrics.
-	Limit int64 `json:"limit,required"`
-	// Array of metric names.
-	Metrics []string `json:"metrics,required"`
-	// Start date and time of requesting data period in ISO 8601 format.
-	Since time.Time `json:"since,required" format:"date-time"`
-	// Unit of time to group data by.
-	TimeDelta Delta `json:"time_delta,required"`
-	// End date and time of requesting data period in ISO 8601 format.
-	Until time.Time `json:"until,required" format:"date-time"`
-	// Segmentation filter in 'attribute operator value' format.
-	Filters string `json:"filters"`
-	// Array of dimensions to sort by, where each dimension may be prefixed by -
-	// (descending) or + (ascending).
-	Sort []string              `json:"sort"`
-	JSON dnsAnalyticsQueryJSON `json:"-"`
+// Array of dimension names.
+Dimensions []string `json:"dimensions,required"`
+// Limit number of returned metrics.
+Limit int64 `json:"limit,required"`
+// Array of metric names.
+Metrics []string `json:"metrics,required"`
+// Start date and time of requesting data period in ISO 8601 format.
+Since time.Time `json:"since,required" format:"date-time"`
+// Unit of time to group data by.
+TimeDelta Delta `json:"time_delta,required"`
+// End date and time of requesting data period in ISO 8601 format.
+Until time.Time `json:"until,required" format:"date-time"`
+// Segmentation filter in 'attribute operator value' format.
+Filters string `json:"filters"`
+// Array of dimensions to sort by, where each dimension may be prefixed by -
+// (descending) or + (ascending).
+Sort []string `json:"sort"`
+JSON dnsAnalyticsQueryJSON `json:"-"`
 }
 
 // dnsAnalyticsQueryJSON contains the JSON metadata for the struct
 // [DNSAnalyticsQuery]
 type dnsAnalyticsQueryJSON struct {
-	Dimensions  apijson.Field
-	Limit       apijson.Field
-	Metrics     apijson.Field
-	Since       apijson.Field
-	TimeDelta   apijson.Field
-	Until       apijson.Field
-	Filters     apijson.Field
-	Sort        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+Dimensions apijson.Field
+Limit apijson.Field
+Metrics apijson.Field
+Since apijson.Field
+TimeDelta apijson.Field
+Until apijson.Field
+Filters apijson.Field
+Sort apijson.Field
+raw string
+ExtraFields map[string]apijson.Field
 }
 
 func (r *DNSAnalyticsQuery) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+  return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsAnalyticsQueryJSON) RawJSON() string {
-	return r.raw
+func (r dnsAnalyticsQueryJSON) RawJSON() (string) {
+  return r.raw
 }

@@ -3,18 +3,18 @@
 package zero_trust
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"net/http"
-	"reflect"
+  "context"
+  "errors"
+  "fmt"
+  "net/http"
+  "reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+  "github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+  "github.com/cloudflare/cloudflare-go/v2/internal/param"
+  "github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+  "github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/shared"
+  "github.com/tidwall/gjson"
 )
 
 // TunnelManagementService contains methods and other services that help with
@@ -24,60 +24,60 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewTunnelManagementService] method instead.
 type TunnelManagementService struct {
-	Options []option.RequestOption
+Options []option.RequestOption
 }
 
 // NewTunnelManagementService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
 func NewTunnelManagementService(opts ...option.RequestOption) (r *TunnelManagementService) {
-	r = &TunnelManagementService{}
-	r.Options = opts
-	return
+  r = &TunnelManagementService{}
+  r.Options = opts
+  return
 }
 
 // Gets a management token used to access the management resources (i.e. Streaming
 // Logs) of a tunnel.
 func (r *TunnelManagementService) New(ctx context.Context, tunnelID string, params TunnelManagementNewParams, opts ...option.RequestOption) (res *TunnelManagementNewResponseUnion, err error) {
-	var env TunnelManagementNewResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if tunnelID == "" {
-		err = errors.New("missing required tunnel_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/management", params.AccountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+  var env TunnelManagementNewResponseEnvelope
+  opts = append(r.Options[:], opts...)
+  if params.AccountID.Value == "" {
+    err = errors.New("missing required account_id parameter")
+    return
+  }
+  if tunnelID == "" {
+    err = errors.New("missing required tunnel_id parameter")
+    return
+  }
+  path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/management", params.AccountID, tunnelID)
+  err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+  if err != nil {
+    return
+  }
+  res = &env.Result
+  return
 }
 
 // Union satisfied by
 // [zero_trust.TunnelManagementNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
 // [zero_trust.TunnelManagementNewResponseArray] or [shared.UnionString].
 type TunnelManagementNewResponseUnion interface {
-	ImplementsZeroTrustTunnelManagementNewResponseUnion()
+  ImplementsZeroTrustTunnelManagementNewResponseUnion()
 }
 
 func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TunnelManagementNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TunnelManagementNewResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+  apijson.RegisterUnion(
+    reflect.TypeOf((*TunnelManagementNewResponseUnion)(nil)).Elem(),
+    "",
+    apijson.UnionVariant{
+      TypeFilter: gjson.JSON,
+      Type: reflect.TypeOf(TunnelManagementNewResponseArray{}),
+    },
+    apijson.UnionVariant{
+      TypeFilter: gjson.String,
+      Type: reflect.TypeOf(shared.UnionString("")),
+    },
+  )
 }
 
 type TunnelManagementNewResponseArray []interface{}
@@ -85,69 +85,69 @@ type TunnelManagementNewResponseArray []interface{}
 func (r TunnelManagementNewResponseArray) ImplementsZeroTrustTunnelManagementNewResponseUnion() {}
 
 type TunnelManagementNewParams struct {
-	// Cloudflare account ID
-	AccountID param.Field[string]                              `path:"account_id,required"`
-	Resources param.Field[[]TunnelManagementNewParamsResource] `json:"resources,required"`
+// Cloudflare account ID
+AccountID param.Field[string] `path:"account_id,required"`
+Resources param.Field[[]TunnelManagementNewParamsResource] `json:"resources,required"`
 }
 
 func (r TunnelManagementNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+  return apijson.MarshalRoot(r)
 }
 
 // Management resources the token will have access to.
 type TunnelManagementNewParamsResource string
 
 const (
-	TunnelManagementNewParamsResourceLogs TunnelManagementNewParamsResource = "logs"
+  TunnelManagementNewParamsResourceLogs TunnelManagementNewParamsResource = "logs"
 )
 
-func (r TunnelManagementNewParamsResource) IsKnown() bool {
-	switch r {
-	case TunnelManagementNewParamsResourceLogs:
-		return true
-	}
-	return false
+func (r TunnelManagementNewParamsResource) IsKnown() (bool) {
+  switch r {
+  case TunnelManagementNewParamsResourceLogs:
+      return true
+  }
+  return false
 }
 
 type TunnelManagementNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo            `json:"errors,required"`
-	Messages []shared.ResponseInfo            `json:"messages,required"`
-	Result   TunnelManagementNewResponseUnion `json:"result,required"`
-	// Whether the API call was successful
-	Success TunnelManagementNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    tunnelManagementNewResponseEnvelopeJSON    `json:"-"`
+Errors []shared.ResponseInfo `json:"errors,required"`
+Messages []shared.ResponseInfo `json:"messages,required"`
+Result TunnelManagementNewResponseUnion `json:"result,required"`
+// Whether the API call was successful
+Success TunnelManagementNewResponseEnvelopeSuccess `json:"success,required"`
+JSON tunnelManagementNewResponseEnvelopeJSON `json:"-"`
 }
 
 // tunnelManagementNewResponseEnvelopeJSON contains the JSON metadata for the
 // struct [TunnelManagementNewResponseEnvelope]
 type tunnelManagementNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+Errors apijson.Field
+Messages apijson.Field
+Result apijson.Field
+Success apijson.Field
+raw string
+ExtraFields map[string]apijson.Field
 }
 
 func (r *TunnelManagementNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+  return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tunnelManagementNewResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
+func (r tunnelManagementNewResponseEnvelopeJSON) RawJSON() (string) {
+  return r.raw
 }
 
 // Whether the API call was successful
 type TunnelManagementNewResponseEnvelopeSuccess bool
 
 const (
-	TunnelManagementNewResponseEnvelopeSuccessTrue TunnelManagementNewResponseEnvelopeSuccess = true
+  TunnelManagementNewResponseEnvelopeSuccessTrue TunnelManagementNewResponseEnvelopeSuccess = true
 )
 
-func (r TunnelManagementNewResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case TunnelManagementNewResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
+func (r TunnelManagementNewResponseEnvelopeSuccess) IsKnown() (bool) {
+  switch r {
+  case TunnelManagementNewResponseEnvelopeSuccessTrue:
+      return true
+  }
+  return false
 }

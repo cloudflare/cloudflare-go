@@ -3,7 +3,7 @@
 package durable_objects
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+  "github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // DurableObjectService contains methods and other services that help with
@@ -13,16 +13,16 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDurableObjectService] method instead.
 type DurableObjectService struct {
-	Options    []option.RequestOption
-	Namespaces *NamespaceService
+Options []option.RequestOption
+Namespaces *NamespaceService
 }
 
 // NewDurableObjectService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
 func NewDurableObjectService(opts ...option.RequestOption) (r *DurableObjectService) {
-	r = &DurableObjectService{}
-	r.Options = opts
-	r.Namespaces = NewNamespaceService(opts...)
-	return
+  r = &DurableObjectService{}
+  r.Options = opts
+  r.Namespaces = NewNamespaceService(opts...)
+  return
 }
