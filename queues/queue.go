@@ -256,9 +256,7 @@ func (r queueUpdatedJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by
-// [queues.QueueDeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
-// [queues.QueueDeleteResponseArray] or [shared.UnionString].
+// Union satisfied by [queues.QueueDeleteResponseArray] or [shared.UnionString].
 type QueueDeleteResponseUnion interface {
 	ImplementsQueuesQueueDeleteResponseUnion()
 }

@@ -7,14 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // SmartRoutingService contains methods and other services that help with
@@ -37,7 +35,7 @@ func NewSmartRoutingService(opts ...option.RequestOption) (r *SmartRoutingServic
 }
 
 // Updates enablement of Argo Smart Routing.
-func (r *SmartRoutingService) Edit(ctx context.Context, params SmartRoutingEditParams, opts ...option.RequestOption) (res *SmartRoutingEditResponseUnion, err error) {
+func (r *SmartRoutingService) Edit(ctx context.Context, params SmartRoutingEditParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env SmartRoutingEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -54,7 +52,7 @@ func (r *SmartRoutingService) Edit(ctx context.Context, params SmartRoutingEditP
 }
 
 // Get Argo Smart Routing setting
-func (r *SmartRoutingService) Get(ctx context.Context, query SmartRoutingGetParams, opts ...option.RequestOption) (res *SmartRoutingGetResponseUnion, err error) {
+func (r *SmartRoutingService) Get(ctx context.Context, query SmartRoutingGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env SmartRoutingGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
@@ -68,42 +66,6 @@ func (r *SmartRoutingService) Get(ctx context.Context, query SmartRoutingGetPara
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by
-// [argo.SmartRoutingEditResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
-type SmartRoutingEditResponseUnion interface {
-	ImplementsArgoSmartRoutingEditResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SmartRoutingEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by
-// [argo.SmartRoutingGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
-type SmartRoutingGetResponseUnion interface {
-	ImplementsArgoSmartRoutingGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SmartRoutingGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type SmartRoutingEditParams struct {
@@ -134,9 +96,9 @@ func (r SmartRoutingEditParamsValue) IsKnown() bool {
 }
 
 type SmartRoutingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   SmartRoutingEditResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartRoutingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    smartRoutingEditResponseEnvelopeJSON    `json:"-"`
@@ -182,9 +144,9 @@ type SmartRoutingGetParams struct {
 }
 
 type SmartRoutingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   SmartRoutingGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartRoutingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    smartRoutingGetResponseEnvelopeJSON    `json:"-"`
