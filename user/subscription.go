@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // SubscriptionService contains methods and other services that help with
@@ -38,7 +36,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 }
 
 // Updates a user's subscriptions.
-func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *SubscriptionUpdateResponseUnion, err error) {
+func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env SubscriptionUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if identifier == "" {
@@ -234,24 +232,6 @@ func (r SubscriptionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by
-// [user.SubscriptionUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
-type SubscriptionUpdateResponseUnion interface {
-	ImplementsUserSubscriptionUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type SubscriptionDeleteResponse struct {
 	// Subscription identifier tag.
 	SubscriptionID string                         `json:"subscription_id"`
@@ -283,9 +263,9 @@ func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo           `json:"errors,required"`
-	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   SubscriptionUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
