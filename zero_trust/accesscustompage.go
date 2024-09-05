@@ -205,8 +205,6 @@ type CustomPageParam struct {
 	Type param.Field[CustomPageType] `json:"type,required"`
 	// Number of apps the custom page is assigned to.
 	AppCount param.Field[int64] `json:"app_count"`
-	// UUID
-	UID param.Field[string] `json:"uid"`
 }
 
 func (r CustomPageParam) MarshalJSON() (data []byte, err error) {
