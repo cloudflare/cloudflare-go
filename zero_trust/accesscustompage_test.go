@@ -34,7 +34,6 @@ func TestAccessCustomPageNewWithOptionalParams(t *testing.T) {
 			Name:       cloudflare.F("name"),
 			Type:       cloudflare.F(zero_trust.CustomPageTypeIdentityDenied),
 			AppCount:   cloudflare.F(int64(0)),
-			UID:        cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 		},
 	})
 	if err != nil {
@@ -69,7 +68,6 @@ func TestAccessCustomPageUpdateWithOptionalParams(t *testing.T) {
 				Name:       cloudflare.F("name"),
 				Type:       cloudflare.F(zero_trust.CustomPageTypeIdentityDenied),
 				AppCount:   cloudflare.F(int64(0)),
-				UID:        cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 			},
 		},
 	)
