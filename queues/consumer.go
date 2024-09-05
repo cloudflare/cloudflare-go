@@ -299,9 +299,7 @@ func (r consumerUpdateResponseSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by
-// [queues.ConsumerDeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
-// [queues.ConsumerDeleteResponseArray] or [shared.UnionString].
+// Union satisfied by [queues.ConsumerDeleteResponseArray] or [shared.UnionString].
 type ConsumerDeleteResponseUnion interface {
 	ImplementsQueuesConsumerDeleteResponseUnion()
 }
