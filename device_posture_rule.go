@@ -203,6 +203,7 @@ type DevicePostureRuleInput struct {
 	ExtendedKeyUsage []string             `json:"extended_key_usage,omitempty"`
 	CheckPrivateKey  *bool                `json:"check_private_key,omitempty"`
 	Locations        CertificateLocations `json:"locations,omitempty"`
+	Score            int                  `json:"score,omitempty"`
 }
 
 // Locations struct for client certificate rule v2.

@@ -1,0 +1,3 @@
+```release-note:enhancement
+device_posture_rule: add score field for custom_s2s posture rule
+```
