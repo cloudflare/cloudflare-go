@@ -109,8 +109,10 @@ func (r r2ConfigurationQueueUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [event_notifications.R2ConfigurationQueueDeleteResponseArray]
-// or [shared.UnionString].
+// Union satisfied by
+// [event_notifications.R2ConfigurationQueueDeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
+// [event_notifications.R2ConfigurationQueueDeleteResponseArray] or
+// [shared.UnionString].
 type R2ConfigurationQueueDeleteResponseUnion interface {
 	ImplementsEventNotificationsR2ConfigurationQueueDeleteResponseUnion()
 }

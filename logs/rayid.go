@@ -8,11 +8,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/tidwall/gjson"
 )
 
 // RayIDService contains methods and other services that help with interacting with
@@ -36,7 +40,7 @@ func NewRayIDService(opts ...option.RequestOption) (r *RayIDService) {
 
 // The `/rayids` api route allows lookups by specific rayid. The rayids route will
 // return zero, one, or more records (ray ids are not unique).
-func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetParams, opts ...option.RequestOption) (res *RayIDGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -49,6 +53,23 @@ func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetPar
 	path := fmt.Sprintf("zones/%s/logs/rayids/%s", params.ZoneID, RayID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
+}
+
+// Union satisfied by [shared.UnionString] or
+// [logs.RayIDGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a].
+type RayIDGetResponseUnion interface {
+	ImplementsLogsRayIDGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RayIDGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type RayIDGetParams struct {
