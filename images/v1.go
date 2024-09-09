@@ -10,7 +10,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
@@ -21,7 +20,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // V1Service contains methods and other services that help with interacting with
@@ -101,7 +99,7 @@ func (r *V1Service) ListAutoPaging(ctx context.Context, params V1ListParams, opt
 
 // Delete an image on Cloudflare Images. On success, all copies of the image are
 // deleted and purged from cache.
-func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeleteParams, opts ...option.RequestOption) (res *V1DeleteResponseUnion, err error) {
+func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env V1DeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -265,24 +263,6 @@ func (r V1ListResponseSuccess) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by
-// [images.V1DeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a] or
-// [shared.UnionString].
-type V1DeleteResponseUnion interface {
-	ImplementsImagesV1DeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*V1DeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type V1NewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -381,7 +361,7 @@ type V1DeleteParams struct {
 type V1DeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1DeleteResponseUnion `json:"result,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success V1DeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1DeleteResponseEnvelopeJSON    `json:"-"`

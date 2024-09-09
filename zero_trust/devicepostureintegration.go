@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // DevicePostureIntegrationService contains methods and other services that help
@@ -82,7 +80,7 @@ func (r *DevicePostureIntegrationService) ListAutoPaging(ctx context.Context, qu
 }
 
 // Delete a configured device posture integration.
-func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, body DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *DevicePostureIntegrationDeleteResponseUnion, err error) {
+func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, body DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env DevicePostureIntegrationDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -226,24 +224,6 @@ func (r IntegrationType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Union satisfied by
-// [zero_trust.DevicePostureIntegrationDeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
-type DevicePostureIntegrationDeleteResponseUnion interface {
-	ImplementsZeroTrustDevicePostureIntegrationDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DevicePostureIntegrationDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type DevicePostureIntegrationNewParams struct {
@@ -498,9 +478,9 @@ type DevicePostureIntegrationDeleteParams struct {
 }
 
 type DevicePostureIntegrationDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
-	Result   DevicePostureIntegrationDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePostureIntegrationDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePostureIntegrationDeleteResponseEnvelopeJSON    `json:"-"`

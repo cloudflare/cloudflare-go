@@ -204,7 +204,6 @@ func (r WAFPackageListResponseFirewallAPIResponseCollection) implementsFirewallW
 }
 
 // Union satisfied by
-// [firewall.WAFPackageListResponseFirewallAPIResponseCollectionResultUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a],
 // [firewall.WAFPackageListResponseFirewallAPIResponseCollectionResultArray] or
 // [shared.UnionString].
 type WAFPackageListResponseFirewallAPIResponseCollectionResultUnion interface {
@@ -695,8 +694,7 @@ type WAFPackageGetResponse struct {
 	Errors interface{} `json:"errors,required"`
 	// This field can have the runtime type of [[]shared.ResponseInfo].
 	Messages interface{} `json:"messages,required"`
-	// This field can have the runtime type of
-	// [WAFPackageGetResponseFirewallAPIResponseSingleResultUnion], [interface{}].
+	// This field can have the runtime type of [interface{}].
 	Result interface{} `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGetResponseSuccess `json:"success"`
@@ -760,9 +758,9 @@ func init() {
 }
 
 type WAFPackageGetResponseFirewallAPIResponseSingle struct {
-	Errors   []shared.ResponseInfo                                     `json:"errors,required"`
-	Messages []shared.ResponseInfo                                     `json:"messages,required"`
-	Result   WAFPackageGetResponseFirewallAPIResponseSingleResultUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success WAFPackageGetResponseFirewallAPIResponseSingleSuccess `json:"success,required"`
 	JSON    wafPackageGetResponseFirewallAPIResponseSingleJSON    `json:"-"`
@@ -788,24 +786,6 @@ func (r wafPackageGetResponseFirewallAPIResponseSingleJSON) RawJSON() string {
 }
 
 func (r WAFPackageGetResponseFirewallAPIResponseSingle) implementsFirewallWAFPackageGetResponse() {}
-
-// Union satisfied by
-// [firewall.WAFPackageGetResponseFirewallAPIResponseSingleResultUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
-type WAFPackageGetResponseFirewallAPIResponseSingleResultUnion interface {
-	ImplementsFirewallWAFPackageGetResponseFirewallAPIResponseSingleResultUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WAFPackageGetResponseFirewallAPIResponseSingleResultUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
 
 // Whether the API call was successful
 type WAFPackageGetResponseFirewallAPIResponseSingleSuccess bool
