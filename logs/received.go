@@ -8,11 +8,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/tidwall/gjson"
 )
 
 // ReceivedService contains methods and other services that help with interacting
@@ -44,7 +48,7 @@ func NewReceivedService(opts ...option.RequestOption) (r *ReceivedService) {
 // `start=2018-05-20T10:00:00Z&end=2018-05-20T10:01:00Z`, then
 // `start=2018-05-20T10:01:00Z&end=2018-05-20T10:02:00Z` and so on; the overlap
 // will be handled properly.
-func (r *ReceivedService) Get(ctx context.Context, params ReceivedGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *ReceivedService) Get(ctx context.Context, params ReceivedGetParams, opts ...option.RequestOption) (res *ReceivedGetResponseUnion, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -53,6 +57,23 @@ func (r *ReceivedService) Get(ctx context.Context, params ReceivedGetParams, opt
 	path := fmt.Sprintf("zones/%s/logs/received", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
+}
+
+// Union satisfied by [shared.UnionString] or
+// [logs.ReceivedGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a].
+type ReceivedGetResponseUnion interface {
+	ImplementsLogsReceivedGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ReceivedGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type ReceivedGetParams struct {
