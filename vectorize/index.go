@@ -11,6 +11,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
@@ -21,6 +22,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/tidwall/gjson"
 )
 
 // IndexService contains methods and other services that help with interacting with
@@ -89,7 +91,7 @@ func (r *IndexService) ListAutoPaging(ctx context.Context, query IndexListParams
 }
 
 // Deletes the specified Vectorize Index.
-func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *IndexService) Delete(ctx context.Context, indexName string, body IndexDeleteParams, opts ...option.RequestOption) (res *IndexDeleteResponseUnion, err error) {
 	var env IndexDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -343,6 +345,24 @@ func (r IndexDimensionConfigurationParam) MarshalJSON() (data []byte, err error)
 }
 
 func (r IndexDimensionConfigurationParam) implementsVectorizeIndexNewParamsConfigUnion() {}
+
+// Union satisfied by
+// [vectorize.IndexDeleteResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
+type IndexDeleteResponseUnion interface {
+	ImplementsVectorizeIndexDeleteResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*IndexDeleteResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
 type IndexDeleteByIDsResponse struct {
 	// The unique identifier for the async mutation operation containing the changeset.
@@ -660,9 +680,9 @@ type IndexDeleteParams struct {
 }
 
 type IndexDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo    `json:"errors,required"`
+	Messages []shared.ResponseInfo    `json:"messages,required"`
+	Result   IndexDeleteResponseUnion `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success IndexDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexDeleteResponseEnvelopeJSON    `json:"-"`

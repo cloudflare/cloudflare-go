@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -16,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/tidwall/gjson"
 )
 
 // UARuleService contains methods and other services that help with interacting
@@ -38,7 +40,7 @@ func NewUARuleService(opts ...option.RequestOption) (r *UARuleService) {
 }
 
 // Creates a new User Agent Blocking rule in a zone.
-func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *UARuleNewResponseUnion, err error) {
 	var env UARuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
@@ -55,7 +57,7 @@ func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UAR
 }
 
 // Updates an existing User Agent Blocking rule.
-func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *UARuleUpdateResponseUnion, err error) {
 	var env UARuleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
@@ -126,7 +128,7 @@ func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id st
 }
 
 // Fetches the details of a User Agent Blocking rule.
-func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *UARuleGetResponseUnion, err error) {
 	var env UARuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
@@ -144,6 +146,42 @@ func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id strin
 	}
 	res = &env.Result
 	return
+}
+
+// Union satisfied by
+// [firewall.UARuleNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a] or
+// [shared.UnionString].
+type UARuleNewResponseUnion interface {
+	ImplementsFirewallUARuleNewResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UARuleNewResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by
+// [firewall.UARuleUpdateResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
+// or [shared.UnionString].
+type UARuleUpdateResponseUnion interface {
+	ImplementsFirewallUARuleUpdateResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UARuleUpdateResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type UARuleListResponse struct {
@@ -248,6 +286,24 @@ func (r uaRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Union satisfied by
+// [firewall.UARuleGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a] or
+// [shared.UnionString].
+type UARuleGetResponseUnion interface {
+	ImplementsFirewallUARuleGetResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UARuleGetResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type UARuleNewParams struct {
 	// The rule configuration.
 	Configuration param.Field[UARuleNewParamsConfigurationUnion] `json:"configuration,required"`
@@ -325,9 +381,9 @@ func (r UARuleNewParamsMode) IsKnown() bool {
 }
 
 type UARuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   UARuleNewResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success UARuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -444,9 +500,9 @@ func (r UARuleUpdateParamsMode) IsKnown() bool {
 }
 
 type UARuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []shared.ResponseInfo     `json:"errors,required"`
+	Messages []shared.ResponseInfo     `json:"messages,required"`
+	Result   UARuleUpdateResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success UARuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -552,9 +608,9 @@ func (r UARuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Errors   []shared.ResponseInfo  `json:"errors,required"`
+	Messages []shared.ResponseInfo  `json:"messages,required"`
+	Result   UARuleGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success UARuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleGetResponseEnvelopeJSON    `json:"-"`
