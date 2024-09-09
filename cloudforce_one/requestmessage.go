@@ -35,9 +35,7 @@ func NewRequestMessageService(opts ...option.RequestOption) (r *RequestMessageSe
 	return
 }
 
-// Creating a request adds the request into the Cloudforce One queue for analysis.
-// In addition to the content, a short title, type, priority, and releasability
-// should be provided. If one is not provided a default will be assigned.
+// Create a New Request Message
 func (r *RequestMessageService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageNewParams, opts ...option.RequestOption) (res *Message, err error) {
 	var env RequestMessageNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -123,7 +121,7 @@ type Message struct {
 	Author string `json:"author,required"`
 	// Content of message
 	Content string `json:"content,required"`
-	// Message is a follow-on request
+	// Whether the message is a follow-on request
 	IsFollowOnRequest bool `json:"is_follow_on_request,required"`
 	// Message last updated time
 	Updated time.Time `json:"updated,required" format:"date-time"`
@@ -246,39 +244,12 @@ func (r RequestMessageNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestMessageUpdateParams struct {
-	// Request content
+	// Content of message
 	Content param.Field[string] `json:"content"`
-	// Priority for analyzing the request
-	Priority param.Field[string] `json:"priority"`
-	// Requested information from request
-	RequestType param.Field[string] `json:"request_type"`
-	// Brief description of the request
-	Summary param.Field[string] `json:"summary"`
-	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp param.Field[RequestMessageUpdateParamsTlp] `json:"tlp"`
 }
 
 func (r RequestMessageUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type RequestMessageUpdateParamsTlp string
-
-const (
-	RequestMessageUpdateParamsTlpClear       RequestMessageUpdateParamsTlp = "clear"
-	RequestMessageUpdateParamsTlpAmber       RequestMessageUpdateParamsTlp = "amber"
-	RequestMessageUpdateParamsTlpAmberStrict RequestMessageUpdateParamsTlp = "amber-strict"
-	RequestMessageUpdateParamsTlpGreen       RequestMessageUpdateParamsTlp = "green"
-	RequestMessageUpdateParamsTlpRed         RequestMessageUpdateParamsTlp = "red"
-)
-
-func (r RequestMessageUpdateParamsTlp) IsKnown() bool {
-	switch r {
-	case RequestMessageUpdateParamsTlpClear, RequestMessageUpdateParamsTlpAmber, RequestMessageUpdateParamsTlpAmberStrict, RequestMessageUpdateParamsTlpGreen, RequestMessageUpdateParamsTlpRed:
-		return true
-	}
-	return false
 }
 
 type RequestMessageUpdateResponseEnvelope struct {
