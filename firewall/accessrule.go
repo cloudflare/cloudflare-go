@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
@@ -17,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // AccessRuleService contains methods and other services that help with interacting
@@ -44,7 +42,7 @@ func NewAccessRuleService(opts ...option.RequestOption) (r *AccessRuleService) {
 //
 // Note: To create an IP Access rule that applies to a single zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
-func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *AccessRuleNewResponseUnion, err error) {
+func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env AccessRuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -159,7 +157,7 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier string, body 
 // Updates an IP Access rule defined.
 //
 // Note: This operation will affect all zones in the account or zone.
-func (r *AccessRuleService) Edit(ctx context.Context, identifier string, params AccessRuleEditParams, opts ...option.RequestOption) (res *AccessRuleEditResponseUnion, err error) {
+func (r *AccessRuleService) Edit(ctx context.Context, identifier string, params AccessRuleEditParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env AccessRuleEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -194,7 +192,7 @@ func (r *AccessRuleService) Edit(ctx context.Context, identifier string, params 
 }
 
 // Fetches the details of an IP Access rule defined.
-func (r *AccessRuleService) Get(ctx context.Context, identifier string, query AccessRuleGetParams, opts ...option.RequestOption) (res *AccessRuleGetResponseUnion, err error) {
+func (r *AccessRuleService) Get(ctx context.Context, identifier string, query AccessRuleGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env AccessRuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -412,24 +410,6 @@ func (r IPV6ConfigurationTarget) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by
-// [firewall.AccessRuleNewResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
-type AccessRuleNewResponseUnion interface {
-	ImplementsFirewallAccessRuleNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessRuleNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type AccessRuleListResponse = interface{}
 
 type AccessRuleDeleteResponse struct {
@@ -452,42 +432,6 @@ func (r *AccessRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r accessRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// Union satisfied by
-// [firewall.AccessRuleEditResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
-type AccessRuleEditResponseUnion interface {
-	ImplementsFirewallAccessRuleEditResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessRuleEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by
-// [firewall.AccessRuleGetResponseUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a]
-// or [shared.UnionString].
-type AccessRuleGetResponseUnion interface {
-	ImplementsFirewallAccessRuleGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessRuleGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type AccessRuleNewParams struct {
@@ -573,9 +517,9 @@ func (r AccessRuleNewParamsMode) IsKnown() bool {
 }
 
 type AccessRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   AccessRuleNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -888,9 +832,9 @@ func (r AccessRuleEditParamsMode) IsKnown() bool {
 }
 
 type AccessRuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   AccessRuleEditResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleEditResponseEnvelopeJSON    `json:"-"`
@@ -938,9 +882,9 @@ type AccessRuleGetParams struct {
 }
 
 type AccessRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   AccessRuleGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleGetResponseEnvelopeJSON    `json:"-"`

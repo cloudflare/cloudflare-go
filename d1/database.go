@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
@@ -18,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
 )
 
 // DatabaseService contains methods and other services that help with interacting
@@ -593,9 +591,9 @@ func (r databaseRawResponseMetaJSON) RawJSON() string {
 }
 
 type DatabaseRawResponseResults struct {
-	Columns []string                                `json:"columns"`
-	Rows    [][]DatabaseRawResponseResultsRowsUnion `json:"rows"`
-	JSON    databaseRawResponseResultsJSON          `json:"-"`
+	Columns []string                       `json:"columns"`
+	Rows    [][]interface{}                `json:"rows"`
+	JSON    databaseRawResponseResultsJSON `json:"-"`
 }
 
 // databaseRawResponseResultsJSON contains the JSON metadata for the struct
@@ -613,27 +611,6 @@ func (r *DatabaseRawResponseResults) UnmarshalJSON(data []byte) (err error) {
 
 func (r databaseRawResponseResultsJSON) RawJSON() string {
 	return r.raw
-}
-
-// Union satisfied by [shared.UnionFloat], [shared.UnionString] or
-// [d1.DatabaseRawResponseResultsRowsUnnamedSchemaRef9444735ca60712dbcf8afd832eb5716a].
-type DatabaseRawResponseResultsRowsUnion interface {
-	ImplementsD1DatabaseRawResponseResultsRowsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DatabaseRawResponseResultsRowsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type DatabaseNewParams struct {
