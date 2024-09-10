@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package challenges_test
+package turnstile_test
 
 import (
 	"context"
@@ -9,9 +9,9 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/challenges"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/turnstile"
 )
 
 func TestWidgetNewWithOptionalParams(t *testing.T) {
@@ -27,19 +27,19 @@ func TestWidgetNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Challenges.Widgets.New(context.TODO(), challenges.WidgetNewParams{
+	_, err := client.Turnstile.Widgets.New(context.TODO(), turnstile.WidgetNewParams{
 		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Domains:        cloudflare.F([]challenges.WidgetDomainParam{"203.0.113.1", "cloudflare.com", "blog.example.com"}),
-		Mode:           cloudflare.F(challenges.WidgetNewParamsModeNonInteractive),
+		Domains:        cloudflare.F([]turnstile.WidgetDomainParam{"203.0.113.1", "cloudflare.com", "blog.example.com"}),
+		Mode:           cloudflare.F(turnstile.WidgetNewParamsModeNonInteractive),
 		Name:           cloudflare.F("blog.cloudflare.com login form"),
-		Direction:      cloudflare.F(challenges.WidgetNewParamsDirectionAsc),
-		Order:          cloudflare.F(challenges.WidgetNewParamsOrderID),
+		Direction:      cloudflare.F(turnstile.WidgetNewParamsDirectionAsc),
+		Order:          cloudflare.F(turnstile.WidgetNewParamsOrderID),
 		Page:           cloudflare.F(1.000000),
 		PerPage:        cloudflare.F(5.000000),
 		BotFightMode:   cloudflare.F(false),
-		ClearanceLevel: cloudflare.F(challenges.WidgetNewParamsClearanceLevelNoClearance),
+		ClearanceLevel: cloudflare.F(turnstile.WidgetNewParamsClearanceLevelNoClearance),
 		Offlabel:       cloudflare.F(false),
-		Region:         cloudflare.F(challenges.WidgetNewParamsRegionWorld),
+		Region:         cloudflare.F(turnstile.WidgetNewParamsRegionWorld),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -63,16 +63,16 @@ func TestWidgetUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Challenges.Widgets.Update(
+	_, err := client.Turnstile.Widgets.Update(
 		context.TODO(),
 		"0x4AAF00AAAABn0R22HWm-YUc",
-		challenges.WidgetUpdateParams{
+		turnstile.WidgetUpdateParams{
 			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Domains:        cloudflare.F([]challenges.WidgetDomainParam{"203.0.113.1", "cloudflare.com", "blog.example.com"}),
-			Mode:           cloudflare.F(challenges.WidgetUpdateParamsModeNonInteractive),
+			Domains:        cloudflare.F([]turnstile.WidgetDomainParam{"203.0.113.1", "cloudflare.com", "blog.example.com"}),
+			Mode:           cloudflare.F(turnstile.WidgetUpdateParamsModeNonInteractive),
 			Name:           cloudflare.F("blog.cloudflare.com login form"),
 			BotFightMode:   cloudflare.F(false),
-			ClearanceLevel: cloudflare.F(challenges.WidgetUpdateParamsClearanceLevelNoClearance),
+			ClearanceLevel: cloudflare.F(turnstile.WidgetUpdateParamsClearanceLevelNoClearance),
 			Offlabel:       cloudflare.F(false),
 		},
 	)
@@ -98,10 +98,10 @@ func TestWidgetListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Challenges.Widgets.List(context.TODO(), challenges.WidgetListParams{
+	_, err := client.Turnstile.Widgets.List(context.TODO(), turnstile.WidgetListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction: cloudflare.F(challenges.WidgetListParamsDirectionAsc),
-		Order:     cloudflare.F(challenges.WidgetListParamsOrderID),
+		Direction: cloudflare.F(turnstile.WidgetListParamsDirectionAsc),
+		Order:     cloudflare.F(turnstile.WidgetListParamsOrderID),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 	})
@@ -127,10 +127,10 @@ func TestWidgetDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Challenges.Widgets.Delete(
+	_, err := client.Turnstile.Widgets.Delete(
 		context.TODO(),
 		"0x4AAF00AAAABn0R22HWm-YUc",
-		challenges.WidgetDeleteParams{
+		turnstile.WidgetDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -156,10 +156,10 @@ func TestWidgetGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Challenges.Widgets.Get(
+	_, err := client.Turnstile.Widgets.Get(
 		context.TODO(),
 		"0x4AAF00AAAABn0R22HWm-YUc",
-		challenges.WidgetGetParams{
+		turnstile.WidgetGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -185,10 +185,10 @@ func TestWidgetRotateSecretWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Challenges.Widgets.RotateSecret(
+	_, err := client.Turnstile.Widgets.RotateSecret(
 		context.TODO(),
 		"0x4AAF00AAAABn0R22HWm-YUc",
-		challenges.WidgetRotateSecretParams{
+		turnstile.WidgetRotateSecretParams{
 			AccountID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			InvalidateImmediately: cloudflare.F(true),
 		},
