@@ -22,7 +22,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/cache"
 	"github.com/cloudflare/cloudflare-go/v2/calls"
 	"github.com/cloudflare/cloudflare-go/v2/certificate_authorities"
-	"github.com/cloudflare/cloudflare-go/v2/challenges"
 	"github.com/cloudflare/cloudflare-go/v2/client_certificates"
 	"github.com/cloudflare/cloudflare-go/v2/cloud_connector"
 	"github.com/cloudflare/cloudflare-go/v2/cloudforce_one"
@@ -84,6 +83,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/ssl"
 	"github.com/cloudflare/cloudflare-go/v2/storage"
 	"github.com/cloudflare/cloudflare-go/v2/stream"
+	"github.com/cloudflare/cloudflare-go/v2/turnstile"
 	"github.com/cloudflare/cloudflare-go/v2/url_normalization"
 	"github.com/cloudflare/cloudflare-go/v2/url_scanner"
 	"github.com/cloudflare/cloudflare-go/v2/user"
@@ -169,7 +169,7 @@ type Client struct {
 	WARPConnector               *warp_connector.WARPConnectorService
 	WorkersForPlatforms         *workers_for_platforms.WorkersForPlatformService
 	ZeroTrust                   *zero_trust.ZeroTrustService
-	Challenges                  *challenges.ChallengeService
+	Turnstile                   *turnstile.TurnstileService
 	Hyperdrive                  *hyperdrive.HyperdriveService
 	RUM                         *rum.RUMService
 	Vectorize                   *vectorize.VectorizeService
@@ -280,7 +280,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.WARPConnector = warp_connector.NewWARPConnectorService(opts...)
 	r.WorkersForPlatforms = workers_for_platforms.NewWorkersForPlatformService(opts...)
 	r.ZeroTrust = zero_trust.NewZeroTrustService(opts...)
-	r.Challenges = challenges.NewChallengeService(opts...)
+	r.Turnstile = turnstile.NewTurnstileService(opts...)
 	r.Hyperdrive = hyperdrive.NewHyperdriveService(opts...)
 	r.RUM = rum.NewRUMService(opts...)
 	r.Vectorize = vectorize.NewVectorizeService(opts...)

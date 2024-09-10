@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package challenges
+package turnstile
 
 import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apierror"
