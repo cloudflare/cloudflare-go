@@ -435,6 +435,27 @@ Methods:
 - <code title="put /zones/{identifier}/subscription">client.Zones.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SubscriptionService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SubscriptionUpdateParams">SubscriptionUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#interface{}">interface{}</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{identifier}/subscription">client.Zones.Subscriptions.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#SubscriptionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#interface{}">interface{}</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+## Plans
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#AvailableRatePlan">AvailableRatePlan</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/available_plans">client.Zones.Plans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#PlanService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#PlanListParams">PlanListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#AvailableRatePlan">AvailableRatePlan</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/available_plans/{plan_identifier}">client.Zones.Plans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#PlanService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, planIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#PlanGetParams">PlanGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#AvailableRatePlan">AvailableRatePlan</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## RatePlans
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#RatePlanGetResponse">RatePlanGetResponse</a>
+
+Methods:
+
+- <code title="get /zones/{zone_id}/available_rate_plans">client.Zones.RatePlans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#RatePlanService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#RatePlanGetParams">RatePlanGetParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zones#RatePlanGetResponse">RatePlanGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # LoadBalancers
 
 Params Types:
@@ -803,27 +824,6 @@ Methods:
 
 - <code title="patch /zones/{zone_id}/argo/tiered_caching">client.Argo.TieredCaching.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/argo#TieredCachingService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/argo">argo</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/argo#TieredCachingEditParams">TieredCachingEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/argo">argo</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/argo#TieredCachingEditResponse">TieredCachingEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/argo/tiered_caching">client.Argo.TieredCaching.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/argo#TieredCachingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/argo">argo</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/argo#TieredCachingGetParams">TieredCachingGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/argo">argo</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/argo#TieredCachingGetResponse">TieredCachingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-# Plans
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans">plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#AvailableRatePlan">AvailableRatePlan</a>
-
-Methods:
-
-- <code title="get /zones/{zone_id}/available_plans">client.Plans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#PlanService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans">plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#PlanListParams">PlanListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/pagination#SinglePage">SinglePage</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans">plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#AvailableRatePlan">AvailableRatePlan</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_id}/available_plans/{plan_identifier}">client.Plans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#PlanService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, planIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans">plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#PlanGetParams">PlanGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans">plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/plans#AvailableRatePlan">AvailableRatePlan</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-# RatePlans
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans">rate_plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans#RatePlan">RatePlan</a>
-
-Methods:
-
-- <code title="get /zones/{zone_id}/available_rate_plans">client.RatePlans.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans#RatePlanService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans">rate_plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans#RatePlanGetParams">RatePlanGetParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans">rate_plans</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/rate_plans#RatePlan">RatePlan</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # CertificateAuthorities
 

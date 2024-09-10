@@ -64,12 +64,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/page_shield"
 	"github.com/cloudflare/cloudflare-go/v2/pagerules"
 	"github.com/cloudflare/cloudflare-go/v2/pages"
-	"github.com/cloudflare/cloudflare-go/v2/plans"
 	"github.com/cloudflare/cloudflare-go/v2/queues"
 	"github.com/cloudflare/cloudflare-go/v2/r2"
 	"github.com/cloudflare/cloudflare-go/v2/radar"
 	"github.com/cloudflare/cloudflare-go/v2/rate_limits"
-	"github.com/cloudflare/cloudflare-go/v2/rate_plans"
 	"github.com/cloudflare/cloudflare-go/v2/registrar"
 	"github.com/cloudflare/cloudflare-go/v2/request_tracers"
 	"github.com/cloudflare/cloudflare-go/v2/rules"
@@ -112,8 +110,6 @@ type Client struct {
 	SSL                         *ssl.SSLService
 	ACM                         *acm.ACMService
 	Argo                        *argo.ArgoService
-	Plans                       *plans.PlanService
-	RatePlans                   *rate_plans.RatePlanService
 	CertificateAuthorities      *certificate_authorities.CertificateAuthorityService
 	ClientCertificates          *client_certificates.ClientCertificateService
 	CustomCertificates          *custom_certificates.CustomCertificateService
@@ -222,8 +218,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.SSL = ssl.NewSSLService(opts...)
 	r.ACM = acm.NewACMService(opts...)
 	r.Argo = argo.NewArgoService(opts...)
-	r.Plans = plans.NewPlanService(opts...)
-	r.RatePlans = rate_plans.NewRatePlanService(opts...)
 	r.CertificateAuthorities = certificate_authorities.NewCertificateAuthorityService(opts...)
 	r.ClientCertificates = client_certificates.NewClientCertificateService(opts...)
 	r.CustomCertificates = custom_certificates.NewCustomCertificateService(opts...)
