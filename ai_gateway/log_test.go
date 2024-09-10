@@ -36,7 +36,7 @@ func TestLogListWithOptionalParams(t *testing.T) {
 			Cached:              cloudflare.F(true),
 			Direction:           cloudflare.F(ai_gateway.LogListParamsDirectionAsc),
 			EndDate:             cloudflare.F(time.Now()),
-			Feedback:            cloudflare.F(ai_gateway.LogListParamsFeedback - 1),
+			Feedback:            cloudflare.F(ai_gateway.LogListParamsFeedback0),
 			MaxCost:             cloudflare.F(0.000000),
 			MaxDuration:         cloudflare.F(0.000000),
 			MaxTokensIn:         cloudflare.F(0.000000),
