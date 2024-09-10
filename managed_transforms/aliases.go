@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package managed_headers
+package managed_transforms
 
 import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apierror"
