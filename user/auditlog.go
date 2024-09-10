@@ -6,7 +6,6 @@ import (
 	"context"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
@@ -65,9 +64,9 @@ type AuditLogListParams struct {
 	ID     param.Field[string]                   `query:"id"`
 	Action param.Field[AuditLogListParamsAction] `query:"action"`
 	Actor  param.Field[AuditLogListParamsActor]  `query:"actor"`
-	// Limits the returned results to logs older than the specified date. This can be a
-	// date string `2019-04-30` or an absolute timestamp that conforms to RFC3339.
-	Before param.Field[time.Time] `query:"before" format:"date-time"`
+	// Limits the returned results to logs older than the specified date. A `full-date`
+	// that conforms to RFC3339.
+	Before param.Field[AuditLogListParamsBeforeUnion] `query:"before" format:"date"`
 	// Changes the direction of the chronological sorting.
 	Direction param.Field[AuditLogListParamsDirection] `query:"direction"`
 	// Indicates that this request is an export of logs in CSV format.
@@ -78,10 +77,10 @@ type AuditLogListParams struct {
 	Page param.Field[float64] `query:"page"`
 	// Sets the number of results to return per page.
 	PerPage param.Field[float64] `query:"per_page"`
-	// Limits the returned results to logs newer than the specified date. This can be a
-	// date string `2019-04-30` or an absolute timestamp that conforms to RFC3339.
-	Since param.Field[time.Time]              `query:"since" format:"date-time"`
-	Zone  param.Field[AuditLogListParamsZone] `query:"zone"`
+	// Limits the returned results to logs newer than the specified date. A `full-date`
+	// that conforms to RFC3339.
+	Since param.Field[AuditLogListParamsSinceUnion] `query:"since" format:"date"`
+	Zone  param.Field[AuditLogListParamsZone]       `query:"zone"`
 }
 
 // URLQuery serializes [AuditLogListParams]'s query parameters as `url.Values`.
@@ -123,6 +122,14 @@ func (r AuditLogListParamsActor) URLQuery() (v url.Values) {
 	})
 }
 
+// Limits the returned results to logs older than the specified date. A `full-date`
+// that conforms to RFC3339.
+//
+// Satisfied by [shared.UnionTime], [shared.UnionTime].
+type AuditLogListParamsBeforeUnion interface {
+	ImplementsUserAuditLogListParamsBeforeUnion()
+}
+
 // Changes the direction of the chronological sorting.
 type AuditLogListParamsDirection string
 
@@ -137,6 +144,14 @@ func (r AuditLogListParamsDirection) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Limits the returned results to logs newer than the specified date. A `full-date`
+// that conforms to RFC3339.
+//
+// Satisfied by [shared.UnionTime], [shared.UnionTime].
+type AuditLogListParamsSinceUnion interface {
+	ImplementsUserAuditLogListParamsSinceUnion()
 }
 
 type AuditLogListParamsZone struct {
