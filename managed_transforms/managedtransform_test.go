@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package managed_headers_test
+package managed_transforms_test
 
 import (
 	"context"
@@ -10,11 +10,11 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/managed_headers"
+	"github.com/cloudflare/cloudflare-go/v2/managed_transforms"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestManagedHeaderList(t *testing.T) {
+func TestManagedTransformList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,7 +27,7 @@ func TestManagedHeaderList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ManagedHeaders.List(context.TODO(), managed_headers.ManagedHeaderListParams{
+	_, err := client.ManagedTransforms.List(context.TODO(), managed_transforms.ManagedTransformListParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
@@ -39,7 +39,7 @@ func TestManagedHeaderList(t *testing.T) {
 	}
 }
 
-func TestManagedHeaderEdit(t *testing.T) {
+func TestManagedTransformEdit(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -52,9 +52,9 @@ func TestManagedHeaderEdit(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ManagedHeaders.Edit(context.TODO(), managed_headers.ManagedHeaderEditParams{
+	_, err := client.ManagedTransforms.Edit(context.TODO(), managed_transforms.ManagedTransformEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ManagedRequestHeaders: cloudflare.F([]managed_headers.RequestModelParam{{
+		ManagedRequestHeaders: cloudflare.F([]managed_transforms.RequestModelParam{{
 			ID:      cloudflare.F("add_cf-bot-score_header"),
 			Enabled: cloudflare.F(true),
 		}, {
@@ -64,7 +64,7 @@ func TestManagedHeaderEdit(t *testing.T) {
 			ID:      cloudflare.F("add_cf-bot-score_header"),
 			Enabled: cloudflare.F(true),
 		}}),
-		ManagedResponseHeaders: cloudflare.F([]managed_headers.RequestModelParam{{
+		ManagedResponseHeaders: cloudflare.F([]managed_transforms.RequestModelParam{{
 			ID:      cloudflare.F("add_cf-bot-score_header"),
 			Enabled: cloudflare.F(true),
 		}, {

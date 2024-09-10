@@ -54,7 +54,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/logs"
 	"github.com/cloudflare/cloudflare-go/v2/magic_network_monitoring"
 	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v2/managed_headers"
+	"github.com/cloudflare/cloudflare-go/v2/managed_transforms"
 	"github.com/cloudflare/cloudflare-go/v2/memberships"
 	"github.com/cloudflare/cloudflare-go/v2/mtls_certificates"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -140,7 +140,7 @@ type Client struct {
 	DurableObjects              *durable_objects.DurableObjectService
 	Queues                      *queues.QueueService
 	APIGateway                  *api_gateway.APIGatewayService
-	ManagedHeaders              *managed_headers.ManagedHeaderService
+	ManagedTransforms           *managed_transforms.ManagedTransformService
 	PageShield                  *page_shield.PageShieldService
 	Rulesets                    *rulesets.RulesetService
 	URLNormalization            *url_normalization.URLNormalizationService
@@ -250,7 +250,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DurableObjects = durable_objects.NewDurableObjectService(opts...)
 	r.Queues = queues.NewQueueService(opts...)
 	r.APIGateway = api_gateway.NewAPIGatewayService(opts...)
-	r.ManagedHeaders = managed_headers.NewManagedHeaderService(opts...)
+	r.ManagedTransforms = managed_transforms.NewManagedTransformService(opts...)
 	r.PageShield = page_shield.NewPageShieldService(opts...)
 	r.Rulesets = rulesets.NewRulesetService(opts...)
 	r.URLNormalization = url_normalization.NewURLNormalizationService(opts...)

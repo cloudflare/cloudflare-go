@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package managed_headers
+package managed_transforms
 
 import (
 	"context"
@@ -14,27 +14,27 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-// ManagedHeaderService contains methods and other services that help with
+// ManagedTransformService contains methods and other services that help with
 // interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewManagedHeaderService] method instead.
-type ManagedHeaderService struct {
+// the [NewManagedTransformService] method instead.
+type ManagedTransformService struct {
 	Options []option.RequestOption
 }
 
-// NewManagedHeaderService generates a new service that applies the given options
-// to each request. These options are applied after the parent client's options (if
-// there is one), and before any request-specific options.
-func NewManagedHeaderService(opts ...option.RequestOption) (r *ManagedHeaderService) {
-	r = &ManagedHeaderService{}
+// NewManagedTransformService generates a new service that applies the given
+// options to each request. These options are applied after the parent client's
+// options (if there is one), and before any request-specific options.
+func NewManagedTransformService(opts ...option.RequestOption) (r *ManagedTransformService) {
+	r = &ManagedTransformService{}
 	r.Options = opts
 	return
 }
 
 // Fetches a list of all Managed Transforms.
-func (r *ManagedHeaderService) List(ctx context.Context, query ManagedHeaderListParams, opts ...option.RequestOption) (res *ManagedHeaderListResponse, err error) {
+func (r *ManagedTransformService) List(ctx context.Context, query ManagedTransformListParams, opts ...option.RequestOption) (res *ManagedTransformListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -46,7 +46,7 @@ func (r *ManagedHeaderService) List(ctx context.Context, query ManagedHeaderList
 }
 
 // Updates the status of one or more Managed Transforms.
-func (r *ManagedHeaderService) Edit(ctx context.Context, params ManagedHeaderEditParams, opts ...option.RequestOption) (res *ManagedHeaderEditResponse, err error) {
+func (r *ManagedTransformService) Edit(ctx context.Context, params ManagedTransformEditParams, opts ...option.RequestOption) (res *ManagedTransformEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -92,65 +92,65 @@ func (r RequestModelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ManagedHeaderListResponse struct {
-	ManagedRequestHeaders  []RequestModel                `json:"managed_request_headers"`
-	ManagedResponseHeaders []RequestModel                `json:"managed_response_headers"`
-	JSON                   managedHeaderListResponseJSON `json:"-"`
+type ManagedTransformListResponse struct {
+	ManagedRequestHeaders  []RequestModel                   `json:"managed_request_headers"`
+	ManagedResponseHeaders []RequestModel                   `json:"managed_response_headers"`
+	JSON                   managedTransformListResponseJSON `json:"-"`
 }
 
-// managedHeaderListResponseJSON contains the JSON metadata for the struct
-// [ManagedHeaderListResponse]
-type managedHeaderListResponseJSON struct {
+// managedTransformListResponseJSON contains the JSON metadata for the struct
+// [ManagedTransformListResponse]
+type managedTransformListResponseJSON struct {
 	ManagedRequestHeaders  apijson.Field
 	ManagedResponseHeaders apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *ManagedHeaderListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ManagedTransformListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r managedHeaderListResponseJSON) RawJSON() string {
+func (r managedTransformListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ManagedHeaderEditResponse struct {
-	ManagedRequestHeaders  []ManagedHeaderEditResponseManagedRequestHeader  `json:"managed_request_headers"`
-	ManagedResponseHeaders []ManagedHeaderEditResponseManagedResponseHeader `json:"managed_response_headers"`
-	JSON                   managedHeaderEditResponseJSON                    `json:"-"`
+type ManagedTransformEditResponse struct {
+	ManagedRequestHeaders  []ManagedTransformEditResponseManagedRequestHeader  `json:"managed_request_headers"`
+	ManagedResponseHeaders []ManagedTransformEditResponseManagedResponseHeader `json:"managed_response_headers"`
+	JSON                   managedTransformEditResponseJSON                    `json:"-"`
 }
 
-// managedHeaderEditResponseJSON contains the JSON metadata for the struct
-// [ManagedHeaderEditResponse]
-type managedHeaderEditResponseJSON struct {
+// managedTransformEditResponseJSON contains the JSON metadata for the struct
+// [ManagedTransformEditResponse]
+type managedTransformEditResponseJSON struct {
 	ManagedRequestHeaders  apijson.Field
 	ManagedResponseHeaders apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *ManagedHeaderEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ManagedTransformEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r managedHeaderEditResponseJSON) RawJSON() string {
+func (r managedTransformEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ManagedHeaderEditResponseManagedRequestHeader struct {
+type ManagedTransformEditResponseManagedRequestHeader struct {
 	// Human-readable identifier of the Managed Transform.
 	ID string `json:"id"`
 	// When true, the Managed Transform is available in the current Cloudflare plan.
 	Available bool `json:"available"`
 	// When true, the Managed Transform is enabled.
-	Enabled bool                                              `json:"enabled"`
-	JSON    managedHeaderEditResponseManagedRequestHeaderJSON `json:"-"`
+	Enabled bool                                                 `json:"enabled"`
+	JSON    managedTransformEditResponseManagedRequestHeaderJSON `json:"-"`
 }
 
-// managedHeaderEditResponseManagedRequestHeaderJSON contains the JSON metadata for
-// the struct [ManagedHeaderEditResponseManagedRequestHeader]
-type managedHeaderEditResponseManagedRequestHeaderJSON struct {
+// managedTransformEditResponseManagedRequestHeaderJSON contains the JSON metadata
+// for the struct [ManagedTransformEditResponseManagedRequestHeader]
+type managedTransformEditResponseManagedRequestHeaderJSON struct {
 	ID          apijson.Field
 	Available   apijson.Field
 	Enabled     apijson.Field
@@ -158,27 +158,27 @@ type managedHeaderEditResponseManagedRequestHeaderJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ManagedHeaderEditResponseManagedRequestHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *ManagedTransformEditResponseManagedRequestHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r managedHeaderEditResponseManagedRequestHeaderJSON) RawJSON() string {
+func (r managedTransformEditResponseManagedRequestHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-type ManagedHeaderEditResponseManagedResponseHeader struct {
+type ManagedTransformEditResponseManagedResponseHeader struct {
 	// Human-readable identifier of the Managed Transform.
 	ID string `json:"id"`
 	// When true, the Managed Transform is available in the current Cloudflare plan.
 	Available bool `json:"available"`
 	// When true, the Managed Transform is enabled.
-	Enabled bool                                               `json:"enabled"`
-	JSON    managedHeaderEditResponseManagedResponseHeaderJSON `json:"-"`
+	Enabled bool                                                  `json:"enabled"`
+	JSON    managedTransformEditResponseManagedResponseHeaderJSON `json:"-"`
 }
 
-// managedHeaderEditResponseManagedResponseHeaderJSON contains the JSON metadata
-// for the struct [ManagedHeaderEditResponseManagedResponseHeader]
-type managedHeaderEditResponseManagedResponseHeaderJSON struct {
+// managedTransformEditResponseManagedResponseHeaderJSON contains the JSON metadata
+// for the struct [ManagedTransformEditResponseManagedResponseHeader]
+type managedTransformEditResponseManagedResponseHeaderJSON struct {
 	ID          apijson.Field
 	Available   apijson.Field
 	Enabled     apijson.Field
@@ -186,26 +186,26 @@ type managedHeaderEditResponseManagedResponseHeaderJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ManagedHeaderEditResponseManagedResponseHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *ManagedTransformEditResponseManagedResponseHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r managedHeaderEditResponseManagedResponseHeaderJSON) RawJSON() string {
+func (r managedTransformEditResponseManagedResponseHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-type ManagedHeaderListParams struct {
+type ManagedTransformListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type ManagedHeaderEditParams struct {
+type ManagedTransformEditParams struct {
 	// Identifier
 	ZoneID                 param.Field[string]              `path:"zone_id,required"`
 	ManagedRequestHeaders  param.Field[[]RequestModelParam] `json:"managed_request_headers,required"`
 	ManagedResponseHeaders param.Field[[]RequestModelParam] `json:"managed_response_headers,required"`
 }
 
-func (r ManagedHeaderEditParams) MarshalJSON() (data []byte, err error) {
+func (r ManagedTransformEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
