@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package pcaps_test
+package magic_transit_test
 
 import (
 	"context"
@@ -10,8 +10,8 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/pcaps"
 )
 
 func TestPCAPNewWithOptionalParams(t *testing.T) {
@@ -27,14 +27,14 @@ func TestPCAPNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.PCAPs.New(context.TODO(), pcaps.PCAPNewParams{
+	_, err := client.MagicTransit.PCAPs.New(context.TODO(), magic_transit.PCAPNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body: pcaps.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimple{
+		Body: magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimple{
 			PacketLimit: cloudflare.F(10000.000000),
-			System:      cloudflare.F(pcaps.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystemMagicTransit),
+			System:      cloudflare.F(magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystemMagicTransit),
 			TimeLimit:   cloudflare.F(300.000000),
-			Type:        cloudflare.F(pcaps.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleTypeSimple),
-			FilterV1: cloudflare.F(pcaps.PCAPFilterParam{
+			Type:        cloudflare.F(magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleTypeSimple),
+			FilterV1: cloudflare.F(magic_transit.PCAPFilterParam{
 				DestinationAddress: cloudflare.F("1.2.3.4"),
 				DestinationPort:    cloudflare.F(80.000000),
 				Protocol:           cloudflare.F(6.000000),
@@ -65,7 +65,7 @@ func TestPCAPList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.PCAPs.List(context.TODO(), pcaps.PCAPListParams{
+	_, err := client.MagicTransit.PCAPs.List(context.TODO(), magic_transit.PCAPListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
@@ -90,10 +90,10 @@ func TestPCAPGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.PCAPs.Get(
+	_, err := client.MagicTransit.PCAPs.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		pcaps.PCAPGetParams{
+		magic_transit.PCAPGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

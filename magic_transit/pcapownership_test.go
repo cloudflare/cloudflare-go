@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package pcaps_test
+package magic_transit_test
 
 import (
 	"context"
@@ -10,11 +10,11 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/pcaps"
 )
 
-func TestOwnershipNew(t *testing.T) {
+func TestPCAPOwnershipNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,7 +27,7 @@ func TestOwnershipNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.PCAPs.Ownership.New(context.TODO(), pcaps.OwnershipNewParams{
+	_, err := client.MagicTransit.PCAPs.Ownership.New(context.TODO(), magic_transit.PCAPOwnershipNewParams{
 		AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		DestinationConf: cloudflare.F("s3://pcaps-bucket?region=us-east-1"),
 	})
@@ -40,7 +40,7 @@ func TestOwnershipNew(t *testing.T) {
 	}
 }
 
-func TestOwnershipDelete(t *testing.T) {
+func TestPCAPOwnershipDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -53,10 +53,10 @@ func TestOwnershipDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	err := client.PCAPs.Ownership.Delete(
+	err := client.MagicTransit.PCAPs.Ownership.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		pcaps.OwnershipDeleteParams{
+		magic_transit.PCAPOwnershipDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -69,7 +69,7 @@ func TestOwnershipDelete(t *testing.T) {
 	}
 }
 
-func TestOwnershipGet(t *testing.T) {
+func TestPCAPOwnershipGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -82,7 +82,7 @@ func TestOwnershipGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.PCAPs.Ownership.Get(context.TODO(), pcaps.OwnershipGetParams{
+	_, err := client.MagicTransit.PCAPs.Ownership.Get(context.TODO(), magic_transit.PCAPOwnershipGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
@@ -94,7 +94,7 @@ func TestOwnershipGet(t *testing.T) {
 	}
 }
 
-func TestOwnershipValidate(t *testing.T) {
+func TestPCAPOwnershipValidate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -107,7 +107,7 @@ func TestOwnershipValidate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.PCAPs.Ownership.Validate(context.TODO(), pcaps.OwnershipValidateParams{
+	_, err := client.MagicTransit.PCAPs.Ownership.Validate(context.TODO(), magic_transit.PCAPOwnershipValidateParams{
 		AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		DestinationConf:    cloudflare.F("s3://pcaps-bucket?region=us-east-1"),
 		OwnershipChallenge: cloudflare.F("ownership-challenge-9883874ecac311ec8475433579a6bf5f.txt"),

@@ -23,6 +23,7 @@ type MagicTransitService struct {
 	Routes          *RouteService
 	Sites           *SiteService
 	Connectors      *ConnectorService
+	PCAPs           *PCAPService
 }
 
 // NewMagicTransitService generates a new service that applies the given options to
@@ -38,6 +39,7 @@ func NewMagicTransitService(opts ...option.RequestOption) (r *MagicTransitServic
 	r.Routes = NewRouteService(opts...)
 	r.Sites = NewSiteService(opts...)
 	r.Connectors = NewConnectorService(opts...)
+	r.PCAPs = NewPCAPService(opts...)
 	return
 }
 

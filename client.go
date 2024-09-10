@@ -64,7 +64,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/page_shield"
 	"github.com/cloudflare/cloudflare-go/v2/pagerules"
 	"github.com/cloudflare/cloudflare-go/v2/pages"
-	"github.com/cloudflare/cloudflare-go/v2/pcaps"
 	"github.com/cloudflare/cloudflare-go/v2/plans"
 	"github.com/cloudflare/cloudflare-go/v2/queues"
 	"github.com/cloudflare/cloudflare-go/v2/r2"
@@ -157,7 +156,6 @@ type Client struct {
 	MagicNetworkMonitoring      *magic_network_monitoring.MagicNetworkMonitoringService
 	MTLSCertificates            *mtls_certificates.MTLSCertificateService
 	Pages                       *pages.PageService
-	PCAPs                       *pcaps.PCAPService
 	Registrar                   *registrar.RegistrarService
 	RequestTracers              *request_tracers.RequestTracerService
 	Rules                       *rules.RuleService
@@ -268,7 +266,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.MagicNetworkMonitoring = magic_network_monitoring.NewMagicNetworkMonitoringService(opts...)
 	r.MTLSCertificates = mtls_certificates.NewMTLSCertificateService(opts...)
 	r.Pages = pages.NewPageService(opts...)
-	r.PCAPs = pcaps.NewPCAPService(opts...)
 	r.Registrar = registrar.NewRegistrarService(opts...)
 	r.RequestTracers = request_tracers.NewRequestTracerService(opts...)
 	r.Rules = rules.NewRuleService(opts...)
