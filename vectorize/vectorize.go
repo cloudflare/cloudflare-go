@@ -3,7 +3,7 @@
 package vectorize
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // VectorizeService contains methods and other services that help with interacting

@@ -3,7 +3,7 @@
 package event_notifications
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // R2Service contains methods and other services that help with interacting with

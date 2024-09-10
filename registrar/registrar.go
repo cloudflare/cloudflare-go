@@ -3,7 +3,7 @@
 package registrar
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // RegistrarService contains methods and other services that help with interacting

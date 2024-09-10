@@ -3,7 +3,7 @@
 package workers_for_platforms
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // DispatchService contains methods and other services that help with interacting
