@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 	"github.com/cloudflare/cloudflare-go/v2/zones"
 )
 
@@ -35,7 +34,7 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 		zones.SubscriptionNewParams{
 			Subscription: shared.SubscriptionParam{
 				Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
-				RatePlan: cloudflare.F(user.RatePlanParam{
+				RatePlan: cloudflare.F(shared.RatePlanParam{
 					ID:                cloudflare.F("free"),
 					Currency:          cloudflare.F("USD"),
 					ExternallyManaged: cloudflare.F(false),
@@ -75,7 +74,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		zones.SubscriptionUpdateParams{
 			Subscription: shared.SubscriptionParam{
 				Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
-				RatePlan: cloudflare.F(user.RatePlanParam{
+				RatePlan: cloudflare.F(shared.RatePlanParam{
 					ID:                cloudflare.F("free"),
 					Currency:          cloudflare.F("USD"),
 					ExternallyManaged: cloudflare.F(false),

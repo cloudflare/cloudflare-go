@@ -34,7 +34,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		user.SubscriptionUpdateParams{
 			Subscription: shared.SubscriptionParam{
 				Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
-				RatePlan: cloudflare.F(user.RatePlanParam{
+				RatePlan: cloudflare.F(shared.RatePlanParam{
 					ID:                cloudflare.F("free"),
 					Currency:          cloudflare.F("USD"),
 					ExternallyManaged: cloudflare.F(false),

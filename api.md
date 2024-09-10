@@ -5,6 +5,7 @@
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#CertificateRequestType">CertificateRequestType</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#MemberParam">MemberParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#PermissionGrantParam">PermissionGrantParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#RatePlanParam">RatePlanParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#SortDirection">SortDirection</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#SubscriptionParam">SubscriptionParam</a>
 
@@ -18,6 +19,7 @@
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#ErrorData">ErrorData</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#Permission">Permission</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#PermissionGrant">PermissionGrant</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#RatePlan">RatePlan</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#ResponseInfo">ResponseInfo</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#Role">Role</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/shared#Subscription">Subscription</a>
@@ -198,13 +200,8 @@ Methods:
 
 ## Subscriptions
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#RatePlanParam">RatePlanParam</a>
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#RatePlan">RatePlan</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#interface{}">interface{}</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/user#SubscriptionDeleteResponse">SubscriptionDeleteResponse</a>
 
