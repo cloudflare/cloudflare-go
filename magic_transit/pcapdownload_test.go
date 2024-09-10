@@ -11,9 +11,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/magic_transit"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 func TestPCAPDownloadGet(t *testing.T) {

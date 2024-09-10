@@ -3,7 +3,7 @@
 package turnstile
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // TurnstileService contains methods and other services that help with interacting

@@ -11,12 +11,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/shared"
 )
 
 // V2DirectUploadService contains methods and other services that help with

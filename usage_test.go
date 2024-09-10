@@ -7,10 +7,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zones"
+	"github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/zones"
 )
 
 func TestUsage(t *testing.T) {

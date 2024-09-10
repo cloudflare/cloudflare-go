@@ -3,7 +3,7 @@
 package magic_network_monitoring
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // MagicNetworkMonitoringService contains methods and other services that help with

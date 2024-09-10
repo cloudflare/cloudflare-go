@@ -3,8 +3,8 @@
 package magic_transit
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/shared"
 )
 
 type Error = apierror.Error
