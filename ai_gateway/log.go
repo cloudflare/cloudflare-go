@@ -138,10 +138,13 @@ type LogListParams struct {
 	MaxDuration         param.Field[float64]                       `query:"max_duration"`
 	MaxTokensIn         param.Field[float64]                       `query:"max_tokens_in"`
 	MaxTokensOut        param.Field[float64]                       `query:"max_tokens_out"`
+	MaxTotalTokens      param.Field[float64]                       `query:"max_total_tokens"`
+	MetaInfo            param.Field[bool]                          `query:"meta_info"`
 	MinCost             param.Field[float64]                       `query:"min_cost"`
 	MinDuration         param.Field[float64]                       `query:"min_duration"`
 	MinTokensIn         param.Field[float64]                       `query:"min_tokens_in"`
 	MinTokensOut        param.Field[float64]                       `query:"min_tokens_out"`
+	MinTotalTokens      param.Field[float64]                       `query:"min_total_tokens"`
 	Model               param.Field[string]                        `query:"model"`
 	ModelType           param.Field[string]                        `query:"model_type"`
 	OrderBy             param.Field[LogListParamsOrderBy]          `query:"order_by"`
