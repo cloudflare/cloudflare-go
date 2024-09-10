@@ -84,7 +84,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/ssl"
 	"github.com/cloudflare/cloudflare-go/v2/storage"
 	"github.com/cloudflare/cloudflare-go/v2/stream"
-	"github.com/cloudflare/cloudflare-go/v2/subscriptions"
 	"github.com/cloudflare/cloudflare-go/v2/url_normalization"
 	"github.com/cloudflare/cloudflare-go/v2/url_scanner"
 	"github.com/cloudflare/cloudflare-go/v2/user"
@@ -112,7 +111,6 @@ type Client struct {
 	LoadBalancers               *load_balancers.LoadBalancerService
 	Cache                       *cache.CacheService
 	SSL                         *ssl.SSLService
-	Subscriptions               *subscriptions.SubscriptionService
 	ACM                         *acm.ACMService
 	Argo                        *argo.ArgoService
 	Plans                       *plans.PlanService
@@ -224,7 +222,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.LoadBalancers = load_balancers.NewLoadBalancerService(opts...)
 	r.Cache = cache.NewCacheService(opts...)
 	r.SSL = ssl.NewSSLService(opts...)
-	r.Subscriptions = subscriptions.NewSubscriptionService(opts...)
 	r.ACM = acm.NewACMService(opts...)
 	r.Argo = argo.NewArgoService(opts...)
 	r.Plans = plans.NewPlanService(opts...)
