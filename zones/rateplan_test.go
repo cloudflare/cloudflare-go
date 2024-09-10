@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package rate_plans_test
+package zones_test
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/rate_plans"
+	"github.com/cloudflare/cloudflare-go/v2/zones"
 )
 
 func TestRatePlanGet(t *testing.T) {
@@ -27,7 +27,7 @@ func TestRatePlanGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RatePlans.Get(context.TODO(), rate_plans.RatePlanGetParams{
+	_, err := client.Zones.RatePlans.Get(context.TODO(), zones.RatePlanGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {

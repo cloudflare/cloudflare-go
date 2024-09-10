@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package plans_test
+package zones_test
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/plans"
+	"github.com/cloudflare/cloudflare-go/v2/zones"
 )
 
 func TestPlanList(t *testing.T) {
@@ -27,7 +27,7 @@ func TestPlanList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Plans.List(context.TODO(), plans.PlanListParams{
+	_, err := client.Zones.Plans.List(context.TODO(), zones.PlanListParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
@@ -52,10 +52,10 @@ func TestPlanGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Plans.Get(
+	_, err := client.Zones.Plans.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		plans.PlanGetParams{
+		zones.PlanGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
