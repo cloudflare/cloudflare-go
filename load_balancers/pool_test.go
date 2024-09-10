@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/load_balancers"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 func TestPoolNewWithOptionalParams(t *testing.T) {

@@ -3,7 +3,7 @@
 package firewall
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // WAFService contains methods and other services that help with interacting with

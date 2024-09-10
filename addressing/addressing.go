@@ -3,7 +3,7 @@
 package addressing
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // AddressingService contains methods and other services that help with interacting
