@@ -177,3 +177,52 @@ const SortDirectionAsc = shared.SortDirectionAsc
 
 // This is an alias to an internal value.
 const SortDirectionDesc = shared.SortDirectionDesc
+
+// This is an alias to an internal type.
+type Subscription = shared.Subscription
+
+// How often the subscription is renewed automatically.
+//
+// This is an alias to an internal type.
+type SubscriptionFrequency = shared.SubscriptionFrequency
+
+// This is an alias to an internal value.
+const SubscriptionFrequencyWeekly = shared.SubscriptionFrequencyWeekly
+
+// This is an alias to an internal value.
+const SubscriptionFrequencyMonthly = shared.SubscriptionFrequencyMonthly
+
+// This is an alias to an internal value.
+const SubscriptionFrequencyQuarterly = shared.SubscriptionFrequencyQuarterly
+
+// This is an alias to an internal value.
+const SubscriptionFrequencyYearly = shared.SubscriptionFrequencyYearly
+
+// The state that the subscription is in.
+//
+// This is an alias to an internal type.
+type SubscriptionState = shared.SubscriptionState
+
+// This is an alias to an internal value.
+const SubscriptionStateTrial = shared.SubscriptionStateTrial
+
+// This is an alias to an internal value.
+const SubscriptionStateProvisioned = shared.SubscriptionStateProvisioned
+
+// This is an alias to an internal value.
+const SubscriptionStatePaid = shared.SubscriptionStatePaid
+
+// This is an alias to an internal value.
+const SubscriptionStateAwaitingPayment = shared.SubscriptionStateAwaitingPayment
+
+// This is an alias to an internal value.
+const SubscriptionStateCancelled = shared.SubscriptionStateCancelled
+
+// This is an alias to an internal value.
+const SubscriptionStateFailed = shared.SubscriptionStateFailed
+
+// This is an alias to an internal value.
+const SubscriptionStateExpired = shared.SubscriptionStateExpired
+
+// This is an alias to an internal type.
+type SubscriptionParam = shared.SubscriptionParam
