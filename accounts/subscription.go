@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package subscriptions
+package accounts
 
 import (
 	"context"
@@ -9,7 +9,6 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
@@ -36,16 +35,16 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 	return
 }
 
-// Create a zone subscription, either plan or add-ons.
-func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
+// Creates an account subscription.
+func (r *SubscriptionService) New(ctx context.Context, params SubscriptionNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env SubscriptionNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if identifier == "" {
-		err = errors.New("missing required identifier parameter")
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/subscription", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/subscriptions", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,33 +73,6 @@ func (r *SubscriptionService) Update(ctx context.Context, subscriptionIdentifier
 	return
 }
 
-// Lists all of an account's subscriptions.
-func (r *SubscriptionService) List(ctx context.Context, query SubscriptionListParams, opts ...option.RequestOption) (res *pagination.SinglePage[user.Subscription], err error) {
-	var raw *http.Response
-	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/subscriptions", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Lists all of an account's subscriptions.
-func (r *SubscriptionService) ListAutoPaging(ctx context.Context, query SubscriptionListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.Subscription] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
-}
-
 // Deletes an account's subscription.
 func (r *SubscriptionService) Delete(ctx context.Context, subscriptionIdentifier string, body SubscriptionDeleteParams, opts ...option.RequestOption) (res *SubscriptionDeleteResponse, err error) {
 	var env SubscriptionDeleteResponseEnvelope
@@ -122,15 +94,15 @@ func (r *SubscriptionService) Delete(ctx context.Context, subscriptionIdentifier
 	return
 }
 
-// Lists zone subscription details.
-func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *interface{}, err error) {
+// Lists all of an account's subscriptions.
+func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *[]user.Subscription, err error) {
 	var env SubscriptionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if identifier == "" {
-		err = errors.New("missing required identifier parameter")
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/subscription", identifier)
+	path := fmt.Sprintf("accounts/%s/subscriptions", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -162,6 +134,8 @@ func (r subscriptionDeleteResponseJSON) RawJSON() string {
 }
 
 type SubscriptionNewParams struct {
+	// Identifier
+	AccountID    param.Field[string]    `path:"account_id,required"`
 	Subscription user.SubscriptionParam `json:"subscription,required"`
 }
 
@@ -265,11 +239,6 @@ func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type SubscriptionListParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
 type SubscriptionDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -318,13 +287,19 @@ func (r SubscriptionDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type SubscriptionGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type SubscriptionGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   []user.Subscription   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    subscriptionGetResponseEnvelopeJSON    `json:"-"`
+	Success    SubscriptionGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo SubscriptionGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       subscriptionGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // subscriptionGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -334,6 +309,7 @@ type subscriptionGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -359,4 +335,35 @@ func (r SubscriptionGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type SubscriptionGetResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                       `json:"total_count"`
+	JSON       subscriptionGetResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// subscriptionGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [SubscriptionGetResponseEnvelopeResultInfo]
+type subscriptionGetResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubscriptionGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
