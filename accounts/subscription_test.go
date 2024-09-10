@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/accounts"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
@@ -30,8 +31,8 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Accounts.Subscriptions.New(context.TODO(), accounts.SubscriptionNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Subscription: user.SubscriptionParam{
-			Frequency: cloudflare.F(user.SubscriptionFrequencyWeekly),
+		Subscription: shared.SubscriptionParam{
+			Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
 			RatePlan: cloudflare.F(user.RatePlanParam{
 				ID:                cloudflare.F("free"),
 				Currency:          cloudflare.F("USD"),
@@ -70,8 +71,8 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		"506e3185e9c882d175a2d0cb0093d9f2",
 		accounts.SubscriptionUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Subscription: user.SubscriptionParam{
-				Frequency: cloudflare.F(user.SubscriptionFrequencyWeekly),
+			Subscription: shared.SubscriptionParam{
+				Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
 				RatePlan: cloudflare.F(user.RatePlanParam{
 					ID:                cloudflare.F("free"),
 					Currency:          cloudflare.F("USD"),

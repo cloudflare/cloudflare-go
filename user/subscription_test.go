@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
@@ -31,8 +32,8 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"506e3185e9c882d175a2d0cb0093d9f2",
 		user.SubscriptionUpdateParams{
-			Subscription: user.SubscriptionParam{
-				Frequency: cloudflare.F(user.SubscriptionFrequencyWeekly),
+			Subscription: shared.SubscriptionParam{
+				Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
 				RatePlan: cloudflare.F(user.RatePlanParam{
 					ID:                cloudflare.F("free"),
 					Currency:          cloudflare.F("USD"),

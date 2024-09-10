@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // SubscriptionService contains methods and other services that help with
@@ -95,7 +94,7 @@ func (r *SubscriptionService) Delete(ctx context.Context, subscriptionIdentifier
 }
 
 // Lists all of an account's subscriptions.
-func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *[]user.Subscription, err error) {
+func (r *SubscriptionService) Get(ctx context.Context, query SubscriptionGetParams, opts ...option.RequestOption) (res *[]shared.Subscription, err error) {
 	var env SubscriptionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -135,8 +134,8 @@ func (r subscriptionDeleteResponseJSON) RawJSON() string {
 
 type SubscriptionNewParams struct {
 	// Identifier
-	AccountID    param.Field[string]    `path:"account_id,required"`
-	Subscription user.SubscriptionParam `json:"subscription,required"`
+	AccountID    param.Field[string]      `path:"account_id,required"`
+	Subscription shared.SubscriptionParam `json:"subscription,required"`
 }
 
 func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
@@ -188,8 +187,8 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type SubscriptionUpdateParams struct {
 	// Identifier
-	AccountID    param.Field[string]    `path:"account_id,required"`
-	Subscription user.SubscriptionParam `json:"subscription,required"`
+	AccountID    param.Field[string]      `path:"account_id,required"`
+	Subscription shared.SubscriptionParam `json:"subscription,required"`
 }
 
 func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -295,7 +294,7 @@ type SubscriptionGetParams struct {
 type SubscriptionGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []user.Subscription   `json:"result,required,nullable"`
+	Result   []shared.Subscription `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SubscriptionGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SubscriptionGetResponseEnvelopeResultInfo `json:"result_info"`
