@@ -468,10 +468,17 @@ func (cfg *RequestConfig) Clone(ctx context.Context) *RequestConfig {
 		return nil
 	}
 	new := &RequestConfig{
-		MaxRetries: cfg.MaxRetries,
-		Context:    ctx,
-		Request:    req,
-		HTTPClient: cfg.HTTPClient,
+		MaxRetries:     cfg.MaxRetries,
+		RequestTimeout: cfg.RequestTimeout,
+		Context:        ctx,
+		Request:        req,
+		BaseURL:        cfg.BaseURL,
+		HTTPClient:     cfg.HTTPClient,
+		Middlewares:    cfg.Middlewares,
+		APIToken:       cfg.APIToken,
+		APIKey:         cfg.APIKey,
+		APIEmail:       cfg.APIEmail,
+		UserServiceKey: cfg.UserServiceKey,
 	}
 
 	return new
