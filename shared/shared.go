@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 type ASN = int64
@@ -571,4 +572,97 @@ func (r SortDirection) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type Subscription struct {
+	// Subscription identifier tag.
+	ID string `json:"id"`
+	// The monetary unit in which pricing information is displayed.
+	Currency string `json:"currency"`
+	// The end of the current period and also when the next billing is due.
+	CurrentPeriodEnd time.Time `json:"current_period_end" format:"date-time"`
+	// When the current billing period started. May match initial_period_start if this
+	// is the first period.
+	CurrentPeriodStart time.Time `json:"current_period_start" format:"date-time"`
+	// How often the subscription is renewed automatically.
+	Frequency SubscriptionFrequency `json:"frequency"`
+	// The price of the subscription that will be billed, in US dollars.
+	Price float64 `json:"price"`
+	// The rate plan applied to the subscription.
+	RatePlan user.RatePlan `json:"rate_plan"`
+	// The state that the subscription is in.
+	State SubscriptionState `json:"state"`
+	JSON  subscriptionJSON  `json:"-"`
+}
+
+// subscriptionJSON contains the JSON metadata for the struct [Subscription]
+type subscriptionJSON struct {
+	ID                 apijson.Field
+	Currency           apijson.Field
+	CurrentPeriodEnd   apijson.Field
+	CurrentPeriodStart apijson.Field
+	Frequency          apijson.Field
+	Price              apijson.Field
+	RatePlan           apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *Subscription) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionJSON) RawJSON() string {
+	return r.raw
+}
+
+// How often the subscription is renewed automatically.
+type SubscriptionFrequency string
+
+const (
+	SubscriptionFrequencyWeekly    SubscriptionFrequency = "weekly"
+	SubscriptionFrequencyMonthly   SubscriptionFrequency = "monthly"
+	SubscriptionFrequencyQuarterly SubscriptionFrequency = "quarterly"
+	SubscriptionFrequencyYearly    SubscriptionFrequency = "yearly"
+)
+
+func (r SubscriptionFrequency) IsKnown() bool {
+	switch r {
+	case SubscriptionFrequencyWeekly, SubscriptionFrequencyMonthly, SubscriptionFrequencyQuarterly, SubscriptionFrequencyYearly:
+		return true
+	}
+	return false
+}
+
+// The state that the subscription is in.
+type SubscriptionState string
+
+const (
+	SubscriptionStateTrial           SubscriptionState = "Trial"
+	SubscriptionStateProvisioned     SubscriptionState = "Provisioned"
+	SubscriptionStatePaid            SubscriptionState = "Paid"
+	SubscriptionStateAwaitingPayment SubscriptionState = "AwaitingPayment"
+	SubscriptionStateCancelled       SubscriptionState = "Cancelled"
+	SubscriptionStateFailed          SubscriptionState = "Failed"
+	SubscriptionStateExpired         SubscriptionState = "Expired"
+)
+
+func (r SubscriptionState) IsKnown() bool {
+	switch r {
+	case SubscriptionStateTrial, SubscriptionStateProvisioned, SubscriptionStatePaid, SubscriptionStateAwaitingPayment, SubscriptionStateCancelled, SubscriptionStateFailed, SubscriptionStateExpired:
+		return true
+	}
+	return false
+}
+
+type SubscriptionParam struct {
+	// How often the subscription is renewed automatically.
+	Frequency param.Field[SubscriptionFrequency] `json:"frequency"`
+	// The rate plan applied to the subscription.
+	RatePlan param.Field[user.RatePlanParam] `json:"rate_plan"`
+}
+
+func (r SubscriptionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }

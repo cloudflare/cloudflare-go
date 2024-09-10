@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 // SubscriptionService contains methods and other services that help with
@@ -86,7 +85,7 @@ func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts .
 }
 
 type SubscriptionNewParams struct {
-	Subscription user.SubscriptionParam `json:"subscription,required"`
+	Subscription shared.SubscriptionParam `json:"subscription,required"`
 }
 
 func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
@@ -137,7 +136,7 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SubscriptionUpdateParams struct {
-	Subscription user.SubscriptionParam `json:"subscription,required"`
+	Subscription shared.SubscriptionParam `json:"subscription,required"`
 }
 
 func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
