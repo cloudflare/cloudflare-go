@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
 func TestSubscriptionNewWithOptionalParams(t *testing.T) {
@@ -33,7 +32,7 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Subscription: shared.SubscriptionParam{
 			Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
-			RatePlan: cloudflare.F(user.RatePlanParam{
+			RatePlan: cloudflare.F(shared.RatePlanParam{
 				ID:                cloudflare.F("free"),
 				Currency:          cloudflare.F("USD"),
 				ExternallyManaged: cloudflare.F(false),
@@ -73,7 +72,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Subscription: shared.SubscriptionParam{
 				Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
-				RatePlan: cloudflare.F(user.RatePlanParam{
+				RatePlan: cloudflare.F(shared.RatePlanParam{
 					ID:                cloudflare.F("free"),
 					Currency:          cloudflare.F("USD"),
 					ExternallyManaged: cloudflare.F(false),

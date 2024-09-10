@@ -161,6 +161,16 @@ type PermissionGrant = shared.PermissionGrant
 // This is an alias to an internal type.
 type PermissionGrantParam = shared.PermissionGrantParam
 
+// The rate plan applied to the subscription.
+//
+// This is an alias to an internal type.
+type RatePlan = shared.RatePlan
+
+// The rate plan applied to the subscription.
+//
+// This is an alias to an internal type.
+type RatePlanParam = shared.RatePlanParam
+
 // This is an alias to an internal type.
 type ResponseInfo = shared.ResponseInfo
 
