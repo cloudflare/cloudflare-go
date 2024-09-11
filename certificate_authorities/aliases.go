@@ -3,8 +3,8 @@
 package certificate_authorities
 
 import (
-	"github.com/cloudflare/cloudflare-go/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/shared"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 )
 
 type Error = apierror.Error

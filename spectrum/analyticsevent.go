@@ -3,7 +3,7 @@
 package spectrum
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // AnalyticsEventService contains methods and other services that help with
