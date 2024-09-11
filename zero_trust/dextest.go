@@ -178,7 +178,7 @@ type TestsTest struct {
 	HTTPResultsByColo []TestsTestsHTTPResultsByColo `json:"httpResultsByColo"`
 	// for HTTP, the method to use when running the test
 	Method                  string                              `json:"method"`
-	TargetPolicies          []DeviceExperienceMonitor           `json:"target_policies,nullable"`
+	TargetPolicies          []DigitalExperienceMonitor          `json:"target_policies,nullable"`
 	Targeted                bool                                `json:"targeted"`
 	TracerouteResults       TestsTestsTracerouteResults         `json:"tracerouteResults,nullable"`
 	TracerouteResultsByColo []TestsTestsTracerouteResultsByColo `json:"tracerouteResultsByColo"`
