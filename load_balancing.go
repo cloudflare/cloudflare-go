@@ -689,10 +689,8 @@ func (api *API) CreateLoadBalancer(ctx context.Context, rc *ResourceContainer, p
 
 	var uri string
 	switch rc.Level {
-	case ZoneRouteLevel:
-		uri = fmt.Sprintf("/zones/%s/load_balancers", rc.Identifier)
-	case AccountRouteLevel:
-		uri = fmt.Sprintf("/accounts/%s/load_balancers", rc.Identifier)
+	case AccountRouteLevel, ZoneRouteLevel:
+		uri = fmt.Sprintf("/%s/%s/load_balancers", rc.Level, rc.Identifier)
 	default:
 		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
@@ -715,10 +713,8 @@ func (api *API) ListLoadBalancers(ctx context.Context, rc *ResourceContainer, pa
 
 	var uri string
 	switch rc.Level {
-	case ZoneRouteLevel:
-		uri = fmt.Sprintf("/zones/%s/load_balancers", rc.Identifier)
-	case AccountRouteLevel:
-		uri = fmt.Sprintf("/accounts/%s/load_balancers", rc.Identifier)
+	case AccountRouteLevel, ZoneRouteLevel:
+		uri = fmt.Sprintf("/%s/%s/load_balancers", rc.Level, rc.Identifier)
 	default:
 		return nil, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
@@ -744,10 +740,8 @@ func (api *API) GetLoadBalancer(ctx context.Context, rc *ResourceContainer, load
 
 	var uri string
 	switch rc.Level {
-	case ZoneRouteLevel:
-		uri = fmt.Sprintf("/zones/%s/load_balancers/%s", rc.Identifier, loadbalancerID)
-	case AccountRouteLevel:
-		uri = fmt.Sprintf("/accounts/%s/load_balancers/%s", rc.Identifier, loadbalancerID)
+	case AccountRouteLevel, ZoneRouteLevel:
+		uri = fmt.Sprintf("/%s/%s/load_balancers/%s", rc.Level, rc.Identifier, loadbalancerID)
 	default:
 		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
@@ -774,10 +768,8 @@ func (api *API) DeleteLoadBalancer(ctx context.Context, rc *ResourceContainer, l
 
 	var uri string
 	switch rc.Level {
-	case ZoneRouteLevel:
-		uri = fmt.Sprintf("/zones/%s/load_balancers/%s", rc.Identifier, loadbalancerID)
-	case AccountRouteLevel:
-		uri = fmt.Sprintf("/accounts/%s/load_balancers/%s", rc.Identifier, loadbalancerID)
+	case AccountRouteLevel, ZoneRouteLevel:
+		uri = fmt.Sprintf("/%s/%s/load_balancers/%s", rc.Level, rc.Identifier, loadbalancerID)
 	default:
 		return fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
@@ -799,10 +791,8 @@ func (api *API) UpdateLoadBalancer(ctx context.Context, rc *ResourceContainer, p
 
 	var uri string
 	switch rc.Level {
-	case ZoneRouteLevel:
-		uri = fmt.Sprintf("/zones/%s/load_balancers/%s", rc.Identifier, params.LoadBalancer.ID)
-	case AccountRouteLevel:
-		uri = fmt.Sprintf("/accounts/%s/load_balancers/%s", rc.Identifier, params.LoadBalancer.ID)
+	case AccountRouteLevel, ZoneRouteLevel:
+		uri = fmt.Sprintf("/%s/%s/load_balancers/%s", rc.Level, rc.Identifier, params.LoadBalancer.ID)
 	default:
 		return LoadBalancer{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
