@@ -327,10 +327,32 @@ type DomainCustomNewParams struct {
 	// Whether to enable public bucket access at the custom domain. If undefined, the
 	// domain will be enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// Minimum TLS Version the custom domain will accept for incoming connections. If
+	// not set, defaults to 1.0.
+	MinTLS param.Field[DomainCustomNewParamsMinTLS] `json:"minTLS"`
 }
 
 func (r DomainCustomNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Minimum TLS Version the custom domain will accept for incoming connections. If
+// not set, defaults to 1.0.
+type DomainCustomNewParamsMinTLS string
+
+const (
+	DomainCustomNewParamsMinTLS1_0 DomainCustomNewParamsMinTLS = "1.0"
+	DomainCustomNewParamsMinTLS1_1 DomainCustomNewParamsMinTLS = "1.1"
+	DomainCustomNewParamsMinTLS1_2 DomainCustomNewParamsMinTLS = "1.2"
+	DomainCustomNewParamsMinTLS1_3 DomainCustomNewParamsMinTLS = "1.3"
+)
+
+func (r DomainCustomNewParamsMinTLS) IsKnown() bool {
+	switch r {
+	case DomainCustomNewParamsMinTLS1_0, DomainCustomNewParamsMinTLS1_1, DomainCustomNewParamsMinTLS1_2, DomainCustomNewParamsMinTLS1_3:
+		return true
+	}
+	return false
 }
 
 type DomainCustomNewResponseEnvelope struct {
@@ -381,10 +403,32 @@ type DomainCustomUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether to enable public bucket access at the specified custom domain
 	Enabled param.Field[bool] `json:"enabled"`
+	// Minimum TLS Version the custom domain will accept for incoming connections. If
+	// not set, defaults to previous value.
+	MinTLS param.Field[DomainCustomUpdateParamsMinTLS] `json:"minTLS"`
 }
 
 func (r DomainCustomUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Minimum TLS Version the custom domain will accept for incoming connections. If
+// not set, defaults to previous value.
+type DomainCustomUpdateParamsMinTLS string
+
+const (
+	DomainCustomUpdateParamsMinTLS1_0 DomainCustomUpdateParamsMinTLS = "1.0"
+	DomainCustomUpdateParamsMinTLS1_1 DomainCustomUpdateParamsMinTLS = "1.1"
+	DomainCustomUpdateParamsMinTLS1_2 DomainCustomUpdateParamsMinTLS = "1.2"
+	DomainCustomUpdateParamsMinTLS1_3 DomainCustomUpdateParamsMinTLS = "1.3"
+)
+
+func (r DomainCustomUpdateParamsMinTLS) IsKnown() bool {
+	switch r {
+	case DomainCustomUpdateParamsMinTLS1_0, DomainCustomUpdateParamsMinTLS1_1, DomainCustomUpdateParamsMinTLS1_2, DomainCustomUpdateParamsMinTLS1_3:
+		return true
+	}
+	return false
 }
 
 type DomainCustomUpdateResponseEnvelope struct {
