@@ -38,17 +38,17 @@ func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 	return
 }
 
-type DeviceExperienceMonitor struct {
+type DigitalExperienceMonitor struct {
 	ID string `json:"id,required"`
 	// Whether the policy is the default for the account
-	Default bool                        `json:"default,required"`
-	Name    string                      `json:"name,required"`
-	JSON    deviceExperienceMonitorJSON `json:"-"`
+	Default bool                         `json:"default,required"`
+	Name    string                       `json:"name,required"`
+	JSON    digitalExperienceMonitorJSON `json:"-"`
 }
 
-// deviceExperienceMonitorJSON contains the JSON metadata for the struct
-// [DeviceExperienceMonitor]
-type deviceExperienceMonitorJSON struct {
+// digitalExperienceMonitorJSON contains the JSON metadata for the struct
+// [DigitalExperienceMonitor]
+type digitalExperienceMonitorJSON struct {
 	ID          apijson.Field
 	Default     apijson.Field
 	Name        apijson.Field
@@ -56,11 +56,11 @@ type deviceExperienceMonitorJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceExperienceMonitor) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitor) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r deviceExperienceMonitorJSON) RawJSON() string {
+func (r digitalExperienceMonitorJSON) RawJSON() string {
 	return r.raw
 }
 
