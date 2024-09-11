@@ -4363,7 +4363,7 @@ type SetConfigRuleActionParameters struct {
 	// Select which file extensions to minify automatically.
 	Autominify SetConfigRuleActionParametersAutominify `json:"autominify"`
 	// Turn on or off Browser Integrity Check.
-	Bic bool `json:"bic"`
+	BIC bool `json:"bic"`
 	// Turn off all active Cloudflare Apps.
 	DisableApps SetConfigRuleActionParametersDisableApps `json:"disable_apps"`
 	// Turn off Real User Monitoring (RUM).
@@ -4391,7 +4391,7 @@ type SetConfigRuleActionParameters struct {
 	// Configure the SSL level.
 	SSL SetConfigRuleActionParametersSSL `json:"ssl"`
 	// Turn on or off Signed Exchanges (SXG).
-	Sxg  bool                              `json:"sxg"`
+	SXG  bool                              `json:"sxg"`
 	JSON setConfigRuleActionParametersJSON `json:"-"`
 }
 
@@ -4400,7 +4400,7 @@ type SetConfigRuleActionParameters struct {
 type setConfigRuleActionParametersJSON struct {
 	AutomaticHTTPSRewrites  apijson.Field
 	Autominify              apijson.Field
-	Bic                     apijson.Field
+	BIC                     apijson.Field
 	DisableApps             apijson.Field
 	DisableRUM              apijson.Field
 	DisableZaraz            apijson.Field
@@ -4414,7 +4414,7 @@ type setConfigRuleActionParametersJSON struct {
 	SecurityLevel           apijson.Field
 	ServerSideExcludes      apijson.Field
 	SSL                     apijson.Field
-	Sxg                     apijson.Field
+	SXG                     apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -4430,7 +4430,7 @@ func (r setConfigRuleActionParametersJSON) RawJSON() string {
 // Select which file extensions to minify automatically.
 type SetConfigRuleActionParametersAutominify struct {
 	// Minify CSS files.
-	Css bool `json:"css"`
+	CSS bool `json:"css"`
 	// Minify HTML files.
 	HTML bool `json:"html"`
 	// Minify JS files.
@@ -4441,7 +4441,7 @@ type SetConfigRuleActionParametersAutominify struct {
 // setConfigRuleActionParametersAutominifyJSON contains the JSON metadata for the
 // struct [SetConfigRuleActionParametersAutominify]
 type setConfigRuleActionParametersAutominifyJSON struct {
-	Css         apijson.Field
+	CSS         apijson.Field
 	HTML        apijson.Field
 	JS          apijson.Field
 	raw         string
@@ -4593,7 +4593,7 @@ type SetConfigRuleActionParametersParam struct {
 	// Select which file extensions to minify automatically.
 	Autominify param.Field[SetConfigRuleActionParametersAutominifyParam] `json:"autominify"`
 	// Turn on or off Browser Integrity Check.
-	Bic param.Field[bool] `json:"bic"`
+	BIC param.Field[bool] `json:"bic"`
 	// Turn off all active Cloudflare Apps.
 	DisableApps param.Field[SetConfigRuleActionParametersDisableApps] `json:"disable_apps"`
 	// Turn off Real User Monitoring (RUM).
@@ -4621,7 +4621,7 @@ type SetConfigRuleActionParametersParam struct {
 	// Configure the SSL level.
 	SSL param.Field[SetConfigRuleActionParametersSSL] `json:"ssl"`
 	// Turn on or off Signed Exchanges (SXG).
-	Sxg param.Field[bool] `json:"sxg"`
+	SXG param.Field[bool] `json:"sxg"`
 }
 
 func (r SetConfigRuleActionParametersParam) MarshalJSON() (data []byte, err error) {
@@ -4631,7 +4631,7 @@ func (r SetConfigRuleActionParametersParam) MarshalJSON() (data []byte, err erro
 // Select which file extensions to minify automatically.
 type SetConfigRuleActionParametersAutominifyParam struct {
 	// Minify CSS files.
-	Css param.Field[bool] `json:"css"`
+	CSS param.Field[bool] `json:"css"`
 	// Minify HTML files.
 	HTML param.Field[bool] `json:"html"`
 	// Minify JS files.
@@ -4773,7 +4773,7 @@ func (r skipRuleActionParametersJSON) RawJSON() string {
 type SkipRuleActionParametersProduct string
 
 const (
-	SkipRuleActionParametersProductBic           SkipRuleActionParametersProduct = "bic"
+	SkipRuleActionParametersProductBIC           SkipRuleActionParametersProduct = "bic"
 	SkipRuleActionParametersProductHot           SkipRuleActionParametersProduct = "hot"
 	SkipRuleActionParametersProductRateLimit     SkipRuleActionParametersProduct = "rateLimit"
 	SkipRuleActionParametersProductSecurityLevel SkipRuleActionParametersProduct = "securityLevel"
@@ -4784,7 +4784,7 @@ const (
 
 func (r SkipRuleActionParametersProduct) IsKnown() bool {
 	switch r {
-	case SkipRuleActionParametersProductBic, SkipRuleActionParametersProductHot, SkipRuleActionParametersProductRateLimit, SkipRuleActionParametersProductSecurityLevel, SkipRuleActionParametersProductUABlock, SkipRuleActionParametersProductWAF, SkipRuleActionParametersProductZoneLockdown:
+	case SkipRuleActionParametersProductBIC, SkipRuleActionParametersProductHot, SkipRuleActionParametersProductRateLimit, SkipRuleActionParametersProductSecurityLevel, SkipRuleActionParametersProductUABlock, SkipRuleActionParametersProductWAF, SkipRuleActionParametersProductZoneLockdown:
 		return true
 	}
 	return false
