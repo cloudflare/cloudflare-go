@@ -328,7 +328,7 @@ type Product string
 const (
 	ProductZoneLockdown  Product = "zoneLockdown"
 	ProductUABlock       Product = "uaBlock"
-	ProductBic           Product = "bic"
+	ProductBIC           Product = "bic"
 	ProductHot           Product = "hot"
 	ProductSecurityLevel Product = "securityLevel"
 	ProductRateLimit     Product = "rateLimit"
@@ -337,7 +337,7 @@ const (
 
 func (r Product) IsKnown() bool {
 	switch r {
-	case ProductZoneLockdown, ProductUABlock, ProductBic, ProductHot, ProductSecurityLevel, ProductRateLimit, ProductWAF:
+	case ProductZoneLockdown, ProductUABlock, ProductBIC, ProductHot, ProductSecurityLevel, ProductRateLimit, ProductWAF:
 		return true
 	}
 	return false
