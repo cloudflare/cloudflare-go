@@ -82,9 +82,43 @@ func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, b
 	return
 }
 
-type NamespaceBulkUpdateResponse = interface{}
+type NamespaceBulkUpdateResponse struct {
+	JSON namespaceBulkUpdateResponseJSON `json:"-"`
+}
 
-type NamespaceBulkDeleteResponse = interface{}
+// namespaceBulkUpdateResponseJSON contains the JSON metadata for the struct
+// [NamespaceBulkUpdateResponse]
+type namespaceBulkUpdateResponseJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceBulkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceBulkUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceBulkDeleteResponse struct {
+	JSON namespaceBulkDeleteResponseJSON `json:"-"`
+}
+
+// namespaceBulkDeleteResponseJSON contains the JSON metadata for the struct
+// [NamespaceBulkDeleteResponse]
+type namespaceBulkDeleteResponseJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceBulkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceBulkDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type NamespaceBulkUpdateParams struct {
 	// Identifier
@@ -125,7 +159,7 @@ type NamespaceBulkUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  NamespaceBulkUpdateResponse                `json:"result"`
+	Result  NamespaceBulkUpdateResponse                `json:"result,nullable"`
 	JSON    namespaceBulkUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -173,7 +207,7 @@ type NamespaceBulkDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceBulkDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  NamespaceBulkDeleteResponse                `json:"result"`
+	Result  NamespaceBulkDeleteResponse                `json:"result,nullable"`
 	JSON    namespaceBulkDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
