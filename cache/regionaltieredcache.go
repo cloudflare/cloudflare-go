@@ -240,13 +240,13 @@ func (r RegionalTieredCacheEditParamsValue) IsKnown() bool {
 type RegionalTieredCacheEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success RegionalTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
 	// upper tier. This can help improve performance for smart and custom tiered cache
 	// topologies.
-	Result RegionalTieredCacheEditResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success RegionalTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    regionalTieredCacheEditResponseEnvelopeJSON    `json:"-"`
+	Result RegionalTieredCacheEditResponse             `json:"result"`
+	JSON   regionalTieredCacheEditResponseEnvelopeJSON `json:"-"`
 }
 
 // regionalTieredCacheEditResponseEnvelopeJSON contains the JSON metadata for the
@@ -254,8 +254,8 @@ type RegionalTieredCacheEditResponseEnvelope struct {
 type regionalTieredCacheEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -291,13 +291,13 @@ type RegionalTieredCacheGetParams struct {
 type RegionalTieredCacheGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success RegionalTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
 	// upper tier. This can help improve performance for smart and custom tiered cache
 	// topologies.
-	Result RegionalTieredCacheGetResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success RegionalTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    regionalTieredCacheGetResponseEnvelopeJSON    `json:"-"`
+	Result RegionalTieredCacheGetResponse             `json:"result"`
+	JSON   regionalTieredCacheGetResponseEnvelopeJSON `json:"-"`
 }
 
 // regionalTieredCacheGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -305,8 +305,8 @@ type RegionalTieredCacheGetResponseEnvelope struct {
 type regionalTieredCacheGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
