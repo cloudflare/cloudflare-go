@@ -3,7 +3,7 @@
 package argo
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // ArgoService contains methods and other services that help with interacting with
