@@ -91,7 +91,7 @@ func (r DevicePolicyCertificateUpdateParams) MarshalJSON() (data []byte, err err
 type DevicePolicyCertificateUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful.
 	Success DevicePolicyCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCertificateUpdateResponseEnvelopeJSON    `json:"-"`
@@ -134,7 +134,7 @@ func (r DevicePolicyCertificateUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DevicePolicyCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful.
 	Success DevicePolicyCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCertificateGetResponseEnvelopeJSON    `json:"-"`
