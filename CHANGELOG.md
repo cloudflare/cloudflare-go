@@ -1,5 +1,18 @@
 ## 0.104.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* dns: removed deprecated `ZoneID` and `ZoneName` fields ([#2986](https://github.com/cloudflare/cloudflare-go/issues/2986))
+
+ENHANCEMENTS:
+
+* bot_management: add ai_bots_protection to public API ([#2974](https://github.com/cloudflare/cloudflare-go/issues/2974))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.28.0 to 0.29.0 ([#3030](https://github.com/cloudflare/cloudflare-go/issues/3030))
+* deps: bumps golang.org/x/time from 0.5.0 to 0.6.0 ([#2816](https://github.com/cloudflare/cloudflare-go/issues/2816))
+
 ## 0.103.0 (August 28th, 2024)
 
 ENHANCEMENTS:
