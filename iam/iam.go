@@ -3,7 +3,7 @@
 package iam
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // IAMService contains methods and other services that help with interacting with

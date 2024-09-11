@@ -3,8 +3,8 @@
 package zero_trust
 
 import (
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // DEXService contains methods and other services that help with interacting with
