@@ -115,9 +115,43 @@ func (r *NamespaceValueService) Get(ctx context.Context, namespaceID string, key
 	return
 }
 
-type NamespaceValueUpdateResponse = interface{}
+type NamespaceValueUpdateResponse struct {
+	JSON namespaceValueUpdateResponseJSON `json:"-"`
+}
 
-type NamespaceValueDeleteResponse = interface{}
+// namespaceValueUpdateResponseJSON contains the JSON metadata for the struct
+// [NamespaceValueUpdateResponse]
+type namespaceValueUpdateResponseJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceValueUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceValueUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type NamespaceValueDeleteResponse struct {
+	JSON namespaceValueDeleteResponseJSON `json:"-"`
+}
+
+// namespaceValueDeleteResponseJSON contains the JSON metadata for the struct
+// [NamespaceValueDeleteResponse]
+type namespaceValueDeleteResponseJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NamespaceValueDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r namespaceValueDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type NamespaceValueUpdateParams struct {
 	// Identifier
@@ -137,7 +171,7 @@ type NamespaceValueUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceValueUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  NamespaceValueUpdateResponse                `json:"result"`
+	Result  NamespaceValueUpdateResponse                `json:"result,nullable"`
 	JSON    namespaceValueUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -185,7 +219,7 @@ type NamespaceValueDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success NamespaceValueDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  NamespaceValueDeleteResponse                `json:"result"`
+	Result  NamespaceValueDeleteResponse                `json:"result,nullable"`
 	JSON    namespaceValueDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
