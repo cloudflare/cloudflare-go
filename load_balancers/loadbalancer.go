@@ -357,7 +357,7 @@ type LoadBalancer struct {
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
 	CountryPools map[string][]string `json:"country_pools"`
-	CreatedOn    time.Time           `json:"created_on" format:"date-time"`
+	CreatedOn    string              `json:"created_on"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools []DefaultPools `json:"default_pools"`
@@ -370,7 +370,7 @@ type LoadBalancer struct {
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy LocationStrategy `json:"location_strategy"`
-	ModifiedOn       time.Time        `json:"modified_on" format:"date-time"`
+	ModifiedOn       string           `json:"modified_on"`
 	// The DNS hostname to associate with your Load Balancer. If this hostname already
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
