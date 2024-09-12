@@ -175,7 +175,7 @@ type Pool struct {
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions []CheckRegion `json:"check_regions,nullable"`
-	CreatedOn    time.Time     `json:"created_on" format:"date-time"`
+	CreatedOn    string        `json:"created_on"`
 	// A human-readable description of the pool.
 	Description string `json:"description"`
 	// This field shows up only if the pool is disabled. This field is set with the
@@ -196,8 +196,8 @@ type Pool struct {
 	// The minimum number of origins that must be healthy for this pool to serve
 	// traffic. If the number of healthy origins falls below this number, the pool will
 	// be marked unhealthy and will failover to the next available pool.
-	MinimumOrigins int64     `json:"minimum_origins"`
-	ModifiedOn     time.Time `json:"modified_on" format:"date-time"`
+	MinimumOrigins int64  `json:"minimum_origins"`
+	ModifiedOn     string `json:"modified_on"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor string `json:"monitor"`
