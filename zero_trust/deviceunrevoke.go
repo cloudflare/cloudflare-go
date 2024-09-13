@@ -64,7 +64,7 @@ func (r DeviceUnrevokeNewParams) MarshalJSON() (data []byte, err error) {
 type DeviceUnrevokeNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful.
 	Success DeviceUnrevokeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceUnrevokeNewResponseEnvelopeJSON    `json:"-"`
