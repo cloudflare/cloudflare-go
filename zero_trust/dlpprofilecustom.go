@@ -667,7 +667,7 @@ type DLPProfileCustomDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  DLPProfileCustomDeleteResponse                `json:"result,nullable"`
+	Result  DLPProfileCustomDeleteResponse                `json:"result"`
 	JSON    dlpProfileCustomDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
