@@ -808,7 +808,8 @@ type RecordListParams struct {
 	// Identifier
 	ZoneID  param.Field[string]                  `path:"zone_id,required"`
 	Comment param.Field[RecordListParamsComment] `query:"comment"`
-	Content param.Field[RecordListParamsContent] `query:"content"`
+	// DNS record content.
+	Content param.Field[string] `query:"content"`
 	// Direction to order DNS records in.
 	Direction param.Field[shared.SortDirection] `query:"direction"`
 	// Whether to match all search requirements or at least one (any). If set to `all`,
@@ -816,7 +817,8 @@ type RecordListParams struct {
 	// instead. Note that the interaction between tag filters is controlled by the
 	// `tag-match` parameter instead.
 	Match param.Field[RecordListParamsMatch] `query:"match"`
-	Name  param.Field[RecordListParamsName]  `query:"name"`
+	// DNS record name (or @ for the zone apex) in Punycode.
+	Name param.Field[string] `query:"name"`
 	// Field to order DNS records by.
 	Order param.Field[RecordListParamsOrder] `query:"order"`
 	// Page number of paginated results.
@@ -874,26 +876,6 @@ func (r RecordListParamsComment) URLQuery() (v url.Values) {
 	})
 }
 
-type RecordListParamsContent struct {
-	// Substring of the DNS record content. Content filters are case-insensitive.
-	Contains param.Field[string] `query:"contains"`
-	// Suffix of the DNS record content. Content filters are case-insensitive.
-	Endswith param.Field[string] `query:"endswith"`
-	// Exact value of the DNS record content. Content filters are case-insensitive.
-	Exact param.Field[string] `query:"exact"`
-	// Prefix of the DNS record content. Content filters are case-insensitive.
-	Startswith param.Field[string] `query:"startswith"`
-}
-
-// URLQuery serializes [RecordListParamsContent]'s query parameters as
-// `url.Values`.
-func (r RecordListParamsContent) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
 // Whether to match all search requirements or at least one (any). If set to `all`,
 // acts like a logical AND between filters. If set to `any`, acts like a logical OR
 // instead. Note that the interaction between tag filters is controlled by the
@@ -911,25 +893,6 @@ func (r RecordListParamsMatch) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type RecordListParamsName struct {
-	// Substring of the DNS record name. Name filters are case-insensitive.
-	Contains param.Field[string] `query:"contains"`
-	// Suffix of the DNS record name. Name filters are case-insensitive.
-	Endswith param.Field[string] `query:"endswith"`
-	// Exact value of the DNS record name. Name filters are case-insensitive.
-	Exact param.Field[string] `query:"exact"`
-	// Prefix of the DNS record name. Name filters are case-insensitive.
-	Startswith param.Field[string] `query:"startswith"`
-}
-
-// URLQuery serializes [RecordListParamsName]'s query parameters as `url.Values`.
-func (r RecordListParamsName) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 // Field to order DNS records by.
