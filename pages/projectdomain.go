@@ -927,7 +927,7 @@ type ProjectDomainDeleteParams struct {
 type ProjectDomainDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo       `json:"errors,required"`
 	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ProjectDomainDeleteResponse `json:"result,required"`
+	Result   ProjectDomainDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainDeleteResponseEnvelopeJSON    `json:"-"`
