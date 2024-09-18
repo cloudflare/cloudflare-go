@@ -354,14 +354,14 @@ func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
 type CacheReserveClearResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success CacheReserveClearResponseEnvelopeSuccess `json:"success,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 	// that you cannot undo or cancel this operation.
-	Result CacheReserveClearResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success CacheReserveClearResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cacheReserveClearResponseEnvelopeJSON    `json:"-"`
+	Result CacheReserveClearResponse             `json:"result"`
+	JSON   cacheReserveClearResponseEnvelopeJSON `json:"-"`
 }
 
 // cacheReserveClearResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -369,8 +369,8 @@ type CacheReserveClearResponseEnvelope struct {
 type cacheReserveClearResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -428,16 +428,16 @@ func (r CacheReserveEditParamsValue) IsKnown() bool {
 type CacheReserveEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success CacheReserveEditResponseEnvelopeSuccess `json:"success,required"`
 	// Increase cache lifetimes by automatically storing all cacheable files into
 	// Cloudflare's persistent object storage buckets. Requires Cache Reserve
 	// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
 	// to reduce Reserve operations costs. See the
 	// [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
 	// for more information.
-	Result CacheReserveEditResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success CacheReserveEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cacheReserveEditResponseEnvelopeJSON    `json:"-"`
+	Result CacheReserveEditResponse             `json:"result"`
+	JSON   cacheReserveEditResponseEnvelopeJSON `json:"-"`
 }
 
 // cacheReserveEditResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -445,8 +445,8 @@ type CacheReserveEditResponseEnvelope struct {
 type cacheReserveEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -482,16 +482,16 @@ type CacheReserveGetParams struct {
 type CacheReserveGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success CacheReserveGetResponseEnvelopeSuccess `json:"success,required"`
 	// Increase cache lifetimes by automatically storing all cacheable files into
 	// Cloudflare's persistent object storage buckets. Requires Cache Reserve
 	// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
 	// to reduce Reserve operations costs. See the
 	// [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
 	// for more information.
-	Result CacheReserveGetResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success CacheReserveGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cacheReserveGetResponseEnvelopeJSON    `json:"-"`
+	Result CacheReserveGetResponse             `json:"result"`
+	JSON   cacheReserveGetResponseEnvelopeJSON `json:"-"`
 }
 
 // cacheReserveGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -499,8 +499,8 @@ type CacheReserveGetResponseEnvelope struct {
 type cacheReserveGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -536,14 +536,14 @@ type CacheReserveStatusParams struct {
 type CacheReserveStatusResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success CacheReserveStatusResponseEnvelopeSuccess `json:"success,required"`
 	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 	// that you cannot undo or cancel this operation.
-	Result CacheReserveStatusResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success CacheReserveStatusResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cacheReserveStatusResponseEnvelopeJSON    `json:"-"`
+	Result CacheReserveStatusResponse             `json:"result"`
+	JSON   cacheReserveStatusResponseEnvelopeJSON `json:"-"`
 }
 
 // cacheReserveStatusResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -551,8 +551,8 @@ type CacheReserveStatusResponseEnvelope struct {
 type cacheReserveStatusResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
