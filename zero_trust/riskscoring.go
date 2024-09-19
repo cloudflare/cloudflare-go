@@ -264,7 +264,7 @@ type RiskScoringResetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RiskScoringResetResponseEnvelopeSuccess `json:"success,required"`
-	Result  RiskScoringResetResponse                `json:"result"`
+	Result  RiskScoringResetResponse                `json:"result,nullable"`
 	JSON    riskScoringResetResponseEnvelopeJSON    `json:"-"`
 }
 
