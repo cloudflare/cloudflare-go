@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/shared"
 	"github.com/cloudflare/cloudflare-go/v2/user"
 )
 
@@ -37,13 +38,13 @@ func TestAuditLogListWithOptionalParams(t *testing.T) {
 			Email: cloudflare.F("alice@example.com"),
 			IP:    cloudflare.F("17.168.228.63"),
 		}),
-		Before:       cloudflare.F(time.Now()),
+		Before:       cloudflare.F[user.AuditLogListParamsBeforeUnion](shared.UnionTime(time.Now())),
 		Direction:    cloudflare.F(user.AuditLogListParamsDirectionDesc),
 		Export:       cloudflare.F(true),
 		HideUserLogs: cloudflare.F(true),
 		Page:         cloudflare.F(50.000000),
 		PerPage:      cloudflare.F(25.000000),
-		Since:        cloudflare.F(time.Now()),
+		Since:        cloudflare.F[user.AuditLogListParamsSinceUnion](shared.UnionTime(time.Now())),
 		Zone: cloudflare.F(user.AuditLogListParamsZone{
 			Name: cloudflare.F("example.com"),
 		}),

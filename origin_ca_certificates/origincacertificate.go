@@ -134,7 +134,7 @@ type OriginCACertificate struct {
 	// The Origin CA certificate. Will be newline-encoded.
 	Certificate string `json:"certificate"`
 	// When the certificate will expire.
-	ExpiresOn time.Time               `json:"expires_on" format:"date-time"`
+	ExpiresOn string                  `json:"expires_on"`
 	JSON      originCACertificateJSON `json:"-"`
 }
 
@@ -161,37 +161,20 @@ func (r originCACertificateJSON) RawJSON() string {
 }
 
 type OriginCACertificateDeleteResponse struct {
-	// The Certificate Signing Request (CSR). Must be newline-encoded.
-	Csr string `json:"csr,required"`
-	// Array of hostnames or wildcard names (e.g., \*.example.com) bound to the
-	// certificate.
-	Hostnames []string `json:"hostnames,required"`
-	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
-	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType shared.CertificateRequestType `json:"request_type,required"`
-	// The number of days for which the certificate should be valid.
-	RequestedValidity ssl.RequestValidity `json:"requested_validity,required"`
 	// Identifier
 	ID string `json:"id"`
-	// The Origin CA certificate. Will be newline-encoded.
-	Certificate string `json:"certificate"`
-	// When the certificate will expire.
-	ExpiresOn time.Time                             `json:"expires_on" format:"date-time"`
+	// When the certificate was revoked.
+	RevokedAt time.Time                             `json:"revoked_at" format:"date-time"`
 	JSON      originCACertificateDeleteResponseJSON `json:"-"`
 }
 
 // originCACertificateDeleteResponseJSON contains the JSON metadata for the struct
 // [OriginCACertificateDeleteResponse]
 type originCACertificateDeleteResponseJSON struct {
-	Csr               apijson.Field
-	Hostnames         apijson.Field
-	RequestType       apijson.Field
-	RequestedValidity apijson.Field
-	ID                apijson.Field
-	Certificate       apijson.Field
-	ExpiresOn         apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	ID          apijson.Field
+	RevokedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *OriginCACertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
@@ -277,20 +260,13 @@ func (r OriginCACertificateListParams) URLQuery() (v url.Values) {
 }
 
 type OriginCACertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success OriginCACertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  OriginCACertificateDeleteResponse                `json:"result"`
-	JSON    originCACertificateDeleteResponseEnvelopeJSON    `json:"-"`
+	Result OriginCACertificateDeleteResponse             `json:"result"`
+	JSON   originCACertificateDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // originCACertificateDeleteResponseEnvelopeJSON contains the JSON metadata for the
 // struct [OriginCACertificateDeleteResponseEnvelope]
 type originCACertificateDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -302,21 +278,6 @@ func (r *OriginCACertificateDeleteResponseEnvelope) UnmarshalJSON(data []byte) (
 
 func (r originCACertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
-}
-
-// Whether the API call was successful
-type OriginCACertificateDeleteResponseEnvelopeSuccess bool
-
-const (
-	OriginCACertificateDeleteResponseEnvelopeSuccessTrue OriginCACertificateDeleteResponseEnvelopeSuccess = true
-)
-
-func (r OriginCACertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case OriginCACertificateDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type OriginCACertificateGetResponseEnvelope struct {
