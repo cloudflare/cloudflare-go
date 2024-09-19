@@ -12,7 +12,7 @@ import (
 
 var ErrMissingTargetId = errors.New("required target id missing")
 
-// AccessApplication represents an Access application.
+// Target represents an Infrastructure Target.
 type Target struct {
 	Hostname   string    `json:"hostname"`
 	ID         string    `json:"id"`
@@ -45,7 +45,7 @@ type UpdateInfrastructureTargetParams struct {
 	ModifyParams InfrastructureTargetParams `json:"modify_params"`
 }
 
-// TargetDetailResponse is the API response, containing a single access target.
+// TargetDetailResponse is the API response, containing a single target.
 type TargetDetailResponse struct {
 	Result Target `json:"result"`
 	Response
