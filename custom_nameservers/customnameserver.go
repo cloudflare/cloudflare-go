@@ -266,7 +266,7 @@ type CustomNameserverDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    CustomNameserverDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []string                                         `json:"result"`
+	Result     []string                                         `json:"result,nullable"`
 	ResultInfo CustomNameserverDeleteResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       customNameserverDeleteResponseEnvelopeJSON       `json:"-"`
 }
@@ -347,7 +347,7 @@ type CustomNameserverAvailabiltyResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    CustomNameserverAvailabiltyResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []string                                              `json:"result" format:"hostname"`
+	Result     []string                                              `json:"result,nullable" format:"hostname"`
 	ResultInfo CustomNameserverAvailabiltyResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       customNameserverAvailabiltyResponseEnvelopeJSON       `json:"-"`
 }
@@ -428,7 +428,7 @@ type CustomNameserverGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    CustomNameserverGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CustomNameserver                            `json:"result"`
+	Result     []CustomNameserver                            `json:"result,nullable"`
 	ResultInfo CustomNameserverGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       customNameserverGetResponseEnvelopeJSON       `json:"-"`
 }

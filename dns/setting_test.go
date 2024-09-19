@@ -31,9 +31,8 @@ func TestSettingEditWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Settings.Edit(context.TODO(), dns.SettingEditParams{
 		AccountID: cloudflare.F("account_id"),
 		ZoneDefaults: cloudflare.F(dns.DNSSettingParam{
-			FlattenAllCNAMEs: cloudflare.F(false),
-			FoundationDNS:    cloudflare.F(false),
-			MultiProvider:    cloudflare.F(false),
+			FoundationDNS: cloudflare.F(false),
+			MultiProvider: cloudflare.F(false),
 			Nameservers: cloudflare.F(dns.NameserverParam{
 				Type: cloudflare.F(dns.NameserverTypeCloudflareStandard),
 			}),

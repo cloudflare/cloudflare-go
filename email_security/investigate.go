@@ -187,7 +187,6 @@ type InvestigateListResponse struct {
 	PostfixID        string                                  `json:"postfix_id,required"`
 	Ts               string                                  `json:"ts,required"`
 	AlertID          string                                  `json:"alert_id,nullable"`
-	DeliveryMode     InvestigateListResponseDeliveryMode     `json:"delivery_mode,nullable"`
 	EdfHash          string                                  `json:"edf_hash,nullable"`
 	FinalDisposition InvestigateListResponseFinalDisposition `json:"final_disposition,nullable"`
 	From             string                                  `json:"from,nullable"`
@@ -214,7 +213,6 @@ type investigateListResponseJSON struct {
 	PostfixID         apijson.Field
 	Ts                apijson.Field
 	AlertID           apijson.Field
-	DeliveryMode      apijson.Field
 	EdfHash           apijson.Field
 	FinalDisposition  apijson.Field
 	From              apijson.Field
@@ -235,30 +233,6 @@ func (r *InvestigateListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r investigateListResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type InvestigateListResponseDeliveryMode string
-
-const (
-	InvestigateListResponseDeliveryModeDirect                InvestigateListResponseDeliveryMode = "DIRECT"
-	InvestigateListResponseDeliveryModeBcc                   InvestigateListResponseDeliveryMode = "BCC"
-	InvestigateListResponseDeliveryModeJournal               InvestigateListResponseDeliveryMode = "JOURNAL"
-	InvestigateListResponseDeliveryModeReviewSubmission      InvestigateListResponseDeliveryMode = "REVIEW_SUBMISSION"
-	InvestigateListResponseDeliveryModeDMARCUnverified       InvestigateListResponseDeliveryMode = "DMARC_UNVERIFIED"
-	InvestigateListResponseDeliveryModeDMARCFailureReport    InvestigateListResponseDeliveryMode = "DMARC_FAILURE_REPORT"
-	InvestigateListResponseDeliveryModeDMARCAggregateReport  InvestigateListResponseDeliveryMode = "DMARC_AGGREGATE_REPORT"
-	InvestigateListResponseDeliveryModeThreatIntelSubmission InvestigateListResponseDeliveryMode = "THREAT_INTEL_SUBMISSION"
-	InvestigateListResponseDeliveryModeSimulationSubmission  InvestigateListResponseDeliveryMode = "SIMULATION_SUBMISSION"
-	InvestigateListResponseDeliveryModeAPI                   InvestigateListResponseDeliveryMode = "API"
-	InvestigateListResponseDeliveryModeRetroScan             InvestigateListResponseDeliveryMode = "RETRO_SCAN"
-)
-
-func (r InvestigateListResponseDeliveryMode) IsKnown() bool {
-	switch r {
-	case InvestigateListResponseDeliveryModeDirect, InvestigateListResponseDeliveryModeBcc, InvestigateListResponseDeliveryModeJournal, InvestigateListResponseDeliveryModeReviewSubmission, InvestigateListResponseDeliveryModeDMARCUnverified, InvestigateListResponseDeliveryModeDMARCFailureReport, InvestigateListResponseDeliveryModeDMARCAggregateReport, InvestigateListResponseDeliveryModeThreatIntelSubmission, InvestigateListResponseDeliveryModeSimulationSubmission, InvestigateListResponseDeliveryModeAPI, InvestigateListResponseDeliveryModeRetroScan:
-		return true
-	}
-	return false
 }
 
 type InvestigateListResponseFinalDisposition string
@@ -670,7 +644,6 @@ type InvestigateGetResponse struct {
 	PostfixID        string                                 `json:"postfix_id,required"`
 	Ts               string                                 `json:"ts,required"`
 	AlertID          string                                 `json:"alert_id,nullable"`
-	DeliveryMode     InvestigateGetResponseDeliveryMode     `json:"delivery_mode,nullable"`
 	EdfHash          string                                 `json:"edf_hash,nullable"`
 	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition,nullable"`
 	From             string                                 `json:"from,nullable"`
@@ -697,7 +670,6 @@ type investigateGetResponseJSON struct {
 	PostfixID         apijson.Field
 	Ts                apijson.Field
 	AlertID           apijson.Field
-	DeliveryMode      apijson.Field
 	EdfHash           apijson.Field
 	FinalDisposition  apijson.Field
 	From              apijson.Field
@@ -718,30 +690,6 @@ func (r *InvestigateGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r investigateGetResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type InvestigateGetResponseDeliveryMode string
-
-const (
-	InvestigateGetResponseDeliveryModeDirect                InvestigateGetResponseDeliveryMode = "DIRECT"
-	InvestigateGetResponseDeliveryModeBcc                   InvestigateGetResponseDeliveryMode = "BCC"
-	InvestigateGetResponseDeliveryModeJournal               InvestigateGetResponseDeliveryMode = "JOURNAL"
-	InvestigateGetResponseDeliveryModeReviewSubmission      InvestigateGetResponseDeliveryMode = "REVIEW_SUBMISSION"
-	InvestigateGetResponseDeliveryModeDMARCUnverified       InvestigateGetResponseDeliveryMode = "DMARC_UNVERIFIED"
-	InvestigateGetResponseDeliveryModeDMARCFailureReport    InvestigateGetResponseDeliveryMode = "DMARC_FAILURE_REPORT"
-	InvestigateGetResponseDeliveryModeDMARCAggregateReport  InvestigateGetResponseDeliveryMode = "DMARC_AGGREGATE_REPORT"
-	InvestigateGetResponseDeliveryModeThreatIntelSubmission InvestigateGetResponseDeliveryMode = "THREAT_INTEL_SUBMISSION"
-	InvestigateGetResponseDeliveryModeSimulationSubmission  InvestigateGetResponseDeliveryMode = "SIMULATION_SUBMISSION"
-	InvestigateGetResponseDeliveryModeAPI                   InvestigateGetResponseDeliveryMode = "API"
-	InvestigateGetResponseDeliveryModeRetroScan             InvestigateGetResponseDeliveryMode = "RETRO_SCAN"
-)
-
-func (r InvestigateGetResponseDeliveryMode) IsKnown() bool {
-	switch r {
-	case InvestigateGetResponseDeliveryModeDirect, InvestigateGetResponseDeliveryModeBcc, InvestigateGetResponseDeliveryModeJournal, InvestigateGetResponseDeliveryModeReviewSubmission, InvestigateGetResponseDeliveryModeDMARCUnverified, InvestigateGetResponseDeliveryModeDMARCFailureReport, InvestigateGetResponseDeliveryModeDMARCAggregateReport, InvestigateGetResponseDeliveryModeThreatIntelSubmission, InvestigateGetResponseDeliveryModeSimulationSubmission, InvestigateGetResponseDeliveryModeAPI, InvestigateGetResponseDeliveryModeRetroScan:
-		return true
-	}
-	return false
 }
 
 type InvestigateGetResponseFinalDisposition string

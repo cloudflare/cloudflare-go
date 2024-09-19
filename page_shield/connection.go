@@ -142,7 +142,8 @@ type ConnectionListParams struct {
 	// Excludes connections whose URL contains one of the URL-encoded URLs separated by
 	// commas.
 	ExcludeURLs param.Field[string] `query:"exclude_urls"`
-	// Export the list of connections as a file.
+	// Export the list of connections as a file. Cannot be used with per_page or page
+	// options.
 	Export param.Field[ConnectionListParamsExport] `query:"export"`
 	// Includes connections that match one or more URL-encoded hostnames separated by
 	// commas.
@@ -156,9 +157,10 @@ type ConnectionListParams struct {
 	// The current page number of the paginated results.
 	//
 	// We additionally support a special value "all". When "all" is used, the API will
-	// return all the connections with the applied filters in a single page. This
-	// feature is best-effort and it may only work for zones with a low number of
-	// connections
+	// return all the connections with the applied filters in a single page.
+	// Additionally, when using this value, the API will not return the categorisation
+	// data for the URL and domain of the connections. This feature is best-effort and
+	// it may only work for zones with a low number of connections
 	Page param.Field[string] `query:"page"`
 	// Includes connections that match one or more page URLs (separated by commas)
 	// where they were last seen
@@ -204,7 +206,8 @@ func (r ConnectionListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Export the list of connections as a file.
+// Export the list of connections as a file. Cannot be used with per_page or page
+// options.
 type ConnectionListParamsExport string
 
 const (

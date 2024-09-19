@@ -541,8 +541,8 @@ func (r AIGatewayListParams) URLQuery() (v url.Values) {
 type AIGatewayListParamsOrderByDirection string
 
 const (
-	AIGatewayListParamsOrderByDirectionAsc  AIGatewayListParamsOrderByDirection = "asc"
-	AIGatewayListParamsOrderByDirectionDesc AIGatewayListParamsOrderByDirection = "desc"
+	AIGatewayListParamsOrderByDirectionAsc  AIGatewayListParamsOrderByDirection = "ASC"
+	AIGatewayListParamsOrderByDirectionDesc AIGatewayListParamsOrderByDirection = "DESC"
 )
 
 func (r AIGatewayListParamsOrderByDirection) IsKnown() bool {

@@ -402,10 +402,8 @@ type DeviceInput struct {
 	IsActive bool `json:"is_active"`
 	// Network status of device.
 	NetworkStatus DeviceInputNetworkStatus `json:"network_status"`
-	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
-	Score float64         `json:"score"`
-	JSON  deviceInputJSON `json:"-"`
-	union DeviceInputUnion
+	JSON          deviceInputJSON          `json:"-"`
+	union         DeviceInputUnion
 }
 
 // deviceInputJSON contains the JSON metadata for the struct [DeviceInput]
@@ -448,7 +446,6 @@ type deviceInputJSON struct {
 	Infected         apijson.Field
 	IsActive         apijson.Field
 	NetworkStatus    apijson.Field
-	Score            apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -480,8 +477,7 @@ func (r *DeviceInput) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.DeviceInputTeamsDevicesClientCertificateV2InputRequest],
 // [zero_trust.WorkspaceOneInput], [zero_trust.CrowdstrikeInput],
 // [zero_trust.IntuneInput], [zero_trust.KolideInput], [zero_trust.TaniumInput],
-// [zero_trust.SentineloneS2sInput],
-// [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequest].
+// [zero_trust.SentineloneS2sInput].
 func (r DeviceInput) AsUnion() DeviceInputUnion {
 	return r.union
 }
@@ -497,9 +493,8 @@ func (r DeviceInput) AsUnion() DeviceInputUnion {
 // [zero_trust.ClientCertificateInput],
 // [zero_trust.DeviceInputTeamsDevicesClientCertificateV2InputRequest],
 // [zero_trust.WorkspaceOneInput], [zero_trust.CrowdstrikeInput],
-// [zero_trust.IntuneInput], [zero_trust.KolideInput], [zero_trust.TaniumInput],
-// [zero_trust.SentineloneS2sInput] or
-// [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequest].
+// [zero_trust.IntuneInput], [zero_trust.KolideInput], [zero_trust.TaniumInput] or
+// [zero_trust.SentineloneS2sInput].
 type DeviceInputUnion interface {
 	implementsZeroTrustDeviceInput()
 }
@@ -575,10 +570,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SentineloneS2sInput{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DeviceInputTeamsDevicesCustomS2sInputRequest{}),
 		},
 	)
 }
@@ -793,55 +784,6 @@ const (
 func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStore) IsKnown() bool {
 	switch r {
 	case DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStoreSystem, DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStoreUser:
-		return true
-	}
-	return false
-}
-
-type DeviceInputTeamsDevicesCustomS2sInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
-	// operator
-	Operator DeviceInputTeamsDevicesCustomS2sInputRequestOperator `json:"operator,required"`
-	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
-	Score float64                                          `json:"score,required"`
-	JSON  deviceInputTeamsDevicesCustomS2sInputRequestJSON `json:"-"`
-}
-
-// deviceInputTeamsDevicesCustomS2sInputRequestJSON contains the JSON metadata for
-// the struct [DeviceInputTeamsDevicesCustomS2sInputRequest]
-type deviceInputTeamsDevicesCustomS2sInputRequestJSON struct {
-	ConnectionID apijson.Field
-	Operator     apijson.Field
-	Score        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *DeviceInputTeamsDevicesCustomS2sInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deviceInputTeamsDevicesCustomS2sInputRequestJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DeviceInputTeamsDevicesCustomS2sInputRequest) implementsZeroTrustDeviceInput() {}
-
-// operator
-type DeviceInputTeamsDevicesCustomS2sInputRequestOperator string
-
-const (
-	DeviceInputTeamsDevicesCustomS2sInputRequestOperatorLess            DeviceInputTeamsDevicesCustomS2sInputRequestOperator = "<"
-	DeviceInputTeamsDevicesCustomS2sInputRequestOperatorLessOrEquals    DeviceInputTeamsDevicesCustomS2sInputRequestOperator = "<="
-	DeviceInputTeamsDevicesCustomS2sInputRequestOperatorGreater         DeviceInputTeamsDevicesCustomS2sInputRequestOperator = ">"
-	DeviceInputTeamsDevicesCustomS2sInputRequestOperatorGreaterOrEquals DeviceInputTeamsDevicesCustomS2sInputRequestOperator = ">="
-	DeviceInputTeamsDevicesCustomS2sInputRequestOperatorEquals          DeviceInputTeamsDevicesCustomS2sInputRequestOperator = "=="
-)
-
-func (r DeviceInputTeamsDevicesCustomS2sInputRequestOperator) IsKnown() bool {
-	switch r {
-	case DeviceInputTeamsDevicesCustomS2sInputRequestOperatorLess, DeviceInputTeamsDevicesCustomS2sInputRequestOperatorLessOrEquals, DeviceInputTeamsDevicesCustomS2sInputRequestOperatorGreater, DeviceInputTeamsDevicesCustomS2sInputRequestOperatorGreaterOrEquals, DeviceInputTeamsDevicesCustomS2sInputRequestOperatorEquals:
 		return true
 	}
 	return false
@@ -1093,8 +1035,6 @@ type DeviceInputParam struct {
 	IsActive param.Field[bool] `json:"is_active"`
 	// Network status of device.
 	NetworkStatus param.Field[DeviceInputNetworkStatus] `json:"network_status"`
-	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
-	Score param.Field[float64] `json:"score"`
 }
 
 func (r DeviceInputParam) MarshalJSON() (data []byte, err error) {
@@ -1116,7 +1056,6 @@ func (r DeviceInputParam) implementsZeroTrustDeviceInputUnionParam() {}
 // [zero_trust.WorkspaceOneInputParam], [zero_trust.CrowdstrikeInputParam],
 // [zero_trust.IntuneInputParam], [zero_trust.KolideInputParam],
 // [zero_trust.TaniumInputParam], [zero_trust.SentineloneS2sInputParam],
-// [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequestParam],
 // [DeviceInputParam].
 type DeviceInputUnionParam interface {
 	implementsZeroTrustDeviceInputUnionParam()
@@ -1192,22 +1131,6 @@ type DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam struct
 
 func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type DeviceInputTeamsDevicesCustomS2sInputRequestParam struct {
-	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// operator
-	Operator param.Field[DeviceInputTeamsDevicesCustomS2sInputRequestOperator] `json:"operator,required"`
-	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
-	Score param.Field[float64] `json:"score,required"`
-}
-
-func (r DeviceInputTeamsDevicesCustomS2sInputRequestParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DeviceInputTeamsDevicesCustomS2sInputRequestParam) implementsZeroTrustDeviceInputUnionParam() {
 }
 
 type DeviceMatch struct {
@@ -1325,12 +1248,11 @@ const (
 	DevicePostureRuleTypeIntune              DevicePostureRuleType = "intune"
 	DevicePostureRuleTypeWorkspaceOne        DevicePostureRuleType = "workspace_one"
 	DevicePostureRuleTypeSentineloneS2s      DevicePostureRuleType = "sentinelone_s2s"
-	DevicePostureRuleTypeCustomS2s           DevicePostureRuleType = "custom_s2s"
 )
 
 func (r DevicePostureRuleType) IsKnown() bool {
 	switch r {
-	case DevicePostureRuleTypeFile, DevicePostureRuleTypeApplication, DevicePostureRuleTypeTanium, DevicePostureRuleTypeGateway, DevicePostureRuleTypeWARP, DevicePostureRuleTypeDiskEncryption, DevicePostureRuleTypeSentinelone, DevicePostureRuleTypeCarbonblack, DevicePostureRuleTypeFirewall, DevicePostureRuleTypeOSVersion, DevicePostureRuleTypeDomainJoined, DevicePostureRuleTypeClientCertificate, DevicePostureRuleTypeClientCertificateV2, DevicePostureRuleTypeUniqueClientID, DevicePostureRuleTypeKolide, DevicePostureRuleTypeTaniumS2s, DevicePostureRuleTypeCrowdstrikeS2s, DevicePostureRuleTypeIntune, DevicePostureRuleTypeWorkspaceOne, DevicePostureRuleTypeSentineloneS2s, DevicePostureRuleTypeCustomS2s:
+	case DevicePostureRuleTypeFile, DevicePostureRuleTypeApplication, DevicePostureRuleTypeTanium, DevicePostureRuleTypeGateway, DevicePostureRuleTypeWARP, DevicePostureRuleTypeDiskEncryption, DevicePostureRuleTypeSentinelone, DevicePostureRuleTypeCarbonblack, DevicePostureRuleTypeFirewall, DevicePostureRuleTypeOSVersion, DevicePostureRuleTypeDomainJoined, DevicePostureRuleTypeClientCertificate, DevicePostureRuleTypeClientCertificateV2, DevicePostureRuleTypeUniqueClientID, DevicePostureRuleTypeKolide, DevicePostureRuleTypeTaniumS2s, DevicePostureRuleTypeCrowdstrikeS2s, DevicePostureRuleTypeIntune, DevicePostureRuleTypeWorkspaceOne, DevicePostureRuleTypeSentineloneS2s:
 		return true
 	}
 	return false
@@ -2237,12 +2159,11 @@ const (
 	DevicePostureNewParamsTypeIntune              DevicePostureNewParamsType = "intune"
 	DevicePostureNewParamsTypeWorkspaceOne        DevicePostureNewParamsType = "workspace_one"
 	DevicePostureNewParamsTypeSentineloneS2s      DevicePostureNewParamsType = "sentinelone_s2s"
-	DevicePostureNewParamsTypeCustomS2s           DevicePostureNewParamsType = "custom_s2s"
 )
 
 func (r DevicePostureNewParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureNewParamsTypeFile, DevicePostureNewParamsTypeApplication, DevicePostureNewParamsTypeTanium, DevicePostureNewParamsTypeGateway, DevicePostureNewParamsTypeWARP, DevicePostureNewParamsTypeDiskEncryption, DevicePostureNewParamsTypeSentinelone, DevicePostureNewParamsTypeCarbonblack, DevicePostureNewParamsTypeFirewall, DevicePostureNewParamsTypeOSVersion, DevicePostureNewParamsTypeDomainJoined, DevicePostureNewParamsTypeClientCertificate, DevicePostureNewParamsTypeClientCertificateV2, DevicePostureNewParamsTypeUniqueClientID, DevicePostureNewParamsTypeKolide, DevicePostureNewParamsTypeTaniumS2s, DevicePostureNewParamsTypeCrowdstrikeS2s, DevicePostureNewParamsTypeIntune, DevicePostureNewParamsTypeWorkspaceOne, DevicePostureNewParamsTypeSentineloneS2s, DevicePostureNewParamsTypeCustomS2s:
+	case DevicePostureNewParamsTypeFile, DevicePostureNewParamsTypeApplication, DevicePostureNewParamsTypeTanium, DevicePostureNewParamsTypeGateway, DevicePostureNewParamsTypeWARP, DevicePostureNewParamsTypeDiskEncryption, DevicePostureNewParamsTypeSentinelone, DevicePostureNewParamsTypeCarbonblack, DevicePostureNewParamsTypeFirewall, DevicePostureNewParamsTypeOSVersion, DevicePostureNewParamsTypeDomainJoined, DevicePostureNewParamsTypeClientCertificate, DevicePostureNewParamsTypeClientCertificateV2, DevicePostureNewParamsTypeUniqueClientID, DevicePostureNewParamsTypeKolide, DevicePostureNewParamsTypeTaniumS2s, DevicePostureNewParamsTypeCrowdstrikeS2s, DevicePostureNewParamsTypeIntune, DevicePostureNewParamsTypeWorkspaceOne, DevicePostureNewParamsTypeSentineloneS2s:
 		return true
 	}
 	return false
@@ -2339,12 +2260,11 @@ const (
 	DevicePostureUpdateParamsTypeIntune              DevicePostureUpdateParamsType = "intune"
 	DevicePostureUpdateParamsTypeWorkspaceOne        DevicePostureUpdateParamsType = "workspace_one"
 	DevicePostureUpdateParamsTypeSentineloneS2s      DevicePostureUpdateParamsType = "sentinelone_s2s"
-	DevicePostureUpdateParamsTypeCustomS2s           DevicePostureUpdateParamsType = "custom_s2s"
 )
 
 func (r DevicePostureUpdateParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureUpdateParamsTypeFile, DevicePostureUpdateParamsTypeApplication, DevicePostureUpdateParamsTypeTanium, DevicePostureUpdateParamsTypeGateway, DevicePostureUpdateParamsTypeWARP, DevicePostureUpdateParamsTypeDiskEncryption, DevicePostureUpdateParamsTypeSentinelone, DevicePostureUpdateParamsTypeCarbonblack, DevicePostureUpdateParamsTypeFirewall, DevicePostureUpdateParamsTypeOSVersion, DevicePostureUpdateParamsTypeDomainJoined, DevicePostureUpdateParamsTypeClientCertificate, DevicePostureUpdateParamsTypeClientCertificateV2, DevicePostureUpdateParamsTypeUniqueClientID, DevicePostureUpdateParamsTypeKolide, DevicePostureUpdateParamsTypeTaniumS2s, DevicePostureUpdateParamsTypeCrowdstrikeS2s, DevicePostureUpdateParamsTypeIntune, DevicePostureUpdateParamsTypeWorkspaceOne, DevicePostureUpdateParamsTypeSentineloneS2s, DevicePostureUpdateParamsTypeCustomS2s:
+	case DevicePostureUpdateParamsTypeFile, DevicePostureUpdateParamsTypeApplication, DevicePostureUpdateParamsTypeTanium, DevicePostureUpdateParamsTypeGateway, DevicePostureUpdateParamsTypeWARP, DevicePostureUpdateParamsTypeDiskEncryption, DevicePostureUpdateParamsTypeSentinelone, DevicePostureUpdateParamsTypeCarbonblack, DevicePostureUpdateParamsTypeFirewall, DevicePostureUpdateParamsTypeOSVersion, DevicePostureUpdateParamsTypeDomainJoined, DevicePostureUpdateParamsTypeClientCertificate, DevicePostureUpdateParamsTypeClientCertificateV2, DevicePostureUpdateParamsTypeUniqueClientID, DevicePostureUpdateParamsTypeKolide, DevicePostureUpdateParamsTypeTaniumS2s, DevicePostureUpdateParamsTypeCrowdstrikeS2s, DevicePostureUpdateParamsTypeIntune, DevicePostureUpdateParamsTypeWorkspaceOne, DevicePostureUpdateParamsTypeSentineloneS2s:
 		return true
 	}
 	return false

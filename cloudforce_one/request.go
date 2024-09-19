@@ -42,7 +42,7 @@ func NewRequestService(opts ...option.RequestOption) (r *RequestService) {
 
 // Creating a request adds the request into the Cloudforce One queue for analysis.
 // In addition to the content, a short title, type, priority, and releasability
-// should be provided. If one is not provided, a default will be assigned.
+// should be provided. If one is not provided a default will be assigned.
 func (r *RequestService) New(ctx context.Context, accountIdentifier string, body RequestNewParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -61,7 +61,7 @@ func (r *RequestService) New(ctx context.Context, accountIdentifier string, body
 
 // Updating a request alters the request in the Cloudforce One queue. This API may
 // be used to update any attributes of the request after the initial submission.
-// Only fields that you choose to update need to be add to the request body.
+// Only fields that you choose to update need to be add to the request body
 func (r *RequestService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
