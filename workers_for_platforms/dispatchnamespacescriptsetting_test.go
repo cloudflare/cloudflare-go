@@ -50,10 +50,11 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				}),
 				Logpush: cloudflare.F(false),
 				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion](workers.SingleStepMigrationParam{
-					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
-					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					NewTag:         cloudflare.F("v2"),
-					OldTag:         cloudflare.F("v1"),
+					DeletedClasses:   cloudflare.F([]string{"string", "string", "string"}),
+					NewClasses:       cloudflare.F([]string{"string", "string", "string"}),
+					NewSqliteClasses: cloudflare.F([]string{"string", "string", "string"}),
+					NewTag:           cloudflare.F("v2"),
+					OldTag:           cloudflare.F("v1"),
 					RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
 						From: cloudflare.F("from"),
 						To:   cloudflare.F("to"),
