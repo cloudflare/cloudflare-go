@@ -32,12 +32,11 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Records.New(context.TODO(), dns.RecordNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Record: dns.RecordParam{
-			Name:     cloudflare.F("example.com"),
-			Comment:  cloudflare.F("Domain verification record"),
-			Proxied:  cloudflare.F(true),
-			Settings: cloudflare.F[any](map[string]interface{}{}),
-			Tags:     cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-			TTL:      cloudflare.F(dns.TTL1),
+			Name:    cloudflare.F("example.com"),
+			Comment: cloudflare.F("Domain verification record"),
+			Proxied: cloudflare.F(true),
+			Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+			TTL:     cloudflare.F(dns.TTL1),
 		},
 	})
 	if err != nil {
@@ -69,12 +68,11 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 		dns.RecordUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Record: dns.RecordParam{
-				Name:     cloudflare.F("example.com"),
-				Comment:  cloudflare.F("Domain verification record"),
-				Proxied:  cloudflare.F(true),
-				Settings: cloudflare.F[any](map[string]interface{}{}),
-				Tags:     cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-				TTL:      cloudflare.F(dns.TTL1),
+				Name:    cloudflare.F("example.com"),
+				Comment: cloudflare.F("Domain verification record"),
+				Proxied: cloudflare.F(true),
+				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+				TTL:     cloudflare.F(dns.TTL1),
 			},
 		},
 	)
@@ -188,12 +186,11 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 		dns.RecordEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Record: dns.RecordParam{
-				Comment:  cloudflare.F("Domain verification record"),
-				Name:     cloudflare.F("example.com"),
-				Proxied:  cloudflare.F(true),
-				Settings: cloudflare.F[any](map[string]interface{}{}),
-				Tags:     cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-				TTL:      cloudflare.F(dns.TTL1),
+				Comment: cloudflare.F("Domain verification record"),
+				Name:    cloudflare.F("example.com"),
+				Proxied: cloudflare.F(true),
+				Tags:    cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+				TTL:     cloudflare.F(dns.TTL1),
 			},
 		},
 	)

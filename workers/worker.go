@@ -624,8 +624,6 @@ type MigrationStep struct {
 	DeletedClasses []string `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
 	NewClasses []string `json:"new_classes"`
-	// A list of classes to create Durable Object namespaces with SQLite from.
-	NewSqliteClasses []string `json:"new_sqlite_classes"`
 	// A list of classes with Durable Object namespaces that were renamed.
 	RenamedClasses []MigrationStepRenamedClass `json:"renamed_classes"`
 	// A list of transfers for Durable Object namespaces from a different Worker and
@@ -638,7 +636,6 @@ type MigrationStep struct {
 type migrationStepJSON struct {
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
-	NewSqliteClasses   apijson.Field
 	RenamedClasses     apijson.Field
 	TransferredClasses apijson.Field
 	raw                string
@@ -706,8 +703,6 @@ type MigrationStepParam struct {
 	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
 	NewClasses param.Field[[]string] `json:"new_classes"`
-	// A list of classes to create Durable Object namespaces with SQLite from.
-	NewSqliteClasses param.Field[[]string] `json:"new_sqlite_classes"`
 	// A list of classes with Durable Object namespaces that were renamed.
 	RenamedClasses param.Field[[]MigrationStepRenamedClassParam] `json:"renamed_classes"`
 	// A list of transfers for Durable Object namespaces from a different Worker and
@@ -972,8 +967,6 @@ type SingleStepMigration struct {
 	DeletedClasses []string `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
 	NewClasses []string `json:"new_classes"`
-	// A list of classes to create Durable Object namespaces with SQLite from.
-	NewSqliteClasses []string `json:"new_sqlite_classes"`
 	// Tag to set as the latest migration tag.
 	NewTag string `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
@@ -992,7 +985,6 @@ type SingleStepMigration struct {
 type singleStepMigrationJSON struct {
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
-	NewSqliteClasses   apijson.Field
 	NewTag             apijson.Field
 	OldTag             apijson.Field
 	RenamedClasses     apijson.Field
@@ -1069,8 +1061,6 @@ type SingleStepMigrationParam struct {
 	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
 	NewClasses param.Field[[]string] `json:"new_classes"`
-	// A list of classes to create Durable Object namespaces with SQLite from.
-	NewSqliteClasses param.Field[[]string] `json:"new_sqlite_classes"`
 	// Tag to set as the latest migration tag.
 	NewTag param.Field[string] `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they

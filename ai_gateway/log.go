@@ -133,18 +133,12 @@ type LogListParams struct {
 	Cached              param.Field[bool]                          `query:"cached"`
 	Direction           param.Field[LogListParamsDirection]        `query:"direction"`
 	EndDate             param.Field[time.Time]                     `query:"end_date" format:"date-time"`
-	Feedback            param.Field[LogListParamsFeedback]         `query:"feedback"`
 	MaxCost             param.Field[float64]                       `query:"max_cost"`
 	MaxDuration         param.Field[float64]                       `query:"max_duration"`
-	MaxTokensIn         param.Field[float64]                       `query:"max_tokens_in"`
-	MaxTokensOut        param.Field[float64]                       `query:"max_tokens_out"`
-	MaxTotalTokens      param.Field[float64]                       `query:"max_total_tokens"`
-	MetaInfo            param.Field[bool]                          `query:"meta_info"`
+	MaxTokens           param.Field[float64]                       `query:"max_tokens"`
 	MinCost             param.Field[float64]                       `query:"min_cost"`
 	MinDuration         param.Field[float64]                       `query:"min_duration"`
-	MinTokensIn         param.Field[float64]                       `query:"min_tokens_in"`
-	MinTokensOut        param.Field[float64]                       `query:"min_tokens_out"`
-	MinTotalTokens      param.Field[float64]                       `query:"min_total_tokens"`
+	MinTokens           param.Field[float64]                       `query:"min_tokens"`
 	Model               param.Field[string]                        `query:"model"`
 	ModelType           param.Field[string]                        `query:"model_type"`
 	OrderBy             param.Field[LogListParamsOrderBy]          `query:"order_by"`
@@ -172,26 +166,13 @@ type LogListParamsDirection string
 const (
 	LogListParamsDirectionAsc  LogListParamsDirection = "asc"
 	LogListParamsDirectionDesc LogListParamsDirection = "desc"
+	LogListParamsDirectionAsc  LogListParamsDirection = "ASC"
+	LogListParamsDirectionDesc LogListParamsDirection = "DESC"
 )
 
 func (r LogListParamsDirection) IsKnown() bool {
 	switch r {
-	case LogListParamsDirectionAsc, LogListParamsDirectionDesc:
-		return true
-	}
-	return false
-}
-
-type LogListParamsFeedback float64
-
-const (
-	LogListParamsFeedback0 LogListParamsFeedback = 0
-	LogListParamsFeedback1 LogListParamsFeedback = 1
-)
-
-func (r LogListParamsFeedback) IsKnown() bool {
-	switch r {
-	case LogListParamsFeedback0, LogListParamsFeedback1:
+	case LogListParamsDirectionAsc, LogListParamsDirectionDesc, LogListParamsDirectionAsc, LogListParamsDirectionDesc:
 		return true
 	}
 	return false
@@ -221,11 +202,13 @@ type LogListParamsOrderByDirection string
 const (
 	LogListParamsOrderByDirectionAsc  LogListParamsOrderByDirection = "asc"
 	LogListParamsOrderByDirectionDesc LogListParamsOrderByDirection = "desc"
+	LogListParamsOrderByDirectionAsc  LogListParamsOrderByDirection = "ASC"
+	LogListParamsOrderByDirectionDesc LogListParamsOrderByDirection = "DESC"
 )
 
 func (r LogListParamsOrderByDirection) IsKnown() bool {
 	switch r {
-	case LogListParamsOrderByDirectionAsc, LogListParamsOrderByDirectionDesc:
+	case LogListParamsOrderByDirectionAsc, LogListParamsOrderByDirectionDesc, LogListParamsOrderByDirectionAsc, LogListParamsOrderByDirectionDesc:
 		return true
 	}
 	return false

@@ -64,12 +64,11 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, query NamespaceLi
 }
 
 type Namespace struct {
-	ID        string        `json:"id"`
-	Class     string        `json:"class"`
-	Name      string        `json:"name"`
-	Script    string        `json:"script"`
-	UseSqlite bool          `json:"use_sqlite"`
-	JSON      namespaceJSON `json:"-"`
+	ID     string        `json:"id"`
+	Class  string        `json:"class"`
+	Name   string        `json:"name"`
+	Script string        `json:"script"`
+	JSON   namespaceJSON `json:"-"`
 }
 
 // namespaceJSON contains the JSON metadata for the struct [Namespace]
@@ -78,7 +77,6 @@ type namespaceJSON struct {
 	Class       apijson.Field
 	Name        apijson.Field
 	Script      apijson.Field
-	UseSqlite   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

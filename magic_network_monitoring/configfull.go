@@ -34,7 +34,7 @@ func NewConfigFullService(opts ...option.RequestOption) (r *ConfigFullService) {
 	return
 }
 
-// Lists default sampling, router IPs, warp devices, and rules for account.
+// Lists default sampling, router IPs, and rules for account.
 func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigFullGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

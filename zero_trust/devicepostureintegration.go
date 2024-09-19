@@ -216,12 +216,11 @@ const (
 	IntegrationTypeKolide         IntegrationType = "kolide"
 	IntegrationTypeTanium         IntegrationType = "tanium"
 	IntegrationTypeSentineloneS2s IntegrationType = "sentinelone_s2s"
-	IntegrationTypeCustomS2s      IntegrationType = "custom_s2s"
 )
 
 func (r IntegrationType) IsKnown() bool {
 	switch r {
-	case IntegrationTypeWorkspaceOne, IntegrationTypeCrowdstrikeS2s, IntegrationTypeUptycs, IntegrationTypeIntune, IntegrationTypeKolide, IntegrationTypeTanium, IntegrationTypeSentineloneS2s, IntegrationTypeCustomS2s:
+	case IntegrationTypeWorkspaceOne, IntegrationTypeCrowdstrikeS2s, IntegrationTypeUptycs, IntegrationTypeIntune, IntegrationTypeKolide, IntegrationTypeTanium, IntegrationTypeSentineloneS2s:
 		return true
 	}
 	return false
@@ -253,7 +252,7 @@ type DevicePostureIntegrationNewParamsConfig struct {
 	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
 	ClientID param.Field[string] `json:"client_id"`
 	// The Workspace One client secret provided in the Workspace One Admin Dashboard.
-	ClientSecret param.Field[string] `json:"client_secret"`
+	ClientSecret param.Field[string] `json:"client_secret,required"`
 	// The Crowdstrike customer ID.
 	CustomerID param.Field[string] `json:"customer_id"`
 	// The Uptycs client secret.
@@ -283,7 +282,6 @@ func (r DevicePostureIntegrationNewParamsConfig) implementsZeroTrustDevicePostur
 // [zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesKolideConfigRequest],
 // [zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesTaniumConfigRequest],
 // [zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigRequest],
-// [zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest],
 // [DevicePostureIntegrationNewParamsConfig].
 type DevicePostureIntegrationNewParamsConfigUnion interface {
 	implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion()
@@ -407,24 +405,6 @@ func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigR
 func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesSentineloneS2sConfigRequest) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
 }
 
-type DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest struct {
-	// This id will be passed in the `CF-Access-Client-ID` header when hitting the
-	// `api_url`
-	AccessClientID param.Field[string] `json:"access_client_id,required"`
-	// This secret will be passed in the `CF-Access-Client-Secret` header when hitting
-	// the `api_url`
-	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
-	// The Custom Device Posture Integration API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
-}
-
-func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureIntegrationNewParamsConfigTeamsDevicesCustomS2sConfigRequest) implementsZeroTrustDevicePostureIntegrationNewParamsConfigUnion() {
-}
-
 // The type of device posture integration.
 type DevicePostureIntegrationNewParamsType string
 
@@ -436,12 +416,11 @@ const (
 	DevicePostureIntegrationNewParamsTypeKolide         DevicePostureIntegrationNewParamsType = "kolide"
 	DevicePostureIntegrationNewParamsTypeTanium         DevicePostureIntegrationNewParamsType = "tanium"
 	DevicePostureIntegrationNewParamsTypeSentineloneS2s DevicePostureIntegrationNewParamsType = "sentinelone_s2s"
-	DevicePostureIntegrationNewParamsTypeCustomS2s      DevicePostureIntegrationNewParamsType = "custom_s2s"
 )
 
 func (r DevicePostureIntegrationNewParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureIntegrationNewParamsTypeWorkspaceOne, DevicePostureIntegrationNewParamsTypeCrowdstrikeS2s, DevicePostureIntegrationNewParamsTypeUptycs, DevicePostureIntegrationNewParamsTypeIntune, DevicePostureIntegrationNewParamsTypeKolide, DevicePostureIntegrationNewParamsTypeTanium, DevicePostureIntegrationNewParamsTypeSentineloneS2s, DevicePostureIntegrationNewParamsTypeCustomS2s:
+	case DevicePostureIntegrationNewParamsTypeWorkspaceOne, DevicePostureIntegrationNewParamsTypeCrowdstrikeS2s, DevicePostureIntegrationNewParamsTypeUptycs, DevicePostureIntegrationNewParamsTypeIntune, DevicePostureIntegrationNewParamsTypeKolide, DevicePostureIntegrationNewParamsTypeTanium, DevicePostureIntegrationNewParamsTypeSentineloneS2s:
 		return true
 	}
 	return false
@@ -567,7 +546,7 @@ type DevicePostureIntegrationEditParamsConfig struct {
 	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
 	ClientID param.Field[string] `json:"client_id"`
 	// The Workspace One client secret provided in the Workspace One Admin Dashboard.
-	ClientSecret param.Field[string] `json:"client_secret"`
+	ClientSecret param.Field[string] `json:"client_secret,required"`
 	// The Crowdstrike customer ID.
 	CustomerID param.Field[string] `json:"customer_id"`
 	// The Uptycs client secret.
@@ -597,7 +576,6 @@ func (r DevicePostureIntegrationEditParamsConfig) implementsZeroTrustDevicePostu
 // [zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest],
 // [zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest],
 // [zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest],
-// [zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest],
 // [DevicePostureIntegrationEditParamsConfig].
 type DevicePostureIntegrationEditParamsConfigUnion interface {
 	implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion()
@@ -721,24 +699,6 @@ func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfig
 func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
 }
 
-type DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest struct {
-	// This id will be passed in the `CF-Access-Client-ID` header when hitting the
-	// `api_url`
-	AccessClientID param.Field[string] `json:"access_client_id,required"`
-	// This secret will be passed in the `CF-Access-Client-Secret` header when hitting
-	// the `api_url`
-	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
-	// The Custom Device Posture Integration API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
-}
-
-func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCustomS2sConfigRequest) implementsZeroTrustDevicePostureIntegrationEditParamsConfigUnion() {
-}
-
 // The type of device posture integration.
 type DevicePostureIntegrationEditParamsType string
 
@@ -750,12 +710,11 @@ const (
 	DevicePostureIntegrationEditParamsTypeKolide         DevicePostureIntegrationEditParamsType = "kolide"
 	DevicePostureIntegrationEditParamsTypeTanium         DevicePostureIntegrationEditParamsType = "tanium"
 	DevicePostureIntegrationEditParamsTypeSentineloneS2s DevicePostureIntegrationEditParamsType = "sentinelone_s2s"
-	DevicePostureIntegrationEditParamsTypeCustomS2s      DevicePostureIntegrationEditParamsType = "custom_s2s"
 )
 
 func (r DevicePostureIntegrationEditParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureIntegrationEditParamsTypeWorkspaceOne, DevicePostureIntegrationEditParamsTypeCrowdstrikeS2s, DevicePostureIntegrationEditParamsTypeUptycs, DevicePostureIntegrationEditParamsTypeIntune, DevicePostureIntegrationEditParamsTypeKolide, DevicePostureIntegrationEditParamsTypeTanium, DevicePostureIntegrationEditParamsTypeSentineloneS2s, DevicePostureIntegrationEditParamsTypeCustomS2s:
+	case DevicePostureIntegrationEditParamsTypeWorkspaceOne, DevicePostureIntegrationEditParamsTypeCrowdstrikeS2s, DevicePostureIntegrationEditParamsTypeUptycs, DevicePostureIntegrationEditParamsTypeIntune, DevicePostureIntegrationEditParamsTypeKolide, DevicePostureIntegrationEditParamsTypeTanium, DevicePostureIntegrationEditParamsTypeSentineloneS2s:
 		return true
 	}
 	return false
