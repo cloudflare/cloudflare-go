@@ -172,6 +172,8 @@ type DispatchNamespaceScriptSettingEditResponseMigrations struct {
 	DeletedClasses interface{} `json:"deleted_classes,required"`
 	// This field can have the runtime type of [[]string].
 	NewClasses interface{} `json:"new_classes,required"`
+	// This field can have the runtime type of [[]string].
+	NewSqliteClasses interface{} `json:"new_sqlite_classes,required"`
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationRenamedClass].
 	RenamedClasses interface{} `json:"renamed_classes,required"`
@@ -191,6 +193,7 @@ type dispatchNamespaceScriptSettingEditResponseMigrationsJSON struct {
 	OldTag             apijson.Field
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
+	NewSqliteClasses   apijson.Field
 	RenamedClasses     apijson.Field
 	TransferredClasses apijson.Field
 	Steps              apijson.Field
@@ -324,6 +327,8 @@ type DispatchNamespaceScriptSettingGetResponseMigrations struct {
 	DeletedClasses interface{} `json:"deleted_classes,required"`
 	// This field can have the runtime type of [[]string].
 	NewClasses interface{} `json:"new_classes,required"`
+	// This field can have the runtime type of [[]string].
+	NewSqliteClasses interface{} `json:"new_sqlite_classes,required"`
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationRenamedClass].
 	RenamedClasses interface{} `json:"renamed_classes,required"`
@@ -343,6 +348,7 @@ type dispatchNamespaceScriptSettingGetResponseMigrationsJSON struct {
 	OldTag             apijson.Field
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
+	NewSqliteClasses   apijson.Field
 	RenamedClasses     apijson.Field
 	TransferredClasses apijson.Field
 	Steps              apijson.Field
@@ -460,6 +466,7 @@ type DispatchNamespaceScriptSettingEditParamsSettingsMigrations struct {
 	OldTag             param.Field[string]      `json:"old_tag"`
 	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
 	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
+	NewSqliteClasses   param.Field[interface{}] `json:"new_sqlite_classes,required"`
 	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
 	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
 	Steps              param.Field[interface{}] `json:"steps,required"`

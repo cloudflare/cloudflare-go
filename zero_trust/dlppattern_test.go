@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestDLPPatternValidate(t *testing.T) {
+func TestDLPPatternValidateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,8 +28,9 @@ func TestDLPPatternValidate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Patterns.Validate(context.TODO(), zero_trust.DLPPatternValidateParams{
-		AccountID: cloudflare.F("account_id"),
-		Regex:     cloudflare.F("regex"),
+		AccountID:     cloudflare.F("account_id"),
+		Regex:         cloudflare.F("regex"),
+		MaxMatchBytes: cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
