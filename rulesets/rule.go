@@ -3811,17 +3811,17 @@ type SetCacheSettingsRuleActionParametersCacheReserve struct {
 	// eligibility criteria, Cloudflare will write the resource to cache reserve.
 	Eligible bool `json:"eligible,required"`
 	// The minimum file size eligible for store in cache reserve.
-	MinFileSize int64                                                `json:"min_file_size,required"`
-	JSON        setCacheSettingsRuleActionParametersCacheReserveJSON `json:"-"`
+	MinimumFileSize int64                                                `json:"minimum_file_size,required"`
+	JSON            setCacheSettingsRuleActionParametersCacheReserveJSON `json:"-"`
 }
 
 // setCacheSettingsRuleActionParametersCacheReserveJSON contains the JSON metadata
 // for the struct [SetCacheSettingsRuleActionParametersCacheReserve]
 type setCacheSettingsRuleActionParametersCacheReserveJSON struct {
-	Eligible    apijson.Field
-	MinFileSize apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Eligible        apijson.Field
+	MinimumFileSize apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *SetCacheSettingsRuleActionParametersCacheReserve) UnmarshalJSON(data []byte) (err error) {
@@ -4203,7 +4203,7 @@ type SetCacheSettingsRuleActionParametersCacheReserveParam struct {
 	// eligibility criteria, Cloudflare will write the resource to cache reserve.
 	Eligible param.Field[bool] `json:"eligible,required"`
 	// The minimum file size eligible for store in cache reserve.
-	MinFileSize param.Field[int64] `json:"min_file_size,required"`
+	MinimumFileSize param.Field[int64] `json:"minimum_file_size,required"`
 }
 
 func (r SetCacheSettingsRuleActionParametersCacheReserveParam) MarshalJSON() (data []byte, err error) {

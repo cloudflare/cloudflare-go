@@ -324,6 +324,7 @@ type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations struct {
 	OldTag             param.Field[string]      `json:"old_tag"`
 	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
 	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
+	NewSqliteClasses   param.Field[interface{}] `json:"new_sqlite_classes,required"`
 	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
 	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
 	Steps              param.Field[interface{}] `json:"steps,required"`

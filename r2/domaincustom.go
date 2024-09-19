@@ -130,8 +130,11 @@ type DomainCustomNewResponse struct {
 	// Domain name of the affected custom domain
 	Domain string `json:"domain,required"`
 	// Whether this bucket is publicly accessible at the specified custom domain
-	Enabled bool                        `json:"enabled,required"`
-	JSON    domainCustomNewResponseJSON `json:"-"`
+	Enabled bool `json:"enabled,required"`
+	// Minimum TLS Version the custom domain will accept for incoming connections. If
+	// not set, defaults to 1.0.
+	MinTLS DomainCustomNewResponseMinTLS `json:"minTLS"`
+	JSON   domainCustomNewResponseJSON   `json:"-"`
 }
 
 // domainCustomNewResponseJSON contains the JSON metadata for the struct
@@ -139,6 +142,7 @@ type DomainCustomNewResponse struct {
 type domainCustomNewResponseJSON struct {
 	Domain      apijson.Field
 	Enabled     apijson.Field
+	MinTLS      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -151,12 +155,34 @@ func (r domainCustomNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Minimum TLS Version the custom domain will accept for incoming connections. If
+// not set, defaults to 1.0.
+type DomainCustomNewResponseMinTLS string
+
+const (
+	DomainCustomNewResponseMinTLS1_0 DomainCustomNewResponseMinTLS = "1.0"
+	DomainCustomNewResponseMinTLS1_1 DomainCustomNewResponseMinTLS = "1.1"
+	DomainCustomNewResponseMinTLS1_2 DomainCustomNewResponseMinTLS = "1.2"
+	DomainCustomNewResponseMinTLS1_3 DomainCustomNewResponseMinTLS = "1.3"
+)
+
+func (r DomainCustomNewResponseMinTLS) IsKnown() bool {
+	switch r {
+	case DomainCustomNewResponseMinTLS1_0, DomainCustomNewResponseMinTLS1_1, DomainCustomNewResponseMinTLS1_2, DomainCustomNewResponseMinTLS1_3:
+		return true
+	}
+	return false
+}
+
 type DomainCustomUpdateResponse struct {
 	// Domain name of the affected custom domain
 	Domain string `json:"domain,required"`
 	// Whether this bucket is publicly accessible at the specified custom domain
-	Enabled bool                           `json:"enabled"`
-	JSON    domainCustomUpdateResponseJSON `json:"-"`
+	Enabled bool `json:"enabled"`
+	// Minimum TLS Version the custom domain will accept for incoming connections. If
+	// not set, defaults to 1.0.
+	MinTLS DomainCustomUpdateResponseMinTLS `json:"minTLS"`
+	JSON   domainCustomUpdateResponseJSON   `json:"-"`
 }
 
 // domainCustomUpdateResponseJSON contains the JSON metadata for the struct
@@ -164,6 +190,7 @@ type DomainCustomUpdateResponse struct {
 type domainCustomUpdateResponseJSON struct {
 	Domain      apijson.Field
 	Enabled     apijson.Field
+	MinTLS      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -174,6 +201,25 @@ func (r *DomainCustomUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r domainCustomUpdateResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Minimum TLS Version the custom domain will accept for incoming connections. If
+// not set, defaults to 1.0.
+type DomainCustomUpdateResponseMinTLS string
+
+const (
+	DomainCustomUpdateResponseMinTLS1_0 DomainCustomUpdateResponseMinTLS = "1.0"
+	DomainCustomUpdateResponseMinTLS1_1 DomainCustomUpdateResponseMinTLS = "1.1"
+	DomainCustomUpdateResponseMinTLS1_2 DomainCustomUpdateResponseMinTLS = "1.2"
+	DomainCustomUpdateResponseMinTLS1_3 DomainCustomUpdateResponseMinTLS = "1.3"
+)
+
+func (r DomainCustomUpdateResponseMinTLS) IsKnown() bool {
+	switch r {
+	case DomainCustomUpdateResponseMinTLS1_0, DomainCustomUpdateResponseMinTLS1_1, DomainCustomUpdateResponseMinTLS1_2, DomainCustomUpdateResponseMinTLS1_3:
+		return true
+	}
+	return false
 }
 
 type DomainCustomListResponse struct {
@@ -203,6 +249,9 @@ type DomainCustomListResponseDomain struct {
 	// Whether this bucket is publicly accessible at the specified custom domain
 	Enabled bool                                  `json:"enabled,required"`
 	Status  DomainCustomListResponseDomainsStatus `json:"status,required"`
+	// Minimum TLS Version the custom domain will accept for incoming connections. If
+	// not set, defaults to 1.0.
+	MinTLS DomainCustomListResponseDomainsMinTLS `json:"minTLS"`
 	// Zone ID of the custom domain resides in
 	ZoneID string `json:"zoneId"`
 	// Zone that the custom domain resides in
@@ -216,6 +265,7 @@ type domainCustomListResponseDomainJSON struct {
 	Domain      apijson.Field
 	Enabled     apijson.Field
 	Status      apijson.Field
+	MinTLS      apijson.Field
 	ZoneID      apijson.Field
 	ZoneName    apijson.Field
 	raw         string
@@ -295,6 +345,25 @@ func (r DomainCustomListResponseDomainsStatusSSL) IsKnown() bool {
 	return false
 }
 
+// Minimum TLS Version the custom domain will accept for incoming connections. If
+// not set, defaults to 1.0.
+type DomainCustomListResponseDomainsMinTLS string
+
+const (
+	DomainCustomListResponseDomainsMinTLS1_0 DomainCustomListResponseDomainsMinTLS = "1.0"
+	DomainCustomListResponseDomainsMinTLS1_1 DomainCustomListResponseDomainsMinTLS = "1.1"
+	DomainCustomListResponseDomainsMinTLS1_2 DomainCustomListResponseDomainsMinTLS = "1.2"
+	DomainCustomListResponseDomainsMinTLS1_3 DomainCustomListResponseDomainsMinTLS = "1.3"
+)
+
+func (r DomainCustomListResponseDomainsMinTLS) IsKnown() bool {
+	switch r {
+	case DomainCustomListResponseDomainsMinTLS1_0, DomainCustomListResponseDomainsMinTLS1_1, DomainCustomListResponseDomainsMinTLS1_2, DomainCustomListResponseDomainsMinTLS1_3:
+		return true
+	}
+	return false
+}
+
 type DomainCustomDeleteResponse struct {
 	// Name of the removed custom domain
 	Domain string                         `json:"domain,required"`
@@ -327,10 +396,32 @@ type DomainCustomNewParams struct {
 	// Whether to enable public bucket access at the custom domain. If undefined, the
 	// domain will be enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// Minimum TLS Version the custom domain will accept for incoming connections. If
+	// not set, defaults to 1.0.
+	MinTLS param.Field[DomainCustomNewParamsMinTLS] `json:"minTLS"`
 }
 
 func (r DomainCustomNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Minimum TLS Version the custom domain will accept for incoming connections. If
+// not set, defaults to 1.0.
+type DomainCustomNewParamsMinTLS string
+
+const (
+	DomainCustomNewParamsMinTLS1_0 DomainCustomNewParamsMinTLS = "1.0"
+	DomainCustomNewParamsMinTLS1_1 DomainCustomNewParamsMinTLS = "1.1"
+	DomainCustomNewParamsMinTLS1_2 DomainCustomNewParamsMinTLS = "1.2"
+	DomainCustomNewParamsMinTLS1_3 DomainCustomNewParamsMinTLS = "1.3"
+)
+
+func (r DomainCustomNewParamsMinTLS) IsKnown() bool {
+	switch r {
+	case DomainCustomNewParamsMinTLS1_0, DomainCustomNewParamsMinTLS1_1, DomainCustomNewParamsMinTLS1_2, DomainCustomNewParamsMinTLS1_3:
+		return true
+	}
+	return false
 }
 
 type DomainCustomNewResponseEnvelope struct {
@@ -381,10 +472,32 @@ type DomainCustomUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether to enable public bucket access at the specified custom domain
 	Enabled param.Field[bool] `json:"enabled"`
+	// Minimum TLS Version the custom domain will accept for incoming connections. If
+	// not set, defaults to previous value.
+	MinTLS param.Field[DomainCustomUpdateParamsMinTLS] `json:"minTLS"`
 }
 
 func (r DomainCustomUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Minimum TLS Version the custom domain will accept for incoming connections. If
+// not set, defaults to previous value.
+type DomainCustomUpdateParamsMinTLS string
+
+const (
+	DomainCustomUpdateParamsMinTLS1_0 DomainCustomUpdateParamsMinTLS = "1.0"
+	DomainCustomUpdateParamsMinTLS1_1 DomainCustomUpdateParamsMinTLS = "1.1"
+	DomainCustomUpdateParamsMinTLS1_2 DomainCustomUpdateParamsMinTLS = "1.2"
+	DomainCustomUpdateParamsMinTLS1_3 DomainCustomUpdateParamsMinTLS = "1.3"
+)
+
+func (r DomainCustomUpdateParamsMinTLS) IsKnown() bool {
+	switch r {
+	case DomainCustomUpdateParamsMinTLS1_0, DomainCustomUpdateParamsMinTLS1_1, DomainCustomUpdateParamsMinTLS1_2, DomainCustomUpdateParamsMinTLS1_3:
+		return true
+	}
+	return false
 }
 
 type DomainCustomUpdateResponseEnvelope struct {
