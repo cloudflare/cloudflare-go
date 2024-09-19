@@ -35,7 +35,6 @@ func TestDomainCustomNewWithOptionalParams(t *testing.T) {
 			Domain:    cloudflare.F("prefix.example-domain.com"),
 			ZoneID:    cloudflare.F("36ca64a6d92827b8a6b90be344bb1bfd"),
 			Enabled:   cloudflare.F(true),
-			MinTLS:    cloudflare.F(r2.DomainCustomNewParamsMinTLS1_0),
 		},
 	)
 	if err != nil {
@@ -67,7 +66,6 @@ func TestDomainCustomUpdateWithOptionalParams(t *testing.T) {
 		r2.DomainCustomUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Enabled:   cloudflare.F(true),
-			MinTLS:    cloudflare.F(r2.DomainCustomUpdateParamsMinTLS1_0),
 		},
 	)
 	if err != nil {

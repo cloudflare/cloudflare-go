@@ -97,9 +97,6 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 }
 
 type DNSSetting struct {
-	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
-	// limitations, a CNAME record at the zone apex will always be flattened.
-	FlattenAllCNAMEs bool `json:"flatten_all_cnames"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
 	FoundationDNS bool `json:"foundation_dns"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
@@ -122,7 +119,6 @@ type DNSSetting struct {
 
 // dnsSettingJSON contains the JSON metadata for the struct [DNSSetting]
 type dnsSettingJSON struct {
-	FlattenAllCNAMEs   apijson.Field
 	FoundationDNS      apijson.Field
 	MultiProvider      apijson.Field
 	Nameservers        apijson.Field
@@ -204,9 +200,6 @@ func (r DNSSettingZoneMode) IsKnown() bool {
 }
 
 type DNSSettingParam struct {
-	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
-	// limitations, a CNAME record at the zone apex will always be flattened.
-	FlattenAllCNAMEs param.Field[bool] `json:"flatten_all_cnames"`
 	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
 	FoundationDNS param.Field[bool] `json:"foundation_dns"`
 	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
@@ -282,16 +275,12 @@ func (r nameserverJSON) RawJSON() string {
 type NameserverType string
 
 const (
-	NameserverTypeCloudflareStandard       NameserverType = "cloudflare.standard"
-	NameserverTypeCloudflareStandardRandom NameserverType = "cloudflare.standard.random"
-	NameserverTypeCustomAccount            NameserverType = "custom.account"
-	NameserverTypeCustomTenant             NameserverType = "custom.tenant"
-	NameserverTypeCustomZone               NameserverType = "custom.zone"
+	NameserverTypeCloudflareStandard NameserverType = "cloudflare.standard"
 )
 
 func (r NameserverType) IsKnown() bool {
 	switch r {
-	case NameserverTypeCloudflareStandard, NameserverTypeCloudflareStandardRandom, NameserverTypeCustomAccount, NameserverTypeCustomTenant, NameserverTypeCustomZone:
+	case NameserverTypeCloudflareStandard:
 		return true
 	}
 	return false

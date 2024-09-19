@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestConfigNewWithOptionalParams(t *testing.T) {
+func TestConfigNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,20 +28,8 @@ func TestConfigNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Configs.New(context.TODO(), magic_network_monitoring.ConfigNewParams{
-		AccountID:       cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-		DefaultSampling: cloudflare.F(1.000000),
-		Name:            cloudflare.F("cloudflare user's account"),
-		RouterIPs:       cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
-		WARPDevices: cloudflare.F([]magic_network_monitoring.ConfigNewParamsWARPDevice{{
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
-		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
-		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
-		}}),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
+		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -52,7 +40,7 @@ func TestConfigNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestConfigUpdateWithOptionalParams(t *testing.T) {
+func TestConfigUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -66,20 +54,8 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Configs.Update(context.TODO(), magic_network_monitoring.ConfigUpdateParams{
-		AccountID:       cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-		DefaultSampling: cloudflare.F(1.000000),
-		Name:            cloudflare.F("cloudflare user's account"),
-		RouterIPs:       cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
-		WARPDevices: cloudflare.F([]magic_network_monitoring.ConfigUpdateParamsWARPDevice{{
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
-		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
-		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
-		}}),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
+		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -115,7 +91,7 @@ func TestConfigDelete(t *testing.T) {
 	}
 }
 
-func TestConfigEditWithOptionalParams(t *testing.T) {
+func TestConfigEdit(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -129,20 +105,8 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Configs.Edit(context.TODO(), magic_network_monitoring.ConfigEditParams{
-		AccountID:       cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-		DefaultSampling: cloudflare.F(1.000000),
-		Name:            cloudflare.F("cloudflare user's account"),
-		RouterIPs:       cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
-		WARPDevices: cloudflare.F([]magic_network_monitoring.ConfigEditParamsWARPDevice{{
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
-		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
-		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
-		}}),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
+		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

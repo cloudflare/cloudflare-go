@@ -454,8 +454,6 @@ type AIRunParamsBody struct {
 	Strength          param.Field[float64]     `json:"strength"`
 	Width             param.Field[int64]       `json:"width"`
 	Audio             param.Field[interface{}] `json:"audio,required"`
-	SourceLang        param.Field[string]      `json:"source_lang"`
-	TargetLang        param.Field[string]      `json:"target_lang"`
 	FrequencyPenalty  param.Field[float64]     `json:"frequency_penalty"`
 	Lora              param.Field[string]      `json:"lora"`
 	MaxTokens         param.Field[int64]       `json:"max_tokens"`
@@ -469,6 +467,8 @@ type AIRunParamsBody struct {
 	Functions         param.Field[interface{}] `json:"functions,required"`
 	Messages          param.Field[interface{}] `json:"messages,required"`
 	Tools             param.Field[interface{}] `json:"tools,required"`
+	SourceLang        param.Field[string]      `json:"source_lang"`
+	TargetLang        param.Field[string]      `json:"target_lang"`
 	InputText         param.Field[string]      `json:"input_text"`
 	MaxLength         param.Field[int64]       `json:"max_length"`
 }
@@ -543,9 +543,7 @@ func (r AIRunParamsBodyTextEmbeddingsTextArray) ImplementsWorkersAIRunParamsBody
 }
 
 type AIRunParamsBodyAutomaticSpeechRecognition struct {
-	Audio      param.Field[[]float64] `json:"audio,required"`
-	SourceLang param.Field[string]    `json:"source_lang"`
-	TargetLang param.Field[string]    `json:"target_lang"`
+	Audio param.Field[[]float64] `json:"audio,required"`
 }
 
 func (r AIRunParamsBodyAutomaticSpeechRecognition) MarshalJSON() (data []byte, err error) {
