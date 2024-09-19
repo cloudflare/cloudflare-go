@@ -2,17 +2,6 @@
 
 package shared
 
-import (
-	"time"
-)
-
-type UnionTime time.Time
-
-func (UnionTime) ImplementsUserAuditLogListParamsBeforeUnion()      {}
-func (UnionTime) ImplementsUserAuditLogListParamsSinceUnion()       {}
-func (UnionTime) ImplementsAuditLogsAuditLogListParamsBeforeUnion() {}
-func (UnionTime) ImplementsAuditLogsAuditLogListParamsSinceUnion()  {}
-
 type UnionString string
 
 func (UnionString) ImplementsFirewallWAFPackageListResponseFirewallAPIResponseCollectionResultUnion() {

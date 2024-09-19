@@ -105,7 +105,7 @@ func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts 
 	return
 }
 
-// Lists default sampling, router IPs and warp devices for account.
+// Lists default sampling and router IPs for account.
 func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -127,10 +127,9 @@ type Configuration struct {
 	// should match the packet sampling rate configured on the router.
 	DefaultSampling float64 `json:"default_sampling,required"`
 	// The account name.
-	Name        string                    `json:"name,required"`
-	RouterIPs   []string                  `json:"router_ips,required"`
-	WARPDevices []ConfigurationWARPDevice `json:"warp_devices,required"`
-	JSON        configurationJSON         `json:"-"`
+	Name      string            `json:"name,required"`
+	RouterIPs []string          `json:"router_ips,required"`
+	JSON      configurationJSON `json:"-"`
 }
 
 // configurationJSON contains the JSON metadata for the struct [Configuration]
@@ -138,7 +137,6 @@ type configurationJSON struct {
 	DefaultSampling apijson.Field
 	Name            apijson.Field
 	RouterIPs       apijson.Field
-	WARPDevices     apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -151,57 +149,13 @@ func (r configurationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Object representing a warp device with an ID and name.
-type ConfigurationWARPDevice struct {
-	// Unique identifier for the warp device.
-	ID string `json:"id,required"`
-	// Name of the warp device.
-	Name string                      `json:"name,required"`
-	JSON configurationWARPDeviceJSON `json:"-"`
-}
-
-// configurationWARPDeviceJSON contains the JSON metadata for the struct
-// [ConfigurationWARPDevice]
-type configurationWARPDeviceJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigurationWARPDevice) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configurationWARPDeviceJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConfigNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling param.Field[float64] `json:"default_sampling,required"`
-	// The account name.
-	Name        param.Field[string]                      `json:"name,required"`
-	RouterIPs   param.Field[[]string]                    `json:"router_ips"`
-	WARPDevices param.Field[[]ConfigNewParamsWARPDevice] `json:"warp_devices"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Object representing a warp device with an ID and name.
-type ConfigNewParamsWARPDevice struct {
-	// Unique identifier for the warp device.
-	ID param.Field[string] `json:"id,required"`
-	// Name of the warp device.
-	Name param.Field[string] `json:"name,required"`
-}
-
-func (r ConfigNewParamsWARPDevice) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ConfigNewResponseEnvelope struct {
@@ -249,29 +203,11 @@ func (r ConfigNewResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling param.Field[float64] `json:"default_sampling,required"`
-	// The account name.
-	Name        param.Field[string]                         `json:"name,required"`
-	RouterIPs   param.Field[[]string]                       `json:"router_ips"`
-	WARPDevices param.Field[[]ConfigUpdateParamsWARPDevice] `json:"warp_devices"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Object representing a warp device with an ID and name.
-type ConfigUpdateParamsWARPDevice struct {
-	// Unique identifier for the warp device.
-	ID param.Field[string] `json:"id,required"`
-	// Name of the warp device.
-	Name param.Field[string] `json:"name,required"`
-}
-
-func (r ConfigUpdateParamsWARPDevice) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ConfigUpdateResponseEnvelope struct {
@@ -366,29 +302,11 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling param.Field[float64] `json:"default_sampling"`
-	// The account name.
-	Name        param.Field[string]                       `json:"name"`
-	RouterIPs   param.Field[[]string]                     `json:"router_ips"`
-	WARPDevices param.Field[[]ConfigEditParamsWARPDevice] `json:"warp_devices"`
+	Body      interface{}         `json:"body,required"`
 }
 
 func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Object representing a warp device with an ID and name.
-type ConfigEditParamsWARPDevice struct {
-	// Unique identifier for the warp device.
-	ID param.Field[string] `json:"id,required"`
-	// Name of the warp device.
-	Name param.Field[string] `json:"name,required"`
-}
-
-func (r ConfigEditParamsWARPDevice) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+	return apijson.MarshalRoot(r.Body)
 }
 
 type ConfigEditResponseEnvelope struct {

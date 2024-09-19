@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestRuleNewWithOptionalParams(t *testing.T) {
+func TestRuleNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,13 +28,8 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.New(context.TODO(), magic_network_monitoring.RuleNewParams{
-		AccountID:              cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-		Duration:               cloudflare.F("300s"),
-		Name:                   cloudflare.F("my_rule_1"),
-		AutomaticAdvertisement: cloudflare.F(true),
-		Bandwidth:              cloudflare.F(1000.000000),
-		PacketThreshold:        cloudflare.F(10000.000000),
-		Prefixes:               cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
+		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -45,7 +40,7 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRuleUpdateWithOptionalParams(t *testing.T) {
+func TestRuleUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,14 +54,8 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicNetworkMonitoring.Rules.Update(context.TODO(), magic_network_monitoring.RuleUpdateParams{
-		AccountID:              cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-		Duration:               cloudflare.F("300s"),
-		Name:                   cloudflare.F("my_rule_1"),
-		ID:                     cloudflare.F("2890e6fa406311ed9b5a23f70f6fb8cf"),
-		AutomaticAdvertisement: cloudflare.F(true),
-		Bandwidth:              cloudflare.F(1000.000000),
-		PacketThreshold:        cloudflare.F(10000.000000),
-		Prefixes:               cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
+		AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
+		Body:      map[string]interface{}{},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -131,7 +120,7 @@ func TestRuleDelete(t *testing.T) {
 	}
 }
 
-func TestRuleEditWithOptionalParams(t *testing.T) {
+func TestRuleEdit(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -148,13 +137,8 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
 		magic_network_monitoring.RuleEditParams{
-			AccountID:              cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
-			AutomaticAdvertisement: cloudflare.F(true),
-			Bandwidth:              cloudflare.F(1000.000000),
-			Duration:               cloudflare.F("300s"),
-			Name:                   cloudflare.F("my_rule_1"),
-			PacketThreshold:        cloudflare.F(10000.000000),
-			Prefixes:               cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
+			AccountID: cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
+			Body:      map[string]interface{}{},
 		},
 	)
 	if err != nil {

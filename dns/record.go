@@ -256,8 +256,6 @@ type RecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
-	// Settings for the DNS record.
-	Settings param.Field[interface{}] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -322,10 +320,12 @@ type RecordNewResponse struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment,required"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on,required" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta RecordNewResponseMeta `json:"meta,required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// DNS record name (or @ for the zone apex) in Punycode.
@@ -335,19 +335,15 @@ type RecordNewResponse struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
-	// Settings for the DNS record.
-	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on,required" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordNewResponseJSON `json:"-"`
+	TTL  TTL                   `json:"ttl,required"`
+	JSON recordNewResponseJSON `json:"-"`
 }
 
 // recordNewResponseJSON contains the JSON metadata for the struct
@@ -355,17 +351,16 @@ type RecordNewResponse struct {
 type recordNewResponseJSON struct {
 	ID                apijson.Field
 	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
 	ModifiedOn        apijson.Field
 	Name              apijson.Field
 	Proxiable         apijson.Field
 	Proxied           apijson.Field
-	Settings          apijson.Field
 	Tags              apijson.Field
-	TTL               apijson.Field
-	CommentModifiedOn apijson.Field
 	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -378,16 +373,42 @@ func (r recordNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Extra Cloudflare-specific information about the record.
+type RecordNewResponseMeta struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool                      `json:"auto_added"`
+	JSON      recordNewResponseMetaJSON `json:"-"`
+}
+
+// recordNewResponseMetaJSON contains the JSON metadata for the struct
+// [RecordNewResponseMeta]
+type recordNewResponseMetaJSON struct {
+	AutoAdded   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordNewResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordNewResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RecordUpdateResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment,required"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on,required" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta RecordUpdateResponseMeta `json:"meta,required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// DNS record name (or @ for the zone apex) in Punycode.
@@ -397,19 +418,15 @@ type RecordUpdateResponse struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
-	// Settings for the DNS record.
-	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on,required" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time                `json:"tags_modified_on" format:"date-time"`
-	JSON           recordUpdateResponseJSON `json:"-"`
+	TTL  TTL                      `json:"ttl,required"`
+	JSON recordUpdateResponseJSON `json:"-"`
 }
 
 // recordUpdateResponseJSON contains the JSON metadata for the struct
@@ -417,17 +434,16 @@ type RecordUpdateResponse struct {
 type recordUpdateResponseJSON struct {
 	ID                apijson.Field
 	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
 	ModifiedOn        apijson.Field
 	Name              apijson.Field
 	Proxiable         apijson.Field
 	Proxied           apijson.Field
-	Settings          apijson.Field
 	Tags              apijson.Field
-	TTL               apijson.Field
-	CommentModifiedOn apijson.Field
 	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -440,16 +456,42 @@ func (r recordUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Extra Cloudflare-specific information about the record.
+type RecordUpdateResponseMeta struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool                         `json:"auto_added"`
+	JSON      recordUpdateResponseMetaJSON `json:"-"`
+}
+
+// recordUpdateResponseMetaJSON contains the JSON metadata for the struct
+// [RecordUpdateResponseMeta]
+type recordUpdateResponseMetaJSON struct {
+	AutoAdded   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RecordListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment,required"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on,required" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta RecordListResponseMeta `json:"meta,required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// DNS record name (or @ for the zone apex) in Punycode.
@@ -459,19 +501,15 @@ type RecordListResponse struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
-	// Settings for the DNS record.
-	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on,required" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
-	JSON           recordListResponseJSON `json:"-"`
+	TTL  TTL                    `json:"ttl,required"`
+	JSON recordListResponseJSON `json:"-"`
 }
 
 // recordListResponseJSON contains the JSON metadata for the struct
@@ -479,17 +517,16 @@ type RecordListResponse struct {
 type recordListResponseJSON struct {
 	ID                apijson.Field
 	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
 	ModifiedOn        apijson.Field
 	Name              apijson.Field
 	Proxiable         apijson.Field
 	Proxied           apijson.Field
-	Settings          apijson.Field
 	Tags              apijson.Field
-	TTL               apijson.Field
-	CommentModifiedOn apijson.Field
 	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -499,6 +536,30 @@ func (r *RecordListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Extra Cloudflare-specific information about the record.
+type RecordListResponseMeta struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool                       `json:"auto_added"`
+	JSON      recordListResponseMetaJSON `json:"-"`
+}
+
+// recordListResponseMetaJSON contains the JSON metadata for the struct
+// [RecordListResponseMeta]
+type recordListResponseMetaJSON struct {
+	AutoAdded   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordListResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordListResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -530,10 +591,12 @@ type RecordEditResponse struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment,required"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on,required" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta RecordEditResponseMeta `json:"meta,required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// DNS record name (or @ for the zone apex) in Punycode.
@@ -543,19 +606,15 @@ type RecordEditResponse struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
-	// Settings for the DNS record.
-	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on,required" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time              `json:"tags_modified_on" format:"date-time"`
-	JSON           recordEditResponseJSON `json:"-"`
+	TTL  TTL                    `json:"ttl,required"`
+	JSON recordEditResponseJSON `json:"-"`
 }
 
 // recordEditResponseJSON contains the JSON metadata for the struct
@@ -563,17 +622,16 @@ type RecordEditResponse struct {
 type recordEditResponseJSON struct {
 	ID                apijson.Field
 	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
 	ModifiedOn        apijson.Field
 	Name              apijson.Field
 	Proxiable         apijson.Field
 	Proxied           apijson.Field
-	Settings          apijson.Field
 	Tags              apijson.Field
-	TTL               apijson.Field
-	CommentModifiedOn apijson.Field
 	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -586,16 +644,42 @@ func (r recordEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Extra Cloudflare-specific information about the record.
+type RecordEditResponseMeta struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool                       `json:"auto_added"`
+	JSON      recordEditResponseMetaJSON `json:"-"`
+}
+
+// recordEditResponseMetaJSON contains the JSON metadata for the struct
+// [RecordEditResponseMeta]
+type recordEditResponseMetaJSON struct {
+	AutoAdded   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordEditResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RecordGetResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment string `json:"comment,required"`
+	// When the record comment was last modified.
+	CommentModifiedOn time.Time `json:"comment_modified_on,required" format:"date-time"`
 	// When the record was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// Extra Cloudflare-specific information about the record.
-	Meta interface{} `json:"meta,required"`
+	Meta RecordGetResponseMeta `json:"meta,required"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// DNS record name (or @ for the zone apex) in Punycode.
@@ -605,19 +689,15 @@ type RecordGetResponse struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
-	// Settings for the DNS record.
-	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
+	// When the record tags were last modified.
+	TagsModifiedOn time.Time `json:"tags_modified_on,required" format:"date-time"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL TTL `json:"ttl,required"`
-	// When the record comment was last modified. Omitted if there is no comment.
-	CommentModifiedOn time.Time `json:"comment_modified_on" format:"date-time"`
-	// When the record tags were last modified. Omitted if there are no tags.
-	TagsModifiedOn time.Time             `json:"tags_modified_on" format:"date-time"`
-	JSON           recordGetResponseJSON `json:"-"`
+	TTL  TTL                   `json:"ttl,required"`
+	JSON recordGetResponseJSON `json:"-"`
 }
 
 // recordGetResponseJSON contains the JSON metadata for the struct
@@ -625,17 +705,16 @@ type RecordGetResponse struct {
 type recordGetResponseJSON struct {
 	ID                apijson.Field
 	Comment           apijson.Field
+	CommentModifiedOn apijson.Field
 	CreatedOn         apijson.Field
 	Meta              apijson.Field
 	ModifiedOn        apijson.Field
 	Name              apijson.Field
 	Proxiable         apijson.Field
 	Proxied           apijson.Field
-	Settings          apijson.Field
 	Tags              apijson.Field
-	TTL               apijson.Field
-	CommentModifiedOn apijson.Field
 	TagsModifiedOn    apijson.Field
+	TTL               apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -645,6 +724,30 @@ func (r *RecordGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Extra Cloudflare-specific information about the record.
+type RecordGetResponseMeta struct {
+	// Will exist if Cloudflare automatically added this DNS record during initial
+	// setup.
+	AutoAdded bool                      `json:"auto_added"`
+	JSON      recordGetResponseMetaJSON `json:"-"`
+}
+
+// recordGetResponseMetaJSON contains the JSON metadata for the struct
+// [RecordGetResponseMeta]
+type recordGetResponseMetaJSON struct {
+	AutoAdded   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
 
