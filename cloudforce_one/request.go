@@ -27,6 +27,7 @@ type RequestService struct {
 	Options  []option.RequestOption
 	Message  *RequestMessageService
 	Priority *RequestPriorityService
+	Assets   *RequestAssetService
 }
 
 // NewRequestService generates a new service that applies the given options to each
@@ -37,6 +38,7 @@ func NewRequestService(opts ...option.RequestOption) (r *RequestService) {
 	r.Options = opts
 	r.Message = NewRequestMessageService(opts...)
 	r.Priority = NewRequestPriorityService(opts...)
+	r.Assets = NewRequestAssetService(opts...)
 	return
 }
 
