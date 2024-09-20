@@ -3,7 +3,7 @@
 package storage
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // StorageService contains methods and other services that help with interacting

@@ -3,7 +3,7 @@
 package secondary_dns
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // SecondaryDNSService contains methods and other services that help with
