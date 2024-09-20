@@ -95,6 +95,8 @@ type Script struct {
 	LastSeenAt            time.Time `json:"last_seen_at,required" format:"date-time"`
 	URL                   string    `json:"url,required"`
 	URLContainsCDNCGIPath bool      `json:"url_contains_cdn_cgi_path,required"`
+	// The cryptomining score of the JavaScript content.
+	CryptominingScore int64 `json:"cryptomining_score,nullable"`
 	// The dataflow score of the JavaScript content.
 	DataflowScore           int64 `json:"dataflow_score,nullable"`
 	DomainReportedMalicious bool  `json:"domain_reported_malicious"`
@@ -104,9 +106,13 @@ type Script struct {
 	// The computed hash of the analyzed script.
 	Hash string `json:"hash,nullable"`
 	// The integrity score of the JavaScript content.
-	JSIntegrityScore          int64    `json:"js_integrity_score,nullable"`
+	JSIntegrityScore int64 `json:"js_integrity_score,nullable"`
+	// The magecart score of the JavaScript content.
+	MagecartScore             int64    `json:"magecart_score,nullable"`
 	MaliciousDomainCategories []string `json:"malicious_domain_categories"`
 	MaliciousURLCategories    []string `json:"malicious_url_categories"`
+	// The malware score of the JavaScript content.
+	MalwareScore int64 `json:"malware_score,nullable"`
 	// The obfuscation score of the JavaScript content.
 	ObfuscationScore     int64      `json:"obfuscation_score,nullable"`
 	PageURLs             []string   `json:"page_urls"`
@@ -123,14 +129,17 @@ type scriptJSON struct {
 	LastSeenAt                apijson.Field
 	URL                       apijson.Field
 	URLContainsCDNCGIPath     apijson.Field
+	CryptominingScore         apijson.Field
 	DataflowScore             apijson.Field
 	DomainReportedMalicious   apijson.Field
 	FetchedAt                 apijson.Field
 	FirstPageURL              apijson.Field
 	Hash                      apijson.Field
 	JSIntegrityScore          apijson.Field
+	MagecartScore             apijson.Field
 	MaliciousDomainCategories apijson.Field
 	MaliciousURLCategories    apijson.Field
+	MalwareScore              apijson.Field
 	ObfuscationScore          apijson.Field
 	PageURLs                  apijson.Field
 	URLReportedMalicious      apijson.Field
@@ -155,6 +164,8 @@ type ScriptGetResponse struct {
 	LastSeenAt            time.Time `json:"last_seen_at,required" format:"date-time"`
 	URL                   string    `json:"url,required"`
 	URLContainsCDNCGIPath bool      `json:"url_contains_cdn_cgi_path,required"`
+	// The cryptomining score of the JavaScript content.
+	CryptominingScore int64 `json:"cryptomining_score,nullable"`
 	// The dataflow score of the JavaScript content.
 	DataflowScore           int64 `json:"dataflow_score,nullable"`
 	DomainReportedMalicious bool  `json:"domain_reported_malicious"`
@@ -164,9 +175,13 @@ type ScriptGetResponse struct {
 	// The computed hash of the analyzed script.
 	Hash string `json:"hash,nullable"`
 	// The integrity score of the JavaScript content.
-	JSIntegrityScore          int64    `json:"js_integrity_score,nullable"`
+	JSIntegrityScore int64 `json:"js_integrity_score,nullable"`
+	// The magecart score of the JavaScript content.
+	MagecartScore             int64    `json:"magecart_score,nullable"`
 	MaliciousDomainCategories []string `json:"malicious_domain_categories"`
 	MaliciousURLCategories    []string `json:"malicious_url_categories"`
+	// The malware score of the JavaScript content.
+	MalwareScore int64 `json:"malware_score,nullable"`
 	// The obfuscation score of the JavaScript content.
 	ObfuscationScore     int64                      `json:"obfuscation_score,nullable"`
 	PageURLs             []string                   `json:"page_urls"`
@@ -185,14 +200,17 @@ type scriptGetResponseJSON struct {
 	LastSeenAt                apijson.Field
 	URL                       apijson.Field
 	URLContainsCDNCGIPath     apijson.Field
+	CryptominingScore         apijson.Field
 	DataflowScore             apijson.Field
 	DomainReportedMalicious   apijson.Field
 	FetchedAt                 apijson.Field
 	FirstPageURL              apijson.Field
 	Hash                      apijson.Field
 	JSIntegrityScore          apijson.Field
+	MagecartScore             apijson.Field
 	MaliciousDomainCategories apijson.Field
 	MaliciousURLCategories    apijson.Field
+	MalwareScore              apijson.Field
 	ObfuscationScore          apijson.Field
 	PageURLs                  apijson.Field
 	URLReportedMalicious      apijson.Field
@@ -211,6 +229,8 @@ func (r scriptGetResponseJSON) RawJSON() string {
 
 // The version of the analyzed script.
 type ScriptGetResponseVersion struct {
+	// The cryptomining score of the JavaScript content.
+	CryptominingScore int64 `json:"cryptomining_score,nullable"`
 	// The dataflow score of the JavaScript content.
 	DataflowScore int64 `json:"dataflow_score,nullable"`
 	// The timestamp of when the script was last fetched.
@@ -219,6 +239,10 @@ type ScriptGetResponseVersion struct {
 	Hash string `json:"hash,nullable"`
 	// The integrity score of the JavaScript content.
 	JSIntegrityScore int64 `json:"js_integrity_score,nullable"`
+	// The magecart score of the JavaScript content.
+	MagecartScore int64 `json:"magecart_score,nullable"`
+	// The malware score of the JavaScript content.
+	MalwareScore int64 `json:"malware_score,nullable"`
 	// The obfuscation score of the JavaScript content.
 	ObfuscationScore int64                        `json:"obfuscation_score,nullable"`
 	JSON             scriptGetResponseVersionJSON `json:"-"`
@@ -227,13 +251,16 @@ type ScriptGetResponseVersion struct {
 // scriptGetResponseVersionJSON contains the JSON metadata for the struct
 // [ScriptGetResponseVersion]
 type scriptGetResponseVersionJSON struct {
-	DataflowScore    apijson.Field
-	FetchedAt        apijson.Field
-	Hash             apijson.Field
-	JSIntegrityScore apijson.Field
-	ObfuscationScore apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	CryptominingScore apijson.Field
+	DataflowScore     apijson.Field
+	FetchedAt         apijson.Field
+	Hash              apijson.Field
+	JSIntegrityScore  apijson.Field
+	MagecartScore     apijson.Field
+	MalwareScore      apijson.Field
+	ObfuscationScore  apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *ScriptGetResponseVersion) UnmarshalJSON(data []byte) (err error) {
