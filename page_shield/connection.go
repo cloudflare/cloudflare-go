@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // ConnectionService contains methods and other services that help with interacting
@@ -142,8 +142,7 @@ type ConnectionListParams struct {
 	// Excludes connections whose URL contains one of the URL-encoded URLs separated by
 	// commas.
 	ExcludeURLs param.Field[string] `query:"exclude_urls"`
-	// Export the list of connections as a file. Cannot be used with per_page or page
-	// options.
+	// Export the list of connections as a file.
 	Export param.Field[ConnectionListParamsExport] `query:"export"`
 	// Includes connections that match one or more URL-encoded hostnames separated by
 	// commas.
@@ -157,10 +156,9 @@ type ConnectionListParams struct {
 	// The current page number of the paginated results.
 	//
 	// We additionally support a special value "all". When "all" is used, the API will
-	// return all the connections with the applied filters in a single page.
-	// Additionally, when using this value, the API will not return the categorisation
-	// data for the URL and domain of the connections. This feature is best-effort and
-	// it may only work for zones with a low number of connections
+	// return all the connections with the applied filters in a single page. This
+	// feature is best-effort and it may only work for zones with a low number of
+	// connections
 	Page param.Field[string] `query:"page"`
 	// Includes connections that match one or more page URLs (separated by commas)
 	// where they were last seen
@@ -206,8 +204,7 @@ func (r ConnectionListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Export the list of connections as a file. Cannot be used with per_page or page
-// options.
+// Export the list of connections as a file.
 type ConnectionListParamsExport string
 
 const (

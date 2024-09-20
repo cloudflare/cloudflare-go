@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AnalyticsAggregateCurrentService contains methods and other services that help
@@ -38,15 +38,15 @@ func NewAnalyticsAggregateCurrentService(opts ...option.RequestOption) (r *Analy
 
 // Retrieves analytics aggregated from the last minute of usage on Spectrum
 // applications underneath a given zone.
-func (r *AnalyticsAggregateCurrentService) Get(ctx context.Context, zone string, query AnalyticsAggregateCurrentGetParams, opts ...option.RequestOption) (res *[]AnalyticsAggregateCurrentGetResponse, err error) {
+func (r *AnalyticsAggregateCurrentService) Get(ctx context.Context, params AnalyticsAggregateCurrentGetParams, opts ...option.RequestOption) (res *[]AnalyticsAggregateCurrentGetResponse, err error) {
 	var env AnalyticsAggregateCurrentGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zone == "" {
-		err = errors.New("missing required zone parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/spectrum/analytics/aggregate/current", zone)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/spectrum/analytics/aggregate/current", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,12 +54,43 @@ func (r *AnalyticsAggregateCurrentService) Get(ctx context.Context, zone string,
 	return
 }
 
-type AnalyticsAggregateCurrentGetResponse = interface{}
+type AnalyticsAggregateCurrentGetResponse struct {
+	// Application identifier.
+	AppID string `json:"appID,required"`
+	// Number of bytes sent
+	BytesEgress float64 `json:"bytesEgress,required"`
+	// Number of bytes received
+	BytesIngress float64 `json:"bytesIngress,required"`
+	// Number of connections
+	Connections float64 `json:"connections,required"`
+	// Average duration of connections
+	DurationAvg float64                                  `json:"durationAvg,required"`
+	JSON        analyticsAggregateCurrentGetResponseJSON `json:"-"`
+}
+
+// analyticsAggregateCurrentGetResponseJSON contains the JSON metadata for the
+// struct [AnalyticsAggregateCurrentGetResponse]
+type analyticsAggregateCurrentGetResponseJSON struct {
+	AppID        apijson.Field
+	BytesEgress  apijson.Field
+	BytesIngress apijson.Field
+	Connections  apijson.Field
+	DurationAvg  apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AnalyticsAggregateCurrentGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsAggregateCurrentGetResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type AnalyticsAggregateCurrentGetParams struct {
-	// Comma-delimited list of Spectrum Application Id(s). If provided, the response
-	// will be limited to Spectrum Application Id(s) that match.
-	AppIDParam param.Field[string] `query:"app_id_param"`
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Comma-delimited list of Spectrum Application Id(s). If provided, the response
 	// will be limited to Spectrum Application Id(s) that match.
 	AppID param.Field[string] `query:"appID"`
@@ -77,11 +108,11 @@ func (r AnalyticsAggregateCurrentGetParams) URLQuery() (v url.Values) {
 }
 
 type AnalyticsAggregateCurrentGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                  `json:"errors,required"`
-	Messages []shared.ResponseInfo                  `json:"messages,required"`
-	Result   []AnalyticsAggregateCurrentGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AnalyticsAggregateCurrentGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  []AnalyticsAggregateCurrentGetResponse              `json:"result"`
 	JSON    analyticsAggregateCurrentGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -90,8 +121,8 @@ type AnalyticsAggregateCurrentGetResponseEnvelope struct {
 type analyticsAggregateCurrentGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

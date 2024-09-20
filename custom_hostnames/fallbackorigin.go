@@ -7,14 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
+	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // FallbackOriginService contains methods and other services that help with
@@ -37,7 +36,7 @@ func NewFallbackOriginService(opts ...option.RequestOption) (r *FallbackOriginSe
 }
 
 // Update Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOriginUpdateParams, opts ...option.RequestOption) (res *FallbackOriginUpdateResponseUnion, err error) {
+func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOriginUpdateParams, opts ...option.RequestOption) (res *FallbackOriginUpdateResponse, err error) {
 	var env FallbackOriginUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -54,7 +53,7 @@ func (r *FallbackOriginService) Update(ctx context.Context, params FallbackOrigi
 }
 
 // Delete Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponseUnion, err error) {
+func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginDeleteParams, opts ...option.RequestOption) (res *FallbackOriginDeleteResponse, err error) {
 	var env FallbackOriginDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
@@ -71,7 +70,7 @@ func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginD
 }
 
 // Get Fallback Origin for Custom Hostnames
-func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGetParams, opts ...option.RequestOption) (res *FallbackOriginGetResponseUnion, err error) {
+func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGetParams, opts ...option.RequestOption) (res *FallbackOriginGetResponse, err error) {
 	var env FallbackOriginGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
@@ -87,55 +86,169 @@ func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGet
 	return
 }
 
-// Union satisfied by [custom_hostnames.FallbackOriginUpdateResponseUnknown] or
-// [shared.UnionString].
-type FallbackOriginUpdateResponseUnion interface {
-	ImplementsCustomHostnamesFallbackOriginUpdateResponseUnion()
+type FallbackOriginUpdateResponse struct {
+	// This is the time the fallback origin was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// These are errors that were encountered while trying to activate a fallback
+	// origin.
+	Errors []string `json:"errors"`
+	// Your origin hostname that requests to your custom hostnames will be sent to.
+	Origin string `json:"origin"`
+	// Status of the fallback origin's activation.
+	Status FallbackOriginUpdateResponseStatus `json:"status"`
+	// This is the time the fallback origin was updated.
+	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
+	JSON      fallbackOriginUpdateResponseJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FallbackOriginUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// fallbackOriginUpdateResponseJSON contains the JSON metadata for the struct
+// [FallbackOriginUpdateResponse]
+type fallbackOriginUpdateResponseJSON struct {
+	CreatedAt   apijson.Field
+	Errors      apijson.Field
+	Origin      apijson.Field
+	Status      apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-// Union satisfied by [custom_hostnames.FallbackOriginDeleteResponseUnknown] or
-// [shared.UnionString].
-type FallbackOriginDeleteResponseUnion interface {
-	ImplementsCustomHostnamesFallbackOriginDeleteResponseUnion()
+func (r *FallbackOriginUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FallbackOriginDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r fallbackOriginUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
-// Union satisfied by [custom_hostnames.FallbackOriginGetResponseUnknown] or
-// [shared.UnionString].
-type FallbackOriginGetResponseUnion interface {
-	ImplementsCustomHostnamesFallbackOriginGetResponseUnion()
+// Status of the fallback origin's activation.
+type FallbackOriginUpdateResponseStatus string
+
+const (
+	FallbackOriginUpdateResponseStatusInitializing       FallbackOriginUpdateResponseStatus = "initializing"
+	FallbackOriginUpdateResponseStatusPendingDeployment  FallbackOriginUpdateResponseStatus = "pending_deployment"
+	FallbackOriginUpdateResponseStatusPendingDeletion    FallbackOriginUpdateResponseStatus = "pending_deletion"
+	FallbackOriginUpdateResponseStatusActive             FallbackOriginUpdateResponseStatus = "active"
+	FallbackOriginUpdateResponseStatusDeploymentTimedOut FallbackOriginUpdateResponseStatus = "deployment_timed_out"
+	FallbackOriginUpdateResponseStatusDeletionTimedOut   FallbackOriginUpdateResponseStatus = "deletion_timed_out"
+)
+
+func (r FallbackOriginUpdateResponseStatus) IsKnown() bool {
+	switch r {
+	case FallbackOriginUpdateResponseStatusInitializing, FallbackOriginUpdateResponseStatusPendingDeployment, FallbackOriginUpdateResponseStatusPendingDeletion, FallbackOriginUpdateResponseStatusActive, FallbackOriginUpdateResponseStatusDeploymentTimedOut, FallbackOriginUpdateResponseStatusDeletionTimedOut:
+		return true
+	}
+	return false
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FallbackOriginGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+type FallbackOriginDeleteResponse struct {
+	// This is the time the fallback origin was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// These are errors that were encountered while trying to activate a fallback
+	// origin.
+	Errors []string `json:"errors"`
+	// Your origin hostname that requests to your custom hostnames will be sent to.
+	Origin string `json:"origin"`
+	// Status of the fallback origin's activation.
+	Status FallbackOriginDeleteResponseStatus `json:"status"`
+	// This is the time the fallback origin was updated.
+	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
+	JSON      fallbackOriginDeleteResponseJSON `json:"-"`
+}
+
+// fallbackOriginDeleteResponseJSON contains the JSON metadata for the struct
+// [FallbackOriginDeleteResponse]
+type fallbackOriginDeleteResponseJSON struct {
+	CreatedAt   apijson.Field
+	Errors      apijson.Field
+	Origin      apijson.Field
+	Status      apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FallbackOriginDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r fallbackOriginDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the fallback origin's activation.
+type FallbackOriginDeleteResponseStatus string
+
+const (
+	FallbackOriginDeleteResponseStatusInitializing       FallbackOriginDeleteResponseStatus = "initializing"
+	FallbackOriginDeleteResponseStatusPendingDeployment  FallbackOriginDeleteResponseStatus = "pending_deployment"
+	FallbackOriginDeleteResponseStatusPendingDeletion    FallbackOriginDeleteResponseStatus = "pending_deletion"
+	FallbackOriginDeleteResponseStatusActive             FallbackOriginDeleteResponseStatus = "active"
+	FallbackOriginDeleteResponseStatusDeploymentTimedOut FallbackOriginDeleteResponseStatus = "deployment_timed_out"
+	FallbackOriginDeleteResponseStatusDeletionTimedOut   FallbackOriginDeleteResponseStatus = "deletion_timed_out"
+)
+
+func (r FallbackOriginDeleteResponseStatus) IsKnown() bool {
+	switch r {
+	case FallbackOriginDeleteResponseStatusInitializing, FallbackOriginDeleteResponseStatusPendingDeployment, FallbackOriginDeleteResponseStatusPendingDeletion, FallbackOriginDeleteResponseStatusActive, FallbackOriginDeleteResponseStatusDeploymentTimedOut, FallbackOriginDeleteResponseStatusDeletionTimedOut:
+		return true
+	}
+	return false
+}
+
+type FallbackOriginGetResponse struct {
+	// This is the time the fallback origin was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// These are errors that were encountered while trying to activate a fallback
+	// origin.
+	Errors []string `json:"errors"`
+	// Your origin hostname that requests to your custom hostnames will be sent to.
+	Origin string `json:"origin"`
+	// Status of the fallback origin's activation.
+	Status FallbackOriginGetResponseStatus `json:"status"`
+	// This is the time the fallback origin was updated.
+	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
+	JSON      fallbackOriginGetResponseJSON `json:"-"`
+}
+
+// fallbackOriginGetResponseJSON contains the JSON metadata for the struct
+// [FallbackOriginGetResponse]
+type fallbackOriginGetResponseJSON struct {
+	CreatedAt   apijson.Field
+	Errors      apijson.Field
+	Origin      apijson.Field
+	Status      apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FallbackOriginGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r fallbackOriginGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Status of the fallback origin's activation.
+type FallbackOriginGetResponseStatus string
+
+const (
+	FallbackOriginGetResponseStatusInitializing       FallbackOriginGetResponseStatus = "initializing"
+	FallbackOriginGetResponseStatusPendingDeployment  FallbackOriginGetResponseStatus = "pending_deployment"
+	FallbackOriginGetResponseStatusPendingDeletion    FallbackOriginGetResponseStatus = "pending_deletion"
+	FallbackOriginGetResponseStatusActive             FallbackOriginGetResponseStatus = "active"
+	FallbackOriginGetResponseStatusDeploymentTimedOut FallbackOriginGetResponseStatus = "deployment_timed_out"
+	FallbackOriginGetResponseStatusDeletionTimedOut   FallbackOriginGetResponseStatus = "deletion_timed_out"
+)
+
+func (r FallbackOriginGetResponseStatus) IsKnown() bool {
+	switch r {
+	case FallbackOriginGetResponseStatusInitializing, FallbackOriginGetResponseStatusPendingDeployment, FallbackOriginGetResponseStatusPendingDeletion, FallbackOriginGetResponseStatusActive, FallbackOriginGetResponseStatusDeploymentTimedOut, FallbackOriginGetResponseStatusDeletionTimedOut:
+		return true
+	}
+	return false
 }
 
 type FallbackOriginUpdateParams struct {
@@ -154,7 +267,7 @@ type FallbackOriginUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  FallbackOriginUpdateResponseUnion           `json:"result"`
+	Result  FallbackOriginUpdateResponse                `json:"result"`
 	JSON    fallbackOriginUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -202,7 +315,7 @@ type FallbackOriginDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  FallbackOriginDeleteResponseUnion           `json:"result"`
+	Result  FallbackOriginDeleteResponse                `json:"result"`
 	JSON    fallbackOriginDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -250,7 +363,7 @@ type FallbackOriginGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FallbackOriginGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  FallbackOriginGetResponseUnion           `json:"result"`
+	Result  FallbackOriginGetResponse                `json:"result"`
 	JSON    fallbackOriginGetResponseEnvelopeJSON    `json:"-"`
 }
 

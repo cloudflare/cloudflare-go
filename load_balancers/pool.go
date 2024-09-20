@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // PoolService contains methods and other services that help with interacting with
@@ -175,7 +175,7 @@ type Pool struct {
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions []CheckRegion `json:"check_regions,nullable"`
-	CreatedOn    time.Time     `json:"created_on" format:"date-time"`
+	CreatedOn    string        `json:"created_on"`
 	// A human-readable description of the pool.
 	Description string `json:"description"`
 	// This field shows up only if the pool is disabled. This field is set with the
@@ -196,14 +196,16 @@ type Pool struct {
 	// The minimum number of origins that must be healthy for this pool to serve
 	// traffic. If the number of healthy origins falls below this number, the pool will
 	// be marked unhealthy and will failover to the next available pool.
-	MinimumOrigins int64     `json:"minimum_origins"`
-	ModifiedOn     time.Time `json:"modified_on" format:"date-time"`
+	MinimumOrigins int64  `json:"minimum_origins"`
+	ModifiedOn     string `json:"modified_on"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	Monitor interface{} `json:"monitor"`
+	Monitor string `json:"monitor"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name string `json:"name"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks []string `json:"networks"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -237,6 +239,7 @@ type poolJSON struct {
 	ModifiedOn         apijson.Field
 	Monitor            apijson.Field
 	Name               apijson.Field
+	Networks           apijson.Field
 	NotificationEmail  apijson.Field
 	NotificationFilter apijson.Field
 	OriginSteering     apijson.Field
@@ -303,7 +306,7 @@ type PoolNewParams struct {
 	MinimumOrigins param.Field[int64] `json:"minimum_origins"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	Monitor param.Field[interface{}] `json:"monitor"`
+	Monitor param.Field[string] `json:"monitor"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -397,7 +400,7 @@ type PoolUpdateParams struct {
 	MinimumOrigins param.Field[int64] `json:"minimum_origins"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	Monitor param.Field[interface{}] `json:"monitor"`
+	Monitor param.Field[string] `json:"monitor"`
 	// This field is now deprecated. It has been moved to Cloudflare's Centralized
 	// Notification service
 	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
@@ -464,7 +467,7 @@ type PoolListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	Monitor param.Field[interface{}] `query:"monitor"`
+	Monitor param.Field[string] `query:"monitor"`
 }
 
 // URLQuery serializes [PoolListParams]'s query parameters as `url.Values`.
@@ -549,7 +552,7 @@ type PoolEditParams struct {
 	MinimumOrigins param.Field[int64] `json:"minimum_origins"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
-	Monitor param.Field[interface{}] `json:"monitor"`
+	Monitor param.Field[string] `json:"monitor"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name param.Field[string] `json:"name"`

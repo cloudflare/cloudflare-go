@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // CfInterconnectService contains methods and other services that help with
@@ -97,9 +97,9 @@ func (r *CfInterconnectService) Get(ctx context.Context, cfInterconnectID string
 }
 
 type CfInterconnectUpdateResponse struct {
-	Modified             bool                             `json:"modified"`
-	ModifiedInterconnect interface{}                      `json:"modified_interconnect"`
-	JSON                 cfInterconnectUpdateResponseJSON `json:"-"`
+	Modified             bool                                             `json:"modified"`
+	ModifiedInterconnect CfInterconnectUpdateResponseModifiedInterconnect `json:"modified_interconnect"`
+	JSON                 cfInterconnectUpdateResponseJSON                 `json:"-"`
 }
 
 // cfInterconnectUpdateResponseJSON contains the JSON metadata for the struct
@@ -116,6 +116,115 @@ func (r *CfInterconnectUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r cfInterconnectUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectUpdateResponseModifiedInterconnect struct {
+	// Tunnel identifier tag.
+	ID string `json:"id"`
+	// The name of the interconnect. The name cannot share a name with other tunnels.
+	ColoName string `json:"colo_name"`
+	// The date and time the tunnel was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the interconnect.
+	Description string `json:"description"`
+	// The configuration specific to GRE interconnects.
+	GRE         CfInterconnectUpdateResponseModifiedInterconnectGRE         `json:"gre"`
+	HealthCheck CfInterconnectUpdateResponseModifiedInterconnectHealthCheck `json:"health_check"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress string `json:"interface_address"`
+	// The date and time the tunnel was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
+	// value is 576.
+	Mtu int64 `json:"mtu"`
+	// The name of the interconnect. The name cannot share a name with other tunnels.
+	Name string                                               `json:"name"`
+	JSON cfInterconnectUpdateResponseModifiedInterconnectJSON `json:"-"`
+}
+
+// cfInterconnectUpdateResponseModifiedInterconnectJSON contains the JSON metadata
+// for the struct [CfInterconnectUpdateResponseModifiedInterconnect]
+type cfInterconnectUpdateResponseModifiedInterconnectJSON struct {
+	ID               apijson.Field
+	ColoName         apijson.Field
+	CreatedOn        apijson.Field
+	Description      apijson.Field
+	GRE              apijson.Field
+	HealthCheck      apijson.Field
+	InterfaceAddress apijson.Field
+	ModifiedOn       apijson.Field
+	Mtu              apijson.Field
+	Name             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *CfInterconnectUpdateResponseModifiedInterconnect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectUpdateResponseModifiedInterconnectJSON) RawJSON() string {
+	return r.raw
+}
+
+// The configuration specific to GRE interconnects.
+type CfInterconnectUpdateResponseModifiedInterconnectGRE struct {
+	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
+	// of the Interconnect.
+	CloudflareEndpoint string                                                  `json:"cloudflare_endpoint"`
+	JSON               cfInterconnectUpdateResponseModifiedInterconnectGREJSON `json:"-"`
+}
+
+// cfInterconnectUpdateResponseModifiedInterconnectGREJSON contains the JSON
+// metadata for the struct [CfInterconnectUpdateResponseModifiedInterconnectGRE]
+type cfInterconnectUpdateResponseModifiedInterconnectGREJSON struct {
+	CloudflareEndpoint apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *CfInterconnectUpdateResponseModifiedInterconnectGRE) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectUpdateResponseModifiedInterconnectGREJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectUpdateResponseModifiedInterconnectHealthCheck struct {
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled bool `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate HealthCheckRate `json:"rate"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`.
+	Target string `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type HealthCheckType                                                 `json:"type"`
+	JSON cfInterconnectUpdateResponseModifiedInterconnectHealthCheckJSON `json:"-"`
+}
+
+// cfInterconnectUpdateResponseModifiedInterconnectHealthCheckJSON contains the
+// JSON metadata for the struct
+// [CfInterconnectUpdateResponseModifiedInterconnectHealthCheck]
+type cfInterconnectUpdateResponseModifiedInterconnectHealthCheckJSON struct {
+	Enabled     apijson.Field
+	Rate        apijson.Field
+	Target      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectUpdateResponseModifiedInterconnectHealthCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectUpdateResponseModifiedInterconnectHealthCheckJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -249,8 +358,8 @@ func (r cfInterconnectListResponseInterconnectsHealthCheckJSON) RawJSON() string
 }
 
 type CfInterconnectGetResponse struct {
-	Interconnect interface{}                   `json:"interconnect"`
-	JSON         cfInterconnectGetResponseJSON `json:"-"`
+	Interconnect CfInterconnectGetResponseInterconnect `json:"interconnect"`
+	JSON         cfInterconnectGetResponseJSON         `json:"-"`
 }
 
 // cfInterconnectGetResponseJSON contains the JSON metadata for the struct
@@ -266,6 +375,114 @@ func (r *CfInterconnectGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r cfInterconnectGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectGetResponseInterconnect struct {
+	// Tunnel identifier tag.
+	ID string `json:"id"`
+	// The name of the interconnect. The name cannot share a name with other tunnels.
+	ColoName string `json:"colo_name"`
+	// The date and time the tunnel was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the interconnect.
+	Description string `json:"description"`
+	// The configuration specific to GRE interconnects.
+	GRE         CfInterconnectGetResponseInterconnectGRE         `json:"gre"`
+	HealthCheck CfInterconnectGetResponseInterconnectHealthCheck `json:"health_check"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress string `json:"interface_address"`
+	// The date and time the tunnel was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
+	// value is 576.
+	Mtu int64 `json:"mtu"`
+	// The name of the interconnect. The name cannot share a name with other tunnels.
+	Name string                                    `json:"name"`
+	JSON cfInterconnectGetResponseInterconnectJSON `json:"-"`
+}
+
+// cfInterconnectGetResponseInterconnectJSON contains the JSON metadata for the
+// struct [CfInterconnectGetResponseInterconnect]
+type cfInterconnectGetResponseInterconnectJSON struct {
+	ID               apijson.Field
+	ColoName         apijson.Field
+	CreatedOn        apijson.Field
+	Description      apijson.Field
+	GRE              apijson.Field
+	HealthCheck      apijson.Field
+	InterfaceAddress apijson.Field
+	ModifiedOn       apijson.Field
+	Mtu              apijson.Field
+	Name             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *CfInterconnectGetResponseInterconnect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectGetResponseInterconnectJSON) RawJSON() string {
+	return r.raw
+}
+
+// The configuration specific to GRE interconnects.
+type CfInterconnectGetResponseInterconnectGRE struct {
+	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
+	// of the Interconnect.
+	CloudflareEndpoint string                                       `json:"cloudflare_endpoint"`
+	JSON               cfInterconnectGetResponseInterconnectGREJSON `json:"-"`
+}
+
+// cfInterconnectGetResponseInterconnectGREJSON contains the JSON metadata for the
+// struct [CfInterconnectGetResponseInterconnectGRE]
+type cfInterconnectGetResponseInterconnectGREJSON struct {
+	CloudflareEndpoint apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *CfInterconnectGetResponseInterconnectGRE) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectGetResponseInterconnectGREJSON) RawJSON() string {
+	return r.raw
+}
+
+type CfInterconnectGetResponseInterconnectHealthCheck struct {
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled bool `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate HealthCheckRate `json:"rate"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`.
+	Target string `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type HealthCheckType                                      `json:"type"`
+	JSON cfInterconnectGetResponseInterconnectHealthCheckJSON `json:"-"`
+}
+
+// cfInterconnectGetResponseInterconnectHealthCheckJSON contains the JSON metadata
+// for the struct [CfInterconnectGetResponseInterconnectHealthCheck]
+type cfInterconnectGetResponseInterconnectHealthCheckJSON struct {
+	Enabled     apijson.Field
+	Rate        apijson.Field
+	Target      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CfInterconnectGetResponseInterconnectHealthCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cfInterconnectGetResponseInterconnectHealthCheckJSON) RawJSON() string {
 	return r.raw
 }
 

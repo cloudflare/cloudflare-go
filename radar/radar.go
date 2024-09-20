@@ -3,7 +3,7 @@
 package radar
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // RadarService contains methods and other services that help with interacting with
@@ -14,6 +14,7 @@ import (
 // the [NewRadarService] method instead.
 type RadarService struct {
 	Options           []option.RequestOption
+	AI                *AIService
 	Annotations       *AnnotationService
 	BGP               *BGPService
 	Datasets          *DatasetService
@@ -38,6 +39,7 @@ type RadarService struct {
 func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r = &RadarService{}
 	r.Options = opts
+	r.AI = NewAIService(opts...)
 	r.Annotations = NewAnnotationService(opts...)
 	r.BGP = NewBGPService(opts...)
 	r.Datasets = NewDatasetService(opts...)

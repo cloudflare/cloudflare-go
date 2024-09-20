@@ -10,15 +10,15 @@ import (
 	"net/url"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/filters"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/rate_limits"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/filters"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/rate_limits"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -328,7 +328,7 @@ type Product string
 const (
 	ProductZoneLockdown  Product = "zoneLockdown"
 	ProductUABlock       Product = "uaBlock"
-	ProductBic           Product = "bic"
+	ProductBIC           Product = "bic"
 	ProductHot           Product = "hot"
 	ProductSecurityLevel Product = "securityLevel"
 	ProductRateLimit     Product = "rateLimit"
@@ -337,7 +337,7 @@ const (
 
 func (r Product) IsKnown() bool {
 	switch r {
-	case ProductZoneLockdown, ProductUABlock, ProductBic, ProductHot, ProductSecurityLevel, ProductRateLimit, ProductWAF:
+	case ProductZoneLockdown, ProductUABlock, ProductBIC, ProductHot, ProductSecurityLevel, ProductRateLimit, ProductWAF:
 		return true
 	}
 	return false
@@ -370,11 +370,75 @@ func (r deletedFilterJSON) RawJSON() string {
 func (r DeletedFilter) ImplementsFirewallFirewallRuleFilter() {}
 
 type RuleNewParams struct {
-	Body interface{} `json:"body,required"`
+	// The action to perform when the threshold of matched traffic within the
+	// configured period is exceeded.
+	Action param.Field[RuleNewParamsAction]         `json:"action,required"`
+	Filter param.Field[filters.FirewallFilterParam] `json:"filter,required"`
 }
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
+}
+
+// The action to perform when the threshold of matched traffic within the
+// configured period is exceeded.
+type RuleNewParamsAction struct {
+	// The action to perform.
+	Mode param.Field[RuleNewParamsActionMode] `json:"mode"`
+	// A custom content type and reponse to return when the threshold is exceeded. The
+	// custom response configured in this object will override the custom error for the
+	// zone. This object is optional. Notes: If you omit this object, Cloudflare will
+	// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
+	// or "js_challenge", Cloudflare will use the zone challenge pages and you should
+	// not provide the "response" object.
+	Response param.Field[RuleNewParamsActionResponse] `json:"response"`
+	// The time in seconds during which Cloudflare will perform the mitigation action.
+	// Must be an integer value greater than or equal to the period. Notes: If "mode"
+	// is "challenge", "managed_challenge", or "js_challenge", Cloudflare will use the
+	// zone's Challenge Passage time and you should not provide this value.
+	Timeout param.Field[float64] `json:"timeout"`
+}
+
+func (r RuleNewParamsAction) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The action to perform.
+type RuleNewParamsActionMode string
+
+const (
+	RuleNewParamsActionModeSimulate         RuleNewParamsActionMode = "simulate"
+	RuleNewParamsActionModeBan              RuleNewParamsActionMode = "ban"
+	RuleNewParamsActionModeChallenge        RuleNewParamsActionMode = "challenge"
+	RuleNewParamsActionModeJSChallenge      RuleNewParamsActionMode = "js_challenge"
+	RuleNewParamsActionModeManagedChallenge RuleNewParamsActionMode = "managed_challenge"
+)
+
+func (r RuleNewParamsActionMode) IsKnown() bool {
+	switch r {
+	case RuleNewParamsActionModeSimulate, RuleNewParamsActionModeBan, RuleNewParamsActionModeChallenge, RuleNewParamsActionModeJSChallenge, RuleNewParamsActionModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
+// A custom content type and reponse to return when the threshold is exceeded. The
+// custom response configured in this object will override the custom error for the
+// zone. This object is optional. Notes: If you omit this object, Cloudflare will
+// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
+// or "js_challenge", Cloudflare will use the zone challenge pages and you should
+// not provide the "response" object.
+type RuleNewParamsActionResponse struct {
+	// The response body to return. The value must conform to the configured content
+	// type.
+	Body param.Field[string] `json:"body"`
+	// The content type of the body. Must be one of the following: `text/plain`,
+	// `text/xml`, or `application/json`.
+	ContentType param.Field[string] `json:"content_type"`
+}
+
+func (r RuleNewParamsActionResponse) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type RuleNewResponseEnvelope struct {
@@ -454,11 +518,75 @@ func (r ruleNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type RuleUpdateParams struct {
-	Body interface{} `json:"body,required"`
+	// The action to perform when the threshold of matched traffic within the
+	// configured period is exceeded.
+	Action param.Field[RuleUpdateParamsAction]      `json:"action,required"`
+	Filter param.Field[filters.FirewallFilterParam] `json:"filter,required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
+}
+
+// The action to perform when the threshold of matched traffic within the
+// configured period is exceeded.
+type RuleUpdateParamsAction struct {
+	// The action to perform.
+	Mode param.Field[RuleUpdateParamsActionMode] `json:"mode"`
+	// A custom content type and reponse to return when the threshold is exceeded. The
+	// custom response configured in this object will override the custom error for the
+	// zone. This object is optional. Notes: If you omit this object, Cloudflare will
+	// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
+	// or "js_challenge", Cloudflare will use the zone challenge pages and you should
+	// not provide the "response" object.
+	Response param.Field[RuleUpdateParamsActionResponse] `json:"response"`
+	// The time in seconds during which Cloudflare will perform the mitigation action.
+	// Must be an integer value greater than or equal to the period. Notes: If "mode"
+	// is "challenge", "managed_challenge", or "js_challenge", Cloudflare will use the
+	// zone's Challenge Passage time and you should not provide this value.
+	Timeout param.Field[float64] `json:"timeout"`
+}
+
+func (r RuleUpdateParamsAction) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The action to perform.
+type RuleUpdateParamsActionMode string
+
+const (
+	RuleUpdateParamsActionModeSimulate         RuleUpdateParamsActionMode = "simulate"
+	RuleUpdateParamsActionModeBan              RuleUpdateParamsActionMode = "ban"
+	RuleUpdateParamsActionModeChallenge        RuleUpdateParamsActionMode = "challenge"
+	RuleUpdateParamsActionModeJSChallenge      RuleUpdateParamsActionMode = "js_challenge"
+	RuleUpdateParamsActionModeManagedChallenge RuleUpdateParamsActionMode = "managed_challenge"
+)
+
+func (r RuleUpdateParamsActionMode) IsKnown() bool {
+	switch r {
+	case RuleUpdateParamsActionModeSimulate, RuleUpdateParamsActionModeBan, RuleUpdateParamsActionModeChallenge, RuleUpdateParamsActionModeJSChallenge, RuleUpdateParamsActionModeManagedChallenge:
+		return true
+	}
+	return false
+}
+
+// A custom content type and reponse to return when the threshold is exceeded. The
+// custom response configured in this object will override the custom error for the
+// zone. This object is optional. Notes: If you omit this object, Cloudflare will
+// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
+// or "js_challenge", Cloudflare will use the zone challenge pages and you should
+// not provide the "response" object.
+type RuleUpdateParamsActionResponse struct {
+	// The response body to return. The value must conform to the configured content
+	// type.
+	Body param.Field[string] `json:"body"`
+	// The content type of the body. Must be one of the following: `text/plain`,
+	// `text/xml`, or `application/json`.
+	ContentType param.Field[string] `json:"content_type"`
+}
+
+func (r RuleUpdateParamsActionResponse) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type RuleUpdateResponseEnvelope struct {
@@ -571,11 +699,10 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleEditParams struct {
-	Body interface{} `json:"body,required"`
 }
 
 func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type RuleEditResponseEnvelope struct {

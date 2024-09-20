@@ -7,15 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AccessKeyService contains methods and other services that help with interacting
@@ -38,7 +36,7 @@ func NewAccessKeyService(opts ...option.RequestOption) (r *AccessKeyService) {
 }
 
 // Updates the Access key rotation settings for an account.
-func (r *AccessKeyService) Update(ctx context.Context, params AccessKeyUpdateParams, opts ...option.RequestOption) (res *AccessKeyUpdateResponseUnion, err error) {
+func (r *AccessKeyService) Update(ctx context.Context, params AccessKeyUpdateParams, opts ...option.RequestOption) (res *AccessKeyUpdateResponse, err error) {
 	var env AccessKeyUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -55,7 +53,7 @@ func (r *AccessKeyService) Update(ctx context.Context, params AccessKeyUpdatePar
 }
 
 // Gets the Access key rotation settings for an account.
-func (r *AccessKeyService) Get(ctx context.Context, query AccessKeyGetParams, opts ...option.RequestOption) (res *AccessKeyGetResponseUnion, err error) {
+func (r *AccessKeyService) Get(ctx context.Context, query AccessKeyGetParams, opts ...option.RequestOption) (res *AccessKeyGetResponse, err error) {
 	var env AccessKeyGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -72,7 +70,7 @@ func (r *AccessKeyService) Get(ctx context.Context, query AccessKeyGetParams, op
 }
 
 // Perfoms a key rotation for an account.
-func (r *AccessKeyService) Rotate(ctx context.Context, body AccessKeyRotateParams, opts ...option.RequestOption) (res *AccessKeyRotateResponseUnion, err error) {
+func (r *AccessKeyService) Rotate(ctx context.Context, body AccessKeyRotateParams, opts ...option.RequestOption) (res *AccessKeyRotateResponse, err error) {
 	var env AccessKeyRotateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -88,55 +86,88 @@ func (r *AccessKeyService) Rotate(ctx context.Context, body AccessKeyRotateParam
 	return
 }
 
-// Union satisfied by [zero_trust.AccessKeyUpdateResponseUnknown] or
-// [shared.UnionString].
-type AccessKeyUpdateResponseUnion interface {
-	ImplementsZeroTrustAccessKeyUpdateResponseUnion()
+type AccessKeyUpdateResponse struct {
+	// The number of days until the next key rotation.
+	DaysUntilNextRotation float64 `json:"days_until_next_rotation"`
+	// The number of days between key rotations.
+	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
+	// The timestamp of the previous key rotation.
+	LastKeyRotationAt time.Time                   `json:"last_key_rotation_at" format:"date-time"`
+	JSON              accessKeyUpdateResponseJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessKeyUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// accessKeyUpdateResponseJSON contains the JSON metadata for the struct
+// [AccessKeyUpdateResponse]
+type accessKeyUpdateResponseJSON struct {
+	DaysUntilNextRotation   apijson.Field
+	KeyRotationIntervalDays apijson.Field
+	LastKeyRotationAt       apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
-// Union satisfied by [zero_trust.AccessKeyGetResponseUnknown] or
-// [shared.UnionString].
-type AccessKeyGetResponseUnion interface {
-	ImplementsZeroTrustAccessKeyGetResponseUnion()
+func (r *AccessKeyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessKeyGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r accessKeyUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
-// Union satisfied by [zero_trust.AccessKeyRotateResponseUnknown] or
-// [shared.UnionString].
-type AccessKeyRotateResponseUnion interface {
-	ImplementsZeroTrustAccessKeyRotateResponseUnion()
+type AccessKeyGetResponse struct {
+	// The number of days until the next key rotation.
+	DaysUntilNextRotation float64 `json:"days_until_next_rotation"`
+	// The number of days between key rotations.
+	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
+	// The timestamp of the previous key rotation.
+	LastKeyRotationAt time.Time                `json:"last_key_rotation_at" format:"date-time"`
+	JSON              accessKeyGetResponseJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessKeyRotateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// accessKeyGetResponseJSON contains the JSON metadata for the struct
+// [AccessKeyGetResponse]
+type accessKeyGetResponseJSON struct {
+	DaysUntilNextRotation   apijson.Field
+	KeyRotationIntervalDays apijson.Field
+	LastKeyRotationAt       apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *AccessKeyGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessKeyRotateResponse struct {
+	// The number of days until the next key rotation.
+	DaysUntilNextRotation float64 `json:"days_until_next_rotation"`
+	// The number of days between key rotations.
+	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
+	// The timestamp of the previous key rotation.
+	LastKeyRotationAt time.Time                   `json:"last_key_rotation_at" format:"date-time"`
+	JSON              accessKeyRotateResponseJSON `json:"-"`
+}
+
+// accessKeyRotateResponseJSON contains the JSON metadata for the struct
+// [AccessKeyRotateResponse]
+type accessKeyRotateResponseJSON struct {
+	DaysUntilNextRotation   apijson.Field
+	KeyRotationIntervalDays apijson.Field
+	LastKeyRotationAt       apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *AccessKeyRotateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessKeyRotateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessKeyUpdateParams struct {
@@ -155,28 +186,19 @@ type AccessKeyUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
-	// The number of days until the next key rotation.
-	DaysUntilNextRotation float64 `json:"days_until_next_rotation"`
-	// The number of days between key rotations.
-	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
-	// The timestamp of the previous key rotation.
-	LastKeyRotationAt time.Time                           `json:"last_key_rotation_at" format:"date-time"`
-	Result            AccessKeyUpdateResponseUnion        `json:"result"`
-	JSON              accessKeyUpdateResponseEnvelopeJSON `json:"-"`
+	Result  AccessKeyUpdateResponse                `json:"result"`
+	JSON    accessKeyUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // accessKeyUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AccessKeyUpdateResponseEnvelope]
 type accessKeyUpdateResponseEnvelopeJSON struct {
-	Errors                  apijson.Field
-	Messages                apijson.Field
-	Success                 apijson.Field
-	DaysUntilNextRotation   apijson.Field
-	KeyRotationIntervalDays apijson.Field
-	LastKeyRotationAt       apijson.Field
-	Result                  apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *AccessKeyUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
@@ -212,28 +234,19 @@ type AccessKeyGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessKeyGetResponseEnvelopeSuccess `json:"success,required"`
-	// The number of days until the next key rotation.
-	DaysUntilNextRotation float64 `json:"days_until_next_rotation"`
-	// The number of days between key rotations.
-	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
-	// The timestamp of the previous key rotation.
-	LastKeyRotationAt time.Time                        `json:"last_key_rotation_at" format:"date-time"`
-	Result            AccessKeyGetResponseUnion        `json:"result"`
-	JSON              accessKeyGetResponseEnvelopeJSON `json:"-"`
+	Result  AccessKeyGetResponse                `json:"result"`
+	JSON    accessKeyGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // accessKeyGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AccessKeyGetResponseEnvelope]
 type accessKeyGetResponseEnvelopeJSON struct {
-	Errors                  apijson.Field
-	Messages                apijson.Field
-	Success                 apijson.Field
-	DaysUntilNextRotation   apijson.Field
-	KeyRotationIntervalDays apijson.Field
-	LastKeyRotationAt       apijson.Field
-	Result                  apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *AccessKeyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
@@ -269,28 +282,19 @@ type AccessKeyRotateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessKeyRotateResponseEnvelopeSuccess `json:"success,required"`
-	// The number of days until the next key rotation.
-	DaysUntilNextRotation float64 `json:"days_until_next_rotation"`
-	// The number of days between key rotations.
-	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
-	// The timestamp of the previous key rotation.
-	LastKeyRotationAt time.Time                           `json:"last_key_rotation_at" format:"date-time"`
-	Result            AccessKeyRotateResponseUnion        `json:"result"`
-	JSON              accessKeyRotateResponseEnvelopeJSON `json:"-"`
+	Result  AccessKeyRotateResponse                `json:"result"`
+	JSON    accessKeyRotateResponseEnvelopeJSON    `json:"-"`
 }
 
 // accessKeyRotateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AccessKeyRotateResponseEnvelope]
 type accessKeyRotateResponseEnvelopeJSON struct {
-	Errors                  apijson.Field
-	Messages                apijson.Field
-	Success                 apijson.Field
-	DaysUntilNextRotation   apijson.Field
-	KeyRotationIntervalDays apijson.Field
-	LastKeyRotationAt       apijson.Field
-	Result                  apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *AccessKeyRotateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {

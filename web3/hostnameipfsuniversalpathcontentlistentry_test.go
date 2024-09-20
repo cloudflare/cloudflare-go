@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/web3"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/web3"
 )
 
 func TestHostnameIPFSUniversalPathContentListEntryNewWithOptionalParams(t *testing.T) {
@@ -30,8 +30,8 @@ func TestHostnameIPFSUniversalPathContentListEntryNewWithOptionalParams(t *testi
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		web3.HostnameIPFSUniversalPathContentListEntryNewParams{
+			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 			Type:        cloudflare.F(web3.HostnameIPFSUniversalPathContentListEntryNewParamsTypeCid),
 			Description: cloudflare.F("this is my content list entry"),
@@ -63,8 +63,8 @@ func TestHostnameIPFSUniversalPathContentListEntryUpdateWithOptionalParams(t *te
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		web3.HostnameIPFSUniversalPathContentListEntryUpdateParams{
+			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 			Type:        cloudflare.F(web3.HostnameIPFSUniversalPathContentListEntryUpdateParamsTypeCid),
 			Description: cloudflare.F("this is my content list entry"),
@@ -95,7 +95,9 @@ func TestHostnameIPFSUniversalPathContentListEntryList(t *testing.T) {
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		web3.HostnameIPFSUniversalPathContentListEntryListParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -123,7 +125,9 @@ func TestHostnameIPFSUniversalPathContentListEntryDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		web3.HostnameIPFSUniversalPathContentListEntryDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -151,7 +155,9 @@ func TestHostnameIPFSUniversalPathContentListEntryGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		web3.HostnameIPFSUniversalPathContentListEntryGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

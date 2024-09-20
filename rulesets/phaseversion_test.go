@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/rulesets"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/rulesets"
 )
 
 func TestPhaseVersionListWithOptionalParams(t *testing.T) {
@@ -30,7 +30,7 @@ func TestPhaseVersionListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.Phases.Versions.List(
 		context.TODO(),
-		rulesets.PhaseHTTPRequestFirewallCustom,
+		rulesets.PhaseDDoSL4,
 		rulesets.PhaseVersionListParams{
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -60,7 +60,7 @@ func TestPhaseVersionGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.Phases.Versions.Get(
 		context.TODO(),
-		rulesets.PhaseHTTPRequestFirewallCustom,
+		rulesets.PhaseDDoSL4,
 		"1",
 		rulesets.PhaseVersionGetParams{
 			AccountID: cloudflare.F("account_id"),

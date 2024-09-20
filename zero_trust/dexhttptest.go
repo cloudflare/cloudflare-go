@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DEXHTTPTestService contains methods and other services that help with
@@ -71,10 +71,10 @@ type HTTPDetails struct {
 	// The HTTP method to use when running the test
 	Method string `json:"method"`
 	// The name of the HTTP synthetic application test
-	Name           string                    `json:"name"`
-	TargetPolicies []DeviceExperienceMonitor `json:"target_policies,nullable"`
-	Targeted       bool                      `json:"targeted"`
-	JSON           httpDetailsJSON           `json:"-"`
+	Name           string                     `json:"name"`
+	TargetPolicies []DigitalExperienceMonitor `json:"target_policies,nullable"`
+	Targeted       bool                       `json:"targeted"`
+	JSON           httpDetailsJSON            `json:"-"`
 }
 
 // httpDetailsJSON contains the JSON metadata for the struct [HTTPDetails]

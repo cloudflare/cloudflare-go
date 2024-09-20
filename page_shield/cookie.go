@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // CookieService contains methods and other services that help with interacting
@@ -251,8 +251,7 @@ type CookieListParams struct {
 	Direction param.Field[CookieListParamsDirection] `query:"direction"`
 	// Filters the returned cookies that match the specified domain attribute
 	Domain param.Field[string] `query:"domain"`
-	// Export the list of cookies as a file. Cannot be used with per_page or page
-	// options.
+	// Export the list of cookies as a file.
 	Export param.Field[CookieListParamsExport] `query:"export"`
 	// Includes cookies that match one or more URL-encoded hostnames separated by
 	// commas.
@@ -270,6 +269,10 @@ type CookieListParams struct {
 	// The field used to sort returned cookies.
 	OrderBy param.Field[CookieListParamsOrderBy] `query:"order_by"`
 	// The current page number of the paginated results.
+	//
+	// We additionally support a special value "all". When "all" is used, the API will
+	// return all the cookies with the applied filters in a single page. This feature
+	// is best-effort and it may only work for zones with a low number of cookies
 	Page param.Field[string] `query:"page"`
 	// Includes connections that match one or more page URLs (separated by commas)
 	// where they were last seen
@@ -314,8 +317,7 @@ func (r CookieListParamsDirection) IsKnown() bool {
 	return false
 }
 
-// Export the list of cookies as a file. Cannot be used with per_page or page
-// options.
+// Export the list of cookies as a file.
 type CookieListParamsExport string
 
 const (

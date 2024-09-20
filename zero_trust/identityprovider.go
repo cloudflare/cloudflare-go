@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -229,8 +229,8 @@ type AzureAD struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig  `json:"scim_config"`
-	JSON       azureADJSON `json:"-"`
+	SCIMConfig IdentityProviderSCIMConfig `json:"scim_config"`
+	JSON       azureADJSON                `json:"-"`
 }
 
 // azureADJSON contains the JSON metadata for the struct [AzureAD]
@@ -343,11 +343,9 @@ type AzureADParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r AzureADParam) MarshalJSON() (data []byte, err error) {
@@ -439,7 +437,7 @@ type IdentityProvider struct {
 	Name string `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -590,7 +588,7 @@ type IdentityProviderAccessCentrify struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                         `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig         `json:"scim_config"`
 	JSON       identityProviderAccessCentrifyJSON `json:"-"`
 }
 
@@ -671,7 +669,7 @@ type IdentityProviderAccessFacebook struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                         `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig         `json:"scim_config"`
 	JSON       identityProviderAccessFacebookJSON `json:"-"`
 }
 
@@ -712,7 +710,7 @@ type IdentityProviderAccessGitHub struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                       `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig       `json:"scim_config"`
 	JSON       identityProviderAccessGitHubJSON `json:"-"`
 }
 
@@ -753,7 +751,7 @@ type IdentityProviderAccessGoogle struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                       `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig       `json:"scim_config"`
 	JSON       identityProviderAccessGoogleJSON `json:"-"`
 }
 
@@ -828,7 +826,7 @@ type IdentityProviderAccessGoogleApps struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                           `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig           `json:"scim_config"`
 	JSON       identityProviderAccessGoogleAppsJSON `json:"-"`
 }
 
@@ -906,7 +904,7 @@ type IdentityProviderAccessLinkedin struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                         `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig         `json:"scim_config"`
 	JSON       identityProviderAccessLinkedinJSON `json:"-"`
 }
 
@@ -947,7 +945,7 @@ type IdentityProviderAccessOIDC struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                     `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig     `json:"scim_config"`
 	JSON       identityProviderAccessOIDCJSON `json:"-"`
 }
 
@@ -1034,7 +1032,7 @@ type IdentityProviderAccessOkta struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                     `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig     `json:"scim_config"`
 	JSON       identityProviderAccessOktaJSON `json:"-"`
 }
 
@@ -1115,7 +1113,7 @@ type IdentityProviderAccessOnelogin struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                         `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig         `json:"scim_config"`
 	JSON       identityProviderAccessOneloginJSON `json:"-"`
 }
 
@@ -1193,7 +1191,7 @@ type IdentityProviderAccessPingone struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                        `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig        `json:"scim_config"`
 	JSON       identityProviderAccessPingoneJSON `json:"-"`
 }
 
@@ -1271,7 +1269,7 @@ type IdentityProviderAccessSAML struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                     `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig     `json:"scim_config"`
 	JSON       identityProviderAccessSAMLJSON `json:"-"`
 }
 
@@ -1383,7 +1381,7 @@ type IdentityProviderAccessYandex struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                       `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig       `json:"scim_config"`
 	JSON       identityProviderAccessYandexJSON `json:"-"`
 }
 
@@ -1424,7 +1422,7 @@ type IdentityProviderAccessOnetimepin struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                           `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig           `json:"scim_config"`
 	JSON       identityProviderAccessOnetimepinJSON `json:"-"`
 }
 
@@ -1452,13 +1450,11 @@ func (r IdentityProviderAccessOnetimepin) implementsZeroTrustIdentityProvider() 
 
 type IdentityProviderParam struct {
 	Config param.Field[interface{}] `json:"config"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -1500,11 +1496,9 @@ type IdentityProviderAccessCentrifyParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessCentrifyParam) MarshalJSON() (data []byte, err error) {
@@ -1546,11 +1540,9 @@ type IdentityProviderAccessFacebookParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessFacebookParam) MarshalJSON() (data []byte, err error) {
@@ -1570,11 +1562,9 @@ type IdentityProviderAccessGitHubParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessGitHubParam) MarshalJSON() (data []byte, err error) {
@@ -1594,11 +1584,9 @@ type IdentityProviderAccessGoogleParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessGoogleParam) MarshalJSON() (data []byte, err error) {
@@ -1636,11 +1624,9 @@ type IdentityProviderAccessGoogleAppsParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessGoogleAppsParam) MarshalJSON() (data []byte, err error) {
@@ -1680,11 +1666,9 @@ type IdentityProviderAccessLinkedinParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessLinkedinParam) MarshalJSON() (data []byte, err error) {
@@ -1704,11 +1688,9 @@ type IdentityProviderAccessOIDCParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOIDCParam) MarshalJSON() (data []byte, err error) {
@@ -1754,11 +1736,9 @@ type IdentityProviderAccessOktaParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOktaParam) MarshalJSON() (data []byte, err error) {
@@ -1800,11 +1780,9 @@ type IdentityProviderAccessOneloginParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOneloginParam) MarshalJSON() (data []byte, err error) {
@@ -1844,11 +1822,9 @@ type IdentityProviderAccessPingoneParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessPingoneParam) MarshalJSON() (data []byte, err error) {
@@ -1888,11 +1864,9 @@ type IdentityProviderAccessSAMLParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessSAMLParam) MarshalJSON() (data []byte, err error) {
@@ -1950,11 +1924,9 @@ type IdentityProviderAccessYandexParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessYandexParam) MarshalJSON() (data []byte, err error) {
@@ -1974,11 +1946,9 @@ type IdentityProviderAccessOnetimepinParam struct {
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
-	// UUID
-	ID param.Field[string] `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[SCIMConfigParam] `json:"scim_config"`
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderAccessOnetimepinParam) MarshalJSON() (data []byte, err error) {
@@ -1986,6 +1956,75 @@ func (r IdentityProviderAccessOnetimepinParam) MarshalJSON() (data []byte, err e
 }
 
 func (r IdentityProviderAccessOnetimepinParam) implementsZeroTrustIdentityProviderUnionParam() {}
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type IdentityProviderSCIMConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                           `json:"user_deprovision"`
+	JSON            identityProviderSCIMConfigJSON `json:"-"`
+}
+
+// identityProviderSCIMConfigJSON contains the JSON metadata for the struct
+// [IdentityProviderSCIMConfig]
+type identityProviderSCIMConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *IdentityProviderSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderSCIMConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type IdentityProviderSCIMConfigParam struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r IdentityProviderSCIMConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
@@ -2017,74 +2056,6 @@ func (r IdentityProviderType) IsKnown() bool {
 	return false
 }
 
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type SCIMConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool           `json:"user_deprovision"`
-	JSON            scimConfigJSON `json:"-"`
-}
-
-// scimConfigJSON contains the JSON metadata for the struct [SCIMConfig]
-type scimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *SCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scimConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type SCIMConfigParam struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r SCIMConfigParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type IdentityProviderListResponse struct {
 	// This field can have the runtime type of [AzureADConfig],
 	// [IdentityProviderListResponseAccessCentrifyConfig], [GenericOAuthConfig],
@@ -2102,7 +2073,7 @@ type IdentityProviderListResponse struct {
 	Name string `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
@@ -2247,7 +2218,7 @@ type IdentityProviderListResponseAccessCentrify struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                     `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                     `json:"scim_config"`
 	JSON       identityProviderListResponseAccessCentrifyJSON `json:"-"`
 }
 
@@ -2329,7 +2300,7 @@ type IdentityProviderListResponseAccessFacebook struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                     `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                     `json:"scim_config"`
 	JSON       identityProviderListResponseAccessFacebookJSON `json:"-"`
 }
 
@@ -2371,7 +2342,7 @@ type IdentityProviderListResponseAccessGitHub struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                   `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                   `json:"scim_config"`
 	JSON       identityProviderListResponseAccessGitHubJSON `json:"-"`
 }
 
@@ -2412,7 +2383,7 @@ type IdentityProviderListResponseAccessGoogle struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                   `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                   `json:"scim_config"`
 	JSON       identityProviderListResponseAccessGoogleJSON `json:"-"`
 }
 
@@ -2487,7 +2458,7 @@ type IdentityProviderListResponseAccessGoogleApps struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                       `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                       `json:"scim_config"`
 	JSON       identityProviderListResponseAccessGoogleAppsJSON `json:"-"`
 }
 
@@ -2566,7 +2537,7 @@ type IdentityProviderListResponseAccessLinkedin struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                     `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                     `json:"scim_config"`
 	JSON       identityProviderListResponseAccessLinkedinJSON `json:"-"`
 }
 
@@ -2608,7 +2579,7 @@ type IdentityProviderListResponseAccessOIDC struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                 `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                 `json:"scim_config"`
 	JSON       identityProviderListResponseAccessOIDCJSON `json:"-"`
 }
 
@@ -2695,7 +2666,7 @@ type IdentityProviderListResponseAccessOkta struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                 `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                 `json:"scim_config"`
 	JSON       identityProviderListResponseAccessOktaJSON `json:"-"`
 }
 
@@ -2776,7 +2747,7 @@ type IdentityProviderListResponseAccessOnelogin struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                     `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                     `json:"scim_config"`
 	JSON       identityProviderListResponseAccessOneloginJSON `json:"-"`
 }
 
@@ -2855,7 +2826,7 @@ type IdentityProviderListResponseAccessPingone struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                    `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                    `json:"scim_config"`
 	JSON       identityProviderListResponseAccessPingoneJSON `json:"-"`
 }
 
@@ -2934,7 +2905,7 @@ type IdentityProviderListResponseAccessSAML struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                 `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                 `json:"scim_config"`
 	JSON       identityProviderListResponseAccessSAMLJSON `json:"-"`
 }
 
@@ -3047,7 +3018,7 @@ type IdentityProviderListResponseAccessYandex struct {
 	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig SCIMConfig                                   `json:"scim_config"`
+	SCIMConfig IdentityProviderSCIMConfig                   `json:"scim_config"`
 	JSON       identityProviderListResponseAccessYandexJSON `json:"-"`
 }
 

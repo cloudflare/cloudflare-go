@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/load_balancers"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestPoolNewWithOptionalParams(t *testing.T) {
@@ -69,7 +69,7 @@ func TestPoolNewWithOptionalParams(t *testing.T) {
 		}),
 		Longitude:         cloudflare.F(0.000000),
 		MinimumOrigins:    cloudflare.F(int64(0)),
-		Monitor:           cloudflare.F[any](map[string]interface{}{}),
+		Monitor:           cloudflare.F("monitor"),
 		NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 		NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
 			Origin: cloudflare.F(load_balancers.FilterOptionsParam{
@@ -141,7 +141,7 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
 				Weight:           cloudflare.F(0.600000),
 			}}),
-			CheckRegions: cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWeu, load_balancers.CheckRegionEnam}),
+			CheckRegions: cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWnam, load_balancers.CheckRegionEnam}),
 			Description:  cloudflare.F("Primary data center - Provider XYZ"),
 			Enabled:      cloudflare.F(false),
 			Latitude:     cloudflare.F(0.000000),
@@ -153,7 +153,7 @@ func TestPoolUpdateWithOptionalParams(t *testing.T) {
 			}),
 			Longitude:         cloudflare.F(0.000000),
 			MinimumOrigins:    cloudflare.F(int64(0)),
-			Monitor:           cloudflare.F[any](map[string]interface{}{}),
+			Monitor:           cloudflare.F("monitor"),
 			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 			NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{
 				Origin: cloudflare.F(load_balancers.FilterOptionsParam{
@@ -194,7 +194,7 @@ func TestPoolListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Pools.List(context.TODO(), load_balancers.PoolListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Monitor:   cloudflare.F[any](map[string]interface{}{}),
+		Monitor:   cloudflare.F("monitor"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -252,7 +252,7 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 		"17b5962d775c646f3f9725cbc7a53df4",
 		load_balancers.PoolEditParams{
 			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CheckRegions: cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWeu, load_balancers.CheckRegionEnam}),
+			CheckRegions: cloudflare.F([]load_balancers.CheckRegion{load_balancers.CheckRegionWnam, load_balancers.CheckRegionEnam}),
 			Description:  cloudflare.F("Primary data center - Provider XYZ"),
 			Enabled:      cloudflare.F(false),
 			Latitude:     cloudflare.F(0.000000),
@@ -264,7 +264,7 @@ func TestPoolEditWithOptionalParams(t *testing.T) {
 			}),
 			Longitude:         cloudflare.F(0.000000),
 			MinimumOrigins:    cloudflare.F(int64(0)),
-			Monitor:           cloudflare.F[any](map[string]interface{}{}),
+			Monitor:           cloudflare.F("monitor"),
 			Name:              cloudflare.F("primary-dc-1"),
 			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
 			NotificationFilter: cloudflare.F(load_balancers.NotificationFilterParam{

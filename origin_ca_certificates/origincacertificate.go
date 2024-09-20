@@ -8,18 +8,16 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/cloudflare/cloudflare-go/v2/ssl"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v3/ssl"
 )
 
 // OriginCACertificateService contains methods and other services that help with
@@ -43,7 +41,7 @@ func NewOriginCACertificateService(opts ...option.RequestOption) (r *OriginCACer
 
 // Create an Origin CA certificate. Use your Origin CA Key as your User Service Key
 // when calling this endpoint ([see above](#requests)).
-func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACertificateNewParams, opts ...option.RequestOption) (res *OriginCACertificateNewResponseUnion, err error) {
+func (r *OriginCACertificateService) New(ctx context.Context, body OriginCACertificateNewParams, opts ...option.RequestOption) (res *OriginCACertificate, err error) {
 	var env OriginCACertificateNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	path := "certificates"
@@ -104,7 +102,7 @@ func (r *OriginCACertificateService) Delete(ctx context.Context, certificateID s
 // Get an existing Origin CA certificate by its serial number. Use your Origin CA
 // Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
-func (r *OriginCACertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificateGetResponseUnion, err error) {
+func (r *OriginCACertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *OriginCACertificate, err error) {
 	var env OriginCACertificateGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if certificateID == "" {
@@ -125,7 +123,7 @@ type OriginCACertificate struct {
 	Csr string `json:"csr,required"`
 	// Array of hostnames or wildcard names (e.g., \*.example.com) bound to the
 	// certificate.
-	Hostnames []interface{} `json:"hostnames,required"`
+	Hostnames []string `json:"hostnames,required"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
 	RequestType shared.CertificateRequestType `json:"request_type,required"`
@@ -136,7 +134,7 @@ type OriginCACertificate struct {
 	// The Origin CA certificate. Will be newline-encoded.
 	Certificate string `json:"certificate"`
 	// When the certificate will expire.
-	ExpiresOn time.Time               `json:"expires_on" format:"date-time"`
+	ExpiresOn string                  `json:"expires_on"`
 	JSON      originCACertificateJSON `json:"-"`
 }
 
@@ -162,34 +160,19 @@ func (r originCACertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by
-// [origin_ca_certificates.OriginCACertificateNewResponseUnknown] or
-// [shared.UnionString].
-type OriginCACertificateNewResponseUnion interface {
-	ImplementsOriginCACertificatesOriginCACertificateNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*OriginCACertificateNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type OriginCACertificateDeleteResponse struct {
 	// Identifier
-	ID   string                                `json:"id"`
-	JSON originCACertificateDeleteResponseJSON `json:"-"`
+	ID string `json:"id"`
+	// When the certificate was revoked.
+	RevokedAt time.Time                             `json:"revoked_at" format:"date-time"`
+	JSON      originCACertificateDeleteResponseJSON `json:"-"`
 }
 
 // originCACertificateDeleteResponseJSON contains the JSON metadata for the struct
 // [OriginCACertificateDeleteResponse]
 type originCACertificateDeleteResponseJSON struct {
 	ID          apijson.Field
+	RevokedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -202,30 +185,12 @@ func (r originCACertificateDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by
-// [origin_ca_certificates.OriginCACertificateGetResponseUnknown] or
-// [shared.UnionString].
-type OriginCACertificateGetResponseUnion interface {
-	ImplementsOriginCACertificatesOriginCACertificateGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*OriginCACertificateGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type OriginCACertificateNewParams struct {
 	// The Certificate Signing Request (CSR). Must be newline-encoded.
 	Csr param.Field[string] `json:"csr"`
 	// Array of hostnames or wildcard names (e.g., \*.example.com) bound to the
 	// certificate.
-	Hostnames param.Field[[]interface{}] `json:"hostnames"`
+	Hostnames param.Field[[]string] `json:"hostnames"`
 	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 	// or "keyless-certificate" (for Keyless SSL servers).
 	RequestType param.Field[shared.CertificateRequestType] `json:"request_type"`
@@ -242,7 +207,7 @@ type OriginCACertificateNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  OriginCACertificateNewResponseUnion           `json:"result"`
+	Result  OriginCACertificate                           `json:"result"`
 	JSON    originCACertificateNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -295,20 +260,13 @@ func (r OriginCACertificateListParams) URLQuery() (v url.Values) {
 }
 
 type OriginCACertificateDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success OriginCACertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  OriginCACertificateDeleteResponse                `json:"result"`
-	JSON    originCACertificateDeleteResponseEnvelopeJSON    `json:"-"`
+	Result OriginCACertificateDeleteResponse             `json:"result"`
+	JSON   originCACertificateDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // originCACertificateDeleteResponseEnvelopeJSON contains the JSON metadata for the
 // struct [OriginCACertificateDeleteResponseEnvelope]
 type originCACertificateDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -322,27 +280,12 @@ func (r originCACertificateDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
-type OriginCACertificateDeleteResponseEnvelopeSuccess bool
-
-const (
-	OriginCACertificateDeleteResponseEnvelopeSuccessTrue OriginCACertificateDeleteResponseEnvelopeSuccess = true
-)
-
-func (r OriginCACertificateDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case OriginCACertificateDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
 type OriginCACertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success OriginCACertificateGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  OriginCACertificateGetResponseUnion           `json:"result"`
+	Result  OriginCACertificate                           `json:"result"`
 	JSON    originCACertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 

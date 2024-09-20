@@ -10,12 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // LogService contains methods and other services that help with interacting with
@@ -38,7 +38,7 @@ func NewLogService(opts ...option.RequestOption) (r *LogService) {
 }
 
 // List Gateway Logs
-func (r *LogService) List(ctx context.Context, id string, params LogListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[LogListResponse], err error) {
+func (r *LogService) List(ctx context.Context, gatewayID string, params LogListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[LogListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -46,11 +46,11 @@ func (r *LogService) List(ctx context.Context, id string, params LogListParams, 
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if gatewayID == "" {
+		err = errors.New("missing required gateway_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs", params.AccountID, id)
+	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs", params.AccountID, gatewayID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -64,8 +64,8 @@ func (r *LogService) List(ctx context.Context, id string, params LogListParams, 
 }
 
 // List Gateway Logs
-func (r *LogService) ListAutoPaging(ctx context.Context, id string, params LogListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[LogListResponse] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, id, params, opts...))
+func (r *LogService) ListAutoPaging(ctx context.Context, gatewayID string, params LogListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[LogListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, gatewayID, params, opts...))
 }
 
 type LogListResponse struct {
@@ -79,9 +79,12 @@ type LogListResponse struct {
 	Request             string              `json:"request,required"`
 	Response            string              `json:"response,required"`
 	Success             bool                `json:"success,required"`
-	TokensIn            int64               `json:"tokens_in,required"`
-	TokensOut           int64               `json:"tokens_out,required"`
+	TokensIn            int64               `json:"tokens_in,required,nullable"`
+	TokensOut           int64               `json:"tokens_out,required,nullable"`
+	Cost                float64             `json:"cost"`
+	CustomCost          bool                `json:"custom_cost"`
 	Metadata            string              `json:"metadata"`
+	ModelType           string              `json:"model_type"`
 	RequestContentType  string              `json:"request_content_type"`
 	RequestType         string              `json:"request_type"`
 	ResponseContentType string              `json:"response_content_type"`
@@ -104,7 +107,10 @@ type logListResponseJSON struct {
 	Success             apijson.Field
 	TokensIn            apijson.Field
 	TokensOut           apijson.Field
+	Cost                apijson.Field
+	CustomCost          apijson.Field
 	Metadata            apijson.Field
+	ModelType           apijson.Field
 	RequestContentType  apijson.Field
 	RequestType         apijson.Field
 	ResponseContentType apijson.Field
@@ -123,16 +129,34 @@ func (r logListResponseJSON) RawJSON() string {
 }
 
 type LogListParams struct {
-	AccountID param.Field[string]                 `path:"account_id,required"`
-	Cached    param.Field[bool]                   `query:"cached"`
-	Direction param.Field[LogListParamsDirection] `query:"direction"`
-	EndDate   param.Field[time.Time]              `query:"end_date" format:"date-time"`
-	OrderBy   param.Field[LogListParamsOrderBy]   `query:"order_by"`
-	Page      param.Field[int64]                  `query:"page"`
-	PerPage   param.Field[int64]                  `query:"per_page"`
-	Search    param.Field[string]                 `query:"search"`
-	StartDate param.Field[time.Time]              `query:"start_date" format:"date-time"`
-	Success   param.Field[bool]                   `query:"success"`
+	AccountID           param.Field[string]                        `path:"account_id,required"`
+	Cached              param.Field[bool]                          `query:"cached"`
+	Direction           param.Field[LogListParamsDirection]        `query:"direction"`
+	EndDate             param.Field[time.Time]                     `query:"end_date" format:"date-time"`
+	Feedback            param.Field[LogListParamsFeedback]         `query:"feedback"`
+	MaxCost             param.Field[float64]                       `query:"max_cost"`
+	MaxDuration         param.Field[float64]                       `query:"max_duration"`
+	MaxTokensIn         param.Field[float64]                       `query:"max_tokens_in"`
+	MaxTokensOut        param.Field[float64]                       `query:"max_tokens_out"`
+	MaxTotalTokens      param.Field[float64]                       `query:"max_total_tokens"`
+	MetaInfo            param.Field[bool]                          `query:"meta_info"`
+	MinCost             param.Field[float64]                       `query:"min_cost"`
+	MinDuration         param.Field[float64]                       `query:"min_duration"`
+	MinTokensIn         param.Field[float64]                       `query:"min_tokens_in"`
+	MinTokensOut        param.Field[float64]                       `query:"min_tokens_out"`
+	MinTotalTokens      param.Field[float64]                       `query:"min_total_tokens"`
+	Model               param.Field[string]                        `query:"model"`
+	ModelType           param.Field[string]                        `query:"model_type"`
+	OrderBy             param.Field[LogListParamsOrderBy]          `query:"order_by"`
+	OrderByDirection    param.Field[LogListParamsOrderByDirection] `query:"order_by_direction"`
+	Page                param.Field[int64]                         `query:"page"`
+	PerPage             param.Field[int64]                         `query:"per_page"`
+	Provider            param.Field[string]                        `query:"provider"`
+	RequestContentType  param.Field[string]                        `query:"request_content_type"`
+	ResponseContentType param.Field[string]                        `query:"response_content_type"`
+	Search              param.Field[string]                        `query:"search"`
+	StartDate           param.Field[time.Time]                     `query:"start_date" format:"date-time"`
+	Success             param.Field[bool]                          `query:"success"`
 }
 
 // URLQuery serializes [LogListParams]'s query parameters as `url.Values`.
@@ -158,16 +182,50 @@ func (r LogListParamsDirection) IsKnown() bool {
 	return false
 }
 
+type LogListParamsFeedback float64
+
+const (
+	LogListParamsFeedback0 LogListParamsFeedback = 0
+	LogListParamsFeedback1 LogListParamsFeedback = 1
+)
+
+func (r LogListParamsFeedback) IsKnown() bool {
+	switch r {
+	case LogListParamsFeedback0, LogListParamsFeedback1:
+		return true
+	}
+	return false
+}
+
 type LogListParamsOrderBy string
 
 const (
 	LogListParamsOrderByCreatedAt LogListParamsOrderBy = "created_at"
 	LogListParamsOrderByProvider  LogListParamsOrderBy = "provider"
+	LogListParamsOrderByModel     LogListParamsOrderBy = "model"
+	LogListParamsOrderByModelType LogListParamsOrderBy = "model_type"
+	LogListParamsOrderBySuccess   LogListParamsOrderBy = "success"
+	LogListParamsOrderByCached    LogListParamsOrderBy = "cached"
 )
 
 func (r LogListParamsOrderBy) IsKnown() bool {
 	switch r {
-	case LogListParamsOrderByCreatedAt, LogListParamsOrderByProvider:
+	case LogListParamsOrderByCreatedAt, LogListParamsOrderByProvider, LogListParamsOrderByModel, LogListParamsOrderByModelType, LogListParamsOrderBySuccess, LogListParamsOrderByCached:
+		return true
+	}
+	return false
+}
+
+type LogListParamsOrderByDirection string
+
+const (
+	LogListParamsOrderByDirectionAsc  LogListParamsOrderByDirection = "asc"
+	LogListParamsOrderByDirectionDesc LogListParamsOrderByDirection = "desc"
+)
+
+func (r LogListParamsOrderByDirection) IsKnown() bool {
+	switch r {
+	case LogListParamsOrderByDirectionAsc, LogListParamsOrderByDirectionDesc:
 		return true
 	}
 	return false

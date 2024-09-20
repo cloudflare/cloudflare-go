@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/stream"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/stream"
 )
 
 func TestTokenNewWithOptionalParams(t *testing.T) {
@@ -34,17 +34,17 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ID:        cloudflare.F("ab0d4ef71g4425f8dcba9041231813000"),
 			AccessRules: cloudflare.F([]stream.TokenNewParamsAccessRule{{
-				Action:  cloudflare.F(stream.TokenNewParamsAccessRulesActionBlock),
+				Action:  cloudflare.F(stream.TokenNewParamsAccessRulesActionAllow),
 				Country: cloudflare.F([]string{"US", "MX"}),
 				IP:      cloudflare.F([]string{"string", "string", "string"}),
-				Type:    cloudflare.F(stream.TokenNewParamsAccessRulesTypeIPGeoipCountry),
+				Type:    cloudflare.F(stream.TokenNewParamsAccessRulesTypeAny),
 			}, {
 				Action:  cloudflare.F(stream.TokenNewParamsAccessRulesActionAllow),
 				Country: cloudflare.F([]string{"string", "string", "string"}),
 				IP:      cloudflare.F([]string{"93.184.216.0/24", "2400:cb00::/32"}),
-				Type:    cloudflare.F(stream.TokenNewParamsAccessRulesTypeIPSrc),
+				Type:    cloudflare.F(stream.TokenNewParamsAccessRulesTypeAny),
 			}, {
-				Action:  cloudflare.F(stream.TokenNewParamsAccessRulesActionBlock),
+				Action:  cloudflare.F(stream.TokenNewParamsAccessRulesActionAllow),
 				Country: cloudflare.F([]string{"string", "string", "string"}),
 				IP:      cloudflare.F([]string{"string", "string", "string"}),
 				Type:    cloudflare.F(stream.TokenNewParamsAccessRulesTypeAny),

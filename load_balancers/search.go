@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // SearchService contains methods and other services that help with interacting
@@ -37,7 +37,7 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 }
 
 // Search for Load Balancing resources.
-func (r *SearchService) Get(ctx context.Context, params SearchGetParams, opts ...option.RequestOption) (res *[]SearchGetResponse, err error) {
+func (r *SearchService) Get(ctx context.Context, params SearchGetParams, opts ...option.RequestOption) (res *SearchGetResponse, err error) {
 	var env SearchGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -53,13 +53,100 @@ func (r *SearchService) Get(ctx context.Context, params SearchGetParams, opts ..
 	return
 }
 
-type SearchGetResponse = interface{}
+type SearchGetResponse struct {
+	// A list of resources matching the search query.
+	Resources []SearchGetResponseResource `json:"resources"`
+	JSON      searchGetResponseJSON       `json:"-"`
+}
+
+// searchGetResponseJSON contains the JSON metadata for the struct
+// [SearchGetResponse]
+type searchGetResponseJSON struct {
+	Resources   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SearchGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r searchGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// A reference to a load balancer resource.
+type SearchGetResponseResource struct {
+	// When listed as a reference, the type (direction) of the reference.
+	ReferenceType SearchGetResponseResourcesReferenceType `json:"reference_type"`
+	// A list of references to (referrer) or from (referral) this resource.
+	References []interface{} `json:"references"`
+	ResourceID string        `json:"resource_id"`
+	// The human-identifiable name of the resource.
+	ResourceName string `json:"resource_name"`
+	// The type of the resource.
+	ResourceType SearchGetResponseResourcesResourceType `json:"resource_type"`
+	JSON         searchGetResponseResourceJSON          `json:"-"`
+}
+
+// searchGetResponseResourceJSON contains the JSON metadata for the struct
+// [SearchGetResponseResource]
+type searchGetResponseResourceJSON struct {
+	ReferenceType apijson.Field
+	References    apijson.Field
+	ResourceID    apijson.Field
+	ResourceName  apijson.Field
+	ResourceType  apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *SearchGetResponseResource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r searchGetResponseResourceJSON) RawJSON() string {
+	return r.raw
+}
+
+// When listed as a reference, the type (direction) of the reference.
+type SearchGetResponseResourcesReferenceType string
+
+const (
+	SearchGetResponseResourcesReferenceTypeReferral SearchGetResponseResourcesReferenceType = "referral"
+	SearchGetResponseResourcesReferenceTypeReferrer SearchGetResponseResourcesReferenceType = "referrer"
+)
+
+func (r SearchGetResponseResourcesReferenceType) IsKnown() bool {
+	switch r {
+	case SearchGetResponseResourcesReferenceTypeReferral, SearchGetResponseResourcesReferenceTypeReferrer:
+		return true
+	}
+	return false
+}
+
+// The type of the resource.
+type SearchGetResponseResourcesResourceType string
+
+const (
+	SearchGetResponseResourcesResourceTypeLoadBalancer SearchGetResponseResourcesResourceType = "load_balancer"
+	SearchGetResponseResourcesResourceTypeMonitor      SearchGetResponseResourcesResourceType = "monitor"
+	SearchGetResponseResourcesResourceTypePool         SearchGetResponseResourcesResourceType = "pool"
+)
+
+func (r SearchGetResponseResourcesResourceType) IsKnown() bool {
+	switch r {
+	case SearchGetResponseResourcesResourceTypeLoadBalancer, SearchGetResponseResourcesResourceTypeMonitor, SearchGetResponseResourcesResourceTypePool:
+		return true
+	}
+	return false
+}
 
 type SearchGetParams struct {
 	// Identifier
 	AccountID    param.Field[string]                      `path:"account_id,required"`
-	Page         param.Field[interface{}]                 `query:"page"`
-	PerPage      param.Field[interface{}]                 `query:"per_page"`
+	Page         param.Field[float64]                     `query:"page"`
+	PerPage      param.Field[float64]                     `query:"per_page"`
 	SearchParams param.Field[SearchGetParamsSearchParams] `query:"search_params"`
 }
 
@@ -108,7 +195,7 @@ func (r SearchGetParamsSearchParamsReferences) IsKnown() bool {
 type SearchGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []SearchGetResponse   `json:"result,required,nullable"`
+	Result   SearchGetResponse     `json:"result,required"`
 	// Whether the API call was successful
 	Success    SearchGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SearchGetResponseEnvelopeResultInfo `json:"result_info"`

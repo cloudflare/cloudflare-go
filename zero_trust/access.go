@@ -5,9 +5,9 @@ package zero_trust
 import (
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -18,18 +18,19 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAccessService] method instead.
 type AccessService struct {
-	Options       []option.RequestOption
-	Applications  *AccessApplicationService
-	Certificates  *AccessCertificateService
-	Groups        *AccessGroupService
-	ServiceTokens *AccessServiceTokenService
-	Bookmarks     *AccessBookmarkService
-	Keys          *AccessKeyService
-	Logs          *AccessLogService
-	Users         *AccessUserService
-	CustomPages   *AccessCustomPageService
-	Tags          *AccessTagService
-	Policies      *AccessPolicyService
+	Options        []option.RequestOption
+	Infrastructure *AccessInfrastructureService
+	Applications   *AccessApplicationService
+	Certificates   *AccessCertificateService
+	Groups         *AccessGroupService
+	ServiceTokens  *AccessServiceTokenService
+	Bookmarks      *AccessBookmarkService
+	Keys           *AccessKeyService
+	Logs           *AccessLogService
+	Users          *AccessUserService
+	CustomPages    *AccessCustomPageService
+	Tags           *AccessTagService
+	Policies       *AccessPolicyService
 }
 
 // NewAccessService generates a new service that applies the given options to each
@@ -38,6 +39,7 @@ type AccessService struct {
 func NewAccessService(opts ...option.RequestOption) (r *AccessService) {
 	r = &AccessService{}
 	r.Options = opts
+	r.Infrastructure = NewAccessInfrastructureService(opts...)
 	r.Applications = NewAccessApplicationService(opts...)
 	r.Certificates = NewAccessCertificateService(opts...)
 	r.Groups = NewAccessGroupService(opts...)
@@ -424,7 +426,8 @@ func (r authenticationMethodRuleJSON) RawJSON() string {
 func (r AuthenticationMethodRule) implementsZeroTrustAccessRule() {}
 
 type AuthenticationMethodRuleAuthMethod struct {
-	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
+	// The type of authentication method
+	// https://datatracker.ietf.org/doc/html/rfc8176#section-2.
 	AuthMethod string                                 `json:"auth_method,required"`
 	JSON       authenticationMethodRuleAuthMethodJSON `json:"-"`
 }
@@ -457,7 +460,8 @@ func (r AuthenticationMethodRuleParam) MarshalJSON() (data []byte, err error) {
 func (r AuthenticationMethodRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type AuthenticationMethodRuleAuthMethodParam struct {
-	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
+	// The type of authentication method
+	// https://datatracker.ietf.org/doc/html/rfc8176#section-2.
 	AuthMethod param.Field[string] `json:"auth_method,required"`
 }
 
@@ -492,17 +496,17 @@ type AzureGroupRuleAzureAD struct {
 	// The ID of an Azure group.
 	ID string `json:"id,required"`
 	// The ID of your Azure identity provider.
-	ConnectionID string                    `json:"connection_id,required"`
-	JSON         azureGroupRuleAzureADJSON `json:"-"`
+	IdentityProviderID string                    `json:"identity_provider_id,required"`
+	JSON               azureGroupRuleAzureADJSON `json:"-"`
 }
 
 // azureGroupRuleAzureADJSON contains the JSON metadata for the struct
 // [AzureGroupRuleAzureAD]
 type azureGroupRuleAzureADJSON struct {
-	ID           apijson.Field
-	ConnectionID apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	ID                 apijson.Field
+	IdentityProviderID apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AzureGroupRuleAzureAD) UnmarshalJSON(data []byte) (err error) {
@@ -528,7 +532,7 @@ type AzureGroupRuleAzureADParam struct {
 	// The ID of an Azure group.
 	ID param.Field[string] `json:"id,required"`
 	// The ID of your Azure identity provider.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
+	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
 }
 
 func (r AzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
@@ -962,7 +966,7 @@ func (r GitHubOrganizationRule) implementsZeroTrustAccessRule() {}
 
 type GitHubOrganizationRuleGitHubOrganization struct {
 	// The ID of your Github identity provider.
-	ConnectionID string `json:"connection_id,required"`
+	IdentityProviderID string `json:"identity_provider_id,required"`
 	// The name of the organization.
 	Name string                                       `json:"name,required"`
 	JSON githubOrganizationRuleGitHubOrganizationJSON `json:"-"`
@@ -971,10 +975,10 @@ type GitHubOrganizationRuleGitHubOrganization struct {
 // githubOrganizationRuleGitHubOrganizationJSON contains the JSON metadata for the
 // struct [GitHubOrganizationRuleGitHubOrganization]
 type githubOrganizationRuleGitHubOrganizationJSON struct {
-	ConnectionID apijson.Field
-	Name         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	IdentityProviderID apijson.Field
+	Name               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *GitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
@@ -998,7 +1002,7 @@ func (r GitHubOrganizationRuleParam) implementsZeroTrustAccessRuleUnionParam() {
 
 type GitHubOrganizationRuleGitHubOrganizationParam struct {
 	// The ID of your Github identity provider.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
+	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
 	// The name of the organization.
 	Name param.Field[string] `json:"name,required"`
 }
@@ -1096,20 +1100,20 @@ func (r GSuiteGroupRuleJSON) RawJSON() string {
 func (r GSuiteGroupRule) implementsZeroTrustAccessRule() {}
 
 type GSuiteGroupRuleGSuite struct {
-	// The ID of your Google Workspace identity provider.
-	ConnectionID string `json:"connection_id,required"`
 	// The email of the Google Workspace group.
-	Email string                    `json:"email,required"`
-	JSON  GSuiteGroupRuleGSuiteJSON `json:"-"`
+	Email string `json:"email,required"`
+	// The ID of your Google Workspace identity provider.
+	IdentityProviderID string                    `json:"identity_provider_id,required"`
+	JSON               GSuiteGroupRuleGSuiteJSON `json:"-"`
 }
 
 // GSuiteGroupRuleGSuiteJSON contains the JSON metadata for the struct
 // [GSuiteGroupRuleGSuite]
 type GSuiteGroupRuleGSuiteJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	Email              apijson.Field
+	IdentityProviderID apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *GSuiteGroupRuleGSuite) UnmarshalJSON(data []byte) (err error) {
@@ -1133,10 +1137,10 @@ func (r GSuiteGroupRuleParam) MarshalJSON() (data []byte, err error) {
 func (r GSuiteGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type GSuiteGroupRuleGSuiteParam struct {
-	// The ID of your Google Workspace identity provider.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
 	// The email of the Google Workspace group.
 	Email param.Field[string] `json:"email,required"`
+	// The ID of your Google Workspace identity provider.
+	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
 }
 
 func (r GSuiteGroupRuleGSuiteParam) MarshalJSON() (data []byte, err error) {
@@ -1297,19 +1301,19 @@ func (r OktaGroupRule) implementsZeroTrustAccessRule() {}
 
 type OktaGroupRuleOkta struct {
 	// The ID of your Okta identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Okta group.
-	Email string                `json:"email,required"`
-	JSON  oktaGroupRuleOktaJSON `json:"-"`
+	IdentityProviderID string `json:"identity_provider_id,required"`
+	// The name of the Okta group.
+	Name string                `json:"name,required"`
+	JSON oktaGroupRuleOktaJSON `json:"-"`
 }
 
 // oktaGroupRuleOktaJSON contains the JSON metadata for the struct
 // [OktaGroupRuleOkta]
 type oktaGroupRuleOktaJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	IdentityProviderID apijson.Field
+	Name               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *OktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
@@ -1333,9 +1337,9 @@ func (r OktaGroupRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
 type OktaGroupRuleOktaParam struct {
 	// The ID of your Okta identity provider.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// The email of the Okta group.
-	Email param.Field[string] `json:"email,required"`
+	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
+	// The name of the Okta group.
+	Name param.Field[string] `json:"name,required"`
 }
 
 func (r OktaGroupRuleOktaParam) MarshalJSON() (data []byte, err error) {
@@ -1369,17 +1373,20 @@ type SAMLGroupRuleSAML struct {
 	// The name of the SAML attribute.
 	AttributeName string `json:"attribute_name,required"`
 	// The SAML attribute value to look for.
-	AttributeValue string                `json:"attribute_value,required"`
-	JSON           samlGroupRuleSAMLJSON `json:"-"`
+	AttributeValue string `json:"attribute_value,required"`
+	// The ID of your SAML identity provider.
+	IdentityProviderID string                `json:"identity_provider_id,required"`
+	JSON               samlGroupRuleSAMLJSON `json:"-"`
 }
 
 // samlGroupRuleSAMLJSON contains the JSON metadata for the struct
 // [SAMLGroupRuleSAML]
 type samlGroupRuleSAMLJSON struct {
-	AttributeName  apijson.Field
-	AttributeValue apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	AttributeName      apijson.Field
+	AttributeValue     apijson.Field
+	IdentityProviderID apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *SAMLGroupRuleSAML) UnmarshalJSON(data []byte) (err error) {
@@ -1406,6 +1413,8 @@ type SAMLGroupRuleSAMLParam struct {
 	AttributeName param.Field[string] `json:"attribute_name,required"`
 	// The SAML attribute value to look for.
 	AttributeValue param.Field[string] `json:"attribute_value,required"`
+	// The ID of your SAML identity provider.
+	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
 }
 
 func (r SAMLGroupRuleSAMLParam) MarshalJSON() (data []byte, err error) {

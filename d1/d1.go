@@ -3,8 +3,10 @@
 package d1
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"time"
+
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // D1Service contains methods and other services that help with interacting with
@@ -30,7 +32,7 @@ func NewD1Service(opts ...option.RequestOption) (r *D1Service) {
 
 type D1 struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt string `json:"created_at"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The D1 database's size, in bytes.
 	FileSize  float64 `json:"file_size"`
 	Name      string  `json:"name"`

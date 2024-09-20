@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // ACLService contains methods and other services that help with interacting with
@@ -210,11 +210,18 @@ func (r aclDeleteResponseJSON) RawJSON() string {
 
 type ACLNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
+	// be applied for the entire account. The IP range is used to allow additional
+	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
+	// for primary zones. CIDRs are limited to a maximum of /24 for IPv4 and /64 for
+	// IPv6 respectively.
+	IPRange param.Field[string] `json:"ip_range,required"`
+	// The name of the acl.
+	Name param.Field[string] `json:"name,required"`
 }
 
 func (r ACLNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type ACLNewResponseEnvelope struct {

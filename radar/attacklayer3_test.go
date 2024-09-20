@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/radar"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/radar"
 )
 
 func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
@@ -29,7 +29,7 @@ func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Timeseries(context.TODO(), radar.AttackLayer3TimeseriesParams{
-		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesParamsAggInterval1h),
+		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesParamsAggInterval15m),
 		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -41,7 +41,7 @@ func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
 		Location:      cloudflare.F([]string{"string", "string", "string"}),
 		Metric:        cloudflare.F(radar.AttackLayer3TimeseriesParamsMetricBytes),
 		Name:          cloudflare.F([]string{"string", "string", "string"}),
-		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesParamsNormalizationMin0Max),
+		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesParamsNormalizationPercentageChange),
 		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesParamsProtocol{radar.AttackLayer3TimeseriesParamsProtocolUdp, radar.AttackLayer3TimeseriesParamsProtocolTCP, radar.AttackLayer3TimeseriesParamsProtocolIcmp}),
 	})
 	if err != nil {

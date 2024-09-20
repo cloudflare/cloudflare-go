@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // RuleCatchAllService contains methods and other services that help with
@@ -36,15 +36,15 @@ func NewRuleCatchAllService(opts ...option.RequestOption) (r *RuleCatchAllServic
 
 // Enable or disable catch-all routing rule, or change action to forward to
 // specific destination address.
-func (r *RuleCatchAllService) Update(ctx context.Context, zoneIdentifier string, body RuleCatchAllUpdateParams, opts ...option.RequestOption) (res *RuleCatchAllUpdateResponse, err error) {
+func (r *RuleCatchAllService) Update(ctx context.Context, params RuleCatchAllUpdateParams, opts ...option.RequestOption) (res *RuleCatchAllUpdateResponse, err error) {
 	var env RuleCatchAllUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/email/routing/rules/catch_all", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/email/routing/rules/catch_all", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -53,14 +53,14 @@ func (r *RuleCatchAllService) Update(ctx context.Context, zoneIdentifier string,
 }
 
 // Get information on the default catch-all routing rule.
-func (r *RuleCatchAllService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *RuleCatchAllGetResponse, err error) {
+func (r *RuleCatchAllService) Get(ctx context.Context, query RuleCatchAllGetParams, opts ...option.RequestOption) (res *RuleCatchAllGetResponse, err error) {
 	var env RuleCatchAllGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/email/routing/rules/catch_all", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/email/routing/rules/catch_all", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -275,6 +275,8 @@ func (r RuleCatchAllGetResponseEnabled) IsKnown() bool {
 }
 
 type RuleCatchAllUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// List actions for the catch-all routing rule.
 	Actions param.Field[[]CatchAllActionParam] `json:"actions,required"`
 	// List of matchers for the catch-all routing rule.
@@ -346,6 +348,11 @@ func (r RuleCatchAllUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RuleCatchAllGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RuleCatchAllGetResponseEnvelope struct {

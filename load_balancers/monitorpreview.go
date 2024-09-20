@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // MonitorPreviewService contains methods and other services that help with
@@ -107,7 +107,7 @@ type MonitorPreviewNewParams struct {
 	// The HTTP request headers to send in the health check. It is recommended you set
 	// a Host header by default. The User-Agent header cannot be overridden. This
 	// parameter is only valid for HTTP and HTTPS monitors.
-	Header param.Field[interface{}] `json:"header"`
+	Header param.Field[map[string][]string] `json:"header"`
 	// The interval between each health check. Shorter intervals may improve failover
 	// time, but will increase load on the origins as we check from multiple locations.
 	Interval param.Field[int64] `json:"interval"`

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/email_routing"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/email_routing"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestRuleCatchAllUpdateWithOptionalParams(t *testing.T) {
@@ -27,31 +27,28 @@ func TestRuleCatchAllUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailRouting.Rules.CatchAlls.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		email_routing.RuleCatchAllUpdateParams{
-			Actions: cloudflare.F([]email_routing.CatchAllActionParam{{
-				Type:  cloudflare.F(email_routing.CatchAllActionTypeForward),
-				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
-			}, {
-				Type:  cloudflare.F(email_routing.CatchAllActionTypeForward),
-				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
-			}, {
-				Type:  cloudflare.F(email_routing.CatchAllActionTypeForward),
-				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
-			}}),
-			Matchers: cloudflare.F([]email_routing.CatchAllMatcherParam{{
-				Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
-			}, {
-				Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
-			}, {
-				Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
-			}}),
-			Enabled: cloudflare.F(email_routing.RuleCatchAllUpdateParamsEnabledTrue),
-			Name:    cloudflare.F("Send to user@example.net rule."),
-		},
-	)
+	_, err := client.EmailRouting.Rules.CatchAlls.Update(context.TODO(), email_routing.RuleCatchAllUpdateParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Actions: cloudflare.F([]email_routing.CatchAllActionParam{{
+			Type:  cloudflare.F(email_routing.CatchAllActionTypeDrop),
+			Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
+		}, {
+			Type:  cloudflare.F(email_routing.CatchAllActionTypeDrop),
+			Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
+		}, {
+			Type:  cloudflare.F(email_routing.CatchAllActionTypeDrop),
+			Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
+		}}),
+		Matchers: cloudflare.F([]email_routing.CatchAllMatcherParam{{
+			Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
+		}, {
+			Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
+		}, {
+			Type: cloudflare.F(email_routing.CatchAllMatcherTypeAll),
+		}}),
+		Enabled: cloudflare.F(email_routing.RuleCatchAllUpdateParamsEnabledTrue),
+		Name:    cloudflare.F("Send to user@example.net rule."),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -74,7 +71,9 @@ func TestRuleCatchAllGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailRouting.Rules.CatchAlls.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.EmailRouting.Rules.CatchAlls.Get(context.TODO(), email_routing.RuleCatchAllGetParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DEXFleetStatusService contains methods and other services that help with
@@ -204,9 +204,9 @@ func (r DEXFleetStatusLiveResponseEnvelopeSuccess) IsKnown() bool {
 
 type DEXFleetStatusOverTimeParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Timestamp in ISO format
+	// Time range beginning in ISO format
 	From param.Field[string] `query:"from,required"`
-	// Timestamp in ISO format
+	// Time range end in ISO format
 	To param.Field[string] `query:"to,required"`
 	// Cloudflare colo
 	Colo param.Field[string] `query:"colo"`

@@ -7,14 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // PoolHealthService contains methods and other services that help with interacting
@@ -59,7 +57,7 @@ func (r *PoolHealthService) New(ctx context.Context, poolID string, params PoolH
 }
 
 // Fetch the latest pool health status for a single pool.
-func (r *PoolHealthService) Get(ctx context.Context, poolID string, query PoolHealthGetParams, opts ...option.RequestOption) (res *PoolHealthGetResponseUnion, err error) {
+func (r *PoolHealthService) Get(ctx context.Context, poolID string, query PoolHealthGetParams, opts ...option.RequestOption) (res *PoolHealthGetResponse, err error) {
 	var env PoolHealthGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -105,22 +103,106 @@ func (r poolHealthNewResponseJSON) RawJSON() string {
 
 // A list of regions from which to run health checks. Null means every Cloudflare
 // data center.
-//
-// Union satisfied by [load_balancers.PoolHealthGetResponseUnknown] or
-// [shared.UnionString].
-type PoolHealthGetResponseUnion interface {
-	ImplementsLoadBalancersPoolHealthGetResponseUnion()
+type PoolHealthGetResponse struct {
+	// Pool ID
+	PoolID string `json:"pool_id"`
+	// List of regions and associated health status.
+	PopHealth PoolHealthGetResponsePopHealth `json:"pop_health"`
+	JSON      poolHealthGetResponseJSON      `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PoolHealthGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// poolHealthGetResponseJSON contains the JSON metadata for the struct
+// [PoolHealthGetResponse]
+type poolHealthGetResponseJSON struct {
+	PoolID      apijson.Field
+	PopHealth   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PoolHealthGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r poolHealthGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// List of regions and associated health status.
+type PoolHealthGetResponsePopHealth struct {
+	// Whether health check in region is healthy.
+	Healthy bool                                   `json:"healthy"`
+	Origins []PoolHealthGetResponsePopHealthOrigin `json:"origins"`
+	JSON    poolHealthGetResponsePopHealthJSON     `json:"-"`
+}
+
+// poolHealthGetResponsePopHealthJSON contains the JSON metadata for the struct
+// [PoolHealthGetResponsePopHealth]
+type poolHealthGetResponsePopHealthJSON struct {
+	Healthy     apijson.Field
+	Origins     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PoolHealthGetResponsePopHealth) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r poolHealthGetResponsePopHealthJSON) RawJSON() string {
+	return r.raw
+}
+
+type PoolHealthGetResponsePopHealthOrigin struct {
+	IP   PoolHealthGetResponsePopHealthOriginsIP  `json:"ip"`
+	JSON poolHealthGetResponsePopHealthOriginJSON `json:"-"`
+}
+
+// poolHealthGetResponsePopHealthOriginJSON contains the JSON metadata for the
+// struct [PoolHealthGetResponsePopHealthOrigin]
+type poolHealthGetResponsePopHealthOriginJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PoolHealthGetResponsePopHealthOrigin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r poolHealthGetResponsePopHealthOriginJSON) RawJSON() string {
+	return r.raw
+}
+
+type PoolHealthGetResponsePopHealthOriginsIP struct {
+	// Failure reason.
+	FailureReason string `json:"failure_reason"`
+	// Origin health status.
+	Healthy bool `json:"healthy"`
+	// Response code from origin health check.
+	ResponseCode float64 `json:"response_code"`
+	// Origin RTT (Round Trip Time) response.
+	RTT  string                                      `json:"rtt"`
+	JSON poolHealthGetResponsePopHealthOriginsIPJSON `json:"-"`
+}
+
+// poolHealthGetResponsePopHealthOriginsIPJSON contains the JSON metadata for the
+// struct [PoolHealthGetResponsePopHealthOriginsIP]
+type poolHealthGetResponsePopHealthOriginsIPJSON struct {
+	FailureReason apijson.Field
+	Healthy       apijson.Field
+	ResponseCode  apijson.Field
+	RTT           apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *PoolHealthGetResponsePopHealthOriginsIP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r poolHealthGetResponsePopHealthOriginsIPJSON) RawJSON() string {
+	return r.raw
 }
 
 type PoolHealthNewParams struct {
@@ -150,7 +232,7 @@ type PoolHealthNewParams struct {
 	// The HTTP request headers to send in the health check. It is recommended you set
 	// a Host header by default. The User-Agent header cannot be overridden. This
 	// parameter is only valid for HTTP and HTTPS monitors.
-	Header param.Field[interface{}] `json:"header"`
+	Header param.Field[map[string][]string] `json:"header"`
 	// The interval between each health check. Shorter intervals may improve failover
 	// time, but will increase load on the origins as we check from multiple locations.
 	Interval param.Field[int64] `json:"interval"`
@@ -255,7 +337,7 @@ type PoolHealthGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	Result PoolHealthGetResponseUnion `json:"result,required"`
+	Result PoolHealthGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success PoolHealthGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    poolHealthGetResponseEnvelopeJSON    `json:"-"`

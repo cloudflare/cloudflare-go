@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DEXTracerouteTestService contains methods and other services that help with
@@ -109,7 +109,7 @@ type Traceroute struct {
 	Kind     TracerouteKind `json:"kind,required"`
 	// The name of the Traceroute synthetic application test
 	Name                  string                            `json:"name,required"`
-	TargetPolicies        []DeviceExperienceMonitor         `json:"target_policies,nullable"`
+	TargetPolicies        []DigitalExperienceMonitor        `json:"target_policies,nullable"`
 	Targeted              bool                              `json:"targeted"`
 	TracerouteStats       TracerouteTracerouteStats         `json:"tracerouteStats,nullable"`
 	TracerouteStatsByColo []TracerouteTracerouteStatsByColo `json:"tracerouteStatsByColo"`

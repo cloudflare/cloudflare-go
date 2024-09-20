@@ -7,12 +7,11 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
 func TestAccessCustomPageNewWithOptionalParams(t *testing.T) {
@@ -31,13 +30,10 @@ func TestAccessCustomPageNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Access.CustomPages.New(context.TODO(), zero_trust.AccessCustomPageNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		CustomPage: zero_trust.CustomPageParam{
-			AppCount:   cloudflare.F(int64(0)),
-			CreatedAt:  cloudflare.F(time.Now()),
 			CustomHTML: cloudflare.F("<html><body><h1>Access Denied</h1></body></html>"),
 			Name:       cloudflare.F("name"),
 			Type:       cloudflare.F(zero_trust.CustomPageTypeIdentityDenied),
-			UID:        cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-			UpdatedAt:  cloudflare.F(time.Now()),
+			AppCount:   cloudflare.F(int64(0)),
 		},
 	})
 	if err != nil {
@@ -68,13 +64,10 @@ func TestAccessCustomPageUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.AccessCustomPageUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			CustomPage: zero_trust.CustomPageParam{
-				AppCount:   cloudflare.F(int64(0)),
-				CreatedAt:  cloudflare.F(time.Now()),
 				CustomHTML: cloudflare.F("<html><body><h1>Access Denied</h1></body></html>"),
 				Name:       cloudflare.F("name"),
 				Type:       cloudflare.F(zero_trust.CustomPageTypeIdentityDenied),
-				UID:        cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				UpdatedAt:  cloudflare.F(time.Now()),
+				AppCount:   cloudflare.F(int64(0)),
 			},
 		},
 	)

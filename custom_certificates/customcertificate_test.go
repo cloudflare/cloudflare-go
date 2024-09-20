@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/custom_certificates"
-	"github.com/cloudflare/cloudflare-go/v2/custom_hostnames"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/custom_certificates"
+	"github.com/cloudflare/cloudflare-go/v3/custom_hostnames"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestCustomCertificateNewWithOptionalParams(t *testing.T) {
@@ -37,7 +37,7 @@ func TestCustomCertificateNewWithOptionalParams(t *testing.T) {
 			Label: cloudflare.F(custom_certificates.GeoRestrictionsLabelUs),
 		}),
 		Policy: cloudflare.F("(country: US) or (region: EU)"),
-		Type:   cloudflare.F(custom_certificates.CustomCertificateNewParamsTypeSNICustom),
+		Type:   cloudflare.F(custom_certificates.CustomCertificateNewParamsTypeLegacyCustom),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

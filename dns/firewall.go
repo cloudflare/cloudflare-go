@@ -8,17 +8,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // FirewallService contains methods and other services that help with interacting
@@ -28,8 +26,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewFirewallService] method instead.
 type FirewallService struct {
-	Options   []option.RequestOption
-	Analytics *FirewallAnalyticsService
+	Options    []option.RequestOption
+	Analytics  *FirewallAnalyticsService
+	ReverseDNS *FirewallReverseDNSService
 }
 
 // NewFirewallService generates a new service that applies the given options to
@@ -39,11 +38,12 @@ func NewFirewallService(opts ...option.RequestOption) (r *FirewallService) {
 	r = &FirewallService{}
 	r.Options = opts
 	r.Analytics = NewFirewallAnalyticsService(opts...)
+	r.ReverseDNS = NewFirewallReverseDNSService(opts...)
 	return
 }
 
-// Create a configured DNS Firewall Cluster.
-func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opts ...option.RequestOption) (res *Firewall, err error) {
+// Create a DNS Firewall cluster
+func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opts ...option.RequestOption) (res *FirewallNewResponse, err error) {
 	var env FirewallNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -59,8 +59,8 @@ func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opt
 	return
 }
 
-// List configured DNS Firewall clusters for an account.
-func (r *FirewallService) List(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Firewall], err error) {
+// List DNS Firewall clusters for an account
+func (r *FirewallService) List(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -81,12 +81,12 @@ func (r *FirewallService) List(ctx context.Context, params FirewallListParams, o
 	return res, nil
 }
 
-// List configured DNS Firewall clusters for an account.
-func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Firewall] {
+// List DNS Firewall clusters for an account
+func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// Delete a configured DNS Firewall Cluster.
+// Delete a DNS Firewall cluster
 func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body FirewallDeleteParams, opts ...option.RequestOption) (res *FirewallDeleteResponse, err error) {
 	var env FirewallDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -107,8 +107,8 @@ func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body
 	return
 }
 
-// Modify a DNS Firewall Cluster configuration.
-func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params FirewallEditParams, opts ...option.RequestOption) (res *Firewall, err error) {
+// Modify the configuration of a DNS Firewall cluster
+func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params FirewallEditParams, opts ...option.RequestOption) (res *FirewallEditResponse, err error) {
 	var env FirewallEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -128,8 +128,8 @@ func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params
 	return
 }
 
-// Show a single configured DNS Firewall cluster for an account.
-func (r *FirewallService) Get(ctx context.Context, dnsFirewallID string, query FirewallGetParams, opts ...option.RequestOption) (res *Firewall, err error) {
+// Show a single DNS Firewall cluster for an account
+func (r *FirewallService) Get(ctx context.Context, dnsFirewallID string, query FirewallGetParams, opts ...option.RequestOption) (res *FirewallGetResponse, err error) {
 	var env FirewallGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -149,12 +149,12 @@ func (r *FirewallService) Get(ctx context.Context, dnsFirewallID string, query F
 	return
 }
 
-// Attack mitigation settings.
+// Attack mitigation settings
 type AttackMitigation struct {
-	// When enabled, random-prefix attacks are automatically mitigated and the upstream
-	// DNS servers protected.
+	// When enabled, automatically mitigate random-prefix attacks to protect upstream
+	// DNS servers
 	Enabled bool `json:"enabled"`
-	// Only mitigate attacks when upstream servers seem unhealthy.
+	// Only mitigate attacks when upstream servers seem unhealthy
 	OnlyWhenUpstreamUnhealthy bool                 `json:"only_when_upstream_unhealthy"`
 	JSON                      attackMitigationJSON `json:"-"`
 }
@@ -176,12 +176,12 @@ func (r attackMitigationJSON) RawJSON() string {
 	return r.raw
 }
 
-// Attack mitigation settings.
+// Attack mitigation settings
 type AttackMitigationParam struct {
-	// When enabled, random-prefix attacks are automatically mitigated and the upstream
-	// DNS servers protected.
+	// When enabled, automatically mitigate random-prefix attacks to protect upstream
+	// DNS servers
 	Enabled param.Field[bool] `json:"enabled"`
-	// Only mitigate attacks when upstream servers seem unhealthy.
+	// Only mitigate attacks when upstream servers seem unhealthy
 	OnlyWhenUpstreamUnhealthy param.Field[bool] `json:"only_when_upstream_unhealthy"`
 }
 
@@ -189,43 +189,50 @@ func (r AttackMitigationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type Firewall struct {
+type FirewallIPs = string
+
+type UpstreamIPs = string
+
+type UpstreamIPsParam = string
+
+type FirewallNewResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
-	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests bool               `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       []FirewallIPsUnion `json:"dns_firewall_ips,required" format:"ipv4"`
-	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
+	// Whether to refuse to answer queries for the ANY type
+	DeprecateAnyRequests bool          `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips,required" format:"ipv4"`
+	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
 	ECSFallback bool `json:"ecs_fallback,required"`
-	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
+	// Maximum DNS cache TTL This setting sets an upper bound on DNS TTLs for purposes
 	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
 	// decreased to the maximum defined here for caching purposes.
 	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
-	// Minimum DNS cache TTL. This setting sets a lower bound on DNS TTLs for purposes
+	// Minimum DNS cache TTL This setting sets a lower bound on DNS TTLs for purposes
 	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
 	// increased to the minimum defined here for caching purposes.
 	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
-	// Last modification of DNS Firewall cluster.
+	// Last modification of DNS Firewall cluster
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// DNS Firewall Cluster Name.
-	Name        string             `json:"name,required"`
-	UpstreamIPs []UpstreamIPsUnion `json:"upstream_ips,required" format:"ipv4"`
-	// Attack mitigation settings.
-	AttackMitigation AttackMitigation `json:"attack_mitigation,nullable"`
-	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
+	// DNS Firewall cluster name
+	Name string `json:"name,required"`
+	// Negative DNS cache TTL This setting controls how long DNS Firewall should cache
 	// negative responses (e.g., NXDOMAIN) from the upstream servers.
-	NegativeCacheTTL float64 `json:"negative_cache_ttl,nullable"`
+	NegativeCacheTTL float64 `json:"negative_cache_ttl,required,nullable"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster).
-	Ratelimit float64 `json:"ratelimit,nullable"`
+	// the upstream nameservers configured on the cluster)
+	Ratelimit float64 `json:"ratelimit,required,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
-	// counting the initial attempt).
-	Retries float64      `json:"retries"`
-	JSON    firewallJSON `json:"-"`
+	// counting the initial attempt)
+	Retries     float64       `json:"retries,required"`
+	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
+	// Attack mitigation settings
+	AttackMitigation AttackMitigation        `json:"attack_mitigation,nullable"`
+	JSON             firewallNewResponseJSON `json:"-"`
 }
 
-// firewallJSON contains the JSON metadata for the struct [Firewall]
-type firewallJSON struct {
+// firewallNewResponseJSON contains the JSON metadata for the struct
+// [FirewallNewResponse]
+type firewallNewResponseJSON struct {
 	ID                   apijson.Field
 	DeprecateAnyRequests apijson.Field
 	DNSFirewallIPs       apijson.Field
@@ -234,115 +241,84 @@ type firewallJSON struct {
 	MinimumCacheTTL      apijson.Field
 	ModifiedOn           apijson.Field
 	Name                 apijson.Field
-	UpstreamIPs          apijson.Field
-	AttackMitigation     apijson.Field
 	NegativeCacheTTL     apijson.Field
 	Ratelimit            apijson.Field
 	Retries              apijson.Field
+	UpstreamIPs          apijson.Field
+	AttackMitigation     apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *Firewall) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallJSON) RawJSON() string {
+func (r firewallNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type FirewallParam struct {
+type FirewallListResponse struct {
 	// Identifier
-	ID param.Field[string] `json:"id,required"`
-	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests param.Field[bool]                    `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       param.Field[[]FirewallIPsUnionParam] `json:"dns_firewall_ips,required" format:"ipv4"`
-	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
-	ECSFallback param.Field[bool] `json:"ecs_fallback,required"`
-	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
+	ID string `json:"id,required"`
+	// Whether to refuse to answer queries for the ANY type
+	DeprecateAnyRequests bool          `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips,required" format:"ipv4"`
+	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
+	ECSFallback bool `json:"ecs_fallback,required"`
+	// Maximum DNS cache TTL This setting sets an upper bound on DNS TTLs for purposes
 	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
 	// decreased to the maximum defined here for caching purposes.
-	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl,required"`
-	// Minimum DNS cache TTL. This setting sets a lower bound on DNS TTLs for purposes
+	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
+	// Minimum DNS cache TTL This setting sets a lower bound on DNS TTLs for purposes
 	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
 	// increased to the minimum defined here for caching purposes.
-	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl,required"`
-	// DNS Firewall Cluster Name.
-	Name        param.Field[string]                  `json:"name,required"`
-	UpstreamIPs param.Field[[]UpstreamIPsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
-	// Attack mitigation settings.
-	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
-	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
+	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
+	// Last modification of DNS Firewall cluster
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// DNS Firewall cluster name
+	Name string `json:"name,required"`
+	// Negative DNS cache TTL This setting controls how long DNS Firewall should cache
 	// negative responses (e.g., NXDOMAIN) from the upstream servers.
-	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
+	NegativeCacheTTL float64 `json:"negative_cache_ttl,required,nullable"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster).
-	Ratelimit param.Field[float64] `json:"ratelimit"`
+	// the upstream nameservers configured on the cluster)
+	Ratelimit float64 `json:"ratelimit,required,nullable"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
-	// counting the initial attempt).
-	Retries param.Field[float64] `json:"retries"`
+	// counting the initial attempt)
+	Retries     float64       `json:"retries,required"`
+	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
+	// Attack mitigation settings
+	AttackMitigation AttackMitigation         `json:"attack_mitigation,nullable"`
+	JSON             firewallListResponseJSON `json:"-"`
 }
 
-func (r FirewallParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// firewallListResponseJSON contains the JSON metadata for the struct
+// [FirewallListResponse]
+type firewallListResponseJSON struct {
+	ID                   apijson.Field
+	DeprecateAnyRequests apijson.Field
+	DNSFirewallIPs       apijson.Field
+	ECSFallback          apijson.Field
+	MaximumCacheTTL      apijson.Field
+	MinimumCacheTTL      apijson.Field
+	ModifiedOn           apijson.Field
+	Name                 apijson.Field
+	NegativeCacheTTL     apijson.Field
+	Ratelimit            apijson.Field
+	Retries              apijson.Field
+	UpstreamIPs          apijson.Field
+	AttackMitigation     apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
-// Cloudflare-assigned DNS IPv4 Address.
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type FirewallIPsUnion interface {
-	ImplementsDNSFirewallIPsUnion()
+func (r *FirewallListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FirewallIPsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Cloudflare-assigned DNS IPv4 Address.
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type FirewallIPsUnionParam interface {
-	ImplementsDNSFirewallIPsUnionParam()
-}
-
-// Upstream DNS Server IPv4 Address.
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type UpstreamIPsUnion interface {
-	ImplementsDNSUpstreamIPsUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UpstreamIPsUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Upstream DNS Server IPv4 Address.
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type UpstreamIPsUnionParam interface {
-	ImplementsDNSUpstreamIPsUnionParam()
+func (r firewallListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type FirewallDeleteResponse struct {
@@ -367,34 +343,160 @@ func (r firewallDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type FirewallEditResponse struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// Whether to refuse to answer queries for the ANY type
+	DeprecateAnyRequests bool          `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips,required" format:"ipv4"`
+	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
+	ECSFallback bool `json:"ecs_fallback,required"`
+	// Maximum DNS cache TTL This setting sets an upper bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
+	// decreased to the maximum defined here for caching purposes.
+	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
+	// Minimum DNS cache TTL This setting sets a lower bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
+	// increased to the minimum defined here for caching purposes.
+	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
+	// Last modification of DNS Firewall cluster
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// DNS Firewall cluster name
+	Name string `json:"name,required"`
+	// Negative DNS cache TTL This setting controls how long DNS Firewall should cache
+	// negative responses (e.g., NXDOMAIN) from the upstream servers.
+	NegativeCacheTTL float64 `json:"negative_cache_ttl,required,nullable"`
+	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
+	// the upstream nameservers configured on the cluster)
+	Ratelimit float64 `json:"ratelimit,required,nullable"`
+	// Number of retries for fetching DNS responses from upstream nameservers (not
+	// counting the initial attempt)
+	Retries     float64       `json:"retries,required"`
+	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
+	// Attack mitigation settings
+	AttackMitigation AttackMitigation         `json:"attack_mitigation,nullable"`
+	JSON             firewallEditResponseJSON `json:"-"`
+}
+
+// firewallEditResponseJSON contains the JSON metadata for the struct
+// [FirewallEditResponse]
+type firewallEditResponseJSON struct {
+	ID                   apijson.Field
+	DeprecateAnyRequests apijson.Field
+	DNSFirewallIPs       apijson.Field
+	ECSFallback          apijson.Field
+	MaximumCacheTTL      apijson.Field
+	MinimumCacheTTL      apijson.Field
+	ModifiedOn           apijson.Field
+	Name                 apijson.Field
+	NegativeCacheTTL     apijson.Field
+	Ratelimit            apijson.Field
+	Retries              apijson.Field
+	UpstreamIPs          apijson.Field
+	AttackMitigation     apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *FirewallEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type FirewallGetResponse struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// Whether to refuse to answer queries for the ANY type
+	DeprecateAnyRequests bool          `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       []FirewallIPs `json:"dns_firewall_ips,required" format:"ipv4"`
+	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
+	ECSFallback bool `json:"ecs_fallback,required"`
+	// Maximum DNS cache TTL This setting sets an upper bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
+	// decreased to the maximum defined here for caching purposes.
+	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
+	// Minimum DNS cache TTL This setting sets a lower bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
+	// increased to the minimum defined here for caching purposes.
+	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
+	// Last modification of DNS Firewall cluster
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// DNS Firewall cluster name
+	Name string `json:"name,required"`
+	// Negative DNS cache TTL This setting controls how long DNS Firewall should cache
+	// negative responses (e.g., NXDOMAIN) from the upstream servers.
+	NegativeCacheTTL float64 `json:"negative_cache_ttl,required,nullable"`
+	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
+	// the upstream nameservers configured on the cluster)
+	Ratelimit float64 `json:"ratelimit,required,nullable"`
+	// Number of retries for fetching DNS responses from upstream nameservers (not
+	// counting the initial attempt)
+	Retries     float64       `json:"retries,required"`
+	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
+	// Attack mitigation settings
+	AttackMitigation AttackMitigation        `json:"attack_mitigation,nullable"`
+	JSON             firewallGetResponseJSON `json:"-"`
+}
+
+// firewallGetResponseJSON contains the JSON metadata for the struct
+// [FirewallGetResponse]
+type firewallGetResponseJSON struct {
+	ID                   apijson.Field
+	DeprecateAnyRequests apijson.Field
+	DNSFirewallIPs       apijson.Field
+	ECSFallback          apijson.Field
+	MaximumCacheTTL      apijson.Field
+	MinimumCacheTTL      apijson.Field
+	ModifiedOn           apijson.Field
+	Name                 apijson.Field
+	NegativeCacheTTL     apijson.Field
+	Ratelimit            apijson.Field
+	Retries              apijson.Field
+	UpstreamIPs          apijson.Field
+	AttackMitigation     apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *FirewallGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// DNS Firewall Cluster Name.
-	Name        param.Field[string]                  `json:"name,required"`
-	UpstreamIPs param.Field[[]UpstreamIPsUnionParam] `json:"upstream_ips,required" format:"ipv4"`
-	// Attack mitigation settings.
+	// DNS Firewall cluster name
+	Name        param.Field[string]             `json:"name,required"`
+	UpstreamIPs param.Field[[]UpstreamIPsParam] `json:"upstream_ips,required" format:"ipv4"`
+	// Attack mitigation settings
 	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
-	// Deprecate the response to ANY requests.
+	// Whether to refuse to answer queries for the ANY type
 	DeprecateAnyRequests param.Field[bool] `json:"deprecate_any_requests"`
-	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
+	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
 	ECSFallback param.Field[bool] `json:"ecs_fallback"`
-	// Maximum DNS cache TTL. This setting sets an upper bound on DNS TTLs for purposes
+	// Maximum DNS cache TTL This setting sets an upper bound on DNS TTLs for purposes
 	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
 	// decreased to the maximum defined here for caching purposes.
 	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl"`
-	// Minimum DNS cache TTL. This setting sets a lower bound on DNS TTLs for purposes
+	// Minimum DNS cache TTL This setting sets a lower bound on DNS TTLs for purposes
 	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
 	// increased to the minimum defined here for caching purposes.
 	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl"`
-	// Negative DNS cache TTL. This setting controls how long DNS Firewall should cache
+	// Negative DNS cache TTL This setting controls how long DNS Firewall should cache
 	// negative responses (e.g., NXDOMAIN) from the upstream servers.
 	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
 	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster).
+	// the upstream nameservers configured on the cluster)
 	Ratelimit param.Field[float64] `json:"ratelimit"`
 	// Number of retries for fetching DNS responses from upstream nameservers (not
-	// counting the initial attempt).
+	// counting the initial attempt)
 	Retries param.Field[float64] `json:"retries"`
 }
 
@@ -407,7 +509,7 @@ type FirewallNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FirewallNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  Firewall                           `json:"result"`
+	Result  FirewallNewResponse                `json:"result"`
 	JSON    firewallNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -448,9 +550,9 @@ func (r FirewallNewResponseEnvelopeSuccess) IsKnown() bool {
 type FirewallListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Page number of paginated results.
+	// Page number of paginated results
 	Page param.Field[float64] `query:"page"`
-	// Number of clusters per page.
+	// Number of clusters per page
 	PerPage param.Field[float64] `query:"per_page"`
 }
 
@@ -513,11 +615,36 @@ func (r FirewallDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type FirewallEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	Firewall  FirewallParam       `json:"firewall,required"`
+	// Attack mitigation settings
+	AttackMitigation param.Field[AttackMitigationParam] `json:"attack_mitigation"`
+	// Whether to refuse to answer queries for the ANY type
+	DeprecateAnyRequests param.Field[bool] `json:"deprecate_any_requests"`
+	// Whether to forward client IP (resolver) subnet if no EDNS Client Subnet is sent
+	ECSFallback param.Field[bool] `json:"ecs_fallback"`
+	// Maximum DNS cache TTL This setting sets an upper bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Higher TTLs will be
+	// decreased to the maximum defined here for caching purposes.
+	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl"`
+	// Minimum DNS cache TTL This setting sets a lower bound on DNS TTLs for purposes
+	// of caching between DNS Firewall and the upstream servers. Lower TTLs will be
+	// increased to the minimum defined here for caching purposes.
+	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl"`
+	// DNS Firewall cluster name
+	Name param.Field[string] `json:"name"`
+	// Negative DNS cache TTL This setting controls how long DNS Firewall should cache
+	// negative responses (e.g., NXDOMAIN) from the upstream servers.
+	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
+	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
+	// the upstream nameservers configured on the cluster)
+	Ratelimit param.Field[float64] `json:"ratelimit"`
+	// Number of retries for fetching DNS responses from upstream nameservers (not
+	// counting the initial attempt)
+	Retries     param.Field[float64]            `json:"retries"`
+	UpstreamIPs param.Field[[]UpstreamIPsParam] `json:"upstream_ips" format:"ipv4"`
 }
 
 func (r FirewallEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Firewall)
+	return apijson.MarshalRoot(r)
 }
 
 type FirewallEditResponseEnvelope struct {
@@ -525,7 +652,7 @@ type FirewallEditResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FirewallEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  Firewall                            `json:"result"`
+	Result  FirewallEditResponse                `json:"result"`
 	JSON    firewallEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -573,7 +700,7 @@ type FirewallGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success FirewallGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  Firewall                           `json:"result"`
+	Result  FirewallGetResponse                `json:"result"`
 	JSON    firewallGetResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -7,15 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/cloudflare/cloudflare-go/v2/user"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // SubscriptionService contains methods and other services that help with
@@ -38,7 +34,7 @@ func NewSubscriptionService(opts ...option.RequestOption) (r *SubscriptionServic
 }
 
 // Create a zone subscription, either plan or add-ons.
-func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *SubscriptionNewResponseUnion, err error) {
+func (r *SubscriptionService) New(ctx context.Context, identifier string, body SubscriptionNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env SubscriptionNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if identifier == "" {
@@ -54,35 +50,25 @@ func (r *SubscriptionService) New(ctx context.Context, identifier string, body S
 	return
 }
 
-// Lists all of an account's subscriptions.
-func (r *SubscriptionService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[user.Subscription], err error) {
-	var raw *http.Response
+// Updates zone subscriptions, either plan or add-ons.
+func (r *SubscriptionService) Update(ctx context.Context, identifier string, body SubscriptionUpdateParams, opts ...option.RequestOption) (res *interface{}, err error) {
+	var env SubscriptionUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/subscriptions", accountIdentifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("zones/%s/subscription", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
-		return nil, err
+		return
 	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Lists all of an account's subscriptions.
-func (r *SubscriptionService) ListAutoPaging(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[user.Subscription] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, accountIdentifier, opts...))
+	res = &env.Result
+	return
 }
 
 // Lists zone subscription details.
-func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *SubscriptionGetResponseUnion, err error) {
+func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env SubscriptionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if identifier == "" {
@@ -98,42 +84,8 @@ func (r *SubscriptionService) Get(ctx context.Context, identifier string, opts .
 	return
 }
 
-// Union satisfied by [zones.SubscriptionNewResponseUnknown] or
-// [shared.UnionString].
-type SubscriptionNewResponseUnion interface {
-	ImplementsZonesSubscriptionNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [zones.SubscriptionGetResponseUnknown] or
-// [shared.UnionString].
-type SubscriptionGetResponseUnion interface {
-	ImplementsZonesSubscriptionGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SubscriptionGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type SubscriptionNewParams struct {
-	Subscription user.SubscriptionParam `json:"subscription,required"`
+	Subscription shared.SubscriptionParam `json:"subscription,required"`
 }
 
 func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
@@ -141,9 +93,9 @@ func (r SubscriptionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type SubscriptionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   SubscriptionNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionNewResponseEnvelopeJSON    `json:"-"`
@@ -183,10 +135,61 @@ func (r SubscriptionNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type SubscriptionUpdateParams struct {
+	Subscription shared.SubscriptionParam `json:"subscription,required"`
+}
+
+func (r SubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Subscription)
+}
+
+type SubscriptionUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
+	// Whether the API call was successful
+	Success SubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    subscriptionUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// subscriptionUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SubscriptionUpdateResponseEnvelope]
+type subscriptionUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SubscriptionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type SubscriptionUpdateResponseEnvelopeSuccess bool
+
+const (
+	SubscriptionUpdateResponseEnvelopeSuccessTrue SubscriptionUpdateResponseEnvelopeSuccess = true
+)
+
+func (r SubscriptionUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case SubscriptionUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type SubscriptionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   SubscriptionGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success SubscriptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    subscriptionGetResponseEnvelopeJSON    `json:"-"`

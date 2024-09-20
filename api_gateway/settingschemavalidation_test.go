@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/api_gateway"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/api_gateway"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestSettingSchemaValidationUpdateWithOptionalParams(t *testing.T) {
@@ -29,7 +29,7 @@ func TestSettingSchemaValidationUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.APIGateway.Settings.SchemaValidation.Update(context.TODO(), api_gateway.SettingSchemaValidationUpdateParams{
 		ZoneID:                             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ValidationDefaultMitigationAction:  cloudflare.F(api_gateway.SettingSchemaValidationUpdateParamsValidationDefaultMitigationActionBlock),
+		ValidationDefaultMitigationAction:  cloudflare.F(api_gateway.SettingSchemaValidationUpdateParamsValidationDefaultMitigationActionNone),
 		ValidationOverrideMitigationAction: cloudflare.F(api_gateway.SettingSchemaValidationUpdateParamsValidationOverrideMitigationActionNone),
 	})
 	if err != nil {
@@ -56,7 +56,7 @@ func TestSettingSchemaValidationEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.APIGateway.Settings.SchemaValidation.Edit(context.TODO(), api_gateway.SettingSchemaValidationEditParams{
 		ZoneID:                             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ValidationDefaultMitigationAction:  cloudflare.F(api_gateway.SettingSchemaValidationEditParamsValidationDefaultMitigationActionBlock),
+		ValidationDefaultMitigationAction:  cloudflare.F(api_gateway.SettingSchemaValidationEditParamsValidationDefaultMitigationActionNone),
 		ValidationOverrideMitigationAction: cloudflare.F(api_gateway.SettingSchemaValidationEditParamsValidationOverrideMitigationActionNone),
 	})
 	if err != nil {

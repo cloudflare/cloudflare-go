@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/web3"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/web3"
 )
 
 func TestHostnameNewWithOptionalParams(t *testing.T) {
@@ -27,15 +27,12 @@ func TestHostnameNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Web3.Hostnames.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		web3.HostnameNewParams{
-			Target:      cloudflare.F(web3.HostnameNewParamsTargetIPFS),
-			Description: cloudflare.F("This is my IPFS gateway."),
-			Dnslink:     cloudflare.F("/ipns/onboarding.ipfs.cloudflare.com"),
-		},
-	)
+	_, err := client.Web3.Hostnames.New(context.TODO(), web3.HostnameNewParams{
+		ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Target:      cloudflare.F(web3.HostnameNewParamsTargetEthereum),
+		Description: cloudflare.F("This is my IPFS gateway."),
+		Dnslink:     cloudflare.F("/ipns/onboarding.ipfs.cloudflare.com"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -58,7 +55,9 @@ func TestHostnameList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Web3.Hostnames.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Web3.Hostnames.List(context.TODO(), web3.HostnameListParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -84,7 +83,9 @@ func TestHostnameDelete(t *testing.T) {
 	_, err := client.Web3.Hostnames.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		web3.HostnameDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -111,8 +112,8 @@ func TestHostnameEditWithOptionalParams(t *testing.T) {
 	_, err := client.Web3.Hostnames.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		web3.HostnameEditParams{
+			ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Description: cloudflare.F("This is my IPFS gateway."),
 			Dnslink:     cloudflare.F("/ipns/onboarding.ipfs.cloudflare.com"),
 		},
@@ -142,7 +143,9 @@ func TestHostnameGet(t *testing.T) {
 	_, err := client.Web3.Hostnames.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		web3.HostnameGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

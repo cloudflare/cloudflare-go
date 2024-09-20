@@ -4,17 +4,19 @@ package accounts
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AccountService contains methods and other services that help with interacting
@@ -24,9 +26,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAccountService] method instead.
 type AccountService struct {
-	Options []option.RequestOption
-	Members *MemberService
-	Roles   *RoleService
+	Options       []option.RequestOption
+	Members       *MemberService
+	Roles         *RoleService
+	Subscriptions *SubscriptionService
 }
 
 // NewAccountService generates a new service that applies the given options to each
@@ -37,14 +40,32 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r.Options = opts
 	r.Members = NewMemberService(opts...)
 	r.Roles = NewRoleService(opts...)
+	r.Subscriptions = NewSubscriptionService(opts...)
+	return
+}
+
+// Create an account (only available for tenant admins at this time)
+func (r *AccountService) New(ctx context.Context, body AccountNewParams, opts ...option.RequestOption) (res *Account, err error) {
+	var env AccountNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	path := "accounts"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Update an existing account.
-func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponse, err error) {
+func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *Account, err error) {
 	var env AccountUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v", params.AccountID)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -54,7 +75,7 @@ func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams,
 }
 
 // List all accounts you have ownership or verified access to.
-func (r *AccountService) List(ctx context.Context, query AccountListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccountListResponse], err error) {
+func (r *AccountService) List(ctx context.Context, query AccountListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Account], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -72,15 +93,38 @@ func (r *AccountService) List(ctx context.Context, query AccountListParams, opts
 }
 
 // List all accounts you have ownership or verified access to.
-func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccountListResponse] {
+func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Account] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
+// Delete a specific account (only available for tenant admins at this time). This
+// is a permanent operation that will delete any zones or other resources under the
+// account
+func (r *AccountService) Delete(ctx context.Context, body AccountDeleteParams, opts ...option.RequestOption) (res *AccountDeleteResponse, err error) {
+	var env AccountDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get information about a specific account that you are a member of.
-func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *AccountGetResponse, err error) {
+func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *Account, err error) {
 	var env AccountGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%v", query.AccountID)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -229,15 +273,120 @@ func (r AccountSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccountUpdateResponse = interface{}
+type AccountDeleteResponse struct {
+	// Identifier
+	ID   string                    `json:"id,required"`
+	JSON accountDeleteResponseJSON `json:"-"`
+}
 
-type AccountListResponse = interface{}
+// accountDeleteResponseJSON contains the JSON metadata for the struct
+// [AccountDeleteResponse]
+type accountDeleteResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
 
-type AccountGetResponse = interface{}
+func (r *AccountDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccountNewParams struct {
+	// Account name
+	Name param.Field[string] `json:"name,required"`
+	// the type of account being created. For self-serve customers, use standard. for
+	// enterprise customers, use enterprise.
+	Type param.Field[AccountNewParamsType] `json:"type,required"`
+	// information related to the tenant unit, and optionally, an id of the unit to
+	// create the account on. see
+	// https://developers.cloudflare.com/tenant/how-to/manage-accounts/
+	Unit param.Field[AccountNewParamsUnit] `json:"unit"`
+}
+
+func (r AccountNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// the type of account being created. For self-serve customers, use standard. for
+// enterprise customers, use enterprise.
+type AccountNewParamsType string
+
+const (
+	AccountNewParamsTypeStandard   AccountNewParamsType = "standard"
+	AccountNewParamsTypeEnterprise AccountNewParamsType = "enterprise"
+)
+
+func (r AccountNewParamsType) IsKnown() bool {
+	switch r {
+	case AccountNewParamsTypeStandard, AccountNewParamsTypeEnterprise:
+		return true
+	}
+	return false
+}
+
+// information related to the tenant unit, and optionally, an id of the unit to
+// create the account on. see
+// https://developers.cloudflare.com/tenant/how-to/manage-accounts/
+type AccountNewParamsUnit struct {
+	// Tenant unit ID
+	ID param.Field[string] `json:"id"`
+}
+
+func (r AccountNewParamsUnit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccountNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success AccountNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Account                           `json:"result"`
+	JSON    accountNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// accountNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccountNewResponseEnvelope]
+type accountNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AccountNewResponseEnvelopeSuccess bool
+
+const (
+	AccountNewResponseEnvelopeSuccessTrue AccountNewResponseEnvelopeSuccess = true
+)
+
+func (r AccountNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccountNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type AccountUpdateParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
-	Account   AccountParam             `json:"account,required"`
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+	Account   AccountParam        `json:"account,required"`
 }
 
 func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -245,13 +394,20 @@ func (r AccountUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccountUpdateResponseEnvelope struct {
-	Result AccountUpdateResponse             `json:"result"`
-	JSON   accountUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success AccountUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Account                              `json:"result"`
+	JSON    accountUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // accountUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AccountUpdateResponseEnvelope]
 type accountUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -263,6 +419,21 @@ func (r *AccountUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r accountUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type AccountUpdateResponseEnvelopeSuccess bool
+
+const (
+	AccountUpdateResponseEnvelopeSuccessTrue AccountUpdateResponseEnvelopeSuccess = true
+)
+
+func (r AccountUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccountUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type AccountListParams struct {
@@ -300,18 +471,74 @@ func (r AccountListParamsDirection) IsKnown() bool {
 	return false
 }
 
+type AccountDeleteParams struct {
+	// The account ID of the account to be deleted
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type AccountDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success AccountDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  AccountDeleteResponse                `json:"result,nullable"`
+	JSON    accountDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// accountDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccountDeleteResponseEnvelope]
+type accountDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AccountDeleteResponseEnvelopeSuccess bool
+
+const (
+	AccountDeleteResponseEnvelopeSuccessTrue AccountDeleteResponseEnvelopeSuccess = true
+)
+
+func (r AccountDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccountDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type AccountGetParams struct {
-	AccountID param.Field[interface{}] `path:"account_id,required"`
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AccountGetResponseEnvelope struct {
-	Result AccountGetResponse             `json:"result"`
-	JSON   accountGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success AccountGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Account                           `json:"result"`
+	JSON    accountGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // accountGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [AccountGetResponseEnvelope]
 type accountGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -323,4 +550,19 @@ func (r *AccountGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r accountGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type AccountGetResponseEnvelopeSuccess bool
+
+const (
+	AccountGetResponseEnvelopeSuccessTrue AccountGetResponseEnvelopeSuccess = true
+)
+
+func (r AccountGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case AccountGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

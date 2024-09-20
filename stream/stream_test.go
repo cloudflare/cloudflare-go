@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/stream"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/stream"
 )
 
 func TestStreamNewWithOptionalParams(t *testing.T) {
@@ -67,7 +67,7 @@ func TestStreamListWithOptionalParams(t *testing.T) {
 		IncludeCounts: cloudflare.F(true),
 		Search:        cloudflare.F("puppy.mp4"),
 		Start:         cloudflare.F(time.Now()),
-		Status:        cloudflare.F(stream.StreamListParamsStatusInprogress),
+		Status:        cloudflare.F(stream.StreamListParamsStatusPendingupload),
 		Type:          cloudflare.F("live"),
 	})
 	if err != nil {

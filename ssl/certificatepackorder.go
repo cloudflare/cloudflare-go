@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // CertificatePackOrderService contains methods and other services that help with
@@ -106,11 +106,12 @@ type CertificatePackOrderNewResponseCertificateAuthority string
 const (
 	CertificatePackOrderNewResponseCertificateAuthorityGoogle      CertificatePackOrderNewResponseCertificateAuthority = "google"
 	CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt CertificatePackOrderNewResponseCertificateAuthority = "lets_encrypt"
+	CertificatePackOrderNewResponseCertificateAuthoritySSLCom      CertificatePackOrderNewResponseCertificateAuthority = "ssl_com"
 )
 
 func (r CertificatePackOrderNewResponseCertificateAuthority) IsKnown() bool {
 	switch r {
-	case CertificatePackOrderNewResponseCertificateAuthorityGoogle, CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt:
+	case CertificatePackOrderNewResponseCertificateAuthorityGoogle, CertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt, CertificatePackOrderNewResponseCertificateAuthoritySSLCom:
 		return true
 	}
 	return false
@@ -199,11 +200,12 @@ type CertificatePackOrderNewParamsCertificateAuthority string
 const (
 	CertificatePackOrderNewParamsCertificateAuthorityGoogle      CertificatePackOrderNewParamsCertificateAuthority = "google"
 	CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt CertificatePackOrderNewParamsCertificateAuthority = "lets_encrypt"
+	CertificatePackOrderNewParamsCertificateAuthoritySSLCom      CertificatePackOrderNewParamsCertificateAuthority = "ssl_com"
 )
 
 func (r CertificatePackOrderNewParamsCertificateAuthority) IsKnown() bool {
 	switch r {
-	case CertificatePackOrderNewParamsCertificateAuthorityGoogle, CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt:
+	case CertificatePackOrderNewParamsCertificateAuthorityGoogle, CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt, CertificatePackOrderNewParamsCertificateAuthoritySSLCom:
 		return true
 	}
 	return false

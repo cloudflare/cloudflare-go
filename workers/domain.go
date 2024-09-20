@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DomainService contains methods and other services that help with interacting
@@ -156,6 +156,7 @@ func (r domainJSON) RawJSON() string {
 }
 
 type DomainUpdateParams struct {
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Worker environment associated with the zone and hostname.
 	Environment param.Field[string] `json:"environment,required"`
@@ -215,6 +216,7 @@ func (r DomainUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DomainListParams struct {
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Worker environment associated with the zone and hostname.
 	Environment param.Field[string] `query:"environment"`
@@ -237,10 +239,12 @@ func (r DomainListParams) URLQuery() (v url.Values) {
 }
 
 type DomainDeleteParams struct {
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DomainGetParams struct {
+	// Identifer of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

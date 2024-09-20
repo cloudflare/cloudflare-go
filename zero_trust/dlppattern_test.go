@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
-func TestDLPPatternValidate(t *testing.T) {
+func TestDLPPatternValidateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,8 +28,9 @@ func TestDLPPatternValidate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Patterns.Validate(context.TODO(), zero_trust.DLPPatternValidateParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Regex:     cloudflare.F("^4[0-9]{6,}$"),
+		AccountID:     cloudflare.F("account_id"),
+		Regex:         cloudflare.F("regex"),
+		MaxMatchBytes: cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

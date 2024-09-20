@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // PrefixService contains methods and other services that help with interacting
@@ -85,8 +85,7 @@ func (r *PrefixService) ListAutoPaging(ctx context.Context, query PrefixListPara
 }
 
 // Delete an unapproved prefix owned by the account.
-func (r *PrefixService) Delete(ctx context.Context, prefixID string, body PrefixDeleteParams, opts ...option.RequestOption) (res *[]PrefixDeleteResponse, err error) {
-	var env PrefixDeleteResponseEnvelope
+func (r *PrefixService) Delete(ctx context.Context, prefixID string, body PrefixDeleteParams, opts ...option.RequestOption) (res *PrefixDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -97,11 +96,7 @@ func (r *PrefixService) Delete(ctx context.Context, prefixID string, body Prefix
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", body.AccountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -206,7 +201,79 @@ func (r prefixJSON) RawJSON() string {
 	return r.raw
 }
 
-type PrefixDeleteResponse = interface{}
+type PrefixDeleteResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success    PrefixDeleteResponseSuccess    `json:"success,required"`
+	ResultInfo PrefixDeleteResponseResultInfo `json:"result_info"`
+	JSON       prefixDeleteResponseJSON       `json:"-"`
+}
+
+// prefixDeleteResponseJSON contains the JSON metadata for the struct
+// [PrefixDeleteResponse]
+type prefixDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type PrefixDeleteResponseSuccess bool
+
+const (
+	PrefixDeleteResponseSuccessTrue PrefixDeleteResponseSuccess = true
+)
+
+func (r PrefixDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case PrefixDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type PrefixDeleteResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                            `json:"total_count"`
+	JSON       prefixDeleteResponseResultInfoJSON `json:"-"`
+}
+
+// prefixDeleteResponseResultInfoJSON contains the JSON metadata for the struct
+// [PrefixDeleteResponseResultInfo]
+type prefixDeleteResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixDeleteResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixDeleteResponseResultInfoJSON) RawJSON() string {
+	return r.raw
+}
 
 type PrefixNewParams struct {
 	// Identifier
@@ -274,82 +341,6 @@ type PrefixListParams struct {
 type PrefixDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type PrefixDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    PrefixDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []PrefixDeleteResponse                 `json:"result,nullable"`
-	ResultInfo PrefixDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       prefixDeleteResponseEnvelopeJSON       `json:"-"`
-}
-
-// prefixDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PrefixDeleteResponseEnvelope]
-type prefixDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type PrefixDeleteResponseEnvelopeSuccess bool
-
-const (
-	PrefixDeleteResponseEnvelopeSuccessTrue PrefixDeleteResponseEnvelopeSuccess = true
-)
-
-func (r PrefixDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case PrefixDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type PrefixDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                    `json:"total_count"`
-	JSON       prefixDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// prefixDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [PrefixDeleteResponseEnvelopeResultInfo]
-type prefixDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PrefixDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r prefixDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type PrefixEditParams struct {

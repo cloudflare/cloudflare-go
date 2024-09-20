@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // RequestPriorityService contains methods and other services that help with
@@ -35,7 +35,7 @@ func NewRequestPriorityService(opts ...option.RequestOption) (r *RequestPriority
 	return
 }
 
-// Create a New Priority Requirement
+// Create a New Priority Intelligence Requirement
 func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier string, body RequestPriorityNewParams, opts ...option.RequestOption) (res *Priority, err error) {
 	var env RequestPriorityNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +73,7 @@ func (r *RequestPriorityService) Update(ctx context.Context, accountIdentifier s
 	return
 }
 
-// Delete a Priority Intelligence Report
+// Delete a Priority Intelligence Requirement
 func (r *RequestPriorityService) Delete(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *RequestPriorityDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {

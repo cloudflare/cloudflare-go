@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // PoolReferenceService contains methods and other services that help with
@@ -107,7 +107,7 @@ type PoolReferenceGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// List of resources that reference a given pool.
-	Result []PoolReferenceGetResponse `json:"result,required,nullable"`
+	Result []PoolReferenceGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success    PoolReferenceGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PoolReferenceGetResponseEnvelopeResultInfo `json:"result_info"`

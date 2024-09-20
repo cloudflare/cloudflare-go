@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/radar"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/radar"
 )
 
 func TestAS112TimeseriesWithOptionalParams(t *testing.T) {
@@ -29,7 +29,7 @@ func TestAS112TimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Timeseries(context.TODO(), radar.AS112TimeseriesParams{
-		AggInterval: cloudflare.F(radar.AS112TimeseriesParamsAggInterval1h),
+		AggInterval: cloudflare.F(radar.AS112TimeseriesParamsAggInterval15m),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/speed"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/speed"
 )
 
 func TestPageList(t *testing.T) {
@@ -61,7 +61,7 @@ func TestPageTrendWithOptionalParams(t *testing.T) {
 			ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			DeviceType: cloudflare.F(speed.PageTrendParamsDeviceTypeDesktop),
 			Metrics:    cloudflare.F("performanceScore,ttfb,fcp,si,lcp,tti,tbt,cls"),
-			Region:     cloudflare.F(speed.PageTrendParamsRegionUsCentral1),
+			Region:     cloudflare.F(speed.PageTrendParamsRegionAsiaEast1),
 			Start:      cloudflare.F(time.Now()),
 			Tz:         cloudflare.F("tz"),
 			End:        cloudflare.F(time.Now()),

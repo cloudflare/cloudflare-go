@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // JobService contains methods and other services that help with interacting with
@@ -479,7 +479,27 @@ func (r OutputOptionsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type JobDeleteResponse = interface{}
+type JobDeleteResponse struct {
+	// Unique id of the job.
+	ID   int64                 `json:"id"`
+	JSON jobDeleteResponseJSON `json:"-"`
+}
+
+// jobDeleteResponseJSON contains the JSON metadata for the struct
+// [JobDeleteResponse]
+type jobDeleteResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *JobDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jobDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
 
 type JobNewParams struct {
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
@@ -773,7 +793,7 @@ type JobDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success JobDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  JobDeleteResponse                `json:"result,nullable"`
+	Result  JobDeleteResponse                `json:"result"`
 	JSON    jobDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

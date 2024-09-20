@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // HealthcheckService contains methods and other services that help with
@@ -79,7 +79,7 @@ func (r *HealthcheckService) Update(ctx context.Context, healthcheckID string, p
 }
 
 // List configured health checks.
-func (r *HealthcheckService) List(ctx context.Context, params HealthcheckListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Healthcheck], err error) {
+func (r *HealthcheckService) List(ctx context.Context, params HealthcheckListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Healthcheck], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -101,8 +101,8 @@ func (r *HealthcheckService) List(ctx context.Context, params HealthcheckListPar
 }
 
 // List configured health checks.
-func (r *HealthcheckService) ListAutoPaging(ctx context.Context, params HealthcheckListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Healthcheck] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
+func (r *HealthcheckService) ListAutoPaging(ctx context.Context, params HealthcheckListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Healthcheck] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a health check.
@@ -614,9 +614,9 @@ type HealthcheckListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Page number of paginated results.
-	Page param.Field[interface{}] `query:"page"`
+	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page. Must be a multiple of 5.
-	PerPage param.Field[interface{}] `query:"per_page"`
+	PerPage param.Field[float64] `query:"per_page"`
 }
 
 // URLQuery serializes [HealthcheckListParams]'s query parameters as `url.Values`.

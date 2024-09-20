@@ -8,16 +8,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // PageruleService contains methods and other services that help with interacting
@@ -47,7 +45,7 @@ func NewPageruleService(opts ...option.RequestOption) (r *PageruleService) {
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
 // for full details.
-func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opts ...option.RequestOption) (res *PageruleNewResponseUnion, err error) {
+func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env PageruleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -70,7 +68,7 @@ func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opt
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
 // for full details.
-func (r *PageruleService) Update(ctx context.Context, pageruleID string, params PageruleUpdateParams, opts ...option.RequestOption) (res *PageruleUpdateResponseUnion, err error) {
+func (r *PageruleService) Update(ctx context.Context, pageruleID string, params PageruleUpdateParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env PageruleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -144,7 +142,7 @@ func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body Pa
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
 // for full details.
-func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params PageruleEditParams, opts ...option.RequestOption) (res *PageruleEditResponseUnion, err error) {
+func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params PageruleEditParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env PageruleEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -170,7 +168,7 @@ func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params Pa
 // See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
 // for full details.
-func (r *PageruleService) Get(ctx context.Context, pageruleID string, query PageruleGetParams, opts ...option.RequestOption) (res *PageruleGetResponseUnion, err error) {
+func (r *PageruleService) Get(ctx context.Context, pageruleID string, query PageruleGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env PageruleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
@@ -465,40 +463,6 @@ func (r TargetConstraintParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by [pagerules.PageruleNewResponseUnknown] or
-// [shared.UnionString].
-type PageruleNewResponseUnion interface {
-	ImplementsPagerulesPageruleNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PageruleNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [pagerules.PageruleUpdateResponseUnknown] or
-// [shared.UnionString].
-type PageruleUpdateResponseUnion interface {
-	ImplementsPagerulesPageruleUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PageruleUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type PageruleDeleteResponse struct {
 	// Identifier
 	ID   string                     `json:"id,required"`
@@ -519,40 +483,6 @@ func (r *PageruleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r pageruleDeleteResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// Union satisfied by [pagerules.PageruleEditResponseUnknown] or
-// [shared.UnionString].
-type PageruleEditResponseUnion interface {
-	ImplementsPagerulesPageruleEditResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PageruleEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [pagerules.PageruleGetResponseUnknown] or
-// [shared.UnionString].
-type PageruleGetResponseUnion interface {
-	ImplementsPagerulesPageruleGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PageruleGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type PageruleNewParams struct {
@@ -594,9 +524,9 @@ func (r PageruleNewParamsStatus) IsKnown() bool {
 }
 
 type PageruleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   PageruleNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success PageruleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pageruleNewResponseEnvelopeJSON    `json:"-"`
@@ -675,9 +605,9 @@ func (r PageruleUpdateParamsStatus) IsKnown() bool {
 }
 
 type PageruleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   PageruleUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success PageruleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pageruleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -934,9 +864,9 @@ func (r PageruleEditParamsStatus) IsKnown() bool {
 }
 
 type PageruleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   PageruleEditResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success PageruleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pageruleEditResponseEnvelopeJSON    `json:"-"`
@@ -982,9 +912,9 @@ type PageruleGetParams struct {
 }
 
 type PageruleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   PageruleGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success PageruleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pageruleGetResponseEnvelopeJSON    `json:"-"`

@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // ControlRetentionService contains methods and other services that help with
@@ -35,15 +35,15 @@ func NewControlRetentionService(opts ...option.RequestOption) (r *ControlRetenti
 }
 
 // Updates log retention flag for Logpull API.
-func (r *ControlRetentionService) New(ctx context.Context, zoneIdentifier string, body ControlRetentionNewParams, opts ...option.RequestOption) (res *ControlRetentionNewResponse, err error) {
+func (r *ControlRetentionService) New(ctx context.Context, params ControlRetentionNewParams, opts ...option.RequestOption) (res *ControlRetentionNewResponse, err error) {
 	var env ControlRetentionNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,14 +52,14 @@ func (r *ControlRetentionService) New(ctx context.Context, zoneIdentifier string
 }
 
 // Gets log retention flag for Logpull API.
-func (r *ControlRetentionService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ControlRetentionGetResponse, err error) {
+func (r *ControlRetentionService) Get(ctx context.Context, query ControlRetentionGetParams, opts ...option.RequestOption) (res *ControlRetentionGetResponse, err error) {
 	var env ControlRetentionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -69,6 +69,7 @@ func (r *ControlRetentionService) Get(ctx context.Context, zoneIdentifier string
 }
 
 type ControlRetentionNewResponse struct {
+	// The log retention flag for Logpull API.
 	Flag bool                            `json:"flag"`
 	JSON controlRetentionNewResponseJSON `json:"-"`
 }
@@ -90,6 +91,7 @@ func (r controlRetentionNewResponseJSON) RawJSON() string {
 }
 
 type ControlRetentionGetResponse struct {
+	// The log retention flag for Logpull API.
 	Flag bool                            `json:"flag"`
 	JSON controlRetentionGetResponseJSON `json:"-"`
 }
@@ -111,8 +113,10 @@ func (r controlRetentionGetResponseJSON) RawJSON() string {
 }
 
 type ControlRetentionNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The log retention flag for Logpull API.
-	Flag param.Field[bool] `json:"flag,required"`
+	Flag param.Field[bool] `json:"flag"`
 }
 
 func (r ControlRetentionNewParams) MarshalJSON() (data []byte, err error) {
@@ -120,11 +124,11 @@ func (r ControlRetentionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ControlRetentionNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ControlRetentionNewResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ControlRetentionNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ControlRetentionNewResponse                `json:"result,nullable"`
 	JSON    controlRetentionNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -133,8 +137,8 @@ type ControlRetentionNewResponseEnvelope struct {
 type controlRetentionNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -162,12 +166,17 @@ func (r ControlRetentionNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type ControlRetentionGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type ControlRetentionGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ControlRetentionGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ControlRetentionGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ControlRetentionGetResponse                `json:"result,nullable"`
 	JSON    controlRetentionGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -176,8 +185,8 @@ type ControlRetentionGetResponseEnvelope struct {
 type controlRetentionGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

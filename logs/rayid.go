@@ -8,15 +8,11 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // RayIDService contains methods and other services that help with interacting with
@@ -40,38 +36,24 @@ func NewRayIDService(opts ...option.RequestOption) (r *RayIDService) {
 
 // The `/rayids` api route allows lookups by specific rayid. The rayids route will
 // return zero, one, or more records (ray ids are not unique).
-func (r *RayIDService) Get(ctx context.Context, zoneIdentifier string, rayIdentifier string, query RayIDGetParams, opts ...option.RequestOption) (res *RayIDGetResponseUnion, err error) {
+func (r *RayIDService) Get(ctx context.Context, RayID string, params RayIDGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if rayIdentifier == "" {
-		err = errors.New("missing required ray_identifier parameter")
+	if RayID == "" {
+		err = errors.New("missing required ray_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/logs/rayids/%s", zoneIdentifier, rayIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/logs/rayids/%s", params.ZoneID, RayID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
 }
 
-// Union satisfied by [shared.UnionString] or [logs.RayIDGetResponseUnknown].
-type RayIDGetResponseUnion interface {
-	ImplementsLogsRayIDGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RayIDGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type RayIDGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The `/received` route by default returns a limited set of fields, and allows
 	// customers to override the default field set by specifying individual fields. The
 	// reasons for this are: 1. Most customers require only a small subset of fields,

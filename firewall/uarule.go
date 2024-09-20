@@ -8,16 +8,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // UARuleService contains methods and other services that help with interacting
@@ -40,7 +38,7 @@ func NewUARuleService(opts ...option.RequestOption) (r *UARuleService) {
 }
 
 // Creates a new User Agent Blocking rule in a zone.
-func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *UARuleNewResponseUnion, err error) {
+func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UARuleNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env UARuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
@@ -57,7 +55,7 @@ func (r *UARuleService) New(ctx context.Context, zoneIdentifier string, body UAR
 }
 
 // Updates an existing User Agent Blocking rule.
-func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *UARuleUpdateResponseUnion, err error) {
+func (r *UARuleService) Update(ctx context.Context, zoneIdentifier string, id string, body UARuleUpdateParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env UARuleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
@@ -128,7 +126,7 @@ func (r *UARuleService) Delete(ctx context.Context, zoneIdentifier string, id st
 }
 
 // Fetches the details of a User Agent Blocking rule.
-func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *UARuleGetResponseUnion, err error) {
+func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env UARuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if zoneIdentifier == "" {
@@ -146,39 +144,6 @@ func (r *UARuleService) Get(ctx context.Context, zoneIdentifier string, id strin
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [firewall.UARuleNewResponseUnknown] or [shared.UnionString].
-type UARuleNewResponseUnion interface {
-	ImplementsFirewallUARuleNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UARuleNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [firewall.UARuleUpdateResponseUnknown] or
-// [shared.UnionString].
-type UARuleUpdateResponseUnion interface {
-	ImplementsFirewallUARuleUpdateResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UARuleUpdateResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type UARuleListResponse struct {
@@ -283,34 +248,86 @@ func (r uaRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [firewall.UARuleGetResponseUnknown] or [shared.UnionString].
-type UARuleGetResponseUnion interface {
-	ImplementsFirewallUARuleGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UARuleGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type UARuleNewParams struct {
-	Body interface{} `json:"body,required"`
+	// The rule configuration.
+	Configuration param.Field[UARuleNewParamsConfigurationUnion] `json:"configuration,required"`
+	// The action to apply to a matched request.
+	Mode param.Field[UARuleNewParamsMode] `json:"mode,required"`
 }
 
 func (r UARuleNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
+}
+
+// The rule configuration.
+type UARuleNewParamsConfiguration struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the rule.
+	Target param.Field[UARuleNewParamsConfigurationTarget] `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r UARuleNewParamsConfiguration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r UARuleNewParamsConfiguration) implementsFirewallUARuleNewParamsConfigurationUnion() {}
+
+// The rule configuration.
+//
+// Satisfied by [firewall.AccessRuleIPConfigurationParam],
+// [firewall.IPV6ConfigurationParam], [firewall.AccessRuleCIDRConfigurationParam],
+// [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
+// [UARuleNewParamsConfiguration].
+type UARuleNewParamsConfigurationUnion interface {
+	implementsFirewallUARuleNewParamsConfigurationUnion()
+}
+
+// The configuration target. You must set the target to `ip` when specifying an IP
+// address in the rule.
+type UARuleNewParamsConfigurationTarget string
+
+const (
+	UARuleNewParamsConfigurationTargetIP      UARuleNewParamsConfigurationTarget = "ip"
+	UARuleNewParamsConfigurationTargetIp6     UARuleNewParamsConfigurationTarget = "ip6"
+	UARuleNewParamsConfigurationTargetIPRange UARuleNewParamsConfigurationTarget = "ip_range"
+	UARuleNewParamsConfigurationTargetASN     UARuleNewParamsConfigurationTarget = "asn"
+	UARuleNewParamsConfigurationTargetCountry UARuleNewParamsConfigurationTarget = "country"
+)
+
+func (r UARuleNewParamsConfigurationTarget) IsKnown() bool {
+	switch r {
+	case UARuleNewParamsConfigurationTargetIP, UARuleNewParamsConfigurationTargetIp6, UARuleNewParamsConfigurationTargetIPRange, UARuleNewParamsConfigurationTargetASN, UARuleNewParamsConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
+// The action to apply to a matched request.
+type UARuleNewParamsMode string
+
+const (
+	UARuleNewParamsModeBlock            UARuleNewParamsMode = "block"
+	UARuleNewParamsModeChallenge        UARuleNewParamsMode = "challenge"
+	UARuleNewParamsModeWhitelist        UARuleNewParamsMode = "whitelist"
+	UARuleNewParamsModeJSChallenge      UARuleNewParamsMode = "js_challenge"
+	UARuleNewParamsModeManagedChallenge UARuleNewParamsMode = "managed_challenge"
+)
+
+func (r UARuleNewParamsMode) IsKnown() bool {
+	switch r {
+	case UARuleNewParamsModeBlock, UARuleNewParamsModeChallenge, UARuleNewParamsModeWhitelist, UARuleNewParamsModeJSChallenge, UARuleNewParamsModeManagedChallenge:
+		return true
+	}
+	return false
 }
 
 type UARuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   UARuleNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success UARuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -351,17 +368,85 @@ func (r UARuleNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleUpdateParams struct {
-	Body interface{} `json:"body,required"`
+	// The rule configuration.
+	Configuration param.Field[UARuleUpdateParamsConfigurationUnion] `json:"configuration,required"`
+	// The action to apply to a matched request.
+	Mode param.Field[UARuleUpdateParamsMode] `json:"mode,required"`
 }
 
 func (r UARuleUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
+}
+
+// The rule configuration.
+type UARuleUpdateParamsConfiguration struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the rule.
+	Target param.Field[UARuleUpdateParamsConfigurationTarget] `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value param.Field[string] `json:"value"`
+}
+
+func (r UARuleUpdateParamsConfiguration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r UARuleUpdateParamsConfiguration) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
+
+// The rule configuration.
+//
+// Satisfied by [firewall.AccessRuleIPConfigurationParam],
+// [firewall.IPV6ConfigurationParam], [firewall.AccessRuleCIDRConfigurationParam],
+// [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
+// [UARuleUpdateParamsConfiguration].
+type UARuleUpdateParamsConfigurationUnion interface {
+	implementsFirewallUARuleUpdateParamsConfigurationUnion()
+}
+
+// The configuration target. You must set the target to `ip` when specifying an IP
+// address in the rule.
+type UARuleUpdateParamsConfigurationTarget string
+
+const (
+	UARuleUpdateParamsConfigurationTargetIP      UARuleUpdateParamsConfigurationTarget = "ip"
+	UARuleUpdateParamsConfigurationTargetIp6     UARuleUpdateParamsConfigurationTarget = "ip6"
+	UARuleUpdateParamsConfigurationTargetIPRange UARuleUpdateParamsConfigurationTarget = "ip_range"
+	UARuleUpdateParamsConfigurationTargetASN     UARuleUpdateParamsConfigurationTarget = "asn"
+	UARuleUpdateParamsConfigurationTargetCountry UARuleUpdateParamsConfigurationTarget = "country"
+)
+
+func (r UARuleUpdateParamsConfigurationTarget) IsKnown() bool {
+	switch r {
+	case UARuleUpdateParamsConfigurationTargetIP, UARuleUpdateParamsConfigurationTargetIp6, UARuleUpdateParamsConfigurationTargetIPRange, UARuleUpdateParamsConfigurationTargetASN, UARuleUpdateParamsConfigurationTargetCountry:
+		return true
+	}
+	return false
+}
+
+// The action to apply to a matched request.
+type UARuleUpdateParamsMode string
+
+const (
+	UARuleUpdateParamsModeBlock            UARuleUpdateParamsMode = "block"
+	UARuleUpdateParamsModeChallenge        UARuleUpdateParamsMode = "challenge"
+	UARuleUpdateParamsModeWhitelist        UARuleUpdateParamsMode = "whitelist"
+	UARuleUpdateParamsModeJSChallenge      UARuleUpdateParamsMode = "js_challenge"
+	UARuleUpdateParamsModeManagedChallenge UARuleUpdateParamsMode = "managed_challenge"
+)
+
+func (r UARuleUpdateParamsMode) IsKnown() bool {
+	switch r {
+	case UARuleUpdateParamsModeBlock, UARuleUpdateParamsModeChallenge, UARuleUpdateParamsModeWhitelist, UARuleUpdateParamsModeJSChallenge, UARuleUpdateParamsModeManagedChallenge:
+		return true
+	}
+	return false
 }
 
 type UARuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   UARuleUpdateResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success UARuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -467,9 +552,9 @@ func (r UARuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type UARuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   UARuleGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success UARuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    uaRuleGetResponseEnvelopeJSON    `json:"-"`

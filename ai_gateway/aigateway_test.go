@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/ai_gateway"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/ai_gateway"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestAIGatewayNew(t *testing.T) {
@@ -95,11 +95,12 @@ func TestAIGatewayListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.AIGateway.List(context.TODO(), ai_gateway.AIGatewayListParams{
-		AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
-		ID:        cloudflare.F("my-gateway"),
-		OrderBy:   cloudflare.F("order_by"),
-		Page:      cloudflare.F(int64(1)),
-		PerPage:   cloudflare.F(int64(5)),
+		AccountID:        cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
+		ID:               cloudflare.F("my-gateway"),
+		OrderBy:          cloudflare.F("order_by"),
+		OrderByDirection: cloudflare.F(ai_gateway.AIGatewayListParamsOrderByDirectionAsc),
+		Page:             cloudflare.F(int64(1)),
+		PerPage:          cloudflare.F(int64(5)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

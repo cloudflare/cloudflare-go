@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/load_balancers"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestMonitorNewWithOptionalParams(t *testing.T) {
@@ -36,13 +36,9 @@ func TestMonitorNewWithOptionalParams(t *testing.T) {
 		Description:     cloudflare.F("Login page monitor"),
 		ExpectedBody:    cloudflare.F("alive"),
 		FollowRedirects: cloudflare.F(true),
-		Header: cloudflare.F[any](map[string]interface{}{
-			"Host": map[string]interface{}{
-				"0": "example.com",
-			},
-			"X-App-ID": map[string]interface{}{
-				"0": "abc123",
-			},
+		Header: cloudflare.F(map[string][]string{
+			"Host":     {"example.com"},
+			"X-App-ID": {"abc123"},
 		}),
 		Interval:  cloudflare.F(int64(0)),
 		Method:    cloudflare.F("GET"),
@@ -51,7 +47,7 @@ func TestMonitorNewWithOptionalParams(t *testing.T) {
 		ProbeZone: cloudflare.F("example.com"),
 		Retries:   cloudflare.F(int64(0)),
 		Timeout:   cloudflare.F(int64(0)),
-		Type:      cloudflare.F(load_balancers.MonitorNewParamsTypeHTTPS),
+		Type:      cloudflare.F(load_balancers.MonitorNewParamsTypeHTTP),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -87,13 +83,9 @@ func TestMonitorUpdateWithOptionalParams(t *testing.T) {
 			Description:     cloudflare.F("Login page monitor"),
 			ExpectedBody:    cloudflare.F("alive"),
 			FollowRedirects: cloudflare.F(true),
-			Header: cloudflare.F[any](map[string]interface{}{
-				"Host": map[string]interface{}{
-					"0": "example.com",
-				},
-				"X-App-ID": map[string]interface{}{
-					"0": "abc123",
-				},
+			Header: cloudflare.F(map[string][]string{
+				"Host":     {"example.com"},
+				"X-App-ID": {"abc123"},
 			}),
 			Interval:  cloudflare.F(int64(0)),
 			Method:    cloudflare.F("GET"),
@@ -102,7 +94,7 @@ func TestMonitorUpdateWithOptionalParams(t *testing.T) {
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(load_balancers.MonitorUpdateParamsTypeHTTPS),
+			Type:      cloudflare.F(load_balancers.MonitorUpdateParamsTypeHTTP),
 		},
 	)
 	if err != nil {
@@ -193,13 +185,9 @@ func TestMonitorEditWithOptionalParams(t *testing.T) {
 			Description:     cloudflare.F("Login page monitor"),
 			ExpectedBody:    cloudflare.F("alive"),
 			FollowRedirects: cloudflare.F(true),
-			Header: cloudflare.F[any](map[string]interface{}{
-				"Host": map[string]interface{}{
-					"0": "example.com",
-				},
-				"X-App-ID": map[string]interface{}{
-					"0": "abc123",
-				},
+			Header: cloudflare.F(map[string][]string{
+				"Host":     {"example.com"},
+				"X-App-ID": {"abc123"},
 			}),
 			Interval:  cloudflare.F(int64(0)),
 			Method:    cloudflare.F("GET"),
@@ -208,7 +196,7 @@ func TestMonitorEditWithOptionalParams(t *testing.T) {
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(load_balancers.MonitorEditParamsTypeHTTPS),
+			Type:      cloudflare.F(load_balancers.MonitorEditParamsTypeHTTP),
 		},
 	)
 	if err != nil {

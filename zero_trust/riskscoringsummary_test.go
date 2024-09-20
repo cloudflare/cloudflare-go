@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
-func TestRiskScoringSummaryGetWithOptionalParams(t *testing.T) {
+func TestRiskScoringSummaryGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,16 +27,9 @@ func TestRiskScoringSummaryGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.RiskScoring.Summary.Get(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		zero_trust.RiskScoringSummaryGetParams{
-			Direction: cloudflare.F(zero_trust.RiskScoringSummaryGetParamsDirectionDesc),
-			OrderBy:   cloudflare.F(zero_trust.RiskScoringSummaryGetParamsOrderByTimestamp),
-			Page:      cloudflare.F(int64(0)),
-			PerPage:   cloudflare.F(int64(0)),
-		},
-	)
+	_, err := client.ZeroTrust.RiskScoring.Summary.Get(context.TODO(), zero_trust.RiskScoringSummaryGetParams{
+		AccountID: cloudflare.F("account_id"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

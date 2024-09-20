@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -58,8 +58,8 @@ func (r *TunnelManagementService) New(ctx context.Context, tunnelID string, para
 	return
 }
 
-// Union satisfied by [zero_trust.TunnelManagementNewResponseUnknown],
-// [zero_trust.TunnelManagementNewResponseArray] or [shared.UnionString].
+// Union satisfied by [zero_trust.TunnelManagementNewResponseArray] or
+// [shared.UnionString].
 type TunnelManagementNewResponseUnion interface {
 	ImplementsZeroTrustTunnelManagementNewResponseUnion()
 }

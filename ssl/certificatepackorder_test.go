@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/ssl"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/ssl"
 )
 
 func TestCertificatePackOrderNewWithOptionalParams(t *testing.T) {
@@ -29,7 +29,7 @@ func TestCertificatePackOrderNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.SSL.CertificatePacks.Order.New(context.TODO(), ssl.CertificatePackOrderNewParams{
 		ZoneID:               cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		CertificateAuthority: cloudflare.F(ssl.CertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt),
+		CertificateAuthority: cloudflare.F(ssl.CertificatePackOrderNewParamsCertificateAuthorityGoogle),
 		Hosts:                cloudflare.F([]ssl.HostParam{"example.com", "*.example.com", "www.example.com"}),
 		Type:                 cloudflare.F(ssl.CertificatePackOrderNewParamsTypeAdvanced),
 		ValidationMethod:     cloudflare.F(ssl.CertificatePackOrderNewParamsValidationMethodTXT),

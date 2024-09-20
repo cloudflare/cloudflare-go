@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/accounts"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/accounts"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 func TestMemberNewWithOptionalParams(t *testing.T) {
@@ -100,8 +100,8 @@ func TestMemberListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Accounts.Members.List(context.TODO(), accounts.MemberListParams{
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-		Direction: cloudflare.F(accounts.MemberListParamsDirectionDesc),
-		Order:     cloudflare.F(accounts.MemberListParamsOrderStatus),
+		Direction: cloudflare.F(accounts.MemberListParamsDirectionAsc),
+		Order:     cloudflare.F(accounts.MemberListParamsOrderUserFirstName),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 		Status:    cloudflare.F(accounts.MemberListParamsStatusAccepted),

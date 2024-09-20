@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // ZoneService contains methods and other services that help with interacting with
@@ -32,6 +32,8 @@ type ZoneService struct {
 	CustomNameservers *CustomNameserverService
 	Holds             *HoldService
 	Subscriptions     *SubscriptionService
+	Plans             *PlanService
+	RatePlans         *RatePlanService
 }
 
 // NewZoneService generates a new service that applies the given options to each
@@ -45,6 +47,8 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r.CustomNameservers = NewCustomNameserverService(opts...)
 	r.Holds = NewHoldService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
+	r.Plans = NewPlanService(opts...)
+	r.RatePlans = NewRatePlanService(opts...)
 	return
 }
 
@@ -61,7 +65,8 @@ func (r *ZoneService) New(ctx context.Context, body ZoneNewParams, opts ...optio
 	return
 }
 
-// Lists, searches, sorts, and filters your zones.
+// Lists, searches, sorts, and filters your zones. Listing zones across more than
+// 500 accounts is currently not allowed.
 func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Zone], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -79,7 +84,8 @@ func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...op
 	return res, nil
 }
 
-// Lists, searches, sorts, and filters your zones.
+// Lists, searches, sorts, and filters your zones. Listing zones across more than
+// 500 accounts is currently not allowed.
 func (r *ZoneService) ListAutoPaging(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Zone] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
@@ -182,6 +188,14 @@ type Zone struct {
 	OriginalRegistrar string `json:"original_registrar,required,nullable"`
 	// The owner of the zone
 	Owner ZoneOwner `json:"owner,required"`
+	// Indicates whether the zone is only using Cloudflare DNS services. A true value
+	// means the zone will not receive security or performance benefits.
+	Paused bool `json:"paused"`
+	// The zone status on Cloudflare.
+	Status ZoneStatus `json:"status"`
+	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
+	// typically a partner-hosted zone or a CNAME setup.
+	Type Type `json:"type"`
 	// An array of domains used for custom name servers. This is only available for
 	// Business and Enterprise plans.
 	VanityNameServers []string `json:"vanity_name_servers" format:"hostname"`
@@ -203,6 +217,9 @@ type zoneJSON struct {
 	OriginalNameServers apijson.Field
 	OriginalRegistrar   apijson.Field
 	Owner               apijson.Field
+	Paused              apijson.Field
+	Status              apijson.Field
+	Type                apijson.Field
 	VanityNameServers   apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -306,6 +323,24 @@ func (r *ZoneOwner) UnmarshalJSON(data []byte) (err error) {
 
 func (r zoneOwnerJSON) RawJSON() string {
 	return r.raw
+}
+
+// The zone status on Cloudflare.
+type ZoneStatus string
+
+const (
+	ZoneStatusInitializing ZoneStatus = "initializing"
+	ZoneStatusPending      ZoneStatus = "pending"
+	ZoneStatusActive       ZoneStatus = "active"
+	ZoneStatusMoved        ZoneStatus = "moved"
+)
+
+func (r ZoneStatus) IsKnown() bool {
+	switch r {
+	case ZoneStatusInitializing, ZoneStatusPending, ZoneStatusActive, ZoneStatusMoved:
+		return true
+	}
+	return false
 }
 
 type ZoneDeleteResponse struct {
@@ -545,10 +580,6 @@ func (r zoneDeleteResponseEnvelopeJSON) RawJSON() string {
 type ZoneEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// (Deprecated) Please use the `/zones/{zone_id}/subscription` API to update a
-	// zone's plan. Changing this value will create/cancel associated subscriptions. To
-	// view available plans for this zone, see Zone Plans.
-	Plan param.Field[ZoneEditParamsPlan] `json:"plan"`
 	// A full zone implies that DNS is hosted with Cloudflare. A partial zone is
 	// typically a partner-hosted zone or a CNAME setup. This parameter is only
 	// available to Enterprise customers or if it has been explicitly enabled on a
@@ -560,18 +591,6 @@ type ZoneEditParams struct {
 }
 
 func (r ZoneEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// (Deprecated) Please use the `/zones/{zone_id}/subscription` API to update a
-// zone's plan. Changing this value will create/cancel associated subscriptions. To
-// view available plans for this zone, see Zone Plans.
-type ZoneEditParamsPlan struct {
-	// Identifier
-	ID param.Field[string] `json:"id"`
-}
-
-func (r ZoneEditParamsPlan) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

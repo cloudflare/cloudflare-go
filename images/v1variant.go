@@ -7,14 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // V1VariantService contains methods and other services that help with interacting
@@ -71,7 +69,7 @@ func (r *V1VariantService) List(ctx context.Context, query V1VariantListParams, 
 }
 
 // Deleting a variant purges the cache for all images associated with the variant.
-func (r *V1VariantService) Delete(ctx context.Context, variantID string, body V1VariantDeleteParams, opts ...option.RequestOption) (res *V1VariantDeleteResponseUnion, err error) {
+func (r *V1VariantService) Delete(ctx context.Context, variantID string, body V1VariantDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env V1VariantDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -388,23 +386,6 @@ func (r V1VariantNewResponseVariantOptionsMetadata) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [images.V1VariantDeleteResponseUnknown] or
-// [shared.UnionString].
-type V1VariantDeleteResponseUnion interface {
-	ImplementsImagesV1VariantDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*V1VariantDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type V1VariantEditResponse struct {
@@ -811,9 +792,9 @@ type V1VariantDeleteParams struct {
 }
 
 type V1VariantDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo        `json:"errors,required"`
-	Messages []shared.ResponseInfo        `json:"messages,required"`
-	Result   V1VariantDeleteResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success V1VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1VariantDeleteResponseEnvelopeJSON    `json:"-"`

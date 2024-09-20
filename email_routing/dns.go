@@ -8,10 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DNSService contains methods and other services that help with interacting with
@@ -33,15 +34,67 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	return
 }
 
-// Show the DNS records needed to configure your Email Routing zone.
-func (r *DNSService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]DNSRecord, err error) {
-	var env DNSGetResponseEnvelope
+// Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
+func (r *DNSService) New(ctx context.Context, body DNSNewParams, opts ...option.RequestOption) (res *Settings, err error) {
+	var env DNSNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/email/routing/dns", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/email/routing/dns", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Disable your Email Routing zone. Also removes additional MX records previously
+// required for Email Routing to work.
+func (r *DNSService) Delete(ctx context.Context, body DNSDeleteParams, opts ...option.RequestOption) (res *Settings, err error) {
+	var env DNSDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/email/routing/dns", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Unlock MX Records previously locked by Email Routing.
+func (r *DNSService) Edit(ctx context.Context, body DNSEditParams, opts ...option.RequestOption) (res *Settings, err error) {
+	var env DNSEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/email/routing/dns", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Show the DNS records needed to configure your Email Routing zone.
+func (r *DNSService) Get(ctx context.Context, query DNSGetParams, opts ...option.RequestOption) (res *[]DNSRecord, err error) {
+	var env DNSGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/email/routing/dns", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -132,12 +185,161 @@ func (r DNSRecordType) IsKnown() bool {
 	return false
 }
 
+type DNSNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type DNSNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DNSNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Settings                      `json:"result"`
+	JSON    dnsNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnsNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSNewResponseEnvelope]
+type dnsNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DNSNewResponseEnvelopeSuccess bool
+
+const (
+	DNSNewResponseEnvelopeSuccessTrue DNSNewResponseEnvelopeSuccess = true
+)
+
+func (r DNSNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DNSDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type DNSDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DNSDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  Settings                         `json:"result"`
+	JSON    dnsDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnsDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSDeleteResponseEnvelope]
+type dnsDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DNSDeleteResponseEnvelopeSuccess bool
+
+const (
+	DNSDeleteResponseEnvelopeSuccessTrue DNSDeleteResponseEnvelopeSuccess = true
+)
+
+func (r DNSDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DNSEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type DNSEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DNSEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  Settings                       `json:"result"`
+	JSON    dnsEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnsEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSEditResponseEnvelope]
+type dnsEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DNSEditResponseEnvelopeSuccess bool
+
+const (
+	DNSEditResponseEnvelopeSuccessTrue DNSEditResponseEnvelopeSuccess = true
+)
+
+func (r DNSEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DNSEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DNSGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type DNSGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    DNSGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []DNSRecord                      `json:"result,nullable"`
+	Result     []DNSRecord                      `json:"result"`
 	ResultInfo DNSGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       dnsGetResponseEnvelopeJSON       `json:"-"`
 }

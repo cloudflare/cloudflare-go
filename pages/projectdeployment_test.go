@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/pages"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/pages"
 )
 
 func TestProjectDeploymentNewWithOptionalParams(t *testing.T) {
@@ -63,7 +63,7 @@ func TestProjectDeploymentListWithOptionalParams(t *testing.T) {
 		"this-is-my-project-01",
 		pages.ProjectDeploymentListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Env:       cloudflare.F(pages.ProjectDeploymentListParamsEnvPreview),
+			Env:       cloudflare.F(pages.ProjectDeploymentListParamsEnvProduction),
 		},
 	)
 	if err != nil {

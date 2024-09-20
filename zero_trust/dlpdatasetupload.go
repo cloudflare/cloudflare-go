@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DLPDatasetUploadService contains methods and other services that help with
@@ -34,7 +34,7 @@ func NewDLPDatasetUploadService(opts ...option.RequestOption) (r *DLPDatasetUplo
 	return
 }
 
-// Prepare to upload a new version of a dataset.
+// Prepare to upload a new version of a dataset
 func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *NewVersion, err error) {
 	var env DLPDatasetUploadNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -55,7 +55,10 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, bod
 	return
 }
 
-// Upload a new version of a dataset.
+// This is used for single-column EDMv1 and Custom Word Lists. The EDM format can
+// only be created in the Cloudflare dashboard. For other clients, this operation
+// can only be used for non-secret Custom Word Lists. The body must be a UTF-8
+// encoded, newline (NL or CRNL) separated list of words to be matched.
 func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, params DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *Dataset, err error) {
 	var env DLPDatasetUploadEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -77,19 +80,23 @@ func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, ve
 }
 
 type NewVersion struct {
-	MaxCells int64          `json:"max_cells,required"`
-	Version  int64          `json:"version,required"`
-	Secret   string         `json:"secret" format:"password"`
-	JSON     newVersionJSON `json:"-"`
+	EncodingVersion int64              `json:"encoding_version,required"`
+	MaxCells        int64              `json:"max_cells,required"`
+	Version         int64              `json:"version,required"`
+	Columns         []NewVersionColumn `json:"columns"`
+	Secret          string             `json:"secret" format:"password"`
+	JSON            newVersionJSON     `json:"-"`
 }
 
 // newVersionJSON contains the JSON metadata for the struct [NewVersion]
 type newVersionJSON struct {
-	MaxCells    apijson.Field
-	Version     apijson.Field
-	Secret      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	EncodingVersion apijson.Field
+	MaxCells        apijson.Field
+	Version         apijson.Field
+	Columns         apijson.Field
+	Secret          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *NewVersion) UnmarshalJSON(data []byte) (err error) {
@@ -100,17 +107,62 @@ func (r newVersionJSON) RawJSON() string {
 	return r.raw
 }
 
+type NewVersionColumn struct {
+	EntryID      string                        `json:"entry_id,required" format:"uuid"`
+	HeaderName   string                        `json:"header_name,required"`
+	NumCells     int64                         `json:"num_cells,required"`
+	UploadStatus NewVersionColumnsUploadStatus `json:"upload_status,required"`
+	JSON         newVersionColumnJSON          `json:"-"`
+}
+
+// newVersionColumnJSON contains the JSON metadata for the struct
+// [NewVersionColumn]
+type newVersionColumnJSON struct {
+	EntryID      apijson.Field
+	HeaderName   apijson.Field
+	NumCells     apijson.Field
+	UploadStatus apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *NewVersionColumn) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r newVersionColumnJSON) RawJSON() string {
+	return r.raw
+}
+
+type NewVersionColumnsUploadStatus string
+
+const (
+	NewVersionColumnsUploadStatusEmpty      NewVersionColumnsUploadStatus = "empty"
+	NewVersionColumnsUploadStatusUploading  NewVersionColumnsUploadStatus = "uploading"
+	NewVersionColumnsUploadStatusProcessing NewVersionColumnsUploadStatus = "processing"
+	NewVersionColumnsUploadStatusFailed     NewVersionColumnsUploadStatus = "failed"
+	NewVersionColumnsUploadStatusComplete   NewVersionColumnsUploadStatus = "complete"
+)
+
+func (r NewVersionColumnsUploadStatus) IsKnown() bool {
+	switch r {
+	case NewVersionColumnsUploadStatusEmpty, NewVersionColumnsUploadStatusUploading, NewVersionColumnsUploadStatusProcessing, NewVersionColumnsUploadStatusFailed, NewVersionColumnsUploadStatusComplete:
+		return true
+	}
+	return false
+}
+
 type DLPDatasetUploadNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DLPDatasetUploadNewResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                         `json:"errors,required"`
-	Messages   []shared.ResponseInfo                         `json:"messages,required"`
-	Success    bool                                          `json:"success,required"`
-	Result     NewVersion                                    `json:"result"`
-	ResultInfo DLPDatasetUploadNewResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpDatasetUploadNewResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DLPDatasetUploadNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  NewVersion                                 `json:"result"`
+	JSON    dlpDatasetUploadNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // dlpDatasetUploadNewResponseEnvelopeJSON contains the JSON metadata for the
@@ -120,7 +172,6 @@ type dlpDatasetUploadNewResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -133,35 +184,19 @@ func (r dlpDatasetUploadNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetUploadNewResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                             `json:"total_count,required"`
-	JSON       dlpDatasetUploadNewResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type DLPDatasetUploadNewResponseEnvelopeSuccess bool
 
-// dlpDatasetUploadNewResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [DLPDatasetUploadNewResponseEnvelopeResultInfo]
-type dlpDatasetUploadNewResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	DLPDatasetUploadNewResponseEnvelopeSuccessTrue DLPDatasetUploadNewResponseEnvelopeSuccess = true
+)
 
-func (r *DLPDatasetUploadNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetUploadNewResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r DLPDatasetUploadNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPDatasetUploadNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type DLPDatasetUploadEditParams struct {
@@ -174,12 +209,12 @@ func (r DLPDatasetUploadEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPDatasetUploadEditResponseEnvelope struct {
-	Errors     []shared.ResponseInfo                          `json:"errors,required"`
-	Messages   []shared.ResponseInfo                          `json:"messages,required"`
-	Success    bool                                           `json:"success,required"`
-	Result     Dataset                                        `json:"result"`
-	ResultInfo DLPDatasetUploadEditResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpDatasetUploadEditResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success DLPDatasetUploadEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  Dataset                                     `json:"result"`
+	JSON    dlpDatasetUploadEditResponseEnvelopeJSON    `json:"-"`
 }
 
 // dlpDatasetUploadEditResponseEnvelopeJSON contains the JSON metadata for the
@@ -189,7 +224,6 @@ type dlpDatasetUploadEditResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -202,33 +236,17 @@ func (r dlpDatasetUploadEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DLPDatasetUploadEditResponseEnvelopeResultInfo struct {
-	// total number of pages
-	Count int64 `json:"count,required"`
-	// current page
-	Page int64 `json:"page,required"`
-	// number of items per page
-	PerPage int64 `json:"per_page,required"`
-	// total number of items
-	TotalCount int64                                              `json:"total_count,required"`
-	JSON       dlpDatasetUploadEditResponseEnvelopeResultInfoJSON `json:"-"`
-}
+// Whether the API call was successful
+type DLPDatasetUploadEditResponseEnvelopeSuccess bool
 
-// dlpDatasetUploadEditResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [DLPDatasetUploadEditResponseEnvelopeResultInfo]
-type dlpDatasetUploadEditResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	DLPDatasetUploadEditResponseEnvelopeSuccessTrue DLPDatasetUploadEditResponseEnvelopeSuccess = true
+)
 
-func (r *DLPDatasetUploadEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpDatasetUploadEditResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
+func (r DLPDatasetUploadEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DLPDatasetUploadEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

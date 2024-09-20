@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/logpush"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/logpush"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestDatasetJobGetWithOptionalParams(t *testing.T) {
@@ -30,7 +30,7 @@ func TestDatasetJobGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Logpush.Datasets.Jobs.Get(
 		context.TODO(),
-		"http_requests",
+		"gateway_dns",
 		logpush.DatasetJobGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},

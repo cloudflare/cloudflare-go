@@ -7,14 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DeviceUnrevokeService contains methods and other services that help with
@@ -37,7 +35,7 @@ func NewDeviceUnrevokeService(opts ...option.RequestOption) (r *DeviceUnrevokeSe
 }
 
 // Unrevokes a list of devices.
-func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNewParams, opts ...option.RequestOption) (res *DeviceUnrevokeNewResponseUnion, err error) {
+func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env DeviceUnrevokeNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -53,23 +51,6 @@ func (r *DeviceUnrevokeService) New(ctx context.Context, params DeviceUnrevokeNe
 	return
 }
 
-// Union satisfied by [zero_trust.DeviceUnrevokeNewResponseUnknown] or
-// [shared.UnionString].
-type DeviceUnrevokeNewResponseUnion interface {
-	ImplementsZeroTrustDeviceUnrevokeNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DeviceUnrevokeNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type DeviceUnrevokeNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of device ids to unrevoke.
@@ -81,9 +62,9 @@ func (r DeviceUnrevokeNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DeviceUnrevokeNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   DeviceUnrevokeNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful.
 	Success DeviceUnrevokeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceUnrevokeNewResponseEnvelopeJSON    `json:"-"`

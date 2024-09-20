@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/waiting_rooms"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/waiting_rooms"
 )
 
 func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
@@ -30,6 +30,10 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 	_, err := client.WaitingRooms.New(context.TODO(), waiting_rooms.WaitingRoomNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Query: waiting_rooms.QueryParam{
+			Host:              cloudflare.F("shop.example.com"),
+			Name:              cloudflare.F("production_webinar"),
+			NewUsersPerMinute: cloudflare.F(int64(200)),
+			TotalActiveUsers:  cloudflare.F(int64(200)),
 			AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
 				Host: cloudflare.F("shop2.example.com"),
 				Path: cloudflare.F("/shop2/checkout"),
@@ -46,20 +50,17 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 			}),
 			CookieSuffix:            cloudflare.F("abcd"),
 			CustomPageHTML:          cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"),
-			DefaultTemplateLanguage: cloudflare.F(waiting_rooms.QueryDefaultTemplateLanguageEsEs),
+			DefaultTemplateLanguage: cloudflare.F(waiting_rooms.QueryDefaultTemplateLanguageEnUs),
 			Description:             cloudflare.F("Production - DO NOT MODIFY"),
 			DisableSessionRenewal:   cloudflare.F(false),
-			Host:                    cloudflare.F("shop.example.com"),
+			EnabledOriginCommands:   cloudflare.F([]waiting_rooms.QueryEnabledOriginCommand{waiting_rooms.QueryEnabledOriginCommandRevoke}),
 			JsonResponseEnabled:     cloudflare.F(false),
-			Name:                    cloudflare.F("production_webinar"),
-			NewUsersPerMinute:       cloudflare.F(int64(200)),
 			Path:                    cloudflare.F("/shop/checkout"),
 			QueueAll:                cloudflare.F(true),
 			QueueingMethod:          cloudflare.F(waiting_rooms.QueryQueueingMethodFifo),
-			QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode202),
+			QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode200),
 			SessionDuration:         cloudflare.F(int64(1)),
 			Suspended:               cloudflare.F(true),
-			TotalActiveUsers:        cloudflare.F(int64(200)),
 		},
 	})
 	if err != nil {
@@ -90,6 +91,10 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 		waiting_rooms.WaitingRoomUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Query: waiting_rooms.QueryParam{
+				Host:              cloudflare.F("shop.example.com"),
+				Name:              cloudflare.F("production_webinar"),
+				NewUsersPerMinute: cloudflare.F(int64(200)),
+				TotalActiveUsers:  cloudflare.F(int64(200)),
 				AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
 					Host: cloudflare.F("shop2.example.com"),
 					Path: cloudflare.F("/shop2/checkout"),
@@ -106,20 +111,17 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 				}),
 				CookieSuffix:            cloudflare.F("abcd"),
 				CustomPageHTML:          cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"),
-				DefaultTemplateLanguage: cloudflare.F(waiting_rooms.QueryDefaultTemplateLanguageEsEs),
+				DefaultTemplateLanguage: cloudflare.F(waiting_rooms.QueryDefaultTemplateLanguageEnUs),
 				Description:             cloudflare.F("Production - DO NOT MODIFY"),
 				DisableSessionRenewal:   cloudflare.F(false),
-				Host:                    cloudflare.F("shop.example.com"),
+				EnabledOriginCommands:   cloudflare.F([]waiting_rooms.QueryEnabledOriginCommand{waiting_rooms.QueryEnabledOriginCommandRevoke}),
 				JsonResponseEnabled:     cloudflare.F(false),
-				Name:                    cloudflare.F("production_webinar"),
-				NewUsersPerMinute:       cloudflare.F(int64(200)),
 				Path:                    cloudflare.F("/shop/checkout"),
 				QueueAll:                cloudflare.F(true),
 				QueueingMethod:          cloudflare.F(waiting_rooms.QueryQueueingMethodFifo),
-				QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode202),
+				QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode200),
 				SessionDuration:         cloudflare.F(int64(1)),
 				Suspended:               cloudflare.F(true),
-				TotalActiveUsers:        cloudflare.F(int64(200)),
 			},
 		},
 	)
@@ -147,8 +149,8 @@ func TestWaitingRoomListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.WaitingRooms.List(context.TODO(), waiting_rooms.WaitingRoomListParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Page:    cloudflare.F[any](map[string]interface{}{}),
-		PerPage: cloudflare.F[any](map[string]interface{}{}),
+		Page:    cloudflare.F(1.000000),
+		PerPage: cloudflare.F(5.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -207,6 +209,10 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 		waiting_rooms.WaitingRoomEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Query: waiting_rooms.QueryParam{
+				Host:              cloudflare.F("shop.example.com"),
+				Name:              cloudflare.F("production_webinar"),
+				NewUsersPerMinute: cloudflare.F(int64(200)),
+				TotalActiveUsers:  cloudflare.F(int64(200)),
 				AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
 					Host: cloudflare.F("shop2.example.com"),
 					Path: cloudflare.F("/shop2/checkout"),
@@ -223,20 +229,17 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 				}),
 				CookieSuffix:            cloudflare.F("abcd"),
 				CustomPageHTML:          cloudflare.F("{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"),
-				DefaultTemplateLanguage: cloudflare.F(waiting_rooms.QueryDefaultTemplateLanguageEsEs),
+				DefaultTemplateLanguage: cloudflare.F(waiting_rooms.QueryDefaultTemplateLanguageEnUs),
 				Description:             cloudflare.F("Production - DO NOT MODIFY"),
 				DisableSessionRenewal:   cloudflare.F(false),
-				Host:                    cloudflare.F("shop.example.com"),
+				EnabledOriginCommands:   cloudflare.F([]waiting_rooms.QueryEnabledOriginCommand{waiting_rooms.QueryEnabledOriginCommandRevoke}),
 				JsonResponseEnabled:     cloudflare.F(false),
-				Name:                    cloudflare.F("production_webinar"),
-				NewUsersPerMinute:       cloudflare.F(int64(200)),
 				Path:                    cloudflare.F("/shop/checkout"),
 				QueueAll:                cloudflare.F(true),
 				QueueingMethod:          cloudflare.F(waiting_rooms.QueryQueueingMethodFifo),
-				QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode202),
+				QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode200),
 				SessionDuration:         cloudflare.F(int64(1)),
 				Suspended:               cloudflare.F(true),
-				TotalActiveUsers:        cloudflare.F(int64(200)),
 			},
 		},
 	)

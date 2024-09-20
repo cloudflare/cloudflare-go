@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // IndicatorFeedPermissionService contains methods and other services that help
@@ -114,6 +114,8 @@ type IndicatorFeedPermissionListResponse struct {
 	Description string `json:"description"`
 	// Whether the indicator feed can be attributed to a provider
 	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed can be downloaded
+	IsDownloadable bool `json:"is_downloadable"`
 	// Whether the indicator feed is exposed to customers
 	IsPublic bool `json:"is_public"`
 	// The name of the indicator feed
@@ -127,6 +129,7 @@ type indicatorFeedPermissionListResponseJSON struct {
 	ID             apijson.Field
 	Description    apijson.Field
 	IsAttributable apijson.Field
+	IsDownloadable apijson.Field
 	IsPublic       apijson.Field
 	Name           apijson.Field
 	raw            string

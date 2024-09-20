@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AccessCustomPageService contains methods and other services that help with
@@ -204,11 +204,7 @@ type CustomPageParam struct {
 	// Custom page type.
 	Type param.Field[CustomPageType] `json:"type,required"`
 	// Number of apps the custom page is assigned to.
-	AppCount  param.Field[int64]     `json:"app_count"`
-	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
-	// UUID
-	UID       param.Field[string]    `json:"uid"`
-	UpdatedAt param.Field[time.Time] `json:"updated_at" format:"date-time"`
+	AppCount param.Field[int64] `json:"app_count"`
 }
 
 func (r CustomPageParam) MarshalJSON() (data []byte, err error) {

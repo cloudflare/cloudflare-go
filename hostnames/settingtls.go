@@ -10,11 +10,11 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -177,11 +177,13 @@ type SettingTLSDeleteResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The hostname for which the tls settings are set.
 	Hostname string `json:"hostname"`
-	Status   string `json:"status"`
+	// Deployment status for the given tls setting.
+	Status string `json:"status"`
 	// This is the time the tls setting was updated.
-	UpdatedAt time.Time                    `json:"updated_at" format:"date-time"`
-	Value     string                       `json:"value"`
-	JSON      settingTLSDeleteResponseJSON `json:"-"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// The tls setting value.
+	Value SettingValueUnion            `json:"value"`
+	JSON  settingTLSDeleteResponseJSON `json:"-"`
 }
 
 // settingTLSDeleteResponseJSON contains the JSON metadata for the struct
@@ -401,7 +403,7 @@ type SettingTLSGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    SettingTLSGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []SettingTLSGetResponse                 `json:"result,nullable"`
+	Result     []SettingTLSGetResponse                 `json:"result"`
 	ResultInfo SettingTLSGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       settingTLSGetResponseEnvelopeJSON       `json:"-"`
 }

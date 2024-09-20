@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AccountSettingService contains methods and other services that help with
@@ -69,8 +69,8 @@ func (r *AccountSettingService) Get(ctx context.Context, query AccountSettingGet
 }
 
 type AccountSettingUpdateResponse struct {
-	DefaultUsageModel interface{}                      `json:"default_usage_model"`
-	GreenCompute      interface{}                      `json:"green_compute"`
+	DefaultUsageModel string                           `json:"default_usage_model"`
+	GreenCompute      bool                             `json:"green_compute"`
 	JSON              accountSettingUpdateResponseJSON `json:"-"`
 }
 
@@ -92,8 +92,8 @@ func (r accountSettingUpdateResponseJSON) RawJSON() string {
 }
 
 type AccountSettingGetResponse struct {
-	DefaultUsageModel interface{}                   `json:"default_usage_model"`
-	GreenCompute      interface{}                   `json:"green_compute"`
+	DefaultUsageModel string                        `json:"default_usage_model"`
+	GreenCompute      bool                          `json:"green_compute"`
 	JSON              accountSettingGetResponseJSON `json:"-"`
 }
 
@@ -116,12 +116,13 @@ func (r accountSettingGetResponseJSON) RawJSON() string {
 
 type AccountSettingUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      string              `json:"body,required"`
+	AccountID         param.Field[string] `path:"account_id,required"`
+	DefaultUsageModel param.Field[string] `json:"default_usage_model"`
+	GreenCompute      param.Field[bool]   `json:"green_compute"`
 }
 
 func (r AccountSettingUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type AccountSettingUpdateResponseEnvelope struct {

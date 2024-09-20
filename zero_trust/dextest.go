@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DEXTestService contains methods and other services that help with interacting
@@ -39,7 +39,7 @@ func NewDEXTestService(opts ...option.RequestOption) (r *DEXTestService) {
 	return
 }
 
-// List DEX tests
+// List DEX tests with overview metrics
 func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DEXTestListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -48,7 +48,7 @@ func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opt
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dex/tests", params.AccountID)
+	path := fmt.Sprintf("accounts/%s/dex/tests/overview", params.AccountID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opt
 	return res, nil
 }
 
-// List DEX tests
+// List DEX tests with overview metrics
 func (r *DEXTestService) ListAutoPaging(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[DEXTestListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
@@ -178,7 +178,7 @@ type TestsTest struct {
 	HTTPResultsByColo []TestsTestsHTTPResultsByColo `json:"httpResultsByColo"`
 	// for HTTP, the method to use when running the test
 	Method                  string                              `json:"method"`
-	TargetPolicies          []DeviceExperienceMonitor           `json:"target_policies,nullable"`
+	TargetPolicies          []DigitalExperienceMonitor          `json:"target_policies,nullable"`
 	Targeted                bool                                `json:"targeted"`
 	TracerouteResults       TestsTestsTracerouteResults         `json:"tracerouteResults,nullable"`
 	TracerouteResultsByColo []TestsTestsTracerouteResultsByColo `json:"tracerouteResultsByColo"`

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
 func TestOrganizationNewWithOptionalParams(t *testing.T) {
@@ -44,7 +44,7 @@ func TestOrganizationNewWithOptionalParams(t *testing.T) {
 		}),
 		SessionDuration:                cloudflare.F("24h"),
 		UIReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
-		UserSeatExpirationInactiveTime: cloudflare.F("720h"),
+		UserSeatExpirationInactiveTime: cloudflare.F("730h"),
 		WARPAuthSessionDuration:        cloudflare.F("24h"),
 	})
 	if err != nil {
@@ -90,7 +90,7 @@ func TestOrganizationUpdateWithOptionalParams(t *testing.T) {
 		Name:                           cloudflare.F("Widget Corps Internal Applications"),
 		SessionDuration:                cloudflare.F("24h"),
 		UIReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
-		UserSeatExpirationInactiveTime: cloudflare.F("720h"),
+		UserSeatExpirationInactiveTime: cloudflare.F("730h"),
 		WARPAuthSessionDuration:        cloudflare.F("24h"),
 	})
 	if err != nil {

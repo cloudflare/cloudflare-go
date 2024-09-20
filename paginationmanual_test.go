@@ -7,10 +7,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/accounts"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/accounts"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestManualPagination(t *testing.T) {
@@ -31,7 +31,7 @@ func TestManualPagination(t *testing.T) {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
 	for _, account := range page.Result {
-		t.Logf("%+v\n", account)
+		t.Logf("%+v\n", account.ID)
 	}
 	// Prism mock isn't going to give us real pagination
 	page, err = page.GetNextPage()
@@ -40,7 +40,7 @@ func TestManualPagination(t *testing.T) {
 	}
 	if page != nil {
 		for _, account := range page.Result {
-			t.Logf("%+v\n", account)
+			t.Logf("%+v\n", account.ID)
 		}
 	}
 }

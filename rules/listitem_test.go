@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/rules"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/rules"
 )
 
 func TestListItemNew(t *testing.T) {
@@ -40,13 +40,13 @@ func TestListItemNew(t *testing.T) {
 				}),
 				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(rules.RedirectParam{
+					SourceURL:           cloudflare.F("example.com/arch"),
+					TargetURL:           cloudflare.F("https://archlinux.org/"),
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
-					SourceURL:           cloudflare.F("example.com/arch"),
 					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
-					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
 				ASN:     cloudflare.F(int64(5567)),
@@ -56,13 +56,13 @@ func TestListItemNew(t *testing.T) {
 				}),
 				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(rules.RedirectParam{
+					SourceURL:           cloudflare.F("example.com/arch"),
+					TargetURL:           cloudflare.F("https://archlinux.org/"),
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
-					SourceURL:           cloudflare.F("example.com/arch"),
 					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
-					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
 				ASN:     cloudflare.F(int64(5567)),
@@ -72,13 +72,13 @@ func TestListItemNew(t *testing.T) {
 				}),
 				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(rules.RedirectParam{
+					SourceURL:           cloudflare.F("example.com/arch"),
+					TargetURL:           cloudflare.F("https://archlinux.org/"),
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
-					SourceURL:           cloudflare.F("example.com/arch"),
 					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
-					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}},
 		},
@@ -118,13 +118,13 @@ func TestListItemUpdate(t *testing.T) {
 				}),
 				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(rules.RedirectParam{
+					SourceURL:           cloudflare.F("example.com/arch"),
+					TargetURL:           cloudflare.F("https://archlinux.org/"),
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
-					SourceURL:           cloudflare.F("example.com/arch"),
 					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
-					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
 				ASN:     cloudflare.F(int64(5567)),
@@ -134,13 +134,13 @@ func TestListItemUpdate(t *testing.T) {
 				}),
 				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(rules.RedirectParam{
+					SourceURL:           cloudflare.F("example.com/arch"),
+					TargetURL:           cloudflare.F("https://archlinux.org/"),
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
-					SourceURL:           cloudflare.F("example.com/arch"),
 					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
-					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
 				ASN:     cloudflare.F(int64(5567)),
@@ -150,13 +150,13 @@ func TestListItemUpdate(t *testing.T) {
 				}),
 				IP: cloudflare.F("10.0.0.1"),
 				Redirect: cloudflare.F(rules.RedirectParam{
+					SourceURL:           cloudflare.F("example.com/arch"),
+					TargetURL:           cloudflare.F("https://archlinux.org/"),
 					IncludeSubdomains:   cloudflare.F(true),
 					PreservePathSuffix:  cloudflare.F(true),
 					PreserveQueryString: cloudflare.F(true),
-					SourceURL:           cloudflare.F("example.com/arch"),
 					StatusCode:          cloudflare.F(rules.RedirectStatusCode301),
 					SubpathMatching:     cloudflare.F(true),
-					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}},
 		},

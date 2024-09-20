@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // RoleService contains methods and other services that help with interacting with
@@ -63,14 +63,18 @@ func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, 
 }
 
 // Get information about a specific role for an account.
-func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponse, err error) {
+func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponse, err error) {
 	var env RoleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/roles/%v", query.AccountID, roleID)
+	if roleID == "" {
+		err = errors.New("missing required role_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/roles/%s", query.AccountID, roleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -92,13 +96,20 @@ type RoleGetParams struct {
 }
 
 type RoleGetResponseEnvelope struct {
-	Result RoleGetResponse             `json:"result"`
-	JSON   roleGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success RoleGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  RoleGetResponse                `json:"result"`
+	JSON    roleGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // roleGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [RoleGetResponseEnvelope]
 type roleGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -110,4 +121,19 @@ func (r *RoleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r roleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type RoleGetResponseEnvelopeSuccess bool
+
+const (
+	RoleGetResponseEnvelopeSuccessTrue RoleGetResponseEnvelopeSuccess = true
+)
+
+func (r RoleGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RoleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

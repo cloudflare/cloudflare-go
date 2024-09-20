@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/radar"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/radar"
 )
 
 func TestTCPResetsTimeoutSummaryWithOptionalParams(t *testing.T) {
@@ -61,7 +61,7 @@ func TestTCPResetsTimeoutTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.TCPResetsTimeouts.TimeseriesGroups(context.TODO(), radar.TCPResetsTimeoutTimeseriesGroupsParams{
-		AggInterval: cloudflare.F(radar.TCPResetsTimeoutTimeseriesGroupsParamsAggInterval1h),
+		AggInterval: cloudflare.F(radar.TCPResetsTimeoutTimeseriesGroupsParamsAggInterval15m),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

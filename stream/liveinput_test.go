@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/stream"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/stream"
 )
 
 func TestLiveInputNewWithOptionalParams(t *testing.T) {
@@ -35,10 +35,11 @@ func TestLiveInputNewWithOptionalParams(t *testing.T) {
 			"name": "test stream 1",
 		}),
 		Recording: cloudflare.F(stream.LiveInputNewParamsRecording{
-			AllowedOrigins:    cloudflare.F([]string{"example.com"}),
-			Mode:              cloudflare.F(stream.LiveInputNewParamsRecordingModeOff),
-			RequireSignedURLs: cloudflare.F(false),
-			TimeoutSeconds:    cloudflare.F(int64(0)),
+			AllowedOrigins:      cloudflare.F([]string{"example.com"}),
+			HideLiveViewerCount: cloudflare.F(false),
+			Mode:                cloudflare.F(stream.LiveInputNewParamsRecordingModeOff),
+			RequireSignedURLs:   cloudflare.F(false),
+			TimeoutSeconds:      cloudflare.F(int64(0)),
 		}),
 	})
 	if err != nil {
@@ -74,10 +75,11 @@ func TestLiveInputUpdateWithOptionalParams(t *testing.T) {
 				"name": "test stream 1",
 			}),
 			Recording: cloudflare.F(stream.LiveInputUpdateParamsRecording{
-				AllowedOrigins:    cloudflare.F([]string{"example.com"}),
-				Mode:              cloudflare.F(stream.LiveInputUpdateParamsRecordingModeOff),
-				RequireSignedURLs: cloudflare.F(false),
-				TimeoutSeconds:    cloudflare.F(int64(0)),
+				AllowedOrigins:      cloudflare.F([]string{"example.com"}),
+				HideLiveViewerCount: cloudflare.F(false),
+				Mode:                cloudflare.F(stream.LiveInputUpdateParamsRecordingModeOff),
+				RequireSignedURLs:   cloudflare.F(false),
+				TimeoutSeconds:      cloudflare.F(int64(0)),
 			}),
 		},
 	)

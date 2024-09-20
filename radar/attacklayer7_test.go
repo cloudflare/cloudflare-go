@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/radar"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/radar"
 )
 
 func TestAttackLayer7TimeseriesWithOptionalParams(t *testing.T) {
@@ -29,7 +29,7 @@ func TestAttackLayer7TimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.Timeseries(context.TODO(), radar.AttackLayer7TimeseriesParams{
-		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesParamsAggInterval1h),
+		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesParamsAggInterval15m),
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		Attack:            cloudflare.F([]radar.AttackLayer7TimeseriesParamsAttack{radar.AttackLayer7TimeseriesParamsAttackDDoS, radar.AttackLayer7TimeseriesParamsAttackWAF, radar.AttackLayer7TimeseriesParamsAttackBotManagement}),
 		Continent:         cloudflare.F([]string{"string", "string", "string"}),
@@ -43,7 +43,7 @@ func TestAttackLayer7TimeseriesWithOptionalParams(t *testing.T) {
 		Location:          cloudflare.F([]string{"string", "string", "string"}),
 		MitigationProduct: cloudflare.F([]radar.AttackLayer7TimeseriesParamsMitigationProduct{radar.AttackLayer7TimeseriesParamsMitigationProductDDoS, radar.AttackLayer7TimeseriesParamsMitigationProductWAF, radar.AttackLayer7TimeseriesParamsMitigationProductBotManagement}),
 		Name:              cloudflare.F([]string{"string", "string", "string"}),
-		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesParamsNormalizationMin0Max),
+		Normalization:     cloudflare.F(radar.AttackLayer7TimeseriesParamsNormalizationPercentageChange),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

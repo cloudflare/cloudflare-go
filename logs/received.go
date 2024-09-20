@@ -8,15 +8,11 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // ReceivedService contains methods and other services that help with interacting
@@ -48,34 +44,20 @@ func NewReceivedService(opts ...option.RequestOption) (r *ReceivedService) {
 // `start=2018-05-20T10:00:00Z&end=2018-05-20T10:01:00Z`, then
 // `start=2018-05-20T10:01:00Z&end=2018-05-20T10:02:00Z` and so on; the overlap
 // will be handled properly.
-func (r *ReceivedService) Get(ctx context.Context, zoneIdentifier string, query ReceivedGetParams, opts ...option.RequestOption) (res *ReceivedGetResponseUnion, err error) {
+func (r *ReceivedService) Get(ctx context.Context, params ReceivedGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/logs/received", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/logs/received", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
 }
 
-// Union satisfied by [shared.UnionString] or [logs.ReceivedGetResponseUnknown].
-type ReceivedGetResponseUnion interface {
-	ImplementsLogsReceivedGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ReceivedGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type ReceivedGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Sets the (exclusive) end of the requested time frame. This can be a unix
 	// timestamp (in seconds or nanoseconds), or an absolute timestamp that conforms to
 	// RFC 3339. `end` must be at least five minutes earlier than now and must be later

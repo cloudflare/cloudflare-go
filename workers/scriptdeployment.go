@@ -7,12 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // ScriptDeploymentService contains methods and other services that help with
@@ -111,24 +113,26 @@ func (r DeploymentParam) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptDeploymentNewResponse struct {
-	ID          string                          `json:"id"`
-	Annotations Deployment                      `json:"annotations"`
-	AuthorEmail string                          `json:"author_email"`
-	CreatedOn   string                          `json:"created_on"`
-	Source      string                          `json:"source"`
-	Strategy    string                          `json:"strategy"`
-	JSON        scriptDeploymentNewResponseJSON `json:"-"`
+	Strategy    ScriptDeploymentNewResponseStrategy  `json:"strategy,required"`
+	Versions    []ScriptDeploymentNewResponseVersion `json:"versions,required"`
+	ID          string                               `json:"id"`
+	Annotations Deployment                           `json:"annotations"`
+	AuthorEmail string                               `json:"author_email"`
+	CreatedOn   string                               `json:"created_on"`
+	Source      string                               `json:"source"`
+	JSON        scriptDeploymentNewResponseJSON      `json:"-"`
 }
 
 // scriptDeploymentNewResponseJSON contains the JSON metadata for the struct
 // [ScriptDeploymentNewResponse]
 type scriptDeploymentNewResponseJSON struct {
+	Strategy    apijson.Field
+	Versions    apijson.Field
 	ID          apijson.Field
 	Annotations apijson.Field
 	AuthorEmail apijson.Field
 	CreatedOn   apijson.Field
 	Source      apijson.Field
-	Strategy    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -138,6 +142,43 @@ func (r *ScriptDeploymentNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scriptDeploymentNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScriptDeploymentNewResponseStrategy string
+
+const (
+	ScriptDeploymentNewResponseStrategyPercentage ScriptDeploymentNewResponseStrategy = "percentage"
+)
+
+func (r ScriptDeploymentNewResponseStrategy) IsKnown() bool {
+	switch r {
+	case ScriptDeploymentNewResponseStrategyPercentage:
+		return true
+	}
+	return false
+}
+
+type ScriptDeploymentNewResponseVersion struct {
+	Percentage float64                                `json:"percentage,required"`
+	VersionID  string                                 `json:"version_id,required"`
+	JSON       scriptDeploymentNewResponseVersionJSON `json:"-"`
+}
+
+// scriptDeploymentNewResponseVersionJSON contains the JSON metadata for the struct
+// [ScriptDeploymentNewResponseVersion]
+type scriptDeploymentNewResponseVersionJSON struct {
+	Percentage  apijson.Field
+	VersionID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentNewResponseVersion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentNewResponseVersionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -163,24 +204,26 @@ func (r scriptDeploymentGetResponseJSON) RawJSON() string {
 }
 
 type ScriptDeploymentGetResponseDeployment struct {
-	ID          string                                    `json:"id"`
-	Annotations Deployment                                `json:"annotations"`
-	AuthorEmail string                                    `json:"author_email"`
-	CreatedOn   string                                    `json:"created_on"`
-	Source      string                                    `json:"source"`
-	Strategy    string                                    `json:"strategy"`
-	JSON        scriptDeploymentGetResponseDeploymentJSON `json:"-"`
+	Strategy    ScriptDeploymentGetResponseDeploymentsStrategy  `json:"strategy,required"`
+	Versions    []ScriptDeploymentGetResponseDeploymentsVersion `json:"versions,required"`
+	ID          string                                          `json:"id"`
+	Annotations Deployment                                      `json:"annotations"`
+	AuthorEmail string                                          `json:"author_email"`
+	CreatedOn   string                                          `json:"created_on"`
+	Source      string                                          `json:"source"`
+	JSON        scriptDeploymentGetResponseDeploymentJSON       `json:"-"`
 }
 
 // scriptDeploymentGetResponseDeploymentJSON contains the JSON metadata for the
 // struct [ScriptDeploymentGetResponseDeployment]
 type scriptDeploymentGetResponseDeploymentJSON struct {
+	Strategy    apijson.Field
+	Versions    apijson.Field
 	ID          apijson.Field
 	Annotations apijson.Field
 	AuthorEmail apijson.Field
 	CreatedOn   apijson.Field
 	Source      apijson.Field
-	Strategy    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -193,14 +236,87 @@ func (r scriptDeploymentGetResponseDeploymentJSON) RawJSON() string {
 	return r.raw
 }
 
+type ScriptDeploymentGetResponseDeploymentsStrategy string
+
+const (
+	ScriptDeploymentGetResponseDeploymentsStrategyPercentage ScriptDeploymentGetResponseDeploymentsStrategy = "percentage"
+)
+
+func (r ScriptDeploymentGetResponseDeploymentsStrategy) IsKnown() bool {
+	switch r {
+	case ScriptDeploymentGetResponseDeploymentsStrategyPercentage:
+		return true
+	}
+	return false
+}
+
+type ScriptDeploymentGetResponseDeploymentsVersion struct {
+	Percentage float64                                           `json:"percentage,required"`
+	VersionID  string                                            `json:"version_id,required"`
+	JSON       scriptDeploymentGetResponseDeploymentsVersionJSON `json:"-"`
+}
+
+// scriptDeploymentGetResponseDeploymentsVersionJSON contains the JSON metadata for
+// the struct [ScriptDeploymentGetResponseDeploymentsVersion]
+type scriptDeploymentGetResponseDeploymentsVersionJSON struct {
+	Percentage  apijson.Field
+	VersionID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptDeploymentGetResponseDeploymentsVersion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptDeploymentGetResponseDeploymentsVersionJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScriptDeploymentNewParams struct {
 	// Identifier
-	AccountID   param.Field[string]          `path:"account_id,required"`
+	AccountID param.Field[string]                             `path:"account_id,required"`
+	Strategy  param.Field[ScriptDeploymentNewParamsStrategy]  `json:"strategy,required"`
+	Versions  param.Field[[]ScriptDeploymentNewParamsVersion] `json:"versions,required"`
+	// If set to true, the deployment will be created even if normally blocked by
+	// something such rolling back to an older version when a secret has changed.
+	Force       param.Field[bool]            `query:"force"`
 	Annotations param.Field[DeploymentParam] `json:"annotations"`
-	Strategy    param.Field[string]          `json:"strategy"`
 }
 
 func (r ScriptDeploymentNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [ScriptDeploymentNewParams]'s query parameters as
+// `url.Values`.
+func (r ScriptDeploymentNewParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type ScriptDeploymentNewParamsStrategy string
+
+const (
+	ScriptDeploymentNewParamsStrategyPercentage ScriptDeploymentNewParamsStrategy = "percentage"
+)
+
+func (r ScriptDeploymentNewParamsStrategy) IsKnown() bool {
+	switch r {
+	case ScriptDeploymentNewParamsStrategyPercentage:
+		return true
+	}
+	return false
+}
+
+type ScriptDeploymentNewParamsVersion struct {
+	Percentage param.Field[float64] `json:"percentage,required"`
+	VersionID  param.Field[string]  `json:"version_id,required"`
+}
+
+func (r ScriptDeploymentNewParamsVersion) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

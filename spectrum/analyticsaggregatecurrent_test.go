@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/spectrum"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/spectrum"
 )
 
 func TestAnalyticsAggregateCurrentGetWithOptionalParams(t *testing.T) {
@@ -27,15 +27,11 @@ func TestAnalyticsAggregateCurrentGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Spectrum.Analytics.Aggregates.Currents.Get(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		spectrum.AnalyticsAggregateCurrentGetParams{
-			AppIDParam: cloudflare.F("ea95132c15732412d22c1476fa83f27a,d122c5f4bb71e25cc9e86ab43b142e2f"),
-			AppID:      cloudflare.F("ea95132c15732412d22c1476fa83f27a,d122c5f4bb71e25cc9e86ab43b142e2f"),
-			ColoName:   cloudflare.F("PDX"),
-		},
-	)
+	_, err := client.Spectrum.Analytics.Aggregates.Currents.Get(context.TODO(), spectrum.AnalyticsAggregateCurrentGetParams{
+		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AppID:    cloudflare.F("ea95132c15732412d22c1476fa83f27a,d122c5f4bb71e25cc9e86ab43b142e2f"),
+		ColoName: cloudflare.F("PDX"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

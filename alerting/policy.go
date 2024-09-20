@@ -7,16 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // PolicyService contains methods and other services that help with interacting
@@ -144,8 +142,8 @@ type Mechanism map[string][]MechanismItem
 
 type MechanismItem struct {
 	// UUID
-	ID   MechanismItemIDUnion `json:"id"`
-	JSON mechanismItemJSON    `json:"-"`
+	ID   string            `json:"id"`
+	JSON mechanismItemJSON `json:"-"`
 }
 
 // mechanismItemJSON contains the JSON metadata for the struct [MechanismItem]
@@ -163,49 +161,23 @@ func (r mechanismItemJSON) RawJSON() string {
 	return r.raw
 }
 
-// UUID
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type MechanismItemIDUnion interface {
-	ImplementsAlertingMechanismItemIDUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*MechanismItemIDUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type MechanismParam map[string][]MechanismItemParam
 
 type MechanismItemParam struct {
 	// UUID
-	ID param.Field[MechanismItemIDUnionParam] `json:"id"`
+	ID param.Field[string] `json:"id"`
 }
 
 func (r MechanismItemParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// UUID
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type MechanismItemIDUnionParam interface {
-	ImplementsAlertingMechanismItemIDUnionParam()
-}
-
 type Policy struct {
 	// The unique identifier of a notification policy
 	ID string `json:"id"`
+	// Optional specification of how often to re-alert from the same incident, not
+	// support on all alert types.
+	AlertInterval string `json:"alert_interval"`
 	// Refers to which event will trigger a Notification dispatch. You can use the
 	// endpoint to get available alert types which then will give you a list of
 	// possible values.
@@ -230,17 +202,18 @@ type Policy struct {
 
 // policyJSON contains the JSON metadata for the struct [Policy]
 type policyJSON struct {
-	ID          apijson.Field
-	AlertType   apijson.Field
-	Created     apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	Filters     apijson.Field
-	Mechanisms  apijson.Field
-	Modified    apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	AlertInterval apijson.Field
+	AlertType     apijson.Field
+	Created       apijson.Field
+	Description   apijson.Field
+	Enabled       apijson.Field
+	Filters       apijson.Field
+	Mechanisms    apijson.Field
+	Modified      apijson.Field
+	Name          apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *Policy) UnmarshalJSON(data []byte) (err error) {
@@ -270,8 +243,11 @@ const (
 	PolicyAlertTypeBrandProtectionDigest                         PolicyAlertType = "brand_protection_digest"
 	PolicyAlertTypeClickhouseAlertFwAnomaly                      PolicyAlertType = "clickhouse_alert_fw_anomaly"
 	PolicyAlertTypeClickhouseAlertFwEntAnomaly                   PolicyAlertType = "clickhouse_alert_fw_ent_anomaly"
+	PolicyAlertTypeCloudforceOneRequestNotification              PolicyAlertType = "cloudforce_one_request_notification"
+	PolicyAlertTypeCustomAnalytics                               PolicyAlertType = "custom_analytics"
 	PolicyAlertTypeCustomSSLCertificateEventType                 PolicyAlertType = "custom_ssl_certificate_event_type"
 	PolicyAlertTypeDedicatedSSLCertificateEventType              PolicyAlertType = "dedicated_ssl_certificate_event_type"
+	PolicyAlertTypeDeviceConnectivityAnomalyAlert                PolicyAlertType = "device_connectivity_anomaly_alert"
 	PolicyAlertTypeDosAttackL4                                   PolicyAlertType = "dos_attack_l4"
 	PolicyAlertTypeDosAttackL7                                   PolicyAlertType = "dos_attack_l7"
 	PolicyAlertTypeExpiringServiceTokenAlert                     PolicyAlertType = "expiring_service_token_alert"
@@ -284,10 +260,12 @@ const (
 	PolicyAlertTypeHTTPAlertEdgeError                            PolicyAlertType = "http_alert_edge_error"
 	PolicyAlertTypeHTTPAlertOriginError                          PolicyAlertType = "http_alert_origin_error"
 	PolicyAlertTypeIncidentAlert                                 PolicyAlertType = "incident_alert"
+	PolicyAlertTypeImageNotification                             PolicyAlertType = "image_notification"
 	PolicyAlertTypeLoadBalancingHealthAlert                      PolicyAlertType = "load_balancing_health_alert"
 	PolicyAlertTypeLoadBalancingPoolEnablementAlert              PolicyAlertType = "load_balancing_pool_enablement_alert"
 	PolicyAlertTypeLogoMatchAlert                                PolicyAlertType = "logo_match_alert"
 	PolicyAlertTypeMagicTunnelHealthCheckEvent                   PolicyAlertType = "magic_tunnel_health_check_event"
+	PolicyAlertTypeMagicWANTunnelHealth                          PolicyAlertType = "magic_wan_tunnel_health"
 	PolicyAlertTypeMaintenanceEventNotification                  PolicyAlertType = "maintenance_event_notification"
 	PolicyAlertTypeMTLSCertificateStoreCertificateExpirationType PolicyAlertType = "mtls_certificate_store_certificate_expiration_type"
 	PolicyAlertTypePagesEventAlert                               PolicyAlertType = "pages_event_alert"
@@ -302,10 +280,13 @@ const (
 	PolicyAlertTypeScriptmonitorAlertNewResources                PolicyAlertType = "scriptmonitor_alert_new_resources"
 	PolicyAlertTypeSecondaryDNSAllPrimariesFailing               PolicyAlertType = "secondary_dns_all_primaries_failing"
 	PolicyAlertTypeSecondaryDNSPrimariesFailing                  PolicyAlertType = "secondary_dns_primaries_failing"
+	PolicyAlertTypeSecondaryDNSWarning                           PolicyAlertType = "secondary_dns_warning"
 	PolicyAlertTypeSecondaryDNSZoneSuccessfullyUpdated           PolicyAlertType = "secondary_dns_zone_successfully_updated"
 	PolicyAlertTypeSecondaryDNSZoneValidationWarning             PolicyAlertType = "secondary_dns_zone_validation_warning"
 	PolicyAlertTypeSentinelAlert                                 PolicyAlertType = "sentinel_alert"
 	PolicyAlertTypeStreamLiveNotifications                       PolicyAlertType = "stream_live_notifications"
+	PolicyAlertTypeSyntheticTestLatencyAlert                     PolicyAlertType = "synthetic_test_latency_alert"
+	PolicyAlertTypeSyntheticTestLowAvailabilityAlert             PolicyAlertType = "synthetic_test_low_availability_alert"
 	PolicyAlertTypeTrafficAnomaliesAlert                         PolicyAlertType = "traffic_anomalies_alert"
 	PolicyAlertTypeTunnelHealthEvent                             PolicyAlertType = "tunnel_health_event"
 	PolicyAlertTypeTunnelUpdateEvent                             PolicyAlertType = "tunnel_update_event"
@@ -316,34 +297,10 @@ const (
 
 func (r PolicyAlertType) IsKnown() bool {
 	switch r {
-	case PolicyAlertTypeAccessCustomCertificateExpirationType, PolicyAlertTypeAdvancedDDoSAttackL4Alert, PolicyAlertTypeAdvancedDDoSAttackL7Alert, PolicyAlertTypeAdvancedHTTPAlertError, PolicyAlertTypeBGPHijackNotification, PolicyAlertTypeBillingUsageAlert, PolicyAlertTypeBlockNotificationBlockRemoved, PolicyAlertTypeBlockNotificationNewBlock, PolicyAlertTypeBlockNotificationReviewRejected, PolicyAlertTypeBrandProtectionAlert, PolicyAlertTypeBrandProtectionDigest, PolicyAlertTypeClickhouseAlertFwAnomaly, PolicyAlertTypeClickhouseAlertFwEntAnomaly, PolicyAlertTypeCustomSSLCertificateEventType, PolicyAlertTypeDedicatedSSLCertificateEventType, PolicyAlertTypeDosAttackL4, PolicyAlertTypeDosAttackL7, PolicyAlertTypeExpiringServiceTokenAlert, PolicyAlertTypeFailingLogpushJobDisabledAlert, PolicyAlertTypeFbmAutoAdvertisement, PolicyAlertTypeFbmDosdAttack, PolicyAlertTypeFbmVolumetricAttack, PolicyAlertTypeHealthCheckStatusNotification, PolicyAlertTypeHostnameAopCustomCertificateExpirationType, PolicyAlertTypeHTTPAlertEdgeError, PolicyAlertTypeHTTPAlertOriginError, PolicyAlertTypeIncidentAlert, PolicyAlertTypeLoadBalancingHealthAlert, PolicyAlertTypeLoadBalancingPoolEnablementAlert, PolicyAlertTypeLogoMatchAlert, PolicyAlertTypeMagicTunnelHealthCheckEvent, PolicyAlertTypeMaintenanceEventNotification, PolicyAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyAlertTypePagesEventAlert, PolicyAlertTypeRadarNotification, PolicyAlertTypeRealOriginMonitoring, PolicyAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyAlertTypeScriptmonitorAlertNewHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyAlertTypeScriptmonitorAlertNewResources, PolicyAlertTypeSecondaryDNSAllPrimariesFailing, PolicyAlertTypeSecondaryDNSPrimariesFailing, PolicyAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyAlertTypeSecondaryDNSZoneValidationWarning, PolicyAlertTypeSentinelAlert, PolicyAlertTypeStreamLiveNotifications, PolicyAlertTypeTrafficAnomaliesAlert, PolicyAlertTypeTunnelHealthEvent, PolicyAlertTypeTunnelUpdateEvent, PolicyAlertTypeUniversalSSLEventType, PolicyAlertTypeWebAnalyticsMetricsUpdate, PolicyAlertTypeZoneAopCustomCertificateExpirationType:
+	case PolicyAlertTypeAccessCustomCertificateExpirationType, PolicyAlertTypeAdvancedDDoSAttackL4Alert, PolicyAlertTypeAdvancedDDoSAttackL7Alert, PolicyAlertTypeAdvancedHTTPAlertError, PolicyAlertTypeBGPHijackNotification, PolicyAlertTypeBillingUsageAlert, PolicyAlertTypeBlockNotificationBlockRemoved, PolicyAlertTypeBlockNotificationNewBlock, PolicyAlertTypeBlockNotificationReviewRejected, PolicyAlertTypeBrandProtectionAlert, PolicyAlertTypeBrandProtectionDigest, PolicyAlertTypeClickhouseAlertFwAnomaly, PolicyAlertTypeClickhouseAlertFwEntAnomaly, PolicyAlertTypeCloudforceOneRequestNotification, PolicyAlertTypeCustomAnalytics, PolicyAlertTypeCustomSSLCertificateEventType, PolicyAlertTypeDedicatedSSLCertificateEventType, PolicyAlertTypeDeviceConnectivityAnomalyAlert, PolicyAlertTypeDosAttackL4, PolicyAlertTypeDosAttackL7, PolicyAlertTypeExpiringServiceTokenAlert, PolicyAlertTypeFailingLogpushJobDisabledAlert, PolicyAlertTypeFbmAutoAdvertisement, PolicyAlertTypeFbmDosdAttack, PolicyAlertTypeFbmVolumetricAttack, PolicyAlertTypeHealthCheckStatusNotification, PolicyAlertTypeHostnameAopCustomCertificateExpirationType, PolicyAlertTypeHTTPAlertEdgeError, PolicyAlertTypeHTTPAlertOriginError, PolicyAlertTypeIncidentAlert, PolicyAlertTypeImageNotification, PolicyAlertTypeLoadBalancingHealthAlert, PolicyAlertTypeLoadBalancingPoolEnablementAlert, PolicyAlertTypeLogoMatchAlert, PolicyAlertTypeMagicTunnelHealthCheckEvent, PolicyAlertTypeMagicWANTunnelHealth, PolicyAlertTypeMaintenanceEventNotification, PolicyAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyAlertTypePagesEventAlert, PolicyAlertTypeRadarNotification, PolicyAlertTypeRealOriginMonitoring, PolicyAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyAlertTypeScriptmonitorAlertNewHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyAlertTypeScriptmonitorAlertNewResources, PolicyAlertTypeSecondaryDNSAllPrimariesFailing, PolicyAlertTypeSecondaryDNSPrimariesFailing, PolicyAlertTypeSecondaryDNSWarning, PolicyAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyAlertTypeSecondaryDNSZoneValidationWarning, PolicyAlertTypeSentinelAlert, PolicyAlertTypeStreamLiveNotifications, PolicyAlertTypeSyntheticTestLatencyAlert, PolicyAlertTypeSyntheticTestLowAvailabilityAlert, PolicyAlertTypeTrafficAnomaliesAlert, PolicyAlertTypeTunnelHealthEvent, PolicyAlertTypeTunnelUpdateEvent, PolicyAlertTypeUniversalSSLEventType, PolicyAlertTypeWebAnalyticsMetricsUpdate, PolicyAlertTypeZoneAopCustomCertificateExpirationType:
 		return true
 	}
 	return false
-}
-
-type PolicyParam struct {
-	// Refers to which event will trigger a Notification dispatch. You can use the
-	// endpoint to get available alert types which then will give you a list of
-	// possible values.
-	AlertType param.Field[PolicyAlertType] `json:"alert_type"`
-	// Optional description for the Notification policy.
-	Description param.Field[string] `json:"description"`
-	// Whether or not the Notification policy is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Optional filters that allow you to be alerted only on a subset of events for
-	// that alert type based on some criteria. This is only available for select alert
-	// types. See alert type documentation for more details.
-	Filters param.Field[PolicyFilterParam] `json:"filters"`
-	// List of IDs that will be used when dispatching a notification. IDs for email
-	// type will be the email address.
-	Mechanisms param.Field[MechanismParam] `json:"mechanisms"`
-	// Name of the policy.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r PolicyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Optional filters that allow you to be alerted only on a subset of events for
@@ -354,8 +311,7 @@ type PolicyFilter struct {
 	Actions []string `json:"actions"`
 	// Used for configuring radar_notification
 	AffectedASNs []string `json:"affected_asns"`
-	// Used for configuring incident_alert. A list of identifiers for each component to
-	// monitor.
+	// Used for configuring incident_alert
 	AffectedComponents []string `json:"affected_components"`
 	// Used for configuring radar_notification
 	AffectedLocations []string `json:"affected_locations"`
@@ -363,8 +319,8 @@ type PolicyFilter struct {
 	AirportCode []string `json:"airport_code"`
 	// Usage depends on specific alert type
 	AlertTriggerPreferences []string `json:"alert_trigger_preferences"`
-	// Used for configuring magic_tunnel_health_check_event
-	AlertTriggerPreferencesValue []PolicyFilterAlertTriggerPreferencesValue `json:"alert_trigger_preferences_value"`
+	// Usage depends on specific alert type
+	AlertTriggerPreferencesValue []string `json:"alert_trigger_preferences_value"`
 	// Used for configuring load_balancing_pool_enablement_alert
 	Enabled []string `json:"enabled"`
 	// Used for configuring pages_event_alert
@@ -397,6 +353,8 @@ type PolicyFilter struct {
 	PacketsPerSecond []string `json:"packets_per_second"`
 	// Usage depends on specific alert type
 	PoolID []string `json:"pool_id"`
+	// Usage depends on specific alert type
+	PopName []string `json:"pop_name"`
 	// Used for configuring billing_usage_alert
 	Product []string `json:"product"`
 	// Used for configuring pages_event_alert
@@ -425,7 +383,7 @@ type PolicyFilter struct {
 	TrafficExclusions []PolicyFilterTrafficExclusion `json:"traffic_exclusions"`
 	// Used for configuring tunnel_health_event
 	TunnelID []string `json:"tunnel_id"`
-	// Used for configuring magic_tunnel_health_check_event
+	// Usage depends on specific alert type
 	TunnelName []string `json:"tunnel_name"`
 	// Usage depends on specific alert type
 	Where []string `json:"where"`
@@ -459,6 +417,7 @@ type policyFilterJSON struct {
 	NewStatus                    apijson.Field
 	PacketsPerSecond             apijson.Field
 	PoolID                       apijson.Field
+	PopName                      apijson.Field
 	Product                      apijson.Field
 	ProjectID                    apijson.Field
 	Protocol                     apijson.Field
@@ -486,22 +445,6 @@ func (r *PolicyFilter) UnmarshalJSON(data []byte) (err error) {
 
 func (r policyFilterJSON) RawJSON() string {
 	return r.raw
-}
-
-type PolicyFilterAlertTriggerPreferencesValue string
-
-const (
-	PolicyFilterAlertTriggerPreferencesValue99_0 PolicyFilterAlertTriggerPreferencesValue = "99.0"
-	PolicyFilterAlertTriggerPreferencesValue98_0 PolicyFilterAlertTriggerPreferencesValue = "98.0"
-	PolicyFilterAlertTriggerPreferencesValue97_0 PolicyFilterAlertTriggerPreferencesValue = "97.0"
-)
-
-func (r PolicyFilterAlertTriggerPreferencesValue) IsKnown() bool {
-	switch r {
-	case PolicyFilterAlertTriggerPreferencesValue99_0, PolicyFilterAlertTriggerPreferencesValue98_0, PolicyFilterAlertTriggerPreferencesValue97_0:
-		return true
-	}
-	return false
 }
 
 type PolicyFilterIncidentImpact string
@@ -543,8 +486,7 @@ type PolicyFilterParam struct {
 	Actions param.Field[[]string] `json:"actions"`
 	// Used for configuring radar_notification
 	AffectedASNs param.Field[[]string] `json:"affected_asns"`
-	// Used for configuring incident_alert. A list of identifiers for each component to
-	// monitor.
+	// Used for configuring incident_alert
 	AffectedComponents param.Field[[]string] `json:"affected_components"`
 	// Used for configuring radar_notification
 	AffectedLocations param.Field[[]string] `json:"affected_locations"`
@@ -552,8 +494,8 @@ type PolicyFilterParam struct {
 	AirportCode param.Field[[]string] `json:"airport_code"`
 	// Usage depends on specific alert type
 	AlertTriggerPreferences param.Field[[]string] `json:"alert_trigger_preferences"`
-	// Used for configuring magic_tunnel_health_check_event
-	AlertTriggerPreferencesValue param.Field[[]PolicyFilterAlertTriggerPreferencesValue] `json:"alert_trigger_preferences_value"`
+	// Usage depends on specific alert type
+	AlertTriggerPreferencesValue param.Field[[]string] `json:"alert_trigger_preferences_value"`
 	// Used for configuring load_balancing_pool_enablement_alert
 	Enabled param.Field[[]string] `json:"enabled"`
 	// Used for configuring pages_event_alert
@@ -586,6 +528,8 @@ type PolicyFilterParam struct {
 	PacketsPerSecond param.Field[[]string] `json:"packets_per_second"`
 	// Usage depends on specific alert type
 	PoolID param.Field[[]string] `json:"pool_id"`
+	// Usage depends on specific alert type
+	PopName param.Field[[]string] `json:"pop_name"`
 	// Used for configuring billing_usage_alert
 	Product param.Field[[]string] `json:"product"`
 	// Used for configuring pages_event_alert
@@ -614,7 +558,7 @@ type PolicyFilterParam struct {
 	TrafficExclusions param.Field[[]PolicyFilterTrafficExclusion] `json:"traffic_exclusions"`
 	// Used for configuring tunnel_health_event
 	TunnelID param.Field[[]string] `json:"tunnel_id"`
-	// Used for configuring magic_tunnel_health_check_event
+	// Usage depends on specific alert type
 	TunnelName param.Field[[]string] `json:"tunnel_name"`
 	// Usage depends on specific alert type
 	Where param.Field[[]string] `json:"where"`
@@ -758,6 +702,9 @@ type PolicyNewParams struct {
 	Mechanisms param.Field[MechanismParam] `json:"mechanisms,required"`
 	// Name of the policy.
 	Name param.Field[string] `json:"name,required"`
+	// Optional specification of how often to re-alert from the same incident, not
+	// support on all alert types.
+	AlertInterval param.Field[string] `json:"alert_interval"`
 	// Optional description for the Notification policy.
 	Description param.Field[string] `json:"description"`
 	// Optional filters that allow you to be alerted only on a subset of events for
@@ -789,8 +736,11 @@ const (
 	PolicyNewParamsAlertTypeBrandProtectionDigest                         PolicyNewParamsAlertType = "brand_protection_digest"
 	PolicyNewParamsAlertTypeClickhouseAlertFwAnomaly                      PolicyNewParamsAlertType = "clickhouse_alert_fw_anomaly"
 	PolicyNewParamsAlertTypeClickhouseAlertFwEntAnomaly                   PolicyNewParamsAlertType = "clickhouse_alert_fw_ent_anomaly"
+	PolicyNewParamsAlertTypeCloudforceOneRequestNotification              PolicyNewParamsAlertType = "cloudforce_one_request_notification"
+	PolicyNewParamsAlertTypeCustomAnalytics                               PolicyNewParamsAlertType = "custom_analytics"
 	PolicyNewParamsAlertTypeCustomSSLCertificateEventType                 PolicyNewParamsAlertType = "custom_ssl_certificate_event_type"
 	PolicyNewParamsAlertTypeDedicatedSSLCertificateEventType              PolicyNewParamsAlertType = "dedicated_ssl_certificate_event_type"
+	PolicyNewParamsAlertTypeDeviceConnectivityAnomalyAlert                PolicyNewParamsAlertType = "device_connectivity_anomaly_alert"
 	PolicyNewParamsAlertTypeDosAttackL4                                   PolicyNewParamsAlertType = "dos_attack_l4"
 	PolicyNewParamsAlertTypeDosAttackL7                                   PolicyNewParamsAlertType = "dos_attack_l7"
 	PolicyNewParamsAlertTypeExpiringServiceTokenAlert                     PolicyNewParamsAlertType = "expiring_service_token_alert"
@@ -803,10 +753,12 @@ const (
 	PolicyNewParamsAlertTypeHTTPAlertEdgeError                            PolicyNewParamsAlertType = "http_alert_edge_error"
 	PolicyNewParamsAlertTypeHTTPAlertOriginError                          PolicyNewParamsAlertType = "http_alert_origin_error"
 	PolicyNewParamsAlertTypeIncidentAlert                                 PolicyNewParamsAlertType = "incident_alert"
+	PolicyNewParamsAlertTypeImageNotification                             PolicyNewParamsAlertType = "image_notification"
 	PolicyNewParamsAlertTypeLoadBalancingHealthAlert                      PolicyNewParamsAlertType = "load_balancing_health_alert"
 	PolicyNewParamsAlertTypeLoadBalancingPoolEnablementAlert              PolicyNewParamsAlertType = "load_balancing_pool_enablement_alert"
 	PolicyNewParamsAlertTypeLogoMatchAlert                                PolicyNewParamsAlertType = "logo_match_alert"
 	PolicyNewParamsAlertTypeMagicTunnelHealthCheckEvent                   PolicyNewParamsAlertType = "magic_tunnel_health_check_event"
+	PolicyNewParamsAlertTypeMagicWANTunnelHealth                          PolicyNewParamsAlertType = "magic_wan_tunnel_health"
 	PolicyNewParamsAlertTypeMaintenanceEventNotification                  PolicyNewParamsAlertType = "maintenance_event_notification"
 	PolicyNewParamsAlertTypeMTLSCertificateStoreCertificateExpirationType PolicyNewParamsAlertType = "mtls_certificate_store_certificate_expiration_type"
 	PolicyNewParamsAlertTypePagesEventAlert                               PolicyNewParamsAlertType = "pages_event_alert"
@@ -821,10 +773,13 @@ const (
 	PolicyNewParamsAlertTypeScriptmonitorAlertNewResources                PolicyNewParamsAlertType = "scriptmonitor_alert_new_resources"
 	PolicyNewParamsAlertTypeSecondaryDNSAllPrimariesFailing               PolicyNewParamsAlertType = "secondary_dns_all_primaries_failing"
 	PolicyNewParamsAlertTypeSecondaryDNSPrimariesFailing                  PolicyNewParamsAlertType = "secondary_dns_primaries_failing"
+	PolicyNewParamsAlertTypeSecondaryDNSWarning                           PolicyNewParamsAlertType = "secondary_dns_warning"
 	PolicyNewParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated           PolicyNewParamsAlertType = "secondary_dns_zone_successfully_updated"
 	PolicyNewParamsAlertTypeSecondaryDNSZoneValidationWarning             PolicyNewParamsAlertType = "secondary_dns_zone_validation_warning"
 	PolicyNewParamsAlertTypeSentinelAlert                                 PolicyNewParamsAlertType = "sentinel_alert"
 	PolicyNewParamsAlertTypeStreamLiveNotifications                       PolicyNewParamsAlertType = "stream_live_notifications"
+	PolicyNewParamsAlertTypeSyntheticTestLatencyAlert                     PolicyNewParamsAlertType = "synthetic_test_latency_alert"
+	PolicyNewParamsAlertTypeSyntheticTestLowAvailabilityAlert             PolicyNewParamsAlertType = "synthetic_test_low_availability_alert"
 	PolicyNewParamsAlertTypeTrafficAnomaliesAlert                         PolicyNewParamsAlertType = "traffic_anomalies_alert"
 	PolicyNewParamsAlertTypeTunnelHealthEvent                             PolicyNewParamsAlertType = "tunnel_health_event"
 	PolicyNewParamsAlertTypeTunnelUpdateEvent                             PolicyNewParamsAlertType = "tunnel_update_event"
@@ -835,20 +790,27 @@ const (
 
 func (r PolicyNewParamsAlertType) IsKnown() bool {
 	switch r {
-	case PolicyNewParamsAlertTypeAccessCustomCertificateExpirationType, PolicyNewParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyNewParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyNewParamsAlertTypeAdvancedHTTPAlertError, PolicyNewParamsAlertTypeBGPHijackNotification, PolicyNewParamsAlertTypeBillingUsageAlert, PolicyNewParamsAlertTypeBlockNotificationBlockRemoved, PolicyNewParamsAlertTypeBlockNotificationNewBlock, PolicyNewParamsAlertTypeBlockNotificationReviewRejected, PolicyNewParamsAlertTypeBrandProtectionAlert, PolicyNewParamsAlertTypeBrandProtectionDigest, PolicyNewParamsAlertTypeClickhouseAlertFwAnomaly, PolicyNewParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyNewParamsAlertTypeCustomSSLCertificateEventType, PolicyNewParamsAlertTypeDedicatedSSLCertificateEventType, PolicyNewParamsAlertTypeDosAttackL4, PolicyNewParamsAlertTypeDosAttackL7, PolicyNewParamsAlertTypeExpiringServiceTokenAlert, PolicyNewParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyNewParamsAlertTypeFbmAutoAdvertisement, PolicyNewParamsAlertTypeFbmDosdAttack, PolicyNewParamsAlertTypeFbmVolumetricAttack, PolicyNewParamsAlertTypeHealthCheckStatusNotification, PolicyNewParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyNewParamsAlertTypeHTTPAlertEdgeError, PolicyNewParamsAlertTypeHTTPAlertOriginError, PolicyNewParamsAlertTypeIncidentAlert, PolicyNewParamsAlertTypeLoadBalancingHealthAlert, PolicyNewParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyNewParamsAlertTypeLogoMatchAlert, PolicyNewParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyNewParamsAlertTypeMaintenanceEventNotification, PolicyNewParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyNewParamsAlertTypePagesEventAlert, PolicyNewParamsAlertTypeRadarNotification, PolicyNewParamsAlertTypeRealOriginMonitoring, PolicyNewParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyNewParamsAlertTypeScriptmonitorAlertNewHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewResources, PolicyNewParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyNewParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyNewParamsAlertTypeSentinelAlert, PolicyNewParamsAlertTypeStreamLiveNotifications, PolicyNewParamsAlertTypeTrafficAnomaliesAlert, PolicyNewParamsAlertTypeTunnelHealthEvent, PolicyNewParamsAlertTypeTunnelUpdateEvent, PolicyNewParamsAlertTypeUniversalSSLEventType, PolicyNewParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyNewParamsAlertTypeZoneAopCustomCertificateExpirationType:
+	case PolicyNewParamsAlertTypeAccessCustomCertificateExpirationType, PolicyNewParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyNewParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyNewParamsAlertTypeAdvancedHTTPAlertError, PolicyNewParamsAlertTypeBGPHijackNotification, PolicyNewParamsAlertTypeBillingUsageAlert, PolicyNewParamsAlertTypeBlockNotificationBlockRemoved, PolicyNewParamsAlertTypeBlockNotificationNewBlock, PolicyNewParamsAlertTypeBlockNotificationReviewRejected, PolicyNewParamsAlertTypeBrandProtectionAlert, PolicyNewParamsAlertTypeBrandProtectionDigest, PolicyNewParamsAlertTypeClickhouseAlertFwAnomaly, PolicyNewParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyNewParamsAlertTypeCloudforceOneRequestNotification, PolicyNewParamsAlertTypeCustomAnalytics, PolicyNewParamsAlertTypeCustomSSLCertificateEventType, PolicyNewParamsAlertTypeDedicatedSSLCertificateEventType, PolicyNewParamsAlertTypeDeviceConnectivityAnomalyAlert, PolicyNewParamsAlertTypeDosAttackL4, PolicyNewParamsAlertTypeDosAttackL7, PolicyNewParamsAlertTypeExpiringServiceTokenAlert, PolicyNewParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyNewParamsAlertTypeFbmAutoAdvertisement, PolicyNewParamsAlertTypeFbmDosdAttack, PolicyNewParamsAlertTypeFbmVolumetricAttack, PolicyNewParamsAlertTypeHealthCheckStatusNotification, PolicyNewParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyNewParamsAlertTypeHTTPAlertEdgeError, PolicyNewParamsAlertTypeHTTPAlertOriginError, PolicyNewParamsAlertTypeIncidentAlert, PolicyNewParamsAlertTypeImageNotification, PolicyNewParamsAlertTypeLoadBalancingHealthAlert, PolicyNewParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyNewParamsAlertTypeLogoMatchAlert, PolicyNewParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyNewParamsAlertTypeMagicWANTunnelHealth, PolicyNewParamsAlertTypeMaintenanceEventNotification, PolicyNewParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyNewParamsAlertTypePagesEventAlert, PolicyNewParamsAlertTypeRadarNotification, PolicyNewParamsAlertTypeRealOriginMonitoring, PolicyNewParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyNewParamsAlertTypeScriptmonitorAlertNewHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyNewParamsAlertTypeScriptmonitorAlertNewResources, PolicyNewParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyNewParamsAlertTypeSecondaryDNSWarning, PolicyNewParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyNewParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyNewParamsAlertTypeSentinelAlert, PolicyNewParamsAlertTypeStreamLiveNotifications, PolicyNewParamsAlertTypeSyntheticTestLatencyAlert, PolicyNewParamsAlertTypeSyntheticTestLowAvailabilityAlert, PolicyNewParamsAlertTypeTrafficAnomaliesAlert, PolicyNewParamsAlertTypeTunnelHealthEvent, PolicyNewParamsAlertTypeTunnelUpdateEvent, PolicyNewParamsAlertTypeUniversalSSLEventType, PolicyNewParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyNewParamsAlertTypeZoneAopCustomCertificateExpirationType:
 		return true
 	}
 	return false
 }
 
 type PolicyNewResponseEnvelope struct {
-	Result PolicyNewResponse             `json:"result"`
-	JSON   policyNewResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success PolicyNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  PolicyNewResponse                `json:"result"`
+	JSON    policyNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // policyNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PolicyNewResponseEnvelope]
 type policyNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -862,9 +824,27 @@ func (r policyNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+// Whether the API call was successful
+type PolicyNewResponseEnvelopeSuccess bool
+
+const (
+	PolicyNewResponseEnvelopeSuccessTrue PolicyNewResponseEnvelopeSuccess = true
+)
+
+func (r PolicyNewResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PolicyNewResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type PolicyUpdateParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
+	// Optional specification of how often to re-alert from the same incident, not
+	// support on all alert types.
+	AlertInterval param.Field[string] `json:"alert_interval"`
 	// Refers to which event will trigger a Notification dispatch. You can use the
 	// endpoint to get available alert types which then will give you a list of
 	// possible values.
@@ -907,8 +887,11 @@ const (
 	PolicyUpdateParamsAlertTypeBrandProtectionDigest                         PolicyUpdateParamsAlertType = "brand_protection_digest"
 	PolicyUpdateParamsAlertTypeClickhouseAlertFwAnomaly                      PolicyUpdateParamsAlertType = "clickhouse_alert_fw_anomaly"
 	PolicyUpdateParamsAlertTypeClickhouseAlertFwEntAnomaly                   PolicyUpdateParamsAlertType = "clickhouse_alert_fw_ent_anomaly"
+	PolicyUpdateParamsAlertTypeCloudforceOneRequestNotification              PolicyUpdateParamsAlertType = "cloudforce_one_request_notification"
+	PolicyUpdateParamsAlertTypeCustomAnalytics                               PolicyUpdateParamsAlertType = "custom_analytics"
 	PolicyUpdateParamsAlertTypeCustomSSLCertificateEventType                 PolicyUpdateParamsAlertType = "custom_ssl_certificate_event_type"
 	PolicyUpdateParamsAlertTypeDedicatedSSLCertificateEventType              PolicyUpdateParamsAlertType = "dedicated_ssl_certificate_event_type"
+	PolicyUpdateParamsAlertTypeDeviceConnectivityAnomalyAlert                PolicyUpdateParamsAlertType = "device_connectivity_anomaly_alert"
 	PolicyUpdateParamsAlertTypeDosAttackL4                                   PolicyUpdateParamsAlertType = "dos_attack_l4"
 	PolicyUpdateParamsAlertTypeDosAttackL7                                   PolicyUpdateParamsAlertType = "dos_attack_l7"
 	PolicyUpdateParamsAlertTypeExpiringServiceTokenAlert                     PolicyUpdateParamsAlertType = "expiring_service_token_alert"
@@ -921,10 +904,12 @@ const (
 	PolicyUpdateParamsAlertTypeHTTPAlertEdgeError                            PolicyUpdateParamsAlertType = "http_alert_edge_error"
 	PolicyUpdateParamsAlertTypeHTTPAlertOriginError                          PolicyUpdateParamsAlertType = "http_alert_origin_error"
 	PolicyUpdateParamsAlertTypeIncidentAlert                                 PolicyUpdateParamsAlertType = "incident_alert"
+	PolicyUpdateParamsAlertTypeImageNotification                             PolicyUpdateParamsAlertType = "image_notification"
 	PolicyUpdateParamsAlertTypeLoadBalancingHealthAlert                      PolicyUpdateParamsAlertType = "load_balancing_health_alert"
 	PolicyUpdateParamsAlertTypeLoadBalancingPoolEnablementAlert              PolicyUpdateParamsAlertType = "load_balancing_pool_enablement_alert"
 	PolicyUpdateParamsAlertTypeLogoMatchAlert                                PolicyUpdateParamsAlertType = "logo_match_alert"
 	PolicyUpdateParamsAlertTypeMagicTunnelHealthCheckEvent                   PolicyUpdateParamsAlertType = "magic_tunnel_health_check_event"
+	PolicyUpdateParamsAlertTypeMagicWANTunnelHealth                          PolicyUpdateParamsAlertType = "magic_wan_tunnel_health"
 	PolicyUpdateParamsAlertTypeMaintenanceEventNotification                  PolicyUpdateParamsAlertType = "maintenance_event_notification"
 	PolicyUpdateParamsAlertTypeMTLSCertificateStoreCertificateExpirationType PolicyUpdateParamsAlertType = "mtls_certificate_store_certificate_expiration_type"
 	PolicyUpdateParamsAlertTypePagesEventAlert                               PolicyUpdateParamsAlertType = "pages_event_alert"
@@ -939,10 +924,13 @@ const (
 	PolicyUpdateParamsAlertTypeScriptmonitorAlertNewResources                PolicyUpdateParamsAlertType = "scriptmonitor_alert_new_resources"
 	PolicyUpdateParamsAlertTypeSecondaryDNSAllPrimariesFailing               PolicyUpdateParamsAlertType = "secondary_dns_all_primaries_failing"
 	PolicyUpdateParamsAlertTypeSecondaryDNSPrimariesFailing                  PolicyUpdateParamsAlertType = "secondary_dns_primaries_failing"
+	PolicyUpdateParamsAlertTypeSecondaryDNSWarning                           PolicyUpdateParamsAlertType = "secondary_dns_warning"
 	PolicyUpdateParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated           PolicyUpdateParamsAlertType = "secondary_dns_zone_successfully_updated"
 	PolicyUpdateParamsAlertTypeSecondaryDNSZoneValidationWarning             PolicyUpdateParamsAlertType = "secondary_dns_zone_validation_warning"
 	PolicyUpdateParamsAlertTypeSentinelAlert                                 PolicyUpdateParamsAlertType = "sentinel_alert"
 	PolicyUpdateParamsAlertTypeStreamLiveNotifications                       PolicyUpdateParamsAlertType = "stream_live_notifications"
+	PolicyUpdateParamsAlertTypeSyntheticTestLatencyAlert                     PolicyUpdateParamsAlertType = "synthetic_test_latency_alert"
+	PolicyUpdateParamsAlertTypeSyntheticTestLowAvailabilityAlert             PolicyUpdateParamsAlertType = "synthetic_test_low_availability_alert"
 	PolicyUpdateParamsAlertTypeTrafficAnomaliesAlert                         PolicyUpdateParamsAlertType = "traffic_anomalies_alert"
 	PolicyUpdateParamsAlertTypeTunnelHealthEvent                             PolicyUpdateParamsAlertType = "tunnel_health_event"
 	PolicyUpdateParamsAlertTypeTunnelUpdateEvent                             PolicyUpdateParamsAlertType = "tunnel_update_event"
@@ -953,20 +941,27 @@ const (
 
 func (r PolicyUpdateParamsAlertType) IsKnown() bool {
 	switch r {
-	case PolicyUpdateParamsAlertTypeAccessCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyUpdateParamsAlertTypeAdvancedHTTPAlertError, PolicyUpdateParamsAlertTypeBGPHijackNotification, PolicyUpdateParamsAlertTypeBillingUsageAlert, PolicyUpdateParamsAlertTypeBlockNotificationBlockRemoved, PolicyUpdateParamsAlertTypeBlockNotificationNewBlock, PolicyUpdateParamsAlertTypeBlockNotificationReviewRejected, PolicyUpdateParamsAlertTypeBrandProtectionAlert, PolicyUpdateParamsAlertTypeBrandProtectionDigest, PolicyUpdateParamsAlertTypeClickhouseAlertFwAnomaly, PolicyUpdateParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyUpdateParamsAlertTypeCustomSSLCertificateEventType, PolicyUpdateParamsAlertTypeDedicatedSSLCertificateEventType, PolicyUpdateParamsAlertTypeDosAttackL4, PolicyUpdateParamsAlertTypeDosAttackL7, PolicyUpdateParamsAlertTypeExpiringServiceTokenAlert, PolicyUpdateParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyUpdateParamsAlertTypeFbmAutoAdvertisement, PolicyUpdateParamsAlertTypeFbmDosdAttack, PolicyUpdateParamsAlertTypeFbmVolumetricAttack, PolicyUpdateParamsAlertTypeHealthCheckStatusNotification, PolicyUpdateParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeHTTPAlertEdgeError, PolicyUpdateParamsAlertTypeHTTPAlertOriginError, PolicyUpdateParamsAlertTypeIncidentAlert, PolicyUpdateParamsAlertTypeLoadBalancingHealthAlert, PolicyUpdateParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyUpdateParamsAlertTypeLogoMatchAlert, PolicyUpdateParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyUpdateParamsAlertTypeMaintenanceEventNotification, PolicyUpdateParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyUpdateParamsAlertTypePagesEventAlert, PolicyUpdateParamsAlertTypeRadarNotification, PolicyUpdateParamsAlertTypeRealOriginMonitoring, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewResources, PolicyUpdateParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyUpdateParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyUpdateParamsAlertTypeSentinelAlert, PolicyUpdateParamsAlertTypeStreamLiveNotifications, PolicyUpdateParamsAlertTypeTrafficAnomaliesAlert, PolicyUpdateParamsAlertTypeTunnelHealthEvent, PolicyUpdateParamsAlertTypeTunnelUpdateEvent, PolicyUpdateParamsAlertTypeUniversalSSLEventType, PolicyUpdateParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyUpdateParamsAlertTypeZoneAopCustomCertificateExpirationType:
+	case PolicyUpdateParamsAlertTypeAccessCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL4Alert, PolicyUpdateParamsAlertTypeAdvancedDDoSAttackL7Alert, PolicyUpdateParamsAlertTypeAdvancedHTTPAlertError, PolicyUpdateParamsAlertTypeBGPHijackNotification, PolicyUpdateParamsAlertTypeBillingUsageAlert, PolicyUpdateParamsAlertTypeBlockNotificationBlockRemoved, PolicyUpdateParamsAlertTypeBlockNotificationNewBlock, PolicyUpdateParamsAlertTypeBlockNotificationReviewRejected, PolicyUpdateParamsAlertTypeBrandProtectionAlert, PolicyUpdateParamsAlertTypeBrandProtectionDigest, PolicyUpdateParamsAlertTypeClickhouseAlertFwAnomaly, PolicyUpdateParamsAlertTypeClickhouseAlertFwEntAnomaly, PolicyUpdateParamsAlertTypeCloudforceOneRequestNotification, PolicyUpdateParamsAlertTypeCustomAnalytics, PolicyUpdateParamsAlertTypeCustomSSLCertificateEventType, PolicyUpdateParamsAlertTypeDedicatedSSLCertificateEventType, PolicyUpdateParamsAlertTypeDeviceConnectivityAnomalyAlert, PolicyUpdateParamsAlertTypeDosAttackL4, PolicyUpdateParamsAlertTypeDosAttackL7, PolicyUpdateParamsAlertTypeExpiringServiceTokenAlert, PolicyUpdateParamsAlertTypeFailingLogpushJobDisabledAlert, PolicyUpdateParamsAlertTypeFbmAutoAdvertisement, PolicyUpdateParamsAlertTypeFbmDosdAttack, PolicyUpdateParamsAlertTypeFbmVolumetricAttack, PolicyUpdateParamsAlertTypeHealthCheckStatusNotification, PolicyUpdateParamsAlertTypeHostnameAopCustomCertificateExpirationType, PolicyUpdateParamsAlertTypeHTTPAlertEdgeError, PolicyUpdateParamsAlertTypeHTTPAlertOriginError, PolicyUpdateParamsAlertTypeIncidentAlert, PolicyUpdateParamsAlertTypeImageNotification, PolicyUpdateParamsAlertTypeLoadBalancingHealthAlert, PolicyUpdateParamsAlertTypeLoadBalancingPoolEnablementAlert, PolicyUpdateParamsAlertTypeLogoMatchAlert, PolicyUpdateParamsAlertTypeMagicTunnelHealthCheckEvent, PolicyUpdateParamsAlertTypeMagicWANTunnelHealth, PolicyUpdateParamsAlertTypeMaintenanceEventNotification, PolicyUpdateParamsAlertTypeMTLSCertificateStoreCertificateExpirationType, PolicyUpdateParamsAlertTypePagesEventAlert, PolicyUpdateParamsAlertTypeRadarNotification, PolicyUpdateParamsAlertTypeRealOriginMonitoring, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousHosts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousScripts, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL, PolicyUpdateParamsAlertTypeScriptmonitorAlertNewResources, PolicyUpdateParamsAlertTypeSecondaryDNSAllPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSPrimariesFailing, PolicyUpdateParamsAlertTypeSecondaryDNSWarning, PolicyUpdateParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated, PolicyUpdateParamsAlertTypeSecondaryDNSZoneValidationWarning, PolicyUpdateParamsAlertTypeSentinelAlert, PolicyUpdateParamsAlertTypeStreamLiveNotifications, PolicyUpdateParamsAlertTypeSyntheticTestLatencyAlert, PolicyUpdateParamsAlertTypeSyntheticTestLowAvailabilityAlert, PolicyUpdateParamsAlertTypeTrafficAnomaliesAlert, PolicyUpdateParamsAlertTypeTunnelHealthEvent, PolicyUpdateParamsAlertTypeTunnelUpdateEvent, PolicyUpdateParamsAlertTypeUniversalSSLEventType, PolicyUpdateParamsAlertTypeWebAnalyticsMetricsUpdate, PolicyUpdateParamsAlertTypeZoneAopCustomCertificateExpirationType:
 		return true
 	}
 	return false
 }
 
 type PolicyUpdateResponseEnvelope struct {
-	Result PolicyUpdateResponse             `json:"result"`
-	JSON   policyUpdateResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success PolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  PolicyUpdateResponse                `json:"result"`
+	JSON    policyUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // policyUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PolicyUpdateResponseEnvelope]
 type policyUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -978,6 +973,21 @@ func (r *PolicyUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r policyUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type PolicyUpdateResponseEnvelopeSuccess bool
+
+const (
+	PolicyUpdateResponseEnvelopeSuccessTrue PolicyUpdateResponseEnvelopeSuccess = true
+)
+
+func (r PolicyUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PolicyUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type PolicyListParams struct {
@@ -996,13 +1006,20 @@ type PolicyGetParams struct {
 }
 
 type PolicyGetResponseEnvelope struct {
-	Result Policy                        `json:"result"`
-	JSON   policyGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success PolicyGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Policy                           `json:"result"`
+	JSON    policyGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // policyGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [PolicyGetResponseEnvelope]
 type policyGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1014,4 +1031,19 @@ func (r *PolicyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r policyGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type PolicyGetResponseEnvelopeSuccess bool
+
+const (
+	PolicyGetResponseEnvelopeSuccessTrue PolicyGetResponseEnvelopeSuccess = true
+)
+
+func (r PolicyGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PolicyGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

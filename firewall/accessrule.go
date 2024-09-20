@@ -8,16 +8,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AccessRuleService contains methods and other services that help with interacting
@@ -44,7 +42,7 @@ func NewAccessRuleService(opts ...option.RequestOption) (r *AccessRuleService) {
 //
 // Note: To create an IP Access rule that applies to a single zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
-func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *AccessRuleNewResponseUnion, err error) {
+func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env AccessRuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -122,7 +120,7 @@ func (r *AccessRuleService) ListAutoPaging(ctx context.Context, params AccessRul
 // Deletes an existing IP Access rule defined.
 //
 // Note: This operation will affect all zones in the account or zone.
-func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, body AccessRuleDeleteParams, opts ...option.RequestOption) (res *AccessRuleDeleteResponse, err error) {
+func (r *AccessRuleService) Delete(ctx context.Context, identifier string, body AccessRuleDeleteParams, opts ...option.RequestOption) (res *AccessRuleDeleteResponse, err error) {
 	var env AccessRuleDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -143,7 +141,11 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, 
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%s", accountOrZone, accountOrZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -155,7 +157,7 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, 
 // Updates an IP Access rule defined.
 //
 // Note: This operation will affect all zones in the account or zone.
-func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, params AccessRuleEditParams, opts ...option.RequestOption) (res *AccessRuleEditResponseUnion, err error) {
+func (r *AccessRuleService) Edit(ctx context.Context, identifier string, params AccessRuleEditParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env AccessRuleEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -176,7 +178,11 @@ func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, pa
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%s", accountOrZone, accountOrZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -186,7 +192,7 @@ func (r *AccessRuleService) Edit(ctx context.Context, identifier interface{}, pa
 }
 
 // Fetches the details of an IP Access rule defined.
-func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, query AccessRuleGetParams, opts ...option.RequestOption) (res *AccessRuleGetResponseUnion, err error) {
+func (r *AccessRuleService) Get(ctx context.Context, identifier string, query AccessRuleGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env AccessRuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -207,7 +213,11 @@ func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, que
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
-	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
+	if identifier == "" {
+		err = errors.New("missing required identifier parameter")
+		return
+	}
+	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%s", accountOrZone, accountOrZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -233,6 +243,10 @@ func (r AccessRuleCIDRConfigurationParam) implementsFirewallAccessRuleNewParamsC
 
 func (r AccessRuleCIDRConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {
 }
+
+func (r AccessRuleCIDRConfigurationParam) implementsFirewallUARuleNewParamsConfigurationUnion() {}
+
+func (r AccessRuleCIDRConfigurationParam) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
@@ -267,6 +281,10 @@ func (r AccessRuleIPConfigurationParam) implementsFirewallAccessRuleNewParamsCon
 
 func (r AccessRuleIPConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
 
+func (r AccessRuleIPConfigurationParam) implementsFirewallUARuleNewParamsConfigurationUnion() {}
+
+func (r AccessRuleIPConfigurationParam) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
+
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the rule.
 type AccessRuleIPConfigurationTarget string
@@ -298,6 +316,10 @@ func (r ASNConfigurationParam) MarshalJSON() (data []byte, err error) {
 func (r ASNConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
 
 func (r ASNConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
+
+func (r ASNConfigurationParam) implementsFirewallUARuleNewParamsConfigurationUnion() {}
+
+func (r ASNConfigurationParam) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
@@ -332,6 +354,10 @@ func (r CountryConfigurationParam) implementsFirewallAccessRuleNewParamsConfigur
 
 func (r CountryConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
 
+func (r CountryConfigurationParam) implementsFirewallUARuleNewParamsConfigurationUnion() {}
+
+func (r CountryConfigurationParam) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
+
 // The configuration target. You must set the target to `country` when specifying a
 // country code in the rule.
 type CountryConfigurationTarget string
@@ -364,6 +390,10 @@ func (r IPV6ConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurati
 
 func (r IPV6ConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
 
+func (r IPV6ConfigurationParam) implementsFirewallUARuleNewParamsConfigurationUnion() {}
+
+func (r IPV6ConfigurationParam) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
+
 // The configuration target. You must set the target to `ip6` when specifying an
 // IPv6 address in the rule.
 type IPV6ConfigurationTarget string
@@ -378,23 +408,6 @@ func (r IPV6ConfigurationTarget) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// Union satisfied by [firewall.AccessRuleNewResponseUnknown] or
-// [shared.UnionString].
-type AccessRuleNewResponseUnion interface {
-	ImplementsFirewallAccessRuleNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessRuleNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type AccessRuleListResponse = interface{}
@@ -419,40 +432,6 @@ func (r *AccessRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r accessRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-// Union satisfied by [firewall.AccessRuleEditResponseUnknown] or
-// [shared.UnionString].
-type AccessRuleEditResponseUnion interface {
-	ImplementsFirewallAccessRuleEditResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessRuleEditResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [firewall.AccessRuleGetResponseUnknown] or
-// [shared.UnionString].
-type AccessRuleGetResponseUnion interface {
-	ImplementsFirewallAccessRuleGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessRuleGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type AccessRuleNewParams struct {
@@ -538,9 +517,9 @@ func (r AccessRuleNewParamsMode) IsKnown() bool {
 }
 
 type AccessRuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   AccessRuleNewResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -584,11 +563,19 @@ type AccessRuleListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
+	ZoneID        param.Field[string]                            `path:"zone_id"`
+	Configuration param.Field[AccessRuleListParamsConfiguration] `query:"configuration"`
 	// The direction used to sort returned rules.
-	Direction     param.Field[AccessRuleListParamsDirection]     `query:"direction"`
-	EgsPagination param.Field[AccessRuleListParamsEgsPagination] `query:"egs-pagination"`
-	Filters       param.Field[AccessRuleListParamsFilters]       `query:"filters"`
+	Direction param.Field[AccessRuleListParamsDirection] `query:"direction"`
+	// When set to `all`, all the search requirements must match. When set to `any`,
+	// only one of the search requirements has to match.
+	Match param.Field[AccessRuleListParamsMatch] `query:"match"`
+	// The action to apply to a matched request.
+	Mode param.Field[AccessRuleListParamsMode] `query:"mode"`
+	// The string to search for in the notes of existing IP Access rules. Notes: For
+	// example, the string 'attack' would match IP Access rules with notes 'Attack
+	// 26/02' and 'Attack 27/02'. The search is case insensitive.
+	Notes param.Field[string] `query:"notes"`
 	// The field used to sort returned rules.
 	Order param.Field[AccessRuleListParamsOrder] `query:"order"`
 	// Requested page within paginated list of results.
@@ -603,6 +590,43 @@ func (r AccessRuleListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type AccessRuleListParamsConfiguration struct {
+	// The target to search in existing rules.
+	Target param.Field[AccessRuleListParamsConfigurationTarget] `query:"target"`
+	// The target value to search for in existing rules: an IP address, an IP address
+	// range, or a country code, depending on the provided `configuration.target`.
+	// Notes: You can search for a single IPv4 address, an IP address range with a
+	// subnet of '/16' or '/24', or a two-letter ISO-3166-1 alpha-2 country code.
+	Value param.Field[string] `query:"value"`
+}
+
+// URLQuery serializes [AccessRuleListParamsConfiguration]'s query parameters as
+// `url.Values`.
+func (r AccessRuleListParamsConfiguration) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+// The target to search in existing rules.
+type AccessRuleListParamsConfigurationTarget string
+
+const (
+	AccessRuleListParamsConfigurationTargetIP      AccessRuleListParamsConfigurationTarget = "ip"
+	AccessRuleListParamsConfigurationTargetIPRange AccessRuleListParamsConfigurationTarget = "ip_range"
+	AccessRuleListParamsConfigurationTargetASN     AccessRuleListParamsConfigurationTarget = "asn"
+	AccessRuleListParamsConfigurationTargetCountry AccessRuleListParamsConfigurationTarget = "country"
+)
+
+func (r AccessRuleListParamsConfigurationTarget) IsKnown() bool {
+	switch r {
+	case AccessRuleListParamsConfigurationTargetIP, AccessRuleListParamsConfigurationTargetIPRange, AccessRuleListParamsConfigurationTargetASN, AccessRuleListParamsConfigurationTargetCountry:
+		return true
+	}
+	return false
 }
 
 // The direction used to sort returned rules.
@@ -621,113 +645,37 @@ func (r AccessRuleListParamsDirection) IsKnown() bool {
 	return false
 }
 
-type AccessRuleListParamsEgsPagination struct {
-	Json param.Field[AccessRuleListParamsEgsPaginationJson] `query:"json"`
-}
-
-// URLQuery serializes [AccessRuleListParamsEgsPagination]'s query parameters as
-// `url.Values`.
-func (r AccessRuleListParamsEgsPagination) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-type AccessRuleListParamsEgsPaginationJson struct {
-	// The page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// The maximum number of results per page. You can only set the value to `1` or to
-	// a multiple of 5 such as `5`, `10`, `15`, or `20`.
-	PerPage param.Field[float64] `query:"per_page"`
-}
-
-// URLQuery serializes [AccessRuleListParamsEgsPaginationJson]'s query parameters
-// as `url.Values`.
-func (r AccessRuleListParamsEgsPaginationJson) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-type AccessRuleListParamsFilters struct {
-	// The target to search in existing rules.
-	ConfigurationTarget param.Field[AccessRuleListParamsFiltersConfigurationTarget] `query:"configuration.target"`
-	// The target value to search for in existing rules: an IP address, an IP address
-	// range, or a country code, depending on the provided `configuration.target`.
-	// Notes: You can search for a single IPv4 address, an IP address range with a
-	// subnet of '/16' or '/24', or a two-letter ISO-3166-1 alpha-2 country code.
-	ConfigurationValue param.Field[string] `query:"configuration.value"`
-	// When set to `all`, all the search requirements must match. When set to `any`,
-	// only one of the search requirements has to match.
-	Match param.Field[AccessRuleListParamsFiltersMatch] `query:"match"`
-	// The action to apply to a matched request.
-	Mode param.Field[AccessRuleListParamsFiltersMode] `query:"mode"`
-	// The string to search for in the notes of existing IP Access rules. Notes: For
-	// example, the string 'attack' would match IP Access rules with notes 'Attack
-	// 26/02' and 'Attack 27/02'. The search is case insensitive.
-	Notes param.Field[string] `query:"notes"`
-}
-
-// URLQuery serializes [AccessRuleListParamsFilters]'s query parameters as
-// `url.Values`.
-func (r AccessRuleListParamsFilters) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-// The target to search in existing rules.
-type AccessRuleListParamsFiltersConfigurationTarget string
-
-const (
-	AccessRuleListParamsFiltersConfigurationTargetIP      AccessRuleListParamsFiltersConfigurationTarget = "ip"
-	AccessRuleListParamsFiltersConfigurationTargetIPRange AccessRuleListParamsFiltersConfigurationTarget = "ip_range"
-	AccessRuleListParamsFiltersConfigurationTargetASN     AccessRuleListParamsFiltersConfigurationTarget = "asn"
-	AccessRuleListParamsFiltersConfigurationTargetCountry AccessRuleListParamsFiltersConfigurationTarget = "country"
-)
-
-func (r AccessRuleListParamsFiltersConfigurationTarget) IsKnown() bool {
-	switch r {
-	case AccessRuleListParamsFiltersConfigurationTargetIP, AccessRuleListParamsFiltersConfigurationTargetIPRange, AccessRuleListParamsFiltersConfigurationTargetASN, AccessRuleListParamsFiltersConfigurationTargetCountry:
-		return true
-	}
-	return false
-}
-
 // When set to `all`, all the search requirements must match. When set to `any`,
 // only one of the search requirements has to match.
-type AccessRuleListParamsFiltersMatch string
+type AccessRuleListParamsMatch string
 
 const (
-	AccessRuleListParamsFiltersMatchAny AccessRuleListParamsFiltersMatch = "any"
-	AccessRuleListParamsFiltersMatchAll AccessRuleListParamsFiltersMatch = "all"
+	AccessRuleListParamsMatchAny AccessRuleListParamsMatch = "any"
+	AccessRuleListParamsMatchAll AccessRuleListParamsMatch = "all"
 )
 
-func (r AccessRuleListParamsFiltersMatch) IsKnown() bool {
+func (r AccessRuleListParamsMatch) IsKnown() bool {
 	switch r {
-	case AccessRuleListParamsFiltersMatchAny, AccessRuleListParamsFiltersMatchAll:
+	case AccessRuleListParamsMatchAny, AccessRuleListParamsMatchAll:
 		return true
 	}
 	return false
 }
 
 // The action to apply to a matched request.
-type AccessRuleListParamsFiltersMode string
+type AccessRuleListParamsMode string
 
 const (
-	AccessRuleListParamsFiltersModeBlock            AccessRuleListParamsFiltersMode = "block"
-	AccessRuleListParamsFiltersModeChallenge        AccessRuleListParamsFiltersMode = "challenge"
-	AccessRuleListParamsFiltersModeWhitelist        AccessRuleListParamsFiltersMode = "whitelist"
-	AccessRuleListParamsFiltersModeJSChallenge      AccessRuleListParamsFiltersMode = "js_challenge"
-	AccessRuleListParamsFiltersModeManagedChallenge AccessRuleListParamsFiltersMode = "managed_challenge"
+	AccessRuleListParamsModeBlock            AccessRuleListParamsMode = "block"
+	AccessRuleListParamsModeChallenge        AccessRuleListParamsMode = "challenge"
+	AccessRuleListParamsModeWhitelist        AccessRuleListParamsMode = "whitelist"
+	AccessRuleListParamsModeJSChallenge      AccessRuleListParamsMode = "js_challenge"
+	AccessRuleListParamsModeManagedChallenge AccessRuleListParamsMode = "managed_challenge"
 )
 
-func (r AccessRuleListParamsFiltersMode) IsKnown() bool {
+func (r AccessRuleListParamsMode) IsKnown() bool {
 	switch r {
-	case AccessRuleListParamsFiltersModeBlock, AccessRuleListParamsFiltersModeChallenge, AccessRuleListParamsFiltersModeWhitelist, AccessRuleListParamsFiltersModeJSChallenge, AccessRuleListParamsFiltersModeManagedChallenge:
+	case AccessRuleListParamsModeBlock, AccessRuleListParamsModeChallenge, AccessRuleListParamsModeWhitelist, AccessRuleListParamsModeJSChallenge, AccessRuleListParamsModeManagedChallenge:
 		return true
 	}
 	return false
@@ -884,9 +832,9 @@ func (r AccessRuleEditParamsMode) IsKnown() bool {
 }
 
 type AccessRuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   AccessRuleEditResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleEditResponseEnvelopeJSON    `json:"-"`
@@ -934,9 +882,9 @@ type AccessRuleGetParams struct {
 }
 
 type AccessRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   AccessRuleGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleGetResponseEnvelopeJSON    `json:"-"`

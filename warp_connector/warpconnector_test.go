@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/warp_connector"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/warp_connector"
 )
 
 func TestWARPConnectorNew(t *testing.T) {
@@ -63,7 +63,7 @@ func TestWARPConnectorListWithOptionalParams(t *testing.T) {
 		Name:          cloudflare.F("blog"),
 		Page:          cloudflare.F(1.000000),
 		PerPage:       cloudflare.F(1.000000),
-		Status:        cloudflare.F(warp_connector.WARPConnectorListParamsStatusHealthy),
+		Status:        cloudflare.F(warp_connector.WARPConnectorListParamsStatusInactive),
 		UUID:          cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		WasActiveAt:   cloudflare.F(time.Now()),
 		WasInactiveAt: cloudflare.F(time.Now()),

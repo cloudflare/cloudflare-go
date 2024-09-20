@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/cloudforce_one"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/cloudforce_one"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestRequestMessageNewWithOptionalParams(t *testing.T) {
@@ -64,11 +64,7 @@ func TestRequestMessageUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		int64(0),
 		cloudforce_one.RequestMessageUpdateParams{
-			Content:     cloudflare.F("What regions were most effected by the recent DoS?"),
-			Priority:    cloudflare.F("routine"),
-			RequestType: cloudflare.F("Victomology"),
-			Summary:     cloudflare.F("DoS attack"),
-			Tlp:         cloudflare.F(cloudforce_one.RequestMessageUpdateParamsTlpClear),
+			Content: cloudflare.F("Can you elaborate on the type of DoS that occurred?"),
 		},
 	)
 	if err != nil {

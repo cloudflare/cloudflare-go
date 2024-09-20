@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/workers"
-	"github.com/cloudflare/cloudflare-go/v2/workers_for_platforms"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/workers"
+	"github.com/cloudflare/cloudflare-go/v3/workers_for_platforms"
 )
 
 func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
@@ -50,10 +50,11 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				}),
 				Logpush: cloudflare.F(false),
 				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion](workers.SingleStepMigrationParam{
-					NewTag:         cloudflare.F("v2"),
-					OldTag:         cloudflare.F("v1"),
-					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
-					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
+					DeletedClasses:   cloudflare.F([]string{"string", "string", "string"}),
+					NewClasses:       cloudflare.F([]string{"string", "string", "string"}),
+					NewSqliteClasses: cloudflare.F([]string{"string", "string", "string"}),
+					NewTag:           cloudflare.F("v2"),
+					OldTag:           cloudflare.F("v1"),
 					RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
 						From: cloudflare.F("from"),
 						To:   cloudflare.F("to"),
@@ -83,17 +84,17 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				}),
 				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
+					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
 				}, {
+					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
 				}, {
+					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
-					Service:     cloudflare.F("my-log-consumer"),
 				}}),
 				UsageModel: cloudflare.F("unbound"),
 			}),

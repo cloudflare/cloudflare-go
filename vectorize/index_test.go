@@ -10,10 +10,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/vectorize"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/vectorize"
 )
 
 func TestIndexNewWithOptionalParams(t *testing.T) {
@@ -38,36 +38,6 @@ func TestIndexNewWithOptionalParams(t *testing.T) {
 		Name:        cloudflare.F("example-index"),
 		Description: cloudflare.F("This is my example index."),
 	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestIndexUpdate(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Vectorize.Indexes.Update(
-		context.TODO(),
-		"example-index",
-		vectorize.IndexUpdateParams{
-			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Description: cloudflare.F("This is my example index."),
-		},
-	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -220,7 +190,36 @@ func TestIndexGetByIDsWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestIndexInsert(t *testing.T) {
+func TestIndexInfo(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Vectorize.Indexes.Info(
+		context.TODO(),
+		"example-index",
+		vectorize.IndexInfoParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestIndexInsertWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -238,8 +237,9 @@ func TestIndexInsert(t *testing.T) {
 		context.TODO(),
 		"example-index",
 		vectorize.IndexInsertParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:               io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			UnparsableBehavior: cloudflare.F(vectorize.IndexInsertParamsUnparsableBehaviorError),
 		},
 	)
 	if err != nil {
@@ -276,7 +276,7 @@ func TestIndexQueryWithOptionalParams(t *testing.T) {
 				},
 				"streaming_platform": "netflix",
 			}),
-			ReturnMetadata: cloudflare.F(true),
+			ReturnMetadata: cloudflare.F(vectorize.IndexQueryParamsReturnMetadataNone),
 			ReturnValues:   cloudflare.F(true),
 			TopK:           cloudflare.F(5.000000),
 		},
@@ -290,7 +290,7 @@ func TestIndexQueryWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestIndexUpsert(t *testing.T) {
+func TestIndexUpsertWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -308,8 +308,9 @@ func TestIndexUpsert(t *testing.T) {
 		context.TODO(),
 		"example-index",
 		vectorize.IndexUpsertParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:               io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			UnparsableBehavior: cloudflare.F(vectorize.IndexUpsertParamsUnparsableBehaviorError),
 		},
 	)
 	if err != nil {

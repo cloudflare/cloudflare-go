@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/hyperdrive"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/hyperdrive"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestConfigNewWithOptionalParams(t *testing.T) {
@@ -31,19 +31,19 @@ func TestConfigNewWithOptionalParams(t *testing.T) {
 	_, err := client.Hyperdrive.Configs.New(context.TODO(), hyperdrive.ConfigNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Hyperdrive: hyperdrive.HyperdriveParam{
+			Name: cloudflare.F("example-hyperdrive"),
+			Origin: cloudflare.F(hyperdrive.ConfigurationParam{
+				Database:       cloudflare.F("postgres"),
+				Host:           cloudflare.F("database.example.com"),
+				Scheme:         cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
+				User:           cloudflare.F("postgres"),
+				AccessClientID: cloudflare.F("0123456789abcdef0123456789abcdef.access"),
+				Port:           cloudflare.F(int64(5432)),
+			}),
 			Caching: cloudflare.F(hyperdrive.HyperdriveCachingParam{
 				Disabled:             cloudflare.F(false),
 				MaxAge:               cloudflare.F(int64(60)),
 				StaleWhileRevalidate: cloudflare.F(int64(15)),
-			}),
-			Name: cloudflare.F("example-hyperdrive"),
-			Origin: cloudflare.F(hyperdrive.ConfigurationParam{
-				AccessClientID: cloudflare.F("0123456789abcdef0123456789abcdef.access"),
-				Database:       cloudflare.F("postgres"),
-				Host:           cloudflare.F("database.example.com"),
-				Port:           cloudflare.F(int64(5432)),
-				Scheme:         cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
-				User:           cloudflare.F("postgres"),
 			}),
 		},
 	})
@@ -76,19 +76,19 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 		hyperdrive.ConfigUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Hyperdrive: hyperdrive.HyperdriveParam{
+				Name: cloudflare.F("example-hyperdrive"),
+				Origin: cloudflare.F(hyperdrive.ConfigurationParam{
+					Database:       cloudflare.F("postgres"),
+					Host:           cloudflare.F("database.example.com"),
+					Scheme:         cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
+					User:           cloudflare.F("postgres"),
+					AccessClientID: cloudflare.F("0123456789abcdef0123456789abcdef.access"),
+					Port:           cloudflare.F(int64(5432)),
+				}),
 				Caching: cloudflare.F(hyperdrive.HyperdriveCachingParam{
 					Disabled:             cloudflare.F(false),
 					MaxAge:               cloudflare.F(int64(60)),
 					StaleWhileRevalidate: cloudflare.F(int64(15)),
-				}),
-				Name: cloudflare.F("example-hyperdrive"),
-				Origin: cloudflare.F(hyperdrive.ConfigurationParam{
-					AccessClientID: cloudflare.F("0123456789abcdef0123456789abcdef.access"),
-					Database:       cloudflare.F("postgres"),
-					Host:           cloudflare.F("database.example.com"),
-					Port:           cloudflare.F(int64(5432)),
-					Scheme:         cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
-					User:           cloudflare.F("postgres"),
 				}),
 			},
 		},
@@ -183,12 +183,12 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 				}),
 				Name: cloudflare.F("example-hyperdrive"),
 				Origin: cloudflare.F(hyperdrive.ConfigurationParam{
-					AccessClientID: cloudflare.F("0123456789abcdef0123456789abcdef.access"),
 					Database:       cloudflare.F("postgres"),
 					Host:           cloudflare.F("database.example.com"),
-					Port:           cloudflare.F(int64(5432)),
 					Scheme:         cloudflare.F(hyperdrive.ConfigurationSchemePostgres),
 					User:           cloudflare.F("postgres"),
+					AccessClientID: cloudflare.F("0123456789abcdef0123456789abcdef.access"),
+					Port:           cloudflare.F(int64(5432)),
 				}),
 			},
 		},

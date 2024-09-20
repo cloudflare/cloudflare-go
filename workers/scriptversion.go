@@ -12,14 +12,14 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // ScriptVersionService contains methods and other services that help with
@@ -41,7 +41,9 @@ func NewScriptVersionService(opts ...option.RequestOption) (r *ScriptVersionServ
 	return
 }
 
-// Upload a Worker Version without deploying to Cloudflare's network.
+// Upload a Worker Version without deploying to Cloudflare's network. You can find
+// more about the multipart metadata on our docs:
+// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/.
 func (r *ScriptVersionService) New(ctx context.Context, scriptName string, params ScriptVersionNewParams, opts ...option.RequestOption) (res *ScriptVersionNewResponse, err error) {
 	var env ScriptVersionNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -119,22 +121,24 @@ func (r *ScriptVersionService) Get(ctx context.Context, scriptName string, versi
 }
 
 type ScriptVersionNewResponse struct {
-	Resources interface{}                  `json:"resources,required"`
-	ID        string                       `json:"id"`
-	Metadata  interface{}                  `json:"metadata"`
-	Number    float64                      `json:"number"`
-	JSON      scriptVersionNewResponseJSON `json:"-"`
+	Resources     interface{}                  `json:"resources,required"`
+	ID            string                       `json:"id"`
+	Metadata      interface{}                  `json:"metadata"`
+	Number        float64                      `json:"number"`
+	StartupTimeMs int64                        `json:"startup_time_ms"`
+	JSON          scriptVersionNewResponseJSON `json:"-"`
 }
 
 // scriptVersionNewResponseJSON contains the JSON metadata for the struct
 // [ScriptVersionNewResponse]
 type scriptVersionNewResponseJSON struct {
-	Resources   apijson.Field
-	ID          apijson.Field
-	Metadata    apijson.Field
-	Number      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Resources     apijson.Field
+	ID            apijson.Field
+	Metadata      apijson.Field
+	Number        apijson.Field
+	StartupTimeMs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ScriptVersionNewResponse) UnmarshalJSON(data []byte) (err error) {

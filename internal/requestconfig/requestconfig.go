@@ -17,10 +17,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
 )
 
 func getDefaultHeaders() map[string]string {
@@ -441,7 +441,7 @@ func (cfg *RequestConfig) Execute() (err error) {
 
 	err = json.NewDecoder(bytes.NewReader(contents)).Decode(cfg.ResponseBodyInto)
 	if err != nil {
-		err = fmt.Errorf("error parsing response json: %w", err)
+		return fmt.Errorf("error parsing response json: %w", err)
 	}
 
 	return nil
@@ -468,10 +468,17 @@ func (cfg *RequestConfig) Clone(ctx context.Context) *RequestConfig {
 		return nil
 	}
 	new := &RequestConfig{
-		MaxRetries: cfg.MaxRetries,
-		Context:    ctx,
-		Request:    req,
-		HTTPClient: cfg.HTTPClient,
+		MaxRetries:     cfg.MaxRetries,
+		RequestTimeout: cfg.RequestTimeout,
+		Context:        ctx,
+		Request:        req,
+		BaseURL:        cfg.BaseURL,
+		HTTPClient:     cfg.HTTPClient,
+		Middlewares:    cfg.Middlewares,
+		APIToken:       cfg.APIToken,
+		APIKey:         cfg.APIKey,
+		APIEmail:       cfg.APIEmail,
+		UserServiceKey: cfg.UserServiceKey,
 	}
 
 	return new

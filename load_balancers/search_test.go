@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/load_balancers"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestSearchGetWithOptionalParams(t *testing.T) {
@@ -30,11 +30,11 @@ func TestSearchGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Searches.Get(context.TODO(), load_balancers.SearchGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Page:      cloudflare.F[any](map[string]interface{}{}),
-		PerPage:   cloudflare.F[any](map[string]interface{}{}),
+		Page:      cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(1.000000),
 		SearchParams: cloudflare.F(load_balancers.SearchGetParamsSearchParams{
 			Query:      cloudflare.F("primary"),
-			References: cloudflare.F(load_balancers.SearchGetParamsSearchParamsReferencesStar),
+			References: cloudflare.F(load_balancers.SearchGetParamsSearchParamsReferencesEmpty),
 		}),
 	})
 	if err != nil {

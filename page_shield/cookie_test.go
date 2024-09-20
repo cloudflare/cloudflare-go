@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/page_shield"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/page_shield"
 )
 
 func TestCookieListWithOptionalParams(t *testing.T) {
@@ -40,7 +40,7 @@ func TestCookieListWithOptionalParams(t *testing.T) {
 		PageURL:   cloudflare.F("example.com/page,*/checkout,example.com/*,*checkout*"),
 		Path:      cloudflare.F("/"),
 		PerPage:   cloudflare.F(100.000000),
-		SameSite:  cloudflare.F(page_shield.CookieListParamsSameSiteStrict),
+		SameSite:  cloudflare.F(page_shield.CookieListParamsSameSiteLax),
 		Secure:    cloudflare.F(true),
 		Type:      cloudflare.F(page_shield.CookieListParamsTypeFirstParty),
 	})

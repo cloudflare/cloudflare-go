@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // R2ConfigurationService contains methods and other services that help with
@@ -132,7 +132,7 @@ func (r R2ConfigurationGetResponseItemRulesAction) IsKnown() bool {
 }
 
 type R2ConfigurationGetParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -140,7 +140,7 @@ type R2ConfigurationGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo      `json:"errors,required"`
 	Messages []shared.ResponseInfo      `json:"messages,required"`
 	Result   R2ConfigurationGetResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success R2ConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    r2ConfigurationGetResponseEnvelopeJSON    `json:"-"`
 }
@@ -164,7 +164,7 @@ func (r r2ConfigurationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type R2ConfigurationGetResponseEnvelopeSuccess bool
 
 const (

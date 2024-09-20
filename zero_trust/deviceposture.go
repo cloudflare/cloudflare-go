@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -357,6 +357,15 @@ type DeviceInput struct {
 	CertificateID string `json:"certificate_id"`
 	// Common Name that is protected by the certificate
 	Cn string `json:"cn"`
+	// Confirm the certificate was not imported from another device. We recommend
+	// keeping this enabled unless the certificate was deployed without a private key.
+	CheckPrivateKey bool `json:"check_private_key"`
+	// This field can have the runtime type of
+	// [[]DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage].
+	ExtendedKeyUsage interface{} `json:"extended_key_usage,required"`
+	// This field can have the runtime type of
+	// [DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations].
+	Locations interface{} `json:"locations,required"`
 	// Compliance Status
 	ComplianceStatus DeviceInputComplianceStatus `json:"compliance_status"`
 	// Posture Integration ID.
@@ -393,8 +402,10 @@ type DeviceInput struct {
 	IsActive bool `json:"is_active"`
 	// Network status of device.
 	NetworkStatus DeviceInputNetworkStatus `json:"network_status"`
-	JSON          deviceInputJSON          `json:"-"`
-	union         DeviceInputUnion
+	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
+	Score float64         `json:"score"`
+	JSON  deviceInputJSON `json:"-"`
+	union DeviceInputUnion
 }
 
 // deviceInputJSON contains the JSON metadata for the struct [DeviceInput]
@@ -416,6 +427,9 @@ type deviceInputJSON struct {
 	RequireAll       apijson.Field
 	CertificateID    apijson.Field
 	Cn               apijson.Field
+	CheckPrivateKey  apijson.Field
+	ExtendedKeyUsage apijson.Field
+	Locations        apijson.Field
 	ComplianceStatus apijson.Field
 	ConnectionID     apijson.Field
 	LastSeen         apijson.Field
@@ -434,6 +448,7 @@ type deviceInputJSON struct {
 	Infected         apijson.Field
 	IsActive         apijson.Field
 	NetworkStatus    apijson.Field
+	Score            apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -461,10 +476,12 @@ func (r *DeviceInput) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.DeviceInputTeamsDevicesCarbonblackInputRequest],
 // [zero_trust.DiskEncryptionInput],
 // [zero_trust.DeviceInputTeamsDevicesApplicationInputRequest],
-// [zero_trust.ClientCertificateInput], [zero_trust.WorkspaceOneInput],
-// [zero_trust.CrowdstrikeInput], [zero_trust.IntuneInput],
-// [zero_trust.KolideInput], [zero_trust.TaniumInput],
-// [zero_trust.SentineloneS2sInput].
+// [zero_trust.ClientCertificateInput],
+// [zero_trust.DeviceInputTeamsDevicesClientCertificateV2InputRequest],
+// [zero_trust.WorkspaceOneInput], [zero_trust.CrowdstrikeInput],
+// [zero_trust.IntuneInput], [zero_trust.KolideInput], [zero_trust.TaniumInput],
+// [zero_trust.SentineloneS2sInput],
+// [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequest].
 func (r DeviceInput) AsUnion() DeviceInputUnion {
 	return r.union
 }
@@ -477,10 +494,12 @@ func (r DeviceInput) AsUnion() DeviceInputUnion {
 // [zero_trust.DeviceInputTeamsDevicesCarbonblackInputRequest],
 // [zero_trust.DiskEncryptionInput],
 // [zero_trust.DeviceInputTeamsDevicesApplicationInputRequest],
-// [zero_trust.ClientCertificateInput], [zero_trust.WorkspaceOneInput],
-// [zero_trust.CrowdstrikeInput], [zero_trust.IntuneInput],
-// [zero_trust.KolideInput], [zero_trust.TaniumInput] or
-// [zero_trust.SentineloneS2sInput].
+// [zero_trust.ClientCertificateInput],
+// [zero_trust.DeviceInputTeamsDevicesClientCertificateV2InputRequest],
+// [zero_trust.WorkspaceOneInput], [zero_trust.CrowdstrikeInput],
+// [zero_trust.IntuneInput], [zero_trust.KolideInput], [zero_trust.TaniumInput],
+// [zero_trust.SentineloneS2sInput] or
+// [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequest].
 type DeviceInputUnion interface {
 	implementsZeroTrustDeviceInput()
 }
@@ -531,6 +550,10 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DeviceInputTeamsDevicesClientCertificateV2InputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(WorkspaceOneInput{}),
 		},
 		apijson.UnionVariant{
@@ -552,6 +575,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(SentineloneS2sInput{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DeviceInputTeamsDevicesCustomS2sInputRequest{}),
 		},
 	)
 }
@@ -651,6 +678,170 @@ const (
 func (r DeviceInputTeamsDevicesApplicationInputRequestOperatingSystem) IsKnown() bool {
 	switch r {
 	case DeviceInputTeamsDevicesApplicationInputRequestOperatingSystemWindows, DeviceInputTeamsDevicesApplicationInputRequestOperatingSystemLinux, DeviceInputTeamsDevicesApplicationInputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
+type DeviceInputTeamsDevicesClientCertificateV2InputRequest struct {
+	// UUID of Cloudflare managed certificate.
+	CertificateID string `json:"certificate_id,required"`
+	// Confirm the certificate was not imported from another device. We recommend
+	// keeping this enabled unless the certificate was deployed without a private key.
+	CheckPrivateKey bool `json:"check_private_key,required"`
+	// Operating system
+	OperatingSystem DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem `json:"operating_system,required"`
+	// Common Name that is protected by the client certificate. This may include one or
+	// more variables in the ${ } notation. Only ${serial_number} and ${hostname} are
+	// valid variables.
+	Cn string `json:"cn"`
+	// List of values indicating purposes for which the certificate public key can be
+	// used
+	ExtendedKeyUsage []DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage `json:"extended_key_usage"`
+	Locations        DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations          `json:"locations"`
+	JSON             deviceInputTeamsDevicesClientCertificateV2InputRequestJSON               `json:"-"`
+}
+
+// deviceInputTeamsDevicesClientCertificateV2InputRequestJSON contains the JSON
+// metadata for the struct [DeviceInputTeamsDevicesClientCertificateV2InputRequest]
+type deviceInputTeamsDevicesClientCertificateV2InputRequestJSON struct {
+	CertificateID    apijson.Field
+	CheckPrivateKey  apijson.Field
+	OperatingSystem  apijson.Field
+	Cn               apijson.Field
+	ExtendedKeyUsage apijson.Field
+	Locations        apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DeviceInputTeamsDevicesClientCertificateV2InputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceInputTeamsDevicesClientCertificateV2InputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DeviceInputTeamsDevicesClientCertificateV2InputRequest) implementsZeroTrustDeviceInput() {}
+
+// Operating system
+type DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem string
+
+const (
+	DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystemWindows DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem = "windows"
+	DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystemLinux   DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem = "linux"
+	DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystemMac     DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem = "mac"
+)
+
+func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystemWindows, DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystemLinux, DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystemMac:
+		return true
+	}
+	return false
+}
+
+type DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage string
+
+const (
+	DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsageClientAuth      DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage = "clientAuth"
+	DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsageEmailProtection DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage = "emailProtection"
+)
+
+func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsageClientAuth, DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsageEmailProtection:
+		return true
+	}
+	return false
+}
+
+type DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations struct {
+	// List of paths to check for client certificate on linux.
+	Paths []string `json:"paths"`
+	// List of trust stores to check for client certificate.
+	TrustStores []DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStore `json:"trust_stores"`
+	JSON        deviceInputTeamsDevicesClientCertificateV2InputRequestLocationsJSON         `json:"-"`
+}
+
+// deviceInputTeamsDevicesClientCertificateV2InputRequestLocationsJSON contains the
+// JSON metadata for the struct
+// [DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations]
+type deviceInputTeamsDevicesClientCertificateV2InputRequestLocationsJSON struct {
+	Paths       apijson.Field
+	TrustStores apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceInputTeamsDevicesClientCertificateV2InputRequestLocationsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStore string
+
+const (
+	DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStoreSystem DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStore = "system"
+	DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStoreUser   DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStore = "user"
+)
+
+func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStore) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStoreSystem, DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStoreUser:
+		return true
+	}
+	return false
+}
+
+type DeviceInputTeamsDevicesCustomS2sInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID string `json:"connection_id,required"`
+	// operator
+	Operator DeviceInputTeamsDevicesCustomS2sInputRequestOperator `json:"operator,required"`
+	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
+	Score float64                                          `json:"score,required"`
+	JSON  deviceInputTeamsDevicesCustomS2sInputRequestJSON `json:"-"`
+}
+
+// deviceInputTeamsDevicesCustomS2sInputRequestJSON contains the JSON metadata for
+// the struct [DeviceInputTeamsDevicesCustomS2sInputRequest]
+type deviceInputTeamsDevicesCustomS2sInputRequestJSON struct {
+	ConnectionID apijson.Field
+	Operator     apijson.Field
+	Score        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DeviceInputTeamsDevicesCustomS2sInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceInputTeamsDevicesCustomS2sInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DeviceInputTeamsDevicesCustomS2sInputRequest) implementsZeroTrustDeviceInput() {}
+
+// operator
+type DeviceInputTeamsDevicesCustomS2sInputRequestOperator string
+
+const (
+	DeviceInputTeamsDevicesCustomS2sInputRequestOperatorLess            DeviceInputTeamsDevicesCustomS2sInputRequestOperator = "<"
+	DeviceInputTeamsDevicesCustomS2sInputRequestOperatorLessOrEquals    DeviceInputTeamsDevicesCustomS2sInputRequestOperator = "<="
+	DeviceInputTeamsDevicesCustomS2sInputRequestOperatorGreater         DeviceInputTeamsDevicesCustomS2sInputRequestOperator = ">"
+	DeviceInputTeamsDevicesCustomS2sInputRequestOperatorGreaterOrEquals DeviceInputTeamsDevicesCustomS2sInputRequestOperator = ">="
+	DeviceInputTeamsDevicesCustomS2sInputRequestOperatorEquals          DeviceInputTeamsDevicesCustomS2sInputRequestOperator = "=="
+)
+
+func (r DeviceInputTeamsDevicesCustomS2sInputRequestOperator) IsKnown() bool {
+	switch r {
+	case DeviceInputTeamsDevicesCustomS2sInputRequestOperatorLess, DeviceInputTeamsDevicesCustomS2sInputRequestOperatorLessOrEquals, DeviceInputTeamsDevicesCustomS2sInputRequestOperatorGreater, DeviceInputTeamsDevicesCustomS2sInputRequestOperatorGreaterOrEquals, DeviceInputTeamsDevicesCustomS2sInputRequestOperatorEquals:
 		return true
 	}
 	return false
@@ -861,6 +1052,11 @@ type DeviceInputParam struct {
 	CertificateID param.Field[string] `json:"certificate_id"`
 	// Common Name that is protected by the certificate
 	Cn param.Field[string] `json:"cn"`
+	// Confirm the certificate was not imported from another device. We recommend
+	// keeping this enabled unless the certificate was deployed without a private key.
+	CheckPrivateKey  param.Field[bool]        `json:"check_private_key"`
+	ExtendedKeyUsage param.Field[interface{}] `json:"extended_key_usage,required"`
+	Locations        param.Field[interface{}] `json:"locations,required"`
 	// Compliance Status
 	ComplianceStatus param.Field[DeviceInputComplianceStatus] `json:"compliance_status"`
 	// Posture Integration ID.
@@ -897,6 +1093,8 @@ type DeviceInputParam struct {
 	IsActive param.Field[bool] `json:"is_active"`
 	// Network status of device.
 	NetworkStatus param.Field[DeviceInputNetworkStatus] `json:"network_status"`
+	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
+	Score param.Field[float64] `json:"score"`
 }
 
 func (r DeviceInputParam) MarshalJSON() (data []byte, err error) {
@@ -913,10 +1111,13 @@ func (r DeviceInputParam) implementsZeroTrustDeviceInputUnionParam() {}
 // [zero_trust.DeviceInputTeamsDevicesCarbonblackInputRequestParam],
 // [zero_trust.DiskEncryptionInputParam],
 // [zero_trust.DeviceInputTeamsDevicesApplicationInputRequestParam],
-// [zero_trust.ClientCertificateInputParam], [zero_trust.WorkspaceOneInputParam],
-// [zero_trust.CrowdstrikeInputParam], [zero_trust.IntuneInputParam],
-// [zero_trust.KolideInputParam], [zero_trust.TaniumInputParam],
-// [zero_trust.SentineloneS2sInputParam], [DeviceInputParam].
+// [zero_trust.ClientCertificateInputParam],
+// [zero_trust.DeviceInputTeamsDevicesClientCertificateV2InputRequestParam],
+// [zero_trust.WorkspaceOneInputParam], [zero_trust.CrowdstrikeInputParam],
+// [zero_trust.IntuneInputParam], [zero_trust.KolideInputParam],
+// [zero_trust.TaniumInputParam], [zero_trust.SentineloneS2sInputParam],
+// [zero_trust.DeviceInputTeamsDevicesCustomS2sInputRequestParam],
+// [DeviceInputParam].
 type DeviceInputUnionParam interface {
 	implementsZeroTrustDeviceInputUnionParam()
 }
@@ -955,6 +1156,58 @@ func (r DeviceInputTeamsDevicesApplicationInputRequestParam) MarshalJSON() (data
 }
 
 func (r DeviceInputTeamsDevicesApplicationInputRequestParam) implementsZeroTrustDeviceInputUnionParam() {
+}
+
+type DeviceInputTeamsDevicesClientCertificateV2InputRequestParam struct {
+	// UUID of Cloudflare managed certificate.
+	CertificateID param.Field[string] `json:"certificate_id,required"`
+	// Confirm the certificate was not imported from another device. We recommend
+	// keeping this enabled unless the certificate was deployed without a private key.
+	CheckPrivateKey param.Field[bool] `json:"check_private_key,required"`
+	// Operating system
+	OperatingSystem param.Field[DeviceInputTeamsDevicesClientCertificateV2InputRequestOperatingSystem] `json:"operating_system,required"`
+	// Common Name that is protected by the client certificate. This may include one or
+	// more variables in the ${ } notation. Only ${serial_number} and ${hostname} are
+	// valid variables.
+	Cn param.Field[string] `json:"cn"`
+	// List of values indicating purposes for which the certificate public key can be
+	// used
+	ExtendedKeyUsage param.Field[[]DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage] `json:"extended_key_usage"`
+	Locations        param.Field[DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam]     `json:"locations"`
+}
+
+func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestParam) implementsZeroTrustDeviceInputUnionParam() {
+}
+
+type DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam struct {
+	// List of paths to check for client certificate on linux.
+	Paths param.Field[[]string] `json:"paths"`
+	// List of trust stores to check for client certificate.
+	TrustStores param.Field[[]DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsTrustStore] `json:"trust_stores"`
+}
+
+func (r DeviceInputTeamsDevicesClientCertificateV2InputRequestLocationsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DeviceInputTeamsDevicesCustomS2sInputRequestParam struct {
+	// Posture Integration ID.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+	// operator
+	Operator param.Field[DeviceInputTeamsDevicesCustomS2sInputRequestOperator] `json:"operator,required"`
+	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
+	Score param.Field[float64] `json:"score,required"`
+}
+
+func (r DeviceInputTeamsDevicesCustomS2sInputRequestParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DeviceInputTeamsDevicesCustomS2sInputRequestParam) implementsZeroTrustDeviceInputUnionParam() {
 }
 
 type DeviceMatch struct {
@@ -1052,30 +1305,32 @@ func (r devicePostureRuleJSON) RawJSON() string {
 type DevicePostureRuleType string
 
 const (
-	DevicePostureRuleTypeFile              DevicePostureRuleType = "file"
-	DevicePostureRuleTypeApplication       DevicePostureRuleType = "application"
-	DevicePostureRuleTypeTanium            DevicePostureRuleType = "tanium"
-	DevicePostureRuleTypeGateway           DevicePostureRuleType = "gateway"
-	DevicePostureRuleTypeWARP              DevicePostureRuleType = "warp"
-	DevicePostureRuleTypeDiskEncryption    DevicePostureRuleType = "disk_encryption"
-	DevicePostureRuleTypeSentinelone       DevicePostureRuleType = "sentinelone"
-	DevicePostureRuleTypeCarbonblack       DevicePostureRuleType = "carbonblack"
-	DevicePostureRuleTypeFirewall          DevicePostureRuleType = "firewall"
-	DevicePostureRuleTypeOSVersion         DevicePostureRuleType = "os_version"
-	DevicePostureRuleTypeDomainJoined      DevicePostureRuleType = "domain_joined"
-	DevicePostureRuleTypeClientCertificate DevicePostureRuleType = "client_certificate"
-	DevicePostureRuleTypeUniqueClientID    DevicePostureRuleType = "unique_client_id"
-	DevicePostureRuleTypeKolide            DevicePostureRuleType = "kolide"
-	DevicePostureRuleTypeTaniumS2s         DevicePostureRuleType = "tanium_s2s"
-	DevicePostureRuleTypeCrowdstrikeS2s    DevicePostureRuleType = "crowdstrike_s2s"
-	DevicePostureRuleTypeIntune            DevicePostureRuleType = "intune"
-	DevicePostureRuleTypeWorkspaceOne      DevicePostureRuleType = "workspace_one"
-	DevicePostureRuleTypeSentineloneS2s    DevicePostureRuleType = "sentinelone_s2s"
+	DevicePostureRuleTypeFile                DevicePostureRuleType = "file"
+	DevicePostureRuleTypeApplication         DevicePostureRuleType = "application"
+	DevicePostureRuleTypeTanium              DevicePostureRuleType = "tanium"
+	DevicePostureRuleTypeGateway             DevicePostureRuleType = "gateway"
+	DevicePostureRuleTypeWARP                DevicePostureRuleType = "warp"
+	DevicePostureRuleTypeDiskEncryption      DevicePostureRuleType = "disk_encryption"
+	DevicePostureRuleTypeSentinelone         DevicePostureRuleType = "sentinelone"
+	DevicePostureRuleTypeCarbonblack         DevicePostureRuleType = "carbonblack"
+	DevicePostureRuleTypeFirewall            DevicePostureRuleType = "firewall"
+	DevicePostureRuleTypeOSVersion           DevicePostureRuleType = "os_version"
+	DevicePostureRuleTypeDomainJoined        DevicePostureRuleType = "domain_joined"
+	DevicePostureRuleTypeClientCertificate   DevicePostureRuleType = "client_certificate"
+	DevicePostureRuleTypeClientCertificateV2 DevicePostureRuleType = "client_certificate_v2"
+	DevicePostureRuleTypeUniqueClientID      DevicePostureRuleType = "unique_client_id"
+	DevicePostureRuleTypeKolide              DevicePostureRuleType = "kolide"
+	DevicePostureRuleTypeTaniumS2s           DevicePostureRuleType = "tanium_s2s"
+	DevicePostureRuleTypeCrowdstrikeS2s      DevicePostureRuleType = "crowdstrike_s2s"
+	DevicePostureRuleTypeIntune              DevicePostureRuleType = "intune"
+	DevicePostureRuleTypeWorkspaceOne        DevicePostureRuleType = "workspace_one"
+	DevicePostureRuleTypeSentineloneS2s      DevicePostureRuleType = "sentinelone_s2s"
+	DevicePostureRuleTypeCustomS2s           DevicePostureRuleType = "custom_s2s"
 )
 
 func (r DevicePostureRuleType) IsKnown() bool {
 	switch r {
-	case DevicePostureRuleTypeFile, DevicePostureRuleTypeApplication, DevicePostureRuleTypeTanium, DevicePostureRuleTypeGateway, DevicePostureRuleTypeWARP, DevicePostureRuleTypeDiskEncryption, DevicePostureRuleTypeSentinelone, DevicePostureRuleTypeCarbonblack, DevicePostureRuleTypeFirewall, DevicePostureRuleTypeOSVersion, DevicePostureRuleTypeDomainJoined, DevicePostureRuleTypeClientCertificate, DevicePostureRuleTypeUniqueClientID, DevicePostureRuleTypeKolide, DevicePostureRuleTypeTaniumS2s, DevicePostureRuleTypeCrowdstrikeS2s, DevicePostureRuleTypeIntune, DevicePostureRuleTypeWorkspaceOne, DevicePostureRuleTypeSentineloneS2s:
+	case DevicePostureRuleTypeFile, DevicePostureRuleTypeApplication, DevicePostureRuleTypeTanium, DevicePostureRuleTypeGateway, DevicePostureRuleTypeWARP, DevicePostureRuleTypeDiskEncryption, DevicePostureRuleTypeSentinelone, DevicePostureRuleTypeCarbonblack, DevicePostureRuleTypeFirewall, DevicePostureRuleTypeOSVersion, DevicePostureRuleTypeDomainJoined, DevicePostureRuleTypeClientCertificate, DevicePostureRuleTypeClientCertificateV2, DevicePostureRuleTypeUniqueClientID, DevicePostureRuleTypeKolide, DevicePostureRuleTypeTaniumS2s, DevicePostureRuleTypeCrowdstrikeS2s, DevicePostureRuleTypeIntune, DevicePostureRuleTypeWorkspaceOne, DevicePostureRuleTypeSentineloneS2s, DevicePostureRuleTypeCustomS2s:
 		return true
 	}
 	return false
@@ -1962,30 +2217,32 @@ func (r DevicePostureNewParams) MarshalJSON() (data []byte, err error) {
 type DevicePostureNewParamsType string
 
 const (
-	DevicePostureNewParamsTypeFile              DevicePostureNewParamsType = "file"
-	DevicePostureNewParamsTypeApplication       DevicePostureNewParamsType = "application"
-	DevicePostureNewParamsTypeTanium            DevicePostureNewParamsType = "tanium"
-	DevicePostureNewParamsTypeGateway           DevicePostureNewParamsType = "gateway"
-	DevicePostureNewParamsTypeWARP              DevicePostureNewParamsType = "warp"
-	DevicePostureNewParamsTypeDiskEncryption    DevicePostureNewParamsType = "disk_encryption"
-	DevicePostureNewParamsTypeSentinelone       DevicePostureNewParamsType = "sentinelone"
-	DevicePostureNewParamsTypeCarbonblack       DevicePostureNewParamsType = "carbonblack"
-	DevicePostureNewParamsTypeFirewall          DevicePostureNewParamsType = "firewall"
-	DevicePostureNewParamsTypeOSVersion         DevicePostureNewParamsType = "os_version"
-	DevicePostureNewParamsTypeDomainJoined      DevicePostureNewParamsType = "domain_joined"
-	DevicePostureNewParamsTypeClientCertificate DevicePostureNewParamsType = "client_certificate"
-	DevicePostureNewParamsTypeUniqueClientID    DevicePostureNewParamsType = "unique_client_id"
-	DevicePostureNewParamsTypeKolide            DevicePostureNewParamsType = "kolide"
-	DevicePostureNewParamsTypeTaniumS2s         DevicePostureNewParamsType = "tanium_s2s"
-	DevicePostureNewParamsTypeCrowdstrikeS2s    DevicePostureNewParamsType = "crowdstrike_s2s"
-	DevicePostureNewParamsTypeIntune            DevicePostureNewParamsType = "intune"
-	DevicePostureNewParamsTypeWorkspaceOne      DevicePostureNewParamsType = "workspace_one"
-	DevicePostureNewParamsTypeSentineloneS2s    DevicePostureNewParamsType = "sentinelone_s2s"
+	DevicePostureNewParamsTypeFile                DevicePostureNewParamsType = "file"
+	DevicePostureNewParamsTypeApplication         DevicePostureNewParamsType = "application"
+	DevicePostureNewParamsTypeTanium              DevicePostureNewParamsType = "tanium"
+	DevicePostureNewParamsTypeGateway             DevicePostureNewParamsType = "gateway"
+	DevicePostureNewParamsTypeWARP                DevicePostureNewParamsType = "warp"
+	DevicePostureNewParamsTypeDiskEncryption      DevicePostureNewParamsType = "disk_encryption"
+	DevicePostureNewParamsTypeSentinelone         DevicePostureNewParamsType = "sentinelone"
+	DevicePostureNewParamsTypeCarbonblack         DevicePostureNewParamsType = "carbonblack"
+	DevicePostureNewParamsTypeFirewall            DevicePostureNewParamsType = "firewall"
+	DevicePostureNewParamsTypeOSVersion           DevicePostureNewParamsType = "os_version"
+	DevicePostureNewParamsTypeDomainJoined        DevicePostureNewParamsType = "domain_joined"
+	DevicePostureNewParamsTypeClientCertificate   DevicePostureNewParamsType = "client_certificate"
+	DevicePostureNewParamsTypeClientCertificateV2 DevicePostureNewParamsType = "client_certificate_v2"
+	DevicePostureNewParamsTypeUniqueClientID      DevicePostureNewParamsType = "unique_client_id"
+	DevicePostureNewParamsTypeKolide              DevicePostureNewParamsType = "kolide"
+	DevicePostureNewParamsTypeTaniumS2s           DevicePostureNewParamsType = "tanium_s2s"
+	DevicePostureNewParamsTypeCrowdstrikeS2s      DevicePostureNewParamsType = "crowdstrike_s2s"
+	DevicePostureNewParamsTypeIntune              DevicePostureNewParamsType = "intune"
+	DevicePostureNewParamsTypeWorkspaceOne        DevicePostureNewParamsType = "workspace_one"
+	DevicePostureNewParamsTypeSentineloneS2s      DevicePostureNewParamsType = "sentinelone_s2s"
+	DevicePostureNewParamsTypeCustomS2s           DevicePostureNewParamsType = "custom_s2s"
 )
 
 func (r DevicePostureNewParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureNewParamsTypeFile, DevicePostureNewParamsTypeApplication, DevicePostureNewParamsTypeTanium, DevicePostureNewParamsTypeGateway, DevicePostureNewParamsTypeWARP, DevicePostureNewParamsTypeDiskEncryption, DevicePostureNewParamsTypeSentinelone, DevicePostureNewParamsTypeCarbonblack, DevicePostureNewParamsTypeFirewall, DevicePostureNewParamsTypeOSVersion, DevicePostureNewParamsTypeDomainJoined, DevicePostureNewParamsTypeClientCertificate, DevicePostureNewParamsTypeUniqueClientID, DevicePostureNewParamsTypeKolide, DevicePostureNewParamsTypeTaniumS2s, DevicePostureNewParamsTypeCrowdstrikeS2s, DevicePostureNewParamsTypeIntune, DevicePostureNewParamsTypeWorkspaceOne, DevicePostureNewParamsTypeSentineloneS2s:
+	case DevicePostureNewParamsTypeFile, DevicePostureNewParamsTypeApplication, DevicePostureNewParamsTypeTanium, DevicePostureNewParamsTypeGateway, DevicePostureNewParamsTypeWARP, DevicePostureNewParamsTypeDiskEncryption, DevicePostureNewParamsTypeSentinelone, DevicePostureNewParamsTypeCarbonblack, DevicePostureNewParamsTypeFirewall, DevicePostureNewParamsTypeOSVersion, DevicePostureNewParamsTypeDomainJoined, DevicePostureNewParamsTypeClientCertificate, DevicePostureNewParamsTypeClientCertificateV2, DevicePostureNewParamsTypeUniqueClientID, DevicePostureNewParamsTypeKolide, DevicePostureNewParamsTypeTaniumS2s, DevicePostureNewParamsTypeCrowdstrikeS2s, DevicePostureNewParamsTypeIntune, DevicePostureNewParamsTypeWorkspaceOne, DevicePostureNewParamsTypeSentineloneS2s, DevicePostureNewParamsTypeCustomS2s:
 		return true
 	}
 	return false
@@ -2062,30 +2319,32 @@ func (r DevicePostureUpdateParams) MarshalJSON() (data []byte, err error) {
 type DevicePostureUpdateParamsType string
 
 const (
-	DevicePostureUpdateParamsTypeFile              DevicePostureUpdateParamsType = "file"
-	DevicePostureUpdateParamsTypeApplication       DevicePostureUpdateParamsType = "application"
-	DevicePostureUpdateParamsTypeTanium            DevicePostureUpdateParamsType = "tanium"
-	DevicePostureUpdateParamsTypeGateway           DevicePostureUpdateParamsType = "gateway"
-	DevicePostureUpdateParamsTypeWARP              DevicePostureUpdateParamsType = "warp"
-	DevicePostureUpdateParamsTypeDiskEncryption    DevicePostureUpdateParamsType = "disk_encryption"
-	DevicePostureUpdateParamsTypeSentinelone       DevicePostureUpdateParamsType = "sentinelone"
-	DevicePostureUpdateParamsTypeCarbonblack       DevicePostureUpdateParamsType = "carbonblack"
-	DevicePostureUpdateParamsTypeFirewall          DevicePostureUpdateParamsType = "firewall"
-	DevicePostureUpdateParamsTypeOSVersion         DevicePostureUpdateParamsType = "os_version"
-	DevicePostureUpdateParamsTypeDomainJoined      DevicePostureUpdateParamsType = "domain_joined"
-	DevicePostureUpdateParamsTypeClientCertificate DevicePostureUpdateParamsType = "client_certificate"
-	DevicePostureUpdateParamsTypeUniqueClientID    DevicePostureUpdateParamsType = "unique_client_id"
-	DevicePostureUpdateParamsTypeKolide            DevicePostureUpdateParamsType = "kolide"
-	DevicePostureUpdateParamsTypeTaniumS2s         DevicePostureUpdateParamsType = "tanium_s2s"
-	DevicePostureUpdateParamsTypeCrowdstrikeS2s    DevicePostureUpdateParamsType = "crowdstrike_s2s"
-	DevicePostureUpdateParamsTypeIntune            DevicePostureUpdateParamsType = "intune"
-	DevicePostureUpdateParamsTypeWorkspaceOne      DevicePostureUpdateParamsType = "workspace_one"
-	DevicePostureUpdateParamsTypeSentineloneS2s    DevicePostureUpdateParamsType = "sentinelone_s2s"
+	DevicePostureUpdateParamsTypeFile                DevicePostureUpdateParamsType = "file"
+	DevicePostureUpdateParamsTypeApplication         DevicePostureUpdateParamsType = "application"
+	DevicePostureUpdateParamsTypeTanium              DevicePostureUpdateParamsType = "tanium"
+	DevicePostureUpdateParamsTypeGateway             DevicePostureUpdateParamsType = "gateway"
+	DevicePostureUpdateParamsTypeWARP                DevicePostureUpdateParamsType = "warp"
+	DevicePostureUpdateParamsTypeDiskEncryption      DevicePostureUpdateParamsType = "disk_encryption"
+	DevicePostureUpdateParamsTypeSentinelone         DevicePostureUpdateParamsType = "sentinelone"
+	DevicePostureUpdateParamsTypeCarbonblack         DevicePostureUpdateParamsType = "carbonblack"
+	DevicePostureUpdateParamsTypeFirewall            DevicePostureUpdateParamsType = "firewall"
+	DevicePostureUpdateParamsTypeOSVersion           DevicePostureUpdateParamsType = "os_version"
+	DevicePostureUpdateParamsTypeDomainJoined        DevicePostureUpdateParamsType = "domain_joined"
+	DevicePostureUpdateParamsTypeClientCertificate   DevicePostureUpdateParamsType = "client_certificate"
+	DevicePostureUpdateParamsTypeClientCertificateV2 DevicePostureUpdateParamsType = "client_certificate_v2"
+	DevicePostureUpdateParamsTypeUniqueClientID      DevicePostureUpdateParamsType = "unique_client_id"
+	DevicePostureUpdateParamsTypeKolide              DevicePostureUpdateParamsType = "kolide"
+	DevicePostureUpdateParamsTypeTaniumS2s           DevicePostureUpdateParamsType = "tanium_s2s"
+	DevicePostureUpdateParamsTypeCrowdstrikeS2s      DevicePostureUpdateParamsType = "crowdstrike_s2s"
+	DevicePostureUpdateParamsTypeIntune              DevicePostureUpdateParamsType = "intune"
+	DevicePostureUpdateParamsTypeWorkspaceOne        DevicePostureUpdateParamsType = "workspace_one"
+	DevicePostureUpdateParamsTypeSentineloneS2s      DevicePostureUpdateParamsType = "sentinelone_s2s"
+	DevicePostureUpdateParamsTypeCustomS2s           DevicePostureUpdateParamsType = "custom_s2s"
 )
 
 func (r DevicePostureUpdateParamsType) IsKnown() bool {
 	switch r {
-	case DevicePostureUpdateParamsTypeFile, DevicePostureUpdateParamsTypeApplication, DevicePostureUpdateParamsTypeTanium, DevicePostureUpdateParamsTypeGateway, DevicePostureUpdateParamsTypeWARP, DevicePostureUpdateParamsTypeDiskEncryption, DevicePostureUpdateParamsTypeSentinelone, DevicePostureUpdateParamsTypeCarbonblack, DevicePostureUpdateParamsTypeFirewall, DevicePostureUpdateParamsTypeOSVersion, DevicePostureUpdateParamsTypeDomainJoined, DevicePostureUpdateParamsTypeClientCertificate, DevicePostureUpdateParamsTypeUniqueClientID, DevicePostureUpdateParamsTypeKolide, DevicePostureUpdateParamsTypeTaniumS2s, DevicePostureUpdateParamsTypeCrowdstrikeS2s, DevicePostureUpdateParamsTypeIntune, DevicePostureUpdateParamsTypeWorkspaceOne, DevicePostureUpdateParamsTypeSentineloneS2s:
+	case DevicePostureUpdateParamsTypeFile, DevicePostureUpdateParamsTypeApplication, DevicePostureUpdateParamsTypeTanium, DevicePostureUpdateParamsTypeGateway, DevicePostureUpdateParamsTypeWARP, DevicePostureUpdateParamsTypeDiskEncryption, DevicePostureUpdateParamsTypeSentinelone, DevicePostureUpdateParamsTypeCarbonblack, DevicePostureUpdateParamsTypeFirewall, DevicePostureUpdateParamsTypeOSVersion, DevicePostureUpdateParamsTypeDomainJoined, DevicePostureUpdateParamsTypeClientCertificate, DevicePostureUpdateParamsTypeClientCertificateV2, DevicePostureUpdateParamsTypeUniqueClientID, DevicePostureUpdateParamsTypeKolide, DevicePostureUpdateParamsTypeTaniumS2s, DevicePostureUpdateParamsTypeCrowdstrikeS2s, DevicePostureUpdateParamsTypeIntune, DevicePostureUpdateParamsTypeWorkspaceOne, DevicePostureUpdateParamsTypeSentineloneS2s, DevicePostureUpdateParamsTypeCustomS2s:
 		return true
 	}
 	return false

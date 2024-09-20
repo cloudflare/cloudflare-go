@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/magic_transit"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestGRETunnelNew(t *testing.T) {
@@ -65,11 +65,11 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 			Name:                  cloudflare.F("GRE_1"),
 			Description:           cloudflare.F("Tunnel for ISP X"),
 			HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
-				Direction: cloudflare.F(magic_transit.HealthCheckDirectionBidirectional),
+				Direction: cloudflare.F(magic_transit.HealthCheckDirectionUnidirectional),
 				Enabled:   cloudflare.F(true),
 				Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
 				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(magic_transit.HealthCheckTypeRequest),
+				Type:      cloudflare.F(magic_transit.HealthCheckTypeReply),
 			}),
 			Mtu: cloudflare.F(int64(0)),
 			TTL: cloudflare.F(int64(0)),

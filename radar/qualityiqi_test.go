@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/radar"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/radar"
 )
 
 func TestQualityIQISummaryWithOptionalParams(t *testing.T) {
@@ -63,7 +63,7 @@ func TestQualityIQITimeseriesGroupsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Quality.IQI.TimeseriesGroups(context.TODO(), radar.QualityIQITimeseriesGroupsParams{
 		Metric:        cloudflare.F(radar.QualityIQITimeseriesGroupsParamsMetricBandwidth),
-		AggInterval:   cloudflare.F(radar.QualityIQITimeseriesGroupsParamsAggInterval1h),
+		AggInterval:   cloudflare.F(radar.QualityIQITimeseriesGroupsParamsAggInterval15m),
 		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

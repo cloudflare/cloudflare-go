@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -57,8 +57,8 @@ func (r *TunnelTokenService) Get(ctx context.Context, tunnelID string, query Tun
 	return
 }
 
-// Union satisfied by [zero_trust.TunnelTokenGetResponseUnknown],
-// [zero_trust.TunnelTokenGetResponseArray] or [shared.UnionString].
+// Union satisfied by [zero_trust.TunnelTokenGetResponseArray] or
+// [shared.UnionString].
 type TunnelTokenGetResponseUnion interface {
 	ImplementsZeroTrustTunnelTokenGetResponseUnion()
 }

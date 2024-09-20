@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/custom_hostnames"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/custom_hostnames"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // KeylessCertificateService contains methods and other services that help with
@@ -160,7 +160,7 @@ type KeylessCertificate struct {
 	Name string `json:"name,required"`
 	// Available permissions for the Keyless SSL for the current user requesting the
 	// item.
-	Permissions []interface{} `json:"permissions,required"`
+	Permissions []string `json:"permissions,required"`
 	// The keyless SSL port used to communicate between Cloudflare and the client's
 	// Keyless SSL server.
 	Port float64 `json:"port,required"`

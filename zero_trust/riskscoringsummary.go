@@ -7,15 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // RiskScoringSummaryService contains methods and other services that help with
@@ -38,15 +36,15 @@ func NewRiskScoringSummaryService(opts ...option.RequestOption) (r *RiskScoringS
 }
 
 // Get risk score info for all users in the account
-func (r *RiskScoringSummaryService) Get(ctx context.Context, accountIdentifier string, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
+func (r *RiskScoringSummaryService) Get(ctx context.Context, query RiskScoringSummaryGetParams, opts ...option.RequestOption) (res *RiskScoringSummaryGetResponse, err error) {
 	var env RiskScoringSummaryGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/summary", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/summary", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -55,7 +53,7 @@ func (r *RiskScoringSummaryService) Get(ctx context.Context, accountIdentifier s
 }
 
 type RiskScoringSummaryGetResponse struct {
-	Users []RiskScoringSummaryGetResponseUser `json:"users"`
+	Users []RiskScoringSummaryGetResponseUser `json:"users,required"`
 	JSON  riskScoringSummaryGetResponseJSON   `json:"-"`
 }
 
@@ -81,9 +79,8 @@ type RiskScoringSummaryGetResponseUser struct {
 	LastEvent    time.Time                                      `json:"last_event,required" format:"date-time"`
 	MaxRiskLevel RiskScoringSummaryGetResponseUsersMaxRiskLevel `json:"max_risk_level,required"`
 	Name         string                                         `json:"name,required"`
-	// The ID for a user
-	UserID string                                `json:"user_id,required"`
-	JSON   riskScoringSummaryGetResponseUserJSON `json:"-"`
+	UserID       string                                         `json:"user_id,required" format:"uuid"`
+	JSON         riskScoringSummaryGetResponseUserJSON          `json:"-"`
 }
 
 // riskScoringSummaryGetResponseUserJSON contains the JSON metadata for the struct
@@ -124,58 +121,15 @@ func (r RiskScoringSummaryGetResponseUsersMaxRiskLevel) IsKnown() bool {
 }
 
 type RiskScoringSummaryGetParams struct {
-	Direction param.Field[RiskScoringSummaryGetParamsDirection] `query:"direction"`
-	OrderBy   param.Field[RiskScoringSummaryGetParamsOrderBy]   `query:"order_by"`
-	Page      param.Field[int64]                                `query:"page"`
-	PerPage   param.Field[int64]                                `query:"per_page"`
-}
-
-// URLQuery serializes [RiskScoringSummaryGetParams]'s query parameters as
-// `url.Values`.
-func (r RiskScoringSummaryGetParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-type RiskScoringSummaryGetParamsDirection string
-
-const (
-	RiskScoringSummaryGetParamsDirectionDesc RiskScoringSummaryGetParamsDirection = "desc"
-	RiskScoringSummaryGetParamsDirectionAsc  RiskScoringSummaryGetParamsDirection = "asc"
-)
-
-func (r RiskScoringSummaryGetParamsDirection) IsKnown() bool {
-	switch r {
-	case RiskScoringSummaryGetParamsDirectionDesc, RiskScoringSummaryGetParamsDirectionAsc:
-		return true
-	}
-	return false
-}
-
-type RiskScoringSummaryGetParamsOrderBy string
-
-const (
-	RiskScoringSummaryGetParamsOrderByTimestamp    RiskScoringSummaryGetParamsOrderBy = "timestamp"
-	RiskScoringSummaryGetParamsOrderByEventCount   RiskScoringSummaryGetParamsOrderBy = "event_count"
-	RiskScoringSummaryGetParamsOrderByMaxRiskLevel RiskScoringSummaryGetParamsOrderBy = "max_risk_level"
-)
-
-func (r RiskScoringSummaryGetParamsOrderBy) IsKnown() bool {
-	switch r {
-	case RiskScoringSummaryGetParamsOrderByTimestamp, RiskScoringSummaryGetParamsOrderByEventCount, RiskScoringSummaryGetParamsOrderByMaxRiskLevel:
-		return true
-	}
-	return false
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RiskScoringSummaryGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   RiskScoringSummaryGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    RiskScoringSummaryGetResponseEnvelopeSuccess    `json:"success,required"`
+	Result     RiskScoringSummaryGetResponse                   `json:"result"`
 	ResultInfo RiskScoringSummaryGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       riskScoringSummaryGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -185,8 +139,8 @@ type RiskScoringSummaryGetResponseEnvelope struct {
 type riskScoringSummaryGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -216,10 +170,14 @@ func (r RiskScoringSummaryGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RiskScoringSummaryGetResponseEnvelopeResultInfo struct {
-	Count      int64                                               `json:"count,required"`
-	Page       int64                                               `json:"page,required"`
-	PerPage    int64                                               `json:"per_page,required"`
-	TotalCount int64                                               `json:"total_count,required"`
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                             `json:"total_count"`
 	JSON       riskScoringSummaryGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 

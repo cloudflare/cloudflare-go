@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -109,10 +109,8 @@ func (r r2ConfigurationQueueUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by
-// [event_notifications.R2ConfigurationQueueDeleteResponseUnknown],
-// [event_notifications.R2ConfigurationQueueDeleteResponseArray] or
-// [shared.UnionString].
+// Union satisfied by [event_notifications.R2ConfigurationQueueDeleteResponseArray]
+// or [shared.UnionString].
 type R2ConfigurationQueueDeleteResponseUnion interface {
 	ImplementsEventNotificationsR2ConfigurationQueueDeleteResponseUnion()
 }
@@ -138,7 +136,7 @@ func (r R2ConfigurationQueueDeleteResponseArray) ImplementsEventNotificationsR2C
 }
 
 type R2ConfigurationQueueUpdateParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Array of rules to drive notifications
 	Rules param.Field[[]R2ConfigurationQueueUpdateParamsRule] `json:"rules"`
@@ -183,7 +181,7 @@ type R2ConfigurationQueueUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo              `json:"errors,required"`
 	Messages []shared.ResponseInfo              `json:"messages,required"`
 	Result   R2ConfigurationQueueUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success R2ConfigurationQueueUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    r2ConfigurationQueueUpdateResponseEnvelopeJSON    `json:"-"`
 }
@@ -207,7 +205,7 @@ func (r r2ConfigurationQueueUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type R2ConfigurationQueueUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -223,7 +221,7 @@ func (r R2ConfigurationQueueUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type R2ConfigurationQueueDeleteParams struct {
-	// Identifier
+	// Identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
@@ -231,7 +229,7 @@ type R2ConfigurationQueueDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                   `json:"errors,required"`
 	Messages []shared.ResponseInfo                   `json:"messages,required"`
 	Result   R2ConfigurationQueueDeleteResponseUnion `json:"result,required"`
-	// Whether the API call was successful
+	// Whether the API call was successful.
 	Success R2ConfigurationQueueDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    r2ConfigurationQueueDeleteResponseEnvelopeJSON    `json:"-"`
 }
@@ -255,7 +253,7 @@ func (r r2ConfigurationQueueDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful
+// Whether the API call was successful.
 type R2ConfigurationQueueDeleteResponseEnvelopeSuccess bool
 
 const (

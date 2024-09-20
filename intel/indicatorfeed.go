@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // IndicatorFeedService contains methods and other services that help with
@@ -27,6 +27,7 @@ type IndicatorFeedService struct {
 	Options     []option.RequestOption
 	Snapshots   *IndicatorFeedSnapshotService
 	Permissions *IndicatorFeedPermissionService
+	Downloads   *IndicatorFeedDownloadService
 }
 
 // NewIndicatorFeedService generates a new service that applies the given options
@@ -37,6 +38,7 @@ func NewIndicatorFeedService(opts ...option.RequestOption) (r *IndicatorFeedServ
 	r.Options = opts
 	r.Snapshots = NewIndicatorFeedSnapshotService(opts...)
 	r.Permissions = NewIndicatorFeedPermissionService(opts...)
+	r.Downloads = NewIndicatorFeedDownloadService(opts...)
 	return
 }
 
@@ -140,6 +142,8 @@ type IndicatorFeedNewResponse struct {
 	Description string `json:"description"`
 	// Whether the indicator feed can be attributed to a provider
 	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed can be downloaded
+	IsDownloadable bool `json:"is_downloadable"`
 	// Whether the indicator feed is exposed to customers
 	IsPublic bool `json:"is_public"`
 	// The date and time when the data entry was last modified
@@ -156,6 +160,7 @@ type indicatorFeedNewResponseJSON struct {
 	CreatedOn      apijson.Field
 	Description    apijson.Field
 	IsAttributable apijson.Field
+	IsDownloadable apijson.Field
 	IsPublic       apijson.Field
 	ModifiedOn     apijson.Field
 	Name           apijson.Field
@@ -180,6 +185,8 @@ type IndicatorFeedUpdateResponse struct {
 	Description string `json:"description"`
 	// Whether the indicator feed can be attributed to a provider
 	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed can be downloaded
+	IsDownloadable bool `json:"is_downloadable"`
 	// Whether the indicator feed is exposed to customers
 	IsPublic bool `json:"is_public"`
 	// The date and time when the data entry was last modified
@@ -196,6 +203,7 @@ type indicatorFeedUpdateResponseJSON struct {
 	CreatedOn      apijson.Field
 	Description    apijson.Field
 	IsAttributable apijson.Field
+	IsDownloadable apijson.Field
 	IsPublic       apijson.Field
 	ModifiedOn     apijson.Field
 	Name           apijson.Field
@@ -220,6 +228,8 @@ type IndicatorFeedListResponse struct {
 	Description string `json:"description"`
 	// Whether the indicator feed can be attributed to a provider
 	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed can be downloaded
+	IsDownloadable bool `json:"is_downloadable"`
 	// Whether the indicator feed is exposed to customers
 	IsPublic bool `json:"is_public"`
 	// The date and time when the data entry was last modified
@@ -236,6 +246,7 @@ type indicatorFeedListResponseJSON struct {
 	CreatedOn      apijson.Field
 	Description    apijson.Field
 	IsAttributable apijson.Field
+	IsDownloadable apijson.Field
 	IsPublic       apijson.Field
 	ModifiedOn     apijson.Field
 	Name           apijson.Field
@@ -260,6 +271,8 @@ type IndicatorFeedGetResponse struct {
 	Description string `json:"description"`
 	// Whether the indicator feed can be attributed to a provider
 	IsAttributable bool `json:"is_attributable"`
+	// Whether the indicator feed can be downloaded
+	IsDownloadable bool `json:"is_downloadable"`
 	// Whether the indicator feed is exposed to customers
 	IsPublic bool `json:"is_public"`
 	// Status of the latest snapshot uploaded
@@ -282,6 +295,7 @@ type indicatorFeedGetResponseJSON struct {
 	CreatedOn          apijson.Field
 	Description        apijson.Field
 	IsAttributable     apijson.Field
+	IsDownloadable     apijson.Field
 	IsPublic           apijson.Field
 	LatestUploadStatus apijson.Field
 	ModifiedOn         apijson.Field
@@ -383,6 +397,8 @@ type IndicatorFeedUpdateParams struct {
 	Description param.Field[string] `json:"description"`
 	// The new is_attributable value of the feed
 	IsAttributable param.Field[bool] `json:"is_attributable"`
+	// The new is_downloadable value of the feed
+	IsDownloadable param.Field[bool] `json:"is_downloadable"`
 	// The new is_public value of the feed
 	IsPublic param.Field[bool] `json:"is_public"`
 	// The new name of the feed

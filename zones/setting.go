@@ -10,11 +10,11 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -2339,182 +2339,6 @@ func (r MinTLSVersionParam) MarshalJSON() (data []byte, err error) {
 
 func (r MinTLSVersionParam) implementsZonesSettingEditParamsBodyUnion() {}
 
-// Automatically minify certain assets for your website. Refer to
-// [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
-// for more information.
-type Minify struct {
-	// Zone setting identifier.
-	ID MinifyID `json:"id,required"`
-	// Current value of the zone setting.
-	Value MinifyValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable MinifyEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time  `json:"modified_on,nullable" format:"date-time"`
-	JSON       minifyJSON `json:"-"`
-}
-
-// minifyJSON contains the JSON metadata for the struct [Minify]
-type minifyJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Minify) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r minifyJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r Minify) implementsZonesSettingEditResponse() {}
-
-func (r Minify) implementsZonesSettingGetResponse() {}
-
-// Zone setting identifier.
-type MinifyID string
-
-const (
-	MinifyIDMinify MinifyID = "minify"
-)
-
-func (r MinifyID) IsKnown() bool {
-	switch r {
-	case MinifyIDMinify:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type MinifyValue struct {
-	// Automatically minify all CSS files for your website.
-	Css MinifyValueCss `json:"css"`
-	// Automatically minify all HTML files for your website.
-	HTML MinifyValueHTML `json:"html"`
-	// Automatically minify all JavaScript files for your website.
-	JS   MinifyValueJS   `json:"js"`
-	JSON minifyValueJSON `json:"-"`
-}
-
-// minifyValueJSON contains the JSON metadata for the struct [MinifyValue]
-type minifyValueJSON struct {
-	Css         apijson.Field
-	HTML        apijson.Field
-	JS          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MinifyValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r minifyValueJSON) RawJSON() string {
-	return r.raw
-}
-
-// Automatically minify all CSS files for your website.
-type MinifyValueCss string
-
-const (
-	MinifyValueCssOn  MinifyValueCss = "on"
-	MinifyValueCssOff MinifyValueCss = "off"
-)
-
-func (r MinifyValueCss) IsKnown() bool {
-	switch r {
-	case MinifyValueCssOn, MinifyValueCssOff:
-		return true
-	}
-	return false
-}
-
-// Automatically minify all HTML files for your website.
-type MinifyValueHTML string
-
-const (
-	MinifyValueHTMLOn  MinifyValueHTML = "on"
-	MinifyValueHTMLOff MinifyValueHTML = "off"
-)
-
-func (r MinifyValueHTML) IsKnown() bool {
-	switch r {
-	case MinifyValueHTMLOn, MinifyValueHTMLOff:
-		return true
-	}
-	return false
-}
-
-// Automatically minify all JavaScript files for your website.
-type MinifyValueJS string
-
-const (
-	MinifyValueJSOn  MinifyValueJS = "on"
-	MinifyValueJSOff MinifyValueJS = "off"
-)
-
-func (r MinifyValueJS) IsKnown() bool {
-	switch r {
-	case MinifyValueJSOn, MinifyValueJSOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type MinifyEditable bool
-
-const (
-	MinifyEditableTrue  MinifyEditable = true
-	MinifyEditableFalse MinifyEditable = false
-)
-
-func (r MinifyEditable) IsKnown() bool {
-	switch r {
-	case MinifyEditableTrue, MinifyEditableFalse:
-		return true
-	}
-	return false
-}
-
-// Automatically minify certain assets for your website. Refer to
-// [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
-// for more information.
-type MinifyParam struct {
-	// Zone setting identifier.
-	ID param.Field[MinifyID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[MinifyValueParam] `json:"value,required"`
-}
-
-func (r MinifyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r MinifyParam) implementsZonesSettingEditParamsBodyUnion() {}
-
-// Current value of the zone setting.
-type MinifyValueParam struct {
-	// Automatically minify all CSS files for your website.
-	Css param.Field[MinifyValueCss] `json:"css"`
-	// Automatically minify all HTML files for your website.
-	HTML param.Field[MinifyValueHTML] `json:"html"`
-	// Automatically minify all JavaScript files for your website.
-	JS param.Field[MinifyValueJS] `json:"js"`
-}
-
-func (r MinifyValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to
 // [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
@@ -2618,163 +2442,6 @@ func (r MirageParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r MirageParam) implementsZonesSettingEditParamsBodyUnion() {}
-
-// Deprecated: Use Single Redirects instead
-// https://developers.cloudflare.com/rules/url-forwarding/single-redirects/examples/#perform-mobile-redirects.
-// Automatically redirect visitors on mobile devices to a mobile-optimized
-// subdomain.
-type MobileRedirect struct {
-	// Identifier of the zone setting.
-	ID MobileRedirectID `json:"id,required"`
-	// Current value of the zone setting.
-	Value MobileRedirectValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable MobileRedirectEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time          `json:"modified_on,nullable" format:"date-time"`
-	JSON       mobileRedirectJSON `json:"-"`
-}
-
-// mobileRedirectJSON contains the JSON metadata for the struct [MobileRedirect]
-type mobileRedirectJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MobileRedirect) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mobileRedirectJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r MobileRedirect) implementsZonesSettingEditResponse() {}
-
-func (r MobileRedirect) implementsZonesSettingGetResponse() {}
-
-// Identifier of the zone setting.
-type MobileRedirectID string
-
-const (
-	MobileRedirectIDMobileRedirect MobileRedirectID = "mobile_redirect"
-)
-
-func (r MobileRedirectID) IsKnown() bool {
-	switch r {
-	case MobileRedirectIDMobileRedirect:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type MobileRedirectValue struct {
-	// Which subdomain prefix you wish to redirect visitors on mobile devices to
-	// (subdomain must already exist).
-	MobileSubdomain string `json:"mobile_subdomain,nullable"`
-	// Deprecated: Use Single Redirects instead
-	// https://developers.cloudflare.com/rules/url-forwarding/single-redirects/examples/#perform-mobile-redirects.
-	// Whether or not mobile redirect is enabled.
-	Status MobileRedirectValueStatus `json:"status"`
-	// Whether to drop the current page path and redirect to the mobile subdomain URL
-	// root, or keep the path and redirect to the same page on the mobile subdomain.
-	StripURI bool                    `json:"strip_uri"`
-	JSON     mobileRedirectValueJSON `json:"-"`
-}
-
-// mobileRedirectValueJSON contains the JSON metadata for the struct
-// [MobileRedirectValue]
-type mobileRedirectValueJSON struct {
-	MobileSubdomain apijson.Field
-	Status          apijson.Field
-	StripURI        apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *MobileRedirectValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mobileRedirectValueJSON) RawJSON() string {
-	return r.raw
-}
-
-// Deprecated: Use Single Redirects instead
-// https://developers.cloudflare.com/rules/url-forwarding/single-redirects/examples/#perform-mobile-redirects.
-// Whether or not mobile redirect is enabled.
-type MobileRedirectValueStatus string
-
-const (
-	MobileRedirectValueStatusOn  MobileRedirectValueStatus = "on"
-	MobileRedirectValueStatusOff MobileRedirectValueStatus = "off"
-)
-
-func (r MobileRedirectValueStatus) IsKnown() bool {
-	switch r {
-	case MobileRedirectValueStatusOn, MobileRedirectValueStatusOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type MobileRedirectEditable bool
-
-const (
-	MobileRedirectEditableTrue  MobileRedirectEditable = true
-	MobileRedirectEditableFalse MobileRedirectEditable = false
-)
-
-func (r MobileRedirectEditable) IsKnown() bool {
-	switch r {
-	case MobileRedirectEditableTrue, MobileRedirectEditableFalse:
-		return true
-	}
-	return false
-}
-
-// Deprecated: Use Single Redirects instead
-// https://developers.cloudflare.com/rules/url-forwarding/single-redirects/examples/#perform-mobile-redirects.
-// Automatically redirect visitors on mobile devices to a mobile-optimized
-// subdomain.
-type MobileRedirectParam struct {
-	// Identifier of the zone setting.
-	ID param.Field[MobileRedirectID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[MobileRedirectValueParam] `json:"value,required"`
-}
-
-func (r MobileRedirectParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r MobileRedirectParam) implementsZonesSettingEditParamsBodyUnion() {}
-
-// Current value of the zone setting.
-type MobileRedirectValueParam struct {
-	// Which subdomain prefix you wish to redirect visitors on mobile devices to
-	// (subdomain must already exist).
-	MobileSubdomain param.Field[string] `json:"mobile_subdomain"`
-	// Deprecated: Use Single Redirects instead
-	// https://developers.cloudflare.com/rules/url-forwarding/single-redirects/examples/#perform-mobile-redirects.
-	// Whether or not mobile redirect is enabled.
-	Status param.Field[MobileRedirectValueStatus] `json:"status"`
-	// Whether to drop the current page path and redirect to the mobile subdomain URL
-	// root, or keep the path and redirect to the same page on the mobile subdomain.
-	StripURI param.Field[bool] `json:"strip_uri"`
-}
-
-func (r MobileRedirectValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 // Enable Network Error Logging reporting on your zone. (Beta)
 type NEL struct {
@@ -5336,9 +5003,8 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesEdgeCacheTTLValue], [EmailObfuscationValue],
 	// [H2PrioritizationValue], [HotlinkProtectionValue], [HTTP2Value], [HTTP3Value],
 	// [ImageResizingValue], [IPGeolocationValue], [IPV6Value],
-	// [SettingEditResponseZonesMaxUploadValue], [MinTLSVersionValue], [MinifyValue],
-	// [MirageValue], [MobileRedirectValue], [NELValue],
-	// [OpportunisticEncryptionValue], [OpportunisticOnionValue],
+	// [SettingEditResponseZonesMaxUploadValue], [MinTLSVersionValue], [MirageValue],
+	// [NELValue], [OpportunisticEncryptionValue], [OpportunisticOnionValue],
 	// [OrangeToOrangeValue], [OriginErrorPagePassThruValue], [PolishValue],
 	// [PrefetchPreloadValue], [float64], [PseudoIPV4Value],
 	// [SettingEditResponseZonesReplaceInsecureJSValue], [ResponseBufferingValue],
@@ -5397,10 +5063,10 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.EmailObfuscation], [zones.H2Prioritization], [zones.HotlinkProtection],
 // [zones.HTTP2], [zones.HTTP3], [zones.ImageResizing], [zones.IPGeolocation],
 // [zones.IPV6], [zones.SettingEditResponseZonesMaxUpload], [zones.MinTLSVersion],
-// [zones.Minify], [zones.Mirage], [zones.MobileRedirect], [zones.NEL],
-// [zones.OpportunisticEncryption], [zones.OpportunisticOnion],
-// [zones.OrangeToOrange], [zones.OriginErrorPagePassThru], [zones.Polish],
-// [zones.PrefetchPreload], [zones.ProxyReadTimeout], [zones.PseudoIPV4],
+// [zones.Mirage], [zones.NEL], [zones.OpportunisticEncryption],
+// [zones.OpportunisticOnion], [zones.OrangeToOrange],
+// [zones.OriginErrorPagePassThru], [zones.Polish], [zones.PrefetchPreload],
+// [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingEditResponseZonesReplaceInsecureJS], [zones.ResponseBuffering],
 // [zones.RocketLoader],
 // [zones.SettingEditResponseZonesSchemasAutomaticPlatformOptimization],
@@ -5424,10 +5090,10 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [zones.EmailObfuscation], [zones.H2Prioritization], [zones.HotlinkProtection],
 // [zones.HTTP2], [zones.HTTP3], [zones.ImageResizing], [zones.IPGeolocation],
 // [zones.IPV6], [zones.SettingEditResponseZonesMaxUpload], [zones.MinTLSVersion],
-// [zones.Minify], [zones.Mirage], [zones.MobileRedirect], [zones.NEL],
-// [zones.OpportunisticEncryption], [zones.OpportunisticOnion],
-// [zones.OrangeToOrange], [zones.OriginErrorPagePassThru], [zones.Polish],
-// [zones.PrefetchPreload], [zones.ProxyReadTimeout], [zones.PseudoIPV4],
+// [zones.Mirage], [zones.NEL], [zones.OpportunisticEncryption],
+// [zones.OpportunisticOnion], [zones.OrangeToOrange],
+// [zones.OriginErrorPagePassThru], [zones.Polish], [zones.PrefetchPreload],
+// [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingEditResponseZonesReplaceInsecureJS], [zones.ResponseBuffering],
 // [zones.RocketLoader],
 // [zones.SettingEditResponseZonesSchemasAutomaticPlatformOptimization],
@@ -5546,15 +5212,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(Minify{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(Mirage{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MobileRedirect{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -6305,9 +5963,7 @@ const (
 	SettingEditResponseIDIPV6                          SettingEditResponseID = "ipv6"
 	SettingEditResponseIDMaxUpload                     SettingEditResponseID = "max_upload"
 	SettingEditResponseIDMinTLSVersion                 SettingEditResponseID = "min_tls_version"
-	SettingEditResponseIDMinify                        SettingEditResponseID = "minify"
 	SettingEditResponseIDMirage                        SettingEditResponseID = "mirage"
-	SettingEditResponseIDMobileRedirect                SettingEditResponseID = "mobile_redirect"
 	SettingEditResponseIDNEL                           SettingEditResponseID = "nel"
 	SettingEditResponseIDOpportunisticEncryption       SettingEditResponseID = "opportunistic_encryption"
 	SettingEditResponseIDOpportunisticOnion            SettingEditResponseID = "opportunistic_onion"
@@ -6339,7 +5995,7 @@ const (
 
 func (r SettingEditResponseID) IsKnown() bool {
 	switch r {
-	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMinify, SettingEditResponseIDMirage, SettingEditResponseIDMobileRedirect, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
+	case SettingEditResponseID0rtt, SettingEditResponseIDAdvancedDDoS, SettingEditResponseIDAlwaysOnline, SettingEditResponseIDAlwaysUseHTTPS, SettingEditResponseIDAutomaticHTTPSRewrites, SettingEditResponseIDBrotli, SettingEditResponseIDBrowserCacheTTL, SettingEditResponseIDBrowserCheck, SettingEditResponseIDCacheLevel, SettingEditResponseIDChallengeTTL, SettingEditResponseIDCiphers, SettingEditResponseIDCNAMEFlattening, SettingEditResponseIDDevelopmentMode, SettingEditResponseIDEarlyHints, SettingEditResponseIDEdgeCacheTTL, SettingEditResponseIDEmailObfuscation, SettingEditResponseIDH2Prioritization, SettingEditResponseIDHotlinkProtection, SettingEditResponseIDHTTP2, SettingEditResponseIDHTTP3, SettingEditResponseIDImageResizing, SettingEditResponseIDIPGeolocation, SettingEditResponseIDIPV6, SettingEditResponseIDMaxUpload, SettingEditResponseIDMinTLSVersion, SettingEditResponseIDMirage, SettingEditResponseIDNEL, SettingEditResponseIDOpportunisticEncryption, SettingEditResponseIDOpportunisticOnion, SettingEditResponseIDOrangeToOrange, SettingEditResponseIDOriginErrorPagePassThru, SettingEditResponseIDPolish, SettingEditResponseIDPrefetchPreload, SettingEditResponseIDProxyReadTimeout, SettingEditResponseIDPseudoIPV4, SettingEditResponseIDReplaceInsecureJS, SettingEditResponseIDResponseBuffering, SettingEditResponseIDRocketLoader, SettingEditResponseIDAutomaticPlatformOptimization, SettingEditResponseIDSecurityHeader, SettingEditResponseIDSecurityLevel, SettingEditResponseIDServerSideExclude, SettingEditResponseIDSha1Support, SettingEditResponseIDSortQueryStringForCache, SettingEditResponseIDSSL, SettingEditResponseIDSSLRecommender, SettingEditResponseIDTLS1_2Only, SettingEditResponseIDTLS1_3, SettingEditResponseIDTLSClientAuth, SettingEditResponseIDTrueClientIPHeader, SettingEditResponseIDWAF, SettingEditResponseIDWebP, SettingEditResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -6362,9 +6018,8 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesEdgeCacheTTLValue], [EmailObfuscationValue],
 	// [H2PrioritizationValue], [HotlinkProtectionValue], [HTTP2Value], [HTTP3Value],
 	// [ImageResizingValue], [IPGeolocationValue], [IPV6Value],
-	// [SettingGetResponseZonesMaxUploadValue], [MinTLSVersionValue], [MinifyValue],
-	// [MirageValue], [MobileRedirectValue], [NELValue],
-	// [OpportunisticEncryptionValue], [OpportunisticOnionValue],
+	// [SettingGetResponseZonesMaxUploadValue], [MinTLSVersionValue], [MirageValue],
+	// [NELValue], [OpportunisticEncryptionValue], [OpportunisticOnionValue],
 	// [OrangeToOrangeValue], [OriginErrorPagePassThruValue], [PolishValue],
 	// [PrefetchPreloadValue], [float64], [PseudoIPV4Value],
 	// [SettingGetResponseZonesReplaceInsecureJSValue], [ResponseBufferingValue],
@@ -6423,10 +6078,10 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.EmailObfuscation], [zones.H2Prioritization], [zones.HotlinkProtection],
 // [zones.HTTP2], [zones.HTTP3], [zones.ImageResizing], [zones.IPGeolocation],
 // [zones.IPV6], [zones.SettingGetResponseZonesMaxUpload], [zones.MinTLSVersion],
-// [zones.Minify], [zones.Mirage], [zones.MobileRedirect], [zones.NEL],
-// [zones.OpportunisticEncryption], [zones.OpportunisticOnion],
-// [zones.OrangeToOrange], [zones.OriginErrorPagePassThru], [zones.Polish],
-// [zones.PrefetchPreload], [zones.ProxyReadTimeout], [zones.PseudoIPV4],
+// [zones.Mirage], [zones.NEL], [zones.OpportunisticEncryption],
+// [zones.OpportunisticOnion], [zones.OrangeToOrange],
+// [zones.OriginErrorPagePassThru], [zones.Polish], [zones.PrefetchPreload],
+// [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingGetResponseZonesReplaceInsecureJS], [zones.ResponseBuffering],
 // [zones.RocketLoader],
 // [zones.SettingGetResponseZonesSchemasAutomaticPlatformOptimization],
@@ -6450,10 +6105,10 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [zones.EmailObfuscation], [zones.H2Prioritization], [zones.HotlinkProtection],
 // [zones.HTTP2], [zones.HTTP3], [zones.ImageResizing], [zones.IPGeolocation],
 // [zones.IPV6], [zones.SettingGetResponseZonesMaxUpload], [zones.MinTLSVersion],
-// [zones.Minify], [zones.Mirage], [zones.MobileRedirect], [zones.NEL],
-// [zones.OpportunisticEncryption], [zones.OpportunisticOnion],
-// [zones.OrangeToOrange], [zones.OriginErrorPagePassThru], [zones.Polish],
-// [zones.PrefetchPreload], [zones.ProxyReadTimeout], [zones.PseudoIPV4],
+// [zones.Mirage], [zones.NEL], [zones.OpportunisticEncryption],
+// [zones.OpportunisticOnion], [zones.OrangeToOrange],
+// [zones.OriginErrorPagePassThru], [zones.Polish], [zones.PrefetchPreload],
+// [zones.ProxyReadTimeout], [zones.PseudoIPV4],
 // [zones.SettingGetResponseZonesReplaceInsecureJS], [zones.ResponseBuffering],
 // [zones.RocketLoader],
 // [zones.SettingGetResponseZonesSchemasAutomaticPlatformOptimization],
@@ -6572,15 +6227,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(Minify{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(Mirage{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MobileRedirect{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -7331,9 +6978,7 @@ const (
 	SettingGetResponseIDIPV6                          SettingGetResponseID = "ipv6"
 	SettingGetResponseIDMaxUpload                     SettingGetResponseID = "max_upload"
 	SettingGetResponseIDMinTLSVersion                 SettingGetResponseID = "min_tls_version"
-	SettingGetResponseIDMinify                        SettingGetResponseID = "minify"
 	SettingGetResponseIDMirage                        SettingGetResponseID = "mirage"
-	SettingGetResponseIDMobileRedirect                SettingGetResponseID = "mobile_redirect"
 	SettingGetResponseIDNEL                           SettingGetResponseID = "nel"
 	SettingGetResponseIDOpportunisticEncryption       SettingGetResponseID = "opportunistic_encryption"
 	SettingGetResponseIDOpportunisticOnion            SettingGetResponseID = "opportunistic_onion"
@@ -7365,7 +7010,7 @@ const (
 
 func (r SettingGetResponseID) IsKnown() bool {
 	switch r {
-	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMinify, SettingGetResponseIDMirage, SettingGetResponseIDMobileRedirect, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
+	case SettingGetResponseID0rtt, SettingGetResponseIDAdvancedDDoS, SettingGetResponseIDAlwaysOnline, SettingGetResponseIDAlwaysUseHTTPS, SettingGetResponseIDAutomaticHTTPSRewrites, SettingGetResponseIDBrotli, SettingGetResponseIDBrowserCacheTTL, SettingGetResponseIDBrowserCheck, SettingGetResponseIDCacheLevel, SettingGetResponseIDChallengeTTL, SettingGetResponseIDCiphers, SettingGetResponseIDCNAMEFlattening, SettingGetResponseIDDevelopmentMode, SettingGetResponseIDEarlyHints, SettingGetResponseIDEdgeCacheTTL, SettingGetResponseIDEmailObfuscation, SettingGetResponseIDH2Prioritization, SettingGetResponseIDHotlinkProtection, SettingGetResponseIDHTTP2, SettingGetResponseIDHTTP3, SettingGetResponseIDImageResizing, SettingGetResponseIDIPGeolocation, SettingGetResponseIDIPV6, SettingGetResponseIDMaxUpload, SettingGetResponseIDMinTLSVersion, SettingGetResponseIDMirage, SettingGetResponseIDNEL, SettingGetResponseIDOpportunisticEncryption, SettingGetResponseIDOpportunisticOnion, SettingGetResponseIDOrangeToOrange, SettingGetResponseIDOriginErrorPagePassThru, SettingGetResponseIDPolish, SettingGetResponseIDPrefetchPreload, SettingGetResponseIDProxyReadTimeout, SettingGetResponseIDPseudoIPV4, SettingGetResponseIDReplaceInsecureJS, SettingGetResponseIDResponseBuffering, SettingGetResponseIDRocketLoader, SettingGetResponseIDAutomaticPlatformOptimization, SettingGetResponseIDSecurityHeader, SettingGetResponseIDSecurityLevel, SettingGetResponseIDServerSideExclude, SettingGetResponseIDSha1Support, SettingGetResponseIDSortQueryStringForCache, SettingGetResponseIDSSL, SettingGetResponseIDSSLRecommender, SettingGetResponseIDTLS1_2Only, SettingGetResponseIDTLS1_3, SettingGetResponseIDTLSClientAuth, SettingGetResponseIDTrueClientIPHeader, SettingGetResponseIDWAF, SettingGetResponseIDWebP, SettingGetResponseIDWebsockets:
 		return true
 	}
 	return false
@@ -7410,8 +7055,7 @@ func (r SettingEditParamsBody) implementsZonesSettingEditParamsBodyUnion() {}
 // [zones.HotlinkProtectionParam], [zones.HTTP2Param], [zones.HTTP3Param],
 // [zones.ImageResizingParam], [zones.IPGeolocationParam], [zones.IPV6Param],
 // [zones.SettingEditParamsBodyZonesMaxUpload], [zones.MinTLSVersionParam],
-// [zones.MinifyParam], [zones.MirageParam], [zones.MobileRedirectParam],
-// [zones.NELParam], [zones.OpportunisticEncryptionParam],
+// [zones.MirageParam], [zones.NELParam], [zones.OpportunisticEncryptionParam],
 // [zones.OpportunisticOnionParam], [zones.OrangeToOrangeParam],
 // [zones.OriginErrorPagePassThruParam], [zones.PolishParam],
 // [zones.PrefetchPreloadParam], [zones.ProxyReadTimeoutParam],
@@ -7919,9 +7563,7 @@ const (
 	SettingEditParamsBodyIDIPV6                          SettingEditParamsBodyID = "ipv6"
 	SettingEditParamsBodyIDMaxUpload                     SettingEditParamsBodyID = "max_upload"
 	SettingEditParamsBodyIDMinTLSVersion                 SettingEditParamsBodyID = "min_tls_version"
-	SettingEditParamsBodyIDMinify                        SettingEditParamsBodyID = "minify"
 	SettingEditParamsBodyIDMirage                        SettingEditParamsBodyID = "mirage"
-	SettingEditParamsBodyIDMobileRedirect                SettingEditParamsBodyID = "mobile_redirect"
 	SettingEditParamsBodyIDNEL                           SettingEditParamsBodyID = "nel"
 	SettingEditParamsBodyIDOpportunisticEncryption       SettingEditParamsBodyID = "opportunistic_encryption"
 	SettingEditParamsBodyIDOpportunisticOnion            SettingEditParamsBodyID = "opportunistic_onion"
@@ -7953,7 +7595,7 @@ const (
 
 func (r SettingEditParamsBodyID) IsKnown() bool {
 	switch r {
-	case SettingEditParamsBodyID0rtt, SettingEditParamsBodyIDAdvancedDDoS, SettingEditParamsBodyIDAlwaysOnline, SettingEditParamsBodyIDAlwaysUseHTTPS, SettingEditParamsBodyIDAutomaticHTTPSRewrites, SettingEditParamsBodyIDBrotli, SettingEditParamsBodyIDBrowserCacheTTL, SettingEditParamsBodyIDBrowserCheck, SettingEditParamsBodyIDCacheLevel, SettingEditParamsBodyIDChallengeTTL, SettingEditParamsBodyIDCiphers, SettingEditParamsBodyIDCNAMEFlattening, SettingEditParamsBodyIDDevelopmentMode, SettingEditParamsBodyIDEarlyHints, SettingEditParamsBodyIDEdgeCacheTTL, SettingEditParamsBodyIDEmailObfuscation, SettingEditParamsBodyIDH2Prioritization, SettingEditParamsBodyIDHotlinkProtection, SettingEditParamsBodyIDHTTP2, SettingEditParamsBodyIDHTTP3, SettingEditParamsBodyIDImageResizing, SettingEditParamsBodyIDIPGeolocation, SettingEditParamsBodyIDIPV6, SettingEditParamsBodyIDMaxUpload, SettingEditParamsBodyIDMinTLSVersion, SettingEditParamsBodyIDMinify, SettingEditParamsBodyIDMirage, SettingEditParamsBodyIDMobileRedirect, SettingEditParamsBodyIDNEL, SettingEditParamsBodyIDOpportunisticEncryption, SettingEditParamsBodyIDOpportunisticOnion, SettingEditParamsBodyIDOrangeToOrange, SettingEditParamsBodyIDOriginErrorPagePassThru, SettingEditParamsBodyIDPolish, SettingEditParamsBodyIDPrefetchPreload, SettingEditParamsBodyIDProxyReadTimeout, SettingEditParamsBodyIDPseudoIPV4, SettingEditParamsBodyIDReplaceInsecureJS, SettingEditParamsBodyIDResponseBuffering, SettingEditParamsBodyIDRocketLoader, SettingEditParamsBodyIDAutomaticPlatformOptimization, SettingEditParamsBodyIDSecurityHeader, SettingEditParamsBodyIDSecurityLevel, SettingEditParamsBodyIDServerSideExclude, SettingEditParamsBodyIDSha1Support, SettingEditParamsBodyIDSortQueryStringForCache, SettingEditParamsBodyIDSSL, SettingEditParamsBodyIDSSLRecommender, SettingEditParamsBodyIDTLS1_2Only, SettingEditParamsBodyIDTLS1_3, SettingEditParamsBodyIDTLSClientAuth, SettingEditParamsBodyIDTrueClientIPHeader, SettingEditParamsBodyIDWAF, SettingEditParamsBodyIDWebP, SettingEditParamsBodyIDWebsockets:
+	case SettingEditParamsBodyID0rtt, SettingEditParamsBodyIDAdvancedDDoS, SettingEditParamsBodyIDAlwaysOnline, SettingEditParamsBodyIDAlwaysUseHTTPS, SettingEditParamsBodyIDAutomaticHTTPSRewrites, SettingEditParamsBodyIDBrotli, SettingEditParamsBodyIDBrowserCacheTTL, SettingEditParamsBodyIDBrowserCheck, SettingEditParamsBodyIDCacheLevel, SettingEditParamsBodyIDChallengeTTL, SettingEditParamsBodyIDCiphers, SettingEditParamsBodyIDCNAMEFlattening, SettingEditParamsBodyIDDevelopmentMode, SettingEditParamsBodyIDEarlyHints, SettingEditParamsBodyIDEdgeCacheTTL, SettingEditParamsBodyIDEmailObfuscation, SettingEditParamsBodyIDH2Prioritization, SettingEditParamsBodyIDHotlinkProtection, SettingEditParamsBodyIDHTTP2, SettingEditParamsBodyIDHTTP3, SettingEditParamsBodyIDImageResizing, SettingEditParamsBodyIDIPGeolocation, SettingEditParamsBodyIDIPV6, SettingEditParamsBodyIDMaxUpload, SettingEditParamsBodyIDMinTLSVersion, SettingEditParamsBodyIDMirage, SettingEditParamsBodyIDNEL, SettingEditParamsBodyIDOpportunisticEncryption, SettingEditParamsBodyIDOpportunisticOnion, SettingEditParamsBodyIDOrangeToOrange, SettingEditParamsBodyIDOriginErrorPagePassThru, SettingEditParamsBodyIDPolish, SettingEditParamsBodyIDPrefetchPreload, SettingEditParamsBodyIDProxyReadTimeout, SettingEditParamsBodyIDPseudoIPV4, SettingEditParamsBodyIDReplaceInsecureJS, SettingEditParamsBodyIDResponseBuffering, SettingEditParamsBodyIDRocketLoader, SettingEditParamsBodyIDAutomaticPlatformOptimization, SettingEditParamsBodyIDSecurityHeader, SettingEditParamsBodyIDSecurityLevel, SettingEditParamsBodyIDServerSideExclude, SettingEditParamsBodyIDSha1Support, SettingEditParamsBodyIDSortQueryStringForCache, SettingEditParamsBodyIDSSL, SettingEditParamsBodyIDSSLRecommender, SettingEditParamsBodyIDTLS1_2Only, SettingEditParamsBodyIDTLS1_3, SettingEditParamsBodyIDTLSClientAuth, SettingEditParamsBodyIDTrueClientIPHeader, SettingEditParamsBodyIDWAF, SettingEditParamsBodyIDWebP, SettingEditParamsBodyIDWebsockets:
 		return true
 	}
 	return false

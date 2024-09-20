@@ -13,14 +13,14 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // ScriptService contains methods and other services that help with interacting
@@ -54,8 +54,10 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	return
 }
 
-// Upload a worker module.
-func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
+// Upload a worker module. You can find more about the multipart metadata on our
+// docs:
+// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/.
+func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *ScriptUpdateResponse, err error) {
 	var env ScriptUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -214,6 +216,51 @@ func (r ScriptSettingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type ScriptUpdateResponse struct {
+	// The id of the script in the Workers system. Usually the script name.
+	ID string `json:"id"`
+	// When the script was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Hashed script content, can be used in a If-None-Match header when updating.
+	Etag string `json:"etag"`
+	// Whether Logpush is turned on for the Worker.
+	Logpush bool `json:"logpush"`
+	// When the script was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Specifies the placement mode for the Worker (e.g. 'smart').
+	PlacementMode string `json:"placement_mode"`
+	StartupTimeMs int64  `json:"startup_time_ms"`
+	// List of Workers that will consume logs from the attached Worker.
+	TailConsumers []ConsumerScript `json:"tail_consumers"`
+	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
+	UsageModel string                   `json:"usage_model"`
+	JSON       scriptUpdateResponseJSON `json:"-"`
+}
+
+// scriptUpdateResponseJSON contains the JSON metadata for the struct
+// [ScriptUpdateResponse]
+type scriptUpdateResponseJSON struct {
+	ID            apijson.Field
+	CreatedOn     apijson.Field
+	Etag          apijson.Field
+	Logpush       apijson.Field
+	ModifiedOn    apijson.Field
+	PlacementMode apijson.Field
+	StartupTimeMs apijson.Field
+	TailConsumers apijson.Field
+	UsageModel    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScriptUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string]         `path:"account_id,required"`
@@ -262,7 +309,7 @@ func (r ScriptUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 func (r ScriptUpdateParamsBody) implementsWorkersScriptUpdateParamsBodyUnion() {}
 
 // Satisfied by [workers.ScriptUpdateParamsBodyObject],
-// [workers.ScriptUpdateParamsBodyObject], [ScriptUpdateParamsBody].
+// [workers.ScriptUpdateParamsBodyMessage], [ScriptUpdateParamsBody].
 type ScriptUpdateParamsBodyUnion interface {
 	implementsWorkersScriptUpdateParamsBodyUnion()
 }
@@ -287,7 +334,7 @@ func (r ScriptUpdateParamsBodyObject) implementsWorkersScriptUpdateParamsBodyUni
 // JSON encoded metadata about the uploaded parts and Worker configuration.
 type ScriptUpdateParamsBodyObjectMetadata struct {
 	// List of bindings available to the worker.
-	Bindings param.Field[[]interface{}] `json:"bindings"`
+	Bindings param.Field[[]ScriptUpdateParamsBodyObjectMetadataBinding] `json:"bindings"`
 	// Name of the part in the multipart request that contains the script (e.g. the
 	// file adding a listener to the `fetch` event). Indicates a
 	// `service worker syntax` Worker.
@@ -316,10 +363,23 @@ type ScriptUpdateParamsBodyObjectMetadata struct {
 	// Usage model to apply to invocations.
 	UsageModel param.Field[ScriptUpdateParamsBodyObjectMetadataUsageModel] `json:"usage_model"`
 	// Key-value pairs to use as tags for this version of this Worker
-	VersionTags param.Field[interface{}] `json:"version_tags"`
+	VersionTags param.Field[map[string]string] `json:"version_tags"`
 }
 
 func (r ScriptUpdateParamsBodyObjectMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ScriptUpdateParamsBodyObjectMetadataBinding struct {
+	// Name of the binding variable.
+	Name param.Field[string] `json:"name"`
+	// Type of binding. You can find more about bindings on our docs:
+	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
+	Type        param.Field[string]    `json:"type"`
+	ExtraFields map[string]interface{} `json:"-,extras"`
+}
+
+func (r ScriptUpdateParamsBodyObjectMetadataBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -332,6 +392,7 @@ type ScriptUpdateParamsBodyObjectMetadataMigrations struct {
 	OldTag             param.Field[string]      `json:"old_tag"`
 	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
 	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
+	NewSqliteClasses   param.Field[interface{}] `json:"new_sqlite_classes,required"`
 	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
 	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
 	Steps              param.Field[interface{}] `json:"steps,required"`
@@ -369,12 +430,24 @@ func (r ScriptUpdateParamsBodyObjectMetadataUsageModel) IsKnown() bool {
 	return false
 }
 
+type ScriptUpdateParamsBodyMessage struct {
+	// Rollback message to be associated with this deployment. Only parsed when query
+	// param `"rollback_to"` is present.
+	Message param.Field[string] `json:"message"`
+}
+
+func (r ScriptUpdateParamsBodyMessage) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsBodyMessage) implementsWorkersScriptUpdateParamsBodyUnion() {}
+
 type ScriptUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success ScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Script                              `json:"result"`
+	Result  ScriptUpdateResponse                `json:"result"`
 	JSON    scriptUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

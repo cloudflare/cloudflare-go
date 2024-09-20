@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/user"
 )
 
 func TestTokenValueUpdate(t *testing.T) {
@@ -29,7 +29,7 @@ func TestTokenValueUpdate(t *testing.T) {
 	)
 	_, err := client.User.Tokens.Value.Update(
 		context.TODO(),
-		map[string]interface{}{},
+		"ed17574386854bf78a67040be0a770b0",
 		user.TokenValueUpdateParams{
 			Body: map[string]interface{}{},
 		},

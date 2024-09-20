@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/storage"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/storage"
 )
 
 func TestAnalyticsListWithOptionalParams(t *testing.T) {
@@ -36,7 +36,7 @@ func TestAnalyticsListWithOptionalParams(t *testing.T) {
 			Limit:      cloudflare.F(int64(0)),
 			Metrics:    cloudflare.F([]storage.AnalyticsListParamsQueryMetric{storage.AnalyticsListParamsQueryMetricRequests, storage.AnalyticsListParamsQueryMetricWriteKiB, storage.AnalyticsListParamsQueryMetricReadKiB}),
 			Since:      cloudflare.F(time.Now()),
-			Sort:       cloudflare.F([]interface{}{"+requests", "-responseCode"}),
+			Sort:       cloudflare.F([]string{"+requests", "-responseCode"}),
 			Until:      cloudflare.F(time.Now()),
 		}),
 	})
@@ -70,7 +70,7 @@ func TestAnalyticsStoredWithOptionalParams(t *testing.T) {
 			Limit:      cloudflare.F(int64(0)),
 			Metrics:    cloudflare.F([]storage.AnalyticsStoredParamsQueryMetric{storage.AnalyticsStoredParamsQueryMetricStoredBytes, storage.AnalyticsStoredParamsQueryMetricStoredKeys}),
 			Since:      cloudflare.F(time.Now()),
-			Sort:       cloudflare.F([]interface{}{"+storedBytes", "-namespaceId"}),
+			Sort:       cloudflare.F([]string{"+storedBytes", "-namespaceId"}),
 			Until:      cloudflare.F(time.Now()),
 		}),
 	})

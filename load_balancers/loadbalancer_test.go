@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/load_balancers"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
@@ -30,54 +30,37 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 	_, err := client.LoadBalancers.New(context.TODO(), load_balancers.LoadBalancerNewParams{
 		ZoneID:       cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-		FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+		FallbackPool: cloudflare.F("fallback_pool"),
 		Name:         cloudflare.F("www.example.com"),
 		AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 			FailoverAcrossPools: cloudflare.F(true),
 		}),
-		CountryPools: cloudflare.F[any](map[string]interface{}{
-			"GB": map[string]interface{}{
-				"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-			},
-			"US": map[string]interface{}{
-				"0": "de90f38ced07c2e2f4df50b1f61d4194",
-				"1": "00920f38ce07c2e2f4df50b1f61d4194",
-			},
+		CountryPools: cloudflare.F(map[string][]string{
+			"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+			"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 		}),
 		Description: cloudflare.F("Load Balancer for www.example.com"),
 		LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-			Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+			Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 			PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 		}),
-		PopPools: cloudflare.F[any](map[string]interface{}{
-			"LAX": map[string]interface{}{
-				"0": "de90f38ced07c2e2f4df50b1f61d4194",
-				"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-			},
-			"LHR": map[string]interface{}{
-				"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-				"1": "f9138c5d07c2e2f4df57b1f61d4196",
-			},
-			"SJC": map[string]interface{}{
-				"0": "00920f38ce07c2e2f4df50b1f61d4194",
-			},
+		Networks: cloudflare.F([]string{"string", "string", "string"}),
+		PopPools: cloudflare.F(map[string][]string{
+			"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+			"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+			"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 		}),
 		Proxied: cloudflare.F(true),
 		RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 			DefaultWeight: cloudflare.F(0.200000),
-			PoolWeights: cloudflare.F[any](map[string]interface{}{
-				"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-				"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+			PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+				Key:   cloudflare.F("key"),
+				Value: cloudflare.F(0.000000),
 			}),
 		}),
-		RegionPools: cloudflare.F[any](map[string]interface{}{
-			"ENAM": map[string]interface{}{
-				"0": "00920f38ce07c2e2f4df50b1f61d4194",
-			},
-			"WNAM": map[string]interface{}{
-				"0": "de90f38ced07c2e2f4df50b1f61d4194",
-				"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-			},
+		RegionPools: cloudflare.F(map[string][]string{
+			"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+			"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 		}),
 		Rules: cloudflare.F([]load_balancers.RulesParam{{
 			Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
@@ -93,61 +76,43 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 					FailoverAcrossPools: cloudflare.F(true),
 				}),
-				CountryPools: cloudflare.F[any](map[string]interface{}{
-					"GB": map[string]interface{}{
-						"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-					},
-					"US": map[string]interface{}{
-						"0": "de90f38ced07c2e2f4df50b1f61d4194",
-						"1": "00920f38ce07c2e2f4df50b1f61d4194",
-					},
+				CountryPools: cloudflare.F(map[string][]string{
+					"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+					"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 				}),
 				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-				FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+				FallbackPool: cloudflare.F("fallback_pool"),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+					Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
-				PopPools: cloudflare.F[any](map[string]interface{}{
-					"LAX": map[string]interface{}{
-						"0": "de90f38ced07c2e2f4df50b1f61d4194",
-						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-					},
-					"LHR": map[string]interface{}{
-						"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-						"1": "f9138c5d07c2e2f4df57b1f61d4196",
-					},
-					"SJC": map[string]interface{}{
-						"0": "00920f38ce07c2e2f4df50b1f61d4194",
-					},
+				PopPools: cloudflare.F(map[string][]string{
+					"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+					"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+					"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 				}),
 				RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 					DefaultWeight: cloudflare.F(0.200000),
-					PoolWeights: cloudflare.F[any](map[string]interface{}{
-						"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-						"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+					PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+						Key:   cloudflare.F("key"),
+						Value: cloudflare.F(0.000000),
 					}),
 				}),
-				RegionPools: cloudflare.F[any](map[string]interface{}{
-					"ENAM": map[string]interface{}{
-						"0": "00920f38ce07c2e2f4df50b1f61d4194",
-					},
-					"WNAM": map[string]interface{}{
-						"0": "de90f38ced07c2e2f4df50b1f61d4194",
-						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-					},
+				RegionPools: cloudflare.F(map[string][]string{
+					"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+					"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 				}),
-				SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+				SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 				SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 					DrainDuration:        cloudflare.F(100.000000),
 					Headers:              cloudflare.F([]string{"x"}),
 					RequireAllHeaders:    cloudflare.F(true),
 					Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 					Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 				}),
 				SessionAffinityTTL: cloudflare.F(1800.000000),
-				SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+				SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 				TTL:                cloudflare.F(30.000000),
 			}),
 			Priority:   cloudflare.F(int64(0)),
@@ -166,61 +131,43 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 					FailoverAcrossPools: cloudflare.F(true),
 				}),
-				CountryPools: cloudflare.F[any](map[string]interface{}{
-					"GB": map[string]interface{}{
-						"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-					},
-					"US": map[string]interface{}{
-						"0": "de90f38ced07c2e2f4df50b1f61d4194",
-						"1": "00920f38ce07c2e2f4df50b1f61d4194",
-					},
+				CountryPools: cloudflare.F(map[string][]string{
+					"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+					"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 				}),
 				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-				FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+				FallbackPool: cloudflare.F("fallback_pool"),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+					Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
-				PopPools: cloudflare.F[any](map[string]interface{}{
-					"LAX": map[string]interface{}{
-						"0": "de90f38ced07c2e2f4df50b1f61d4194",
-						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-					},
-					"LHR": map[string]interface{}{
-						"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-						"1": "f9138c5d07c2e2f4df57b1f61d4196",
-					},
-					"SJC": map[string]interface{}{
-						"0": "00920f38ce07c2e2f4df50b1f61d4194",
-					},
+				PopPools: cloudflare.F(map[string][]string{
+					"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+					"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+					"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 				}),
 				RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 					DefaultWeight: cloudflare.F(0.200000),
-					PoolWeights: cloudflare.F[any](map[string]interface{}{
-						"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-						"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+					PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+						Key:   cloudflare.F("key"),
+						Value: cloudflare.F(0.000000),
 					}),
 				}),
-				RegionPools: cloudflare.F[any](map[string]interface{}{
-					"ENAM": map[string]interface{}{
-						"0": "00920f38ce07c2e2f4df50b1f61d4194",
-					},
-					"WNAM": map[string]interface{}{
-						"0": "de90f38ced07c2e2f4df50b1f61d4194",
-						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-					},
+				RegionPools: cloudflare.F(map[string][]string{
+					"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+					"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 				}),
-				SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+				SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 				SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 					DrainDuration:        cloudflare.F(100.000000),
 					Headers:              cloudflare.F([]string{"x"}),
 					RequireAllHeaders:    cloudflare.F(true),
 					Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 					Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 				}),
 				SessionAffinityTTL: cloudflare.F(1800.000000),
-				SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+				SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 				TTL:                cloudflare.F(30.000000),
 			}),
 			Priority:   cloudflare.F(int64(0)),
@@ -239,77 +186,59 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 					FailoverAcrossPools: cloudflare.F(true),
 				}),
-				CountryPools: cloudflare.F[any](map[string]interface{}{
-					"GB": map[string]interface{}{
-						"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-					},
-					"US": map[string]interface{}{
-						"0": "de90f38ced07c2e2f4df50b1f61d4194",
-						"1": "00920f38ce07c2e2f4df50b1f61d4194",
-					},
+				CountryPools: cloudflare.F(map[string][]string{
+					"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+					"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 				}),
 				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-				FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+				FallbackPool: cloudflare.F("fallback_pool"),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-					Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+					Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
-				PopPools: cloudflare.F[any](map[string]interface{}{
-					"LAX": map[string]interface{}{
-						"0": "de90f38ced07c2e2f4df50b1f61d4194",
-						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-					},
-					"LHR": map[string]interface{}{
-						"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-						"1": "f9138c5d07c2e2f4df57b1f61d4196",
-					},
-					"SJC": map[string]interface{}{
-						"0": "00920f38ce07c2e2f4df50b1f61d4194",
-					},
+				PopPools: cloudflare.F(map[string][]string{
+					"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+					"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+					"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 				}),
 				RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 					DefaultWeight: cloudflare.F(0.200000),
-					PoolWeights: cloudflare.F[any](map[string]interface{}{
-						"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-						"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+					PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+						Key:   cloudflare.F("key"),
+						Value: cloudflare.F(0.000000),
 					}),
 				}),
-				RegionPools: cloudflare.F[any](map[string]interface{}{
-					"ENAM": map[string]interface{}{
-						"0": "00920f38ce07c2e2f4df50b1f61d4194",
-					},
-					"WNAM": map[string]interface{}{
-						"0": "de90f38ced07c2e2f4df50b1f61d4194",
-						"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-					},
+				RegionPools: cloudflare.F(map[string][]string{
+					"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+					"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 				}),
-				SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+				SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 				SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 					DrainDuration:        cloudflare.F(100.000000),
 					Headers:              cloudflare.F([]string{"x"}),
 					RequireAllHeaders:    cloudflare.F(true),
 					Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 					Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+					ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 				}),
 				SessionAffinityTTL: cloudflare.F(1800.000000),
-				SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+				SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 				TTL:                cloudflare.F(30.000000),
 			}),
 			Priority:   cloudflare.F(int64(0)),
 			Terminates: cloudflare.F(true),
 		}}),
-		SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+		SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 		SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 			DrainDuration:        cloudflare.F(100.000000),
 			Headers:              cloudflare.F([]string{"x"}),
 			RequireAllHeaders:    cloudflare.F(true),
 			Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 			Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-			ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+			ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 		}),
 		SessionAffinityTTL: cloudflare.F(1800.000000),
-		SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+		SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 		TTL:                cloudflare.F(30.000000),
 	})
 	if err != nil {
@@ -340,55 +269,38 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 		load_balancers.LoadBalancerUpdateParams{
 			ZoneID:       cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-			FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+			FallbackPool: cloudflare.F("fallback_pool"),
 			Name:         cloudflare.F("www.example.com"),
 			AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 				FailoverAcrossPools: cloudflare.F(true),
 			}),
-			CountryPools: cloudflare.F[any](map[string]interface{}{
-				"GB": map[string]interface{}{
-					"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-				},
-				"US": map[string]interface{}{
-					"0": "de90f38ced07c2e2f4df50b1f61d4194",
-					"1": "00920f38ce07c2e2f4df50b1f61d4194",
-				},
+			CountryPools: cloudflare.F(map[string][]string{
+				"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+				"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 			}),
 			Description: cloudflare.F("Load Balancer for www.example.com"),
 			Enabled:     cloudflare.F(true),
 			LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-				Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+				Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 				PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 			}),
-			PopPools: cloudflare.F[any](map[string]interface{}{
-				"LAX": map[string]interface{}{
-					"0": "de90f38ced07c2e2f4df50b1f61d4194",
-					"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-				},
-				"LHR": map[string]interface{}{
-					"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-					"1": "f9138c5d07c2e2f4df57b1f61d4196",
-				},
-				"SJC": map[string]interface{}{
-					"0": "00920f38ce07c2e2f4df50b1f61d4194",
-				},
+			Networks: cloudflare.F([]string{"string", "string", "string"}),
+			PopPools: cloudflare.F(map[string][]string{
+				"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+				"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+				"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 			}),
 			Proxied: cloudflare.F(true),
 			RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 				DefaultWeight: cloudflare.F(0.200000),
-				PoolWeights: cloudflare.F[any](map[string]interface{}{
-					"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-					"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+				PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+					Key:   cloudflare.F("key"),
+					Value: cloudflare.F(0.000000),
 				}),
 			}),
-			RegionPools: cloudflare.F[any](map[string]interface{}{
-				"ENAM": map[string]interface{}{
-					"0": "00920f38ce07c2e2f4df50b1f61d4194",
-				},
-				"WNAM": map[string]interface{}{
-					"0": "de90f38ced07c2e2f4df50b1f61d4194",
-					"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-				},
+			RegionPools: cloudflare.F(map[string][]string{
+				"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+				"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 			}),
 			Rules: cloudflare.F([]load_balancers.RulesParam{{
 				Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
@@ -404,61 +316,43 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
-					CountryPools: cloudflare.F[any](map[string]interface{}{
-						"GB": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-						},
-						"US": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					CountryPools: cloudflare.F(map[string][]string{
+						"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+						"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F[any](map[string]interface{}{
-						"LAX": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
-						"LHR": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-							"1": "f9138c5d07c2e2f4df57b1f61d4196",
-						},
-						"SJC": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					PopPools: cloudflare.F(map[string][]string{
+						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F[any](map[string]interface{}{
-							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+							Key:   cloudflare.F("key"),
+							Value: cloudflare.F(0.000000),
 						}),
 					}),
-					RegionPools: cloudflare.F[any](map[string]interface{}{
-						"ENAM": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
-						"WNAM": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
+					RegionPools: cloudflare.F(map[string][]string{
+						"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+						"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
 						RequireAllHeaders:    cloudflare.F(true),
 						Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 						Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -477,61 +371,43 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
-					CountryPools: cloudflare.F[any](map[string]interface{}{
-						"GB": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-						},
-						"US": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					CountryPools: cloudflare.F(map[string][]string{
+						"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+						"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F[any](map[string]interface{}{
-						"LAX": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
-						"LHR": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-							"1": "f9138c5d07c2e2f4df57b1f61d4196",
-						},
-						"SJC": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					PopPools: cloudflare.F(map[string][]string{
+						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F[any](map[string]interface{}{
-							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+							Key:   cloudflare.F("key"),
+							Value: cloudflare.F(0.000000),
 						}),
 					}),
-					RegionPools: cloudflare.F[any](map[string]interface{}{
-						"ENAM": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
-						"WNAM": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
+					RegionPools: cloudflare.F(map[string][]string{
+						"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+						"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
 						RequireAllHeaders:    cloudflare.F(true),
 						Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 						Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -550,77 +426,59 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
-					CountryPools: cloudflare.F[any](map[string]interface{}{
-						"GB": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-						},
-						"US": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					CountryPools: cloudflare.F(map[string][]string{
+						"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+						"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F[any](map[string]interface{}{
-						"LAX": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
-						"LHR": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-							"1": "f9138c5d07c2e2f4df57b1f61d4196",
-						},
-						"SJC": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					PopPools: cloudflare.F(map[string][]string{
+						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F[any](map[string]interface{}{
-							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+							Key:   cloudflare.F("key"),
+							Value: cloudflare.F(0.000000),
 						}),
 					}),
-					RegionPools: cloudflare.F[any](map[string]interface{}{
-						"ENAM": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
-						"WNAM": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
+					RegionPools: cloudflare.F(map[string][]string{
+						"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+						"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
 						RequireAllHeaders:    cloudflare.F(true),
 						Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 						Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
 				Terminates: cloudflare.F(true),
 			}}),
-			SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+			SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 			SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 				DrainDuration:        cloudflare.F(100.000000),
 				Headers:              cloudflare.F([]string{"x"}),
 				RequireAllHeaders:    cloudflare.F(true),
 				Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 				Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-				ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+				ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 			}),
 			SessionAffinityTTL: cloudflare.F(1800.000000),
-			SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+			SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 			TTL:                cloudflare.F(30.000000),
 		},
 	)
@@ -708,53 +566,35 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 			AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 				FailoverAcrossPools: cloudflare.F(true),
 			}),
-			CountryPools: cloudflare.F[any](map[string]interface{}{
-				"GB": map[string]interface{}{
-					"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-				},
-				"US": map[string]interface{}{
-					"0": "de90f38ced07c2e2f4df50b1f61d4194",
-					"1": "00920f38ce07c2e2f4df50b1f61d4194",
-				},
+			CountryPools: cloudflare.F(map[string][]string{
+				"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+				"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 			}),
 			DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 			Description:  cloudflare.F("Load Balancer for www.example.com"),
 			Enabled:      cloudflare.F(true),
-			FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+			FallbackPool: cloudflare.F("fallback_pool"),
 			LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-				Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+				Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 				PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 			}),
 			Name: cloudflare.F("www.example.com"),
-			PopPools: cloudflare.F[any](map[string]interface{}{
-				"LAX": map[string]interface{}{
-					"0": "de90f38ced07c2e2f4df50b1f61d4194",
-					"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-				},
-				"LHR": map[string]interface{}{
-					"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-					"1": "f9138c5d07c2e2f4df57b1f61d4196",
-				},
-				"SJC": map[string]interface{}{
-					"0": "00920f38ce07c2e2f4df50b1f61d4194",
-				},
+			PopPools: cloudflare.F(map[string][]string{
+				"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+				"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+				"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 			}),
 			Proxied: cloudflare.F(true),
 			RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 				DefaultWeight: cloudflare.F(0.200000),
-				PoolWeights: cloudflare.F[any](map[string]interface{}{
-					"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-					"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+				PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+					Key:   cloudflare.F("key"),
+					Value: cloudflare.F(0.000000),
 				}),
 			}),
-			RegionPools: cloudflare.F[any](map[string]interface{}{
-				"ENAM": map[string]interface{}{
-					"0": "00920f38ce07c2e2f4df50b1f61d4194",
-				},
-				"WNAM": map[string]interface{}{
-					"0": "de90f38ced07c2e2f4df50b1f61d4194",
-					"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-				},
+			RegionPools: cloudflare.F(map[string][]string{
+				"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+				"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 			}),
 			Rules: cloudflare.F([]load_balancers.RulesParam{{
 				Condition: cloudflare.F("http.request.uri.path contains \"/testing\""),
@@ -770,61 +610,43 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
-					CountryPools: cloudflare.F[any](map[string]interface{}{
-						"GB": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-						},
-						"US": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					CountryPools: cloudflare.F(map[string][]string{
+						"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+						"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F[any](map[string]interface{}{
-						"LAX": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
-						"LHR": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-							"1": "f9138c5d07c2e2f4df57b1f61d4196",
-						},
-						"SJC": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					PopPools: cloudflare.F(map[string][]string{
+						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F[any](map[string]interface{}{
-							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+							Key:   cloudflare.F("key"),
+							Value: cloudflare.F(0.000000),
 						}),
 					}),
-					RegionPools: cloudflare.F[any](map[string]interface{}{
-						"ENAM": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
-						"WNAM": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
+					RegionPools: cloudflare.F(map[string][]string{
+						"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+						"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
 						RequireAllHeaders:    cloudflare.F(true),
 						Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 						Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -843,61 +665,43 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
-					CountryPools: cloudflare.F[any](map[string]interface{}{
-						"GB": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-						},
-						"US": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					CountryPools: cloudflare.F(map[string][]string{
+						"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+						"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F[any](map[string]interface{}{
-						"LAX": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
-						"LHR": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-							"1": "f9138c5d07c2e2f4df57b1f61d4196",
-						},
-						"SJC": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					PopPools: cloudflare.F(map[string][]string{
+						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F[any](map[string]interface{}{
-							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+							Key:   cloudflare.F("key"),
+							Value: cloudflare.F(0.000000),
 						}),
 					}),
-					RegionPools: cloudflare.F[any](map[string]interface{}{
-						"ENAM": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
-						"WNAM": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
+					RegionPools: cloudflare.F(map[string][]string{
+						"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+						"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
 						RequireAllHeaders:    cloudflare.F(true),
 						Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 						Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
@@ -916,77 +720,59 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					AdaptiveRouting: cloudflare.F(load_balancers.AdaptiveRoutingParam{
 						FailoverAcrossPools: cloudflare.F(true),
 					}),
-					CountryPools: cloudflare.F[any](map[string]interface{}{
-						"GB": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-						},
-						"US": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					CountryPools: cloudflare.F(map[string][]string{
+						"GB": {"abd90f38ced07c2e2f4df50b1f61d4194"},
+						"US": {"de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
-					FallbackPool: cloudflare.F[any](map[string]interface{}{}),
+					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModeResolverIP),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F[any](map[string]interface{}{
-						"LAX": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
-						"LHR": map[string]interface{}{
-							"0": "abd90f38ced07c2e2f4df50b1f61d4194",
-							"1": "f9138c5d07c2e2f4df57b1f61d4196",
-						},
-						"SJC": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
+					PopPools: cloudflare.F(map[string][]string{
+						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
+						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
+						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F[any](map[string]interface{}{
-							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
-							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
+						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
+							Key:   cloudflare.F("key"),
+							Value: cloudflare.F(0.000000),
 						}),
 					}),
-					RegionPools: cloudflare.F[any](map[string]interface{}{
-						"ENAM": map[string]interface{}{
-							"0": "00920f38ce07c2e2f4df50b1f61d4194",
-						},
-						"WNAM": map[string]interface{}{
-							"0": "de90f38ced07c2e2f4df50b1f61d4194",
-							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
-						},
+					RegionPools: cloudflare.F(map[string][]string{
+						"ENAM": {"00920f38ce07c2e2f4df50b1f61d4194"},
+						"WNAM": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					}),
-					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+					SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 					SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
 						RequireAllHeaders:    cloudflare.F(true),
 						Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 						Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+						ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 					}),
 					SessionAffinityTTL: cloudflare.F(1800.000000),
-					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+					SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 					TTL:                cloudflare.F(30.000000),
 				}),
 				Priority:   cloudflare.F(int64(0)),
 				Terminates: cloudflare.F(true),
 			}}),
-			SessionAffinity: cloudflare.F(load_balancers.SessionAffinityCookie),
+			SessionAffinity: cloudflare.F(load_balancers.SessionAffinityNone),
 			SessionAffinityAttributes: cloudflare.F(load_balancers.SessionAffinityAttributesParam{
 				DrainDuration:        cloudflare.F(100.000000),
 				Headers:              cloudflare.F([]string{"x"}),
 				RequireAllHeaders:    cloudflare.F(true),
 				Samesite:             cloudflare.F(load_balancers.SessionAffinityAttributesSamesiteAuto),
 				Secure:               cloudflare.F(load_balancers.SessionAffinityAttributesSecureAuto),
-				ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverSticky),
+				ZeroDowntimeFailover: cloudflare.F(load_balancers.SessionAffinityAttributesZeroDowntimeFailoverNone),
 			}),
 			SessionAffinityTTL: cloudflare.F(1800.000000),
-			SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyDynamicLatency),
+			SteeringPolicy:     cloudflare.F(load_balancers.SteeringPolicyOff),
 			TTL:                cloudflare.F(30.000000),
 		},
 	)

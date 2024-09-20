@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/workers"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/workers"
 )
 
 func TestScriptDeploymentNewWithOptionalParams(t *testing.T) {
@@ -32,10 +32,21 @@ func TestScriptDeploymentNewWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptDeploymentNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Strategy:  cloudflare.F(workers.ScriptDeploymentNewParamsStrategyPercentage),
+			Versions: cloudflare.F([]workers.ScriptDeploymentNewParamsVersion{{
+				Percentage: cloudflare.F(100.000000),
+				VersionID:  cloudflare.F("bcf48806-b317-4351-9ee7-36e7d557d4de"),
+			}, {
+				Percentage: cloudflare.F(100.000000),
+				VersionID:  cloudflare.F("bcf48806-b317-4351-9ee7-36e7d557d4de"),
+			}, {
+				Percentage: cloudflare.F(100.000000),
+				VersionID:  cloudflare.F("bcf48806-b317-4351-9ee7-36e7d557d4de"),
+			}}),
+			Force: cloudflare.F(true),
 			Annotations: cloudflare.F(workers.DeploymentParam{
 				WorkersMessage: cloudflare.F("Deploy bug fix."),
 			}),
-			Strategy: cloudflare.F("strategy"),
 		},
 	)
 	if err != nil {

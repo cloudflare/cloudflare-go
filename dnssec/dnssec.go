@@ -7,15 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DNSSECService contains methods and other services that help with interacting
@@ -38,7 +36,7 @@ func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 }
 
 // Delete DNSSEC.
-func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opts ...option.RequestOption) (res *DNSSECDeleteResponseUnion, err error) {
+func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env DNSSECDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
@@ -177,22 +175,6 @@ func (r DNSSECStatus) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [dnssec.DNSSECDeleteResponseUnknown] or [shared.UnionString].
-type DNSSECDeleteResponseUnion interface {
-	ImplementsDNSSECDNSSECDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSSECDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type DNSSECDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -203,7 +185,7 @@ type DNSSECDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSECDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  DNSSECDeleteResponseUnion           `json:"result"`
+	Result  interface{}                         `json:"result"`
 	JSON    dnssecDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

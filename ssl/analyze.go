@@ -7,15 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/custom_hostnames"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/custom_hostnames"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AnalyzeService contains methods and other services that help with interacting
@@ -39,7 +37,7 @@ func NewAnalyzeService(opts ...option.RequestOption) (r *AnalyzeService) {
 
 // Returns the set of hostnames, the signature algorithm, and the expiration date
 // of the certificate.
-func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts ...option.RequestOption) (res *AnalyzeNewResponseUnion, err error) {
+func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts ...option.RequestOption) (res *AnalyzeNewResponse, err error) {
 	var env AnalyzeNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -55,21 +53,7 @@ func (r *AnalyzeService) New(ctx context.Context, params AnalyzeNewParams, opts 
 	return
 }
 
-// Union satisfied by [ssl.AnalyzeNewResponseUnknown] or [shared.UnionString].
-type AnalyzeNewResponseUnion interface {
-	ImplementsSSLAnalyzeNewResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AnalyzeNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type AnalyzeNewResponse = interface{}
 
 type AnalyzeNewParams struct {
 	// Identifier
@@ -92,7 +76,7 @@ type AnalyzeNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AnalyzeNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  AnalyzeNewResponseUnion           `json:"result"`
+	Result  AnalyzeNewResponse                `json:"result"`
 	JSON    analyzeNewResponseEnvelopeJSON    `json:"-"`
 }
 

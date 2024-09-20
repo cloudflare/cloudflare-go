@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/magic_transit"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
@@ -35,11 +35,11 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 		CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 		Description:        cloudflare.F("Tunnel for ISP X"),
 		HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
-			Direction: cloudflare.F(magic_transit.HealthCheckDirectionBidirectional),
+			Direction: cloudflare.F(magic_transit.HealthCheckDirectionUnidirectional),
 			Enabled:   cloudflare.F(true),
 			Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
 			Target:    cloudflare.F("203.0.113.1"),
-			Type:      cloudflare.F(magic_transit.HealthCheckTypeRequest),
+			Type:      cloudflare.F(magic_transit.HealthCheckTypeReply),
 		}),
 		PSK:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 		ReplayProtection: cloudflare.F(false),
@@ -77,11 +77,11 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 			CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 			Description:        cloudflare.F("Tunnel for ISP X"),
 			HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
-				Direction: cloudflare.F(magic_transit.HealthCheckDirectionBidirectional),
+				Direction: cloudflare.F(magic_transit.HealthCheckDirectionUnidirectional),
 				Enabled:   cloudflare.F(true),
 				Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
 				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(magic_transit.HealthCheckTypeRequest),
+				Type:      cloudflare.F(magic_transit.HealthCheckTypeReply),
 			}),
 			PSK:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 			ReplayProtection: cloudflare.F(false),

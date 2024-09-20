@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/ai_gateway"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/ai_gateway"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestLogListWithOptionalParams(t *testing.T) {
@@ -32,16 +32,34 @@ func TestLogListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"my-gateway",
 		ai_gateway.LogListParams{
-			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
-			Cached:    cloudflare.F(true),
-			Direction: cloudflare.F(ai_gateway.LogListParamsDirectionAsc),
-			EndDate:   cloudflare.F(time.Now()),
-			OrderBy:   cloudflare.F(ai_gateway.LogListParamsOrderByCreatedAt),
-			Page:      cloudflare.F(int64(1)),
-			PerPage:   cloudflare.F(int64(5)),
-			Search:    cloudflare.F("search"),
-			StartDate: cloudflare.F(time.Now()),
-			Success:   cloudflare.F(true),
+			AccountID:           cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
+			Cached:              cloudflare.F(true),
+			Direction:           cloudflare.F(ai_gateway.LogListParamsDirectionAsc),
+			EndDate:             cloudflare.F(time.Now()),
+			Feedback:            cloudflare.F(ai_gateway.LogListParamsFeedback0),
+			MaxCost:             cloudflare.F(0.000000),
+			MaxDuration:         cloudflare.F(0.000000),
+			MaxTokensIn:         cloudflare.F(0.000000),
+			MaxTokensOut:        cloudflare.F(0.000000),
+			MaxTotalTokens:      cloudflare.F(0.000000),
+			MetaInfo:            cloudflare.F(true),
+			MinCost:             cloudflare.F(0.000000),
+			MinDuration:         cloudflare.F(0.000000),
+			MinTokensIn:         cloudflare.F(0.000000),
+			MinTokensOut:        cloudflare.F(0.000000),
+			MinTotalTokens:      cloudflare.F(0.000000),
+			Model:               cloudflare.F("model"),
+			ModelType:           cloudflare.F("model_type"),
+			OrderBy:             cloudflare.F(ai_gateway.LogListParamsOrderByCreatedAt),
+			OrderByDirection:    cloudflare.F(ai_gateway.LogListParamsOrderByDirectionAsc),
+			Page:                cloudflare.F(int64(1)),
+			PerPage:             cloudflare.F(int64(5)),
+			Provider:            cloudflare.F("provider"),
+			RequestContentType:  cloudflare.F("request_content_type"),
+			ResponseContentType: cloudflare.F("response_content_type"),
+			Search:              cloudflare.F("search"),
+			StartDate:           cloudflare.F(time.Now()),
+			Success:             cloudflare.F(true),
 		},
 	)
 	if err != nil {

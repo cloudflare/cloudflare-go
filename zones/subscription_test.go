@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
-	"github.com/cloudflare/cloudflare-go/v2/zones"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 func TestSubscriptionNewWithOptionalParams(t *testing.T) {
@@ -32,37 +32,17 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"506e3185e9c882d175a2d0cb0093d9f2",
 		zones.SubscriptionNewParams{
-			Subscription: user.SubscriptionParam{
-				App: cloudflare.F(user.SubscriptionAppParam{
-					InstallID: cloudflare.F("install_id"),
-				}),
-				ComponentValues: cloudflare.F([]user.SubscriptionComponentParam{{
-					Default: cloudflare.F(5.000000),
-					Name:    cloudflare.F("page_rules"),
-					Price:   cloudflare.F(5.000000),
-					Value:   cloudflare.F(20.000000),
-				}, {
-					Default: cloudflare.F(5.000000),
-					Name:    cloudflare.F("page_rules"),
-					Price:   cloudflare.F(5.000000),
-					Value:   cloudflare.F(20.000000),
-				}, {
-					Default: cloudflare.F(5.000000),
-					Name:    cloudflare.F("page_rules"),
-					Price:   cloudflare.F(5.000000),
-					Value:   cloudflare.F(20.000000),
-				}}),
-				Frequency: cloudflare.F(user.SubscriptionFrequencyMonthly),
-				RatePlan: cloudflare.F(user.RatePlanParam{
+			Subscription: shared.SubscriptionParam{
+				Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
+				RatePlan: cloudflare.F(shared.RatePlanParam{
+					ID:                cloudflare.F("free"),
 					Currency:          cloudflare.F("USD"),
 					ExternallyManaged: cloudflare.F(false),
-					ID:                cloudflare.F("free"),
 					IsContract:        cloudflare.F(false),
 					PublicName:        cloudflare.F("Business Plan"),
 					Scope:             cloudflare.F("zone"),
 					Sets:              cloudflare.F([]string{"string", "string", "string"}),
 				}),
-				Zone: cloudflare.F(user.SubscriptionZoneParam{}),
 			},
 		},
 	)
@@ -75,7 +55,7 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSubscriptionList(t *testing.T) {
+func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -88,7 +68,24 @@ func TestSubscriptionList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Zones.Subscriptions.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Subscriptions.Update(
+		context.TODO(),
+		"506e3185e9c882d175a2d0cb0093d9f2",
+		zones.SubscriptionUpdateParams{
+			Subscription: shared.SubscriptionParam{
+				Frequency: cloudflare.F(shared.SubscriptionFrequencyWeekly),
+				RatePlan: cloudflare.F(shared.RatePlanParam{
+					ID:                cloudflare.F("free"),
+					Currency:          cloudflare.F("USD"),
+					ExternallyManaged: cloudflare.F(false),
+					IsContract:        cloudflare.F(false),
+					PublicName:        cloudflare.F("Business Plan"),
+					Scope:             cloudflare.F("zone"),
+					Sets:              cloudflare.F([]string{"string", "string", "string"}),
+				}),
+			},
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

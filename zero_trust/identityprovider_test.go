@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
 func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
@@ -31,25 +31,24 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.IdentityProviders.New(context.TODO(), zero_trust.IdentityProviderNewParams{
 		IdentityProvider: zero_trust.AzureADParam{
 			Config: cloudflare.F(zero_trust.AzureADConfigParam{
+				Claims:                   cloudflare.F([]string{"email_verified", "preferred_username", "custom_claim_name"}),
 				ClientID:                 cloudflare.F("<your client id>"),
 				ClientSecret:             cloudflare.F("<your client secret>"),
-				Claims:                   cloudflare.F([]string{"email_verified", "preferred_username", "custom_claim_name"}),
-				EmailClaimName:           cloudflare.F("custom_claim_name"),
 				ConditionalAccessEnabled: cloudflare.F(true),
 				DirectoryID:              cloudflare.F("<your azure directory uuid>"),
+				EmailClaimName:           cloudflare.F("custom_claim_name"),
 				Prompt:                   cloudflare.F(zero_trust.AzureADConfigPromptLogin),
 				SupportGroups:            cloudflare.F(true),
 			}),
-			ID:   cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 			Name: cloudflare.F("Widget Corps IDP"),
-			SCIMConfig: cloudflare.F(zero_trust.SCIMConfigParam{
+			Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
+			SCIMConfig: cloudflare.F(zero_trust.IdentityProviderSCIMConfigParam{
 				Enabled:                cloudflare.F(true),
 				GroupMemberDeprovision: cloudflare.F(true),
 				SeatDeprovision:        cloudflare.F(true),
 				Secret:                 cloudflare.F("secret"),
 				UserDeprovision:        cloudflare.F(true),
 			}),
-			Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
 		},
 		AccountID: cloudflare.F("account_id"),
 	})
@@ -82,25 +81,24 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.IdentityProviderUpdateParams{
 			IdentityProvider: zero_trust.AzureADParam{
 				Config: cloudflare.F(zero_trust.AzureADConfigParam{
+					Claims:                   cloudflare.F([]string{"email_verified", "preferred_username", "custom_claim_name"}),
 					ClientID:                 cloudflare.F("<your client id>"),
 					ClientSecret:             cloudflare.F("<your client secret>"),
-					Claims:                   cloudflare.F([]string{"email_verified", "preferred_username", "custom_claim_name"}),
-					EmailClaimName:           cloudflare.F("custom_claim_name"),
 					ConditionalAccessEnabled: cloudflare.F(true),
 					DirectoryID:              cloudflare.F("<your azure directory uuid>"),
+					EmailClaimName:           cloudflare.F("custom_claim_name"),
 					Prompt:                   cloudflare.F(zero_trust.AzureADConfigPromptLogin),
 					SupportGroups:            cloudflare.F(true),
 				}),
-				ID:   cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Name: cloudflare.F("Widget Corps IDP"),
-				SCIMConfig: cloudflare.F(zero_trust.SCIMConfigParam{
+				Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
+				SCIMConfig: cloudflare.F(zero_trust.IdentityProviderSCIMConfigParam{
 					Enabled:                cloudflare.F(true),
 					GroupMemberDeprovision: cloudflare.F(true),
 					SeatDeprovision:        cloudflare.F(true),
 					Secret:                 cloudflare.F("secret"),
 					UserDeprovision:        cloudflare.F(true),
 				}),
-				Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
 			},
 			AccountID: cloudflare.F("account_id"),
 		},

@@ -9,11 +9,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // EmailSecurityTopTldSpoofService contains methods and other services that help
@@ -49,9 +49,9 @@ func (r *EmailSecurityTopTldSpoofService) Get(ctx context.Context, spoof EmailSe
 }
 
 type EmailSecurityTopTldSpoofGetResponse struct {
-	Meta EmailSecurityTopTldSpoofGetResponseMeta `json:"meta,required"`
-	Top0 []Browser                               `json:"top_0,required"`
-	JSON emailSecurityTopTldSpoofGetResponseJSON `json:"-"`
+	Meta EmailSecurityTopTldSpoofGetResponseMeta   `json:"meta,required"`
+	Top0 []EmailSecurityTopTldSpoofGetResponseTop0 `json:"top_0,required"`
+	JSON emailSecurityTopTldSpoofGetResponseJSON   `json:"-"`
 }
 
 // emailSecurityTopTldSpoofGetResponseJSON contains the JSON metadata for the
@@ -175,6 +175,29 @@ func (r *EmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation) Unmars
 }
 
 func (r emailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EmailSecurityTopTldSpoofGetResponseTop0 struct {
+	Name  string                                      `json:"name,required"`
+	Value string                                      `json:"value,required"`
+	JSON  emailSecurityTopTldSpoofGetResponseTop0JSON `json:"-"`
+}
+
+// emailSecurityTopTldSpoofGetResponseTop0JSON contains the JSON metadata for the
+// struct [EmailSecurityTopTldSpoofGetResponseTop0]
+type emailSecurityTopTldSpoofGetResponseTop0JSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailSecurityTopTldSpoofGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailSecurityTopTldSpoofGetResponseTop0JSON) RawJSON() string {
 	return r.raw
 }
 

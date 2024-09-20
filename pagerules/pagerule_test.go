@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/pagerules"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/pagerules"
 )
 
 func TestPageruleNewWithOptionalParams(t *testing.T) {
@@ -139,7 +139,7 @@ func TestPageruleListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Pagerules.List(context.TODO(), pagerules.PageruleListParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction: cloudflare.F(pagerules.PageruleListParamsDirectionDesc),
+		Direction: cloudflare.F(pagerules.PageruleListParamsDirectionAsc),
 		Match:     cloudflare.F(pagerules.PageruleListParamsMatchAny),
 		Order:     cloudflare.F(pagerules.PageruleListParamsOrderStatus),
 		Status:    cloudflare.F(pagerules.PageruleListParamsStatusActive),

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/secondary_dns"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/secondary_dns"
 )
 
 func TestIncomingNew(t *testing.T) {
@@ -31,7 +31,7 @@ func TestIncomingNew(t *testing.T) {
 		ZoneID:             cloudflare.F("269d8f4853475ca241c4e730be286b20"),
 		AutoRefreshSeconds: cloudflare.F(86400.000000),
 		Name:               cloudflare.F("www.example.com."),
-		Peers:              cloudflare.F([]interface{}{"23ff594956f20c2a721606e94745a8aa", "00920f38ce07c2e2f4df50b1f61d4194"}),
+		Peers:              cloudflare.F([]string{"23ff594956f20c2a721606e94745a8aa", "00920f38ce07c2e2f4df50b1f61d4194"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -59,7 +59,7 @@ func TestIncomingUpdate(t *testing.T) {
 		ZoneID:             cloudflare.F("269d8f4853475ca241c4e730be286b20"),
 		AutoRefreshSeconds: cloudflare.F(86400.000000),
 		Name:               cloudflare.F("www.example.com."),
-		Peers:              cloudflare.F([]interface{}{"23ff594956f20c2a721606e94745a8aa", "00920f38ce07c2e2f4df50b1f61d4194"}),
+		Peers:              cloudflare.F([]string{"23ff594956f20c2a721606e94745a8aa", "00920f38ce07c2e2f4df50b1f61d4194"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/radar"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/radar"
 )
 
 func TestBGPLeakEventListWithOptionalParams(t *testing.T) {
@@ -39,8 +39,8 @@ func TestBGPLeakEventListWithOptionalParams(t *testing.T) {
 		LeakASN:         cloudflare.F(int64(0)),
 		Page:            cloudflare.F(int64(0)),
 		PerPage:         cloudflare.F(int64(0)),
-		SortBy:          cloudflare.F(radar.BGPLeakEventListParamsSortByTime),
-		SortOrder:       cloudflare.F(radar.BGPLeakEventListParamsSortOrderDesc),
+		SortBy:          cloudflare.F(radar.BGPLeakEventListParamsSortByID),
+		SortOrder:       cloudflare.F(radar.BGPLeakEventListParamsSortOrderAsc),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/radar"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/radar"
 )
 
 func TestBGPHijackEventListWithOptionalParams(t *testing.T) {
@@ -42,8 +42,8 @@ func TestBGPHijackEventListWithOptionalParams(t *testing.T) {
 		Page:            cloudflare.F(int64(0)),
 		PerPage:         cloudflare.F(int64(0)),
 		Prefix:          cloudflare.F("1.1.1.0/24"),
-		SortBy:          cloudflare.F(radar.BGPHijackEventListParamsSortByTime),
-		SortOrder:       cloudflare.F(radar.BGPHijackEventListParamsSortOrderDesc),
+		SortBy:          cloudflare.F(radar.BGPHijackEventListParamsSortByID),
+		SortOrder:       cloudflare.F(radar.BGPHijackEventListParamsSortOrderAsc),
 		VictimASN:       cloudflare.F(int64(0)),
 	})
 	if err != nil {

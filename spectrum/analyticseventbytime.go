@@ -11,12 +11,12 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -40,15 +40,15 @@ func NewAnalyticsEventBytimeService(opts ...option.RequestOption) (r *AnalyticsE
 }
 
 // Retrieves a list of aggregate metrics grouped by time interval.
-func (r *AnalyticsEventBytimeService) Get(ctx context.Context, zone string, query AnalyticsEventBytimeGetParams, opts ...option.RequestOption) (res *AnalyticsEventBytimeGetResponseUnion, err error) {
+func (r *AnalyticsEventBytimeService) Get(ctx context.Context, params AnalyticsEventBytimeGetParams, opts ...option.RequestOption) (res *AnalyticsEventBytimeGetResponse, err error) {
 	var env AnalyticsEventBytimeGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zone == "" {
-		err = errors.New("missing required zone parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/bytime", zone)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/bytime", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -56,24 +56,197 @@ func (r *AnalyticsEventBytimeService) Get(ctx context.Context, zone string, quer
 	return
 }
 
-// Union satisfied by [spectrum.AnalyticsEventBytimeGetResponseUnknown] or
-// [shared.UnionString].
-type AnalyticsEventBytimeGetResponseUnion interface {
-	ImplementsSpectrumAnalyticsEventBytimeGetResponseUnion()
+type AnalyticsEventBytimeGetResponse struct {
+	// List of columns returned by the analytics query.
+	Data []AnalyticsEventBytimeGetResponseData `json:"data,required"`
+	// Number of seconds between current time and last processed event, i.e. how many
+	// seconds of data could be missing.
+	DataLag float64 `json:"data_lag,required"`
+	// Maximum result for each selected metrics across all data.
+	Max map[string]float64 `json:"max,required"`
+	// Minimum result for each selected metrics across all data.
+	Min   map[string]float64                   `json:"min,required"`
+	Query AnalyticsEventBytimeGetResponseQuery `json:"query,required"`
+	// Total number of rows in the result.
+	Rows float64 `json:"rows,required"`
+	// Total result for each selected metrics across all data.
+	Totals map[string]float64 `json:"totals,required"`
+	// List of time interval buckets: [start, end]
+	TimeIntervals [][]time.Time                       `json:"time_intervals" format:"date-time"`
+	JSON          analyticsEventBytimeGetResponseJSON `json:"-"`
+}
+
+// analyticsEventBytimeGetResponseJSON contains the JSON metadata for the struct
+// [AnalyticsEventBytimeGetResponse]
+type analyticsEventBytimeGetResponseJSON struct {
+	Data          apijson.Field
+	DataLag       apijson.Field
+	Max           apijson.Field
+	Min           apijson.Field
+	Query         apijson.Field
+	Rows          apijson.Field
+	Totals        apijson.Field
+	TimeIntervals apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AnalyticsEventBytimeGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsEventBytimeGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AnalyticsEventBytimeGetResponseData struct {
+	Dimensions []string                                        `json:"dimensions"`
+	Metrics    AnalyticsEventBytimeGetResponseDataMetricsUnion `json:"metrics"`
+	JSON       analyticsEventBytimeGetResponseDataJSON         `json:"-"`
+}
+
+// analyticsEventBytimeGetResponseDataJSON contains the JSON metadata for the
+// struct [AnalyticsEventBytimeGetResponseData]
+type analyticsEventBytimeGetResponseDataJSON struct {
+	Dimensions  apijson.Field
+	Metrics     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnalyticsEventBytimeGetResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsEventBytimeGetResponseDataJSON) RawJSON() string {
+	return r.raw
+}
+
+// Union satisfied by [spectrum.AnalyticsEventBytimeGetResponseDataMetricsArray] or
+// [spectrum.AnalyticsEventBytimeGetResponseDataMetricsArray].
+type AnalyticsEventBytimeGetResponseDataMetricsUnion interface {
+	implementsSpectrumAnalyticsEventBytimeGetResponseDataMetricsUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AnalyticsEventBytimeGetResponseUnion)(nil)).Elem(),
+		reflect.TypeOf((*AnalyticsEventBytimeGetResponseDataMetricsUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AnalyticsEventBytimeGetResponseDataMetricsArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AnalyticsEventBytimeGetResponseDataMetricsArray{}),
 		},
 	)
 }
 
+type AnalyticsEventBytimeGetResponseDataMetricsArray []float64
+
+func (r AnalyticsEventBytimeGetResponseDataMetricsArray) implementsSpectrumAnalyticsEventBytimeGetResponseDataMetricsUnion() {
+}
+
+type AnalyticsEventBytimeGetResponseQuery struct {
+	// Can be used to break down the data by given attributes. Options are:
+	//
+	// | Dimension | Name                          | Example                                                    |
+	// | --------- | ----------------------------- | ---------------------------------------------------------- |
+	// | event     | Connection Event              | connect, progress, disconnect, originError, clientFiltered |
+	// | appID     | Application ID                | 40d67c87c6cd4b889a4fd57805225e85                           |
+	// | coloName  | Colo Name                     | SFO                                                        |
+	// | ipVersion | IP version used by the client | 4, 6.                                                      |
+	Dimensions []Dimension `json:"dimensions"`
+	// Used to filter rows by one or more dimensions. Filters can be combined using OR
+	// and AND boolean logic. AND takes precedence over OR in all the expressions. The
+	// OR operator is defined using a comma (,) or OR keyword surrounded by whitespace.
+	// The AND operator is defined using a semicolon (;) or AND keyword surrounded by
+	// whitespace. Note that the semicolon is a reserved character in URLs (rfc1738)
+	// and needs to be percent-encoded as %3B. Comparison options are:
+	//
+	// | Operator | Name                     | URL Encoded |
+	// | -------- | ------------------------ | ----------- |
+	// | ==       | Equals                   | %3D%3D      |
+	// | !=       | Does not equals          | !%3D        |
+	// | \>       | Greater Than             | %3E         |
+	// | \<       | Less Than                | %3C         |
+	// | \>=      | Greater than or equal to | %3E%3D      |
+	// | \<=      | Less than or equal to    | %3C%3D      |
+	Filters string `json:"filters"`
+	// Limit number of returned metrics.
+	Limit float64 `json:"limit"`
+	// One or more metrics to compute. Options are:
+	//
+	// | Metric         | Name                                | Example | Unit                  |
+	// | -------------- | ----------------------------------- | ------- | --------------------- |
+	// | count          | Count of total events               | 1000    | Count                 |
+	// | bytesIngress   | Sum of ingress bytes                | 1000    | Sum                   |
+	// | bytesEgress    | Sum of egress bytes                 | 1000    | Sum                   |
+	// | durationAvg    | Average connection duration         | 1.0     | Time in milliseconds  |
+	// | durationMedian | Median connection duration          | 1.0     | Time in milliseconds  |
+	// | duration90th   | 90th percentile connection duration | 1.0     | Time in milliseconds  |
+	// | duration99th   | 99th percentile connection duration | 1.0     | Time in milliseconds. |
+	Metrics []AnalyticsEventBytimeGetResponseQueryMetric `json:"metrics"`
+	// Start of time interval to query, defaults to `until` - 6 hours. Timestamp must
+	// be in RFC3339 format and uses UTC unless otherwise specified.
+	Since time.Time `json:"since" format:"date-time"`
+	// The sort order for the result set; sort fields must be included in `metrics` or
+	// `dimensions`.
+	Sort []string `json:"sort"`
+	// End of time interval to query, defaults to current time. Timestamp must be in
+	// RFC3339 format and uses UTC unless otherwise specified.
+	Until time.Time                                `json:"until" format:"date-time"`
+	JSON  analyticsEventBytimeGetResponseQueryJSON `json:"-"`
+}
+
+// analyticsEventBytimeGetResponseQueryJSON contains the JSON metadata for the
+// struct [AnalyticsEventBytimeGetResponseQuery]
+type analyticsEventBytimeGetResponseQueryJSON struct {
+	Dimensions  apijson.Field
+	Filters     apijson.Field
+	Limit       apijson.Field
+	Metrics     apijson.Field
+	Since       apijson.Field
+	Sort        apijson.Field
+	Until       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnalyticsEventBytimeGetResponseQuery) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r analyticsEventBytimeGetResponseQueryJSON) RawJSON() string {
+	return r.raw
+}
+
+type AnalyticsEventBytimeGetResponseQueryMetric string
+
+const (
+	AnalyticsEventBytimeGetResponseQueryMetricCount          AnalyticsEventBytimeGetResponseQueryMetric = "count"
+	AnalyticsEventBytimeGetResponseQueryMetricBytesIngress   AnalyticsEventBytimeGetResponseQueryMetric = "bytesIngress"
+	AnalyticsEventBytimeGetResponseQueryMetricBytesEgress    AnalyticsEventBytimeGetResponseQueryMetric = "bytesEgress"
+	AnalyticsEventBytimeGetResponseQueryMetricDurationAvg    AnalyticsEventBytimeGetResponseQueryMetric = "durationAvg"
+	AnalyticsEventBytimeGetResponseQueryMetricDurationMedian AnalyticsEventBytimeGetResponseQueryMetric = "durationMedian"
+	AnalyticsEventBytimeGetResponseQueryMetricDuration90th   AnalyticsEventBytimeGetResponseQueryMetric = "duration90th"
+	AnalyticsEventBytimeGetResponseQueryMetricDuration99th   AnalyticsEventBytimeGetResponseQueryMetric = "duration99th"
+)
+
+func (r AnalyticsEventBytimeGetResponseQueryMetric) IsKnown() bool {
+	switch r {
+	case AnalyticsEventBytimeGetResponseQueryMetricCount, AnalyticsEventBytimeGetResponseQueryMetricBytesIngress, AnalyticsEventBytimeGetResponseQueryMetricBytesEgress, AnalyticsEventBytimeGetResponseQueryMetricDurationAvg, AnalyticsEventBytimeGetResponseQueryMetricDurationMedian, AnalyticsEventBytimeGetResponseQueryMetricDuration90th, AnalyticsEventBytimeGetResponseQueryMetricDuration99th:
+		return true
+	}
+	return false
+}
+
 type AnalyticsEventBytimeGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Used to select time series resolution.
+	TimeDelta param.Field[AnalyticsEventBytimeGetParamsTimeDelta] `query:"time_delta,required"`
 	// Can be used to break down the data by given attributes. Options are:
 	//
 	// | Dimension | Name                          | Example                                                    |
@@ -94,10 +267,10 @@ type AnalyticsEventBytimeGetParams struct {
 	// | -------- | ------------------------ | ----------- |
 	// | ==       | Equals                   | %3D%3D      |
 	// | !=       | Does not equals          | !%3D        |
-	// | >        | Greater Than             | %3E         |
-	// | <        | Less Than                | %3C         |
-	// | >=       | Greater than or equal to | %3E%3D      |
-	// | <=       | Less than or equal to    | %3C%3D .    |
+	// | \>       | Greater Than             | %3E         |
+	// | \<       | Less Than                | %3C         |
+	// | \>=      | Greater than or equal to | %3E%3D      |
+	// | \<=      | Less than or equal to    | %3C%3D      |
 	Filters param.Field[string] `query:"filters"`
 	// One or more metrics to compute. Options are:
 	//
@@ -116,9 +289,7 @@ type AnalyticsEventBytimeGetParams struct {
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
 	// The sort order for the result set; sort fields must be included in `metrics` or
 	// `dimensions`.
-	Sort param.Field[[]interface{}] `query:"sort"`
-	// Used to select time series resolution.
-	TimeDelta param.Field[AnalyticsEventBytimeGetParamsTimeDelta] `query:"time_delta"`
+	Sort param.Field[[]string] `query:"sort"`
 	// End of time interval to query, defaults to current time. Timestamp must be in
 	// RFC3339 format and uses UTC unless otherwise specified.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
@@ -131,26 +302,6 @@ func (r AnalyticsEventBytimeGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-type AnalyticsEventBytimeGetParamsMetric string
-
-const (
-	AnalyticsEventBytimeGetParamsMetricCount          AnalyticsEventBytimeGetParamsMetric = "count"
-	AnalyticsEventBytimeGetParamsMetricBytesIngress   AnalyticsEventBytimeGetParamsMetric = "bytesIngress"
-	AnalyticsEventBytimeGetParamsMetricBytesEgress    AnalyticsEventBytimeGetParamsMetric = "bytesEgress"
-	AnalyticsEventBytimeGetParamsMetricDurationAvg    AnalyticsEventBytimeGetParamsMetric = "durationAvg"
-	AnalyticsEventBytimeGetParamsMetricDurationMedian AnalyticsEventBytimeGetParamsMetric = "durationMedian"
-	AnalyticsEventBytimeGetParamsMetricDuration90th   AnalyticsEventBytimeGetParamsMetric = "duration90th"
-	AnalyticsEventBytimeGetParamsMetricDuration99th   AnalyticsEventBytimeGetParamsMetric = "duration99th"
-)
-
-func (r AnalyticsEventBytimeGetParamsMetric) IsKnown() bool {
-	switch r {
-	case AnalyticsEventBytimeGetParamsMetricCount, AnalyticsEventBytimeGetParamsMetricBytesIngress, AnalyticsEventBytimeGetParamsMetricBytesEgress, AnalyticsEventBytimeGetParamsMetricDurationAvg, AnalyticsEventBytimeGetParamsMetricDurationMedian, AnalyticsEventBytimeGetParamsMetricDuration90th, AnalyticsEventBytimeGetParamsMetricDuration99th:
-		return true
-	}
-	return false
 }
 
 // Used to select time series resolution.
@@ -175,12 +326,32 @@ func (r AnalyticsEventBytimeGetParamsTimeDelta) IsKnown() bool {
 	return false
 }
 
+type AnalyticsEventBytimeGetParamsMetric string
+
+const (
+	AnalyticsEventBytimeGetParamsMetricCount          AnalyticsEventBytimeGetParamsMetric = "count"
+	AnalyticsEventBytimeGetParamsMetricBytesIngress   AnalyticsEventBytimeGetParamsMetric = "bytesIngress"
+	AnalyticsEventBytimeGetParamsMetricBytesEgress    AnalyticsEventBytimeGetParamsMetric = "bytesEgress"
+	AnalyticsEventBytimeGetParamsMetricDurationAvg    AnalyticsEventBytimeGetParamsMetric = "durationAvg"
+	AnalyticsEventBytimeGetParamsMetricDurationMedian AnalyticsEventBytimeGetParamsMetric = "durationMedian"
+	AnalyticsEventBytimeGetParamsMetricDuration90th   AnalyticsEventBytimeGetParamsMetric = "duration90th"
+	AnalyticsEventBytimeGetParamsMetricDuration99th   AnalyticsEventBytimeGetParamsMetric = "duration99th"
+)
+
+func (r AnalyticsEventBytimeGetParamsMetric) IsKnown() bool {
+	switch r {
+	case AnalyticsEventBytimeGetParamsMetricCount, AnalyticsEventBytimeGetParamsMetricBytesIngress, AnalyticsEventBytimeGetParamsMetricBytesEgress, AnalyticsEventBytimeGetParamsMetricDurationAvg, AnalyticsEventBytimeGetParamsMetricDurationMedian, AnalyticsEventBytimeGetParamsMetricDuration90th, AnalyticsEventBytimeGetParamsMetricDuration99th:
+		return true
+	}
+	return false
+}
+
 type AnalyticsEventBytimeGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                `json:"errors,required"`
-	Messages []shared.ResponseInfo                `json:"messages,required"`
-	Result   AnalyticsEventBytimeGetResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AnalyticsEventBytimeGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  AnalyticsEventBytimeGetResponse                `json:"result"`
 	JSON    analyticsEventBytimeGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -189,8 +360,8 @@ type AnalyticsEventBytimeGetResponseEnvelope struct {
 type analyticsEventBytimeGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

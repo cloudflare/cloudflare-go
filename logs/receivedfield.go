@@ -8,9 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // ReceivedFieldService contains methods and other services that help with
@@ -34,13 +35,13 @@ func NewReceivedFieldService(opts ...option.RequestOption) (r *ReceivedFieldServ
 
 // Lists all fields available. The response is json object with key-value pairs,
 // where keys are field names, and values are descriptions.
-func (r *ReceivedFieldService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ReceivedFieldGetResponse, err error) {
+func (r *ReceivedFieldService) Get(ctx context.Context, query ReceivedFieldGetParams, opts ...option.RequestOption) (res *ReceivedFieldGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/logs/received/fields", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/logs/received/fields", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -64,4 +65,9 @@ func (r *ReceivedFieldGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r receivedFieldGetResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type ReceivedFieldGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }

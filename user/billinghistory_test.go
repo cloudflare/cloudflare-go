@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/user"
 )
 
 func TestBillingHistoryListWithOptionalParams(t *testing.T) {
@@ -30,9 +30,8 @@ func TestBillingHistoryListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.User.Billing.History.List(context.TODO(), user.BillingHistoryListParams{
 		Action:     cloudflare.F("subscription"),
-		OccuredAt:  cloudflare.F(time.Now()),
 		OccurredAt: cloudflare.F(time.Now()),
-		Order:      cloudflare.F(user.BillingHistoryListParamsOrderOccuredAt),
+		Order:      cloudflare.F(user.BillingHistoryListParamsOrderType),
 		Page:       cloudflare.F(1.000000),
 		PerPage:    cloudflare.F(5.000000),
 		Type:       cloudflare.F("charge"),

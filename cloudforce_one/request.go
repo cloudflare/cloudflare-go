@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // RequestService contains methods and other services that help with interacting
@@ -27,6 +27,7 @@ type RequestService struct {
 	Options  []option.RequestOption
 	Message  *RequestMessageService
 	Priority *RequestPriorityService
+	Assets   *RequestAssetService
 }
 
 // NewRequestService generates a new service that applies the given options to each
@@ -37,12 +38,13 @@ func NewRequestService(opts ...option.RequestOption) (r *RequestService) {
 	r.Options = opts
 	r.Message = NewRequestMessageService(opts...)
 	r.Priority = NewRequestPriorityService(opts...)
+	r.Assets = NewRequestAssetService(opts...)
 	return
 }
 
 // Creating a request adds the request into the Cloudforce One queue for analysis.
 // In addition to the content, a short title, type, priority, and releasability
-// should be provided. If one is not provided a default will be assigned.
+// should be provided. If one is not provided, a default will be assigned.
 func (r *RequestService) New(ctx context.Context, accountIdentifier string, body RequestNewParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -61,7 +63,7 @@ func (r *RequestService) New(ctx context.Context, accountIdentifier string, body
 
 // Updating a request alters the request in the Cloudforce One queue. This API may
 // be used to update any attributes of the request after the initial submission.
-// Only fields that you choose to update need to be add to the request body
+// Only fields that you choose to update need to be add to the request body.
 func (r *RequestService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)

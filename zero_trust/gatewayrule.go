@@ -7,16 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // GatewayRuleService contains methods and other services that help with
@@ -104,7 +102,7 @@ func (r *GatewayRuleService) ListAutoPaging(ctx context.Context, query GatewayRu
 }
 
 // Deletes a Zero Trust Gateway rule.
-func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponseUnion, err error) {
+func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponse, err error) {
 	var env GatewayRuleDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -363,13 +361,13 @@ func (r GatewayRuleAction) IsKnown() bool {
 type RuleSetting struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
-	AddHeaders interface{} `json:"add_headers"`
+	AddHeaders map[string]string `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass bool `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
 	AuditSSH RuleSettingAuditSSH `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
-	BisoAdminControls RuleSettingBisoAdminControls `json:"biso_admin_controls"`
+	BISOAdminControls RuleSettingBISOAdminControls `json:"biso_admin_controls"`
 	// Enable the custom block page.
 	BlockPageEnabled bool `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -425,7 +423,7 @@ type ruleSettingJSON struct {
 	AddHeaders                      apijson.Field
 	AllowChildBypass                apijson.Field
 	AuditSSH                        apijson.Field
-	BisoAdminControls               apijson.Field
+	BISOAdminControls               apijson.Field
 	BlockPageEnabled                apijson.Field
 	BlockReason                     apijson.Field
 	BypassParentRule                apijson.Field
@@ -479,7 +477,7 @@ func (r ruleSettingAuditSSHJSON) RawJSON() string {
 }
 
 // Configure how browser isolation behaves.
-type RuleSettingBisoAdminControls struct {
+type RuleSettingBISOAdminControls struct {
 	// Set to false to enable copy-pasting.
 	DCP bool `json:"dcp"`
 	// Set to false to enable downloading.
@@ -490,12 +488,12 @@ type RuleSettingBisoAdminControls struct {
 	DP bool `json:"dp"`
 	// Set to false to enable uploading.
 	DU   bool                             `json:"du"`
-	JSON ruleSettingBisoAdminControlsJSON `json:"-"`
+	JSON ruleSettingBISOAdminControlsJSON `json:"-"`
 }
 
-// ruleSettingBisoAdminControlsJSON contains the JSON metadata for the struct
-// [RuleSettingBisoAdminControls]
-type ruleSettingBisoAdminControlsJSON struct {
+// ruleSettingBISOAdminControlsJSON contains the JSON metadata for the struct
+// [RuleSettingBISOAdminControls]
+type ruleSettingBISOAdminControlsJSON struct {
 	DCP         apijson.Field
 	DD          apijson.Field
 	DK          apijson.Field
@@ -505,11 +503,11 @@ type ruleSettingBisoAdminControlsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleSettingBisoAdminControls) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleSettingBISOAdminControls) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleSettingBisoAdminControlsJSON) RawJSON() string {
+func (r ruleSettingBISOAdminControlsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -725,13 +723,13 @@ func (r RuleSettingUntrustedCERTAction) IsKnown() bool {
 type RuleSettingParam struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
-	AddHeaders param.Field[interface{}] `json:"add_headers"`
+	AddHeaders param.Field[map[string]string] `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
 	AuditSSH param.Field[RuleSettingAuditSSHParam] `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
-	BisoAdminControls param.Field[RuleSettingBisoAdminControlsParam] `json:"biso_admin_controls"`
+	BISOAdminControls param.Field[RuleSettingBISOAdminControlsParam] `json:"biso_admin_controls"`
 	// Enable the custom block page.
 	BlockPageEnabled param.Field[bool] `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -796,7 +794,7 @@ func (r RuleSettingAuditSSHParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Configure how browser isolation behaves.
-type RuleSettingBisoAdminControlsParam struct {
+type RuleSettingBISOAdminControlsParam struct {
 	// Set to false to enable copy-pasting.
 	DCP param.Field[bool] `json:"dcp"`
 	// Set to false to enable downloading.
@@ -809,7 +807,7 @@ type RuleSettingBisoAdminControlsParam struct {
 	DU param.Field[bool] `json:"du"`
 }
 
-func (r RuleSettingBisoAdminControlsParam) MarshalJSON() (data []byte, err error) {
+func (r RuleSettingBISOAdminControlsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1014,22 +1012,7 @@ func (r ScheduleParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Union satisfied by [zero_trust.GatewayRuleDeleteResponseUnknown] or
-// [shared.UnionString].
-type GatewayRuleDeleteResponseUnion interface {
-	ImplementsZeroTrustGatewayRuleDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*GatewayRuleDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type GatewayRuleDeleteResponse = interface{}
 
 type GatewayRuleNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1260,7 +1243,7 @@ type GatewayRuleDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  GatewayRuleDeleteResponseUnion           `json:"result"`
+	Result  GatewayRuleDeleteResponse                `json:"result"`
 	JSON    gatewayRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

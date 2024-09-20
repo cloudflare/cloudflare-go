@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/secondary_dns"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/secondary_dns"
 )
 
 func TestACLNew(t *testing.T) {
@@ -30,7 +30,8 @@ func TestACLNew(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.ACLs.New(context.TODO(), secondary_dns.ACLNewParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		Body:      map[string]interface{}{},
+		IPRange:   cloudflare.F("192.0.2.53/28"),
+		Name:      cloudflare.F("my-acl-1"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

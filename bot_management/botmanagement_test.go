@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/bot_management"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/bot_management"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestBotManagementUpdateWithOptionalParams(t *testing.T) {
@@ -30,8 +30,9 @@ func TestBotManagementUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.BotManagement.Update(context.TODO(), bot_management.BotManagementUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Body: bot_management.BotFightModeConfigurationParam{
-			EnableJS:  cloudflare.F(true),
-			FightMode: cloudflare.F(true),
+			AIBotsProtection: cloudflare.F(bot_management.BotFightModeConfigurationAIBotsProtectionBlock),
+			EnableJS:         cloudflare.F(true),
+			FightMode:        cloudflare.F(true),
 		},
 	})
 	if err != nil {

@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // LoadBalancerService contains methods and other services that help with
@@ -356,8 +356,8 @@ type LoadBalancer struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools interface{} `json:"country_pools"`
-	CreatedOn    time.Time   `json:"created_on" format:"date-time"`
+	CountryPools map[string][]string `json:"country_pools"`
+	CreatedOn    string              `json:"created_on"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools []DefaultPools `json:"default_pools"`
@@ -366,20 +366,22 @@ type LoadBalancer struct {
 	// Whether to enable (the default) this load balancer.
 	Enabled bool `json:"enabled"`
 	// The pool ID to use when all other pools are detected as unhealthy.
-	FallbackPool interface{} `json:"fallback_pool"`
+	FallbackPool string `json:"fallback_pool"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy LocationStrategy `json:"location_strategy"`
-	ModifiedOn       time.Time        `json:"modified_on" format:"date-time"`
+	ModifiedOn       string           `json:"modified_on"`
 	// The DNS hostname to associate with your Load Balancer. If this hostname already
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
 	Name string `json:"name"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks []string `json:"networks"`
 	// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools interface{} `json:"pop_pools"`
+	PopPools map[string][]string `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied bool `json:"proxied"`
 	// Configures pool weights.
@@ -394,7 +396,7 @@ type LoadBalancer struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools interface{} `json:"region_pools"`
+	RegionPools map[string][]string `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules []Rules `json:"rules"`
@@ -477,6 +479,7 @@ type loadBalancerJSON struct {
 	LocationStrategy          apijson.Field
 	ModifiedOn                apijson.Field
 	Name                      apijson.Field
+	Networks                  apijson.Field
 	PopPools                  apijson.Field
 	Proxied                   apijson.Field
 	RandomSteering            apijson.Field
@@ -933,8 +936,8 @@ type RandomSteering struct {
 	DefaultWeight float64 `json:"default_weight"`
 	// A mapping of pool IDs to custom weights. The weight is relative to other pools
 	// in the load balancer.
-	PoolWeights interface{}        `json:"pool_weights"`
-	JSON        randomSteeringJSON `json:"-"`
+	PoolWeights RandomSteeringPoolWeights `json:"pool_weights"`
+	JSON        randomSteeringJSON        `json:"-"`
 }
 
 // randomSteeringJSON contains the JSON metadata for the struct [RandomSteering]
@@ -953,6 +956,33 @@ func (r randomSteeringJSON) RawJSON() string {
 	return r.raw
 }
 
+// A mapping of pool IDs to custom weights. The weight is relative to other pools
+// in the load balancer.
+type RandomSteeringPoolWeights struct {
+	// Pool ID
+	Key string `json:"key"`
+	// Weight
+	Value float64                       `json:"value"`
+	JSON  randomSteeringPoolWeightsJSON `json:"-"`
+}
+
+// randomSteeringPoolWeightsJSON contains the JSON metadata for the struct
+// [RandomSteeringPoolWeights]
+type randomSteeringPoolWeightsJSON struct {
+	Key         apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RandomSteeringPoolWeights) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r randomSteeringPoolWeightsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configures pool weights.
 //
 //   - `steering_policy="random"`: A random pool is selected with probability
@@ -967,10 +997,23 @@ type RandomSteeringParam struct {
 	DefaultWeight param.Field[float64] `json:"default_weight"`
 	// A mapping of pool IDs to custom weights. The weight is relative to other pools
 	// in the load balancer.
-	PoolWeights param.Field[interface{}] `json:"pool_weights"`
+	PoolWeights param.Field[RandomSteeringPoolWeightsParam] `json:"pool_weights"`
 }
 
 func (r RandomSteeringParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A mapping of pool IDs to custom weights. The weight is relative to other pools
+// in the load balancer.
+type RandomSteeringPoolWeightsParam struct {
+	// Pool ID
+	Key param.Field[string] `json:"key"`
+	// Weight
+	Value param.Field[float64] `json:"value"`
+}
+
+func (r RandomSteeringPoolWeightsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1074,12 +1117,12 @@ type RulesOverrides struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools interface{} `json:"country_pools"`
+	CountryPools map[string][]string `json:"country_pools"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools []DefaultPools `json:"default_pools"`
 	// The pool ID to use when all other pools are detected as unhealthy.
-	FallbackPool interface{} `json:"fallback_pool"`
+	FallbackPool string `json:"fallback_pool"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy LocationStrategy `json:"location_strategy"`
@@ -1087,7 +1130,7 @@ type RulesOverrides struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools interface{} `json:"pop_pools"`
+	PopPools map[string][]string `json:"pop_pools"`
 	// Configures pool weights.
 	//
 	//   - `steering_policy="random"`: A random pool is selected with probability
@@ -1100,7 +1143,7 @@ type RulesOverrides struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools interface{} `json:"region_pools"`
+	RegionPools map[string][]string `json:"region_pools"`
 	// Specifies the type of session affinity the load balancer should use unless
 	// specified as `"none"` or "" (default). The supported types are:
 	//
@@ -1260,12 +1303,12 @@ type RulesOverridesParam struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools param.Field[interface{}] `json:"country_pools"`
+	CountryPools param.Field[map[string][]string] `json:"country_pools"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools"`
 	// The pool ID to use when all other pools are detected as unhealthy.
-	FallbackPool param.Field[interface{}] `json:"fallback_pool"`
+	FallbackPool param.Field[string] `json:"fallback_pool"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
@@ -1273,7 +1316,7 @@ type RulesOverridesParam struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[interface{}] `json:"pop_pools"`
+	PopPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Configures pool weights.
 	//
 	//   - `steering_policy="random"`: A random pool is selected with probability
@@ -1286,7 +1329,7 @@ type RulesOverridesParam struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools param.Field[interface{}] `json:"region_pools"`
+	RegionPools param.Field[map[string][]string] `json:"region_pools"`
 	// Specifies the type of session affinity the load balancer should use unless
 	// specified as `"none"` or "" (default). The supported types are:
 	//
@@ -1386,7 +1429,7 @@ const (
 	SessionAffinityCookie   SessionAffinity = "cookie"
 	SessionAffinityIPCookie SessionAffinity = "ip_cookie"
 	SessionAffinityHeader   SessionAffinity = "header"
-	SessionAffinityEmpty    SessionAffinity = "\"\""
+	SessionAffinityEmpty    SessionAffinity = ""
 )
 
 func (r SessionAffinity) IsKnown() bool {
@@ -1618,7 +1661,7 @@ const (
 	SteeringPolicyProximity                SteeringPolicy = "proximity"
 	SteeringPolicyLeastOutstandingRequests SteeringPolicy = "least_outstanding_requests"
 	SteeringPolicyLeastConnections         SteeringPolicy = "least_connections"
-	SteeringPolicyEmpty                    SteeringPolicy = "\"\""
+	SteeringPolicyEmpty                    SteeringPolicy = ""
 )
 
 func (r SteeringPolicy) IsKnown() bool {
@@ -1656,7 +1699,7 @@ type LoadBalancerNewParams struct {
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools,required"`
 	// The pool ID to use when all other pools are detected as unhealthy.
-	FallbackPool param.Field[interface{}] `json:"fallback_pool,required"`
+	FallbackPool param.Field[string] `json:"fallback_pool,required"`
 	// The DNS hostname to associate with your Load Balancer. If this hostname already
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
@@ -1672,17 +1715,19 @@ type LoadBalancerNewParams struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools param.Field[interface{}] `json:"country_pools"`
+	CountryPools param.Field[map[string][]string] `json:"country_pools"`
 	// Object description.
 	Description param.Field[string] `json:"description"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks param.Field[[]string] `json:"networks"`
 	// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[interface{}] `json:"pop_pools"`
+	PopPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -1697,7 +1742,7 @@ type LoadBalancerNewParams struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools param.Field[interface{}] `json:"region_pools"`
+	RegionPools param.Field[map[string][]string] `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
@@ -1819,7 +1864,7 @@ type LoadBalancerUpdateParams struct {
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools,required"`
 	// The pool ID to use when all other pools are detected as unhealthy.
-	FallbackPool param.Field[interface{}] `json:"fallback_pool,required"`
+	FallbackPool param.Field[string] `json:"fallback_pool,required"`
 	// The DNS hostname to associate with your Load Balancer. If this hostname already
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
@@ -1835,7 +1880,7 @@ type LoadBalancerUpdateParams struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools param.Field[interface{}] `json:"country_pools"`
+	CountryPools param.Field[map[string][]string] `json:"country_pools"`
 	// Object description.
 	Description param.Field[string] `json:"description"`
 	// Whether to enable (the default) this load balancer.
@@ -1843,11 +1888,13 @@ type LoadBalancerUpdateParams struct {
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
+	// List of networks where Load Balancer or Pool is enabled.
+	Networks param.Field[[]string] `json:"networks"`
 	// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[interface{}] `json:"pop_pools"`
+	PopPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -1862,7 +1909,7 @@ type LoadBalancerUpdateParams struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools param.Field[interface{}] `json:"region_pools"`
+	RegionPools param.Field[map[string][]string] `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
@@ -2042,7 +2089,7 @@ type LoadBalancerEditParams struct {
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
 	// default_pools.
-	CountryPools param.Field[interface{}] `json:"country_pools"`
+	CountryPools param.Field[map[string][]string] `json:"country_pools"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]DefaultPoolsParam] `json:"default_pools"`
@@ -2051,7 +2098,7 @@ type LoadBalancerEditParams struct {
 	// Whether to enable (the default) this load balancer.
 	Enabled param.Field[bool] `json:"enabled"`
 	// The pool ID to use when all other pools are detected as unhealthy.
-	FallbackPool param.Field[interface{}] `json:"fallback_pool"`
+	FallbackPool param.Field[string] `json:"fallback_pool"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
 	LocationStrategy param.Field[LocationStrategyParam] `json:"location_strategy"`
@@ -2063,7 +2110,7 @@ type LoadBalancerEditParams struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[interface{}] `json:"pop_pools"`
+	PopPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -2078,7 +2125,7 @@ type LoadBalancerEditParams struct {
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
-	RegionPools param.Field[interface{}] `json:"region_pools"`
+	RegionPools param.Field[map[string][]string] `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`

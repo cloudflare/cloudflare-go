@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/web3"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/web3"
 )
 
 func TestHostnameIPFSUniversalPathContentListUpdate(t *testing.T) {
@@ -30,8 +30,8 @@ func TestHostnameIPFSUniversalPathContentListUpdate(t *testing.T) {
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		web3.HostnameIPFSUniversalPathContentListUpdateParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Action: cloudflare.F(web3.HostnameIPFSUniversalPathContentListUpdateParamsActionBlock),
 			Entries: cloudflare.F([]web3.HostnameIPFSUniversalPathContentListUpdateParamsEntry{{
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
@@ -73,7 +73,9 @@ func TestHostnameIPFSUniversalPathContentListGet(t *testing.T) {
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		web3.HostnameIPFSUniversalPathContentListGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

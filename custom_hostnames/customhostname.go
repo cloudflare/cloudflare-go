@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // CustomHostnameService contains methods and other services that help with
@@ -213,8 +213,9 @@ type CustomHostnameNewResponse struct {
 	SSL CustomHostnameNewResponseSSL `json:"ssl,required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// These are per-hostname (customer) settings.
-	CustomMetadata CustomHostnameNewResponseCustomMetadata `json:"custom_metadata"`
+	// Unique key/value metadata for this hostname. These are per-hostname (customer)
+	// settings.
+	CustomMetadata map[string]string `json:"custom_metadata"`
 	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
 	// record.
 	CustomOriginServer string `json:"custom_origin_server"`
@@ -232,7 +233,7 @@ type CustomHostnameNewResponse struct {
 	// Status of the hostname's activation.
 	Status CustomHostnameNewResponseStatus `json:"status"`
 	// These are errors that were encountered while trying to activate a hostname.
-	VerificationErrors []interface{}                 `json:"verification_errors"`
+	VerificationErrors []string                      `json:"verification_errors"`
 	JSON               customHostnameNewResponseJSON `json:"-"`
 }
 
@@ -282,7 +283,7 @@ type CustomHostnameNewResponseSSL struct {
 	// The time the custom certificate expires on.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
+	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
@@ -506,7 +507,7 @@ func (r customHostnameNewResponseSSLValidationErrorJSON) RawJSON() string {
 type CustomHostnameNewResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
-	Emails []interface{} `json:"emails"`
+	Emails []string `json:"emails"`
 	// The content that the certificate authority (CA) will expect to find at the
 	// http_url during the domain validation.
 	HTTPBody string `json:"http_body"`
@@ -538,29 +539,6 @@ func (r *CustomHostnameNewResponseSSLValidationRecord) UnmarshalJSON(data []byte
 }
 
 func (r customHostnameNewResponseSSLValidationRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameNewResponseCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key  string                                      `json:"key"`
-	JSON customHostnameNewResponseCustomMetadataJSON `json:"-"`
-}
-
-// customHostnameNewResponseCustomMetadataJSON contains the JSON metadata for the
-// struct [CustomHostnameNewResponseCustomMetadata]
-type customHostnameNewResponseCustomMetadataJSON struct {
-	Key         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameNewResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameNewResponseCustomMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -675,8 +653,9 @@ type CustomHostnameListResponse struct {
 	SSL CustomHostnameListResponseSSL `json:"ssl,required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// These are per-hostname (customer) settings.
-	CustomMetadata CustomHostnameListResponseCustomMetadata `json:"custom_metadata"`
+	// Unique key/value metadata for this hostname. These are per-hostname (customer)
+	// settings.
+	CustomMetadata map[string]string `json:"custom_metadata"`
 	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
 	// record.
 	CustomOriginServer string `json:"custom_origin_server"`
@@ -694,7 +673,7 @@ type CustomHostnameListResponse struct {
 	// Status of the hostname's activation.
 	Status CustomHostnameListResponseStatus `json:"status"`
 	// These are errors that were encountered while trying to activate a hostname.
-	VerificationErrors []interface{}                  `json:"verification_errors"`
+	VerificationErrors []string                       `json:"verification_errors"`
 	JSON               customHostnameListResponseJSON `json:"-"`
 }
 
@@ -744,7 +723,7 @@ type CustomHostnameListResponseSSL struct {
 	// The time the custom certificate expires on.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
+	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
@@ -968,7 +947,7 @@ func (r customHostnameListResponseSSLValidationErrorJSON) RawJSON() string {
 type CustomHostnameListResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
-	Emails []interface{} `json:"emails"`
+	Emails []string `json:"emails"`
 	// The content that the certificate authority (CA) will expect to find at the
 	// http_url during the domain validation.
 	HTTPBody string `json:"http_body"`
@@ -1000,29 +979,6 @@ func (r *CustomHostnameListResponseSSLValidationRecord) UnmarshalJSON(data []byt
 }
 
 func (r customHostnameListResponseSSLValidationRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameListResponseCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key  string                                       `json:"key"`
-	JSON customHostnameListResponseCustomMetadataJSON `json:"-"`
-}
-
-// customHostnameListResponseCustomMetadataJSON contains the JSON metadata for the
-// struct [CustomHostnameListResponseCustomMetadata]
-type customHostnameListResponseCustomMetadataJSON struct {
-	Key         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameListResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameListResponseCustomMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1159,8 +1115,9 @@ type CustomHostnameEditResponse struct {
 	SSL CustomHostnameEditResponseSSL `json:"ssl,required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// These are per-hostname (customer) settings.
-	CustomMetadata CustomHostnameEditResponseCustomMetadata `json:"custom_metadata"`
+	// Unique key/value metadata for this hostname. These are per-hostname (customer)
+	// settings.
+	CustomMetadata map[string]string `json:"custom_metadata"`
 	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
 	// record.
 	CustomOriginServer string `json:"custom_origin_server"`
@@ -1178,7 +1135,7 @@ type CustomHostnameEditResponse struct {
 	// Status of the hostname's activation.
 	Status CustomHostnameEditResponseStatus `json:"status"`
 	// These are errors that were encountered while trying to activate a hostname.
-	VerificationErrors []interface{}                  `json:"verification_errors"`
+	VerificationErrors []string                       `json:"verification_errors"`
 	JSON               customHostnameEditResponseJSON `json:"-"`
 }
 
@@ -1228,7 +1185,7 @@ type CustomHostnameEditResponseSSL struct {
 	// The time the custom certificate expires on.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
+	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
@@ -1452,7 +1409,7 @@ func (r customHostnameEditResponseSSLValidationErrorJSON) RawJSON() string {
 type CustomHostnameEditResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
-	Emails []interface{} `json:"emails"`
+	Emails []string `json:"emails"`
 	// The content that the certificate authority (CA) will expect to find at the
 	// http_url during the domain validation.
 	HTTPBody string `json:"http_body"`
@@ -1484,29 +1441,6 @@ func (r *CustomHostnameEditResponseSSLValidationRecord) UnmarshalJSON(data []byt
 }
 
 func (r customHostnameEditResponseSSLValidationRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameEditResponseCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key  string                                       `json:"key"`
-	JSON customHostnameEditResponseCustomMetadataJSON `json:"-"`
-}
-
-// customHostnameEditResponseCustomMetadataJSON contains the JSON metadata for the
-// struct [CustomHostnameEditResponseCustomMetadata]
-type customHostnameEditResponseCustomMetadataJSON struct {
-	Key         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameEditResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameEditResponseCustomMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1621,8 +1555,9 @@ type CustomHostnameGetResponse struct {
 	SSL CustomHostnameGetResponseSSL `json:"ssl,required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// These are per-hostname (customer) settings.
-	CustomMetadata CustomHostnameGetResponseCustomMetadata `json:"custom_metadata"`
+	// Unique key/value metadata for this hostname. These are per-hostname (customer)
+	// settings.
+	CustomMetadata map[string]string `json:"custom_metadata"`
 	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
 	// record.
 	CustomOriginServer string `json:"custom_origin_server"`
@@ -1640,7 +1575,7 @@ type CustomHostnameGetResponse struct {
 	// Status of the hostname's activation.
 	Status CustomHostnameGetResponseStatus `json:"status"`
 	// These are errors that were encountered while trying to activate a hostname.
-	VerificationErrors []interface{}                 `json:"verification_errors"`
+	VerificationErrors []string                      `json:"verification_errors"`
 	JSON               customHostnameGetResponseJSON `json:"-"`
 }
 
@@ -1690,7 +1625,7 @@ type CustomHostnameGetResponseSSL struct {
 	// The time the custom certificate expires on.
 	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
 	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
+	Hosts []string `json:"hosts"`
 	// The issuer on a custom uploaded certificate.
 	Issuer string `json:"issuer"`
 	// Domain control validation (DCV) method used for this hostname.
@@ -1914,7 +1849,7 @@ func (r customHostnameGetResponseSSLValidationErrorJSON) RawJSON() string {
 type CustomHostnameGetResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
-	Emails []interface{} `json:"emails"`
+	Emails []string `json:"emails"`
 	// The content that the certificate authority (CA) will expect to find at the
 	// http_url during the domain validation.
 	HTTPBody string `json:"http_body"`
@@ -1946,29 +1881,6 @@ func (r *CustomHostnameGetResponseSSLValidationRecord) UnmarshalJSON(data []byte
 }
 
 func (r customHostnameGetResponseSSLValidationRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameGetResponseCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key  string                                      `json:"key"`
-	JSON customHostnameGetResponseCustomMetadataJSON `json:"-"`
-}
-
-// customHostnameGetResponseCustomMetadataJSON contains the JSON metadata for the
-// struct [CustomHostnameGetResponseCustomMetadata]
-type customHostnameGetResponseCustomMetadataJSON struct {
-	Key         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameGetResponseCustomMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customHostnameGetResponseCustomMetadataJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -2081,8 +1993,9 @@ type CustomHostnameNewParams struct {
 	Hostname param.Field[string] `json:"hostname,required"`
 	// SSL properties used when creating the custom hostname.
 	SSL param.Field[CustomHostnameNewParamsSSL] `json:"ssl,required"`
-	// These are per-hostname (customer) settings.
-	CustomMetadata param.Field[CustomHostnameNewParamsCustomMetadata] `json:"custom_metadata"`
+	// Unique key/value metadata for this hostname. These are per-hostname (customer)
+	// settings.
+	CustomMetadata param.Field[map[string]string] `json:"custom_metadata"`
 }
 
 func (r CustomHostnameNewParams) MarshalJSON() (data []byte, err error) {
@@ -2200,16 +2113,6 @@ func (r CustomHostnameNewParamsSSLSettingsTLS1_3) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameNewParamsCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key param.Field[string] `json:"key"`
-}
-
-func (r CustomHostnameNewParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type CustomHostnameNewResponseEnvelope struct {
@@ -2342,8 +2245,9 @@ type CustomHostnameDeleteParams struct {
 type CustomHostnameEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	// These are per-hostname (customer) settings.
-	CustomMetadata param.Field[CustomHostnameEditParamsCustomMetadata] `json:"custom_metadata"`
+	// Unique key/value metadata for this hostname. These are per-hostname (customer)
+	// settings.
+	CustomMetadata param.Field[map[string]string] `json:"custom_metadata"`
 	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
 	// record.
 	CustomOriginServer param.Field[string] `json:"custom_origin_server"`
@@ -2358,16 +2262,6 @@ type CustomHostnameEditParams struct {
 }
 
 func (r CustomHostnameEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameEditParamsCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key param.Field[string] `json:"key"`
-}
-
-func (r CustomHostnameEditParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

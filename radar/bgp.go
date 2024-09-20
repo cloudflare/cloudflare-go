@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // BGPService contains methods and other services that help with interacting with
@@ -235,7 +235,7 @@ type BGPTimeseriesParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Array of BGP network prefixes.
-	Prefix param.Field[[]BGPTimeseriesParamsPrefix] `query:"prefix"`
+	Prefix param.Field[[]string] `query:"prefix"`
 	// Array of BGP update types.
 	UpdateType param.Field[[]BGPTimeseriesParamsUpdateType] `query:"updateType"`
 }
@@ -282,23 +282,6 @@ func (r BGPTimeseriesParamsFormat) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type BGPTimeseriesParamsPrefix struct {
-	In   param.Field[string]  `query:"in,required"`
-	Name param.Field[string]  `query:"name,required"`
-	Test param.Field[float64] `query:"test,required"`
-	// Network prefix, IPv4 or IPv6.
-	Type param.Field[string] `query:"type"`
-}
-
-// URLQuery serializes [BGPTimeseriesParamsPrefix]'s query parameters as
-// `url.Values`.
-func (r BGPTimeseriesParamsPrefix) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
 }
 
 type BGPTimeseriesParamsUpdateType string

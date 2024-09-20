@@ -7,17 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
-	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // RiskScoringService contains methods and other services that help with
@@ -46,19 +42,19 @@ func NewRiskScoringService(opts ...option.RequestOption) (r *RiskScoringService)
 }
 
 // Get risk event/score information for a specific user
-func (r *RiskScoringService) Get(ctx context.Context, accountIdentifier string, userID string, query RiskScoringGetParams, opts ...option.RequestOption) (res *RiskScoringGetResponse, err error) {
+func (r *RiskScoringService) Get(ctx context.Context, userID string, query RiskScoringGetParams, opts ...option.RequestOption) (res *RiskScoringGetResponse, err error) {
 	var env RiskScoringGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
 	if userID == "" {
 		err = errors.New("missing required user_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s", accountIdentifier, userID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s", query.AccountID, userID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -67,18 +63,18 @@ func (r *RiskScoringService) Get(ctx context.Context, accountIdentifier string, 
 }
 
 // Clear the risk score for a particular user
-func (r *RiskScoringService) Reset(ctx context.Context, accountIdentifier string, userID string, opts ...option.RequestOption) (res *RiskScoringResetResponseUnion, err error) {
+func (r *RiskScoringService) Reset(ctx context.Context, userID string, body RiskScoringResetParams, opts ...option.RequestOption) (res *RiskScoringResetResponse, err error) {
 	var env RiskScoringResetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
 	if userID == "" {
 		err = errors.New("missing required user_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s/reset", accountIdentifier, userID)
+	path := fmt.Sprintf("accounts/%s/zt_risk_scoring/%s/reset", body.AccountID, userID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -88,11 +84,11 @@ func (r *RiskScoringService) Reset(ctx context.Context, accountIdentifier string
 }
 
 type RiskScoringGetResponse struct {
-	Email         string                          `json:"email"`
-	Events        []RiskScoringGetResponseEvent   `json:"events"`
+	Email         string                          `json:"email,required"`
+	Events        []RiskScoringGetResponseEvent   `json:"events,required"`
+	Name          string                          `json:"name,required"`
 	LastResetTime time.Time                       `json:"last_reset_time,nullable" format:"date-time"`
-	Name          string                          `json:"name"`
-	RiskLevel     RiskScoringGetResponseRiskLevel `json:"risk_level,nullable"`
+	RiskLevel     RiskScoringGetResponseRiskLevel `json:"risk_level"`
 	JSON          riskScoringGetResponseJSON      `json:"-"`
 }
 
@@ -101,8 +97,8 @@ type RiskScoringGetResponse struct {
 type riskScoringGetResponseJSON struct {
 	Email         apijson.Field
 	Events        apijson.Field
-	LastResetTime apijson.Field
 	Name          apijson.Field
+	LastResetTime apijson.Field
 	RiskLevel     apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -177,74 +173,18 @@ func (r RiskScoringGetResponseRiskLevel) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [zero_trust.RiskScoringResetResponseUnknown] or
-// [shared.UnionString].
-type RiskScoringResetResponseUnion interface {
-	ImplementsZeroTrustRiskScoringResetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RiskScoringResetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
+type RiskScoringResetResponse = interface{}
 
 type RiskScoringGetParams struct {
-	Direction param.Field[RiskScoringGetParamsDirection] `query:"direction"`
-	OrderBy   param.Field[RiskScoringGetParamsOrderBy]   `query:"order_by"`
-	Page      param.Field[int64]                         `query:"page"`
-	PerPage   param.Field[int64]                         `query:"per_page"`
-}
-
-// URLQuery serializes [RiskScoringGetParams]'s query parameters as `url.Values`.
-func (r RiskScoringGetParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-type RiskScoringGetParamsDirection string
-
-const (
-	RiskScoringGetParamsDirectionDesc RiskScoringGetParamsDirection = "desc"
-	RiskScoringGetParamsDirectionAsc  RiskScoringGetParamsDirection = "asc"
-)
-
-func (r RiskScoringGetParamsDirection) IsKnown() bool {
-	switch r {
-	case RiskScoringGetParamsDirectionDesc, RiskScoringGetParamsDirectionAsc:
-		return true
-	}
-	return false
-}
-
-type RiskScoringGetParamsOrderBy string
-
-const (
-	RiskScoringGetParamsOrderByTimestamp RiskScoringGetParamsOrderBy = "timestamp"
-	RiskScoringGetParamsOrderByRiskLevel RiskScoringGetParamsOrderBy = "risk_level"
-)
-
-func (r RiskScoringGetParamsOrderBy) IsKnown() bool {
-	switch r {
-	case RiskScoringGetParamsOrderByTimestamp, RiskScoringGetParamsOrderByRiskLevel:
-		return true
-	}
-	return false
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RiskScoringGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   RiskScoringGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    RiskScoringGetResponseEnvelopeSuccess    `json:"success,required"`
+	Result     RiskScoringGetResponse                   `json:"result"`
 	ResultInfo RiskScoringGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       riskScoringGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -254,8 +194,8 @@ type RiskScoringGetResponseEnvelope struct {
 type riskScoringGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -285,10 +225,14 @@ func (r RiskScoringGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RiskScoringGetResponseEnvelopeResultInfo struct {
-	Count      int64                                        `json:"count,required"`
-	Page       int64                                        `json:"page,required"`
-	PerPage    int64                                        `json:"per_page,required"`
-	TotalCount int64                                        `json:"total_count,required"`
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                      `json:"total_count"`
 	JSON       riskScoringGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -311,12 +255,16 @@ func (r riskScoringGetResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
 }
 
+type RiskScoringResetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type RiskScoringResetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   RiskScoringResetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RiskScoringResetResponseEnvelopeSuccess `json:"success,required"`
+	Result  RiskScoringResetResponse                `json:"result,nullable"`
 	JSON    riskScoringResetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -325,8 +273,8 @@ type RiskScoringResetResponseEnvelope struct {
 type riskScoringResetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

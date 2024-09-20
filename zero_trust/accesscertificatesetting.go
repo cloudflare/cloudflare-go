@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AccessCertificateSettingService contains methods and other services that help
@@ -160,7 +160,7 @@ type AccessCertificateSettingUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CertificateSettings                                    `json:"result,nullable"`
+	Result     []CertificateSettings                                    `json:"result"`
 	ResultInfo AccessCertificateSettingUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       accessCertificateSettingUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -244,7 +244,7 @@ type AccessCertificateSettingGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingGetResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CertificateSettings                                 `json:"result,nullable"`
+	Result     []CertificateSettings                                 `json:"result"`
 	ResultInfo AccessCertificateSettingGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       accessCertificateSettingGetResponseEnvelopeJSON       `json:"-"`
 }

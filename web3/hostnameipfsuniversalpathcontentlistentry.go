@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // HostnameIPFSUniversalPathContentListEntryService contains methods and other
@@ -37,19 +37,19 @@ func NewHostnameIPFSUniversalPathContentListEntryService(opts ...option.RequestO
 }
 
 // Create IPFS Universal Path Gateway Content List Entry
-func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Context, zoneIdentifier string, identifier string, body HostnameIPFSUniversalPathContentListEntryNewParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryNewResponse, err error) {
+func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Context, identifier string, params HostnameIPFSUniversalPathContentListEntryNewParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryNewResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries", zoneIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries", params.ZoneID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) New(ctx context.Conte
 }
 
 // Edit IPFS Universal Path Gateway Content List Entry
-func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, body HostnameIPFSUniversalPathContentListEntryUpdateParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryUpdateResponse, err error) {
+func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Context, identifier string, contentListEntryIdentifier string, params HostnameIPFSUniversalPathContentListEntryUpdateParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryUpdateResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	if identifier == "" {
@@ -73,8 +73,8 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Co
 		err = errors.New("missing required content_list_entry_identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries/%s", zoneIdentifier, identifier, contentListEntryIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries/%s", params.ZoneID, identifier, contentListEntryIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -83,18 +83,18 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Update(ctx context.Co
 }
 
 // List IPFS Universal Path Gateway Content List Entries
-func (r *HostnameIPFSUniversalPathContentListEntryService) List(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryListResponse, err error) {
+func (r *HostnameIPFSUniversalPathContentListEntryService) List(ctx context.Context, identifier string, query HostnameIPFSUniversalPathContentListEntryListParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryListResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryListResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries", zoneIdentifier, identifier)
+	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries", query.ZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -104,11 +104,11 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) List(ctx context.Cont
 }
 
 // Delete IPFS Universal Path Gateway Content List Entry
-func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryDeleteResponse, err error) {
+func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Context, identifier string, contentListEntryIdentifier string, body HostnameIPFSUniversalPathContentListEntryDeleteParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryDeleteResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	if identifier == "" {
@@ -119,7 +119,7 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Co
 		err = errors.New("missing required content_list_entry_identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries/%s", zoneIdentifier, identifier, contentListEntryIdentifier)
+	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries/%s", body.ZoneID, identifier, contentListEntryIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -129,11 +129,11 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Delete(ctx context.Co
 }
 
 // IPFS Universal Path Gateway Content List Entry Details
-func (r *HostnameIPFSUniversalPathContentListEntryService) Get(ctx context.Context, zoneIdentifier string, identifier string, contentListEntryIdentifier string, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryGetResponse, err error) {
+func (r *HostnameIPFSUniversalPathContentListEntryService) Get(ctx context.Context, identifier string, contentListEntryIdentifier string, query HostnameIPFSUniversalPathContentListEntryGetParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListEntryGetResponse, err error) {
 	var env HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	if identifier == "" {
@@ -144,7 +144,7 @@ func (r *HostnameIPFSUniversalPathContentListEntryService) Get(ctx context.Conte
 		err = errors.New("missing required content_list_entry_identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries/%s", zoneIdentifier, identifier, contentListEntryIdentifier)
+	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list/entries/%s", query.ZoneID, identifier, contentListEntryIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -409,6 +409,8 @@ func (r HostnameIPFSUniversalPathContentListEntryGetResponseType) IsKnown() bool
 }
 
 type HostnameIPFSUniversalPathContentListEntryNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// CID or content path of content to block.
 	Content param.Field[string] `json:"content,required"`
 	// Type of content list entry to block.
@@ -483,6 +485,8 @@ func (r HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeSuccess) IsK
 }
 
 type HostnameIPFSUniversalPathContentListEntryUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// CID or content path of content to block.
 	Content param.Field[string] `json:"content,required"`
 	// Type of content list entry to block.
@@ -554,6 +558,11 @@ func (r HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeSuccess) 
 		return true
 	}
 	return false
+}
+
+type HostnameIPFSUniversalPathContentListEntryListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type HostnameIPFSUniversalPathContentListEntryListResponseEnvelope struct {
@@ -634,6 +643,11 @@ func (r hostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfoJ
 	return r.raw
 }
 
+type HostnameIPFSUniversalPathContentListEntryDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                                   `json:"errors,required"`
 	Messages []shared.ResponseInfo                                   `json:"messages,required"`
@@ -676,6 +690,11 @@ func (r HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeSuccess) 
 		return true
 	}
 	return false
+}
+
+type HostnameIPFSUniversalPathContentListEntryGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope struct {

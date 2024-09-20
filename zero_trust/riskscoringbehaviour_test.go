@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
-func TestRiskScoringBehaviourUpdateWithOptionalParams(t *testing.T) {
+func TestRiskScoringBehaviourUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,18 +27,15 @@ func TestRiskScoringBehaviourUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.RiskScoring.Behaviours.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		zero_trust.RiskScoringBehaviourUpdateParams{
-			Behaviors: cloudflare.F(map[string]zero_trust.RiskScoringBehaviourUpdateParamsBehaviors{
-				"foo": {
-					Enabled:   cloudflare.F(true),
-					RiskLevel: cloudflare.F(zero_trust.RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelLow),
-				},
-			}),
-		},
-	)
+	_, err := client.ZeroTrust.RiskScoring.Behaviours.Update(context.TODO(), zero_trust.RiskScoringBehaviourUpdateParams{
+		AccountID: cloudflare.F("account_id"),
+		Behaviors: cloudflare.F(map[string]zero_trust.RiskScoringBehaviourUpdateParamsBehaviors{
+			"foo": {
+				Enabled:   cloudflare.F(true),
+				RiskLevel: cloudflare.F(zero_trust.RiskScoringBehaviourUpdateParamsBehaviorsRiskLevelLow),
+			},
+		}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -61,7 +58,9 @@ func TestRiskScoringBehaviourGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.RiskScoring.Behaviours.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.ZeroTrust.RiskScoring.Behaviours.Get(context.TODO(), zero_trust.RiskScoringBehaviourGetParams{
+		AccountID: cloudflare.F("account_id"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

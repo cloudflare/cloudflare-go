@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/logs"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/logs"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestRayIDGetWithOptionalParams(t *testing.T) {
@@ -29,11 +29,11 @@ func TestRayIDGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Logs.RayID.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"41ddf1740f67442d",
 		logs.RayIDGetParams{
+			ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Fields:     cloudflare.F("ClientIP,RayID,EdgeStartTimestamp"),
-			Timestamps: cloudflare.F(logs.RayIDGetParamsTimestampsUnixnano),
+			Timestamps: cloudflare.F(logs.RayIDGetParamsTimestampsUnix),
 		},
 	)
 	if err != nil {

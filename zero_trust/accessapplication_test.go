@@ -8,11 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
 func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
@@ -31,6 +30,8 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.New(context.TODO(), zero_trust.AccessApplicationNewParams{
 		Body: zero_trust.AccessApplicationNewParamsBodySelfHostedApplication{
+			Domain:                   cloudflare.F("test.example.com/admin"),
+			Type:                     cloudflare.F("self_hosted"),
 			AllowAuthenticateViaWARP: cloudflare.F(true),
 			AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			AppLauncherVisible:       cloudflare.F(true),
@@ -49,20 +50,12 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			CustomDenyURL:            cloudflare.F("custom_deny_url"),
 			CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
 			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
-			Domain:                   cloudflare.F("test.example.com/admin"),
 			EnableBindingCookie:      cloudflare.F(true),
 			HTTPOnlyCookieAttribute:  cloudflare.F(true),
 			LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
 			Name:                     cloudflare.F("Admin Site"),
 			OptionsPreflightBypass:   cloudflare.F(true),
 			PathCookieAttribute:      cloudflare.F(true),
-			SameSiteCookieAttribute:  cloudflare.F("strict"),
-			SelfHostedDomains:        cloudflare.F([]zero_trust.SelfHostedDomainsParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
-			ServiceAuth401Redirect:   cloudflare.F(true),
-			SessionDuration:          cloudflare.F("24h"),
-			SkipInterstitial:         cloudflare.F(true),
-			Tags:                     cloudflare.F([]string{"engineers", "engineers", "engineers"}),
-			Type:                     cloudflare.F("self_hosted"),
 			Policies: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
 				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Precedence: cloudflare.F(int64(0)),
@@ -73,48 +66,54 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Precedence: cloudflare.F(int64(0)),
 			}}),
+			SameSiteCookieAttribute: cloudflare.F("strict"),
 			SCIMConfig: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig{
-				Authentication: cloudflare.F[zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic{
+				IdPUID:    cloudflare.F("idp_uid"),
+				RemoteURI: cloudflare.F("remote_uri"),
+				Authentication: cloudflare.F[zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.SCIMConfigAuthenticationHTTPBasicParam{
 					Password: cloudflare.F("password"),
-					Scheme:   cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
+					Scheme:   cloudflare.F(zero_trust.SCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
 					User:     cloudflare.F("user"),
 				}),
 				DeactivateOnDelete: cloudflare.F(true),
 				Enabled:            cloudflare.F(true),
-				IdPUID:             cloudflare.F("idp_uid"),
-				Mappings: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMapping{{
+				Mappings: cloudflare.F([]zero_trust.SCIMConfigMappingParam{{
+					Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 					Enabled: cloudflare.F(true),
 					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+					Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 						Create: cloudflare.F(true),
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
 					}),
-					Schema:           cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 					TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 				}, {
+					Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 					Enabled: cloudflare.F(true),
 					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+					Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 						Create: cloudflare.F(true),
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
 					}),
-					Schema:           cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 					TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 				}, {
+					Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 					Enabled: cloudflare.F(true),
 					Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-					Operations: cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+					Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 						Create: cloudflare.F(true),
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
 					}),
-					Schema:           cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 					TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 				}}),
-				RemoteURI: cloudflare.F("remote_uri"),
 			}),
+			SelfHostedDomains:      cloudflare.F([]zero_trust.SelfHostedDomainsParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
+			ServiceAuth401Redirect: cloudflare.F(true),
+			SessionDuration:        cloudflare.F("24h"),
+			SkipInterstitial:       cloudflare.F(true),
+			Tags:                   cloudflare.F([]string{"engineers", "engineers", "engineers"}),
 		},
 		AccountID: cloudflare.F("account_id"),
 	})
@@ -143,9 +142,11 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.Update(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationUpdateParams{
 			Body: zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplication{
+				Domain:                   cloudflare.F("test.example.com/admin"),
+				Type:                     cloudflare.F("self_hosted"),
 				AllowAuthenticateViaWARP: cloudflare.F(true),
 				AllowedIdPs:              cloudflare.F([]zero_trust.AllowedIdPsParam{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 				AppLauncherVisible:       cloudflare.F(true),
@@ -164,20 +165,12 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				CustomDenyURL:            cloudflare.F("custom_deny_url"),
 				CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
 				CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
-				Domain:                   cloudflare.F("test.example.com/admin"),
 				EnableBindingCookie:      cloudflare.F(true),
 				HTTPOnlyCookieAttribute:  cloudflare.F(true),
 				LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
 				Name:                     cloudflare.F("Admin Site"),
 				OptionsPreflightBypass:   cloudflare.F(true),
 				PathCookieAttribute:      cloudflare.F(true),
-				SameSiteCookieAttribute:  cloudflare.F("strict"),
-				SelfHostedDomains:        cloudflare.F([]zero_trust.SelfHostedDomainsParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
-				ServiceAuth401Redirect:   cloudflare.F(true),
-				SessionDuration:          cloudflare.F("24h"),
-				SkipInterstitial:         cloudflare.F(true),
-				Tags:                     cloudflare.F([]string{"engineers", "engineers", "engineers"}),
-				Type:                     cloudflare.F("self_hosted"),
 				Policies: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
 					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					Precedence: cloudflare.F(int64(0)),
@@ -188,48 +181,54 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					Precedence: cloudflare.F(int64(0)),
 				}}),
+				SameSiteCookieAttribute: cloudflare.F("strict"),
 				SCIMConfig: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig{
-					Authentication: cloudflare.F[zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasic{
+					IdPUID:    cloudflare.F("idp_uid"),
+					RemoteURI: cloudflare.F("remote_uri"),
+					Authentication: cloudflare.F[zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationUnion](zero_trust.SCIMConfigAuthenticationHTTPBasicParam{
 						Password: cloudflare.F("password"),
-						Scheme:   cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationAccessSCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
+						Scheme:   cloudflare.F(zero_trust.SCIMConfigAuthenticationHTTPBasicSchemeHttpbasic),
 						User:     cloudflare.F("user"),
 					}),
 					DeactivateOnDelete: cloudflare.F(true),
 					Enabled:            cloudflare.F(true),
-					IdPUID:             cloudflare.F("idp_uid"),
-					Mappings: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMapping{{
+					Mappings: cloudflare.F([]zero_trust.SCIMConfigMappingParam{{
+						Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 						Enabled: cloudflare.F(true),
 						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+						Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 							Create: cloudflare.F(true),
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
 						}),
-						Schema:           cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 						TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 					}, {
+						Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 						Enabled: cloudflare.F(true),
 						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+						Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 							Create: cloudflare.F(true),
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
 						}),
-						Schema:           cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 						TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 					}, {
+						Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 						Enabled: cloudflare.F(true),
 						Filter:  cloudflare.F("title pr or userType eq \"Intern\""),
-						Operations: cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigMappingsOperations{
+						Operations: cloudflare.F(zero_trust.SCIMConfigMappingOperationsParam{
 							Create: cloudflare.F(true),
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
 						}),
-						Schema:           cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
 						TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 					}}),
-					RemoteURI: cloudflare.F("remote_uri"),
 				}),
+				SelfHostedDomains:      cloudflare.F([]zero_trust.SelfHostedDomainsParam{"test.example.com/admin", "test.anotherexample.com/staff"}),
+				ServiceAuth401Redirect: cloudflare.F(true),
+				SessionDuration:        cloudflare.F("24h"),
+				SkipInterstitial:       cloudflare.F(true),
+				Tags:                   cloudflare.F([]string{"engineers", "engineers", "engineers"}),
 			},
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -285,7 +284,7 @@ func TestAccessApplicationDeleteWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.Delete(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationDeleteParams{
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -315,7 +314,7 @@ func TestAccessApplicationGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.Get(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},
@@ -345,7 +344,7 @@ func TestAccessApplicationRevokeTokensWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.RevokeTokens(
 		context.TODO(),
-		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		zero_trust.AccessApplicationRevokeTokensParams{
 			AccountID: cloudflare.F("account_id"),
 		},

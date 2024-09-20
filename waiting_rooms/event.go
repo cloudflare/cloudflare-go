@@ -10,12 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // EventService contains methods and other services that help with interacting with
@@ -91,7 +91,7 @@ func (r *EventService) Update(ctx context.Context, waitingRoomID string, eventID
 }
 
 // Lists events for a waiting room.
-func (r *EventService) List(ctx context.Context, waitingRoomID string, params EventListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Event], err error) {
+func (r *EventService) List(ctx context.Context, waitingRoomID string, params EventListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Event], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -117,8 +117,8 @@ func (r *EventService) List(ctx context.Context, waitingRoomID string, params Ev
 }
 
 // Lists events for a waiting room.
-func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string, params EventListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Event] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, waitingRoomID, params, opts...))
+func (r *EventService) ListAutoPaging(ctx context.Context, waitingRoomID string, params EventListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Event] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, waitingRoomID, params, opts...))
 }
 
 // Deletes an event for a waiting room.
@@ -365,9 +365,9 @@ type EventListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Page number of paginated results.
-	Page param.Field[interface{}] `query:"page"`
+	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page. Must be a multiple of 5.
-	PerPage param.Field[interface{}] `query:"per_page"`
+	PerPage param.Field[float64] `query:"per_page"`
 }
 
 // URLQuery serializes [EventListParams]'s query parameters as `url.Values`.

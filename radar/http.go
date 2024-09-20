@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // HTTPService contains methods and other services that help with interacting with
@@ -23,11 +23,11 @@ import (
 // the [NewHTTPService] method instead.
 type HTTPService struct {
 	Options          []option.RequestOption
-	Top              *HTTPTopService
 	Locations        *HTTPLocationService
 	Ases             *HTTPAseService
 	Summary          *HTTPSummaryService
 	TimeseriesGroups *HTTPTimeseriesGroupService
+	Top              *HTTPTopService
 }
 
 // NewHTTPService generates a new service that applies the given options to each
@@ -36,11 +36,11 @@ type HTTPService struct {
 func NewHTTPService(opts ...option.RequestOption) (r *HTTPService) {
 	r = &HTTPService{}
 	r.Options = opts
-	r.Top = NewHTTPTopService(opts...)
 	r.Locations = NewHTTPLocationService(opts...)
 	r.Ases = NewHTTPAseService(opts...)
 	r.Summary = NewHTTPSummaryService(opts...)
 	r.TimeseriesGroups = NewHTTPTimeseriesGroupService(opts...)
+	r.Top = NewHTTPTopService(opts...)
 	return
 }
 
@@ -240,6 +240,9 @@ type HTTPTimeseriesParams struct {
 	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[HTTPTimeseriesParamsNormalization] `query:"normalization"`
 }
 
 // URLQuery serializes [HTTPTimeseriesParams]'s query parameters as `url.Values`.
@@ -281,6 +284,23 @@ const (
 func (r HTTPTimeseriesParamsFormat) IsKnown() bool {
 	switch r {
 	case HTTPTimeseriesParamsFormatJson, HTTPTimeseriesParamsFormatCsv:
+		return true
+	}
+	return false
+}
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type HTTPTimeseriesParamsNormalization string
+
+const (
+	HTTPTimeseriesParamsNormalizationPercentageChange HTTPTimeseriesParamsNormalization = "PERCENTAGE_CHANGE"
+	HTTPTimeseriesParamsNormalizationMin0Max          HTTPTimeseriesParamsNormalization = "MIN0_MAX"
+)
+
+func (r HTTPTimeseriesParamsNormalization) IsKnown() bool {
+	switch r {
+	case HTTPTimeseriesParamsNormalizationPercentageChange, HTTPTimeseriesParamsNormalizationMin0Max:
 		return true
 	}
 	return false

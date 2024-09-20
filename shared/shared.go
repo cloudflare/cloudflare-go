@@ -5,8 +5,8 @@ package shared
 import (
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 )
 
 type ASN = int64
@@ -183,11 +183,12 @@ const (
 	CertificateCADigicert    CertificateCA = "digicert"
 	CertificateCAGoogle      CertificateCA = "google"
 	CertificateCALetsEncrypt CertificateCA = "lets_encrypt"
+	CertificateCASSLCom      CertificateCA = "ssl_com"
 )
 
 func (r CertificateCA) IsKnown() bool {
 	switch r {
-	case CertificateCADigicert, CertificateCAGoogle, CertificateCALetsEncrypt:
+	case CertificateCADigicert, CertificateCAGoogle, CertificateCALetsEncrypt, CertificateCASSLCom:
 		return true
 	}
 	return false
@@ -284,9 +285,15 @@ func (r CloudflareTunnel) ImplementsWARPConnectorWARPConnectorEditResponse() {}
 
 func (r CloudflareTunnel) ImplementsWARPConnectorWARPConnectorGetResponse() {}
 
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelNewResponse() {}
+
 func (r CloudflareTunnel) ImplementsZeroTrustTunnelListResponse() {}
 
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelDeleteResponse() {}
+
 func (r CloudflareTunnel) ImplementsZeroTrustTunnelEditResponse() {}
+
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelGetResponse() {}
 
 type CloudflareTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
@@ -498,6 +505,68 @@ func (r PermissionGrantParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The rate plan applied to the subscription.
+type RatePlan struct {
+	// The ID of the rate plan.
+	ID string `json:"id"`
+	// The currency applied to the rate plan subscription.
+	Currency string `json:"currency"`
+	// Whether this rate plan is managed externally from Cloudflare.
+	ExternallyManaged bool `json:"externally_managed"`
+	// Whether a rate plan is enterprise-based (or newly adopted term contract).
+	IsContract bool `json:"is_contract"`
+	// The full name of the rate plan.
+	PublicName string `json:"public_name"`
+	// The scope that this rate plan applies to.
+	Scope string `json:"scope"`
+	// The list of sets this rate plan applies to.
+	Sets []string     `json:"sets"`
+	JSON ratePlanJSON `json:"-"`
+}
+
+// ratePlanJSON contains the JSON metadata for the struct [RatePlan]
+type ratePlanJSON struct {
+	ID                apijson.Field
+	Currency          apijson.Field
+	ExternallyManaged apijson.Field
+	IsContract        apijson.Field
+	PublicName        apijson.Field
+	Scope             apijson.Field
+	Sets              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *RatePlan) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ratePlanJSON) RawJSON() string {
+	return r.raw
+}
+
+// The rate plan applied to the subscription.
+type RatePlanParam struct {
+	// The ID of the rate plan.
+	ID param.Field[string] `json:"id"`
+	// The currency applied to the rate plan subscription.
+	Currency param.Field[string] `json:"currency"`
+	// Whether this rate plan is managed externally from Cloudflare.
+	ExternallyManaged param.Field[bool] `json:"externally_managed"`
+	// Whether a rate plan is enterprise-based (or newly adopted term contract).
+	IsContract param.Field[bool] `json:"is_contract"`
+	// The full name of the rate plan.
+	PublicName param.Field[string] `json:"public_name"`
+	// The scope that this rate plan applies to.
+	Scope param.Field[string] `json:"scope"`
+	// The list of sets this rate plan applies to.
+	Sets param.Field[[]string] `json:"sets"`
+}
+
+func (r RatePlanParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type ResponseInfo struct {
 	Code    int64            `json:"code,required"`
 	Message string           `json:"message,required"`
@@ -564,4 +633,97 @@ func (r SortDirection) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type Subscription struct {
+	// Subscription identifier tag.
+	ID string `json:"id"`
+	// The monetary unit in which pricing information is displayed.
+	Currency string `json:"currency"`
+	// The end of the current period and also when the next billing is due.
+	CurrentPeriodEnd time.Time `json:"current_period_end" format:"date-time"`
+	// When the current billing period started. May match initial_period_start if this
+	// is the first period.
+	CurrentPeriodStart time.Time `json:"current_period_start" format:"date-time"`
+	// How often the subscription is renewed automatically.
+	Frequency SubscriptionFrequency `json:"frequency"`
+	// The price of the subscription that will be billed, in US dollars.
+	Price float64 `json:"price"`
+	// The rate plan applied to the subscription.
+	RatePlan RatePlan `json:"rate_plan"`
+	// The state that the subscription is in.
+	State SubscriptionState `json:"state"`
+	JSON  subscriptionJSON  `json:"-"`
+}
+
+// subscriptionJSON contains the JSON metadata for the struct [Subscription]
+type subscriptionJSON struct {
+	ID                 apijson.Field
+	Currency           apijson.Field
+	CurrentPeriodEnd   apijson.Field
+	CurrentPeriodStart apijson.Field
+	Frequency          apijson.Field
+	Price              apijson.Field
+	RatePlan           apijson.Field
+	State              apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *Subscription) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionJSON) RawJSON() string {
+	return r.raw
+}
+
+// How often the subscription is renewed automatically.
+type SubscriptionFrequency string
+
+const (
+	SubscriptionFrequencyWeekly    SubscriptionFrequency = "weekly"
+	SubscriptionFrequencyMonthly   SubscriptionFrequency = "monthly"
+	SubscriptionFrequencyQuarterly SubscriptionFrequency = "quarterly"
+	SubscriptionFrequencyYearly    SubscriptionFrequency = "yearly"
+)
+
+func (r SubscriptionFrequency) IsKnown() bool {
+	switch r {
+	case SubscriptionFrequencyWeekly, SubscriptionFrequencyMonthly, SubscriptionFrequencyQuarterly, SubscriptionFrequencyYearly:
+		return true
+	}
+	return false
+}
+
+// The state that the subscription is in.
+type SubscriptionState string
+
+const (
+	SubscriptionStateTrial           SubscriptionState = "Trial"
+	SubscriptionStateProvisioned     SubscriptionState = "Provisioned"
+	SubscriptionStatePaid            SubscriptionState = "Paid"
+	SubscriptionStateAwaitingPayment SubscriptionState = "AwaitingPayment"
+	SubscriptionStateCancelled       SubscriptionState = "Cancelled"
+	SubscriptionStateFailed          SubscriptionState = "Failed"
+	SubscriptionStateExpired         SubscriptionState = "Expired"
+)
+
+func (r SubscriptionState) IsKnown() bool {
+	switch r {
+	case SubscriptionStateTrial, SubscriptionStateProvisioned, SubscriptionStatePaid, SubscriptionStateAwaitingPayment, SubscriptionStateCancelled, SubscriptionStateFailed, SubscriptionStateExpired:
+		return true
+	}
+	return false
+}
+
+type SubscriptionParam struct {
+	// How often the subscription is renewed automatically.
+	Frequency param.Field[SubscriptionFrequency] `json:"frequency"`
+	// The rate plan applied to the subscription.
+	RatePlan param.Field[RatePlanParam] `json:"rate_plan"`
+}
+
+func (r SubscriptionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }

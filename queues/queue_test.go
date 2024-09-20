@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/queues"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/queues"
 )
 
 func TestQueueNew(t *testing.T) {
@@ -29,9 +29,7 @@ func TestQueueNew(t *testing.T) {
 	)
 	_, err := client.Queues.New(context.TODO(), queues.QueueNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body: map[string]interface{}{
-			"queue_name": "example-queue",
-		},
+		QueueName: cloudflare.F("example-queue"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

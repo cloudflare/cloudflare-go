@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/magic_transit"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestSiteLANNewWithOptionalParams(t *testing.T) {
@@ -40,23 +40,23 @@ func TestSiteLANNewWithOptionalParams(t *testing.T) {
 				StaticPrefix: cloudflare.F("192.0.2.0/24"),
 			}),
 			RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				NextHop: cloudflare.F("192.0.2.1"),
-				Prefix:  cloudflare.F("192.0.2.0/24"),
 			}, {
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				NextHop: cloudflare.F("192.0.2.1"),
-				Prefix:  cloudflare.F("192.0.2.0/24"),
 			}, {
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				NextHop: cloudflare.F("192.0.2.1"),
-				Prefix:  cloudflare.F("192.0.2.0/24"),
 			}}),
 			StaticAddressing: cloudflare.F(magic_transit.LANStaticAddressingParam{
 				Address: cloudflare.F("192.0.2.0/24"),
@@ -111,23 +111,23 @@ func TestSiteLANUpdateWithOptionalParams(t *testing.T) {
 			}),
 			Physport: cloudflare.F(int64(1)),
 			RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				NextHop: cloudflare.F("192.0.2.1"),
-				Prefix:  cloudflare.F("192.0.2.0/24"),
 			}, {
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				NextHop: cloudflare.F("192.0.2.1"),
-				Prefix:  cloudflare.F("192.0.2.0/24"),
 			}, {
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				NextHop: cloudflare.F("192.0.2.1"),
-				Prefix:  cloudflare.F("192.0.2.0/24"),
 			}}),
 			StaticAddressing: cloudflare.F(magic_transit.LANStaticAddressingParam{
 				Address: cloudflare.F("192.0.2.0/24"),
@@ -242,23 +242,23 @@ func TestSiteLANEditWithOptionalParams(t *testing.T) {
 			}),
 			Physport: cloudflare.F(int64(1)),
 			RoutedSubnets: cloudflare.F([]magic_transit.RoutedSubnetParam{{
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				NextHop: cloudflare.F("192.0.2.1"),
-				Prefix:  cloudflare.F("192.0.2.0/24"),
 			}, {
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				NextHop: cloudflare.F("192.0.2.1"),
-				Prefix:  cloudflare.F("192.0.2.0/24"),
 			}, {
+				NextHop: cloudflare.F("192.0.2.1"),
+				Prefix:  cloudflare.F("192.0.2.0/24"),
 				Nat: cloudflare.F(magic_transit.NatParam{
 					StaticPrefix: cloudflare.F("192.0.2.0/24"),
 				}),
-				NextHop: cloudflare.F("192.0.2.1"),
-				Prefix:  cloudflare.F("192.0.2.0/24"),
 			}}),
 			StaticAddressing: cloudflare.F(magic_transit.LANStaticAddressingParam{
 				Address: cloudflare.F("192.0.2.0/24"),

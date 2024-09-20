@@ -7,14 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // MonitorService contains methods and other services that help with interacting
@@ -178,8 +177,8 @@ type Monitor struct {
 	ConsecutiveDown int64 `json:"consecutive_down"`
 	// To be marked healthy the monitored origin must pass this healthcheck N
 	// consecutive times.
-	ConsecutiveUp int64     `json:"consecutive_up"`
-	CreatedOn     time.Time `json:"created_on" format:"date-time"`
+	ConsecutiveUp int64  `json:"consecutive_up"`
+	CreatedOn     string `json:"created_on"`
 	// Object description.
 	Description string `json:"description"`
 	// A case-insensitive sub-string to look for in the response body. If this string
@@ -195,14 +194,14 @@ type Monitor struct {
 	// The HTTP request headers to send in the health check. It is recommended you set
 	// a Host header by default. The User-Agent header cannot be overridden. This
 	// parameter is only valid for HTTP and HTTPS monitors.
-	Header interface{} `json:"header"`
+	Header map[string][]string `json:"header"`
 	// The interval between each health check. Shorter intervals may improve failover
 	// time, but will increase load on the origins as we check from multiple locations.
 	Interval int64 `json:"interval"`
 	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
 	// based checks and 'connection_established' for TCP based health checks.
-	Method     string    `json:"method"`
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	Method     string `json:"method"`
+	ModifiedOn string `json:"modified_on"`
 	// The endpoint path you want to conduct a health check against. This parameter is
 	// only valid for HTTP and HTTPS monitors.
 	Path string `json:"path"`
@@ -326,7 +325,7 @@ type MonitorNewParams struct {
 	// The HTTP request headers to send in the health check. It is recommended you set
 	// a Host header by default. The User-Agent header cannot be overridden. This
 	// parameter is only valid for HTTP and HTTPS monitors.
-	Header param.Field[interface{}] `json:"header"`
+	Header param.Field[map[string][]string] `json:"header"`
 	// The interval between each health check. Shorter intervals may improve failover
 	// time, but will increase load on the origins as we check from multiple locations.
 	Interval param.Field[int64] `json:"interval"`
@@ -448,7 +447,7 @@ type MonitorUpdateParams struct {
 	// The HTTP request headers to send in the health check. It is recommended you set
 	// a Host header by default. The User-Agent header cannot be overridden. This
 	// parameter is only valid for HTTP and HTTPS monitors.
-	Header param.Field[interface{}] `json:"header"`
+	Header param.Field[map[string][]string] `json:"header"`
 	// The interval between each health check. Shorter intervals may improve failover
 	// time, but will increase load on the origins as we check from multiple locations.
 	Interval param.Field[int64] `json:"interval"`
@@ -623,7 +622,7 @@ type MonitorEditParams struct {
 	// The HTTP request headers to send in the health check. It is recommended you set
 	// a Host header by default. The User-Agent header cannot be overridden. This
 	// parameter is only valid for HTTP and HTTPS monitors.
-	Header param.Field[interface{}] `json:"header"`
+	Header param.Field[map[string][]string] `json:"header"`
 	// The interval between each health check. Shorter intervals may improve failover
 	// time, but will increase load on the origins as we check from multiple locations.
 	Interval param.Field[int64] `json:"interval"`

@@ -9,14 +9,14 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v2/accounts"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/accounts"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // OrganizationService contains methods and other services that help with
@@ -238,13 +238,20 @@ func (r OrganizationListParamsStatus) IsKnown() bool {
 }
 
 type OrganizationGetResponseEnvelope struct {
-	Result OrganizationGetResponse             `json:"result"`
-	JSON   organizationGetResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success OrganizationGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  OrganizationGetResponse                `json:"result"`
+	JSON    organizationGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // organizationGetResponseEnvelopeJSON contains the JSON metadata for the struct
 // [OrganizationGetResponseEnvelope]
 type organizationGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -256,4 +263,19 @@ func (r *OrganizationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 
 func (r organizationGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type OrganizationGetResponseEnvelopeSuccess bool
+
+const (
+	OrganizationGetResponseEnvelopeSuccessTrue OrganizationGetResponseEnvelopeSuccess = true
+)
+
+func (r OrganizationGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case OrganizationGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }

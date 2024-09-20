@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/radar"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/radar"
 )
 
 func TestHTTPTimeseriesWithOptionalParams(t *testing.T) {
@@ -29,15 +29,16 @@ func TestHTTPTimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.Timeseries(context.TODO(), radar.HTTPTimeseriesParams{
-		AggInterval: cloudflare.F(radar.HTTPTimeseriesParamsAggInterval1h),
-		ASN:         cloudflare.F([]string{"string", "string", "string"}),
-		Continent:   cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:      cloudflare.F(radar.HTTPTimeseriesParamsFormatJson),
-		Location:    cloudflare.F([]string{"string", "string", "string"}),
-		Name:        cloudflare.F([]string{"string", "string", "string"}),
+		AggInterval:   cloudflare.F(radar.HTTPTimeseriesParamsAggInterval15m),
+		ASN:           cloudflare.F([]string{"string", "string", "string"}),
+		Continent:     cloudflare.F([]string{"string", "string", "string"}),
+		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		DateRange:     cloudflare.F([]string{"7d", "7d", "7d"}),
+		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		Format:        cloudflare.F(radar.HTTPTimeseriesParamsFormatJson),
+		Location:      cloudflare.F([]string{"string", "string", "string"}),
+		Name:          cloudflare.F([]string{"string", "string", "string"}),
+		Normalization: cloudflare.F(radar.HTTPTimeseriesParamsNormalizationPercentageChange),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

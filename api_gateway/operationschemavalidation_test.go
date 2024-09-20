@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/api_gateway"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/api_gateway"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestOperationSchemaValidationUpdateWithOptionalParams(t *testing.T) {
@@ -32,7 +32,7 @@ func TestOperationSchemaValidationUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		api_gateway.OperationSchemaValidationUpdateParams{
 			ZoneID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			MitigationAction: cloudflare.F(api_gateway.OperationSchemaValidationUpdateParamsMitigationActionBlock),
+			MitigationAction: cloudflare.F(api_gateway.OperationSchemaValidationUpdateParamsMitigationActionLog),
 		},
 	)
 	if err != nil {
@@ -60,11 +60,11 @@ func TestOperationSchemaValidationEdit(t *testing.T) {
 	_, err := client.APIGateway.Operations.SchemaValidation.Edit(context.TODO(), api_gateway.OperationSchemaValidationEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		SettingsMultipleRequest: api_gateway.SettingsMultipleRequestParam{
-			"3818d821-5901-4147-a474-f5f5aec1d54e": api_gateway.SettingsMultipleRequestItemItemParam{
+			"3818d821-5901-4147-a474-f5f5aec1d54e": api_gateway.SettingsMultipleRequestItemParam{
 				MitigationAction: cloudflare.F(api_gateway.SettingsMultipleRequestItemMitigationActionLog),
 			},
-			"b17c8043-99a0-4202-b7d9-8f7cdbee02cd": api_gateway.SettingsMultipleRequestItemItemParam{
-				MitigationAction: cloudflare.F(api_gateway.SettingsMultipleRequestItemMitigationActionBlock),
+			"b17c8043-99a0-4202-b7d9-8f7cdbee02cd": api_gateway.SettingsMultipleRequestItemParam{
+				MitigationAction: cloudflare.F(api_gateway.SettingsMultipleRequestItemMitigationActionLog),
 			},
 		},
 	})

@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // PolicyService contains methods and other services that help with interacting
@@ -138,56 +138,6 @@ func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGe
 	return
 }
 
-type Policy struct {
-	// The action to take if the expression matches
-	Action PolicyAction `json:"action,required"`
-	// A description for the policy
-	Description string `json:"description,required"`
-	// Whether the policy is enabled
-	Enabled bool `json:"enabled,required"`
-	// The expression which must match for the policy to be applied, using the
-	// Cloudflare Firewall rule expression syntax
-	Expression string `json:"expression,required"`
-	// The policy which will be applied
-	Value string     `json:"value,required"`
-	JSON  policyJSON `json:"-"`
-}
-
-// policyJSON contains the JSON metadata for the struct [Policy]
-type policyJSON struct {
-	Action      apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Policy) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r policyJSON) RawJSON() string {
-	return r.raw
-}
-
-// The action to take if the expression matches
-type PolicyAction string
-
-const (
-	PolicyActionAllow PolicyAction = "allow"
-	PolicyActionLog   PolicyAction = "log"
-)
-
-func (r PolicyAction) IsKnown() bool {
-	switch r {
-	case PolicyActionAllow, PolicyActionLog:
-		return true
-	}
-	return false
-}
-
 type PolicyParam struct {
 	// The action to take if the expression matches
 	Action param.Field[PolicyAction] `json:"action,required"`
@@ -204,6 +154,22 @@ type PolicyParam struct {
 
 func (r PolicyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// The action to take if the expression matches
+type PolicyAction string
+
+const (
+	PolicyActionAllow PolicyAction = "allow"
+	PolicyActionLog   PolicyAction = "log"
+)
+
+func (r PolicyAction) IsKnown() bool {
+	switch r {
+	case PolicyActionAllow, PolicyActionLog:
+		return true
+	}
+	return false
 }
 
 type PolicyNewResponse struct {

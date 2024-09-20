@@ -8,15 +8,13 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // RegionService contains methods and other services that help with interacting
@@ -39,7 +37,7 @@ func NewRegionService(opts ...option.RequestOption) (r *RegionService) {
 }
 
 // List all region mappings.
-func (r *RegionService) List(ctx context.Context, params RegionListParams, opts ...option.RequestOption) (res *RegionListResponseUnion, err error) {
+func (r *RegionService) List(ctx context.Context, params RegionListParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env RegionListResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -56,7 +54,7 @@ func (r *RegionService) List(ctx context.Context, params RegionListParams, opts 
 }
 
 // Get a single region mapping.
-func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionID, query RegionGetParams, opts ...option.RequestOption) (res *RegionGetResponseUnion, err error) {
+func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionID, query RegionGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env RegionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -70,42 +68,6 @@ func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionI
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [load_balancers.RegionListResponseUnknown] or
-// [shared.UnionString].
-type RegionListResponseUnion interface {
-	ImplementsLoadBalancersRegionListResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RegionListResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// A list of countries and subdivisions mapped to a region.
-//
-// Union satisfied by [load_balancers.RegionGetResponseUnknown] or
-// [shared.UnionString].
-type RegionGetResponseUnion interface {
-	ImplementsLoadBalancersRegionGetResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RegionGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type RegionListParams struct {
@@ -128,9 +90,9 @@ func (r RegionListParams) URLQuery() (v url.Values) {
 }
 
 type RegionListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   RegionListResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success RegionListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    regionListResponseEnvelopeJSON    `json:"-"`
@@ -210,7 +172,7 @@ type RegionGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// A list of countries and subdivisions mapped to a region.
-	Result RegionGetResponseUnion `json:"result,required"`
+	Result interface{} `json:"result,required"`
 	// Whether the API call was successful
 	Success RegionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    regionGetResponseEnvelopeJSON    `json:"-"`

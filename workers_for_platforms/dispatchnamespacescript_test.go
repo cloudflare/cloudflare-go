@@ -10,11 +10,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/workers"
-	"github.com/cloudflare/cloudflare-go/v2/workers_for_platforms"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/workers"
+	"github.com/cloudflare/cloudflare-go/v3/workers_for_platforms"
 )
 
 func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
@@ -40,10 +40,9 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 			Body: workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObject{
 				AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 				Metadata: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadata{
-					Bindings: cloudflare.F([]interface{}{map[string]interface{}{
-						"name": "MY_ENV_VAR",
-						"text": "my_data",
-						"type": "plain_text",
+					Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataBinding{{
+						Name: cloudflare.F("MY_ENV_VAR"),
+						Type: cloudflare.F("plain_text"),
 					}}),
 					BodyPart:           cloudflare.F("worker.js"),
 					CompatibilityDate:  cloudflare.F("2023-07-25"),
@@ -52,10 +51,11 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					Logpush:            cloudflare.F(false),
 					MainModule:         cloudflare.F("worker.js"),
 					Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion](workers.SingleStepMigrationParam{
-						NewTag:         cloudflare.F("v2"),
-						OldTag:         cloudflare.F("v1"),
-						DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
-						NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
+						DeletedClasses:   cloudflare.F([]string{"string", "string", "string"}),
+						NewClasses:       cloudflare.F([]string{"string", "string", "string"}),
+						NewSqliteClasses: cloudflare.F([]string{"string", "string", "string"}),
+						NewTag:           cloudflare.F("v2"),
+						OldTag:           cloudflare.F("v1"),
 						RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
 							From: cloudflare.F("from"),
 							To:   cloudflare.F("to"),
@@ -85,20 +85,22 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					}),
 					Tags: cloudflare.F([]string{"string", "string", "string"}),
 					TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
+						Service:     cloudflare.F("my-log-consumer"),
 						Environment: cloudflare.F("production"),
 						Namespace:   cloudflare.F("my-namespace"),
-						Service:     cloudflare.F("my-log-consumer"),
 					}, {
+						Service:     cloudflare.F("my-log-consumer"),
 						Environment: cloudflare.F("production"),
 						Namespace:   cloudflare.F("my-namespace"),
-						Service:     cloudflare.F("my-log-consumer"),
 					}, {
+						Service:     cloudflare.F("my-log-consumer"),
 						Environment: cloudflare.F("production"),
 						Namespace:   cloudflare.F("my-namespace"),
-						Service:     cloudflare.F("my-log-consumer"),
 					}}),
-					UsageModel:  cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModelBundled),
-					VersionTags: cloudflare.F[any](map[string]interface{}{}),
+					UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModelBundled),
+					VersionTags: cloudflare.F(map[string]string{
+						"foo": "string",
+					}),
 				}),
 			},
 		},

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/user"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/user"
 )
 
 func TestOrganizationListWithOptionalParams(t *testing.T) {
@@ -28,10 +28,10 @@ func TestOrganizationListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Organizations.List(context.TODO(), user.OrganizationListParams{
-		Direction: cloudflare.F(user.OrganizationListParamsDirectionDesc),
+		Direction: cloudflare.F(user.OrganizationListParamsDirectionAsc),
 		Match:     cloudflare.F(user.OrganizationListParamsMatchAny),
 		Name:      cloudflare.F("Cloudflare, Inc."),
-		Order:     cloudflare.F(user.OrganizationListParamsOrderStatus),
+		Order:     cloudflare.F(user.OrganizationListParamsOrderID),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 		Status:    cloudflare.F(user.OrganizationListParamsStatusMember),

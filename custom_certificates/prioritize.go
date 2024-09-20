@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // PrioritizeService contains methods and other services that help with interacting
@@ -83,7 +83,7 @@ type PrioritizeUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success    PrioritizeUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []CustomCertificate                        `json:"result,nullable"`
+	Result     []CustomCertificate                        `json:"result"`
 	ResultInfo PrioritizeUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       prioritizeUpdateResponseEnvelopeJSON       `json:"-"`
 }

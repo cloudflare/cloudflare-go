@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/intel"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/intel"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestIndicatorFeedNewWithOptionalParams(t *testing.T) {
@@ -61,6 +61,7 @@ func TestIndicatorFeedUpdateWithOptionalParams(t *testing.T) {
 			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Description:    cloudflare.F("This is an example description"),
 			IsAttributable: cloudflare.F(true),
+			IsDownloadable: cloudflare.F(true),
 			IsPublic:       cloudflare.F(true),
 			Name:           cloudflare.F("indicator_list"),
 		},

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/firewall"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/firewall"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestWAFPackageListWithOptionalParams(t *testing.T) {
@@ -32,7 +32,7 @@ func TestWAFPackageListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		firewall.WAFPackageListParams{
-			Direction: cloudflare.F(firewall.WAFPackageListParamsDirectionDesc),
+			Direction: cloudflare.F(firewall.WAFPackageListParamsDirectionAsc),
 			Match:     cloudflare.F(firewall.WAFPackageListParamsMatchAny),
 			Name:      cloudflare.F("USER"),
 			Order:     cloudflare.F(firewall.WAFPackageListParamsOrderName),

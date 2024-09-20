@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/r2"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/r2"
 )
 
 func TestBucketNewWithOptionalParams(t *testing.T) {
@@ -58,7 +58,7 @@ func TestBucketListWithOptionalParams(t *testing.T) {
 	_, err := client.R2.Buckets.List(context.TODO(), r2.BucketListParams{
 		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Cursor:       cloudflare.F("cursor"),
-		Direction:    cloudflare.F(r2.BucketListParamsDirectionDesc),
+		Direction:    cloudflare.F(r2.BucketListParamsDirectionAsc),
 		NameContains: cloudflare.F("my-bucket"),
 		Order:        cloudflare.F(r2.BucketListParamsOrderName),
 		PerPage:      cloudflare.F(1.000000),

@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AddressMapService contains methods and other services that help with interacting
@@ -88,8 +88,7 @@ func (r *AddressMapService) ListAutoPaging(ctx context.Context, query AddressMap
 
 // Delete a particular address map owned by the account. An Address Map must be
 // disabled before it can be deleted.
-func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, body AddressMapDeleteParams, opts ...option.RequestOption) (res *[]AddressMapDeleteResponse, err error) {
-	var env AddressMapDeleteResponseEnvelope
+func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, body AddressMapDeleteParams, opts ...option.RequestOption) (res *AddressMapDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -100,11 +99,7 @@ func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, bod
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", body.AccountID, addressMapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -324,7 +319,79 @@ func (r addressMapNewResponseMembershipJSON) RawJSON() string {
 	return r.raw
 }
 
-type AddressMapDeleteResponse = interface{}
+type AddressMapDeleteResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success    AddressMapDeleteResponseSuccess    `json:"success,required"`
+	ResultInfo AddressMapDeleteResponseResultInfo `json:"result_info"`
+	JSON       addressMapDeleteResponseJSON       `json:"-"`
+}
+
+// addressMapDeleteResponseJSON contains the JSON metadata for the struct
+// [AddressMapDeleteResponse]
+type addressMapDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AddressMapDeleteResponseSuccess bool
+
+const (
+	AddressMapDeleteResponseSuccessTrue AddressMapDeleteResponseSuccess = true
+)
+
+func (r AddressMapDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case AddressMapDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type AddressMapDeleteResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                `json:"total_count"`
+	JSON       addressMapDeleteResponseResultInfoJSON `json:"-"`
+}
+
+// addressMapDeleteResponseResultInfoJSON contains the JSON metadata for the struct
+// [AddressMapDeleteResponseResultInfo]
+type addressMapDeleteResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressMapDeleteResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressMapDeleteResponseResultInfoJSON) RawJSON() string {
+	return r.raw
+}
 
 type AddressMapGetResponse struct {
 	// Identifier
@@ -456,7 +523,6 @@ func (r AddressMapNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapNewParamsMembership struct {
-	CreatedAt param.Field[time.Time] `json:"created_at" format:"date-time"`
 	// The identifier for the membership (eg. a zone or account tag).
 	Identifier param.Field[string] `json:"identifier"`
 	// The type of the membership.
@@ -518,82 +584,6 @@ type AddressMapListParams struct {
 type AddressMapDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type AddressMapDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    AddressMapDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	Result     []AddressMapDeleteResponse                 `json:"result,nullable"`
-	ResultInfo AddressMapDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       addressMapDeleteResponseEnvelopeJSON       `json:"-"`
-}
-
-// addressMapDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AddressMapDeleteResponseEnvelope]
-type addressMapDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AddressMapDeleteResponseEnvelopeSuccess bool
-
-const (
-	AddressMapDeleteResponseEnvelopeSuccessTrue AddressMapDeleteResponseEnvelopeSuccess = true
-)
-
-func (r AddressMapDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AddressMapDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AddressMapDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       addressMapDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// addressMapDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [AddressMapDeleteResponseEnvelopeResultInfo]
-type addressMapDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressMapDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r addressMapDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type AddressMapEditParams struct {

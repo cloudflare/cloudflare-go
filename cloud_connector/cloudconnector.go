@@ -3,7 +3,7 @@
 package cloud_connector
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // CloudConnectorService contains methods and other services that help with

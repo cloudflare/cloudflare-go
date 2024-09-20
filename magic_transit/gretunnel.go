@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // GRETunnelService contains methods and other services that help with interacting
@@ -212,9 +212,9 @@ func (r greTunnelNewResponseGRETunnelJSON) RawJSON() string {
 }
 
 type GRETunnelUpdateResponse struct {
-	Modified          bool                        `json:"modified"`
-	ModifiedGRETunnel interface{}                 `json:"modified_gre_tunnel"`
-	JSON              greTunnelUpdateResponseJSON `json:"-"`
+	Modified          bool                                     `json:"modified"`
+	ModifiedGRETunnel GRETunnelUpdateResponseModifiedGRETunnel `json:"modified_gre_tunnel"`
+	JSON              greTunnelUpdateResponseJSON              `json:"-"`
 }
 
 // greTunnelUpdateResponseJSON contains the JSON metadata for the struct
@@ -231,6 +231,61 @@ func (r *GRETunnelUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r greTunnelUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelUpdateResponseModifiedGRETunnel struct {
+	// The IP address assigned to the Cloudflare side of the GRE tunnel.
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	// The IP address assigned to the customer side of the GRE tunnel.
+	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress string `json:"interface_address,required"`
+	// The name of the tunnel. The name cannot contain spaces or special characters,
+	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
+	Name string `json:"name,required"`
+	// Tunnel identifier tag.
+	ID string `json:"id"`
+	// The date and time the tunnel was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the GRE tunnel.
+	Description string      `json:"description"`
+	HealthCheck HealthCheck `json:"health_check"`
+	// The date and time the tunnel was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
+	// is 576.
+	Mtu int64 `json:"mtu"`
+	// Time To Live (TTL) in number of hops of the GRE tunnel.
+	TTL  int64                                        `json:"ttl"`
+	JSON greTunnelUpdateResponseModifiedGRETunnelJSON `json:"-"`
+}
+
+// greTunnelUpdateResponseModifiedGRETunnelJSON contains the JSON metadata for the
+// struct [GRETunnelUpdateResponseModifiedGRETunnel]
+type greTunnelUpdateResponseModifiedGRETunnelJSON struct {
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
+	InterfaceAddress      apijson.Field
+	Name                  apijson.Field
+	ID                    apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	HealthCheck           apijson.Field
+	ModifiedOn            apijson.Field
+	Mtu                   apijson.Field
+	TTL                   apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *GRETunnelUpdateResponseModifiedGRETunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelUpdateResponseModifiedGRETunnelJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -311,9 +366,9 @@ func (r greTunnelListResponseGRETunnelJSON) RawJSON() string {
 }
 
 type GRETunnelDeleteResponse struct {
-	Deleted          bool                        `json:"deleted"`
-	DeletedGRETunnel interface{}                 `json:"deleted_gre_tunnel"`
-	JSON             greTunnelDeleteResponseJSON `json:"-"`
+	Deleted          bool                                    `json:"deleted"`
+	DeletedGRETunnel GRETunnelDeleteResponseDeletedGRETunnel `json:"deleted_gre_tunnel"`
+	JSON             greTunnelDeleteResponseJSON             `json:"-"`
 }
 
 // greTunnelDeleteResponseJSON contains the JSON metadata for the struct
@@ -333,9 +388,64 @@ func (r greTunnelDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type GRETunnelDeleteResponseDeletedGRETunnel struct {
+	// The IP address assigned to the Cloudflare side of the GRE tunnel.
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	// The IP address assigned to the customer side of the GRE tunnel.
+	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress string `json:"interface_address,required"`
+	// The name of the tunnel. The name cannot contain spaces or special characters,
+	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
+	Name string `json:"name,required"`
+	// Tunnel identifier tag.
+	ID string `json:"id"`
+	// The date and time the tunnel was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the GRE tunnel.
+	Description string      `json:"description"`
+	HealthCheck HealthCheck `json:"health_check"`
+	// The date and time the tunnel was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
+	// is 576.
+	Mtu int64 `json:"mtu"`
+	// Time To Live (TTL) in number of hops of the GRE tunnel.
+	TTL  int64                                       `json:"ttl"`
+	JSON greTunnelDeleteResponseDeletedGRETunnelJSON `json:"-"`
+}
+
+// greTunnelDeleteResponseDeletedGRETunnelJSON contains the JSON metadata for the
+// struct [GRETunnelDeleteResponseDeletedGRETunnel]
+type greTunnelDeleteResponseDeletedGRETunnelJSON struct {
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
+	InterfaceAddress      apijson.Field
+	Name                  apijson.Field
+	ID                    apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	HealthCheck           apijson.Field
+	ModifiedOn            apijson.Field
+	Mtu                   apijson.Field
+	TTL                   apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *GRETunnelDeleteResponseDeletedGRETunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelDeleteResponseDeletedGRETunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 type GRETunnelGetResponse struct {
-	GRETunnel interface{}              `json:"gre_tunnel"`
-	JSON      greTunnelGetResponseJSON `json:"-"`
+	GRETunnel GRETunnelGetResponseGRETunnel `json:"gre_tunnel"`
+	JSON      greTunnelGetResponseJSON      `json:"-"`
 }
 
 // greTunnelGetResponseJSON contains the JSON metadata for the struct
@@ -351,6 +461,61 @@ func (r *GRETunnelGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r greTunnelGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelGetResponseGRETunnel struct {
+	// The IP address assigned to the Cloudflare side of the GRE tunnel.
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	// The IP address assigned to the customer side of the GRE tunnel.
+	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress string `json:"interface_address,required"`
+	// The name of the tunnel. The name cannot contain spaces or special characters,
+	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
+	Name string `json:"name,required"`
+	// Tunnel identifier tag.
+	ID string `json:"id"`
+	// The date and time the tunnel was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the GRE tunnel.
+	Description string      `json:"description"`
+	HealthCheck HealthCheck `json:"health_check"`
+	// The date and time the tunnel was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
+	// is 576.
+	Mtu int64 `json:"mtu"`
+	// Time To Live (TTL) in number of hops of the GRE tunnel.
+	TTL  int64                             `json:"ttl"`
+	JSON greTunnelGetResponseGRETunnelJSON `json:"-"`
+}
+
+// greTunnelGetResponseGRETunnelJSON contains the JSON metadata for the struct
+// [GRETunnelGetResponseGRETunnel]
+type greTunnelGetResponseGRETunnelJSON struct {
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
+	InterfaceAddress      apijson.Field
+	Name                  apijson.Field
+	ID                    apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	HealthCheck           apijson.Field
+	ModifiedOn            apijson.Field
+	Mtu                   apijson.Field
+	TTL                   apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *GRETunnelGetResponseGRETunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelGetResponseGRETunnelJSON) RawJSON() string {
 	return r.raw
 }
 

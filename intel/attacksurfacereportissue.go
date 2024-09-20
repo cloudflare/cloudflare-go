@@ -8,17 +8,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AttackSurfaceReportIssueService contains methods and other services that help
@@ -85,8 +83,7 @@ func (r *AttackSurfaceReportIssueService) Class(ctx context.Context, params Atta
 }
 
 // Archive Security Center Insight
-func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *AttackSurfaceReportIssueDismissResponseUnion, err error) {
-	var env AttackSurfaceReportIssueDismissResponseEnvelope
+func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID string, params AttackSurfaceReportIssueDismissParams, opts ...option.RequestOption) (res *AttackSurfaceReportIssueDismissResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -97,11 +94,7 @@ func (r *AttackSurfaceReportIssueService) Dismiss(ctx context.Context, issueID s
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/intel/attack-surface-report/%s/dismiss", params.AccountID, issueID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
 }
 
@@ -326,21 +319,45 @@ func (r attackSurfaceReportIssueClassResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [intel.AttackSurfaceReportIssueDismissResponseUnknown] or
-// [shared.UnionString].
-type AttackSurfaceReportIssueDismissResponseUnion interface {
-	ImplementsIntelAttackSurfaceReportIssueDismissResponseUnion()
+type AttackSurfaceReportIssueDismissResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success AttackSurfaceReportIssueDismissResponseSuccess `json:"success,required"`
+	JSON    attackSurfaceReportIssueDismissResponseJSON    `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AttackSurfaceReportIssueDismissResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// attackSurfaceReportIssueDismissResponseJSON contains the JSON metadata for the
+// struct [AttackSurfaceReportIssueDismissResponse]
+type attackSurfaceReportIssueDismissResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackSurfaceReportIssueDismissResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackSurfaceReportIssueDismissResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AttackSurfaceReportIssueDismissResponseSuccess bool
+
+const (
+	AttackSurfaceReportIssueDismissResponseSuccessTrue AttackSurfaceReportIssueDismissResponseSuccess = true
+)
+
+func (r AttackSurfaceReportIssueDismissResponseSuccess) IsKnown() bool {
+	switch r {
+	case AttackSurfaceReportIssueDismissResponseSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type AttackSurfaceReportIssueSeverityResponse struct {
@@ -494,49 +511,6 @@ type AttackSurfaceReportIssueDismissParams struct {
 
 func (r AttackSurfaceReportIssueDismissParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type AttackSurfaceReportIssueDismissResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success AttackSurfaceReportIssueDismissResponseEnvelopeSuccess `json:"success,required"`
-	Result  AttackSurfaceReportIssueDismissResponseUnion           `json:"result"`
-	JSON    attackSurfaceReportIssueDismissResponseEnvelopeJSON    `json:"-"`
-}
-
-// attackSurfaceReportIssueDismissResponseEnvelopeJSON contains the JSON metadata
-// for the struct [AttackSurfaceReportIssueDismissResponseEnvelope]
-type attackSurfaceReportIssueDismissResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackSurfaceReportIssueDismissResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackSurfaceReportIssueDismissResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AttackSurfaceReportIssueDismissResponseEnvelopeSuccess bool
-
-const (
-	AttackSurfaceReportIssueDismissResponseEnvelopeSuccessTrue AttackSurfaceReportIssueDismissResponseEnvelopeSuccess = true
-)
-
-func (r AttackSurfaceReportIssueDismissResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AttackSurfaceReportIssueDismissResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type AttackSurfaceReportIssueSeverityParams struct {

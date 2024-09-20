@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -80,6 +80,8 @@ func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetPa
 }
 
 type BotFightModeConfiguration struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection BotFightModeConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -94,6 +96,7 @@ type BotFightModeConfiguration struct {
 // botFightModeConfigurationJSON contains the JSON metadata for the struct
 // [BotFightModeConfiguration]
 type botFightModeConfigurationJSON struct {
+	AIBotsProtection apijson.Field
 	EnableJS         apijson.Field
 	FightMode        apijson.Field
 	UsingLatestModel apijson.Field
@@ -113,7 +116,25 @@ func (r BotFightModeConfiguration) implementsBotManagementBotManagementUpdateRes
 
 func (r BotFightModeConfiguration) implementsBotManagementBotManagementGetResponse() {}
 
+// Enable rule to block AI Scrapers and Crawlers.
+type BotFightModeConfigurationAIBotsProtection string
+
+const (
+	BotFightModeConfigurationAIBotsProtectionBlock    BotFightModeConfigurationAIBotsProtection = "block"
+	BotFightModeConfigurationAIBotsProtectionDisabled BotFightModeConfigurationAIBotsProtection = "disabled"
+)
+
+func (r BotFightModeConfigurationAIBotsProtection) IsKnown() bool {
+	switch r {
+	case BotFightModeConfigurationAIBotsProtectionBlock, BotFightModeConfigurationAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
 type BotFightModeConfigurationParam struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection param.Field[BotFightModeConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS param.Field[bool] `json:"enable_js"`
@@ -128,6 +149,8 @@ func (r BotFightModeConfigurationParam) MarshalJSON() (data []byte, err error) {
 func (r BotFightModeConfigurationParam) implementsBotManagementBotManagementUpdateParamsBodyUnion() {}
 
 type SubscriptionConfiguration struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection SubscriptionConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -147,6 +170,7 @@ type SubscriptionConfiguration struct {
 // subscriptionConfigurationJSON contains the JSON metadata for the struct
 // [SubscriptionConfiguration]
 type subscriptionConfigurationJSON struct {
+	AIBotsProtection     apijson.Field
 	AutoUpdateModel      apijson.Field
 	EnableJS             apijson.Field
 	SuppressSessionScore apijson.Field
@@ -167,7 +191,25 @@ func (r SubscriptionConfiguration) implementsBotManagementBotManagementUpdateRes
 
 func (r SubscriptionConfiguration) implementsBotManagementBotManagementGetResponse() {}
 
+// Enable rule to block AI Scrapers and Crawlers.
+type SubscriptionConfigurationAIBotsProtection string
+
+const (
+	SubscriptionConfigurationAIBotsProtectionBlock    SubscriptionConfigurationAIBotsProtection = "block"
+	SubscriptionConfigurationAIBotsProtectionDisabled SubscriptionConfigurationAIBotsProtection = "disabled"
+)
+
+func (r SubscriptionConfigurationAIBotsProtection) IsKnown() bool {
+	switch r {
+	case SubscriptionConfigurationAIBotsProtectionBlock, SubscriptionConfigurationAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
 type SubscriptionConfigurationParam struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection param.Field[SubscriptionConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -187,6 +229,8 @@ func (r SubscriptionConfigurationParam) MarshalJSON() (data []byte, err error) {
 func (r SubscriptionConfigurationParam) implementsBotManagementBotManagementUpdateParamsBodyUnion() {}
 
 type SuperBotFightModeDefinitelyConfiguration struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection SuperBotFightModeDefinitelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -209,6 +253,7 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 // superBotFightModeDefinitelyConfigurationJSON contains the JSON metadata for the
 // struct [SuperBotFightModeDefinitelyConfiguration]
 type superBotFightModeDefinitelyConfigurationJSON struct {
+	AIBotsProtection             apijson.Field
 	EnableJS                     apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
@@ -231,6 +276,22 @@ func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementBotMana
 }
 
 func (r SuperBotFightModeDefinitelyConfiguration) implementsBotManagementBotManagementGetResponse() {}
+
+// Enable rule to block AI Scrapers and Crawlers.
+type SuperBotFightModeDefinitelyConfigurationAIBotsProtection string
+
+const (
+	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock    SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "block"
+	SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled SuperBotFightModeDefinitelyConfigurationAIBotsProtection = "disabled"
+)
+
+func (r SuperBotFightModeDefinitelyConfigurationAIBotsProtection) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeDefinitelyConfigurationAIBotsProtectionBlock, SuperBotFightModeDefinitelyConfigurationAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
 
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
 type SuperBotFightModeDefinitelyConfigurationSBFMDefinitelyAutomated string
@@ -266,6 +327,8 @@ func (r SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBots) IsKnown() bool
 }
 
 type SuperBotFightModeDefinitelyConfigurationParam struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection param.Field[SuperBotFightModeDefinitelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS param.Field[bool] `json:"enable_js"`
@@ -289,6 +352,8 @@ func (r SuperBotFightModeDefinitelyConfigurationParam) implementsBotManagementBo
 }
 
 type SuperBotFightModeLikelyConfiguration struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection SuperBotFightModeLikelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -313,6 +378,7 @@ type SuperBotFightModeLikelyConfiguration struct {
 // superBotFightModeLikelyConfigurationJSON contains the JSON metadata for the
 // struct [SuperBotFightModeLikelyConfiguration]
 type superBotFightModeLikelyConfigurationJSON struct {
+	AIBotsProtection             apijson.Field
 	EnableJS                     apijson.Field
 	OptimizeWordpress            apijson.Field
 	SBFMDefinitelyAutomated      apijson.Field
@@ -335,6 +401,22 @@ func (r superBotFightModeLikelyConfigurationJSON) RawJSON() string {
 func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementBotManagementUpdateResponse() {}
 
 func (r SuperBotFightModeLikelyConfiguration) implementsBotManagementBotManagementGetResponse() {}
+
+// Enable rule to block AI Scrapers and Crawlers.
+type SuperBotFightModeLikelyConfigurationAIBotsProtection string
+
+const (
+	SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock    SuperBotFightModeLikelyConfigurationAIBotsProtection = "block"
+	SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled SuperBotFightModeLikelyConfigurationAIBotsProtection = "disabled"
+)
+
+func (r SuperBotFightModeLikelyConfigurationAIBotsProtection) IsKnown() bool {
+	switch r {
+	case SuperBotFightModeLikelyConfigurationAIBotsProtectionBlock, SuperBotFightModeLikelyConfigurationAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
 
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
 type SuperBotFightModeLikelyConfigurationSBFMDefinitelyAutomated string
@@ -387,6 +469,8 @@ func (r SuperBotFightModeLikelyConfigurationSBFMVerifiedBots) IsKnown() bool {
 }
 
 type SuperBotFightModeLikelyConfigurationParam struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection param.Field[SuperBotFightModeLikelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS param.Field[bool] `json:"enable_js"`
@@ -412,6 +496,8 @@ func (r SuperBotFightModeLikelyConfigurationParam) implementsBotManagementBotMan
 }
 
 type BotManagementUpdateResponse struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection BotManagementUpdateResponseAIBotsProtection `json:"ai_bots_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -446,6 +532,7 @@ type BotManagementUpdateResponse struct {
 // botManagementUpdateResponseJSON contains the JSON metadata for the struct
 // [BotManagementUpdateResponse]
 type botManagementUpdateResponseJSON struct {
+	AIBotsProtection             apijson.Field
 	EnableJS                     apijson.Field
 	UsingLatestModel             apijson.Field
 	FightMode                    apijson.Field
@@ -516,6 +603,22 @@ func init() {
 	)
 }
 
+// Enable rule to block AI Scrapers and Crawlers.
+type BotManagementUpdateResponseAIBotsProtection string
+
+const (
+	BotManagementUpdateResponseAIBotsProtectionBlock    BotManagementUpdateResponseAIBotsProtection = "block"
+	BotManagementUpdateResponseAIBotsProtectionDisabled BotManagementUpdateResponseAIBotsProtection = "disabled"
+)
+
+func (r BotManagementUpdateResponseAIBotsProtection) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateResponseAIBotsProtectionBlock, BotManagementUpdateResponseAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
 type BotManagementUpdateResponseSBFMDefinitelyAutomated string
 
@@ -567,6 +670,8 @@ func (r BotManagementUpdateResponseSBFMLikelyAutomated) IsKnown() bool {
 }
 
 type BotManagementGetResponse struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection BotManagementGetResponseAIBotsProtection `json:"ai_bots_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
@@ -601,6 +706,7 @@ type BotManagementGetResponse struct {
 // botManagementGetResponseJSON contains the JSON metadata for the struct
 // [BotManagementGetResponse]
 type botManagementGetResponseJSON struct {
+	AIBotsProtection             apijson.Field
 	EnableJS                     apijson.Field
 	UsingLatestModel             apijson.Field
 	FightMode                    apijson.Field
@@ -671,6 +777,22 @@ func init() {
 	)
 }
 
+// Enable rule to block AI Scrapers and Crawlers.
+type BotManagementGetResponseAIBotsProtection string
+
+const (
+	BotManagementGetResponseAIBotsProtectionBlock    BotManagementGetResponseAIBotsProtection = "block"
+	BotManagementGetResponseAIBotsProtectionDisabled BotManagementGetResponseAIBotsProtection = "disabled"
+)
+
+func (r BotManagementGetResponseAIBotsProtection) IsKnown() bool {
+	switch r {
+	case BotManagementGetResponseAIBotsProtectionBlock, BotManagementGetResponseAIBotsProtectionDisabled:
+		return true
+	}
+	return false
+}
+
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
 type BotManagementGetResponseSBFMDefinitelyAutomated string
 
@@ -732,6 +854,8 @@ func (r BotManagementUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BotManagementUpdateParamsBody struct {
+	// Enable rule to block AI Scrapers and Crawlers.
+	AIBotsProtection param.Field[BotManagementUpdateParamsBodyAIBotsProtection] `json:"ai_bots_protection"`
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS param.Field[bool] `json:"enable_js"`
@@ -771,6 +895,22 @@ func (r BotManagementUpdateParamsBody) implementsBotManagementBotManagementUpdat
 // [BotManagementUpdateParamsBody].
 type BotManagementUpdateParamsBodyUnion interface {
 	implementsBotManagementBotManagementUpdateParamsBodyUnion()
+}
+
+// Enable rule to block AI Scrapers and Crawlers.
+type BotManagementUpdateParamsBodyAIBotsProtection string
+
+const (
+	BotManagementUpdateParamsBodyAIBotsProtectionBlock    BotManagementUpdateParamsBodyAIBotsProtection = "block"
+	BotManagementUpdateParamsBodyAIBotsProtectionDisabled BotManagementUpdateParamsBodyAIBotsProtection = "disabled"
+)
+
+func (r BotManagementUpdateParamsBodyAIBotsProtection) IsKnown() bool {
+	switch r {
+	case BotManagementUpdateParamsBodyAIBotsProtectionBlock, BotManagementUpdateParamsBodyAIBotsProtectionDisabled:
+		return true
+	}
+	return false
 }
 
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.

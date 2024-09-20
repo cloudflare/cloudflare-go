@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // HostnameService contains methods and other services that help with interacting
@@ -39,15 +39,15 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 }
 
 // Create Web3 Hostname
-func (r *HostnameService) New(ctx context.Context, zoneIdentifier string, body HostnameNewParams, opts ...option.RequestOption) (res *Hostname, err error) {
+func (r *HostnameService) New(ctx context.Context, params HostnameNewParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	var env HostnameNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/web3/hostnames", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/web3/hostnames", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -56,15 +56,15 @@ func (r *HostnameService) New(ctx context.Context, zoneIdentifier string, body H
 }
 
 // List Web3 Hostnames
-func (r *HostnameService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *pagination.SinglePage[Hostname], err error) {
+func (r *HostnameService) List(ctx context.Context, query HostnameListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Hostname], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/web3/hostnames", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/web3/hostnames", query.ZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -78,23 +78,23 @@ func (r *HostnameService) List(ctx context.Context, zoneIdentifier string, opts 
 }
 
 // List Web3 Hostnames
-func (r *HostnameService) ListAutoPaging(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Hostname] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, zoneIdentifier, opts...))
+func (r *HostnameService) ListAutoPaging(ctx context.Context, query HostnameListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Hostname] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Web3 Hostname
-func (r *HostnameService) Delete(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HostnameDeleteResponse, err error) {
+func (r *HostnameService) Delete(ctx context.Context, identifier string, body HostnameDeleteParams, opts ...option.RequestOption) (res *HostnameDeleteResponse, err error) {
 	var env HostnameDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
+	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", body.ZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -104,19 +104,19 @@ func (r *HostnameService) Delete(ctx context.Context, zoneIdentifier string, ide
 }
 
 // Edit Web3 Hostname
-func (r *HostnameService) Edit(ctx context.Context, zoneIdentifier string, identifier string, body HostnameEditParams, opts ...option.RequestOption) (res *Hostname, err error) {
+func (r *HostnameService) Edit(ctx context.Context, identifier string, params HostnameEditParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	var env HostnameEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", params.ZoneID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -125,18 +125,18 @@ func (r *HostnameService) Edit(ctx context.Context, zoneIdentifier string, ident
 }
 
 // Web3 Hostname Details
-func (r *HostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *Hostname, err error) {
+func (r *HostnameService) Get(ctx context.Context, identifier string, query HostnameGetParams, opts ...option.RequestOption) (res *Hostname, err error) {
 	var env HostnameGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	if identifier == "" {
 		err = errors.New("missing required identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
+	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", query.ZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -245,6 +245,8 @@ func (r hostnameDeleteResponseJSON) RawJSON() string {
 }
 
 type HostnameNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Target gateway of the hostname.
 	Target param.Field[HostnameNewParamsTarget] `json:"target,required"`
 	// An optional description of the hostname.
@@ -317,6 +319,16 @@ func (r HostnameNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
+type HostnameListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type HostnameDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type HostnameDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
 	Messages []shared.ResponseInfo  `json:"messages,required"`
@@ -361,6 +373,8 @@ func (r HostnameDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type HostnameEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// An optional description of the hostname.
 	Description param.Field[string] `json:"description"`
 	// DNSLink value used if the target is ipfs.
@@ -412,6 +426,11 @@ func (r HostnameEditResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type HostnameGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type HostnameGetResponseEnvelope struct {

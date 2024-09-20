@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DevicePolicyFallbackDomainService contains methods and other services that help
@@ -116,7 +116,7 @@ type FallbackDomain struct {
 	// A description of the fallback domain, displayed in the client UI.
 	Description string `json:"description"`
 	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}      `json:"dns_server"`
+	DNSServer []string           `json:"dns_server"`
 	JSON      fallbackDomainJSON `json:"-"`
 }
 
@@ -143,7 +143,7 @@ type FallbackDomainParam struct {
 	// A description of the fallback domain, displayed in the client UI.
 	Description param.Field[string] `json:"description"`
 	// A list of IP addresses to handle domain resolution.
-	DNSServer param.Field[[]interface{}] `json:"dns_server"`
+	DNSServer param.Field[[]string] `json:"dns_server"`
 }
 
 func (r FallbackDomainParam) MarshalJSON() (data []byte, err error) {

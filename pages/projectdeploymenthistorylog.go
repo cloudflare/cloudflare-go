@@ -7,14 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // ProjectDeploymentHistoryLogService contains methods and other services that help
@@ -37,7 +35,7 @@ func NewProjectDeploymentHistoryLogService(opts ...option.RequestOption) (r *Pro
 }
 
 // Fetch deployment logs for a project.
-func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentHistoryLogGetParams, opts ...option.RequestOption) (res *ProjectDeploymentHistoryLogGetResponseUnion, err error) {
+func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectName string, deploymentID string, query ProjectDeploymentHistoryLogGetParams, opts ...option.RequestOption) (res *ProjectDeploymentHistoryLogGetResponse, err error) {
 	var env ProjectDeploymentHistoryLogGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -61,30 +59,52 @@ func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectNam
 	return
 }
 
-// Union satisfied by [pages.ProjectDeploymentHistoryLogGetResponseUnknown],
-// [pages.ProjectDeploymentHistoryLogGetResponseArray] or [shared.UnionString].
-type ProjectDeploymentHistoryLogGetResponseUnion interface {
-	ImplementsPagesProjectDeploymentHistoryLogGetResponseUnion()
+type ProjectDeploymentHistoryLogGetResponse struct {
+	Data                  []ProjectDeploymentHistoryLogGetResponseData `json:"data"`
+	IncludesContainerLogs bool                                         `json:"includes_container_logs"`
+	Total                 int64                                        `json:"total"`
+	JSON                  projectDeploymentHistoryLogGetResponseJSON   `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ProjectDeploymentHistoryLogGetResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ProjectDeploymentHistoryLogGetResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// projectDeploymentHistoryLogGetResponseJSON contains the JSON metadata for the
+// struct [ProjectDeploymentHistoryLogGetResponse]
+type projectDeploymentHistoryLogGetResponseJSON struct {
+	Data                  apijson.Field
+	IncludesContainerLogs apijson.Field
+	Total                 apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
-type ProjectDeploymentHistoryLogGetResponseArray []interface{}
+func (r *ProjectDeploymentHistoryLogGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
-func (r ProjectDeploymentHistoryLogGetResponseArray) ImplementsPagesProjectDeploymentHistoryLogGetResponseUnion() {
+func (r projectDeploymentHistoryLogGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ProjectDeploymentHistoryLogGetResponseData struct {
+	Line string                                         `json:"line"`
+	Ts   string                                         `json:"ts"`
+	JSON projectDeploymentHistoryLogGetResponseDataJSON `json:"-"`
+}
+
+// projectDeploymentHistoryLogGetResponseDataJSON contains the JSON metadata for
+// the struct [ProjectDeploymentHistoryLogGetResponseData]
+type projectDeploymentHistoryLogGetResponseDataJSON struct {
+	Line        apijson.Field
+	Ts          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDeploymentHistoryLogGetResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDeploymentHistoryLogGetResponseDataJSON) RawJSON() string {
+	return r.raw
 }
 
 type ProjectDeploymentHistoryLogGetParams struct {
@@ -93,9 +113,9 @@ type ProjectDeploymentHistoryLogGetParams struct {
 }
 
 type ProjectDeploymentHistoryLogGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo                       `json:"errors,required"`
-	Messages []shared.ResponseInfo                       `json:"messages,required"`
-	Result   ProjectDeploymentHistoryLogGetResponseUnion `json:"result,required"`
+	Errors   []shared.ResponseInfo                  `json:"errors,required"`
+	Messages []shared.ResponseInfo                  `json:"messages,required"`
+	Result   ProjectDeploymentHistoryLogGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentHistoryLogGetResponseEnvelopeJSON    `json:"-"`
@@ -124,12 +144,13 @@ func (r projectDeploymentHistoryLogGetResponseEnvelopeJSON) RawJSON() string {
 type ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess bool
 
 const (
-	ProjectDeploymentHistoryLogGetResponseEnvelopeSuccessTrue ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess = true
+	ProjectDeploymentHistoryLogGetResponseEnvelopeSuccessFalse ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess = false
+	ProjectDeploymentHistoryLogGetResponseEnvelopeSuccessTrue  ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess = true
 )
 
 func (r ProjectDeploymentHistoryLogGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ProjectDeploymentHistoryLogGetResponseEnvelopeSuccessTrue:
+	case ProjectDeploymentHistoryLogGetResponseEnvelopeSuccessFalse, ProjectDeploymentHistoryLogGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

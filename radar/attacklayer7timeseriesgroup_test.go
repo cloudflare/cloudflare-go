@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/radar"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/radar"
 )
 
 func TestAttackLayer7TimeseriesGroupGetWithOptionalParams(t *testing.T) {
@@ -29,7 +29,7 @@ func TestAttackLayer7TimeseriesGroupGetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.Get(context.TODO(), radar.AttackLayer7TimeseriesGroupGetParams{
-		AggInterval: cloudflare.F(radar.AttackLayer7TimeseriesGroupGetParamsAggInterval1h),
+		AggInterval: cloudflare.F(radar.AttackLayer7TimeseriesGroupGetParamsAggInterval15m),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -62,7 +62,7 @@ func TestAttackLayer7TimeseriesGroupHTTPMethodWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.HTTPMethod(context.TODO(), radar.AttackLayer7TimeseriesGroupHTTPMethodParams{
-		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1h),
+		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval15m),
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		Continent:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -99,7 +99,7 @@ func TestAttackLayer7TimeseriesGroupHTTPVersionWithOptionalParams(t *testing.T) 
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.HTTPVersion(context.TODO(), radar.AttackLayer7TimeseriesGroupHTTPVersionParams{
-		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1h),
+		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval15m),
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		Continent:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -136,7 +136,7 @@ func TestAttackLayer7TimeseriesGroupIndustryWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.Industry(context.TODO(), radar.AttackLayer7TimeseriesGroupIndustryParams{
-		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupIndustryParamsAggInterval1h),
+		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupIndustryParamsAggInterval15m),
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		Continent:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -175,7 +175,7 @@ func TestAttackLayer7TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.IPVersion(context.TODO(), radar.AttackLayer7TimeseriesGroupIPVersionParams{
-		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1h),
+		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupIPVersionParamsAggInterval15m),
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		Continent:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -212,7 +212,7 @@ func TestAttackLayer7TimeseriesGroupManagedRulesWithOptionalParams(t *testing.T)
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.ManagedRules(context.TODO(), radar.AttackLayer7TimeseriesGroupManagedRulesParams{
-		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1h),
+		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval15m),
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		Continent:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -250,7 +250,7 @@ func TestAttackLayer7TimeseriesGroupMitigationProductWithOptionalParams(t *testi
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.MitigationProduct(context.TODO(), radar.AttackLayer7TimeseriesGroupMitigationProductParams{
-		AggInterval:   cloudflare.F(radar.AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1h),
+		AggInterval:   cloudflare.F(radar.AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval15m),
 		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -287,7 +287,7 @@ func TestAttackLayer7TimeseriesGroupVerticalWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.Vertical(context.TODO(), radar.AttackLayer7TimeseriesGroupVerticalParams{
-		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupVerticalParamsAggInterval1h),
+		AggInterval:       cloudflare.F(radar.AttackLayer7TimeseriesGroupVerticalParamsAggInterval15m),
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		Continent:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

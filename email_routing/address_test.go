@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/email_routing"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/email_routing"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestAddressNew(t *testing.T) {
@@ -27,13 +27,10 @@ func TestAddressNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailRouting.Addresses.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		email_routing.AddressNewParams{
-			Email: cloudflare.F("user@example.com"),
-		},
-	)
+	_, err := client.EmailRouting.Addresses.New(context.TODO(), email_routing.AddressNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Email:     cloudflare.F("user@example.com"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -56,16 +53,13 @@ func TestAddressListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailRouting.Addresses.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		email_routing.AddressListParams{
-			Direction: cloudflare.F(email_routing.AddressListParamsDirectionAsc),
-			Page:      cloudflare.F(1.000000),
-			PerPage:   cloudflare.F(5.000000),
-			Verified:  cloudflare.F(email_routing.AddressListParamsVerifiedTrue),
-		},
-	)
+	_, err := client.EmailRouting.Addresses.List(context.TODO(), email_routing.AddressListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Direction: cloudflare.F(email_routing.AddressListParamsDirectionAsc),
+		Page:      cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(5.000000),
+		Verified:  cloudflare.F(email_routing.AddressListParamsVerifiedTrue),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -90,8 +84,10 @@ func TestAddressDelete(t *testing.T) {
 	)
 	_, err := client.EmailRouting.Addresses.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
+		email_routing.AddressDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -117,8 +113,10 @@ func TestAddressGet(t *testing.T) {
 	)
 	_, err := client.EmailRouting.Addresses.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
+		email_routing.AddressGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

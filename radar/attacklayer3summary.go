@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // AttackLayer3SummaryService contains methods and other services that help with
@@ -246,24 +246,24 @@ func (r attackLayer3SummaryBitrateResponseMetaConfidenceInfoAnnotationJSON) RawJ
 }
 
 type AttackLayer3SummaryBitrateResponseSummary0 struct {
-	Number1GbpsTo10Gbps   string                                         `json:"_1_GBPS_TO_10_GBPS,required"`
-	Number10GbpsTo100Gbps string                                         `json:"_10_GBPS_TO_100_GBPS,required"`
-	Number500MbpsTo1Gbps  string                                         `json:"_500_MBPS_TO_1_GBPS,required"`
-	Over100Gbps           string                                         `json:"OVER_100_GBPS,required"`
-	Under500Mbps          string                                         `json:"UNDER_500_MBPS,required"`
-	JSON                  attackLayer3SummaryBitrateResponseSummary0JSON `json:"-"`
+	OneGBPSToTenGBPS         string                                         `json:"_1_GBPS_TO_10_GBPS,required"`
+	TenGBPSToOneHundredGBPS  string                                         `json:"_10_GBPS_TO_100_GBPS,required"`
+	FiveHundredMBPSToOneGBPS string                                         `json:"_500_MBPS_TO_1_GBPS,required"`
+	Over100GBPS              string                                         `json:"OVER_100_GBPS,required"`
+	Under500MBPS             string                                         `json:"UNDER_500_MBPS,required"`
+	JSON                     attackLayer3SummaryBitrateResponseSummary0JSON `json:"-"`
 }
 
 // attackLayer3SummaryBitrateResponseSummary0JSON contains the JSON metadata for
 // the struct [AttackLayer3SummaryBitrateResponseSummary0]
 type attackLayer3SummaryBitrateResponseSummary0JSON struct {
-	Number1GbpsTo10Gbps   apijson.Field
-	Number10GbpsTo100Gbps apijson.Field
-	Number500MbpsTo1Gbps  apijson.Field
-	Over100Gbps           apijson.Field
-	Under500Mbps          apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
+	OneGBPSToTenGBPS         apijson.Field
+	TenGBPSToOneHundredGBPS  apijson.Field
+	FiveHundredMBPSToOneGBPS apijson.Field
+	Over100GBPS              apijson.Field
+	Under500MBPS             apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
 }
 
 func (r *AttackLayer3SummaryBitrateResponseSummary0) UnmarshalJSON(data []byte) (err error) {
@@ -407,26 +407,26 @@ func (r attackLayer3SummaryDurationResponseMetaConfidenceInfoAnnotationJSON) Raw
 }
 
 type AttackLayer3SummaryDurationResponseSummary0 struct {
-	Number1HourTo3Hours  string                                          `json:"_1_HOUR_TO_3_HOURS,required"`
-	Number10MinsTo20Mins string                                          `json:"_10_MINS_TO_20_MINS,required"`
-	Number20MinsTo40Mins string                                          `json:"_20_MINS_TO_40_MINS,required"`
-	Number40MinsTo1Hour  string                                          `json:"_40_MINS_TO_1_HOUR,required"`
-	Over3Hours           string                                          `json:"OVER_3_HOURS,required"`
-	Under10Mins          string                                          `json:"UNDER_10_MINS,required"`
-	JSON                 attackLayer3SummaryDurationResponseSummary0JSON `json:"-"`
+	OneHourToThreeHours     string                                          `json:"_1_HOUR_TO_3_HOURS,required"`
+	TenMinsToTwentyMinds    string                                          `json:"_10_MINS_TO_20_MINS,required"`
+	TwentyMindsToFortyMinds string                                          `json:"_20_MINS_TO_40_MINS,required"`
+	FortyMinsToOneHour      string                                          `json:"_40_MINS_TO_1_HOUR,required"`
+	Over3Hours              string                                          `json:"OVER_3_HOURS,required"`
+	Under10Mins             string                                          `json:"UNDER_10_MINS,required"`
+	JSON                    attackLayer3SummaryDurationResponseSummary0JSON `json:"-"`
 }
 
 // attackLayer3SummaryDurationResponseSummary0JSON contains the JSON metadata for
 // the struct [AttackLayer3SummaryDurationResponseSummary0]
 type attackLayer3SummaryDurationResponseSummary0JSON struct {
-	Number1HourTo3Hours  apijson.Field
-	Number10MinsTo20Mins apijson.Field
-	Number20MinsTo40Mins apijson.Field
-	Number40MinsTo1Hour  apijson.Field
-	Over3Hours           apijson.Field
-	Under10Mins          apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	OneHourToThreeHours     apijson.Field
+	TenMinsToTwentyMinds    apijson.Field
+	TwentyMindsToFortyMinds apijson.Field
+	FortyMinsToOneHour      apijson.Field
+	Over3Hours              apijson.Field
+	Under10Mins             apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *AttackLayer3SummaryDurationResponseSummary0) UnmarshalJSON(data []byte) (err error) {

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/queues"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/queues"
 )
 
 func TestMessageAckWithOptionalParams(t *testing.T) {
@@ -77,9 +77,9 @@ func TestMessagePullWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.MessagePullParams{
-			AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			BatchSize:           cloudflare.F(10.000000),
-			VisibilityTimeoutMs: cloudflare.F(1000.000000),
+			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			BatchSize:         cloudflare.F(50.000000),
+			VisibilityTimeout: cloudflare.F(6000.000000),
 		},
 	)
 	if err != nil {

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
 func TestDeviceNetworkNewWithOptionalParams(t *testing.T) {
@@ -30,8 +30,8 @@ func TestDeviceNetworkNewWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Devices.Networks.New(context.TODO(), zero_trust.DeviceNetworkNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Config: cloudflare.F(zero_trust.DeviceNetworkNewParamsConfig{
-			Sha256:      cloudflare.F("b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c"),
 			TLSSockaddr: cloudflare.F("foo.bar:1234"),
+			Sha256:      cloudflare.F("b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c"),
 		}),
 		Name: cloudflare.F("managed-network-1"),
 		Type: cloudflare.F(zero_trust.DeviceNetworkNewParamsTypeTLS),
@@ -64,8 +64,8 @@ func TestDeviceNetworkUpdateWithOptionalParams(t *testing.T) {
 		zero_trust.DeviceNetworkUpdateParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Config: cloudflare.F(zero_trust.DeviceNetworkUpdateParamsConfig{
-				Sha256:      cloudflare.F("b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c"),
 				TLSSockaddr: cloudflare.F("foo.bar:1234"),
+				Sha256:      cloudflare.F("b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c"),
 			}),
 			Name: cloudflare.F("managed-network-1"),
 			Type: cloudflare.F(zero_trust.DeviceNetworkUpdateParamsTypeTLS),

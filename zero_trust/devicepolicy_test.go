@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
 func TestDevicePolicyNewWithOptionalParams(t *testing.T) {
@@ -48,8 +48,9 @@ func TestDevicePolicyNewWithOptionalParams(t *testing.T) {
 			Mode: cloudflare.F("proxy"),
 			Port: cloudflare.F(3000.000000),
 		}),
-		SupportURL:   cloudflare.F("https://1.1.1.1/help"),
-		SwitchLocked: cloudflare.F(true),
+		SupportURL:     cloudflare.F("https://1.1.1.1/help"),
+		SwitchLocked:   cloudflare.F(true),
+		TunnelProtocol: cloudflare.F("wireguard"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -149,8 +150,9 @@ func TestDevicePolicyEditWithOptionalParams(t *testing.T) {
 				Mode: cloudflare.F("proxy"),
 				Port: cloudflare.F(3000.000000),
 			}),
-			SupportURL:   cloudflare.F("https://1.1.1.1/help"),
-			SwitchLocked: cloudflare.F(true),
+			SupportURL:     cloudflare.F("https://1.1.1.1/help"),
+			SwitchLocked:   cloudflare.F(true),
+			TunnelProtocol: cloudflare.F("wireguard"),
 		},
 	)
 	if err != nil {

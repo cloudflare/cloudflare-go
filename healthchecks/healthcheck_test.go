@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/healthchecks"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/healthchecks"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestHealthcheckNewWithOptionalParams(t *testing.T) {
@@ -31,7 +31,8 @@ func TestHealthcheckNewWithOptionalParams(t *testing.T) {
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		QueryHealthcheck: healthchecks.QueryHealthcheckParam{
 			Address:              cloudflare.F("www.example.com"),
-			CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWeu, healthchecks.CheckRegionEnam}),
+			Name:                 cloudflare.F("server-1"),
+			CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWnam, healthchecks.CheckRegionEnam}),
 			ConsecutiveFails:     cloudflare.F(int64(0)),
 			ConsecutiveSuccesses: cloudflare.F(int64(0)),
 			Description:          cloudflare.F("Health check for www.example.com"),
@@ -49,7 +50,6 @@ func TestHealthcheckNewWithOptionalParams(t *testing.T) {
 				Port:   cloudflare.F(int64(0)),
 			}),
 			Interval:  cloudflare.F(int64(0)),
-			Name:      cloudflare.F("server-1"),
 			Retries:   cloudflare.F(int64(0)),
 			Suspended: cloudflare.F(true),
 			TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{
@@ -89,7 +89,8 @@ func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			QueryHealthcheck: healthchecks.QueryHealthcheckParam{
 				Address:              cloudflare.F("www.example.com"),
-				CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWeu, healthchecks.CheckRegionEnam}),
+				Name:                 cloudflare.F("server-1"),
+				CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWnam, healthchecks.CheckRegionEnam}),
 				ConsecutiveFails:     cloudflare.F(int64(0)),
 				ConsecutiveSuccesses: cloudflare.F(int64(0)),
 				Description:          cloudflare.F("Health check for www.example.com"),
@@ -107,7 +108,6 @@ func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
 					Port:   cloudflare.F(int64(0)),
 				}),
 				Interval:  cloudflare.F(int64(0)),
-				Name:      cloudflare.F("server-1"),
 				Retries:   cloudflare.F(int64(0)),
 				Suspended: cloudflare.F(true),
 				TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{
@@ -143,8 +143,8 @@ func TestHealthcheckListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Healthchecks.List(context.TODO(), healthchecks.HealthcheckListParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Page:    cloudflare.F[any](map[string]interface{}{}),
-		PerPage: cloudflare.F[any](map[string]interface{}{}),
+		Page:    cloudflare.F(1.000000),
+		PerPage: cloudflare.F(5.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -204,7 +204,8 @@ func TestHealthcheckEditWithOptionalParams(t *testing.T) {
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			QueryHealthcheck: healthchecks.QueryHealthcheckParam{
 				Address:              cloudflare.F("www.example.com"),
-				CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWeu, healthchecks.CheckRegionEnam}),
+				Name:                 cloudflare.F("server-1"),
+				CheckRegions:         cloudflare.F([]healthchecks.CheckRegion{healthchecks.CheckRegionWnam, healthchecks.CheckRegionEnam}),
 				ConsecutiveFails:     cloudflare.F(int64(0)),
 				ConsecutiveSuccesses: cloudflare.F(int64(0)),
 				Description:          cloudflare.F("Health check for www.example.com"),
@@ -222,7 +223,6 @@ func TestHealthcheckEditWithOptionalParams(t *testing.T) {
 					Port:   cloudflare.F(int64(0)),
 				}),
 				Interval:  cloudflare.F(int64(0)),
-				Name:      cloudflare.F("server-1"),
 				Retries:   cloudflare.F(int64(0)),
 				Suspended: cloudflare.F(true),
 				TCPConfig: cloudflare.F(healthchecks.TCPConfigurationParam{

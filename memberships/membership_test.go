@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/memberships"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/memberships"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestMembershipUpdate(t *testing.T) {
@@ -60,9 +60,9 @@ func TestMembershipListWithOptionalParams(t *testing.T) {
 		Account: cloudflare.F(memberships.MembershipListParamsAccount{
 			Name: cloudflare.F("Demo Account"),
 		}),
-		Direction: cloudflare.F(memberships.MembershipListParamsDirectionDesc),
+		Direction: cloudflare.F(memberships.MembershipListParamsDirectionAsc),
 		Name:      cloudflare.F("Demo Account"),
-		Order:     cloudflare.F(memberships.MembershipListParamsOrderStatus),
+		Order:     cloudflare.F(memberships.MembershipListParamsOrderID),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 		Status:    cloudflare.F(memberships.MembershipListParamsStatusAccepted),

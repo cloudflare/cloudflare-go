@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // AddressService contains methods and other services that help with interacting
@@ -40,15 +40,15 @@ func NewAddressService(opts ...option.RequestOption) (r *AddressService) {
 
 // Create a destination address to forward your emails to. Destination addresses
 // need to be verified before they can be used.
-func (r *AddressService) New(ctx context.Context, accountIdentifier string, body AddressNewParams, opts ...option.RequestOption) (res *Address, err error) {
+func (r *AddressService) New(ctx context.Context, params AddressNewParams, opts ...option.RequestOption) (res *Address, err error) {
 	var env AddressNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/email/routing/addresses", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/email/routing/addresses", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -57,16 +57,16 @@ func (r *AddressService) New(ctx context.Context, accountIdentifier string, body
 }
 
 // Lists existing destination addresses.
-func (r *AddressService) List(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Address], err error) {
+func (r *AddressService) List(ctx context.Context, params AddressListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Address], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/email/routing/addresses", accountIdentifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/email/routing/addresses", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,23 +79,23 @@ func (r *AddressService) List(ctx context.Context, accountIdentifier string, que
 }
 
 // Lists existing destination addresses.
-func (r *AddressService) ListAutoPaging(ctx context.Context, accountIdentifier string, query AddressListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Address] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, query, opts...))
+func (r *AddressService) ListAutoPaging(ctx context.Context, params AddressListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Address] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a specific destination address.
-func (r *AddressService) Delete(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *Address, err error) {
+func (r *AddressService) Delete(ctx context.Context, destinationAddressIdentifier string, body AddressDeleteParams, opts ...option.RequestOption) (res *Address, err error) {
 	var env AddressDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
 	if destinationAddressIdentifier == "" {
 		err = errors.New("missing required destination_address_identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", accountIdentifier, destinationAddressIdentifier)
+	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", body.AccountID, destinationAddressIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -105,18 +105,18 @@ func (r *AddressService) Delete(ctx context.Context, accountIdentifier string, d
 }
 
 // Gets information for a specific destination email already created.
-func (r *AddressService) Get(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *Address, err error) {
+func (r *AddressService) Get(ctx context.Context, destinationAddressIdentifier string, query AddressGetParams, opts ...option.RequestOption) (res *Address, err error) {
 	var env AddressGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if accountIdentifier == "" {
-		err = errors.New("missing required account_identifier parameter")
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
 		return
 	}
 	if destinationAddressIdentifier == "" {
 		err = errors.New("missing required destination_address_identifier parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", accountIdentifier, destinationAddressIdentifier)
+	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", query.AccountID, destinationAddressIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -164,6 +164,8 @@ func (r addressJSON) RawJSON() string {
 }
 
 type AddressNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email,required"`
 }
@@ -216,6 +218,8 @@ func (r AddressNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AddressListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Sorts results in an ascending or descending order.
 	Direction param.Field[AddressListParamsDirection] `query:"direction"`
 	// Page number of paginated results.
@@ -266,6 +270,11 @@ func (r AddressListParamsVerified) IsKnown() bool {
 	return false
 }
 
+type AddressDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AddressDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
@@ -307,6 +316,11 @@ func (r AddressDeleteResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type AddressGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressGetResponseEnvelope struct {

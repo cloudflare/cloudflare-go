@@ -8,12 +8,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // BillingHistoryService contains methods and other services that help with
@@ -100,7 +100,7 @@ func (r billingHistoryJSON) RawJSON() string {
 }
 
 type BillingHistoryZone struct {
-	Name interface{}            `json:"name"`
+	Name string                 `json:"name"`
 	JSON billingHistoryZoneJSON `json:"-"`
 }
 
@@ -123,8 +123,6 @@ func (r billingHistoryZoneJSON) RawJSON() string {
 type BillingHistoryListParams struct {
 	// The billing item action.
 	Action param.Field[string] `query:"action"`
-	// When the billing item was created.
-	OccuredAt param.Field[time.Time] `query:"occured_at" format:"date-time"`
 	// When the billing item was created.
 	OccurredAt param.Field[time.Time] `query:"occurred_at" format:"date-time"`
 	// Field to order billing history by.
@@ -150,14 +148,14 @@ func (r BillingHistoryListParams) URLQuery() (v url.Values) {
 type BillingHistoryListParamsOrder string
 
 const (
-	BillingHistoryListParamsOrderType      BillingHistoryListParamsOrder = "type"
-	BillingHistoryListParamsOrderOccuredAt BillingHistoryListParamsOrder = "occured_at"
-	BillingHistoryListParamsOrderAction    BillingHistoryListParamsOrder = "action"
+	BillingHistoryListParamsOrderType       BillingHistoryListParamsOrder = "type"
+	BillingHistoryListParamsOrderOccurredAt BillingHistoryListParamsOrder = "occurred_at"
+	BillingHistoryListParamsOrderAction     BillingHistoryListParamsOrder = "action"
 )
 
 func (r BillingHistoryListParamsOrder) IsKnown() bool {
 	switch r {
-	case BillingHistoryListParamsOrderType, BillingHistoryListParamsOrderOccuredAt, BillingHistoryListParamsOrderAction:
+	case BillingHistoryListParamsOrderType, BillingHistoryListParamsOrderOccurredAt, BillingHistoryListParamsOrderAction:
 		return true
 	}
 	return false

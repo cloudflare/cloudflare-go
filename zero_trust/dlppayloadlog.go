@@ -7,12 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DLPPayloadLogService contains methods and other services that help with
@@ -34,7 +35,7 @@ func NewDLPPayloadLogService(opts ...option.RequestOption) (r *DLPPayloadLogServ
 	return
 }
 
-// Updates the DLP payload log settings for this account.
+// Set payload log settings
 func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogUpdateParams, opts ...option.RequestOption) (res *DLPPayloadLogUpdateResponse, err error) {
 	var env DLPPayloadLogUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -51,7 +52,7 @@ func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogU
 	return
 }
 
-// Gets the current DLP payload log settings for this account.
+// Get payload log settings
 func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetParams, opts ...option.RequestOption) (res *DLPPayloadLogGetResponse, err error) {
 	var env DLPPayloadLogGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -69,13 +70,15 @@ func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetPa
 }
 
 type DLPPayloadLogUpdateResponse struct {
-	PublicKey string                          `json:"public_key,required,nullable"`
+	UpdatedAt time.Time                       `json:"updated_at,required" format:"date-time"`
+	PublicKey string                          `json:"public_key,nullable"`
 	JSON      dlpPayloadLogUpdateResponseJSON `json:"-"`
 }
 
 // dlpPayloadLogUpdateResponseJSON contains the JSON metadata for the struct
 // [DLPPayloadLogUpdateResponse]
 type dlpPayloadLogUpdateResponseJSON struct {
+	UpdatedAt   apijson.Field
 	PublicKey   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -90,13 +93,15 @@ func (r dlpPayloadLogUpdateResponseJSON) RawJSON() string {
 }
 
 type DLPPayloadLogGetResponse struct {
-	PublicKey string                       `json:"public_key,required,nullable"`
+	UpdatedAt time.Time                    `json:"updated_at,required" format:"date-time"`
+	PublicKey string                       `json:"public_key,nullable"`
 	JSON      dlpPayloadLogGetResponseJSON `json:"-"`
 }
 
 // dlpPayloadLogGetResponseJSON contains the JSON metadata for the struct
 // [DLPPayloadLogGetResponse]
 type dlpPayloadLogGetResponseJSON struct {
+	UpdatedAt   apijson.Field
 	PublicKey   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -111,10 +116,8 @@ func (r dlpPayloadLogGetResponseJSON) RawJSON() string {
 }
 
 type DLPPayloadLogUpdateParams struct {
-	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The public key to use when encrypting extracted payloads, as a base64 string
-	PublicKey param.Field[string] `json:"public_key,required"`
+	PublicKey param.Field[string] `json:"public_key"`
 }
 
 func (r DLPPayloadLogUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -122,11 +125,11 @@ func (r DLPPayloadLogUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPPayloadLogUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo       `json:"errors,required"`
-	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   DLPPayloadLogUpdateResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPPayloadLogUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  DLPPayloadLogUpdateResponse                `json:"result"`
 	JSON    dlpPayloadLogUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -135,8 +138,8 @@ type DLPPayloadLogUpdateResponseEnvelope struct {
 type dlpPayloadLogUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -165,16 +168,15 @@ func (r DLPPayloadLogUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type DLPPayloadLogGetParams struct {
-	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DLPPayloadLogGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   DLPPayloadLogGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPPayloadLogGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DLPPayloadLogGetResponse                `json:"result"`
 	JSON    dlpPayloadLogGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -183,8 +185,8 @@ type DLPPayloadLogGetResponseEnvelope struct {
 type dlpPayloadLogGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

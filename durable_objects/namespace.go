@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // NamespaceService contains methods and other services that help with interacting
@@ -64,11 +64,12 @@ func (r *NamespaceService) ListAutoPaging(ctx context.Context, query NamespaceLi
 }
 
 type Namespace struct {
-	ID     interface{}   `json:"id"`
-	Class  interface{}   `json:"class"`
-	Name   interface{}   `json:"name"`
-	Script interface{}   `json:"script"`
-	JSON   namespaceJSON `json:"-"`
+	ID        string        `json:"id"`
+	Class     string        `json:"class"`
+	Name      string        `json:"name"`
+	Script    string        `json:"script"`
+	UseSqlite bool          `json:"use_sqlite"`
+	JSON      namespaceJSON `json:"-"`
 }
 
 // namespaceJSON contains the JSON metadata for the struct [Namespace]
@@ -77,6 +78,7 @@ type namespaceJSON struct {
 	Class       apijson.Field
 	Name        apijson.Field
 	Script      apijson.Field
+	UseSqlite   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

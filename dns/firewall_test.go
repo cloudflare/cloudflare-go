@@ -8,11 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/dns"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/dns"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestFirewallNewWithOptionalParams(t *testing.T) {
@@ -31,7 +30,7 @@ func TestFirewallNewWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Firewall.New(context.TODO(), dns.FirewallNewParams{
 		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:        cloudflare.F("My Awesome DNS Firewall cluster"),
-		UpstreamIPs: cloudflare.F([]dns.UpstreamIPsUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("198.51.100.1"), shared.UnionString("2001:DB8:100::CF")}),
+		UpstreamIPs: cloudflare.F([]dns.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
 		AttackMitigation: cloudflare.F(dns.AttackMitigationParam{
 			Enabled:                   cloudflare.F(true),
 			OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
@@ -127,23 +126,19 @@ func TestFirewallEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		dns.FirewallEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Firewall: dns.FirewallParam{
-				AttackMitigation: cloudflare.F(dns.AttackMitigationParam{
-					Enabled:                   cloudflare.F(true),
-					OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
-				}),
-				DeprecateAnyRequests: cloudflare.F(true),
-				DNSFirewallIPs:       cloudflare.F([]dns.FirewallIPsUnionParam{shared.UnionString("203.0.113.1"), shared.UnionString("203.0.113.254"), shared.UnionString("2001:DB8:AB::CF"), shared.UnionString("2001:DB8:CD::CF")}),
-				ECSFallback:          cloudflare.F(false),
-				ID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-				MaximumCacheTTL:      cloudflare.F(900.000000),
-				MinimumCacheTTL:      cloudflare.F(60.000000),
-				Name:                 cloudflare.F("My Awesome DNS Firewall cluster"),
-				NegativeCacheTTL:     cloudflare.F(900.000000),
-				Ratelimit:            cloudflare.F(600.000000),
-				Retries:              cloudflare.F(2.000000),
-				UpstreamIPs:          cloudflare.F([]dns.UpstreamIPsUnionParam{shared.UnionString("192.0.2.1"), shared.UnionString("198.51.100.1"), shared.UnionString("2001:DB8:100::CF")}),
-			},
+			AttackMitigation: cloudflare.F(dns.AttackMitigationParam{
+				Enabled:                   cloudflare.F(true),
+				OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
+			}),
+			DeprecateAnyRequests: cloudflare.F(true),
+			ECSFallback:          cloudflare.F(false),
+			MaximumCacheTTL:      cloudflare.F(900.000000),
+			MinimumCacheTTL:      cloudflare.F(60.000000),
+			Name:                 cloudflare.F("My Awesome DNS Firewall cluster"),
+			NegativeCacheTTL:     cloudflare.F(900.000000),
+			Ratelimit:            cloudflare.F(600.000000),
+			Retries:              cloudflare.F(2.000000),
+			UpstreamIPs:          cloudflare.F([]dns.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
 		},
 	)
 	if err != nil {

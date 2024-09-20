@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
 func TestDevicePostureNewWithOptionalParams(t *testing.T) {
@@ -34,9 +34,9 @@ func TestDevicePostureNewWithOptionalParams(t *testing.T) {
 		Description: cloudflare.F("The rule for admin serial numbers"),
 		Expiration:  cloudflare.F("1h"),
 		Input: cloudflare.F[zero_trust.DeviceInputUnionParam](zero_trust.FileInputParam{
-			Exists:          cloudflare.F(true),
-			OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemLinux),
+			OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemWindows),
 			Path:            cloudflare.F("/bin/cat"),
+			Exists:          cloudflare.F(true),
 			Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 			Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
 		}),
@@ -81,9 +81,9 @@ func TestDevicePostureUpdateWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("The rule for admin serial numbers"),
 			Expiration:  cloudflare.F("1h"),
 			Input: cloudflare.F[zero_trust.DeviceInputUnionParam](zero_trust.FileInputParam{
-				Exists:          cloudflare.F(true),
-				OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemLinux),
+				OperatingSystem: cloudflare.F(zero_trust.FileInputOperatingSystemWindows),
 				Path:            cloudflare.F("/bin/cat"),
+				Exists:          cloudflare.F(true),
 				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
 			}),

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
 func TestDevicePolicyFallbackDomainUpdate(t *testing.T) {
@@ -33,17 +33,17 @@ func TestDevicePolicyFallbackDomainUpdate(t *testing.T) {
 		zero_trust.DevicePolicyFallbackDomainUpdateParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Body: []zero_trust.FallbackDomainParam{{
-				Description: cloudflare.F("Domain bypass for local development"),
-				DNSServer:   cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
 				Suffix:      cloudflare.F("example.com"),
+				Description: cloudflare.F("Domain bypass for local development"),
+				DNSServer:   cloudflare.F([]string{"1.1.1.1", "1.1.1.1", "1.1.1.1"}),
 			}, {
-				Description: cloudflare.F("Domain bypass for local development"),
-				DNSServer:   cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
 				Suffix:      cloudflare.F("example.com"),
+				Description: cloudflare.F("Domain bypass for local development"),
+				DNSServer:   cloudflare.F([]string{"1.1.1.1", "1.1.1.1", "1.1.1.1"}),
 			}, {
-				Description: cloudflare.F("Domain bypass for local development"),
-				DNSServer:   cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
 				Suffix:      cloudflare.F("example.com"),
+				Description: cloudflare.F("Domain bypass for local development"),
+				DNSServer:   cloudflare.F([]string{"1.1.1.1", "1.1.1.1", "1.1.1.1"}),
 			}},
 		},
 	)

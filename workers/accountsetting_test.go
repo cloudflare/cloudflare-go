@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/workers"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/workers"
 )
 
-func TestAccountSettingUpdate(t *testing.T) {
+func TestAccountSettingUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,8 +28,9 @@ func TestAccountSettingUpdate(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.AccountSettings.Update(context.TODO(), workers.AccountSettingUpdateParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:      "{'default_usage_model': 'unbound'}",
+		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		DefaultUsageModel: cloudflare.F("default_usage_model"),
+		GreenCompute:      cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

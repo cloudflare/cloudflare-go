@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
 func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
@@ -29,23 +29,26 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Predefined.Update(
 		context.TODO(),
-		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPProfilePredefinedUpdateParams{
-			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AllowedMatchCount: cloudflare.F(5.000000),
+			AccountID: cloudflare.F("account_id"),
+			Entries: cloudflare.F([]zero_trust.DLPProfilePredefinedUpdateParamsEntry{{
+				ID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				Enabled: cloudflare.F(true),
+			}, {
+				ID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				Enabled: cloudflare.F(true),
+			}, {
+				ID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				Enabled: cloudflare.F(true),
+			}}),
+			AllowedMatchCount: cloudflare.F(int64(0)),
 			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
 				Enabled: cloudflare.F(true),
 				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
 					Files: cloudflare.F(true),
 				}),
 			}),
-			Entries: cloudflare.F([]zero_trust.DLPProfilePredefinedUpdateParamsEntry{{
-				Enabled: cloudflare.F(true),
-			}, {
-				Enabled: cloudflare.F(true),
-			}, {
-				Enabled: cloudflare.F(true),
-			}}),
 			OCREnabled: cloudflare.F(true),
 		},
 	)
@@ -73,9 +76,9 @@ func TestDLPProfilePredefinedGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Predefined.Get(
 		context.TODO(),
-		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		zero_trust.DLPProfilePredefinedGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("account_id"),
 		},
 	)
 	if err != nil {

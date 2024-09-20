@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/email_routing"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/email_routing"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestEmailRoutingDisable(t *testing.T) {
@@ -27,13 +27,10 @@ func TestEmailRoutingDisable(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailRouting.Disable(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		email_routing.EmailRoutingDisableParams{
-			Body: map[string]interface{}{},
-		},
-	)
+	_, err := client.EmailRouting.Disable(context.TODO(), email_routing.EmailRoutingDisableParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body:   map[string]interface{}{},
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -56,13 +53,10 @@ func TestEmailRoutingEnable(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailRouting.Enable(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		email_routing.EmailRoutingEnableParams{
-			Body: map[string]interface{}{},
-		},
-	)
+	_, err := client.EmailRouting.Enable(context.TODO(), email_routing.EmailRoutingEnableParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body:   map[string]interface{}{},
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -85,7 +79,9 @@ func TestEmailRoutingGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailRouting.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.EmailRouting.Get(context.TODO(), email_routing.EmailRoutingGetParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

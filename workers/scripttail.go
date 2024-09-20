@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // ScriptTailService contains methods and other services that help with interacting
@@ -139,9 +139,9 @@ func (r ConsumerScriptParam) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptTailNewResponse struct {
-	ID        interface{}               `json:"id"`
-	ExpiresAt interface{}               `json:"expires_at"`
-	URL       interface{}               `json:"url"`
+	ID        string                    `json:"id"`
+	ExpiresAt string                    `json:"expires_at"`
+	URL       string                    `json:"url"`
 	JSON      scriptTailNewResponseJSON `json:"-"`
 }
 
@@ -205,9 +205,9 @@ func (r ScriptTailDeleteResponseSuccess) IsKnown() bool {
 }
 
 type ScriptTailGetResponse struct {
-	ID        interface{}               `json:"id"`
-	ExpiresAt interface{}               `json:"expires_at"`
-	URL       interface{}               `json:"url"`
+	ID        string                    `json:"id"`
+	ExpiresAt string                    `json:"expires_at"`
+	URL       string                    `json:"url"`
 	JSON      scriptTailGetResponseJSON `json:"-"`
 }
 

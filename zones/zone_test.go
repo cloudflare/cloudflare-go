@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zones"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 func TestZoneNewWithOptionalParams(t *testing.T) {
@@ -61,10 +61,10 @@ func TestZoneListWithOptionalParams(t *testing.T) {
 			ID:   cloudflare.F("id"),
 			Name: cloudflare.F("name"),
 		}),
-		Direction: cloudflare.F(zones.ZoneListParamsDirectionDesc),
+		Direction: cloudflare.F(zones.ZoneListParamsDirectionAsc),
 		Match:     cloudflare.F(zones.ZoneListParamsMatchAny),
 		Name:      cloudflare.F("name"),
-		Order:     cloudflare.F(zones.ZoneListParamsOrderStatus),
+		Order:     cloudflare.F(zones.ZoneListParamsOrderName),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
 		Status:    cloudflare.F(zones.ZoneListParamsStatusInitializing),
@@ -118,10 +118,7 @@ func TestZoneEditWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.Edit(context.TODO(), zones.ZoneEditParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Plan: cloudflare.F(zones.ZoneEditParamsPlan{
-			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		}),
+		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Type:              cloudflare.F(zones.ZoneEditParamsTypeFull),
 		VanityNameServers: cloudflare.F([]string{"ns1.example.com", "ns2.example.com"}),
 	})

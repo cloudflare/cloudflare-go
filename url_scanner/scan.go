@@ -10,12 +10,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/radar"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // ScanService contains methods and other services that help with interacting with
@@ -38,8 +37,8 @@ func NewScanService(opts ...option.RequestOption) (r *ScanService) {
 }
 
 // Submit a URL to scan. You can also set some options, like the visibility level
-// and custom headers. Accounts are limited to 1 new scan every 10 seconds and 8000
-// per month. If you need more, please reach out.
+// and custom headers. Check limits at
+// https://developers.cloudflare.com/security-center/investigate/scan-limits/.
 func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewParams, opts ...option.RequestOption) (res *ScanNewResponse, err error) {
 	var env ScanNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -542,7 +541,7 @@ type ScanGetResponseScanPage struct {
 	Country               string                                     `json:"country,required"`
 	CountryLocationAlpha2 string                                     `json:"countryLocationAlpha2,required"`
 	Domain                string                                     `json:"domain,required"`
-	Headers               []radar.Browser                            `json:"headers,required"`
+	Headers               []ScanGetResponseScanPageHeader            `json:"headers,required"`
 	IP                    string                                     `json:"ip,required"`
 	JS                    ScanGetResponseScanPageJS                  `json:"js,required"`
 	SecurityViolations    []ScanGetResponseScanPageSecurityViolation `json:"securityViolations,required"`
@@ -653,6 +652,29 @@ func (r *ScanGetResponseScanPageCookie) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r scanGetResponseScanPageCookieJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanGetResponseScanPageHeader struct {
+	Name  string                            `json:"name,required"`
+	Value string                            `json:"value,required"`
+	JSON  scanGetResponseScanPageHeaderJSON `json:"-"`
+}
+
+// scanGetResponseScanPageHeaderJSON contains the JSON metadata for the struct
+// [ScanGetResponseScanPageHeader]
+type scanGetResponseScanPageHeaderJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanGetResponseScanPageHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanGetResponseScanPageHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1481,13 +1503,13 @@ func (r scanHarResponseHarLogEntryJSON) RawJSON() string {
 }
 
 type ScanHarResponseHarLogEntriesRequest struct {
-	BodySize    float64                                 `json:"bodySize,required"`
-	Headers     []radar.Browser                         `json:"headers,required"`
-	HeadersSize float64                                 `json:"headersSize,required"`
-	HTTPVersion string                                  `json:"httpVersion,required"`
-	Method      string                                  `json:"method,required"`
-	URL         string                                  `json:"url,required"`
-	JSON        scanHarResponseHarLogEntriesRequestJSON `json:"-"`
+	BodySize    float64                                     `json:"bodySize,required"`
+	Headers     []ScanHarResponseHarLogEntriesRequestHeader `json:"headers,required"`
+	HeadersSize float64                                     `json:"headersSize,required"`
+	HTTPVersion string                                      `json:"httpVersion,required"`
+	Method      string                                      `json:"method,required"`
+	URL         string                                      `json:"url,required"`
+	JSON        scanHarResponseHarLogEntriesRequestJSON     `json:"-"`
 }
 
 // scanHarResponseHarLogEntriesRequestJSON contains the JSON metadata for the
@@ -1511,17 +1533,40 @@ func (r scanHarResponseHarLogEntriesRequestJSON) RawJSON() string {
 	return r.raw
 }
 
+type ScanHarResponseHarLogEntriesRequestHeader struct {
+	Name  string                                        `json:"name,required"`
+	Value string                                        `json:"value,required"`
+	JSON  scanHarResponseHarLogEntriesRequestHeaderJSON `json:"-"`
+}
+
+// scanHarResponseHarLogEntriesRequestHeaderJSON contains the JSON metadata for the
+// struct [ScanHarResponseHarLogEntriesRequestHeader]
+type scanHarResponseHarLogEntriesRequestHeaderJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanHarResponseHarLogEntriesRequestHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanHarResponseHarLogEntriesRequestHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScanHarResponseHarLogEntriesResponse struct {
-	TransferSize float64                                     `json:"_transferSize,required"`
-	BodySize     float64                                     `json:"bodySize,required"`
-	Content      ScanHarResponseHarLogEntriesResponseContent `json:"content,required"`
-	Headers      []radar.Browser                             `json:"headers,required"`
-	HeadersSize  float64                                     `json:"headersSize,required"`
-	HTTPVersion  string                                      `json:"httpVersion,required"`
-	RedirectURL  string                                      `json:"redirectURL,required"`
-	Status       float64                                     `json:"status,required"`
-	StatusText   string                                      `json:"statusText,required"`
-	JSON         scanHarResponseHarLogEntriesResponseJSON    `json:"-"`
+	TransferSize float64                                      `json:"_transferSize,required"`
+	BodySize     float64                                      `json:"bodySize,required"`
+	Content      ScanHarResponseHarLogEntriesResponseContent  `json:"content,required"`
+	Headers      []ScanHarResponseHarLogEntriesResponseHeader `json:"headers,required"`
+	HeadersSize  float64                                      `json:"headersSize,required"`
+	HTTPVersion  string                                       `json:"httpVersion,required"`
+	RedirectURL  string                                       `json:"redirectURL,required"`
+	Status       float64                                      `json:"status,required"`
+	StatusText   string                                       `json:"statusText,required"`
+	JSON         scanHarResponseHarLogEntriesResponseJSON     `json:"-"`
 }
 
 // scanHarResponseHarLogEntriesResponseJSON contains the JSON metadata for the
@@ -1570,6 +1615,29 @@ func (r *ScanHarResponseHarLogEntriesResponseContent) UnmarshalJSON(data []byte)
 }
 
 func (r scanHarResponseHarLogEntriesResponseContentJSON) RawJSON() string {
+	return r.raw
+}
+
+type ScanHarResponseHarLogEntriesResponseHeader struct {
+	Name  string                                         `json:"name,required"`
+	Value string                                         `json:"value,required"`
+	JSON  scanHarResponseHarLogEntriesResponseHeaderJSON `json:"-"`
+}
+
+// scanHarResponseHarLogEntriesResponseHeaderJSON contains the JSON metadata for
+// the struct [ScanHarResponseHarLogEntriesResponseHeader]
+type scanHarResponseHarLogEntriesResponseHeaderJSON struct {
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScanHarResponseHarLogEntriesResponseHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scanHarResponseHarLogEntriesResponseHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
