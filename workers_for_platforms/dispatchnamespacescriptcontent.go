@@ -11,13 +11,13 @@ import (
 	"mime/multipart"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
-	"github.com/cloudflare/cloudflare-go/v2/workers"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v3/workers"
 )
 
 // DispatchNamespaceScriptContentService contains methods and other services that

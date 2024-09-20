@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/filters"
-	"github.com/cloudflare/cloudflare-go/v2/firewall"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/filters"
+	"github.com/cloudflare/cloudflare-go/v3/firewall"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestRuleNewWithOptionalParams(t *testing.T) {

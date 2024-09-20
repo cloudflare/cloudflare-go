@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v2/internal/param"
-	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // GatewayListItemService contains methods and other services that help with

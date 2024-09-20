@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestBillingProfileGet(t *testing.T) {

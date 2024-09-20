@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/email_routing"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/email_routing"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 func TestRuleNewWithOptionalParams(t *testing.T) {

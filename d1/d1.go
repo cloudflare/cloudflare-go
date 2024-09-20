@@ -5,8 +5,8 @@ package d1
 import (
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // D1Service contains methods and other services that help with interacting with

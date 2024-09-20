@@ -1,0 +1,72 @@
+name: Bug report
+description: Report an issue or bug with this library
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: checkboxes
+    id: non_feature_request
+    attributes:
+      label: Confirm this is not a feature request
+      description: For feature requests or general feedback on the new API, comment in our [v2.0.0 Beta Discussion](https://github.com/cloudflare/cloudflare-go/discussions/1538)
+      options:
+        - label: This is a bug
+          required: true
+  - type: checkboxes
+    id: non_api
+    attributes:
+      label: Confirm this is a Go library issue and not an underlying Cloudflare API issue
+      description: Issues with the underlying Cloudflare API should be reported via [Cloudflare Support](https://developers.cloudflare.com/support/contacting-cloudflare-support)
+      options:
+        - label: This is an issue with the Go library
+          required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is, and any additional context.
+      placeholder: Tell us what you see!
+    validations:
+      required: true
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: To Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Fetch a '...'
+        2. Update the '....'
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: code-snippets
+    attributes:
+      label: Code snippets
+      description: If applicable, add code snippets to help explain your problem.
+      render: Go
+    validations:
+      required: false
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: macOS
+    validations:
+      required: true
+  - type: input
+    id: language-version
+    attributes:
+      label: Go version
+      placeholder: Go 1.22.0
+    validations:
+      required: true
+  - type: input
+    id: lib-version
+    attributes:
+      label: Library version
+      placeholder: github.com/cloudflare/cloudflare-go/v2@v2.0.0-beta.3
+    validations:
+      required: true
