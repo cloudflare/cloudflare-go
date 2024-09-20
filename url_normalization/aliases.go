@@ -3,8 +3,8 @@
 package url_normalization
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v2/shared"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 type Error = apierror.Error
