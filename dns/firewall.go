@@ -26,8 +26,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewFirewallService] method instead.
 type FirewallService struct {
-	Options   []option.RequestOption
-	Analytics *FirewallAnalyticsService
+	Options    []option.RequestOption
+	Analytics  *FirewallAnalyticsService
+	ReverseDNS *FirewallReverseDNSService
 }
 
 // NewFirewallService generates a new service that applies the given options to
@@ -37,6 +38,7 @@ func NewFirewallService(opts ...option.RequestOption) (r *FirewallService) {
 	r = &FirewallService{}
 	r.Options = opts
 	r.Analytics = NewFirewallAnalyticsService(opts...)
+	r.ReverseDNS = NewFirewallReverseDNSService(opts...)
 	return
 }
 
