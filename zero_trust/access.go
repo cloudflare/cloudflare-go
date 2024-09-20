@@ -18,18 +18,19 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAccessService] method instead.
 type AccessService struct {
-	Options       []option.RequestOption
-	Applications  *AccessApplicationService
-	Certificates  *AccessCertificateService
-	Groups        *AccessGroupService
-	ServiceTokens *AccessServiceTokenService
-	Bookmarks     *AccessBookmarkService
-	Keys          *AccessKeyService
-	Logs          *AccessLogService
-	Users         *AccessUserService
-	CustomPages   *AccessCustomPageService
-	Tags          *AccessTagService
-	Policies      *AccessPolicyService
+	Options        []option.RequestOption
+	Infrastructure *AccessInfrastructureService
+	Applications   *AccessApplicationService
+	Certificates   *AccessCertificateService
+	Groups         *AccessGroupService
+	ServiceTokens  *AccessServiceTokenService
+	Bookmarks      *AccessBookmarkService
+	Keys           *AccessKeyService
+	Logs           *AccessLogService
+	Users          *AccessUserService
+	CustomPages    *AccessCustomPageService
+	Tags           *AccessTagService
+	Policies       *AccessPolicyService
 }
 
 // NewAccessService generates a new service that applies the given options to each
@@ -38,6 +39,7 @@ type AccessService struct {
 func NewAccessService(opts ...option.RequestOption) (r *AccessService) {
 	r = &AccessService{}
 	r.Options = opts
+	r.Infrastructure = NewAccessInfrastructureService(opts...)
 	r.Applications = NewAccessApplicationService(opts...)
 	r.Certificates = NewAccessCertificateService(opts...)
 	r.Groups = NewAccessGroupService(opts...)
