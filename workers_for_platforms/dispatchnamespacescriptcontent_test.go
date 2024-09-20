@@ -12,11 +12,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v2"
-	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/workers"
-	"github.com/cloudflare/cloudflare-go/v2/workers_for_platforms"
+	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/workers"
+	"github.com/cloudflare/cloudflare-go/v3/workers_for_platforms"
 )
 
 func TestDispatchNamespaceScriptContentUpdateWithOptionalParams(t *testing.T) {

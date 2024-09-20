@@ -3,7 +3,7 @@
 package botnet_feed
 
 import (
-	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
 // ConfigService contains methods and other services that help with interacting
