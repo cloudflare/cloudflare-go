@@ -31,16 +31,19 @@ func TestConfigNewWithOptionalParams(t *testing.T) {
 		AccountID:       cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 		DefaultSampling: cloudflare.F(1.000000),
 		Name:            cloudflare.F("cloudflare user's account"),
-		RouterIPs:       cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
+		RouterIPs:       cloudflare.F([]string{"203.0.113.1", "203.0.113.1", "203.0.113.1"}),
 		WARPDevices: cloudflare.F([]magic_network_monitoring.ConfigNewParamsWARPDevice{{
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
+			ID:       cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
+			Name:     cloudflare.F("My warp device"),
+			RouterIP: cloudflare.F("203.0.113.1"),
 		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
+			ID:       cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
+			Name:     cloudflare.F("My warp device"),
+			RouterIP: cloudflare.F("203.0.113.1"),
 		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
+			ID:       cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
+			Name:     cloudflare.F("My warp device"),
+			RouterIP: cloudflare.F("203.0.113.1"),
 		}}),
 	})
 	if err != nil {
@@ -69,16 +72,19 @@ func TestConfigUpdateWithOptionalParams(t *testing.T) {
 		AccountID:       cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 		DefaultSampling: cloudflare.F(1.000000),
 		Name:            cloudflare.F("cloudflare user's account"),
-		RouterIPs:       cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
+		RouterIPs:       cloudflare.F([]string{"203.0.113.1", "203.0.113.1", "203.0.113.1"}),
 		WARPDevices: cloudflare.F([]magic_network_monitoring.ConfigUpdateParamsWARPDevice{{
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
+			ID:       cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
+			Name:     cloudflare.F("My warp device"),
+			RouterIP: cloudflare.F("203.0.113.1"),
 		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
+			ID:       cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
+			Name:     cloudflare.F("My warp device"),
+			RouterIP: cloudflare.F("203.0.113.1"),
 		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
+			ID:       cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
+			Name:     cloudflare.F("My warp device"),
+			RouterIP: cloudflare.F("203.0.113.1"),
 		}}),
 	})
 	if err != nil {
@@ -132,16 +138,19 @@ func TestConfigEditWithOptionalParams(t *testing.T) {
 		AccountID:       cloudflare.F("6f91088a406011ed95aed352566e8d4c"),
 		DefaultSampling: cloudflare.F(1.000000),
 		Name:            cloudflare.F("cloudflare user's account"),
-		RouterIPs:       cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
+		RouterIPs:       cloudflare.F([]string{"203.0.113.1", "203.0.113.1", "203.0.113.1"}),
 		WARPDevices: cloudflare.F([]magic_network_monitoring.ConfigEditParamsWARPDevice{{
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
+			ID:       cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
+			Name:     cloudflare.F("My warp device"),
+			RouterIP: cloudflare.F("203.0.113.1"),
 		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
+			ID:       cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
+			Name:     cloudflare.F("My warp device"),
+			RouterIP: cloudflare.F("203.0.113.1"),
 		}, {
-			ID:   cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
-			Name: cloudflare.F("My warp device"),
+			ID:       cloudflare.F("5360368d-b351-4791-abe1-93550dabd351"),
+			Name:     cloudflare.F("My warp device"),
+			RouterIP: cloudflare.F("203.0.113.1"),
 		}}),
 	})
 	if err != nil {

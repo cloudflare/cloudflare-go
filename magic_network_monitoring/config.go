@@ -156,8 +156,11 @@ type ConfigurationWARPDevice struct {
 	// Unique identifier for the warp device.
 	ID string `json:"id,required"`
 	// Name of the warp device.
-	Name string                      `json:"name,required"`
-	JSON configurationWARPDeviceJSON `json:"-"`
+	Name string `json:"name,required"`
+	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
+	// Only /32 addresses are currently supported.
+	RouterIP string                      `json:"router_ip,required"`
+	JSON     configurationWARPDeviceJSON `json:"-"`
 }
 
 // configurationWARPDeviceJSON contains the JSON metadata for the struct
@@ -165,6 +168,7 @@ type ConfigurationWARPDevice struct {
 type configurationWARPDeviceJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
+	RouterIP    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -198,6 +202,9 @@ type ConfigNewParamsWARPDevice struct {
 	ID param.Field[string] `json:"id,required"`
 	// Name of the warp device.
 	Name param.Field[string] `json:"name,required"`
+	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
+	// Only /32 addresses are currently supported.
+	RouterIP param.Field[string] `json:"router_ip,required"`
 }
 
 func (r ConfigNewParamsWARPDevice) MarshalJSON() (data []byte, err error) {
@@ -268,6 +275,9 @@ type ConfigUpdateParamsWARPDevice struct {
 	ID param.Field[string] `json:"id,required"`
 	// Name of the warp device.
 	Name param.Field[string] `json:"name,required"`
+	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
+	// Only /32 addresses are currently supported.
+	RouterIP param.Field[string] `json:"router_ip,required"`
 }
 
 func (r ConfigUpdateParamsWARPDevice) MarshalJSON() (data []byte, err error) {
@@ -385,6 +395,9 @@ type ConfigEditParamsWARPDevice struct {
 	ID param.Field[string] `json:"id,required"`
 	// Name of the warp device.
 	Name param.Field[string] `json:"name,required"`
+	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
+	// Only /32 addresses are currently supported.
+	RouterIP param.Field[string] `json:"router_ip,required"`
 }
 
 func (r ConfigEditParamsWARPDevice) MarshalJSON() (data []byte, err error) {
