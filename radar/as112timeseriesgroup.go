@@ -60,7 +60,7 @@ func (r *AS112TimeseriesGroupService) Edns(ctx context.Context, query AS112Times
 	return
 }
 
-// Percentage distribution of AS112 DNS queries by IP Version over time.
+// Percentage distribution of AS112 DNS queries by IP version over time.
 func (r *AS112TimeseriesGroupService) IPVersion(ctx context.Context, query AS112TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupIPVersionResponse, err error) {
 	var env AS112TimeseriesGroupIPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +73,7 @@ func (r *AS112TimeseriesGroupService) IPVersion(ctx context.Context, query AS112
 	return
 }
 
-// Percentage distribution of AS112 dns requests classified per Protocol over time.
+// Percentage distribution of AS112 DNS requests classified by protocol over time.
 func (r *AS112TimeseriesGroupService) Protocol(ctx context.Context, query AS112TimeseriesGroupProtocolParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupProtocolResponse, err error) {
 	var env AS112TimeseriesGroupProtocolResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -86,7 +86,7 @@ func (r *AS112TimeseriesGroupService) Protocol(ctx context.Context, query AS112T
 	return
 }
 
-// Percentage distribution of AS112 DNS queries by Query Type over time.
+// Percentage distribution of AS112 DNS queries by query type over time.
 func (r *AS112TimeseriesGroupService) QueryType(ctx context.Context, query AS112TimeseriesGroupQueryTypeParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupQueryTypeResponse, err error) {
 	var env AS112TimeseriesGroupQueryTypeResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +99,7 @@ func (r *AS112TimeseriesGroupService) QueryType(ctx context.Context, query AS112
 	return
 }
 
-// Percentage distribution of AS112 dns requests classified per Response Codes over
+// Percentage distribution of AS112 DNS requests classified by response code over
 // time.
 func (r *AS112TimeseriesGroupService) ResponseCodes(ctx context.Context, query AS112TimeseriesGroupResponseCodesParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupResponseCodesResponse, err error) {
 	var env AS112TimeseriesGroupResponseCodesResponseEnvelope

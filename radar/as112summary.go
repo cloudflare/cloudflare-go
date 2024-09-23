@@ -47,7 +47,7 @@ func (r *AS112SummaryService) DNSSEC(ctx context.Context, query AS112SummaryDNSS
 	return
 }
 
-// Percentage distribution of DNS queries, to AS112, by EDNS support.
+// Percentage distribution of DNS queries to AS112 by EDNS support.
 func (r *AS112SummaryService) Edns(ctx context.Context, query AS112SummaryEdnsParams, opts ...option.RequestOption) (res *AS112SummaryEdnsResponse, err error) {
 	var env AS112SummaryEdnsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -86,7 +86,7 @@ func (r *AS112SummaryService) Protocol(ctx context.Context, query AS112SummaryPr
 	return
 }
 
-// Percentage distribution of DNS queries to AS112 by Query Type.
+// Percentage distribution of DNS queries to AS112 by query type.
 func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQueryTypeParams, opts ...option.RequestOption) (res *AS112SummaryQueryTypeResponse, err error) {
 	var env AS112SummaryQueryTypeResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +99,7 @@ func (r *AS112SummaryService) QueryType(ctx context.Context, query AS112SummaryQ
 	return
 }
 
-// Percentage distribution of AS112 dns requests classified per Response Codes.
+// Percentage distribution of AS112 DNS requests classified by response code.
 func (r *AS112SummaryService) ResponseCodes(ctx context.Context, query AS112SummaryResponseCodesParams, opts ...option.RequestOption) (res *AS112SummaryResponseCodesResponse, err error) {
 	var env AS112SummaryResponseCodesResponseEnvelope
 	opts = append(r.Options[:], opts...)

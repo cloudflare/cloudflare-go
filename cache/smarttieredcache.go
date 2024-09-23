@@ -233,11 +233,11 @@ type SmartTieredCacheDeleteParams struct {
 }
 
 type SmartTieredCacheDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo          `json:"errors,required"`
+	Messages []shared.ResponseInfo          `json:"messages,required"`
+	Result   SmartTieredCacheDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  SmartTieredCacheDeleteResponse                `json:"result"`
 	JSON    smartTieredCacheDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -246,8 +246,8 @@ type SmartTieredCacheDeleteResponseEnvelope struct {
 type smartTieredCacheDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -303,11 +303,11 @@ func (r SmartTieredCacheEditParamsValue) IsKnown() bool {
 }
 
 type SmartTieredCacheEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo        `json:"errors,required"`
+	Messages []shared.ResponseInfo        `json:"messages,required"`
+	Result   SmartTieredCacheEditResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  SmartTieredCacheEditResponse                `json:"result"`
 	JSON    smartTieredCacheEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -316,8 +316,8 @@ type SmartTieredCacheEditResponseEnvelope struct {
 type smartTieredCacheEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -351,11 +351,11 @@ type SmartTieredCacheGetParams struct {
 }
 
 type SmartTieredCacheGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   SmartTieredCacheGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SmartTieredCacheGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  SmartTieredCacheGetResponse                `json:"result"`
 	JSON    smartTieredCacheGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -364,8 +364,8 @@ type SmartTieredCacheGetResponseEnvelope struct {
 type smartTieredCacheGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

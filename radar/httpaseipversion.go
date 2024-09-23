@@ -35,8 +35,8 @@ func NewHTTPAseIPVersionService(opts ...option.RequestOption) (r *HTTPAseIPVersi
 	return
 }
 
-// Get the top autonomous systems, by HTTP traffic, of the requested IP protocol
-// version. Values are a percentage out of the total traffic.
+// Get the top autonomous systems, by HTTP traffic, of the requested IP version.
+// Values are a percentage out of the total traffic.
 func (r *HTTPAseIPVersionService) Get(ctx context.Context, ipVersion HTTPAseIPVersionGetParamsIPVersion, query HTTPAseIPVersionGetParams, opts ...option.RequestOption) (res *HTTPAseIPVersionGetResponse, err error) {
 	var env HTTPAseIPVersionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
