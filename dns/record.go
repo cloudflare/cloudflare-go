@@ -65,7 +65,9 @@ func (r *RecordService) New(ctx context.Context, params RecordNewParams, opts ..
 	return
 }
 
-// Overwrite an existing DNS record. Notes:
+// Overwrite an existing DNS record.
+//
+// Notes:
 //
 //   - A/AAAA records cannot exist on the same name as CNAME records.
 //   - NS records cannot exist on the same name as any other record type.
@@ -139,7 +141,9 @@ func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body Rec
 	return
 }
 
-// Update an existing DNS record. Notes:
+// Update an existing DNS record.
+//
+// Notes:
 //
 //   - A/AAAA records cannot exist on the same name as CNAME records.
 //   - NS records cannot exist on the same name as any other record type.

@@ -34,7 +34,7 @@ func NewEmailSecurityTimeseriesGroupService(opts ...option.RequestOption) (r *Em
 	return
 }
 
-// Percentage distribution of emails classified per Arc validation over time.
+// Percentage distribution of emails classified by ARC validation over time.
 func (r *EmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query EmailSecurityTimeseriesGroupARCParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupARCResponse, err error) {
 	var env EmailSecurityTimeseriesGroupARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +47,7 @@ func (r *EmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query Ema
 	return
 }
 
-// Percentage distribution of emails classified per DKIM validation over time.
+// Percentage distribution of emails classified by DKIM validation over time.
 func (r *EmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, query EmailSecurityTimeseriesGroupDKIMParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupDKIMResponse, err error) {
 	var env EmailSecurityTimeseriesGroupDKIMResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *EmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, query Em
 	return
 }
 
-// Percentage distribution of emails classified per DMARC validation over time.
+// Percentage distribution of emails classified by DMARC validation over time.
 func (r *EmailSecurityTimeseriesGroupService) DMARC(ctx context.Context, query EmailSecurityTimeseriesGroupDMARCParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupDMARCResponse, err error) {
 	var env EmailSecurityTimeseriesGroupDMARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +99,7 @@ func (r *EmailSecurityTimeseriesGroupService) Spam(ctx context.Context, query Em
 	return
 }
 
-// Percentage distribution of emails classified per SPF validation over time.
+// Percentage distribution of emails classified by SPF validation over time.
 func (r *EmailSecurityTimeseriesGroupService) SPF(ctx context.Context, query EmailSecurityTimeseriesGroupSPFParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupSPFResponse, err error) {
 	var env EmailSecurityTimeseriesGroupSPFResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -125,7 +125,7 @@ func (r *EmailSecurityTimeseriesGroupService) Spoof(ctx context.Context, query E
 	return
 }
 
-// Percentage distribution of emails classified in Threat Categories over time.
+// Percentage distribution of emails classified by threat category over time.
 func (r *EmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context, query EmailSecurityTimeseriesGroupThreatCategoryParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupThreatCategoryResponse, err error) {
 	var env EmailSecurityTimeseriesGroupThreatCategoryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -138,7 +138,7 @@ func (r *EmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context
 	return
 }
 
-// Percentage distribution of emails classified per TLS Version over time.
+// Percentage distribution of emails classified by TLS version over time.
 func (r *EmailSecurityTimeseriesGroupService) TLSVersion(ctx context.Context, query EmailSecurityTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *EmailSecurityTimeseriesGroupTLSVersionResponse, err error) {
 	var env EmailSecurityTimeseriesGroupTLSVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)

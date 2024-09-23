@@ -34,8 +34,8 @@ func NewBGPTopAseService(opts ...option.RequestOption) (r *BGPTopAseService) {
 	return
 }
 
-// Get the top autonomous systems (AS) by BGP updates (announcements only). Values
-// are a percentage out of the total updates.
+// Get the top autonomous systems (ASes) by BGP updates (announcements only).
+// Values are a percentage out of the total updates.
 func (r *BGPTopAseService) Get(ctx context.Context, query BGPTopAseGetParams, opts ...option.RequestOption) (res *BGPTopAseGetResponse, err error) {
 	var env BGPTopAseGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

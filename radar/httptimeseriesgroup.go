@@ -78,7 +78,7 @@ func (r *HTTPTimeseriesGroupService) BrowserFamily(ctx context.Context, query HT
 	return
 }
 
-// Get a time series of the percentage distribution of traffic per device type.
+// Get a time series of the percentage distribution of traffic by device type.
 func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPTimeseriesGroupDeviceTypeParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupDeviceTypeResponse, err error) {
 	var env HTTPTimeseriesGroupDeviceTypeResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -91,7 +91,7 @@ func (r *HTTPTimeseriesGroupService) DeviceType(ctx context.Context, query HTTPT
 	return
 }
 
-// Get a time series of the percentage distribution of traffic per HTTP protocol.
+// Get a time series of the percentage distribution of traffic by HTTP protocol.
 func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTTPTimeseriesGroupHTTPProtocolParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPProtocolResponse, err error) {
 	var env HTTPTimeseriesGroupHTTPProtocolResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -104,8 +104,7 @@ func (r *HTTPTimeseriesGroupService) HTTPProtocol(ctx context.Context, query HTT
 	return
 }
 
-// Get a time series of the percentage distribution of traffic per HTTP protocol
-// version.
+// Get a time series of the percentage distribution of traffic by HTTP version.
 func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTPTimeseriesGroupHTTPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupHTTPVersionResponse, err error) {
 	var env HTTPTimeseriesGroupHTTPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -118,8 +117,7 @@ func (r *HTTPTimeseriesGroupService) HTTPVersion(ctx context.Context, query HTTP
 	return
 }
 
-// Get a time series of the percentage distribution of traffic per IP protocol
-// version.
+// Get a time series of the percentage distribution of traffic by IP version.
 func (r *HTTPTimeseriesGroupService) IPVersion(ctx context.Context, query HTTPTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupIPVersionResponse, err error) {
 	var env HTTPTimeseriesGroupIPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -146,7 +144,7 @@ func (r *HTTPTimeseriesGroupService) OS(ctx context.Context, query HTTPTimeserie
 	return
 }
 
-// Get a time series of the percentage distribution of traffic per Post Quantum
+// Get a time series of the percentage distribution of traffic by post-quantum
 // suport.
 func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTPTimeseriesGroupPostQuantumParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupPostQuantumResponse, err error) {
 	var env HTTPTimeseriesGroupPostQuantumResponseEnvelope
@@ -160,7 +158,7 @@ func (r *HTTPTimeseriesGroupService) PostQuantum(ctx context.Context, query HTTP
 	return
 }
 
-// Get a time series of the percentage distribution of traffic per TLS protocol
+// Get a time series of the percentage distribution of traffic by TLS protocol
 // version.
 func (r *HTTPTimeseriesGroupService) TLSVersion(ctx context.Context, query HTTPTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *HTTPTimeseriesGroupTLSVersionResponse, err error) {
 	var env HTTPTimeseriesGroupTLSVersionResponseEnvelope

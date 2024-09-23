@@ -33,7 +33,7 @@ func NewSearchService(opts ...option.RequestOption) (r *SearchService) {
 	return
 }
 
-// Lets you search for locations, autonomous systems (AS) and reports.
+// Lets you search for locations, autonomous systems (ASes), and reports.
 func (r *SearchService) Global(ctx context.Context, query SearchGlobalParams, opts ...option.RequestOption) (res *SearchGlobalResponse, err error) {
 	var env SearchGlobalResponseEnvelope
 	opts = append(r.Options[:], opts...)

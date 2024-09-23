@@ -34,8 +34,7 @@ func NewAttackLayer7TimeseriesGroupService(opts ...option.RequestOption) (r *Att
 	return
 }
 
-// Get a time series of the percentual distribution of mitigation techniques, over
-// time.
+// Get a time series of the distribution of mitigation techniques over time.
 func (r *AttackLayer7TimeseriesGroupService) Get(ctx context.Context, query AttackLayer7TimeseriesGroupGetParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupGetResponse, err error) {
 	var env AttackLayer7TimeseriesGroupGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -74,7 +73,7 @@ func (r *AttackLayer7TimeseriesGroupService) HTTPVersion(ctx context.Context, qu
 	return
 }
 
-// Percentage distribution of attacks by industry used over time.
+// Percentage distribution of attacks by targeted industry over time.
 func (r *AttackLayer7TimeseriesGroupService) Industry(ctx context.Context, query AttackLayer7TimeseriesGroupIndustryParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupIndustryResponse, err error) {
 	var env AttackLayer7TimeseriesGroupIndustryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -126,7 +125,7 @@ func (r *AttackLayer7TimeseriesGroupService) MitigationProduct(ctx context.Conte
 	return
 }
 
-// Percentage distribution of attacks by vertical used over time.
+// Percentage distribution of attacks by targeted vertical over time.
 func (r *AttackLayer7TimeseriesGroupService) Vertical(ctx context.Context, query AttackLayer7TimeseriesGroupVerticalParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupVerticalResponse, err error) {
 	var env AttackLayer7TimeseriesGroupVerticalResponseEnvelope
 	opts = append(r.Options[:], opts...)

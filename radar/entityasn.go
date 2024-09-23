@@ -34,7 +34,7 @@ func NewEntityASNService(opts ...option.RequestOption) (r *EntityASNService) {
 	return
 }
 
-// Gets a list of autonomous systems (AS).
+// Get a list of autonomous systems (ASes).
 func (r *EntityASNService) List(ctx context.Context, query EntityASNListParams, opts ...option.RequestOption) (res *EntityASNListResponse, err error) {
 	var env EntityASNListResponseEnvelope
 	opts = append(r.Options[:], opts...)

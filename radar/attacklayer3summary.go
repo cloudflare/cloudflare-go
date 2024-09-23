@@ -60,7 +60,7 @@ func (r *AttackLayer3SummaryService) Duration(ctx context.Context, query AttackL
 	return
 }
 
-// Percentage distribution of network protocols in layer 3/4 attacks over a given
+// Percentage distribution of network protocols in Layer 3/4 attacks over a given
 // time period.
 func (r *AttackLayer3SummaryService) Get(ctx context.Context, query AttackLayer3SummaryGetParams, opts ...option.RequestOption) (res *AttackLayer3SummaryGetResponse, err error) {
 	var env AttackLayer3SummaryGetResponseEnvelope

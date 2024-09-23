@@ -34,8 +34,8 @@ func NewBGPIPService(opts ...option.RequestOption) (r *BGPIPService) {
 	return
 }
 
-// Gets time-series data for the announced IP space count, represented as the
-// number of IPv4 /24s and IPv6 /48s, for a given ASN.
+// Get time series data for the announced IP space count, represented as the number
+// of IPv4 /24s and IPv6 /48s, for a given ASN.
 func (r *BGPIPService) Timeseries(ctx context.Context, query BGPIPTimeseriesParams, opts ...option.RequestOption) (res *BgpipTimeseriesResponse, err error) {
 	var env BgpipTimeseriesResponseEnvelope
 	opts = append(r.Options[:], opts...)

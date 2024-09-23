@@ -36,7 +36,7 @@ func NewAnnotationService(opts ...option.RequestOption) (r *AnnotationService) {
 	return
 }
 
-// Get latest annotations.
+// Get the latest annotations.
 func (r *AnnotationService) List(ctx context.Context, query AnnotationListParams, opts ...option.RequestOption) (res *AnnotationListResponse, err error) {
 	var env AnnotationListResponseEnvelope
 	opts = append(r.Options[:], opts...)
