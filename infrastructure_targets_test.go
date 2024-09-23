@@ -16,28 +16,28 @@ const testInfrastructureTargetId = "019205b5-97d7-7272-b00e-0ea05e61a124"
 var (
 	infrastrctureTargetCreatedOn, _  = time.Parse(time.RFC3339, "2024-08-25T05:00:22Z")
 	infrastrctureTargetModifiedOn, _ = time.Parse(time.RFC3339, "2024-08-25T05:00:22Z")
-	expectedInfrastructureTarget     = Target{
+	expectedInfrastructureTarget     = InfrastructureTarget{
 		Hostname: "infra-access-target",
 		ID:       testInfrastructureTargetId,
-		IP: IPInfo{
-			IPV4: &IPDetails{
-				IPAddr:           "187.26.29.249",
+		IP: InfrastructureTargetIPInfo{
+			IPV4: &InfrastructureTargetIPDetails{
+				IPAddr:           "198.51.100.1",
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
-			IPV6: &IPDetails{
-				IPAddr:           "64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0",
+			IPV6: &InfrastructureTargetIPDetails{
+				IPAddr:           "2001:0db8:0000:0000:0000:0000:0000:1000",
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
 		},
 		CreatedAt:  infrastrctureTargetCreatedOn,
 		ModifiedAt: infrastrctureTargetModifiedOn,
 	}
-	expectedInfrastructureModified = Target{
+	expectedInfrastructureModified = InfrastructureTarget{
 		Hostname: "infra-access-target-modified",
 		ID:       testInfrastructureTargetId,
-		IP: IPInfo{
-			IPV4: &IPDetails{
-				IPAddr:           "250.26.29.250",
+		IP: InfrastructureTargetIPInfo{
+			IPV4: &InfrastructureTargetIPDetails{
+				IPAddr:           "198.51.100.2",
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
 		},
@@ -64,11 +64,11 @@ func TestInfrastructureTarget_Create(t *testing.T) {
 				"id": "019205b5-97d7-7272-b00e-0ea05e61a124",
 				"ip": {
 				"ipv4": {
-					"ip_addr": "187.26.29.249",
+					"ip_addr": "198.51.100.1",
 					"virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
 				},
 				"ipv6": {
-					"ip_addr": "64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0",
+					"ip_addr": "2001:0db8:0000:0000:0000:0000:0000:1000",
 					"virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
 				}
 				},
@@ -86,13 +86,13 @@ func TestInfrastructureTarget_Create(t *testing.T) {
 	out, err := client.CreateInfrastructureTarget(context.Background(), AccountIdentifier(testAccountID), CreateInfrastructureTargetParams{
 		InfrastructureTargetParams: InfrastructureTargetParams{
 			Hostname: "infra-access-target",
-			IP: IPInfo{
-				IPV4: &IPDetails{
-					IPAddr:           "187.26.29.249",
+			IP: InfrastructureTargetIPInfo{
+				IPV4: &InfrastructureTargetIPDetails{
+					IPAddr:           "198.51.100.1",
 					VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 				},
-				IPV6: &IPDetails{
-					IPAddr:           "64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0",
+				IPV6: &InfrastructureTargetIPDetails{
+					IPAddr:           "2001:0db8:0000:0000:0000:0000:0000:1000",
 					VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 				},
 			},
@@ -122,11 +122,11 @@ func TestInfrastructureTarget_List(t *testing.T) {
 	  "id": "019205b5-97d7-7272-b00e-0ea05e61a124",
 	  "ip": {
 	  	"ipv4": {
-		  "ip_addr": "187.26.29.249",
+		  "ip_addr": "198.51.100.1",
 		  "virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
 		},
 		"ipv6": {
-		  "ip_addr": "64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0",
+		  "ip_addr": "2001:0db8:0000:0000:0000:0000:0000:1000",
 		  "virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
 		}
 	  },
@@ -142,12 +142,12 @@ func TestInfrastructureTarget_List(t *testing.T) {
 }`)
 	})
 
-	_, _, err := client.ListInfrastructureTargets(context.Background(), AccountIdentifier(""), TargetListParams{})
+	_, _, err := client.ListInfrastructureTargets(context.Background(), AccountIdentifier(""), InfrastructureTargetListParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	out, results, err := client.ListInfrastructureTargets(context.Background(), AccountIdentifier(testAccountID), TargetListParams{})
+	out, results, err := client.ListInfrastructureTargets(context.Background(), AccountIdentifier(testAccountID), InfrastructureTargetListParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(out), "expected 1 challenge_widgets")
 		assert.Equal(t, 20, results.PerPage, "expected 20 per page")
@@ -173,11 +173,11 @@ func TestInfrastructureTarget_Get(t *testing.T) {
     "id": "019205b5-97d7-7272-b00e-0ea05e61a124",
     "ip": {
       "ipv4": {
-        "ip_addr": "187.26.29.249",
+        "ip_addr": "198.51.100.1",
         "virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
       },
       "ipv6": {
-        "ip_addr": "64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0",
+        "ip_addr": "2001:0db8:0000:0000:0000:0000:0000:1000",
         "virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
       }
     },
@@ -221,7 +221,7 @@ func TestInfrastructureTarget_Update(t *testing.T) {
     "id": "019205b5-97d7-7272-b00e-0ea05e61a124",
     "ip": {
       "ipv4": {
-        "ip_addr": "250.26.29.250",
+        "ip_addr": "198.51.100.2",
         "virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
       }
     },
@@ -248,9 +248,9 @@ func TestInfrastructureTarget_Update(t *testing.T) {
 		ModifyParams: InfrastructureTargetParams{
 			// Updates hostname and IPv4 address. Deletes IPv6 address.
 			Hostname: "infra-access-target-modified",
-			IP: IPInfo{
-				IPV4: &IPDetails{
-					IPAddr:           "250.26.29.250",
+			IP: InfrastructureTargetIPInfo{
+				IPV4: &InfrastructureTargetIPDetails{
+					IPAddr:           "198.51.100.2",
 					VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 				},
 			},

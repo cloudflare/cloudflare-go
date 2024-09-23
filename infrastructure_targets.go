@@ -12,28 +12,28 @@ import (
 
 var ErrMissingTargetId = errors.New("required target id missing")
 
-// Target represents an Infrastructure Target.
-type Target struct {
-	Hostname   string    `json:"hostname"`
-	ID         string    `json:"id"`
-	IP         IPInfo    `json:"ip"`
-	CreatedAt  time.Time `json:"created_at"`
-	ModifiedAt time.Time `json:"modified_at"`
+// InfrastructureTarget represents an Infrastructure InfrastructureTarget.
+type InfrastructureTarget struct {
+	Hostname   string                     `json:"hostname"`
+	ID         string                     `json:"id"`
+	IP         InfrastructureTargetIPInfo `json:"ip"`
+	CreatedAt  time.Time                  `json:"created_at"`
+	ModifiedAt time.Time                  `json:"modified_at"`
 }
 
-type IPDetails struct {
+type InfrastructureTargetIPDetails struct {
 	IPAddr           string `json:"ip_addr"`
 	VirtualNetworkId string `json:"virtual_network_id"`
 }
 
-type IPInfo struct {
-	IPV4 *IPDetails `json:"ipv4,omitempty"`
-	IPV6 *IPDetails `json:"ipv6,omitempty"`
+type InfrastructureTargetIPInfo struct {
+	IPV4 *InfrastructureTargetIPDetails `json:"ipv4,omitempty"`
+	IPV6 *InfrastructureTargetIPDetails `json:"ipv6,omitempty"`
 }
 
 type InfrastructureTargetParams struct {
-	Hostname string `json:"hostname"`
-	IP       IPInfo `json:"ip"`
+	Hostname string                     `json:"hostname"`
+	IP       InfrastructureTargetIPInfo `json:"ip"`
 }
 
 type CreateInfrastructureTargetParams struct {
@@ -45,19 +45,19 @@ type UpdateInfrastructureTargetParams struct {
 	ModifyParams InfrastructureTargetParams `json:"modify_params"`
 }
 
-// TargetDetailResponse is the API response, containing a single target.
-type TargetDetailResponse struct {
-	Result Target `json:"result"`
+// InfrastructureTargetDetailResponse is the API response, containing a single target.
+type InfrastructureTargetDetailResponse struct {
+	Result InfrastructureTarget `json:"result"`
 	Response
 }
 
-type TargetListDetailResponse struct {
-	Result []Target `json:"result"`
+type InfrastructureTargetListDetailResponse struct {
+	Result []InfrastructureTarget `json:"result"`
 	Response
 	ResultInfo `json:"result_info"`
 }
 
-type TargetListParams struct {
+type InfrastructureTargetListParams struct {
 	CreatedAfter     string `url:"created_after,omitempty"`
 	Hostname         string `url:"hostname,omitempty"`
 	HostnameContains string `url:"hostname_contains,omitempty"`
@@ -72,9 +72,9 @@ type TargetListParams struct {
 // ListInfrastructureTargets returns all applications within an account or zone.
 //
 // API reference: https://developers.cloudflare.com/api/operations/infra-targets-list
-func (api *API) ListInfrastructureTargets(ctx context.Context, rc *ResourceContainer, params TargetListParams) ([]Target, *ResultInfo, error) {
+func (api *API) ListInfrastructureTargets(ctx context.Context, rc *ResourceContainer, params InfrastructureTargetListParams) ([]InfrastructureTarget, *ResultInfo, error) {
 	if rc.Identifier == "" {
-		return []Target{}, &ResultInfo{}, ErrMissingAccountID
+		return []InfrastructureTarget{}, &ResultInfo{}, ErrMissingAccountID
 	}
 
 	baseURL := fmt.Sprintf("/%s/%s/infrastructure/targets", rc.Level, rc.Identifier)
@@ -92,20 +92,20 @@ func (api *API) ListInfrastructureTargets(ctx context.Context, rc *ResourceConta
 		params.Page = 1
 	}
 
-	var applications []Target
-	var r TargetListDetailResponse
+	var applications []InfrastructureTarget
+	var r InfrastructureTargetListDetailResponse
 
 	for {
 		uri := buildURI(baseURL, params)
 
 		res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 		if err != nil {
-			return []Target{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+			return []InfrastructureTarget{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
 
 		err = json.Unmarshal(res, &r)
 		if err != nil {
-			return []Target{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+			return []InfrastructureTarget{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
 		applications = append(applications, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
@@ -120,22 +120,22 @@ func (api *API) ListInfrastructureTargets(ctx context.Context, rc *ResourceConta
 // CreateInfrastructureTarget creates a new infrastructure target.
 //
 // API reference: https://developers.cloudflare.com/api/operations/infra-targets-post
-func (api *API) CreateInfrastructureTarget(ctx context.Context, rc *ResourceContainer, params CreateInfrastructureTargetParams) (Target, error) {
+func (api *API) CreateInfrastructureTarget(ctx context.Context, rc *ResourceContainer, params CreateInfrastructureTargetParams) (InfrastructureTarget, error) {
 	if rc.Identifier == "" {
-		return Target{}, ErrMissingAccountID
+		return InfrastructureTarget{}, ErrMissingAccountID
 	}
 
 	uri := fmt.Sprintf("/%s/%s/infrastructure/targets", rc.Level, rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, params)
 	if err != nil {
-		return Target{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+		return InfrastructureTarget{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
-	var targetDetailResponse TargetDetailResponse
+	var targetDetailResponse InfrastructureTargetDetailResponse
 	err = json.Unmarshal(res, &targetDetailResponse)
 	if err != nil {
-		return Target{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return InfrastructureTarget{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return targetDetailResponse.Result, nil
@@ -144,13 +144,13 @@ func (api *API) CreateInfrastructureTarget(ctx context.Context, rc *ResourceCont
 // UpdateInfrastructureTarget updates an existing infrastructure target.
 //
 // API reference: https://developers.cloudflare.com/api/operations/infra-targets-put
-func (api *API) UpdateInfrastructureTarget(ctx context.Context, rc *ResourceContainer, params UpdateInfrastructureTargetParams) (Target, error) {
+func (api *API) UpdateInfrastructureTarget(ctx context.Context, rc *ResourceContainer, params UpdateInfrastructureTargetParams) (InfrastructureTarget, error) {
 	if rc.Identifier == "" {
-		return Target{}, ErrMissingAccountID
+		return InfrastructureTarget{}, ErrMissingAccountID
 	}
 
 	if params.ID == "" {
-		return Target{}, ErrMissingTargetId
+		return InfrastructureTarget{}, ErrMissingTargetId
 	}
 
 	uri := fmt.Sprintf(
@@ -162,13 +162,13 @@ func (api *API) UpdateInfrastructureTarget(ctx context.Context, rc *ResourceCont
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.ModifyParams)
 	if err != nil {
-		return Target{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+		return InfrastructureTarget{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
-	var targetDetailResponse TargetDetailResponse
+	var targetDetailResponse InfrastructureTargetDetailResponse
 	err = json.Unmarshal(res, &targetDetailResponse)
 	if err != nil {
-		return Target{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return InfrastructureTarget{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return targetDetailResponse.Result, nil
@@ -178,13 +178,13 @@ func (api *API) UpdateInfrastructureTarget(ctx context.Context, rc *ResourceCont
 // ID for either account or zone.
 //
 // API reference: https://developers.cloudflare.com/api/operations/infra-targets-get
-func (api *API) GetInfrastructureTarget(ctx context.Context, rc *ResourceContainer, targetID string) (Target, error) {
+func (api *API) GetInfrastructureTarget(ctx context.Context, rc *ResourceContainer, targetID string) (InfrastructureTarget, error) {
 	if rc.Identifier == "" {
-		return Target{}, ErrMissingAccountID
+		return InfrastructureTarget{}, ErrMissingAccountID
 	}
 
 	if targetID == "" {
-		return Target{}, ErrMissingTargetId
+		return InfrastructureTarget{}, ErrMissingTargetId
 	}
 
 	uri := fmt.Sprintf(
@@ -196,13 +196,13 @@ func (api *API) GetInfrastructureTarget(ctx context.Context, rc *ResourceContain
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
-		return Target{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+		return InfrastructureTarget{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
-	var targetDetailResponse TargetDetailResponse
+	var targetDetailResponse InfrastructureTargetDetailResponse
 	err = json.Unmarshal(res, &targetDetailResponse)
 	if err != nil {
-		return Target{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return InfrastructureTarget{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
 	return targetDetailResponse.Result, nil
