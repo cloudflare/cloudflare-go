@@ -34,7 +34,7 @@ func NewEmailRoutingSummaryService(opts ...option.RequestOption) (r *EmailRoutin
 	return
 }
 
-// Percentage distribution of emails classified per ARC validation.
+// Percentage distribution of emails classified by ARC validation.
 func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRoutingSummaryARCParams, opts ...option.RequestOption) (res *EmailRoutingSummaryARCResponse, err error) {
 	var env EmailRoutingSummaryARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +47,7 @@ func (r *EmailRoutingSummaryService) ARC(ctx context.Context, query EmailRouting
 	return
 }
 
-// Percentage distribution of emails classified per DKIM validation.
+// Percentage distribution of emails classified by DKIM validation.
 func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutingSummaryDKIMParams, opts ...option.RequestOption) (res *EmailRoutingSummaryDKIMResponse, err error) {
 	var env EmailRoutingSummaryDKIMResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *EmailRoutingSummaryService) DKIM(ctx context.Context, query EmailRoutin
 	return
 }
 
-// Percentage distribution of emails classified per DMARC validation.
+// Percentage distribution of emails classified by DMARC validation.
 func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRoutingSummaryDMARCParams, opts ...option.RequestOption) (res *EmailRoutingSummaryDMARCResponse, err error) {
 	var env EmailRoutingSummaryDMARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +73,7 @@ func (r *EmailRoutingSummaryService) DMARC(ctx context.Context, query EmailRouti
 	return
 }
 
-// Percentage distribution of emails by Encrypted
+// Percentage distribution of emails by encryption status.
 func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailRoutingSummaryEncryptedParams, opts ...option.RequestOption) (res *EmailRoutingSummaryEncryptedResponse, err error) {
 	var env EmailRoutingSummaryEncryptedResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -86,7 +86,7 @@ func (r *EmailRoutingSummaryService) Encrypted(ctx context.Context, query EmailR
 	return
 }
 
-// Percentage distribution of emails by Ip Version.
+// Percentage distribution of emails by IP version.
 func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailRoutingSummaryIPVersionParams, opts ...option.RequestOption) (res *EmailRoutingSummaryIPVersionResponse, err error) {
 	var env EmailRoutingSummaryIPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +99,7 @@ func (r *EmailRoutingSummaryService) IPVersion(ctx context.Context, query EmailR
 	return
 }
 
-// Percentage distribution of emails classified per SPF validation.
+// Percentage distribution of emails classified by SPF validation.
 func (r *EmailRoutingSummaryService) SPF(ctx context.Context, query EmailRoutingSummarySPFParams, opts ...option.RequestOption) (res *EmailRoutingSummarySPFResponse, err error) {
 	var env EmailRoutingSummarySPFResponseEnvelope
 	opts = append(r.Options[:], opts...)

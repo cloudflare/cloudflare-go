@@ -40,8 +40,8 @@ func NewEmailSecurityTopTldService(opts ...option.RequestOption) (r *EmailSecuri
 	return
 }
 
-// Get the top TLDs by email messages. Values are a percentage out of the total
-// emails.
+// Get the top TLDs by email messages. Values are a percentage out of total email
+// volume.
 func (r *EmailSecurityTopTldService) Get(ctx context.Context, query EmailSecurityTopTldGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTldGetResponse, err error) {
 	var env EmailSecurityTopTldGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

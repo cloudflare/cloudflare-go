@@ -34,7 +34,7 @@ func NewEmailSecuritySummaryService(opts ...option.RequestOption) (r *EmailSecur
 	return
 }
 
-// Percentage distribution of emails classified per ARC validation.
+// Percentage distribution of emails classified by ARC validation.
 func (r *EmailSecuritySummaryService) ARC(ctx context.Context, query EmailSecuritySummaryARCParams, opts ...option.RequestOption) (res *EmailSecuritySummaryARCResponse, err error) {
 	var env EmailSecuritySummaryARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +47,7 @@ func (r *EmailSecuritySummaryService) ARC(ctx context.Context, query EmailSecuri
 	return
 }
 
-// Percentage distribution of emails classified per DKIM validation.
+// Percentage distribution of emails classified by DKIM validation.
 func (r *EmailSecuritySummaryService) DKIM(ctx context.Context, query EmailSecuritySummaryDKIMParams, opts ...option.RequestOption) (res *EmailSecuritySummaryDKIMResponse, err error) {
 	var env EmailSecuritySummaryDKIMResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *EmailSecuritySummaryService) DKIM(ctx context.Context, query EmailSecur
 	return
 }
 
-// Percentage distribution of emails classified per DMARC validation.
+// Percentage distribution of emails classified by DMARC validation.
 func (r *EmailSecuritySummaryService) DMARC(ctx context.Context, query EmailSecuritySummaryDMARCParams, opts ...option.RequestOption) (res *EmailSecuritySummaryDMARCResponse, err error) {
 	var env EmailSecuritySummaryDMARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +99,7 @@ func (r *EmailSecuritySummaryService) Spam(ctx context.Context, query EmailSecur
 	return
 }
 
-// Percentage distribution of emails classified per SPF validation.
+// Percentage distribution of emails classified by SPF validation.
 func (r *EmailSecuritySummaryService) SPF(ctx context.Context, query EmailSecuritySummarySPFParams, opts ...option.RequestOption) (res *EmailSecuritySummarySPFResponse, err error) {
 	var env EmailSecuritySummarySPFResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -138,7 +138,7 @@ func (r *EmailSecuritySummaryService) ThreatCategory(ctx context.Context, query 
 	return
 }
 
-// Percentage distribution of emails classified per TLS Version.
+// Percentage distribution of emails classified by TLS version.
 func (r *EmailSecuritySummaryService) TLSVersion(ctx context.Context, query EmailSecuritySummaryTLSVersionParams, opts ...option.RequestOption) (res *EmailSecuritySummaryTLSVersionResponse, err error) {
 	var env EmailSecuritySummaryTLSVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)

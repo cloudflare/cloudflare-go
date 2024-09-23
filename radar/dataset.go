@@ -61,7 +61,7 @@ func (r *DatasetService) Download(ctx context.Context, params DatasetDownloadPar
 	return
 }
 
-// Get the csv content of a given dataset by alias or id. When getting the content
+// Get the CSV content of a given dataset by alias or ID. When getting the content
 // by alias the latest dataset is returned, optionally filtered by the latest
 // available at a given date.
 func (r *DatasetService) Get(ctx context.Context, alias string, opts ...option.RequestOption) (res *string, err error) {
