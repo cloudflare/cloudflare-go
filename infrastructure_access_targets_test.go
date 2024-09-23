@@ -10,38 +10,39 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const testInfrastructureTargetId = "019205b5-97d7-7272-b00e-0ea05e61a124"
+// randomly generated uuid
+const testInfrastructureAccessTargetId = "019205b5-97d7-7272-b00e-0ea05e61a124"
 
 var (
-	infrastrctureTargetCreatedOn, _  = time.Parse(time.RFC3339, "2024-08-25T05:00:22Z")
-	infrastrctureTargetModifiedOn, _ = time.Parse(time.RFC3339, "2024-08-25T05:00:22Z")
-	expectedInfrastructureTarget     = InfrastructureTarget{
+	infrastructureAccessTargetCreatedOn, _  = time.Parse(time.RFC3339, "2024-08-25T05:00:22Z")
+	infrastructureAccessTargetModifiedOn, _ = time.Parse(time.RFC3339, "2024-08-25T05:00:22Z")
+	expectedInfrastructureAccessTarget      = InfrastructureAccessTarget{
 		Hostname: "infra-access-target",
-		ID:       testInfrastructureTargetId,
-		IP: InfrastructureTargetIPInfo{
-			IPV4: &InfrastructureTargetIPDetails{
-				IPAddr:           "198.51.100.1",
+		ID:       testInfrastructureAccessTargetId,
+		IP: InfrastructureAccessTargetIPInfo{
+			IPV4: &InfrastructureAccessTargetIPDetails{
+				IPAddr:           "187.26.29.249",
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
-			IPV6: &InfrastructureTargetIPDetails{
+			IPV6: &InfrastructureAccessTargetIPDetails{
 				IPAddr:           "2001:0db8:0000:0000:0000:0000:0000:1000",
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
 		},
-		CreatedAt:  &infrastrctureTargetCreatedOn,
-		ModifiedAt: &infrastrctureTargetModifiedOn,
+		CreatedAt:  infrastructureAccessTargetCreatedOn.String(),
+		ModifiedAt: infrastructureAccessTargetModifiedOn.String(),
 	}
-	expectedInfrastructureModified = InfrastructureTarget{
+	expectedInfrastructureModified = InfrastructureAccessTarget{
 		Hostname: "infra-access-target-modified",
-		ID:       testInfrastructureTargetId,
-		IP: InfrastructureTargetIPInfo{
-			IPV4: &InfrastructureTargetIPDetails{
-				IPAddr:           "198.51.100.2",
+		ID:       testInfrastructureAccessTargetId,
+		IP: InfrastructureAccessTargetIPInfo{
+			IPV4: &InfrastructureAccessTargetIPDetails{
+				IPAddr:           "250.26.29.250",
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
 		},
-		CreatedAt:  &infrastrctureTargetCreatedOn,
-		ModifiedAt: &infrastrctureTargetModifiedOn,
+		CreatedAt:  infrastructureAccessTargetCreatedOn.String(),
+		ModifiedAt: infrastructureAccessTargetModifiedOn.String(),
 	}
 )
 
@@ -77,20 +78,20 @@ func TestInfrastructureTarget_Create(t *testing.T) {
 	})
 
 	// Make sure missing account ID is thrown
-	_, err := client.CreateInfrastructureTarget(context.Background(), AccountIdentifier(""), CreateInfrastructureTargetParams{})
+	_, err := client.CreateInfrastructureAccessTarget(context.Background(), AccountIdentifier(""), CreateInfrastructureAccessTargetParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	out, err := client.CreateInfrastructureTarget(context.Background(), AccountIdentifier(testAccountID), CreateInfrastructureTargetParams{
-		InfrastructureTargetParams: InfrastructureTargetParams{
+	out, err := client.CreateInfrastructureAccessTarget(context.Background(), AccountIdentifier(testAccountID), CreateInfrastructureAccessTargetParams{
+		InfrastructureAccessTargetParams: InfrastructureAccessTargetParams{
 			Hostname: "infra-access-target",
-			IP: InfrastructureTargetIPInfo{
-				IPV4: &InfrastructureTargetIPDetails{
+			IP: InfrastructureAccessTargetIPInfo{
+				IPV4: &InfrastructureAccessTargetIPDetails{
 					IPAddr:           "198.51.100.1",
 					VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 				},
-				IPV6: &InfrastructureTargetIPDetails{
+				IPV6: &InfrastructureAccessTargetIPDetails{
 					IPAddr:           "2001:0db8:0000:0000:0000:0000:0000:1000",
 					VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 				},
@@ -98,7 +99,7 @@ func TestInfrastructureTarget_Create(t *testing.T) {
 		},
 	})
 	if assert.NoError(t, err) {
-		assert.Equal(t, expectedInfrastructureTarget, out, "create infrastructure_target structs not equal")
+		assert.Equal(t, expectedInfrastructureAccessTarget, out, "create infrastructure_target structs not equal")
 	}
 }
 
@@ -141,16 +142,16 @@ func TestInfrastructureTarget_List(t *testing.T) {
 }`)
 	})
 
-	_, _, err := client.ListInfrastructureTargets(context.Background(), AccountIdentifier(""), InfrastructureTargetListParams{})
+	_, _, err := client.ListInfrastructureAccessTargets(context.Background(), AccountIdentifier(""), InfrastructureAccessTargetListParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	out, results, err := client.ListInfrastructureTargets(context.Background(), AccountIdentifier(testAccountID), InfrastructureTargetListParams{})
+	out, results, err := client.ListInfrastructureAccessTargets(context.Background(), AccountIdentifier(testAccountID), InfrastructureAccessTargetListParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(out), "expected 1 challenge_widgets")
 		assert.Equal(t, 20, results.PerPage, "expected 20 per page")
-		assert.Equal(t, expectedInfrastructureTarget, out[0], "list challenge_widgets structs not equal")
+		assert.Equal(t, expectedInfrastructureAccessTarget, out[0], "list challenge_widgets structs not equal")
 	}
 }
 
@@ -158,7 +159,7 @@ func TestInfrastructureTarget_Get(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/infrastructure/targets/"+testInfrastructureTargetId, func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/infrastructure/targets/"+testInfrastructureAccessTargetId, func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -185,20 +186,20 @@ func TestInfrastructureTarget_Get(t *testing.T) {
 }`)
 	})
 
-	_, err := client.GetInfrastructureTarget(context.Background(), AccountIdentifier(""), "")
+	_, err := client.GetInfrastructureAccessTarget(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.GetInfrastructureTarget(context.Background(), AccountIdentifier(testAccountID), "")
+	_, err = client.GetInfrastructureAccessTarget(context.Background(), AccountIdentifier(testAccountID), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingTargetId, err)
 	}
 
-	out, err := client.GetInfrastructureTarget(context.Background(), AccountIdentifier(testAccountID), testInfrastructureTargetId)
+	out, err := client.GetInfrastructureAccessTarget(context.Background(), AccountIdentifier(testAccountID), testInfrastructureAccessTargetId)
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, expectedInfrastructureTarget, out, "get infrastructure_target not equal to expected")
+		assert.Equal(t, expectedInfrastructureAccessTarget, out, "get infrastructure_target not equal to expected")
 	}
 }
 
@@ -206,7 +207,7 @@ func TestInfrastructureTarget_Update(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/infrastructure/targets/"+testInfrastructureTargetId, func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/infrastructure/targets/"+testInfrastructureAccessTargetId, func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `
@@ -229,26 +230,26 @@ func TestInfrastructureTarget_Update(t *testing.T) {
 }`)
 	})
 
-	_, err := client.UpdateInfrastructureTarget(context.Background(), AccountIdentifier(""), UpdateInfrastructureTargetParams{})
+	_, err := client.UpdateInfrastructureAccessTarget(context.Background(), AccountIdentifier(""), UpdateInfrastructureAccessTargetParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	_, err = client.UpdateInfrastructureTarget(context.Background(), AccountIdentifier(testAccountID), UpdateInfrastructureTargetParams{
+	_, err = client.UpdateInfrastructureAccessTarget(context.Background(), AccountIdentifier(testAccountID), UpdateInfrastructureAccessTargetParams{
 		ID:           "",
-		ModifyParams: InfrastructureTargetParams{},
+		ModifyParams: InfrastructureAccessTargetParams{},
 	})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingTargetId, err)
 	}
 
-	out, err := client.UpdateInfrastructureTarget(context.Background(), AccountIdentifier(testAccountID), UpdateInfrastructureTargetParams{
-		ID: testInfrastructureTargetId,
-		ModifyParams: InfrastructureTargetParams{
+	out, err := client.UpdateInfrastructureAccessTarget(context.Background(), AccountIdentifier(testAccountID), UpdateInfrastructureAccessTargetParams{
+		ID: testInfrastructureAccessTargetId,
+		ModifyParams: InfrastructureAccessTargetParams{
 			// Updates hostname and IPv4 address. Deletes IPv6 address.
 			Hostname: "infra-access-target-modified",
-			IP: InfrastructureTargetIPInfo{
-				IPV4: &InfrastructureTargetIPDetails{
+			IP: InfrastructureAccessTargetIPInfo{
+				IPV4: &InfrastructureAccessTargetIPDetails{
 					IPAddr:           "198.51.100.2",
 					VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 				},
@@ -264,23 +265,23 @@ func TestInfrastructureTarget_Delete(t *testing.T) {
 	setup()
 	defer teardown()
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/infrastructure/targets/"+testInfrastructureTargetId, func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/accounts/"+testAccountID+"/infrastructure/targets/"+testInfrastructureAccessTargetId, func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, ``)
 	})
 
 	// Make sure missing account ID is thrown
-	err := client.DeleteInfrastructureTarget(context.Background(), AccountIdentifier(""), "")
+	err := client.DeleteInfrastructureAccessTarget(context.Background(), AccountIdentifier(""), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	err = client.DeleteInfrastructureTarget(context.Background(), AccountIdentifier(testAccountID), "")
+	err = client.DeleteInfrastructureAccessTarget(context.Background(), AccountIdentifier(testAccountID), "")
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingTargetId, err)
 	}
 
-	err = client.DeleteInfrastructureTarget(context.Background(), AccountIdentifier(testAccountID), testInfrastructureTargetId)
+	err = client.DeleteInfrastructureAccessTarget(context.Background(), AccountIdentifier(testAccountID), testInfrastructureAccessTargetId)
 	assert.NoError(t, err)
 }
