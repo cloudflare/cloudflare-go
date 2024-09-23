@@ -41,7 +41,7 @@ type CreateInfrastructureTargetParams struct {
 }
 
 type UpdateInfrastructureTargetParams struct {
-	ID           string                     `json:"hostname"`
+	ID           string                     `json:"-"`
 	ModifyParams InfrastructureTargetParams `json:"modify_params"`
 }
 
