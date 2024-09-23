@@ -56,12 +56,11 @@ func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnr
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
-func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()                      {}
-func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()                 {}
-func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()           {}
-func (UnionString) ImplementsHostnamesSettingValueUnionParam()                           {}
-func (UnionString) ImplementsHostnamesSettingValueUnion()                                {}
-func (UnionString) ImplementsEventNotificationsR2ConfigurationQueueDeleteResponseUnion() {}
+func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()            {}
+func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()       {}
+func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
+func (UnionString) ImplementsHostnamesSettingValueUnionParam()                 {}
+func (UnionString) ImplementsHostnamesSettingValueUnion()                      {}
 
 type UnionInt int64
 
