@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// randomly generated uuid
 const testInfrastructureTargetId = "019205b5-97d7-7272-b00e-0ea05e61a124"
 
 var (

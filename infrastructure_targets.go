@@ -12,7 +12,6 @@ import (
 
 var ErrMissingTargetId = errors.New("required target id missing")
 
-// InfrastructureTarget represents an Infrastructure InfrastructureTarget.
 type InfrastructureTarget struct {
 	Hostname   string                     `json:"hostname"`
 	ID         string                     `json:"id"`
