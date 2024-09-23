@@ -22,7 +22,7 @@ type Target struct {
 }
 
 type IPDetails struct {
-	IpAddr           string `json:"ip_addr"`
+	IPAddr           string `json:"ip_addr"`
 	VirtualNetworkId string `json:"virtual_network_id"`
 }
 
@@ -71,7 +71,7 @@ type TargetListParams struct {
 
 // ListInfrastructureTargets returns all applications within an account or zone.
 //
-// Account API reference: https://developers.cloudflare.com/api/operations/infra-targets-list
+// API reference: https://developers.cloudflare.com/api/operations/infra-targets-list
 func (api *API) ListInfrastructureTargets(ctx context.Context, rc *ResourceContainer, params TargetListParams) ([]Target, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []Target{}, &ResultInfo{}, ErrMissingAccountID
@@ -119,7 +119,7 @@ func (api *API) ListInfrastructureTargets(ctx context.Context, rc *ResourceConta
 
 // CreateInfrastructureTarget creates a new infrastructure target.
 //
-// Account API reference: https://developers.cloudflare.com/api/operations/infra-targets-post
+// API reference: https://developers.cloudflare.com/api/operations/infra-targets-post
 func (api *API) CreateInfrastructureTarget(ctx context.Context, rc *ResourceContainer, params CreateInfrastructureTargetParams) (Target, error) {
 	if rc.Identifier == "" {
 		return Target{}, ErrMissingAccountID
@@ -143,7 +143,7 @@ func (api *API) CreateInfrastructureTarget(ctx context.Context, rc *ResourceCont
 
 // UpdateInfrastructureTarget updates an existing infrastructure target.
 //
-// Account API reference: https://developers.cloudflare.com/api/operations/infra-targets-put
+// API reference: https://developers.cloudflare.com/api/operations/infra-targets-put
 func (api *API) UpdateInfrastructureTarget(ctx context.Context, rc *ResourceContainer, params UpdateInfrastructureTargetParams) (Target, error) {
 	if rc.Identifier == "" {
 		return Target{}, ErrMissingAccountID
@@ -177,7 +177,7 @@ func (api *API) UpdateInfrastructureTarget(ctx context.Context, rc *ResourceCont
 // GetInfrastructureTarget returns a single infrastructure target based on target ID
 // ID for either account or zone.
 //
-// Account API reference: https://developers.cloudflare.com/api/operations/infra-targets-get
+// API reference: https://developers.cloudflare.com/api/operations/infra-targets-get
 func (api *API) GetInfrastructureTarget(ctx context.Context, rc *ResourceContainer, targetID string) (Target, error) {
 	if rc.Identifier == "" {
 		return Target{}, ErrMissingAccountID
@@ -210,7 +210,7 @@ func (api *API) GetInfrastructureTarget(ctx context.Context, rc *ResourceContain
 
 // DeleteInfrastructureTarget deletes an infrastructure target.
 //
-// Account API reference: https://developers.cloudflare.com/api/operations/infra-targets-delete
+// API reference: https://developers.cloudflare.com/api/operations/infra-targets-delete
 func (api *API) DeleteInfrastructureTarget(ctx context.Context, rc *ResourceContainer, targetID string) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID

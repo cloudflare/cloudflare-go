@@ -21,11 +21,11 @@ var (
 		ID:       testInfrastructureTargetId,
 		IP: IPInfo{
 			IPV4: &IPDetails{
-				IpAddr:           "187.26.29.249",
+				IPAddr:           "187.26.29.249",
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
 			IPV6: &IPDetails{
-				IpAddr:           "64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0",
+				IPAddr:           "64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0",
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
 		},
@@ -37,7 +37,7 @@ var (
 		ID:       testInfrastructureTargetId,
 		IP: IPInfo{
 			IPV4: &IPDetails{
-				IpAddr:           "250.26.29.250",
+				IPAddr:           "250.26.29.250",
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
 		},
@@ -88,11 +88,11 @@ func TestInfrastructureTarget_Create(t *testing.T) {
 			Hostname: "infra-access-target",
 			IP: IPInfo{
 				IPV4: &IPDetails{
-					IpAddr:           "187.26.29.249",
+					IPAddr:           "187.26.29.249",
 					VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 				},
 				IPV6: &IPDetails{
-					IpAddr:           "64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0",
+					IPAddr:           "64c0:64e8:f0b4:8dbf:7104:72b0:ec8f:f5e0",
 					VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 				},
 			},
@@ -250,7 +250,7 @@ func TestInfrastructureTarget_Update(t *testing.T) {
 			Hostname: "infra-access-target-modified",
 			IP: IPInfo{
 				IPV4: &IPDetails{
-					IpAddr:           "250.26.29.250",
+					IPAddr:           "250.26.29.250",
 					VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 				},
 			},
