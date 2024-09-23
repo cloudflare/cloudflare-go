@@ -16,8 +16,8 @@ type InfrastructureTarget struct {
 	Hostname   string                     `json:"hostname"`
 	ID         string                     `json:"id"`
 	IP         InfrastructureTargetIPInfo `json:"ip"`
-	CreatedAt  time.Time                  `json:"created_at"`
-	ModifiedAt time.Time                  `json:"modified_at"`
+	CreatedAt  *time.Time                 `json:"created_at"`
+	ModifiedAt *time.Time                 `json:"modified_at"`
 }
 
 type InfrastructureTargetIPDetails struct {

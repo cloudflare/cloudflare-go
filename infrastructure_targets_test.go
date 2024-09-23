@@ -28,8 +28,8 @@ var (
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
 		},
-		CreatedAt:  infrastrctureTargetCreatedOn,
-		ModifiedAt: infrastrctureTargetModifiedOn,
+		CreatedAt:  &infrastrctureTargetCreatedOn,
+		ModifiedAt: &infrastrctureTargetModifiedOn,
 	}
 	expectedInfrastructureModified = InfrastructureTarget{
 		Hostname: "infra-access-target-modified",
@@ -40,8 +40,8 @@ var (
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
 		},
-		CreatedAt:  infrastrctureTargetCreatedOn,
-		ModifiedAt: infrastrctureTargetModifiedOn,
+		CreatedAt:  &infrastrctureTargetCreatedOn,
+		ModifiedAt: &infrastrctureTargetModifiedOn,
 	}
 )
 
