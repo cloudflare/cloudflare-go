@@ -3,7 +3,16 @@
 package event_notifications
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // R2ConfigurationQueueService contains methods and other services that help with
@@ -23,4 +32,192 @@ func NewR2ConfigurationQueueService(opts ...option.RequestOption) (r *R2Configur
 	r = &R2ConfigurationQueueService{}
 	r.Options = opts
 	return
+}
+
+// Create event notification rule.
+func (r *R2ConfigurationQueueService) Update(ctx context.Context, bucketName string, queueID string, params R2ConfigurationQueueUpdateParams, opts ...option.RequestOption) (res *R2ConfigurationQueueUpdateResponse, err error) {
+	var env R2ConfigurationQueueUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if bucketName == "" {
+		err = errors.New("missing required bucket_name parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration/queues/%s", params.AccountID, bucketName, queueID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Delete an event notification rule. **If no body is provided, all rules for
+// specified queue will be deleted**.
+func (r *R2ConfigurationQueueService) Delete(ctx context.Context, bucketName string, queueID string, body R2ConfigurationQueueDeleteParams, opts ...option.RequestOption) (res *R2ConfigurationQueueDeleteResponse, err error) {
+	var env R2ConfigurationQueueDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if bucketName == "" {
+		err = errors.New("missing required bucket_name parameter")
+		return
+	}
+	if queueID == "" {
+		err = errors.New("missing required queue_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration/queues/%s", body.AccountID, bucketName, queueID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type R2ConfigurationQueueUpdateResponse = interface{}
+
+type R2ConfigurationQueueDeleteResponse = interface{}
+
+type R2ConfigurationQueueUpdateParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Array of rules to drive notifications
+	Rules param.Field[[]R2ConfigurationQueueUpdateParamsRule] `json:"rules"`
+}
+
+func (r R2ConfigurationQueueUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type R2ConfigurationQueueUpdateParamsRule struct {
+	// Array of R2 object actions that will trigger notifications
+	Actions param.Field[[]R2ConfigurationQueueUpdateParamsRulesAction] `json:"actions,required"`
+	// Notifications will be sent only for objects with this prefix
+	Prefix param.Field[string] `json:"prefix"`
+	// Notifications will be sent only for objects with this suffix
+	Suffix param.Field[string] `json:"suffix"`
+}
+
+func (r R2ConfigurationQueueUpdateParamsRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type R2ConfigurationQueueUpdateParamsRulesAction string
+
+const (
+	R2ConfigurationQueueUpdateParamsRulesActionPutObject               R2ConfigurationQueueUpdateParamsRulesAction = "PutObject"
+	R2ConfigurationQueueUpdateParamsRulesActionCopyObject              R2ConfigurationQueueUpdateParamsRulesAction = "CopyObject"
+	R2ConfigurationQueueUpdateParamsRulesActionDeleteObject            R2ConfigurationQueueUpdateParamsRulesAction = "DeleteObject"
+	R2ConfigurationQueueUpdateParamsRulesActionCompleteMultipartUpload R2ConfigurationQueueUpdateParamsRulesAction = "CompleteMultipartUpload"
+	R2ConfigurationQueueUpdateParamsRulesActionLifecycleDeletion       R2ConfigurationQueueUpdateParamsRulesAction = "LifecycleDeletion"
+)
+
+func (r R2ConfigurationQueueUpdateParamsRulesAction) IsKnown() bool {
+	switch r {
+	case R2ConfigurationQueueUpdateParamsRulesActionPutObject, R2ConfigurationQueueUpdateParamsRulesActionCopyObject, R2ConfigurationQueueUpdateParamsRulesActionDeleteObject, R2ConfigurationQueueUpdateParamsRulesActionCompleteMultipartUpload, R2ConfigurationQueueUpdateParamsRulesActionLifecycleDeletion:
+		return true
+	}
+	return false
+}
+
+type R2ConfigurationQueueUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []string                           `json:"messages,required"`
+	Result   R2ConfigurationQueueUpdateResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success R2ConfigurationQueueUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    r2ConfigurationQueueUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// r2ConfigurationQueueUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [R2ConfigurationQueueUpdateResponseEnvelope]
+type r2ConfigurationQueueUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *R2ConfigurationQueueUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2ConfigurationQueueUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type R2ConfigurationQueueUpdateResponseEnvelopeSuccess bool
+
+const (
+	R2ConfigurationQueueUpdateResponseEnvelopeSuccessTrue R2ConfigurationQueueUpdateResponseEnvelopeSuccess = true
+)
+
+func (r R2ConfigurationQueueUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case R2ConfigurationQueueUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type R2ConfigurationQueueDeleteParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type R2ConfigurationQueueDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo              `json:"errors,required"`
+	Messages []string                           `json:"messages,required"`
+	Result   R2ConfigurationQueueDeleteResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success R2ConfigurationQueueDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    r2ConfigurationQueueDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// r2ConfigurationQueueDeleteResponseEnvelopeJSON contains the JSON metadata for
+// the struct [R2ConfigurationQueueDeleteResponseEnvelope]
+type r2ConfigurationQueueDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *R2ConfigurationQueueDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2ConfigurationQueueDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type R2ConfigurationQueueDeleteResponseEnvelopeSuccess bool
+
+const (
+	R2ConfigurationQueueDeleteResponseEnvelopeSuccessTrue R2ConfigurationQueueDeleteResponseEnvelopeSuccess = true
+)
+
+func (r R2ConfigurationQueueDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case R2ConfigurationQueueDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
