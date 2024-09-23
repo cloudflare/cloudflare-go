@@ -35,8 +35,8 @@ func NewHTTPLocationIPVersionService(opts ...option.RequestOption) (r *HTTPLocat
 	return
 }
 
-// Get the top locations, by HTTP traffic, of the requested IP protocol version.
-// Values are a percentage out of the total traffic.
+// Get the top locations, by HTTP traffic, of the requested IP version. Values are
+// a percentage out of the total traffic.
 func (r *HTTPLocationIPVersionService) Get(ctx context.Context, ipVersion HTTPLocationIPVersionGetParamsIPVersion, query HTTPLocationIPVersionGetParams, opts ...option.RequestOption) (res *HTTPLocationIPVersionGetResponse, err error) {
 	var env HTTPLocationIPVersionGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

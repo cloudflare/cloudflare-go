@@ -34,9 +34,9 @@ func NewAttackLayer7TopAseService(opts ...option.RequestOption) (r *AttackLayer7
 	return
 }
 
-// Get the top origin Autonomous Systems of and by layer 7 attacks. Values are a
-// percentage out of the total layer 7 attacks. The origin Autonomous Systems is
-// determined by the client IP.
+// Get the top origin Autonomous Systems of and by Layer 7 attacks. Values are a
+// percentage out of the total Layer 7 attacks. The origin Autonomous Systems is
+// determined by the client IP address.
 func (r *AttackLayer7TopAseService) Origin(ctx context.Context, query AttackLayer7TopAseOriginParams, opts ...option.RequestOption) (res *AttackLayer7TopAseOriginResponse, err error) {
 	var env AttackLayer7TopAseOriginResponseEnvelope
 	opts = append(r.Options[:], opts...)

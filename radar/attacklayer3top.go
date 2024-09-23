@@ -52,7 +52,7 @@ func (r *AttackLayer3TopService) Attacks(ctx context.Context, query AttackLayer3
 	return
 }
 
-// Get the Industry of attacks.
+// Get the industries targeted by attacks.
 func (r *AttackLayer3TopService) Industry(ctx context.Context, query AttackLayer3TopIndustryParams, opts ...option.RequestOption) (res *AttackLayer3TopIndustryResponse, err error) {
 	var env AttackLayer3TopIndustryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -65,7 +65,7 @@ func (r *AttackLayer3TopService) Industry(ctx context.Context, query AttackLayer
 	return
 }
 
-// Get the Verticals of attacks.
+// Get the verticals targeted by attacks.
 func (r *AttackLayer3TopService) Vertical(ctx context.Context, query AttackLayer3TopVerticalParams, opts ...option.RequestOption) (res *AttackLayer3TopVerticalResponse, err error) {
 	var env AttackLayer3TopVerticalResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -39,10 +39,10 @@ func NewAttackLayer7TopService(opts ...option.RequestOption) (r *AttackLayer7Top
 }
 
 // Get the top attacks from origin to target location. Values are a percentage out
-// of the total layer 7 attacks (with billing country). The attack magnitude can be
+// of the total Layer 7 attacks (with billing country). The attack magnitude can be
 // defined by the number of mitigated requests or by the number of zones affected.
-// You can optionally limit the number of attacks per origin/target location
-// (useful if all the top attacks are from or to the same location).
+// You can optionally limit the number of attacks by origin/target location (useful
+// if all the top attacks are from or to the same location).
 func (r *AttackLayer7TopService) Attacks(ctx context.Context, query AttackLayer7TopAttacksParams, opts ...option.RequestOption) (res *AttackLayer7TopAttacksResponse, err error) {
 	var env AttackLayer7TopAttacksResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -55,7 +55,7 @@ func (r *AttackLayer7TopService) Attacks(ctx context.Context, query AttackLayer7
 	return
 }
 
-// Get the Industry of attacks.
+// Get the industries targeted by attacks.
 func (r *AttackLayer7TopService) Industry(ctx context.Context, query AttackLayer7TopIndustryParams, opts ...option.RequestOption) (res *AttackLayer7TopIndustryResponse, err error) {
 	var env AttackLayer7TopIndustryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -68,7 +68,7 @@ func (r *AttackLayer7TopService) Industry(ctx context.Context, query AttackLayer
 	return
 }
 
-// Get the Verticals of attacks.
+// Get the verticals targeted by attacks.
 func (r *AttackLayer7TopService) Vertical(ctx context.Context, query AttackLayer7TopVerticalParams, opts ...option.RequestOption) (res *AttackLayer7TopVerticalResponse, err error) {
 	var env AttackLayer7TopVerticalResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -60,7 +60,7 @@ func (r *AttackLayer3TimeseriesGroupService) Duration(ctx context.Context, query
 	return
 }
 
-// Get a timeseries of the percentage distribution of network protocols in Layer
+// Get a time series of the percentage distribution of network protocols in Layer
 // 3/4 attacks.
 func (r *AttackLayer3TimeseriesGroupService) Get(ctx context.Context, query AttackLayer3TimeseriesGroupGetParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupGetResponse, err error) {
 	var env AttackLayer3TimeseriesGroupGetResponseEnvelope

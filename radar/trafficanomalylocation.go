@@ -34,7 +34,7 @@ func NewTrafficAnomalyLocationService(opts ...option.RequestOption) (r *TrafficA
 	return
 }
 
-// Internet traffic anomalies are signals that might point to an outage, These
+// Internet traffic anomalies are signals that might point to an outage. These
 // alerts are automatically detected by Radar and then manually verified by our
 // team. This endpoint returns the sum of alerts grouped by location.
 func (r *TrafficAnomalyLocationService) Get(ctx context.Context, query TrafficAnomalyLocationGetParams, opts ...option.RequestOption) (res *TrafficAnomalyLocationGetResponse, err error) {

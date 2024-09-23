@@ -33,7 +33,7 @@ func NewBGPRouteService(opts ...option.RequestOption) (r *BGPRouteService) {
 	return
 }
 
-// List all ASes on current global routing tables with routing statistics
+// List all ASes in current global routing tables with routing statistics
 func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, opts ...option.RequestOption) (res *BGPRouteAsesResponse, err error) {
 	var env BGPRouteAsesResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -46,7 +46,7 @@ func (r *BGPRouteService) Ases(ctx context.Context, query BGPRouteAsesParams, op
 	return
 }
 
-// List all Multi-origin AS (MOAS) prefixes on the global routing tables.
+// List all Multi-Origin AS (MOAS) prefixes on the global routing tables.
 func (r *BGPRouteService) Moas(ctx context.Context, query BGPRouteMoasParams, opts ...option.RequestOption) (res *BGPRouteMoasResponse, err error) {
 	var env BGPRouteMoasResponseEnvelope
 	opts = append(r.Options[:], opts...)
