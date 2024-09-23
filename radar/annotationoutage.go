@@ -47,7 +47,7 @@ func (r *AnnotationOutageService) Get(ctx context.Context, query AnnotationOutag
 	return
 }
 
-// Get the number of outages for locations.
+// Get the number of outages by location.
 func (r *AnnotationOutageService) Locations(ctx context.Context, query AnnotationOutageLocationsParams, opts ...option.RequestOption) (res *AnnotationOutageLocationsResponse, err error) {
 	var env AnnotationOutageLocationsResponseEnvelope
 	opts = append(r.Options[:], opts...)

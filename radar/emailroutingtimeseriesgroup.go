@@ -34,7 +34,7 @@ func NewEmailRoutingTimeseriesGroupService(opts ...option.RequestOption) (r *Ema
 	return
 }
 
-// Percentage distribution of emails classified per Arc validation over time.
+// Percentage distribution of emails classified by ARC validation over time.
 func (r *EmailRoutingTimeseriesGroupService) ARC(ctx context.Context, query EmailRoutingTimeseriesGroupARCParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupARCResponse, err error) {
 	var env EmailRoutingTimeseriesGroupARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -47,7 +47,7 @@ func (r *EmailRoutingTimeseriesGroupService) ARC(ctx context.Context, query Emai
 	return
 }
 
-// Percentage distribution of emails classified per DKIM validation over time.
+// Percentage distribution of emails classified by DKIM validation over time.
 func (r *EmailRoutingTimeseriesGroupService) DKIM(ctx context.Context, query EmailRoutingTimeseriesGroupDKIMParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupDKIMResponse, err error) {
 	var env EmailRoutingTimeseriesGroupDKIMResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *EmailRoutingTimeseriesGroupService) DKIM(ctx context.Context, query Ema
 	return
 }
 
-// Percentage distribution of emails classified per DMARC validation over time.
+// Percentage distribution of emails classified by DMARC validation over time.
 func (r *EmailRoutingTimeseriesGroupService) DMARC(ctx context.Context, query EmailRoutingTimeseriesGroupDMARCParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupDMARCResponse, err error) {
 	var env EmailRoutingTimeseriesGroupDMARCResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -73,7 +73,7 @@ func (r *EmailRoutingTimeseriesGroupService) DMARC(ctx context.Context, query Em
 	return
 }
 
-// Percentage distribution of emails by Encrypted over time.
+// Percentage distribution of emails by encryption status over time.
 func (r *EmailRoutingTimeseriesGroupService) Encrypted(ctx context.Context, query EmailRoutingTimeseriesGroupEncryptedParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupEncryptedResponse, err error) {
 	var env EmailRoutingTimeseriesGroupEncryptedResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -86,7 +86,7 @@ func (r *EmailRoutingTimeseriesGroupService) Encrypted(ctx context.Context, quer
 	return
 }
 
-// Percentage distribution of emails by Ip Version over time.
+// Percentage distribution of emails by IP version over time.
 func (r *EmailRoutingTimeseriesGroupService) IPVersion(ctx context.Context, query EmailRoutingTimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupIPVersionResponse, err error) {
 	var env EmailRoutingTimeseriesGroupIPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -99,7 +99,7 @@ func (r *EmailRoutingTimeseriesGroupService) IPVersion(ctx context.Context, quer
 	return
 }
 
-// Percentage distribution of emails classified per SPF validation over time.
+// Percentage distribution of emails classified by SPF validation over time.
 func (r *EmailRoutingTimeseriesGroupService) SPF(ctx context.Context, query EmailRoutingTimeseriesGroupSPFParams, opts ...option.RequestOption) (res *EmailRoutingTimeseriesGroupSPFResponse, err error) {
 	var env EmailRoutingTimeseriesGroupSPFResponseEnvelope
 	opts = append(r.Options[:], opts...)

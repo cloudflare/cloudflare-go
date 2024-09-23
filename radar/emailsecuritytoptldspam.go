@@ -35,7 +35,7 @@ func NewEmailSecurityTopTldSpamService(opts ...option.RequestOption) (r *EmailSe
 	return
 }
 
-// Get the top TLDs by emails classified as Spam or not.
+// Get the top TLDs by emails classified as spam or not.
 func (r *EmailSecurityTopTldSpamService) Get(ctx context.Context, spam EmailSecurityTopTldSpamGetParamsSpam, query EmailSecurityTopTldSpamGetParams, opts ...option.RequestOption) (res *EmailSecurityTopTldSpamGetResponse, err error) {
 	var env EmailSecurityTopTldSpamGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

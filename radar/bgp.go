@@ -44,8 +44,8 @@ func NewBGPService(opts ...option.RequestOption) (r *BGPService) {
 	return
 }
 
-// Gets BGP updates change over time. Raw values are returned. When requesting
-// updates of an autonomous system (AS), only BGP updates of type announcement are
+// Get BGP updates change over time. Raw values are returned. When requesting
+// updates for an autonomous system (AS), only BGP updates of type announcement are
 // returned.
 func (r *BGPService) Timeseries(ctx context.Context, query BGPTimeseriesParams, opts ...option.RequestOption) (res *BGPTimeseriesResponse, err error) {
 	var env BGPTimeseriesResponseEnvelope

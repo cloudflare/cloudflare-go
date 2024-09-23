@@ -34,9 +34,9 @@ func NewAttackLayer7TopLocationService(opts ...option.RequestOption) (r *AttackL
 	return
 }
 
-// Get the top origin locations of and by layer 7 attacks. Values are a percentage
-// out of the total layer 7 attacks. The origin location is determined by the
-// client IP.
+// Get the top origin locations of and by Layer 7 attacks. Values are a percentage
+// out of the total Layer 7 attacks. The origin location is determined by the
+// client IP address.
 func (r *AttackLayer7TopLocationService) Origin(ctx context.Context, query AttackLayer7TopLocationOriginParams, opts ...option.RequestOption) (res *AttackLayer7TopLocationOriginResponse, err error) {
 	var env AttackLayer7TopLocationOriginResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -35,7 +35,7 @@ func NewAS112TopService(opts ...option.RequestOption) (r *AS112TopService) {
 	return
 }
 
-// Get the top locations by DNS queries DNSSEC support to AS112.
+// Get the top locations of DNS queries to AS112 with DNSSEC.
 func (r *AS112TopService) DNSSEC(ctx context.Context, dnssec AS112TopDNSSECParamsDNSSEC, query AS112TopDNSSECParams, opts ...option.RequestOption) (res *AS112TopDNSSECResponse, err error) {
 	var env AS112TopDNSSECResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -48,7 +48,7 @@ func (r *AS112TopService) DNSSEC(ctx context.Context, dnssec AS112TopDNSSECParam
 	return
 }
 
-// Get the top locations, by DNS queries EDNS support to AS112.
+// Get the top locations of DNS queries to AS112 with EDNS support.
 func (r *AS112TopService) Edns(ctx context.Context, edns AS112TopEdnsParamsEdns, query AS112TopEdnsParams, opts ...option.RequestOption) (res *AS112TopEdnsResponse, err error) {
 	var env AS112TopEdnsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -61,7 +61,7 @@ func (r *AS112TopService) Edns(ctx context.Context, edns AS112TopEdnsParamsEdns,
 	return
 }
 
-// Get the top locations by DNS queries IP version to AS112.
+// Get the top locations of DNS queries to AS112 by IP version.
 func (r *AS112TopService) IPVersion(ctx context.Context, ipVersion AS112TopIPVersionParamsIPVersion, query AS112TopIPVersionParams, opts ...option.RequestOption) (res *AS112TopIPVersionResponse, err error) {
 	var env AS112TopIPVersionResponseEnvelope
 	opts = append(r.Options[:], opts...)

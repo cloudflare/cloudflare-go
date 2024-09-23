@@ -35,7 +35,7 @@ func NewHTTPLocationHTTPMethodService(opts ...option.RequestOption) (r *HTTPLoca
 	return
 }
 
-// Get the top locations, by HTTP traffic, of the requested HTTP protocol. Values
+// Get the top locations, by HTTP traffic, of the requested HTTP version. Values
 // are a percentage out of the total traffic.
 func (r *HTTPLocationHTTPMethodService) Get(ctx context.Context, httpVersion HTTPLocationHTTPMethodGetParamsHTTPVersion, query HTTPLocationHTTPMethodGetParams, opts ...option.RequestOption) (res *HTTPLocationHTTPMethodGetResponse, err error) {
 	var env HTTPLocationHTTPMethodGetResponseEnvelope
