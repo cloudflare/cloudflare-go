@@ -36,7 +36,7 @@ var (
 		ID:       testInfrastructureAccessTargetId,
 		IP: InfrastructureAccessTargetIPInfo{
 			IPV4: &InfrastructureAccessTargetIPDetails{
-				IPAddr:           "250.26.29.250",
+				IPAddr:           "198.51.100.2",
 				VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 			},
 		},
@@ -45,7 +45,7 @@ var (
 	}
 )
 
-func TestInfrastructureTarget_Create(t *testing.T) {
+func TestInfrastructureAccessTarget_Create(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -58,12 +58,12 @@ func TestInfrastructureTarget_Create(t *testing.T) {
 			  "errors": [],
 			  "messages": [],
 			  "result": {
-			 	"created_at": "2024-08-25T05:00:22Z",
+			 	"created_at": "2024-08-25 05:00:22 +0000 UTC",
 				"hostname": "infra-access-target",
 				"id": "019205b5-97d7-7272-b00e-0ea05e61a124",
 				"ip": {
 				"ipv4": {
-					"ip_addr": "198.51.100.1",
+					"ip_addr": "187.26.29.249",
 					"virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
 				},
 				"ipv6": {
@@ -71,7 +71,7 @@ func TestInfrastructureTarget_Create(t *testing.T) {
 					"virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
 				}
 				},
-				"modified_at": "2024-08-25T05:00:22Z"
+				"modified_at": "2024-08-25 05:00:22 +0000 UTC"
 			  }
 			}`)
 	})
@@ -87,7 +87,7 @@ func TestInfrastructureTarget_Create(t *testing.T) {
 			Hostname: "infra-access-target",
 			IP: InfrastructureAccessTargetIPInfo{
 				IPV4: &InfrastructureAccessTargetIPDetails{
-					IPAddr:           "198.51.100.1",
+					IPAddr:           "187.26.29.249",
 					VirtualNetworkId: "c77b744e-acc8-428f-9257-6878c046ed55",
 				},
 				IPV6: &InfrastructureAccessTargetIPDetails{
@@ -98,7 +98,7 @@ func TestInfrastructureTarget_Create(t *testing.T) {
 		},
 	})
 	if assert.NoError(t, err) {
-		assert.Equal(t, expectedInfrastructureAccessTarget, out, "create infrastructure_target structs not equal")
+		assert.Equal(t, expectedInfrastructureAccessTarget, out, "create infrastructure_access_target structs not equal")
 	}
 }
 
@@ -116,12 +116,12 @@ func TestInfrastructureTarget_List(t *testing.T) {
   "messages": [],
   "result": [
     {
-	  "created_at": "2024-08-25T05:00:22Z",
+	  "created_at": "2024-08-25 05:00:22 +0000 UTC",
 	  "hostname": "infra-access-target",
 	  "id": "019205b5-97d7-7272-b00e-0ea05e61a124",
 	  "ip": {
 	  	"ipv4": {
-		  "ip_addr": "198.51.100.1",
+		  "ip_addr": "187.26.29.249",
 		  "virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
 		},
 		"ipv6": {
@@ -129,7 +129,7 @@ func TestInfrastructureTarget_List(t *testing.T) {
 		  "virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
 		}
 	  },
-	  "modified_at": "2024-08-25T05:00:22Z"
+	  "modified_at": "2024-08-25 05:00:22 +0000 UTC"
     }
   ],
   "result_info": {
@@ -167,12 +167,12 @@ func TestInfrastructureTarget_Get(t *testing.T) {
   "errors": [],
   "messages": [],
   "result": {
-	"created_at": "2024-08-25T05:00:22Z",
+	"created_at": "2024-08-25 05:00:22 +0000 UTC",
     "hostname": "infra-access-target",
     "id": "019205b5-97d7-7272-b00e-0ea05e61a124",
     "ip": {
       "ipv4": {
-        "ip_addr": "198.51.100.1",
+        "ip_addr": "187.26.29.249",
         "virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
       },
       "ipv6": {
@@ -180,7 +180,7 @@ func TestInfrastructureTarget_Get(t *testing.T) {
         "virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
       }
     },
-    "modified_at": "2024-08-25T05:00:22Z"
+    "modified_at": "2024-08-25 05:00:22 +0000 UTC"
   }
 }`)
 	})
@@ -215,7 +215,7 @@ func TestInfrastructureTarget_Update(t *testing.T) {
   "errors": [],
   "messages": [],
   "result": {
-	"created_at": "2024-08-25T05:00:22Z",
+	"created_at": "2024-08-25 05:00:22 +0000 UTC",
     "hostname": "infra-access-target-modified",
     "id": "019205b5-97d7-7272-b00e-0ea05e61a124",
     "ip": {
@@ -224,7 +224,7 @@ func TestInfrastructureTarget_Update(t *testing.T) {
         "virtual_network_id": "c77b744e-acc8-428f-9257-6878c046ed55"
       }
     },
-    "modified_at": "2024-08-25T05:00:22Z"
+    "modified_at": "2024-08-25 05:00:22 +0000 UTC"
   }
 }`)
 	})
