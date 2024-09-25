@@ -14,18 +14,3 @@ type InfraTargetContext struct {
 	Port             int                 `json:"port"`
 	Protocol         InfraProtocol       `json:"protocol"`
 }
-
-type InfrastructureApplication struct {
-	// Items common to both SAML and OIDC
-	ID             string                       `json:"id,omitempty"`
-	Type           AccessApplicationType        `json:"type"`
-	Name           string                       `json:"name"`
-	Aud            string                       `json:"aud,omitempty"`
-	CreatedAt      string                       `json:"created_at,omitempty"`
-	UpdatedAt      string                       `json:"updated_at,omitempty"`
-	ScimConfig     *AccessApplicationSCIMConfig `json:"scim_config,omitempty"`
-	TargetContexts []InfraTargetContext         `json:"target_criteria"`
-	Policies       []AccessPolicy               `json:"policies"`
-}
-
-// Reuse methods from access_application
