@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package event_notifications_test
+package r2_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/event_notifications"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/r2"
 )
 
-func TestR2ConfigurationQueueUpdateWithOptionalParams(t *testing.T) {
+func TestEventNotificationConfigurationQueueUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,22 +27,22 @@ func TestR2ConfigurationQueueUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EventNotifications.R2.Configuration.Queues.Update(
+	_, err := client.R2.EventNotifications.Configuration.Queues.Update(
 		context.TODO(),
 		"example-bucket",
 		"queue_id",
-		event_notifications.R2ConfigurationQueueUpdateParams{
+		r2.EventNotificationConfigurationQueueUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Rules: cloudflare.F([]event_notifications.R2ConfigurationQueueUpdateParamsRule{{
-				Actions: cloudflare.F([]event_notifications.R2ConfigurationQueueUpdateParamsRulesAction{event_notifications.R2ConfigurationQueueUpdateParamsRulesActionPutObject, event_notifications.R2ConfigurationQueueUpdateParamsRulesActionCopyObject}),
+			Rules: cloudflare.F([]r2.EventNotificationConfigurationQueueUpdateParamsRule{{
+				Actions: cloudflare.F([]r2.EventNotificationConfigurationQueueUpdateParamsRulesAction{r2.EventNotificationConfigurationQueueUpdateParamsRulesActionPutObject, r2.EventNotificationConfigurationQueueUpdateParamsRulesActionCopyObject}),
 				Prefix:  cloudflare.F("img/"),
 				Suffix:  cloudflare.F(".jpeg"),
 			}, {
-				Actions: cloudflare.F([]event_notifications.R2ConfigurationQueueUpdateParamsRulesAction{event_notifications.R2ConfigurationQueueUpdateParamsRulesActionPutObject, event_notifications.R2ConfigurationQueueUpdateParamsRulesActionCopyObject}),
+				Actions: cloudflare.F([]r2.EventNotificationConfigurationQueueUpdateParamsRulesAction{r2.EventNotificationConfigurationQueueUpdateParamsRulesActionPutObject, r2.EventNotificationConfigurationQueueUpdateParamsRulesActionCopyObject}),
 				Prefix:  cloudflare.F("img/"),
 				Suffix:  cloudflare.F(".jpeg"),
 			}, {
-				Actions: cloudflare.F([]event_notifications.R2ConfigurationQueueUpdateParamsRulesAction{event_notifications.R2ConfigurationQueueUpdateParamsRulesActionPutObject, event_notifications.R2ConfigurationQueueUpdateParamsRulesActionCopyObject}),
+				Actions: cloudflare.F([]r2.EventNotificationConfigurationQueueUpdateParamsRulesAction{r2.EventNotificationConfigurationQueueUpdateParamsRulesActionPutObject, r2.EventNotificationConfigurationQueueUpdateParamsRulesActionCopyObject}),
 				Prefix:  cloudflare.F("img/"),
 				Suffix:  cloudflare.F(".jpeg"),
 			}}),
@@ -57,7 +57,7 @@ func TestR2ConfigurationQueueUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestR2ConfigurationQueueDelete(t *testing.T) {
+func TestEventNotificationConfigurationQueueDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -70,11 +70,11 @@ func TestR2ConfigurationQueueDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EventNotifications.R2.Configuration.Queues.Delete(
+	_, err := client.R2.EventNotifications.Configuration.Queues.Delete(
 		context.TODO(),
 		"example-bucket",
 		"queue_id",
-		event_notifications.R2ConfigurationQueueDeleteParams{
+		r2.EventNotificationConfigurationQueueDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
