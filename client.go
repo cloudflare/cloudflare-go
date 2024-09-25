@@ -36,7 +36,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/durable_objects"
 	"github.com/cloudflare/cloudflare-go/v3/email_routing"
 	"github.com/cloudflare/cloudflare-go/v3/email_security"
-	"github.com/cloudflare/cloudflare-go/v3/event_notifications"
 	"github.com/cloudflare/cloudflare-go/v3/filters"
 	"github.com/cloudflare/cloudflare-go/v3/firewall"
 	"github.com/cloudflare/cloudflare-go/v3/healthchecks"
@@ -177,7 +176,6 @@ type Client struct {
 	Snippets                    *snippets.SnippetService
 	Calls                       *calls.CallService
 	CloudforceOne               *cloudforce_one.CloudforceOneService
-	EventNotifications          *event_notifications.EventNotificationService
 	AIGateway                   *ai_gateway.AIGatewayService
 	IAM                         *iam.IAMService
 	CloudConnector              *cloud_connector.CloudConnectorService
@@ -285,7 +283,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Snippets = snippets.NewSnippetService(opts...)
 	r.Calls = calls.NewCallService(opts...)
 	r.CloudforceOne = cloudforce_one.NewCloudforceOneService(opts...)
-	r.EventNotifications = event_notifications.NewEventNotificationService(opts...)
 	r.AIGateway = ai_gateway.NewAIGatewayService(opts...)
 	r.IAM = iam.NewIAMService(opts...)
 	r.CloudConnector = cloud_connector.NewCloudConnectorService(opts...)

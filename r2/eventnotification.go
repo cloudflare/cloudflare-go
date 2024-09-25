@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package event_notifications
+package r2
 
 import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
@@ -13,8 +13,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewEventNotificationService] method instead.
 type EventNotificationService struct {
-	Options []option.RequestOption
-	R2      *R2Service
+	Options       []option.RequestOption
+	Configuration *EventNotificationConfigurationService
 }
 
 // NewEventNotificationService generates a new service that applies the given
@@ -23,6 +23,6 @@ type EventNotificationService struct {
 func NewEventNotificationService(opts ...option.RequestOption) (r *EventNotificationService) {
 	r = &EventNotificationService{}
 	r.Options = opts
-	r.R2 = NewR2Service(opts...)
+	r.Configuration = NewEventNotificationConfigurationService(opts...)
 	return
 }
