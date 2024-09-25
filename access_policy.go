@@ -15,6 +15,14 @@ type AccessApprovalGroup struct {
 	ApprovalsNeeded int      `json:"approvals_needed,omitempty"`
 }
 
+type InfraConnectionRulesSSH struct {
+	Usernames []string `json:"usernames"`
+}
+
+type InfraConnectionRules struct {
+	SSH *InfraConnectionRulesSSH `json:"ssh,omitempty"`
+}
+
 // AccessPolicy defines a policy for allowing or disallowing access to
 // one or more Access applications.
 type AccessPolicy struct {
@@ -36,6 +44,7 @@ type AccessPolicy struct {
 	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
 	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
 	ApprovalGroups               []AccessApprovalGroup `json:"approval_groups"`
+	InfraConnectionRules         *InfraConnectionRules `json:"connection_rules,omitempty"`
 
 	// The include policy works like an OR logical operator. The user must
 	// satisfy one of the rules.

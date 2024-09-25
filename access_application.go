@@ -15,14 +15,15 @@ type AccessApplicationType string
 
 // These constants represent all valid application types.
 const (
-	SelfHosted  AccessApplicationType = "self_hosted"
-	SSH         AccessApplicationType = "ssh"
-	VNC         AccessApplicationType = "vnc"
-	Biso        AccessApplicationType = "biso"
-	AppLauncher AccessApplicationType = "app_launcher"
-	Warp        AccessApplicationType = "warp"
-	Bookmark    AccessApplicationType = "bookmark"
-	Saas        AccessApplicationType = "saas"
+	SelfHosted     AccessApplicationType = "self_hosted"
+	SSH            AccessApplicationType = "ssh"
+	VNC            AccessApplicationType = "vnc"
+	Biso           AccessApplicationType = "biso"
+	AppLauncher    AccessApplicationType = "app_launcher"
+	Warp           AccessApplicationType = "warp"
+	Bookmark       AccessApplicationType = "bookmark"
+	Saas           AccessApplicationType = "saas"
+	Infrastructure AccessApplicationType = "infrastructure"
 )
 
 // AccessApplication represents an Access application.
@@ -59,6 +60,7 @@ type AccessApplication struct {
 	Tags                     []string                       `json:"tags,omitempty"`
 	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
 	Policies                 []AccessPolicy                 `json:"policies,omitempty"`
+	TargetContexts           []InfraTargetContext           `json:"target_criteria,omitempty"`
 	AccessAppLauncherCustomization
 }
 
