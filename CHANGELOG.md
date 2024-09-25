@@ -1,5 +1,11 @@
 ## 0.105.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* device_posture_rule: add score field for custom_s2s posture rule ([#3031](https://github.com/cloudflare/cloudflare-go/issues/3031))
+* infrastructure_targets: initialize CRUD endpoints for infrastructure access endpoints ([#3184](https://github.com/cloudflare/cloudflare-go/issues/3184))
+* load_balancing: add account load balancer support ([#3027](https://github.com/cloudflare/cloudflare-go/issues/3027))
+
 ## 0.104.0 (September 11th, 2024)
 
 BREAKING CHANGES:
