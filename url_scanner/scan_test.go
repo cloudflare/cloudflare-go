@@ -11,6 +11,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
@@ -41,6 +42,52 @@ func TestScanNewWithOptionalParams(t *testing.T) {
 			}),
 			ScreenshotsResolutions: cloudflare.F([]url_scanner.ScanNewParamsScreenshotsResolution{url_scanner.ScanNewParamsScreenshotsResolutionDesktop, url_scanner.ScanNewParamsScreenshotsResolutionMobile, url_scanner.ScanNewParamsScreenshotsResolutionTablet}),
 			Visibility:             cloudflare.F(url_scanner.ScanNewParamsVisibilityPublic),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestScanListWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.URLScanner.Scans.List(
+		context.TODO(),
+		"accountId",
+		url_scanner.ScanListParams{
+			AccountScans: cloudflare.F(true),
+			ASN:          cloudflare.F("13335"),
+			DateEnd:      cloudflare.F(time.Now()),
+			DateStart:    cloudflare.F(time.Now()),
+			Hash:         cloudflare.F("hash"),
+			Hostname:     cloudflare.F("example.com"),
+			IP:           cloudflare.F("1.1.1.1"),
+			IsMalicious:  cloudflare.F(true),
+			Limit:        cloudflare.F(int64(100)),
+			NextCursor:   cloudflare.F("next_cursor"),
+			PageASN:      cloudflare.F("page_asn"),
+			PageHostname: cloudflare.F("page_hostname"),
+			PageIP:       cloudflare.F("page_ip"),
+			PagePath:     cloudflare.F("page_path"),
+			PageURL:      cloudflare.F("page_url"),
+			Path:         cloudflare.F("/samples/subresource-integrity/"),
+			ScanID:       cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			URL:          cloudflare.F("https://example.com/?hello"),
 		},
 	)
 	if err != nil {
