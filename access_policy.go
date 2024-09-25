@@ -15,14 +15,6 @@ type AccessApprovalGroup struct {
 	ApprovalsNeeded int      `json:"approvals_needed,omitempty"`
 }
 
-type InfraConnectionRulesSSH struct {
-	Usernames []string `json:"usernames"`
-}
-
-type InfraConnectionRules struct {
-	SSH *InfraConnectionRulesSSH `json:"ssh,omitempty"`
-}
-
 // AccessPolicy defines a policy for allowing or disallowing access to
 // one or more Access applications.
 type AccessPolicy struct {

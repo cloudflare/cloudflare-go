@@ -12,3 +12,11 @@ type InfraTargetContext struct {
 	Port             int                 `json:"port"`
 	Protocol         InfraProtocol       `json:"protocol"`
 }
+
+type InfraConnectionRulesSSH struct {
+	Usernames []string `json:"usernames"`
+}
+
+type InfraConnectionRules struct {
+	SSH *InfraConnectionRulesSSH `json:"ssh,omitempty"`
+}
