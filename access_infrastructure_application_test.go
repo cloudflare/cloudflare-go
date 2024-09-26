@@ -62,7 +62,7 @@ var (
 		CustomNonIdentityDenyURL: "",
 		AllowAuthenticateViaWarp: nil,
 		OptionsPreflightBypass:   nil,
-		TargetContexts: []InfraTargetContext{
+		TargetContexts: &[]InfraTargetContext{
 			{
 				TargetAttributes: map[string][]string{
 					"hostname": {"cfgo-acc-tests"},
@@ -102,7 +102,7 @@ var (
 		CustomNonIdentityDenyURL: "",
 		AllowAuthenticateViaWarp: nil,
 		OptionsPreflightBypass:   nil,
-		TargetContexts: []InfraTargetContext{
+		TargetContexts: &[]InfraTargetContext{
 			{
 				TargetAttributes: map[string][]string{
 					"hostname": {"cfgo-acc-tests", "cfgo-acc-tests-duplicate"},
@@ -177,7 +177,7 @@ func TestInfrastructureApplication_Create(t *testing.T) {
 	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name: "infrastructure_application_test",
 		Type: "infrastructure",
-		TargetContexts: []InfraTargetContext{
+		TargetContexts: &[]InfraTargetContext{
 			{
 				TargetAttributes: map[string][]string{
 					"hostname": {"cfgo-acc-tests"},
@@ -255,7 +255,7 @@ func TestInfrastructureApplication_Update(t *testing.T) {
 	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name: "infrastructure_application_test_updated",
 		Type: "infrastructure",
-		TargetContexts: []InfraTargetContext{
+		TargetContexts: &[]InfraTargetContext{
 			{
 				TargetAttributes: map[string][]string{
 					"hostname": {"cfgo-acc-tests", "cfgo-acc-tests-duplicate"},

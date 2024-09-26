@@ -101,6 +101,7 @@ type CreateAccessPolicyParams struct {
 	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
 	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
 	ApprovalGroups               []AccessApprovalGroup `json:"approval_groups"`
+	InfraConnectionRules         *InfraConnectionRules `json:"connection_rules,omitempty"`
 
 	// The include policy works like an OR logical operator. The user must
 	// satisfy one of the rules.
@@ -134,6 +135,7 @@ type UpdateAccessPolicyParams struct {
 	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
 	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
 	ApprovalGroups               []AccessApprovalGroup `json:"approval_groups"`
+	InfraConnectionRules         *InfraConnectionRules `json:"connection_rules,omitempty"`
 
 	// The include policy works like an OR logical operator. The user must
 	// satisfy one of the rules.
