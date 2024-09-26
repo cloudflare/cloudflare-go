@@ -1773,9 +1773,9 @@ func (r scanHarResponseHarLogPagesPageTimingsJSON) RawJSON() string {
 
 type ScanNewParams struct {
 	URL param.Field[string] `json:"url,required"`
-	// Set custom headers
+	// Set custom headers.
 	CustomHeaders param.Field[map[string]string] `json:"customHeaders"`
-	// Take multiple screenshots targeting different device types
+	// Take multiple screenshots targeting different device types.
 	ScreenshotsResolutions param.Field[[]ScanNewParamsScreenshotsResolution] `json:"screenshotsResolutions"`
 	// The option `Public` means it will be included in listings like recent scans and
 	// search results. `Unlisted` means it will not be included in the aforementioned
@@ -2167,7 +2167,7 @@ func (r scanHarResponseEnvelopeMessagesJSON) RawJSON() string {
 }
 
 type ScanScreenshotParams struct {
-	// Target device type
+	// Target device type.
 	Resolution param.Field[ScanScreenshotParamsResolution] `query:"resolution"`
 }
 
@@ -2179,7 +2179,7 @@ func (r ScanScreenshotParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Target device type
+// Target device type.
 type ScanScreenshotParamsResolution string
 
 const (
