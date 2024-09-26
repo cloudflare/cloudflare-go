@@ -589,6 +589,11 @@ func TestUpdateAccessPolicy(t *testing.T) {
 				ApprovalsNeeded: 1,
 			},
 		},
+		InfraConnectionRules: &InfraConnectionRules{
+			SSH: &InfraConnectionRulesSSH{
+				Usernames: []string{"root", "ec2-user"},
+			},
+		},
 	}
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
