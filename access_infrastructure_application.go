@@ -1,22 +1,22 @@
 package cloudflare
 
-type InfraProtocol string
+type AccessInfrastructureProtocol string
 
 const (
-	InfraSSH InfraProtocol = "SSH"
-	RDP      InfraProtocol = "RDP"
+	AccessInfrastructureSSH AccessInfrastructureProtocol = "SSH"
+	AccessInfrastructureRDP AccessInfrastructureProtocol = "RDP"
 )
 
-type InfraTargetContext struct {
-	TargetAttributes map[string][]string `json:"target_attributes"`
-	Port             int                 `json:"port"`
-	Protocol         InfraProtocol       `json:"protocol"`
+type AccessInfrastructureTargetContext struct {
+	TargetAttributes map[string][]string          `json:"target_attributes"`
+	Port             int                          `json:"port"`
+	Protocol         AccessInfrastructureProtocol `json:"protocol"`
 }
 
-type InfraConnectionRulesSSH struct {
+type AccessInfrastructureConnectionRulesSSH struct {
 	Usernames []string `json:"usernames"`
 }
 
-type InfraConnectionRules struct {
-	SSH *InfraConnectionRulesSSH `json:"ssh,omitempty"`
+type AccessInfrastructureConnectionRules struct {
+	SSH *AccessInfrastructureConnectionRulesSSH `json:"ssh,omitempty"`
 }

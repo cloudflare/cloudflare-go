@@ -55,8 +55,8 @@ var (
 				ApprovalsNeeded: 1,
 			},
 		},
-		InfraConnectionRules: &InfraConnectionRules{
-			SSH: &InfraConnectionRulesSSH{
+		InfrastructureConnectionRules: &AccessInfrastructureConnectionRules{
+			SSH: &AccessInfrastructureConnectionRulesSSH{
 				Usernames: []string{"root", "ec2-user"},
 			},
 		},
@@ -365,8 +365,8 @@ func TestCreateAccessPolicy(t *testing.T) {
 				ApprovalsNeeded: 1,
 			},
 		},
-		InfraConnectionRules: &InfraConnectionRules{
-			SSH: &InfraConnectionRulesSSH{
+		InfrastructureConnectionRules: &AccessInfrastructureConnectionRules{
+			SSH: &AccessInfrastructureConnectionRulesSSH{
 				Usernames: []string{"root", "ec2-user"},
 			},
 		},
@@ -440,8 +440,8 @@ func TestCreateAccessPolicyAuthContextRule(t *testing.T) {
 				ApprovalsNeeded: 1,
 			},
 		},
-		InfraConnectionRules: &InfraConnectionRules{
-			SSH: &InfraConnectionRulesSSH{
+		InfrastructureConnectionRules: &AccessInfrastructureConnectionRules{
+			SSH: &AccessInfrastructureConnectionRulesSSH{
 				Usernames: []string{"root", "ec2-user"},
 			},
 		},
@@ -589,8 +589,8 @@ func TestUpdateAccessPolicy(t *testing.T) {
 				ApprovalsNeeded: 1,
 			},
 		},
-		InfraConnectionRules: &InfraConnectionRules{
-			SSH: &InfraConnectionRulesSSH{
+		InfrastructureConnectionRules: &AccessInfrastructureConnectionRules{
+			SSH: &AccessInfrastructureConnectionRulesSSH{
 				Usernames: []string{"root", "ec2-user"},
 			},
 		},
