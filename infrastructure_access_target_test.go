@@ -150,7 +150,7 @@ func TestInfrastructureTarget_List(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(out), "expected 1 challenge_widgets")
 		assert.Equal(t, 20, results.PerPage, "expected 20 per page")
-		assert.Equal(t, expectedInfrastructureAccessTarget, out[0], "list challenge_widgets structs not equal")
+		assert.Equal(t, expectedInfrastructureAccessTarget, out[0], "list infrastructure_access_target structs not equal")
 	}
 }
 
@@ -256,7 +256,7 @@ func TestInfrastructureTarget_Update(t *testing.T) {
 		},
 	})
 	if assert.NoError(t, err) {
-		assert.Equal(t, expectedInfrastructureModified, out, "update challenge_widgets structs not equal")
+		assert.Equal(t, expectedInfrastructureModified, out, "update infrastructure_access_target structs not equal")
 	}
 }
 
