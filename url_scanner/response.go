@@ -31,7 +31,8 @@ func NewResponseService(opts ...option.RequestOption) (r *ResponseService) {
 	return
 }
 
-// Returns the plain text response of the network request.
+// Returns the raw response of the network request. If HTML, a plain text response
+// will be returned.
 func (r *ResponseService) Get(ctx context.Context, accountID string, responseID string, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain or image")}, opts...)
