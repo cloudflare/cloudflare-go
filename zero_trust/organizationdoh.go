@@ -85,7 +85,7 @@ type OrganizationDOHUpdateResponse struct {
 	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
 	// duration for this setting is the same as the key rotation period on the account.
 	// Default expiration is 24h
-	JwtDuration string `json:"jwt_duration"`
+	JWTDuration string `json:"jwt_duration"`
 	// The name of the service token.
 	Name      string                            `json:"name"`
 	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
@@ -100,7 +100,7 @@ type organizationDOHUpdateResponseJSON struct {
 	CreatedAt   apijson.Field
 	Duration    apijson.Field
 	ExpiresAt   apijson.Field
-	JwtDuration apijson.Field
+	JWTDuration apijson.Field
 	Name        apijson.Field
 	UpdatedAt   apijson.Field
 	raw         string
@@ -130,7 +130,7 @@ type OrganizationDOHGetResponse struct {
 	// The duration the DoH JWT is valid for. Must be in the format `300ms` or `2h45m`.
 	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
 	// duration for this setting is the same as the key rotation period on the account.
-	JwtDuration string `json:"jwt_duration"`
+	JWTDuration string `json:"jwt_duration"`
 	// The name of the service token.
 	Name      string                         `json:"name"`
 	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
@@ -145,7 +145,7 @@ type organizationDOHGetResponseJSON struct {
 	CreatedAt   apijson.Field
 	Duration    apijson.Field
 	ExpiresAt   apijson.Field
-	JwtDuration apijson.Field
+	JWTDuration apijson.Field
 	Name        apijson.Field
 	UpdatedAt   apijson.Field
 	raw         string
@@ -167,7 +167,7 @@ type OrganizationDOHUpdateParams struct {
 	// Valid time units are: ns, us (or µs), ms, s, m, h. Note that the maximum
 	// duration for this setting is the same as the key rotation period on the account.
 	// Default expiration is 24h
-	JwtDuration param.Field[string] `json:"jwt_duration"`
+	JWTDuration param.Field[string] `json:"jwt_duration"`
 	// The uuid of the service token you want to use for DoH authentication
 	ServiceTokenID param.Field[string] `json:"service_token_id"`
 }
