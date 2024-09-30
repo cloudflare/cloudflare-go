@@ -1812,20 +1812,20 @@ func (r resultGetResponseStatsTLSStatsProtocolsJSON) RawJSON() string {
 }
 
 type ResultGetResponseTask struct {
-	ApexDomain    string                            `json:"apexDomain,required"`
-	Domain        string                            `json:"domain,required"`
-	DOMURL        string                            `json:"domURL,required"`
-	ExtraOptions  ResultGetResponseTaskExtraOptions `json:"extraOptions,required"`
-	Method        string                            `json:"method,required"`
-	ReportURL     string                            `json:"reportURL,required"`
-	ScreenshotURL string                            `json:"screenshotURL,required"`
-	Source        string                            `json:"source,required"`
-	Success       bool                              `json:"success,required"`
-	Time          string                            `json:"time,required"`
-	URL           string                            `json:"url,required"`
-	UUID          string                            `json:"uuid,required"`
-	Visibility    string                            `json:"visibility,required"`
-	JSON          resultGetResponseTaskJSON         `json:"-"`
+	ApexDomain    string                       `json:"apexDomain,required"`
+	Domain        string                       `json:"domain,required"`
+	DOMURL        string                       `json:"domURL,required"`
+	Method        string                       `json:"method,required"`
+	Options       ResultGetResponseTaskOptions `json:"options,required"`
+	ReportURL     string                       `json:"reportURL,required"`
+	ScreenshotURL string                       `json:"screenshotURL,required"`
+	Source        string                       `json:"source,required"`
+	Success       bool                         `json:"success,required"`
+	Time          string                       `json:"time,required"`
+	URL           string                       `json:"url,required"`
+	UUID          string                       `json:"uuid,required"`
+	Visibility    string                       `json:"visibility,required"`
+	JSON          resultGetResponseTaskJSON    `json:"-"`
 }
 
 // resultGetResponseTaskJSON contains the JSON metadata for the struct
@@ -1834,8 +1834,8 @@ type resultGetResponseTaskJSON struct {
 	ApexDomain    apijson.Field
 	Domain        apijson.Field
 	DOMURL        apijson.Field
-	ExtraOptions  apijson.Field
 	Method        apijson.Field
+	Options       apijson.Field
 	ReportURL     apijson.Field
 	ScreenshotURL apijson.Field
 	Source        apijson.Field
@@ -1856,24 +1856,27 @@ func (r resultGetResponseTaskJSON) RawJSON() string {
 	return r.raw
 }
 
-type ResultGetResponseTaskExtraOptions struct {
-	ScreenshotsResolutions []string                              `json:"screenshotsResolutions"`
-	JSON                   resultGetResponseTaskExtraOptionsJSON `json:"-"`
+type ResultGetResponseTaskOptions struct {
+	// Custom headers set.
+	CustomHeaders          interface{}                      `json:"customHeaders"`
+	ScreenshotsResolutions []string                         `json:"screenshotsResolutions"`
+	JSON                   resultGetResponseTaskOptionsJSON `json:"-"`
 }
 
-// resultGetResponseTaskExtraOptionsJSON contains the JSON metadata for the struct
-// [ResultGetResponseTaskExtraOptions]
-type resultGetResponseTaskExtraOptionsJSON struct {
+// resultGetResponseTaskOptionsJSON contains the JSON metadata for the struct
+// [ResultGetResponseTaskOptions]
+type resultGetResponseTaskOptionsJSON struct {
+	CustomHeaders          apijson.Field
 	ScreenshotsResolutions apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *ResultGetResponseTaskExtraOptions) UnmarshalJSON(data []byte) (err error) {
+func (r *ResultGetResponseTaskOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r resultGetResponseTaskExtraOptionsJSON) RawJSON() string {
+func (r resultGetResponseTaskOptionsJSON) RawJSON() string {
 	return r.raw
 }
 
