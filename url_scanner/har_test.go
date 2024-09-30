@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestHarGet(t *testing.T) {
+func TestHARGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,7 +26,7 @@ func TestHarGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.URLScanner.Har.Get(
+	_, err := client.URLScanner.HAR.Get(
 		context.TODO(),
 		"accountId",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
