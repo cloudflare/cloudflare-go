@@ -32,6 +32,7 @@ import (
 type UserSchemaService struct {
 	Options    []option.RequestOption
 	Operations *UserSchemaOperationService
+	Hosts      *UserSchemaHostService
 }
 
 // NewUserSchemaService generates a new service that applies the given options to
@@ -41,6 +42,7 @@ func NewUserSchemaService(opts ...option.RequestOption) (r *UserSchemaService) {
 	r = &UserSchemaService{}
 	r.Options = opts
 	r.Operations = NewUserSchemaOperationService(opts...)
+	r.Hosts = NewUserSchemaHostService(opts...)
 	return
 }
 

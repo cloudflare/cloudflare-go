@@ -168,6 +168,80 @@ func TestRecordDelete(t *testing.T) {
 	}
 }
 
+func TestRecordBatchWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.DNS.Records.Batch(context.TODO(), dns.RecordBatchParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Deletes: cloudflare.F([]dns.RecordBatchParamsDelete{{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}, {
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}, {
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}}),
+		Patches: cloudflare.F([]dns.RecordUnionParam{dns.ARecordParam{
+			Content: cloudflare.F("198.51.100.4"),
+			Type:    cloudflare.F(dns.ARecordTypeA),
+		}, dns.ARecordParam{
+			Content: cloudflare.F("198.51.100.4"),
+			Type:    cloudflare.F(dns.ARecordTypeA),
+		}, dns.ARecordParam{
+			Content: cloudflare.F("198.51.100.4"),
+			Type:    cloudflare.F(dns.ARecordTypeA),
+		}}),
+		Posts: cloudflare.F([]dns.RecordParam{{
+			Name:     cloudflare.F("example.com"),
+			Comment:  cloudflare.F("Domain verification record"),
+			Proxied:  cloudflare.F(true),
+			Settings: cloudflare.F[any](map[string]interface{}{}),
+			Tags:     cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+			TTL:      cloudflare.F(dns.TTL1),
+		}, {
+			Name:     cloudflare.F("example.com"),
+			Comment:  cloudflare.F("Domain verification record"),
+			Proxied:  cloudflare.F(true),
+			Settings: cloudflare.F[any](map[string]interface{}{}),
+			Tags:     cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+			TTL:      cloudflare.F(dns.TTL1),
+		}, {
+			Name:     cloudflare.F("example.com"),
+			Comment:  cloudflare.F("Domain verification record"),
+			Proxied:  cloudflare.F(true),
+			Settings: cloudflare.F[any](map[string]interface{}{}),
+			Tags:     cloudflare.F([]dns.RecordTagsParam{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+			TTL:      cloudflare.F(dns.TTL1),
+		}}),
+		Puts: cloudflare.F([]dns.RecordUnionParam{dns.ARecordParam{
+			Content: cloudflare.F("198.51.100.4"),
+			Type:    cloudflare.F(dns.ARecordTypeA),
+		}, dns.ARecordParam{
+			Content: cloudflare.F("198.51.100.4"),
+			Type:    cloudflare.F(dns.ARecordTypeA),
+		}, dns.ARecordParam{
+			Content: cloudflare.F("198.51.100.4"),
+			Type:    cloudflare.F(dns.ARecordTypeA),
+		}}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestRecordEditWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
