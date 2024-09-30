@@ -1814,7 +1814,7 @@ func (r resultGetResponseStatsTLSStatsProtocolsJSON) RawJSON() string {
 type ResultGetResponseTask struct {
 	ApexDomain    string                            `json:"apexDomain,required"`
 	Domain        string                            `json:"domain,required"`
-	DomURL        string                            `json:"domURL,required"`
+	DOMURL        string                            `json:"domURL,required"`
 	ExtraOptions  ResultGetResponseTaskExtraOptions `json:"extraOptions,required"`
 	Method        string                            `json:"method,required"`
 	ReportURL     string                            `json:"reportURL,required"`
@@ -1833,7 +1833,7 @@ type ResultGetResponseTask struct {
 type resultGetResponseTaskJSON struct {
 	ApexDomain    apijson.Field
 	Domain        apijson.Field
-	DomURL        apijson.Field
+	DOMURL        apijson.Field
 	ExtraOptions  apijson.Field
 	Method        apijson.Field
 	ReportURL     apijson.Field

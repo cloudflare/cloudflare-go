@@ -129,7 +129,7 @@ func TestScanGetWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestScanHar(t *testing.T) {
+func TestScanHAR(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -142,7 +142,7 @@ func TestScanHar(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.URLScanner.Scans.Har(
+	_, err := client.URLScanner.Scans.HAR(
 		context.TODO(),
 		"accountId",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",

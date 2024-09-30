@@ -13,28 +13,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-// HarService contains methods and other services that help with interacting with
+// HARService contains methods and other services that help with interacting with
 // the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewHarService] method instead.
-type HarService struct {
+// the [NewHARService] method instead.
+type HARService struct {
 	Options []option.RequestOption
 }
 
-// NewHarService generates a new service that applies the given options to each
+// NewHARService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewHarService(opts ...option.RequestOption) (r *HarService) {
-	r = &HarService{}
+func NewHARService(opts ...option.RequestOption) (r *HARService) {
+	r = &HARService{}
 	r.Options = opts
 	return
 }
 
 // Get a URL scan's HAR file. See HAR spec at
 // http://www.softwareishard.com/blog/har-12-spec/.
-func (r *HarService) Get(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *HarGetResponse, err error) {
+func (r *HARService) Get(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *HARGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required accountId parameter")
@@ -49,19 +49,19 @@ func (r *HarService) Get(ctx context.Context, accountID string, scanID string, o
 	return
 }
 
-type HarGetResponse struct {
-	Log  HarGetResponseLog  `json:"log,required"`
+type HARGetResponse struct {
+	Log  HARGetResponseLog  `json:"log,required"`
 	JSON harGetResponseJSON `json:"-"`
 }
 
-// harGetResponseJSON contains the JSON metadata for the struct [HarGetResponse]
+// harGetResponseJSON contains the JSON metadata for the struct [HARGetResponse]
 type harGetResponseJSON struct {
 	Log         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HarGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -69,16 +69,16 @@ func (r harGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type HarGetResponseLog struct {
-	Creator HarGetResponseLogCreator `json:"creator,required"`
-	Entries []HarGetResponseLogEntry `json:"entries,required"`
-	Pages   []HarGetResponseLogPage  `json:"pages,required"`
+type HARGetResponseLog struct {
+	Creator HARGetResponseLogCreator `json:"creator,required"`
+	Entries []HARGetResponseLogEntry `json:"entries,required"`
+	Pages   []HARGetResponseLogPage  `json:"pages,required"`
 	Version string                   `json:"version,required"`
 	JSON    harGetResponseLogJSON    `json:"-"`
 }
 
 // harGetResponseLogJSON contains the JSON metadata for the struct
-// [HarGetResponseLog]
+// [HARGetResponseLog]
 type harGetResponseLogJSON struct {
 	Creator     apijson.Field
 	Entries     apijson.Field
@@ -88,7 +88,7 @@ type harGetResponseLogJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HarGetResponseLog) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponseLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -96,7 +96,7 @@ func (r harGetResponseLogJSON) RawJSON() string {
 	return r.raw
 }
 
-type HarGetResponseLogCreator struct {
+type HARGetResponseLogCreator struct {
 	Comment string                       `json:"comment,required"`
 	Name    string                       `json:"name,required"`
 	Version string                       `json:"version,required"`
@@ -104,7 +104,7 @@ type HarGetResponseLogCreator struct {
 }
 
 // harGetResponseLogCreatorJSON contains the JSON metadata for the struct
-// [HarGetResponseLogCreator]
+// [HARGetResponseLogCreator]
 type harGetResponseLogCreatorJSON struct {
 	Comment     apijson.Field
 	Name        apijson.Field
@@ -113,7 +113,7 @@ type harGetResponseLogCreatorJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HarGetResponseLogCreator) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponseLogCreator) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -121,7 +121,7 @@ func (r harGetResponseLogCreatorJSON) RawJSON() string {
 	return r.raw
 }
 
-type HarGetResponseLogEntry struct {
+type HARGetResponseLogEntry struct {
 	InitialPriority string                           `json:"_initialPriority,required"`
 	InitiatorType   string                           `json:"_initiator_type,required"`
 	Priority        string                           `json:"_priority,required"`
@@ -131,8 +131,8 @@ type HarGetResponseLogEntry struct {
 	Cache           interface{}                      `json:"cache,required"`
 	Connection      string                           `json:"connection,required"`
 	Pageref         string                           `json:"pageref,required"`
-	Request         HarGetResponseLogEntriesRequest  `json:"request,required"`
-	Response        HarGetResponseLogEntriesResponse `json:"response,required"`
+	Request         HARGetResponseLogEntriesRequest  `json:"request,required"`
+	Response        HARGetResponseLogEntriesResponse `json:"response,required"`
 	ServerIPAddress string                           `json:"serverIPAddress,required"`
 	StartedDateTime string                           `json:"startedDateTime,required"`
 	Time            float64                          `json:"time,required"`
@@ -140,7 +140,7 @@ type HarGetResponseLogEntry struct {
 }
 
 // harGetResponseLogEntryJSON contains the JSON metadata for the struct
-// [HarGetResponseLogEntry]
+// [HARGetResponseLogEntry]
 type harGetResponseLogEntryJSON struct {
 	InitialPriority apijson.Field
 	InitiatorType   apijson.Field
@@ -160,7 +160,7 @@ type harGetResponseLogEntryJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *HarGetResponseLogEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponseLogEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -168,9 +168,9 @@ func (r harGetResponseLogEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-type HarGetResponseLogEntriesRequest struct {
+type HARGetResponseLogEntriesRequest struct {
 	BodySize    float64                                 `json:"bodySize,required"`
-	Headers     []HarGetResponseLogEntriesRequestHeader `json:"headers,required"`
+	Headers     []HARGetResponseLogEntriesRequestHeader `json:"headers,required"`
 	HeadersSize float64                                 `json:"headersSize,required"`
 	HTTPVersion string                                  `json:"httpVersion,required"`
 	Method      string                                  `json:"method,required"`
@@ -179,7 +179,7 @@ type HarGetResponseLogEntriesRequest struct {
 }
 
 // harGetResponseLogEntriesRequestJSON contains the JSON metadata for the struct
-// [HarGetResponseLogEntriesRequest]
+// [HARGetResponseLogEntriesRequest]
 type harGetResponseLogEntriesRequestJSON struct {
 	BodySize    apijson.Field
 	Headers     apijson.Field
@@ -191,7 +191,7 @@ type harGetResponseLogEntriesRequestJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HarGetResponseLogEntriesRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponseLogEntriesRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -199,14 +199,14 @@ func (r harGetResponseLogEntriesRequestJSON) RawJSON() string {
 	return r.raw
 }
 
-type HarGetResponseLogEntriesRequestHeader struct {
+type HARGetResponseLogEntriesRequestHeader struct {
 	Name  string                                    `json:"name,required"`
 	Value string                                    `json:"value,required"`
 	JSON  harGetResponseLogEntriesRequestHeaderJSON `json:"-"`
 }
 
 // harGetResponseLogEntriesRequestHeaderJSON contains the JSON metadata for the
-// struct [HarGetResponseLogEntriesRequestHeader]
+// struct [HARGetResponseLogEntriesRequestHeader]
 type harGetResponseLogEntriesRequestHeaderJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
@@ -214,7 +214,7 @@ type harGetResponseLogEntriesRequestHeaderJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HarGetResponseLogEntriesRequestHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponseLogEntriesRequestHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -222,11 +222,11 @@ func (r harGetResponseLogEntriesRequestHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-type HarGetResponseLogEntriesResponse struct {
+type HARGetResponseLogEntriesResponse struct {
 	TransferSize float64                                  `json:"_transferSize,required"`
 	BodySize     float64                                  `json:"bodySize,required"`
-	Content      HarGetResponseLogEntriesResponseContent  `json:"content,required"`
-	Headers      []HarGetResponseLogEntriesResponseHeader `json:"headers,required"`
+	Content      HARGetResponseLogEntriesResponseContent  `json:"content,required"`
+	Headers      []HARGetResponseLogEntriesResponseHeader `json:"headers,required"`
 	HeadersSize  float64                                  `json:"headersSize,required"`
 	HTTPVersion  string                                   `json:"httpVersion,required"`
 	RedirectURL  string                                   `json:"redirectURL,required"`
@@ -236,7 +236,7 @@ type HarGetResponseLogEntriesResponse struct {
 }
 
 // harGetResponseLogEntriesResponseJSON contains the JSON metadata for the struct
-// [HarGetResponseLogEntriesResponse]
+// [HARGetResponseLogEntriesResponse]
 type harGetResponseLogEntriesResponseJSON struct {
 	TransferSize apijson.Field
 	BodySize     apijson.Field
@@ -251,7 +251,7 @@ type harGetResponseLogEntriesResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *HarGetResponseLogEntriesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponseLogEntriesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -259,7 +259,7 @@ func (r harGetResponseLogEntriesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type HarGetResponseLogEntriesResponseContent struct {
+type HARGetResponseLogEntriesResponseContent struct {
 	MimeType    string                                      `json:"mimeType,required"`
 	Size        float64                                     `json:"size,required"`
 	Compression int64                                       `json:"compression"`
@@ -267,7 +267,7 @@ type HarGetResponseLogEntriesResponseContent struct {
 }
 
 // harGetResponseLogEntriesResponseContentJSON contains the JSON metadata for the
-// struct [HarGetResponseLogEntriesResponseContent]
+// struct [HARGetResponseLogEntriesResponseContent]
 type harGetResponseLogEntriesResponseContentJSON struct {
 	MimeType    apijson.Field
 	Size        apijson.Field
@@ -276,7 +276,7 @@ type harGetResponseLogEntriesResponseContentJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HarGetResponseLogEntriesResponseContent) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponseLogEntriesResponseContent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -284,14 +284,14 @@ func (r harGetResponseLogEntriesResponseContentJSON) RawJSON() string {
 	return r.raw
 }
 
-type HarGetResponseLogEntriesResponseHeader struct {
+type HARGetResponseLogEntriesResponseHeader struct {
 	Name  string                                     `json:"name,required"`
 	Value string                                     `json:"value,required"`
 	JSON  harGetResponseLogEntriesResponseHeaderJSON `json:"-"`
 }
 
 // harGetResponseLogEntriesResponseHeaderJSON contains the JSON metadata for the
-// struct [HarGetResponseLogEntriesResponseHeader]
+// struct [HARGetResponseLogEntriesResponseHeader]
 type harGetResponseLogEntriesResponseHeaderJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
@@ -299,7 +299,7 @@ type harGetResponseLogEntriesResponseHeaderJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HarGetResponseLogEntriesResponseHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponseLogEntriesResponseHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -307,16 +307,16 @@ func (r harGetResponseLogEntriesResponseHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-type HarGetResponseLogPage struct {
+type HARGetResponseLogPage struct {
 	ID              string                            `json:"id,required"`
-	PageTimings     HarGetResponseLogPagesPageTimings `json:"pageTimings,required"`
+	PageTimings     HARGetResponseLogPagesPageTimings `json:"pageTimings,required"`
 	StartedDateTime string                            `json:"startedDateTime,required"`
 	Title           string                            `json:"title,required"`
 	JSON            harGetResponseLogPageJSON         `json:"-"`
 }
 
 // harGetResponseLogPageJSON contains the JSON metadata for the struct
-// [HarGetResponseLogPage]
+// [HARGetResponseLogPage]
 type harGetResponseLogPageJSON struct {
 	ID              apijson.Field
 	PageTimings     apijson.Field
@@ -326,7 +326,7 @@ type harGetResponseLogPageJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *HarGetResponseLogPage) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponseLogPage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -334,14 +334,14 @@ func (r harGetResponseLogPageJSON) RawJSON() string {
 	return r.raw
 }
 
-type HarGetResponseLogPagesPageTimings struct {
+type HARGetResponseLogPagesPageTimings struct {
 	OnContentLoad float64                               `json:"onContentLoad,required"`
 	OnLoad        float64                               `json:"onLoad,required"`
 	JSON          harGetResponseLogPagesPageTimingsJSON `json:"-"`
 }
 
 // harGetResponseLogPagesPageTimingsJSON contains the JSON metadata for the struct
-// [HarGetResponseLogPagesPageTimings]
+// [HARGetResponseLogPagesPageTimings]
 type harGetResponseLogPagesPageTimingsJSON struct {
 	OnContentLoad apijson.Field
 	OnLoad        apijson.Field
@@ -349,7 +349,7 @@ type harGetResponseLogPagesPageTimingsJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *HarGetResponseLogPagesPageTimings) UnmarshalJSON(data []byte) (err error) {
+func (r *HARGetResponseLogPagesPageTimings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
