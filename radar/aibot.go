@@ -6,25 +6,23 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-// AIService contains methods and other services that help with interacting with
+// AIBotService contains methods and other services that help with interacting with
 // the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAIService] method instead.
-type AIService struct {
-	Options          []option.RequestOption
-	Bots             *AIBotService
-	TimeseriesGroups *AITimeseriesGroupService
+// the [NewAIBotService] method instead.
+type AIBotService struct {
+	Options []option.RequestOption
+	Summary *AIBotSummaryService
 }
 
-// NewAIService generates a new service that applies the given options to each
+// NewAIBotService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewAIService(opts ...option.RequestOption) (r *AIService) {
-	r = &AIService{}
+func NewAIBotService(opts ...option.RequestOption) (r *AIBotService) {
+	r = &AIBotService{}
 	r.Options = opts
-	r.Bots = NewAIBotService(opts...)
-	r.TimeseriesGroups = NewAITimeseriesGroupService(opts...)
+	r.Summary = NewAIBotSummaryService(opts...)
 	return
 }
