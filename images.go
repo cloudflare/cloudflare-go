@@ -42,6 +42,7 @@ type UploadImageParams struct {
 	Name              string
 	RequireSignedURLs bool
 	Metadata          map[string]interface{}
+	CustomID          string
 }
 
 // write writes the image upload data to a multipart writer, so
@@ -72,6 +73,13 @@ func (b UploadImageParams) write(mpw *multipart.Writer) error {
 		}
 	}
 
+	if b.CustomID != "" {
+		err := mpw.WriteField("id", b.CustomID)
+		if err != nil {
+			return err
+		}
+	}
+
 	// According to the Cloudflare docs, this field defaults to false.
 	// For simplicity, we will only send it if the value is true, however
 	// if the default is changed to true, this logic will need to be updated.
@@ -81,7 +89,6 @@ func (b UploadImageParams) write(mpw *multipart.Writer) error {
 			return err
 		}
 	}
-
 	if b.Metadata != nil {
 		part, err := mpw.CreateFormField("metadata")
 		if err != nil {
