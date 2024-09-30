@@ -17,8 +17,8 @@ type URLScannerService struct {
 	Options    []option.RequestOption
 	Responses  *ResponseService
 	Scans      *ScanService
-	Dom        *DomService
-	Har        *HarService
+	DOM        *DOMService
+	HAR        *HARService
 	Result     *ResultService
 	Screenshot *ScreenshotService
 }
@@ -31,8 +31,8 @@ func NewURLScannerService(opts ...option.RequestOption) (r *URLScannerService) {
 	r.Options = opts
 	r.Responses = NewResponseService(opts...)
 	r.Scans = NewScanService(opts...)
-	r.Dom = NewDomService(opts...)
-	r.Har = NewHarService(opts...)
+	r.DOM = NewDOMService(opts...)
+	r.HAR = NewHARService(opts...)
 	r.Result = NewResultService(opts...)
 	r.Screenshot = NewScreenshotService(opts...)
 	return
