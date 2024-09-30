@@ -123,7 +123,7 @@ func (r *ConfigurationAuthIDCharacteristic) UnmarshalJSON(data []byte) (err erro
 //
 // Possible runtime types of the union are
 // [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic],
-// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaim].
+// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim].
 func (r ConfigurationAuthIDCharacteristic) AsUnion() ConfigurationAuthIDCharacteristicsUnion {
 	return r.union
 }
@@ -132,7 +132,7 @@ func (r ConfigurationAuthIDCharacteristic) AsUnion() ConfigurationAuthIDCharacte
 //
 // Union satisfied by
 // [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristic] or
-// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaim].
+// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim].
 type ConfigurationAuthIDCharacteristicsUnion interface {
 	implementsAPIGatewayConfigurationAuthIDCharacteristic()
 }
@@ -147,7 +147,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaim{}),
+			Type:       reflect.TypeOf(ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim{}),
 		},
 	)
 }
@@ -199,7 +199,7 @@ func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicType) IsK
 }
 
 // Auth ID Characteristic extracted from JWT Token Claims
-type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaim struct {
+type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim struct {
 	// Claim location expressed as `$(token_config_id):$(json_path)`, where
 	// `token_config_id` is the ID of the token configuration used in validating the
 	// JWT, and `json_path` is a RFC 9535 JSONPath
@@ -209,41 +209,41 @@ type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaim str
 	// must return a singleton value, which will be interpreted as a string.
 	Name string `json:"name,required"`
 	// The type of characteristic.
-	Type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimType `json:"type,required"`
-	JSON configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimJSON `json:"-"`
+	Type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimType `json:"type,required"`
+	JSON configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimJSON `json:"-"`
 }
 
-// configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimJSON
+// configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimJSON
 // contains the JSON metadata for the struct
-// [ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaim]
-type configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimJSON struct {
+// [ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim]
+type configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaim) UnmarshalJSON(data []byte) (err error) {
+func (r *ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimJSON) RawJSON() string {
+func (r configurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaim) implementsAPIGatewayConfigurationAuthIDCharacteristic() {
+func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaim) implementsAPIGatewayConfigurationAuthIDCharacteristic() {
 }
 
 // The type of characteristic.
-type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimType string
+type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimType string
 
 const (
-	ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimTypeJwt ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimType = "jwt"
+	ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimTypeJWT ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimType = "jwt"
 )
 
-func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimType) IsKnown() bool {
+func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimType) IsKnown() bool {
 	switch r {
-	case ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimTypeJwt:
+	case ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimTypeJWT:
 		return true
 	}
 	return false
@@ -255,12 +255,12 @@ type ConfigurationAuthIDCharacteristicsType string
 const (
 	ConfigurationAuthIDCharacteristicsTypeHeader ConfigurationAuthIDCharacteristicsType = "header"
 	ConfigurationAuthIDCharacteristicsTypeCookie ConfigurationAuthIDCharacteristicsType = "cookie"
-	ConfigurationAuthIDCharacteristicsTypeJwt    ConfigurationAuthIDCharacteristicsType = "jwt"
+	ConfigurationAuthIDCharacteristicsTypeJWT    ConfigurationAuthIDCharacteristicsType = "jwt"
 )
 
 func (r ConfigurationAuthIDCharacteristicsType) IsKnown() bool {
 	switch r {
-	case ConfigurationAuthIDCharacteristicsTypeHeader, ConfigurationAuthIDCharacteristicsTypeCookie, ConfigurationAuthIDCharacteristicsTypeJwt:
+	case ConfigurationAuthIDCharacteristicsTypeHeader, ConfigurationAuthIDCharacteristicsTypeCookie, ConfigurationAuthIDCharacteristicsTypeJWT:
 		return true
 	}
 	return false
@@ -293,7 +293,7 @@ func (r ConfigurationAuthIDCharacteristicParam) implementsAPIGatewayConfiguratio
 //
 // Satisfied by
 // [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicParam],
-// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimParam],
+// [api_gateway.ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimParam],
 // [ConfigurationAuthIDCharacteristicParam].
 type ConfigurationAuthIDCharacteristicsUnionParam interface {
 	implementsAPIGatewayConfigurationAuthIDCharacteristicsUnionParam()
@@ -315,7 +315,7 @@ func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicParam) im
 }
 
 // Auth ID Characteristic extracted from JWT Token Claims
-type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimParam struct {
+type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimParam struct {
 	// Claim location expressed as `$(token_config_id):$(json_path)`, where
 	// `token_config_id` is the ID of the token configuration used in validating the
 	// JWT, and `json_path` is a RFC 9535 JSONPath
@@ -325,14 +325,14 @@ type ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimPara
 	// must return a singleton value, which will be interpreted as a string.
 	Name param.Field[string] `json:"name,required"`
 	// The type of characteristic.
-	Type param.Field[ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimType] `json:"type,required"`
+	Type param.Field[ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimType] `json:"type,required"`
 }
 
-func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimParam) MarshalJSON() (data []byte, err error) {
+func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJwtClaimParam) implementsAPIGatewayConfigurationAuthIDCharacteristicsUnionParam() {
+func (r ConfigurationAuthIDCharacteristicsAPIShieldAuthIDCharacteristicJWTClaimParam) implementsAPIGatewayConfigurationAuthIDCharacteristicsUnionParam() {
 }
 
 type ConfigurationUpdateResponse struct {
