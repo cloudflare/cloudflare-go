@@ -137,31 +137,6 @@ func (r *ScanService) Screenshot(ctx context.Context, accountID string, scanID s
 	return
 }
 
-type URLScannerDomain struct {
-	ID              int64                `json:"id,required"`
-	Name            string               `json:"name,required"`
-	SuperCategoryID int64                `json:"super_category_id"`
-	JSON            urlScannerDomainJSON `json:"-"`
-}
-
-// urlScannerDomainJSON contains the JSON metadata for the struct
-// [URLScannerDomain]
-type urlScannerDomainJSON struct {
-	ID              apijson.Field
-	Name            apijson.Field
-	SuperCategoryID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *URLScannerDomain) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r urlScannerDomainJSON) RawJSON() string {
-	return r.raw
-}
-
 type ScanNewResponse struct {
 	// Time when url was submitted for scanning.
 	Time time.Time `json:"time,required" format:"date-time"`
