@@ -321,6 +321,9 @@ type AccessApplicationPolicyNewParams struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// The rules that define how users may connect to the targets secured by your
+	// application.
+	ConnectionRules param.Field[AccessApplicationPolicyNewParamsConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -345,6 +348,29 @@ type AccessApplicationPolicyNewParams struct {
 }
 
 func (r AccessApplicationPolicyNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The rules that define how users may connect to the targets secured by your
+// application.
+type AccessApplicationPolicyNewParamsConnectionRules struct {
+	// The SSH-specific rules that define how users may connect to the targets secured
+	// by your application.
+	SSH param.Field[AccessApplicationPolicyNewParamsConnectionRulesSSH] `json:"ssh"`
+}
+
+func (r AccessApplicationPolicyNewParamsConnectionRules) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The SSH-specific rules that define how users may connect to the targets secured
+// by your application.
+type AccessApplicationPolicyNewParamsConnectionRulesSSH struct {
+	// Contains the Unix usernames that may be used when connecting over SSH.
+	Usernames param.Field[[]string] `json:"usernames,required"`
+}
+
+func (r AccessApplicationPolicyNewParamsConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -408,6 +434,9 @@ type AccessApplicationPolicyUpdateParams struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
+	// The rules that define how users may connect to the targets secured by your
+	// application.
+	ConnectionRules param.Field[AccessApplicationPolicyUpdateParamsConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -432,6 +461,29 @@ type AccessApplicationPolicyUpdateParams struct {
 }
 
 func (r AccessApplicationPolicyUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The rules that define how users may connect to the targets secured by your
+// application.
+type AccessApplicationPolicyUpdateParamsConnectionRules struct {
+	// The SSH-specific rules that define how users may connect to the targets secured
+	// by your application.
+	SSH param.Field[AccessApplicationPolicyUpdateParamsConnectionRulesSSH] `json:"ssh"`
+}
+
+func (r AccessApplicationPolicyUpdateParamsConnectionRules) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The SSH-specific rules that define how users may connect to the targets secured
+// by your application.
+type AccessApplicationPolicyUpdateParamsConnectionRulesSSH struct {
+	// Contains the Unix usernames that may be used when connecting over SSH.
+	Usernames param.Field[[]string] `json:"usernames,required"`
+}
+
+func (r AccessApplicationPolicyUpdateParamsConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
