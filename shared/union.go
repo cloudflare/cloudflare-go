@@ -61,6 +61,11 @@ func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()       {
 func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
 func (UnionString) ImplementsHostnamesSettingValueUnionParam()                 {}
 func (UnionString) ImplementsHostnamesSettingValueUnion()                      {}
+func (UnionString) ImplementsAIGatewayLogListParamsFiltersValueUnion()         {}
+
+type UnionBool bool
+
+func (UnionBool) ImplementsAIGatewayLogListParamsFiltersValueUnion() {}
 
 type UnionInt int64
 
@@ -76,3 +81,4 @@ func (UnionFloat) ImplementsDNSTTL()                                          {}
 func (UnionFloat) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnionParam()                 {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnion()                      {}
+func (UnionFloat) ImplementsAIGatewayLogListParamsFiltersValueUnion()         {}
