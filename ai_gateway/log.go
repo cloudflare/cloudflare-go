@@ -134,6 +134,7 @@ type LogListParams struct {
 	Direction           param.Field[LogListParamsDirection]        `query:"direction"`
 	EndDate             param.Field[time.Time]                     `query:"end_date" format:"date-time"`
 	Feedback            param.Field[LogListParamsFeedback]         `query:"feedback"`
+	Filters             param.Field[[]LogListParamsFilter]         `query:"filters"`
 	MaxCost             param.Field[float64]                       `query:"max_cost"`
 	MaxDuration         param.Field[float64]                       `query:"max_duration"`
 	MaxTokensIn         param.Field[float64]                       `query:"max_tokens_in"`
@@ -195,6 +196,69 @@ func (r LogListParamsFeedback) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type LogListParamsFilter struct {
+	Key      param.Field[LogListParamsFiltersKey]          `query:"key,required"`
+	Operator param.Field[LogListParamsFiltersOperator]     `query:"operator,required"`
+	Value    param.Field[[]LogListParamsFiltersValueUnion] `query:"value,required"`
+}
+
+// URLQuery serializes [LogListParamsFilter]'s query parameters as `url.Values`.
+func (r LogListParamsFilter) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogListParamsFiltersKey string
+
+const (
+	LogListParamsFiltersKeyCreatedAt           LogListParamsFiltersKey = "created_at"
+	LogListParamsFiltersKeyRequestContentType  LogListParamsFiltersKey = "request_content_type"
+	LogListParamsFiltersKeyResponseContentType LogListParamsFiltersKey = "response_content_type"
+	LogListParamsFiltersKeySuccess             LogListParamsFiltersKey = "success"
+	LogListParamsFiltersKeyCached              LogListParamsFiltersKey = "cached"
+	LogListParamsFiltersKeyProvider            LogListParamsFiltersKey = "provider"
+	LogListParamsFiltersKeyModel               LogListParamsFiltersKey = "model"
+	LogListParamsFiltersKeyCost                LogListParamsFiltersKey = "cost"
+	LogListParamsFiltersKeyTokens              LogListParamsFiltersKey = "tokens"
+	LogListParamsFiltersKeyTokensIn            LogListParamsFiltersKey = "tokens_in"
+	LogListParamsFiltersKeyTokensOut           LogListParamsFiltersKey = "tokens_out"
+	LogListParamsFiltersKeyDuration            LogListParamsFiltersKey = "duration"
+	LogListParamsFiltersKeyFeedback            LogListParamsFiltersKey = "feedback"
+)
+
+func (r LogListParamsFiltersKey) IsKnown() bool {
+	switch r {
+	case LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback:
+		return true
+	}
+	return false
+}
+
+type LogListParamsFiltersOperator string
+
+const (
+	LogListParamsFiltersOperatorEq       LogListParamsFiltersOperator = "eq"
+	LogListParamsFiltersOperatorNeq      LogListParamsFiltersOperator = "neq"
+	LogListParamsFiltersOperatorContains LogListParamsFiltersOperator = "contains"
+	LogListParamsFiltersOperatorLt       LogListParamsFiltersOperator = "lt"
+	LogListParamsFiltersOperatorGt       LogListParamsFiltersOperator = "gt"
+)
+
+func (r LogListParamsFiltersOperator) IsKnown() bool {
+	switch r {
+	case LogListParamsFiltersOperatorEq, LogListParamsFiltersOperatorNeq, LogListParamsFiltersOperatorContains, LogListParamsFiltersOperatorLt, LogListParamsFiltersOperatorGt:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type LogListParamsFiltersValueUnion interface {
+	ImplementsAIGatewayLogListParamsFiltersValueUnion()
 }
 
 type LogListParamsOrderBy string

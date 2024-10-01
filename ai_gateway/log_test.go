@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/ai_gateway"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 func TestLogListWithOptionalParams(t *testing.T) {
@@ -32,11 +33,24 @@ func TestLogListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"my-gateway",
 		ai_gateway.LogListParams{
-			AccountID:           cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
-			Cached:              cloudflare.F(true),
-			Direction:           cloudflare.F(ai_gateway.LogListParamsDirectionAsc),
-			EndDate:             cloudflare.F(time.Now()),
-			Feedback:            cloudflare.F(ai_gateway.LogListParamsFeedback0),
+			AccountID: cloudflare.F("0d37909e38d3e99c29fa2cd343ac421a"),
+			Cached:    cloudflare.F(true),
+			Direction: cloudflare.F(ai_gateway.LogListParamsDirectionAsc),
+			EndDate:   cloudflare.F(time.Now()),
+			Feedback:  cloudflare.F(ai_gateway.LogListParamsFeedback0),
+			Filters: cloudflare.F([]ai_gateway.LogListParamsFilter{{
+				Key:      cloudflare.F(ai_gateway.LogListParamsFiltersKeyCreatedAt),
+				Operator: cloudflare.F(ai_gateway.LogListParamsFiltersOperatorEq),
+				Value:    cloudflare.F([]ai_gateway.LogListParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
+			}, {
+				Key:      cloudflare.F(ai_gateway.LogListParamsFiltersKeyCreatedAt),
+				Operator: cloudflare.F(ai_gateway.LogListParamsFiltersOperatorEq),
+				Value:    cloudflare.F([]ai_gateway.LogListParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
+			}, {
+				Key:      cloudflare.F(ai_gateway.LogListParamsFiltersKeyCreatedAt),
+				Operator: cloudflare.F(ai_gateway.LogListParamsFiltersOperatorEq),
+				Value:    cloudflare.F([]ai_gateway.LogListParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
+			}}),
 			MaxCost:             cloudflare.F(0.000000),
 			MaxDuration:         cloudflare.F(0.000000),
 			MaxTokensIn:         cloudflare.F(0.000000),
@@ -53,7 +67,7 @@ func TestLogListWithOptionalParams(t *testing.T) {
 			OrderBy:             cloudflare.F(ai_gateway.LogListParamsOrderByCreatedAt),
 			OrderByDirection:    cloudflare.F(ai_gateway.LogListParamsOrderByDirectionAsc),
 			Page:                cloudflare.F(int64(1)),
-			PerPage:             cloudflare.F(int64(5)),
+			PerPage:             cloudflare.F(int64(1)),
 			Provider:            cloudflare.F("provider"),
 			RequestContentType:  cloudflare.F("request_content_type"),
 			ResponseContentType: cloudflare.F("response_content_type"),
