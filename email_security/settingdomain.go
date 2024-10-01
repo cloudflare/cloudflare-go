@@ -107,6 +107,7 @@ type SettingDomainListResponse struct {
 	Domain               string                                         `json:"domain,required"`
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
+	Folder               SettingDomainListResponseFolder                `json:"folder,nullable"`
 	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
 	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
 	JSON                 settingDomainListResponseJSON                  `json:"-"`
@@ -121,6 +122,7 @@ type settingDomainListResponseJSON struct {
 	Domain               apijson.Field
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
+	Folder               apijson.Field
 	IntegrationID        apijson.Field
 	O365TenantID         apijson.Field
 	raw                  string
@@ -148,6 +150,21 @@ const (
 func (r SettingDomainListResponseAllowedDeliveryMode) IsKnown() bool {
 	switch r {
 	case SettingDomainListResponseAllowedDeliveryModeDirect, SettingDomainListResponseAllowedDeliveryModeBcc, SettingDomainListResponseAllowedDeliveryModeJournal, SettingDomainListResponseAllowedDeliveryModeAPI, SettingDomainListResponseAllowedDeliveryModeRetroScan:
+		return true
+	}
+	return false
+}
+
+type SettingDomainListResponseFolder string
+
+const (
+	SettingDomainListResponseFolderAllItems SettingDomainListResponseFolder = "AllItems"
+	SettingDomainListResponseFolderInbox    SettingDomainListResponseFolder = "Inbox"
+)
+
+func (r SettingDomainListResponseFolder) IsKnown() bool {
+	switch r {
+	case SettingDomainListResponseFolderAllItems, SettingDomainListResponseFolderInbox:
 		return true
 	}
 	return false
@@ -183,6 +200,7 @@ type SettingDomainEditResponse struct {
 	Domain               string                                         `json:"domain,required"`
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
+	Folder               SettingDomainEditResponseFolder                `json:"folder,nullable"`
 	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
 	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
 	JSON                 settingDomainEditResponseJSON                  `json:"-"`
@@ -197,6 +215,7 @@ type settingDomainEditResponseJSON struct {
 	Domain               apijson.Field
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
+	Folder               apijson.Field
 	IntegrationID        apijson.Field
 	O365TenantID         apijson.Field
 	raw                  string
@@ -224,6 +243,21 @@ const (
 func (r SettingDomainEditResponseAllowedDeliveryMode) IsKnown() bool {
 	switch r {
 	case SettingDomainEditResponseAllowedDeliveryModeDirect, SettingDomainEditResponseAllowedDeliveryModeBcc, SettingDomainEditResponseAllowedDeliveryModeJournal, SettingDomainEditResponseAllowedDeliveryModeAPI, SettingDomainEditResponseAllowedDeliveryModeRetroScan:
+		return true
+	}
+	return false
+}
+
+type SettingDomainEditResponseFolder string
+
+const (
+	SettingDomainEditResponseFolderAllItems SettingDomainEditResponseFolder = "AllItems"
+	SettingDomainEditResponseFolderInbox    SettingDomainEditResponseFolder = "Inbox"
+)
+
+func (r SettingDomainEditResponseFolder) IsKnown() bool {
+	switch r {
+	case SettingDomainEditResponseFolderAllItems, SettingDomainEditResponseFolderInbox:
 		return true
 	}
 	return false
