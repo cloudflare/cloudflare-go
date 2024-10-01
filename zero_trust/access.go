@@ -128,13 +128,13 @@ type AccessRule struct {
 	EmailList interface{} `json:"email_list,required"`
 	// This field can have the runtime type of [DomainRuleEmailDomain].
 	EmailDomain interface{} `json:"email_domain,required"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of [EveryoneRuleEveryone].
 	Everyone interface{} `json:"everyone,required"`
 	// This field can have the runtime type of [IPRuleIP].
 	IP interface{} `json:"ip,required"`
 	// This field can have the runtime type of [IPListRuleIPList].
 	IPList interface{} `json:"ip_list,required"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of [CertificateRuleCertificate].
 	Certificate interface{} `json:"certificate,required"`
 	// This field can have the runtime type of [GroupRuleGroup].
 	Group interface{} `json:"group,required"`
@@ -151,7 +151,8 @@ type AccessRule struct {
 	SAML interface{} `json:"saml,required"`
 	// This field can have the runtime type of [ServiceTokenRuleServiceToken].
 	ServiceToken interface{} `json:"service_token,required"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of
+	// [AnyValidServiceTokenRuleAnyValidServiceToken].
 	AnyValidServiceToken interface{} `json:"any_valid_service_token,required"`
 	// This field can have the runtime type of
 	// [ExternalEvaluationRuleExternalEvaluation].
@@ -367,8 +368,8 @@ type AccessRuleUnionParam interface {
 // Matches any valid Access Service Token
 type AnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
-	AnyValidServiceToken interface{}                  `json:"any_valid_service_token,required"`
-	JSON                 anyValidServiceTokenRuleJSON `json:"-"`
+	AnyValidServiceToken AnyValidServiceTokenRuleAnyValidServiceToken `json:"any_valid_service_token,required"`
+	JSON                 anyValidServiceTokenRuleJSON                 `json:"-"`
 }
 
 // anyValidServiceTokenRuleJSON contains the JSON metadata for the struct
@@ -389,10 +390,30 @@ func (r anyValidServiceTokenRuleJSON) RawJSON() string {
 
 func (r AnyValidServiceTokenRule) implementsZeroTrustAccessRule() {}
 
+// An empty object which matches on all service tokens.
+type AnyValidServiceTokenRuleAnyValidServiceToken struct {
+	JSON anyValidServiceTokenRuleAnyValidServiceTokenJSON `json:"-"`
+}
+
+// anyValidServiceTokenRuleAnyValidServiceTokenJSON contains the JSON metadata for
+// the struct [AnyValidServiceTokenRuleAnyValidServiceToken]
+type anyValidServiceTokenRuleAnyValidServiceTokenJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnyValidServiceTokenRuleAnyValidServiceToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r anyValidServiceTokenRuleAnyValidServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type AnyValidServiceTokenRuleParam struct {
 	// An empty object which matches on all service tokens.
-	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+	AnyValidServiceToken param.Field[AnyValidServiceTokenRuleAnyValidServiceTokenParam] `json:"any_valid_service_token,required"`
 }
 
 func (r AnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
@@ -400,6 +421,14 @@ func (r AnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+// An empty object which matches on all service tokens.
+type AnyValidServiceTokenRuleAnyValidServiceTokenParam struct {
+}
+
+func (r AnyValidServiceTokenRuleAnyValidServiceTokenParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Enforce different MFA options
 type AuthenticationMethodRule struct {
@@ -541,8 +570,8 @@ func (r AzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
 
 // Matches any valid client certificate.
 type CertificateRule struct {
-	Certificate interface{}         `json:"certificate,required"`
-	JSON        certificateRuleJSON `json:"-"`
+	Certificate CertificateRuleCertificate `json:"certificate,required"`
+	JSON        certificateRuleJSON        `json:"-"`
 }
 
 // certificateRuleJSON contains the JSON metadata for the struct [CertificateRule]
@@ -562,9 +591,28 @@ func (r certificateRuleJSON) RawJSON() string {
 
 func (r CertificateRule) implementsZeroTrustAccessRule() {}
 
+type CertificateRuleCertificate struct {
+	JSON certificateRuleCertificateJSON `json:"-"`
+}
+
+// certificateRuleCertificateJSON contains the JSON metadata for the struct
+// [CertificateRuleCertificate]
+type certificateRuleCertificateJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateRuleCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateRuleCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type CertificateRuleParam struct {
-	Certificate param.Field[interface{}] `json:"certificate,required"`
+	Certificate param.Field[CertificateRuleCertificateParam] `json:"certificate,required"`
 }
 
 func (r CertificateRuleParam) MarshalJSON() (data []byte, err error) {
@@ -572,6 +620,13 @@ func (r CertificateRuleParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type CertificateRuleCertificateParam struct {
+}
+
+func (r CertificateRuleCertificateParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Matches a specific country
 type CountryRule struct {
@@ -834,8 +889,8 @@ func (r EmailRuleEmailParam) MarshalJSON() (data []byte, err error) {
 // Matches everyone.
 type EveryoneRule struct {
 	// An empty object which matches on all users.
-	Everyone interface{}      `json:"everyone,required"`
-	JSON     everyoneRuleJSON `json:"-"`
+	Everyone EveryoneRuleEveryone `json:"everyone,required"`
+	JSON     everyoneRuleJSON     `json:"-"`
 }
 
 // everyoneRuleJSON contains the JSON metadata for the struct [EveryoneRule]
@@ -855,10 +910,30 @@ func (r everyoneRuleJSON) RawJSON() string {
 
 func (r EveryoneRule) implementsZeroTrustAccessRule() {}
 
+// An empty object which matches on all users.
+type EveryoneRuleEveryone struct {
+	JSON everyoneRuleEveryoneJSON `json:"-"`
+}
+
+// everyoneRuleEveryoneJSON contains the JSON metadata for the struct
+// [EveryoneRuleEveryone]
+type everyoneRuleEveryoneJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EveryoneRuleEveryone) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r everyoneRuleEveryoneJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type EveryoneRuleParam struct {
 	// An empty object which matches on all users.
-	Everyone param.Field[interface{}] `json:"everyone,required"`
+	Everyone param.Field[EveryoneRuleEveryoneParam] `json:"everyone,required"`
 }
 
 func (r EveryoneRuleParam) MarshalJSON() (data []byte, err error) {
@@ -866,6 +941,14 @@ func (r EveryoneRuleParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+// An empty object which matches on all users.
+type EveryoneRuleEveryoneParam struct {
+}
+
+func (r EveryoneRuleEveryoneParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
 type ExternalEvaluationRule struct {
