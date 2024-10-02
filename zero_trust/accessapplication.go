@@ -301,11 +301,8 @@ type ApplicationPolicy struct {
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired bool `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules ApplicationPolicyConnectionRules `json:"connection_rules"`
-	CreatedAt       time.Time                        `json:"created_at" format:"date-time"`
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
@@ -341,7 +338,6 @@ type applicationPolicyJSON struct {
 	ID                           apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
-	ConnectionRules              apijson.Field
 	CreatedAt                    apijson.Field
 	Decision                     apijson.Field
 	Exclude                      apijson.Field
@@ -365,55 +361,6 @@ func (r applicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
-// The rules that define how users may connect to the targets secured by your
-// application.
-type ApplicationPolicyConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH  ApplicationPolicyConnectionRulesSSH  `json:"ssh"`
-	JSON applicationPolicyConnectionRulesJSON `json:"-"`
-}
-
-// applicationPolicyConnectionRulesJSON contains the JSON metadata for the struct
-// [ApplicationPolicyConnectionRules]
-type applicationPolicyConnectionRulesJSON struct {
-	SSH         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ApplicationPolicyConnectionRules) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r applicationPolicyConnectionRulesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type ApplicationPolicyConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames []string                                `json:"usernames,required"`
-	JSON      applicationPolicyConnectionRulesSSHJSON `json:"-"`
-}
-
-// applicationPolicyConnectionRulesSSHJSON contains the JSON metadata for the
-// struct [ApplicationPolicyConnectionRulesSSH]
-type applicationPolicyConnectionRulesSSHJSON struct {
-	Usernames   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ApplicationPolicyConnectionRulesSSH) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r applicationPolicyConnectionRulesSSHJSON) RawJSON() string {
-	return r.raw
-}
-
 type ApplicationPolicyParam struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
@@ -422,9 +369,6 @@ type ApplicationPolicyParam struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[ApplicationPolicyConnectionRulesParam] `json:"connection_rules"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision] `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
@@ -456,48 +400,24 @@ func (r ApplicationPolicyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The rules that define how users may connect to the targets secured by your
-// application.
-type ApplicationPolicyConnectionRulesParam struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[ApplicationPolicyConnectionRulesSSHParam] `json:"ssh"`
-}
-
-func (r ApplicationPolicyConnectionRulesParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type ApplicationPolicyConnectionRulesSSHParam struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r ApplicationPolicyConnectionRulesSSHParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // The application type.
 type ApplicationType string
 
 const (
-	ApplicationTypeSelfHosted     ApplicationType = "self_hosted"
-	ApplicationTypeSaaS           ApplicationType = "saas"
-	ApplicationTypeSSH            ApplicationType = "ssh"
-	ApplicationTypeVNC            ApplicationType = "vnc"
-	ApplicationTypeAppLauncher    ApplicationType = "app_launcher"
-	ApplicationTypeWARP           ApplicationType = "warp"
-	ApplicationTypeBISO           ApplicationType = "biso"
-	ApplicationTypeBookmark       ApplicationType = "bookmark"
-	ApplicationTypeDashSSO        ApplicationType = "dash_sso"
-	ApplicationTypeInfrastructure ApplicationType = "infrastructure"
+	ApplicationTypeSelfHosted  ApplicationType = "self_hosted"
+	ApplicationTypeSaaS        ApplicationType = "saas"
+	ApplicationTypeSSH         ApplicationType = "ssh"
+	ApplicationTypeVNC         ApplicationType = "vnc"
+	ApplicationTypeAppLauncher ApplicationType = "app_launcher"
+	ApplicationTypeWARP        ApplicationType = "warp"
+	ApplicationTypeBISO        ApplicationType = "biso"
+	ApplicationTypeBookmark    ApplicationType = "bookmark"
+	ApplicationTypeDashSSO     ApplicationType = "dash_sso"
 )
 
 func (r ApplicationType) IsKnown() bool {
 	switch r {
-	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO, ApplicationTypeInfrastructure:
+	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO:
 		return true
 	}
 	return false
@@ -1228,9 +1148,6 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationN
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication() {
-}
-
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1253,9 +1170,6 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationU
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication() {
@@ -1282,9 +1196,6 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationL
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication() {
-}
-
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1307,9 +1218,6 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationG
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication() {
-}
-
-func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
@@ -1441,9 +1349,6 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication() {
-}
-
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1466,9 +1371,6 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication() {
@@ -1495,9 +1397,6 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication() {
-}
-
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1520,9 +1419,6 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication() {
-}
-
-func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
@@ -1668,9 +1564,6 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewR
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication() {
-}
-
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1693,9 +1586,6 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpda
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication() {
@@ -1722,9 +1612,6 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationList
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
-func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication() {
-}
-
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1747,9 +1634,6 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetR
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication() {
-}
-
-func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
@@ -1962,8 +1846,7 @@ type AccessApplicationNewResponse struct {
 	// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfig],
 	// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
 	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationNewResponseBookmarkApplicationSCIMConfig],
-	// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfig].
+	// [AccessApplicationNewResponseBookmarkApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config,required"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -2048,12 +1931,9 @@ type AccessApplicationNewResponse struct {
 	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
 	LandingPageDesign interface{} `json:"landing_page_design,required"`
 	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationNewResponseInfrastructureApplicationTargetCriterion].
-	TargetCriteria interface{}                      `json:"target_criteria,required"`
-	JSON           accessApplicationNewResponseJSON `json:"-"`
-	union          AccessApplicationNewResponseUnion
+	SkipAppLauncherLoginPage bool                             `json:"skip_app_launcher_login_page"`
+	JSON                     accessApplicationNewResponseJSON `json:"-"`
+	union                    AccessApplicationNewResponseUnion
 }
 
 // accessApplicationNewResponseJSON contains the JSON metadata for the struct
@@ -2095,7 +1975,6 @@ type accessApplicationNewResponseJSON struct {
 	HeaderBgColor            apijson.Field
 	LandingPageDesign        apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
-	TargetCriteria           apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -2124,8 +2003,7 @@ func (r *AccessApplicationNewResponse) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.AccessApplicationNewResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationNewResponseBookmarkApplication],
-// [zero_trust.AccessApplicationNewResponseInfrastructureApplication].
+// [zero_trust.AccessApplicationNewResponseBookmarkApplication].
 func (r AccessApplicationNewResponse) AsUnion() AccessApplicationNewResponseUnion {
 	return r.union
 }
@@ -2137,9 +2015,8 @@ func (r AccessApplicationNewResponse) AsUnion() AccessApplicationNewResponseUnio
 // [zero_trust.AccessApplicationNewResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationNewResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationNewResponseBookmarkApplication] or
-// [zero_trust.AccessApplicationNewResponseInfrastructureApplication].
+// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication]
+// or [zero_trust.AccessApplicationNewResponseBookmarkApplication].
 type AccessApplicationNewResponseUnion interface {
 	implementsZeroTrustAccessApplicationNewResponse()
 }
@@ -2179,10 +2056,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseBookmarkApplication{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationNewResponseInfrastructureApplication{}),
 		},
 	)
 }
@@ -4546,258 +4419,6 @@ func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationS
 	return false
 }
 
-type AccessApplicationNewResponseInfrastructureApplication struct {
-	TargetCriteria []AccessApplicationNewResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
-	// The application type.
-	Type ApplicationType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// Audience tag.
-	AUD       string    `json:"aud"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationNewResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
-	UpdatedAt  time.Time                                                       `json:"updated_at" format:"date-time"`
-	JSON       accessApplicationNewResponseInfrastructureApplicationJSON       `json:"-"`
-}
-
-// accessApplicationNewResponseInfrastructureApplicationJSON contains the JSON
-// metadata for the struct [AccessApplicationNewResponseInfrastructureApplication]
-type accessApplicationNewResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	CreatedAt      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	SCIMConfig     apijson.Field
-	UpdatedAt      apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseInfrastructureApplicationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationNewResponseInfrastructureApplication) implementsZeroTrustAccessApplicationNewResponse() {
-}
-
-type AccessApplicationNewResponseInfrastructureApplicationTargetCriterion struct {
-	// The port that the targets use for the chosen communication protocol. A port
-	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
-	// The communication protocol your application secures.
-	Protocol AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
-	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                      `json:"target_attributes,required"`
-	JSON             accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
-}
-
-// accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseInfrastructureApplicationTargetCriterion]
-type accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON struct {
-	Port             apijson.Field
-	Protocol         apijson.Field
-	TargetAttributes apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
-	return r.raw
-}
-
-// The communication protocol your application secures.
-type AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol string
-
-const (
-	AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
-)
-
-func (r AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
-		return true
-	}
-	return false
-}
-
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                 `json:"mappings"`
-	JSON     accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfig]
-type accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string                                                                            `json:"token_url"`
-	JSON     accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
-}
-
-// accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication]
-type accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
-	Scheme           apijson.Field
-	User             apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2].
-func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
-// [zero_trust.SCIMConfigAuthenticationOauth2].
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
-	implementsZeroTrustAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-	)
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
-)
-
-func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationUpdateResponse struct {
 	// Audience tag.
 	AUD       string    `json:"aud"`
@@ -4812,8 +4433,7 @@ type AccessApplicationUpdateResponse struct {
 	// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig],
 	// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
 	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig].
+	// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config,required"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -4898,12 +4518,9 @@ type AccessApplicationUpdateResponse struct {
 	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
 	LandingPageDesign interface{} `json:"landing_page_design,required"`
 	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion].
-	TargetCriteria interface{}                         `json:"target_criteria,required"`
-	JSON           accessApplicationUpdateResponseJSON `json:"-"`
-	union          AccessApplicationUpdateResponseUnion
+	SkipAppLauncherLoginPage bool                                `json:"skip_app_launcher_login_page"`
+	JSON                     accessApplicationUpdateResponseJSON `json:"-"`
+	union                    AccessApplicationUpdateResponseUnion
 }
 
 // accessApplicationUpdateResponseJSON contains the JSON metadata for the struct
@@ -4945,7 +4562,6 @@ type accessApplicationUpdateResponseJSON struct {
 	HeaderBgColor            apijson.Field
 	LandingPageDesign        apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
-	TargetCriteria           apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -4974,8 +4590,7 @@ func (r *AccessApplicationUpdateResponse) UnmarshalJSON(data []byte) (err error)
 // [zero_trust.AccessApplicationUpdateResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateResponseBookmarkApplication],
-// [zero_trust.AccessApplicationUpdateResponseInfrastructureApplication].
+// [zero_trust.AccessApplicationUpdateResponseBookmarkApplication].
 func (r AccessApplicationUpdateResponse) AsUnion() AccessApplicationUpdateResponseUnion {
 	return r.union
 }
@@ -4987,9 +4602,8 @@ func (r AccessApplicationUpdateResponse) AsUnion() AccessApplicationUpdateRespon
 // [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationUpdateResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateResponseBookmarkApplication] or
-// [zero_trust.AccessApplicationUpdateResponseInfrastructureApplication].
+// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication]
+// or [zero_trust.AccessApplicationUpdateResponseBookmarkApplication].
 type AccessApplicationUpdateResponseUnion interface {
 	implementsZeroTrustAccessApplicationUpdateResponse()
 }
@@ -5029,10 +4643,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBookmarkApplication{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationUpdateResponseInfrastructureApplication{}),
 		},
 	)
 }
@@ -7397,259 +7007,6 @@ func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticati
 	return false
 }
 
-type AccessApplicationUpdateResponseInfrastructureApplication struct {
-	TargetCriteria []AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
-	// The application type.
-	Type ApplicationType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// Audience tag.
-	AUD       string    `json:"aud"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
-	UpdatedAt  time.Time                                                          `json:"updated_at" format:"date-time"`
-	JSON       accessApplicationUpdateResponseInfrastructureApplicationJSON       `json:"-"`
-}
-
-// accessApplicationUpdateResponseInfrastructureApplicationJSON contains the JSON
-// metadata for the struct
-// [AccessApplicationUpdateResponseInfrastructureApplication]
-type accessApplicationUpdateResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	CreatedAt      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	SCIMConfig     apijson.Field
-	UpdatedAt      apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseInfrastructureApplicationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationUpdateResponseInfrastructureApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
-}
-
-type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion struct {
-	// The port that the targets use for the chosen communication protocol. A port
-	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
-	// The communication protocol your application secures.
-	Protocol AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
-	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                         `json:"target_attributes,required"`
-	JSON             accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion]
-type accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON struct {
-	Port             apijson.Field
-	Protocol         apijson.Field
-	TargetAttributes apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
-	return r.raw
-}
-
-// The communication protocol your application secures.
-type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol string
-
-const (
-	AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
-)
-
-func (r AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
-		return true
-	}
-	return false
-}
-
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                    `json:"mappings"`
-	JSON     accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON contains
-// the JSON metadata for the struct
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig]
-type accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string                                                                               `json:"token_url"`
-	JSON     accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
-}
-
-// accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication]
-type accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
-	Scheme           apijson.Field
-	User             apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2].
-func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
-// [zero_trust.SCIMConfigAuthenticationOauth2].
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
-	implementsZeroTrustAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-	)
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
-)
-
-func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationListResponse struct {
 	// Audience tag.
 	AUD       string    `json:"aud"`
@@ -7664,8 +7021,7 @@ type AccessApplicationListResponse struct {
 	// [AccessApplicationListResponseAppLauncherApplicationSCIMConfig],
 	// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
 	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationListResponseBookmarkApplicationSCIMConfig],
-	// [AccessApplicationListResponseInfrastructureApplicationSCIMConfig].
+	// [AccessApplicationListResponseBookmarkApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config,required"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -7750,12 +7106,9 @@ type AccessApplicationListResponse struct {
 	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
 	LandingPageDesign interface{} `json:"landing_page_design,required"`
 	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationListResponseInfrastructureApplicationTargetCriterion].
-	TargetCriteria interface{}                       `json:"target_criteria,required"`
-	JSON           accessApplicationListResponseJSON `json:"-"`
-	union          AccessApplicationListResponseUnion
+	SkipAppLauncherLoginPage bool                              `json:"skip_app_launcher_login_page"`
+	JSON                     accessApplicationListResponseJSON `json:"-"`
+	union                    AccessApplicationListResponseUnion
 }
 
 // accessApplicationListResponseJSON contains the JSON metadata for the struct
@@ -7797,7 +7150,6 @@ type accessApplicationListResponseJSON struct {
 	HeaderBgColor            apijson.Field
 	LandingPageDesign        apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
-	TargetCriteria           apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -7826,8 +7178,7 @@ func (r *AccessApplicationListResponse) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.AccessApplicationListResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationListResponseBookmarkApplication],
-// [zero_trust.AccessApplicationListResponseInfrastructureApplication].
+// [zero_trust.AccessApplicationListResponseBookmarkApplication].
 func (r AccessApplicationListResponse) AsUnion() AccessApplicationListResponseUnion {
 	return r.union
 }
@@ -7839,9 +7190,8 @@ func (r AccessApplicationListResponse) AsUnion() AccessApplicationListResponseUn
 // [zero_trust.AccessApplicationListResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationListResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationListResponseBookmarkApplication] or
-// [zero_trust.AccessApplicationListResponseInfrastructureApplication].
+// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication]
+// or [zero_trust.AccessApplicationListResponseBookmarkApplication].
 type AccessApplicationListResponseUnion interface {
 	implementsZeroTrustAccessApplicationListResponse()
 }
@@ -7881,10 +7231,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseBookmarkApplication{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationListResponseInfrastructureApplication{}),
 		},
 	)
 }
@@ -10248,258 +9594,6 @@ func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication
 	return false
 }
 
-type AccessApplicationListResponseInfrastructureApplication struct {
-	TargetCriteria []AccessApplicationListResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
-	// The application type.
-	Type ApplicationType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// Audience tag.
-	AUD       string    `json:"aud"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationListResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
-	UpdatedAt  time.Time                                                        `json:"updated_at" format:"date-time"`
-	JSON       accessApplicationListResponseInfrastructureApplicationJSON       `json:"-"`
-}
-
-// accessApplicationListResponseInfrastructureApplicationJSON contains the JSON
-// metadata for the struct [AccessApplicationListResponseInfrastructureApplication]
-type accessApplicationListResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	CreatedAt      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	SCIMConfig     apijson.Field
-	UpdatedAt      apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseInfrastructureApplicationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationListResponseInfrastructureApplication) implementsZeroTrustAccessApplicationListResponse() {
-}
-
-type AccessApplicationListResponseInfrastructureApplicationTargetCriterion struct {
-	// The port that the targets use for the chosen communication protocol. A port
-	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
-	// The communication protocol your application secures.
-	Protocol AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
-	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                       `json:"target_attributes,required"`
-	JSON             accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
-}
-
-// accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseInfrastructureApplicationTargetCriterion]
-type accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON struct {
-	Port             apijson.Field
-	Protocol         apijson.Field
-	TargetAttributes apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
-	return r.raw
-}
-
-// The communication protocol your application secures.
-type AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol string
-
-const (
-	AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
-)
-
-func (r AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
-		return true
-	}
-	return false
-}
-
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                  `json:"mappings"`
-	JSON     accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON contains
-// the JSON metadata for the struct
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfig]
-type accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string                                                                             `json:"token_url"`
-	JSON     accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
-}
-
-// accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication]
-type accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
-	Scheme           apijson.Field
-	User             apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2].
-func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
-// [zero_trust.SCIMConfigAuthenticationOauth2].
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
-	implementsZeroTrustAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-	)
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
-)
-
-func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationDeleteResponse struct {
 	// UUID
 	ID   string                              `json:"id"`
@@ -10536,8 +9630,7 @@ type AccessApplicationGetResponse struct {
 	// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfig],
 	// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
 	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationGetResponseBookmarkApplicationSCIMConfig],
-	// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfig].
+	// [AccessApplicationGetResponseBookmarkApplicationSCIMConfig].
 	SCIMConfig interface{} `json:"scim_config,required"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -10622,12 +9715,9 @@ type AccessApplicationGetResponse struct {
 	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
 	LandingPageDesign interface{} `json:"landing_page_design,required"`
 	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationGetResponseInfrastructureApplicationTargetCriterion].
-	TargetCriteria interface{}                      `json:"target_criteria,required"`
-	JSON           accessApplicationGetResponseJSON `json:"-"`
-	union          AccessApplicationGetResponseUnion
+	SkipAppLauncherLoginPage bool                             `json:"skip_app_launcher_login_page"`
+	JSON                     accessApplicationGetResponseJSON `json:"-"`
+	union                    AccessApplicationGetResponseUnion
 }
 
 // accessApplicationGetResponseJSON contains the JSON metadata for the struct
@@ -10669,7 +9759,6 @@ type accessApplicationGetResponseJSON struct {
 	HeaderBgColor            apijson.Field
 	LandingPageDesign        apijson.Field
 	SkipAppLauncherLoginPage apijson.Field
-	TargetCriteria           apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -10698,8 +9787,7 @@ func (r *AccessApplicationGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.AccessApplicationGetResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationGetResponseBookmarkApplication],
-// [zero_trust.AccessApplicationGetResponseInfrastructureApplication].
+// [zero_trust.AccessApplicationGetResponseBookmarkApplication].
 func (r AccessApplicationGetResponse) AsUnion() AccessApplicationGetResponseUnion {
 	return r.union
 }
@@ -10711,9 +9799,8 @@ func (r AccessApplicationGetResponse) AsUnion() AccessApplicationGetResponseUnio
 // [zero_trust.AccessApplicationGetResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationGetResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationGetResponseBookmarkApplication] or
-// [zero_trust.AccessApplicationGetResponseInfrastructureApplication].
+// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication]
+// or [zero_trust.AccessApplicationGetResponseBookmarkApplication].
 type AccessApplicationGetResponseUnion interface {
 	implementsZeroTrustAccessApplicationGetResponse()
 }
@@ -10753,10 +9840,6 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseBookmarkApplication{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessApplicationGetResponseInfrastructureApplication{}),
 		},
 	)
 }
@@ -13120,258 +12203,6 @@ func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationS
 	return false
 }
 
-type AccessApplicationGetResponseInfrastructureApplication struct {
-	TargetCriteria []AccessApplicationGetResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
-	// The application type.
-	Type ApplicationType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// Audience tag.
-	AUD       string    `json:"aud"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
-	// Configuration for provisioning to this application via SCIM. This is currently
-	// in closed beta.
-	SCIMConfig AccessApplicationGetResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
-	UpdatedAt  time.Time                                                       `json:"updated_at" format:"date-time"`
-	JSON       accessApplicationGetResponseInfrastructureApplicationJSON       `json:"-"`
-}
-
-// accessApplicationGetResponseInfrastructureApplicationJSON contains the JSON
-// metadata for the struct [AccessApplicationGetResponseInfrastructureApplication]
-type accessApplicationGetResponseInfrastructureApplicationJSON struct {
-	TargetCriteria apijson.Field
-	Type           apijson.Field
-	ID             apijson.Field
-	AUD            apijson.Field
-	CreatedAt      apijson.Field
-	Name           apijson.Field
-	Policies       apijson.Field
-	SCIMConfig     apijson.Field
-	UpdatedAt      apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseInfrastructureApplicationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r AccessApplicationGetResponseInfrastructureApplication) implementsZeroTrustAccessApplicationGetResponse() {
-}
-
-type AccessApplicationGetResponseInfrastructureApplicationTargetCriterion struct {
-	// The port that the targets use for the chosen communication protocol. A port
-	// cannot be assigned to multiple protocols.
-	Port int64 `json:"port,required"`
-	// The communication protocol your application secures.
-	Protocol AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
-	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes map[string][]string                                                      `json:"target_attributes,required"`
-	JSON             accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
-}
-
-// accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseInfrastructureApplicationTargetCriterion]
-type accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON struct {
-	Port             apijson.Field
-	Protocol         apijson.Field
-	TargetAttributes apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
-	return r.raw
-}
-
-// The communication protocol your application secures.
-type AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol string
-
-const (
-	AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
-)
-
-func (r AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
-		return true
-	}
-	return false
-}
-
-// Configuration for provisioning to this application via SCIM. This is currently
-// in closed beta.
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfig struct {
-	// The UID of the IdP to use as the source for SCIM resources to provision to this
-	// application.
-	IdPUID string `json:"idp_uid,required"`
-	// The base URI for the application's SCIM-compatible API.
-	RemoteURI string `json:"remote_uri,required"`
-	// Attributes for configuring HTTP Basic authentication scheme for SCIM
-	// provisioning to an application.
-	Authentication AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
-	// If false, propagates DELETE requests to the target application for SCIM
-	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
-	// targets do not support DELETE operations.
-	DeactivateOnDelete bool `json:"deactivate_on_delete"`
-	// Whether SCIM provisioning is turned on for this application.
-	Enabled bool `json:"enabled"`
-	// A list of mappings to apply to SCIM resources before provisioning them in this
-	// application. These can transform or filter the resources to be provisioned.
-	Mappings []SCIMConfigMapping                                                 `json:"mappings"`
-	JSON     accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
-}
-
-// accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfig]
-type accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON struct {
-	IdPUID             apijson.Field
-	RemoteURI          apijson.Field
-	Authentication     apijson.Field
-	DeactivateOnDelete apijson.Field
-	Enabled            apijson.Field
-	Mappings           apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
-	return r.raw
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
-	// The authentication scheme to use when making SCIM requests to this application.
-	Scheme AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
-	// Token used to authenticate with the remote SCIM service.
-	Token string `json:"token"`
-	// URL used to generate the auth code used during token generation.
-	AuthorizationURL string `json:"authorization_url"`
-	// Client ID used to authenticate when generating a token for authenticating with
-	// the remote SCIM service.
-	ClientID string `json:"client_id"`
-	// Secret used to authenticate when generating a token for authenticating with the
-	// remove SCIM service.
-	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
-	// URL used to generate the token used to authenticate with the remote SCIM
-	// service.
-	TokenURL string                                                                            `json:"token_url"`
-	JSON     accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
-}
-
-// accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
-// contains the JSON metadata for the struct
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication]
-type accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
-	Scheme           apijson.Field
-	User             apijson.Field
-	Token            apijson.Field
-	AuthorizationURL apijson.Field
-	ClientID         apijson.Field
-	ClientSecret     apijson.Field
-	Scopes           apijson.Field
-	TokenURL         apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
-	*r = AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication{}
-	err = apijson.UnmarshalRoot(data, &r.union)
-	if err != nil {
-		return err
-	}
-	return apijson.Port(r.union, &r)
-}
-
-// AsUnion returns a
-// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
-// interface which you can cast to the specific types for more type safety.
-//
-// Possible runtime types of the union are
-// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
-// [zero_trust.SCIMConfigAuthenticationOauth2].
-func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
-	return r.union
-}
-
-// Attributes for configuring HTTP Basic authentication scheme for SCIM
-// provisioning to an application.
-//
-// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
-// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
-// [zero_trust.SCIMConfigAuthenticationOauth2].
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
-	implementsZeroTrustAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
-		},
-	)
-}
-
-// The authentication scheme to use when making SCIM requests to this application.
-type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
-
-const (
-	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
-	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
-	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
-)
-
-func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationRevokeTokensResponse = interface{}
 
 type AccessApplicationNewParams struct {
@@ -13455,8 +12286,7 @@ type AccessApplicationNewParamsBody struct {
 	HeaderBgColor     param.Field[string]      `json:"header_bg_color"`
 	LandingPageDesign param.Field[interface{}] `json:"landing_page_design,required"`
 	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage param.Field[bool]        `json:"skip_app_launcher_login_page"`
-	TargetCriteria           param.Field[interface{}] `json:"target_criteria,required"`
+	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -13473,7 +12303,6 @@ func (r AccessApplicationNewParamsBody) implementsZeroTrustAccessApplicationNewP
 // [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBookmarkApplication],
-// [zero_trust.AccessApplicationNewParamsBodyInfrastructureApplication],
 // [AccessApplicationNewParamsBody].
 type AccessApplicationNewParamsBodyUnion interface {
 	implementsZeroTrustAccessApplicationNewParamsBodyUnion()
@@ -13568,8 +12397,7 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -13640,9 +12468,6 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -13671,29 +12496,6 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject) Marsh
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -13829,8 +12631,7 @@ type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -13901,9 +12702,6 @@ type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -13932,29 +12730,6 @@ func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObject) MarshalJSON
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
@@ -14216,8 +12991,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -14288,9 +13062,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -14319,29 +13090,6 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject) Marsh
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -14519,8 +13267,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -14591,9 +13338,6 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -14622,29 +13366,6 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject) Marsh
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -14813,8 +13534,7 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -14885,9 +13605,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -14916,29 +13633,6 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject) Mars
 }
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -15107,8 +13801,7 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy 
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -15179,9 +13872,6 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicie
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -15210,29 +13900,6 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 }
 
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -15401,8 +14068,7 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy 
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -15473,9 +14139,6 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicie
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -15504,29 +14167,6 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 }
 
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -15727,51 +14367,6 @@ func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticatio
 	return false
 }
 
-type AccessApplicationNewParamsBodyInfrastructureApplication struct {
-	TargetCriteria param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria,required"`
-	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
-	// The name of the application.
-	Name     param.Field[string]                   `json:"name"`
-	Policies param.Field[[]ApplicationPolicyParam] `json:"policies"`
-}
-
-func (r AccessApplicationNewParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyInfrastructureApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
-}
-
-type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion struct {
-	// The port that the targets use for the chosen communication protocol. A port
-	// cannot be assigned to multiple protocols.
-	Port param.Field[int64] `json:"port,required"`
-	// The communication protocol your application secures.
-	Protocol param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol,required"`
-	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes param.Field[map[string][]string] `json:"target_attributes,required"`
-}
-
-func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The communication protocol your application secures.
-type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol string
-
-const (
-	AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol = "ssh"
-)
-
-func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH:
-		return true
-	}
-	return false
-}
-
 type AccessApplicationNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
@@ -15896,8 +14491,7 @@ type AccessApplicationUpdateParamsBody struct {
 	HeaderBgColor     param.Field[string]      `json:"header_bg_color"`
 	LandingPageDesign param.Field[interface{}] `json:"landing_page_design,required"`
 	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage param.Field[bool]        `json:"skip_app_launcher_login_page"`
-	TargetCriteria           param.Field[interface{}] `json:"target_criteria,required"`
+	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
 }
 
 func (r AccessApplicationUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -15916,7 +14510,6 @@ func (r AccessApplicationUpdateParamsBody) implementsZeroTrustAccessApplicationU
 // [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplication],
-// [zero_trust.AccessApplicationUpdateParamsBodyInfrastructureApplication],
 // [AccessApplicationUpdateParamsBody].
 type AccessApplicationUpdateParamsBodyUnion interface {
 	implementsZeroTrustAccessApplicationUpdateParamsBodyUnion()
@@ -16011,8 +14604,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -16083,9 +14675,6 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -16114,29 +14703,6 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject) Ma
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -16272,8 +14838,7 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -16344,9 +14909,6 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -16375,29 +14937,6 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject) MarshalJ
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
@@ -16659,8 +15198,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -16731,9 +15269,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -16762,29 +15297,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject) Ma
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -16962,8 +15474,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -17034,9 +15545,6 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -17065,29 +15573,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject) Ma
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -17256,8 +15741,7 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -17328,9 +15812,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struc
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -17359,29 +15840,6 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject) M
 }
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -17550,8 +16008,7 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -17622,9 +16079,6 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -17653,29 +16107,6 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 }
 
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -17844,8 +16275,7 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[Decision]    `json:"decision"`
 	Exclude  param.Field[interface{}] `json:"exclude,required"`
@@ -17916,9 +16346,6 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -17947,29 +16374,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -18165,51 +16569,6 @@ const (
 func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
 	switch r {
 	case AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationSchemeOauth2:
-		return true
-	}
-	return false
-}
-
-type AccessApplicationUpdateParamsBodyInfrastructureApplication struct {
-	TargetCriteria param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria,required"`
-	// The application type.
-	Type param.Field[ApplicationType] `json:"type,required"`
-	// The name of the application.
-	Name     param.Field[string]                   `json:"name"`
-	Policies param.Field[[]ApplicationPolicyParam] `json:"policies"`
-}
-
-func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion struct {
-	// The port that the targets use for the chosen communication protocol. A port
-	// cannot be assigned to multiple protocols.
-	Port param.Field[int64] `json:"port,required"`
-	// The communication protocol your application secures.
-	Protocol param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol,required"`
-	// Contains a map of target attribute keys to target attribute values.
-	TargetAttributes param.Field[map[string][]string] `json:"target_attributes,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The communication protocol your application secures.
-type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol string
-
-const (
-	AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol = "ssh"
-)
-
-func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH:
 		return true
 	}
 	return false
