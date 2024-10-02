@@ -62,10 +62,12 @@ func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {
 func (UnionString) ImplementsHostnamesSettingValueUnionParam()                 {}
 func (UnionString) ImplementsHostnamesSettingValueUnion()                      {}
 func (UnionString) ImplementsAIGatewayLogListParamsFiltersValueUnion()         {}
+func (UnionString) ImplementsAIGatewayLogDeleteParamsFiltersValueUnion()       {}
 
 type UnionBool bool
 
-func (UnionBool) ImplementsAIGatewayLogListParamsFiltersValueUnion() {}
+func (UnionBool) ImplementsAIGatewayLogListParamsFiltersValueUnion()   {}
+func (UnionBool) ImplementsAIGatewayLogDeleteParamsFiltersValueUnion() {}
 
 type UnionInt int64
 
@@ -82,3 +84,4 @@ func (UnionFloat) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnionParam()                 {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnion()                      {}
 func (UnionFloat) ImplementsAIGatewayLogListParamsFiltersValueUnion()         {}
+func (UnionFloat) ImplementsAIGatewayLogDeleteParamsFiltersValueUnion()       {}
