@@ -152,11 +152,8 @@ type AccessPolicyNewResponse struct {
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired bool `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules AccessPolicyNewResponseConnectionRules `json:"connection_rules"`
-	CreatedAt       time.Time                              `json:"created_at" format:"date-time"`
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
@@ -194,7 +191,6 @@ type accessPolicyNewResponseJSON struct {
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
-	ConnectionRules              apijson.Field
 	CreatedAt                    apijson.Field
 	Decision                     apijson.Field
 	Exclude                      apijson.Field
@@ -216,55 +212,6 @@ func (r *AccessPolicyNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accessPolicyNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessPolicyNewResponseConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH  AccessPolicyNewResponseConnectionRulesSSH  `json:"ssh"`
-	JSON accessPolicyNewResponseConnectionRulesJSON `json:"-"`
-}
-
-// accessPolicyNewResponseConnectionRulesJSON contains the JSON metadata for the
-// struct [AccessPolicyNewResponseConnectionRules]
-type accessPolicyNewResponseConnectionRulesJSON struct {
-	SSH         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessPolicyNewResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessPolicyNewResponseConnectionRulesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessPolicyNewResponseConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames []string                                      `json:"usernames,required"`
-	JSON      accessPolicyNewResponseConnectionRulesSSHJSON `json:"-"`
-}
-
-// accessPolicyNewResponseConnectionRulesSSHJSON contains the JSON metadata for the
-// struct [AccessPolicyNewResponseConnectionRulesSSH]
-type accessPolicyNewResponseConnectionRulesSSHJSON struct {
-	Usernames   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessPolicyNewResponseConnectionRulesSSH) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessPolicyNewResponseConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -291,11 +238,8 @@ type AccessPolicyUpdateResponse struct {
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired bool `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules AccessPolicyUpdateResponseConnectionRules `json:"connection_rules"`
-	CreatedAt       time.Time                                 `json:"created_at" format:"date-time"`
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
@@ -333,7 +277,6 @@ type accessPolicyUpdateResponseJSON struct {
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
-	ConnectionRules              apijson.Field
 	CreatedAt                    apijson.Field
 	Decision                     apijson.Field
 	Exclude                      apijson.Field
@@ -355,55 +298,6 @@ func (r *AccessPolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accessPolicyUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessPolicyUpdateResponseConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH  AccessPolicyUpdateResponseConnectionRulesSSH  `json:"ssh"`
-	JSON accessPolicyUpdateResponseConnectionRulesJSON `json:"-"`
-}
-
-// accessPolicyUpdateResponseConnectionRulesJSON contains the JSON metadata for the
-// struct [AccessPolicyUpdateResponseConnectionRules]
-type accessPolicyUpdateResponseConnectionRulesJSON struct {
-	SSH         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessPolicyUpdateResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessPolicyUpdateResponseConnectionRulesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessPolicyUpdateResponseConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames []string                                         `json:"usernames,required"`
-	JSON      accessPolicyUpdateResponseConnectionRulesSSHJSON `json:"-"`
-}
-
-// accessPolicyUpdateResponseConnectionRulesSSHJSON contains the JSON metadata for
-// the struct [AccessPolicyUpdateResponseConnectionRulesSSH]
-type accessPolicyUpdateResponseConnectionRulesSSHJSON struct {
-	Usernames   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessPolicyUpdateResponseConnectionRulesSSH) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessPolicyUpdateResponseConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -430,11 +324,8 @@ type AccessPolicyListResponse struct {
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired bool `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules AccessPolicyListResponseConnectionRules `json:"connection_rules"`
-	CreatedAt       time.Time                               `json:"created_at" format:"date-time"`
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
@@ -472,7 +363,6 @@ type accessPolicyListResponseJSON struct {
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
-	ConnectionRules              apijson.Field
 	CreatedAt                    apijson.Field
 	Decision                     apijson.Field
 	Exclude                      apijson.Field
@@ -494,55 +384,6 @@ func (r *AccessPolicyListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accessPolicyListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessPolicyListResponseConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH  AccessPolicyListResponseConnectionRulesSSH  `json:"ssh"`
-	JSON accessPolicyListResponseConnectionRulesJSON `json:"-"`
-}
-
-// accessPolicyListResponseConnectionRulesJSON contains the JSON metadata for the
-// struct [AccessPolicyListResponseConnectionRules]
-type accessPolicyListResponseConnectionRulesJSON struct {
-	SSH         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessPolicyListResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessPolicyListResponseConnectionRulesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessPolicyListResponseConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames []string                                       `json:"usernames,required"`
-	JSON      accessPolicyListResponseConnectionRulesSSHJSON `json:"-"`
-}
-
-// accessPolicyListResponseConnectionRulesSSHJSON contains the JSON metadata for
-// the struct [AccessPolicyListResponseConnectionRulesSSH]
-type accessPolicyListResponseConnectionRulesSSHJSON struct {
-	Usernames   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessPolicyListResponseConnectionRulesSSH) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessPolicyListResponseConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -591,11 +432,8 @@ type AccessPolicyGetResponse struct {
 	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired bool `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules AccessPolicyGetResponseConnectionRules `json:"connection_rules"`
-	CreatedAt       time.Time                              `json:"created_at" format:"date-time"`
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
@@ -633,7 +471,6 @@ type accessPolicyGetResponseJSON struct {
 	AppCount                     apijson.Field
 	ApprovalGroups               apijson.Field
 	ApprovalRequired             apijson.Field
-	ConnectionRules              apijson.Field
 	CreatedAt                    apijson.Field
 	Decision                     apijson.Field
 	Exclude                      apijson.Field
@@ -655,55 +492,6 @@ func (r *AccessPolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accessPolicyGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessPolicyGetResponseConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH  AccessPolicyGetResponseConnectionRulesSSH  `json:"ssh"`
-	JSON accessPolicyGetResponseConnectionRulesJSON `json:"-"`
-}
-
-// accessPolicyGetResponseConnectionRulesJSON contains the JSON metadata for the
-// struct [AccessPolicyGetResponseConnectionRules]
-type accessPolicyGetResponseConnectionRulesJSON struct {
-	SSH         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessPolicyGetResponseConnectionRules) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessPolicyGetResponseConnectionRulesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessPolicyGetResponseConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames []string                                      `json:"usernames,required"`
-	JSON      accessPolicyGetResponseConnectionRulesSSHJSON `json:"-"`
-}
-
-// accessPolicyGetResponseConnectionRulesSSHJSON contains the JSON metadata for the
-// struct [AccessPolicyGetResponseConnectionRulesSSH]
-type accessPolicyGetResponseConnectionRulesSSHJSON struct {
-	Usernames   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessPolicyGetResponseConnectionRulesSSH) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessPolicyGetResponseConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -736,9 +524,6 @@ type AccessPolicyNewParams struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessPolicyNewParamsConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -760,29 +545,6 @@ type AccessPolicyNewParams struct {
 }
 
 func (r AccessPolicyNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessPolicyNewParamsConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessPolicyNewParamsConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessPolicyNewParamsConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessPolicyNewParamsConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessPolicyNewParamsConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -844,9 +606,6 @@ type AccessPolicyUpdateParams struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessPolicyUpdateParamsConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -868,29 +627,6 @@ type AccessPolicyUpdateParams struct {
 }
 
 func (r AccessPolicyUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessPolicyUpdateParamsConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessPolicyUpdateParamsConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessPolicyUpdateParamsConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessPolicyUpdateParamsConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessPolicyUpdateParamsConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
