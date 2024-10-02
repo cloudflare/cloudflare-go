@@ -68,6 +68,22 @@ func (r *LogService) ListAutoPaging(ctx context.Context, gatewayID string, param
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, gatewayID, params, opts...))
 }
 
+// Delete Gateway Logs
+func (r *LogService) Delete(ctx context.Context, gatewayID string, params LogDeleteParams, opts ...option.RequestOption) (res *LogDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if gatewayID == "" {
+		err = errors.New("missing required gateway_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs", params.AccountID, gatewayID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &res, opts...)
+	return
+}
+
 type LogListResponse struct {
 	ID                  string              `json:"id,required"`
 	Cached              bool                `json:"cached,required"`
@@ -125,6 +141,27 @@ func (r *LogListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r logListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type LogDeleteResponse struct {
+	Success bool                  `json:"success,required"`
+	JSON    logDeleteResponseJSON `json:"-"`
+}
+
+// logDeleteResponseJSON contains the JSON metadata for the struct
+// [LogDeleteResponse]
+type logDeleteResponseJSON struct {
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LogDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -290,6 +327,124 @@ const (
 func (r LogListParamsOrderByDirection) IsKnown() bool {
 	switch r {
 	case LogListParamsOrderByDirectionAsc, LogListParamsOrderByDirectionDesc:
+		return true
+	}
+	return false
+}
+
+type LogDeleteParams struct {
+	AccountID        param.Field[string]                          `path:"account_id,required"`
+	Filters          param.Field[[]LogDeleteParamsFilter]         `query:"filters"`
+	Limit            param.Field[int64]                           `query:"limit"`
+	OrderBy          param.Field[LogDeleteParamsOrderBy]          `query:"order_by"`
+	OrderByDirection param.Field[LogDeleteParamsOrderByDirection] `query:"order_by_direction"`
+}
+
+// URLQuery serializes [LogDeleteParams]'s query parameters as `url.Values`.
+func (r LogDeleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogDeleteParamsFilter struct {
+	Key      param.Field[LogDeleteParamsFiltersKey]          `query:"key,required"`
+	Operator param.Field[LogDeleteParamsFiltersOperator]     `query:"operator,required"`
+	Value    param.Field[[]LogDeleteParamsFiltersValueUnion] `query:"value,required"`
+}
+
+// URLQuery serializes [LogDeleteParamsFilter]'s query parameters as `url.Values`.
+func (r LogDeleteParamsFilter) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
+}
+
+type LogDeleteParamsFiltersKey string
+
+const (
+	LogDeleteParamsFiltersKeyCreatedAt           LogDeleteParamsFiltersKey = "created_at"
+	LogDeleteParamsFiltersKeyRequestContentType  LogDeleteParamsFiltersKey = "request_content_type"
+	LogDeleteParamsFiltersKeyResponseContentType LogDeleteParamsFiltersKey = "response_content_type"
+	LogDeleteParamsFiltersKeySuccess             LogDeleteParamsFiltersKey = "success"
+	LogDeleteParamsFiltersKeyCached              LogDeleteParamsFiltersKey = "cached"
+	LogDeleteParamsFiltersKeyProvider            LogDeleteParamsFiltersKey = "provider"
+	LogDeleteParamsFiltersKeyModel               LogDeleteParamsFiltersKey = "model"
+	LogDeleteParamsFiltersKeyCost                LogDeleteParamsFiltersKey = "cost"
+	LogDeleteParamsFiltersKeyTokens              LogDeleteParamsFiltersKey = "tokens"
+	LogDeleteParamsFiltersKeyTokensIn            LogDeleteParamsFiltersKey = "tokens_in"
+	LogDeleteParamsFiltersKeyTokensOut           LogDeleteParamsFiltersKey = "tokens_out"
+	LogDeleteParamsFiltersKeyDuration            LogDeleteParamsFiltersKey = "duration"
+	LogDeleteParamsFiltersKeyFeedback            LogDeleteParamsFiltersKey = "feedback"
+)
+
+func (r LogDeleteParamsFiltersKey) IsKnown() bool {
+	switch r {
+	case LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback:
+		return true
+	}
+	return false
+}
+
+type LogDeleteParamsFiltersOperator string
+
+const (
+	LogDeleteParamsFiltersOperatorEq       LogDeleteParamsFiltersOperator = "eq"
+	LogDeleteParamsFiltersOperatorNeq      LogDeleteParamsFiltersOperator = "neq"
+	LogDeleteParamsFiltersOperatorContains LogDeleteParamsFiltersOperator = "contains"
+	LogDeleteParamsFiltersOperatorLt       LogDeleteParamsFiltersOperator = "lt"
+	LogDeleteParamsFiltersOperatorGt       LogDeleteParamsFiltersOperator = "gt"
+)
+
+func (r LogDeleteParamsFiltersOperator) IsKnown() bool {
+	switch r {
+	case LogDeleteParamsFiltersOperatorEq, LogDeleteParamsFiltersOperatorNeq, LogDeleteParamsFiltersOperatorContains, LogDeleteParamsFiltersOperatorLt, LogDeleteParamsFiltersOperatorGt:
+		return true
+	}
+	return false
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type LogDeleteParamsFiltersValueUnion interface {
+	ImplementsAIGatewayLogDeleteParamsFiltersValueUnion()
+}
+
+type LogDeleteParamsOrderBy string
+
+const (
+	LogDeleteParamsOrderByCreatedAt LogDeleteParamsOrderBy = "created_at"
+	LogDeleteParamsOrderByProvider  LogDeleteParamsOrderBy = "provider"
+	LogDeleteParamsOrderByModel     LogDeleteParamsOrderBy = "model"
+	LogDeleteParamsOrderByModelType LogDeleteParamsOrderBy = "model_type"
+	LogDeleteParamsOrderBySuccess   LogDeleteParamsOrderBy = "success"
+	LogDeleteParamsOrderByCached    LogDeleteParamsOrderBy = "cached"
+	LogDeleteParamsOrderByCost      LogDeleteParamsOrderBy = "cost"
+	LogDeleteParamsOrderByTokensIn  LogDeleteParamsOrderBy = "tokens_in"
+	LogDeleteParamsOrderByTokensOut LogDeleteParamsOrderBy = "tokens_out"
+	LogDeleteParamsOrderByDuration  LogDeleteParamsOrderBy = "duration"
+	LogDeleteParamsOrderByFeedback  LogDeleteParamsOrderBy = "feedback"
+)
+
+func (r LogDeleteParamsOrderBy) IsKnown() bool {
+	switch r {
+	case LogDeleteParamsOrderByCreatedAt, LogDeleteParamsOrderByProvider, LogDeleteParamsOrderByModel, LogDeleteParamsOrderByModelType, LogDeleteParamsOrderBySuccess, LogDeleteParamsOrderByCached, LogDeleteParamsOrderByCost, LogDeleteParamsOrderByTokensIn, LogDeleteParamsOrderByTokensOut, LogDeleteParamsOrderByDuration, LogDeleteParamsOrderByFeedback:
+		return true
+	}
+	return false
+}
+
+type LogDeleteParamsOrderByDirection string
+
+const (
+	LogDeleteParamsOrderByDirectionAsc  LogDeleteParamsOrderByDirection = "asc"
+	LogDeleteParamsOrderByDirectionDesc LogDeleteParamsOrderByDirection = "desc"
+)
+
+func (r LogDeleteParamsOrderByDirection) IsKnown() bool {
+	switch r {
+	case LogDeleteParamsOrderByDirectionAsc, LogDeleteParamsOrderByDirectionDesc:
 		return true
 	}
 	return false
