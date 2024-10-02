@@ -54,11 +54,6 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 			EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
 		}}),
 		ApprovalRequired: cloudflare.F(true),
-		ConnectionRules: cloudflare.F(zero_trust.AccessPolicyNewParamsConnectionRules{
-			SSH: cloudflare.F(zero_trust.AccessPolicyNewParamsConnectionRulesSSH{
-				Usernames: cloudflare.F([]string{"root", "ubuntu"}),
-			}),
-		}),
 		Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
@@ -142,11 +137,6 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 				EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
 			}}),
 			ApprovalRequired: cloudflare.F(true),
-			ConnectionRules: cloudflare.F(zero_trust.AccessPolicyUpdateParamsConnectionRules{
-				SSH: cloudflare.F(zero_trust.AccessPolicyUpdateParamsConnectionRulesSSH{
-					Usernames: cloudflare.F([]string{"root", "ubuntu"}),
-				}),
-			}),
 			Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
