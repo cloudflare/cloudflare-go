@@ -238,14 +238,16 @@ func (r SearchGetResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type SearchGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
+	// Total number of results on the current page
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
 	Page float64 `json:"page"`
-	// Number of results per page of results
+	// Number of results per page
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                 `json:"total_count"`
+	TotalCount float64 `json:"total_count"`
+	// Total number of pages available
+	TotalPages float64                                 `json:"total_pages"`
 	JSON       searchGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -256,6 +258,7 @@ type searchGetResponseEnvelopeResultInfoJSON struct {
 	Page        apijson.Field
 	PerPage     apijson.Field
 	TotalCount  apijson.Field
+	TotalPages  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

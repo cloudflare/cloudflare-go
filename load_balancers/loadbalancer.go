@@ -401,7 +401,7 @@ type LoadBalancer struct {
 	// execute.
 	Rules []Rules `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
@@ -936,8 +936,8 @@ type RandomSteering struct {
 	DefaultWeight float64 `json:"default_weight"`
 	// A mapping of pool IDs to custom weights. The weight is relative to other pools
 	// in the load balancer.
-	PoolWeights RandomSteeringPoolWeights `json:"pool_weights"`
-	JSON        randomSteeringJSON        `json:"-"`
+	PoolWeights map[string]float64 `json:"pool_weights"`
+	JSON        randomSteeringJSON `json:"-"`
 }
 
 // randomSteeringJSON contains the JSON metadata for the struct [RandomSteering]
@@ -956,33 +956,6 @@ func (r randomSteeringJSON) RawJSON() string {
 	return r.raw
 }
 
-// A mapping of pool IDs to custom weights. The weight is relative to other pools
-// in the load balancer.
-type RandomSteeringPoolWeights struct {
-	// Pool ID
-	Key string `json:"key"`
-	// Weight
-	Value float64                       `json:"value"`
-	JSON  randomSteeringPoolWeightsJSON `json:"-"`
-}
-
-// randomSteeringPoolWeightsJSON contains the JSON metadata for the struct
-// [RandomSteeringPoolWeights]
-type randomSteeringPoolWeightsJSON struct {
-	Key         apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RandomSteeringPoolWeights) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r randomSteeringPoolWeightsJSON) RawJSON() string {
-	return r.raw
-}
-
 // Configures pool weights.
 //
 //   - `steering_policy="random"`: A random pool is selected with probability
@@ -997,23 +970,10 @@ type RandomSteeringParam struct {
 	DefaultWeight param.Field[float64] `json:"default_weight"`
 	// A mapping of pool IDs to custom weights. The weight is relative to other pools
 	// in the load balancer.
-	PoolWeights param.Field[RandomSteeringPoolWeightsParam] `json:"pool_weights"`
+	PoolWeights param.Field[map[string]float64] `json:"pool_weights"`
 }
 
 func (r RandomSteeringParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A mapping of pool IDs to custom weights. The weight is relative to other pools
-// in the load balancer.
-type RandomSteeringPoolWeightsParam struct {
-	// Pool ID
-	Key param.Field[string] `json:"key"`
-	// Weight
-	Value param.Field[float64] `json:"value"`
-}
-
-func (r RandomSteeringPoolWeightsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1145,7 +1105,7 @@ type RulesOverrides struct {
 	// back to using default_pools.
 	RegionPools map[string][]string `json:"region_pools"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
@@ -1331,7 +1291,7 @@ type RulesOverridesParam struct {
 	// back to using default_pools.
 	RegionPools param.Field[map[string][]string] `json:"region_pools"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
@@ -1400,7 +1360,7 @@ func (r RulesOverridesParam) MarshalJSON() (data []byte, err error) {
 }
 
 // Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
+// specified as `"none"`. The supported types are:
 //
 //   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 //     generated, encoding information of which origin the request will be forwarded
@@ -1429,12 +1389,11 @@ const (
 	SessionAffinityCookie   SessionAffinity = "cookie"
 	SessionAffinityIPCookie SessionAffinity = "ip_cookie"
 	SessionAffinityHeader   SessionAffinity = "header"
-	SessionAffinityEmpty    SessionAffinity = ""
 )
 
 func (r SessionAffinity) IsKnown() bool {
 	switch r {
-	case SessionAffinityNone, SessionAffinityCookie, SessionAffinityIPCookie, SessionAffinityHeader, SessionAffinityEmpty:
+	case SessionAffinityNone, SessionAffinityCookie, SessionAffinityIPCookie, SessionAffinityHeader:
 		return true
 	}
 	return false
@@ -1747,7 +1706,7 @@ type LoadBalancerNewParams struct {
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
@@ -1914,7 +1873,7 @@ type LoadBalancerUpdateParams struct {
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
@@ -2130,7 +2089,7 @@ type LoadBalancerEditParams struct {
 	// execute.
 	Rules param.Field[[]RulesParam] `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
-	// specified as `"none"` or "" (default). The supported types are:
+	// specified as `"none"`. The supported types are:
 	//
 	//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
 	//     generated, encoding information of which origin the request will be forwarded
