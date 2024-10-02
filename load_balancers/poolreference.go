@@ -109,9 +109,8 @@ type PoolReferenceGetResponseEnvelope struct {
 	// List of resources that reference a given pool.
 	Result []PoolReferenceGetResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success    PoolReferenceGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PoolReferenceGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       poolReferenceGetResponseEnvelopeJSON       `json:"-"`
+	Success PoolReferenceGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    poolReferenceGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // poolReferenceGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -121,7 +120,6 @@ type poolReferenceGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -147,35 +145,4 @@ func (r PoolReferenceGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type PoolReferenceGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       poolReferenceGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// poolReferenceGetResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [PoolReferenceGetResponseEnvelopeResultInfo]
-type poolReferenceGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PoolReferenceGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r poolReferenceGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

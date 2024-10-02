@@ -53,9 +53,9 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 		Proxied: cloudflare.F(true),
 		RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 			DefaultWeight: cloudflare.F(0.200000),
-			PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-				Key:   cloudflare.F("key"),
-				Value: cloudflare.F(0.000000),
+			PoolWeights: cloudflare.F(map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+				"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 			}),
 		}),
 		RegionPools: cloudflare.F(map[string][]string{
@@ -93,9 +93,9 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				}),
 				RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 					DefaultWeight: cloudflare.F(0.200000),
-					PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-						Key:   cloudflare.F("key"),
-						Value: cloudflare.F(0.000000),
+					PoolWeights: cloudflare.F(map[string]float64{
+						"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+						"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 					}),
 				}),
 				RegionPools: cloudflare.F(map[string][]string{
@@ -148,9 +148,9 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				}),
 				RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 					DefaultWeight: cloudflare.F(0.200000),
-					PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-						Key:   cloudflare.F("key"),
-						Value: cloudflare.F(0.000000),
+					PoolWeights: cloudflare.F(map[string]float64{
+						"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+						"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 					}),
 				}),
 				RegionPools: cloudflare.F(map[string][]string{
@@ -203,9 +203,9 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				}),
 				RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 					DefaultWeight: cloudflare.F(0.200000),
-					PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-						Key:   cloudflare.F("key"),
-						Value: cloudflare.F(0.000000),
+					PoolWeights: cloudflare.F(map[string]float64{
+						"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+						"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 					}),
 				}),
 				RegionPools: cloudflare.F(map[string][]string{
@@ -293,9 +293,9 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 			Proxied: cloudflare.F(true),
 			RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 				DefaultWeight: cloudflare.F(0.200000),
-				PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-					Key:   cloudflare.F("key"),
-					Value: cloudflare.F(0.000000),
+				PoolWeights: cloudflare.F(map[string]float64{
+					"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+					"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 				}),
 			}),
 			RegionPools: cloudflare.F(map[string][]string{
@@ -333,9 +333,9 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-							Key:   cloudflare.F("key"),
-							Value: cloudflare.F(0.000000),
+						PoolWeights: cloudflare.F(map[string]float64{
+							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 						}),
 					}),
 					RegionPools: cloudflare.F(map[string][]string{
@@ -388,9 +388,9 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-							Key:   cloudflare.F("key"),
-							Value: cloudflare.F(0.000000),
+						PoolWeights: cloudflare.F(map[string]float64{
+							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 						}),
 					}),
 					RegionPools: cloudflare.F(map[string][]string{
@@ -443,9 +443,9 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-							Key:   cloudflare.F("key"),
-							Value: cloudflare.F(0.000000),
+						PoolWeights: cloudflare.F(map[string]float64{
+							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 						}),
 					}),
 					RegionPools: cloudflare.F(map[string][]string{
@@ -587,9 +587,9 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 			Proxied: cloudflare.F(true),
 			RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 				DefaultWeight: cloudflare.F(0.200000),
-				PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-					Key:   cloudflare.F("key"),
-					Value: cloudflare.F(0.000000),
+				PoolWeights: cloudflare.F(map[string]float64{
+					"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+					"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 				}),
 			}),
 			RegionPools: cloudflare.F(map[string][]string{
@@ -627,9 +627,9 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-							Key:   cloudflare.F("key"),
-							Value: cloudflare.F(0.000000),
+						PoolWeights: cloudflare.F(map[string]float64{
+							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 						}),
 					}),
 					RegionPools: cloudflare.F(map[string][]string{
@@ -682,9 +682,9 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-							Key:   cloudflare.F("key"),
-							Value: cloudflare.F(0.000000),
+						PoolWeights: cloudflare.F(map[string]float64{
+							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 						}),
 					}),
 					RegionPools: cloudflare.F(map[string][]string{
@@ -737,9 +737,9 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					}),
 					RandomSteering: cloudflare.F(load_balancers.RandomSteeringParam{
 						DefaultWeight: cloudflare.F(0.200000),
-						PoolWeights: cloudflare.F(load_balancers.RandomSteeringPoolWeightsParam{
-							Key:   cloudflare.F("key"),
-							Value: cloudflare.F(0.000000),
+						PoolWeights: cloudflare.F(map[string]float64{
+							"9290f38c5d07c2e2f4df57b1f61d4196": 0.500000,
+							"de90f38ced07c2e2f4df50b1f61d4194": 0.300000,
 						}),
 					}),
 					RegionPools: cloudflare.F(map[string][]string{
