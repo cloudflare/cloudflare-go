@@ -333,6 +333,20 @@ type RulesetNewResponseRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
+	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
+	// [RulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
+	// [CompressResponseRuleExposedCredentialCheck],
+	// [ExecuteRuleExposedCredentialCheck],
+	// [RulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck],
+	// [LogRuleExposedCredentialCheck], [ManagedChallengeRuleExposedCredentialCheck],
+	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
+	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
+	// [ServeErrorRuleExposedCredentialCheck], [SetConfigRuleExposedCredentialCheck],
+	// [SkipRuleExposedCredentialCheck], [SetCacheSettingsRuleExposedCredentialCheck],
+	// [LogCustomFieldRuleExposedCredentialCheck],
+	// [DDoSDynamicRuleExposedCredentialCheck],
+	// [ForceConnectionCloseRuleExposedCredentialCheck].
+	ExposedCredentialCheck interface{} `json:"exposed_credential_check,required"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// The unique ID of the rule.
@@ -341,6 +355,16 @@ type RulesetNewResponseRule struct {
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
+	// This field can have the runtime type of [BlockRuleRatelimit],
+	// [RulesetNewResponseRulesRulesetsChallengeRuleRatelimit],
+	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
+	// [RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit], [LogRuleRatelimit],
+	// [ManagedChallengeRuleRatelimit], [RedirectRuleRatelimit],
+	// [RewriteRuleRatelimit], [RouteRuleRatelimit], [ScoreRuleRatelimit],
+	// [ServeErrorRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit],
+	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
+	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
+	Ratelimit interface{} `json:"ratelimit,required"`
 	// The reference of the rule (the rule ID by default).
 	Ref string `json:"ref"`
 	// The version of the rule.
@@ -352,19 +376,21 @@ type RulesetNewResponseRule struct {
 // rulesetNewResponseRuleJSON contains the JSON metadata for the struct
 // [RulesetNewResponseRule]
 type rulesetNewResponseRuleJSON struct {
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	ID               apijson.Field
-	LastUpdated      apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	Version          apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	ID                     apijson.Field
+	LastUpdated            apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	Version                apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r rulesetNewResponseRuleJSON) RawJSON() string {
@@ -523,10 +549,14 @@ type RulesetNewResponseRulesRulesetsChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck RulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit RulesetNewResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                           `json:"ref"`
 	JSON rulesetNewResponseRulesRulesetsChallengeRuleJSON `json:"-"`
@@ -535,19 +565,21 @@ type RulesetNewResponseRulesRulesetsChallengeRule struct {
 // rulesetNewResponseRulesRulesetsChallengeRuleJSON contains the JSON metadata for
 // the struct [RulesetNewResponseRulesRulesetsChallengeRule]
 type rulesetNewResponseRulesRulesetsChallengeRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *RulesetNewResponseRulesRulesetsChallengeRule) UnmarshalJSON(data []byte) (err error) {
@@ -575,6 +607,101 @@ func (r RulesetNewResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
+// Configure checks for exposed credentials.
+type RulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                 `json:"username_expression,required"`
+	JSON               rulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// rulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON contains
+// the JSON metadata for the struct
+// [RulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck]
+type rulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetNewResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RulesetNewResponseRulesRulesetsChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName int64                                                     `json:"score_response_header_name"`
+	JSON                    rulesetNewResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
+}
+
+// rulesetNewResponseRulesRulesetsChallengeRuleRatelimitJSON contains the JSON
+// metadata for the struct [RulesetNewResponseRulesRulesetsChallengeRuleRatelimit]
+type rulesetNewResponseRulesRulesetsChallengeRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RulesetNewResponseRulesRulesetsChallengeRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetNewResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+// Period in seconds over which the counter is being incremented.
+type RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod int64
+
+const (
+	RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod10   RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod = 10
+	RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod60   RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod = 60
+	RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod600  RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod = 600
+	RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod3600 RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod10, RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod60, RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod600, RulesetNewResponseRulesRulesetsChallengeRuleRatelimitPeriod3600:
+		return true
+	}
+	return false
+}
+
 type RulesetNewResponseRulesRulesetsJSChallengeRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -592,10 +719,14 @@ type RulesetNewResponseRulesRulesetsJSChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck RulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                             `json:"ref"`
 	JSON rulesetNewResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
@@ -604,19 +735,21 @@ type RulesetNewResponseRulesRulesetsJSChallengeRule struct {
 // rulesetNewResponseRulesRulesetsJSChallengeRuleJSON contains the JSON metadata
 // for the struct [RulesetNewResponseRulesRulesetsJSChallengeRule]
 type rulesetNewResponseRulesRulesetsJSChallengeRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *RulesetNewResponseRulesRulesetsJSChallengeRule) UnmarshalJSON(data []byte) (err error) {
@@ -639,6 +772,102 @@ const (
 func (r RulesetNewResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	switch r {
 	case RulesetNewResponseRulesRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
+}
+
+// Configure checks for exposed credentials.
+type RulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                   `json:"username_expression,required"`
+	JSON               rulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// rulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON
+// contains the JSON metadata for the struct
+// [RulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck]
+type rulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetNewResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName int64                                                       `json:"score_response_header_name"`
+	JSON                    rulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
+}
+
+// rulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitJSON contains the JSON
+// metadata for the struct
+// [RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit]
+type rulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+// Period in seconds over which the counter is being incremented.
+type RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod int64
+
+const (
+	RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10   RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
+	RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60   RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
+	RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600  RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
+	RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600 RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10, RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60, RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600, RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
 		return true
 	}
 	return false
@@ -737,6 +966,20 @@ type RulesetUpdateResponseRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
+	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
+	// [RulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
+	// [CompressResponseRuleExposedCredentialCheck],
+	// [ExecuteRuleExposedCredentialCheck],
+	// [RulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck],
+	// [LogRuleExposedCredentialCheck], [ManagedChallengeRuleExposedCredentialCheck],
+	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
+	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
+	// [ServeErrorRuleExposedCredentialCheck], [SetConfigRuleExposedCredentialCheck],
+	// [SkipRuleExposedCredentialCheck], [SetCacheSettingsRuleExposedCredentialCheck],
+	// [LogCustomFieldRuleExposedCredentialCheck],
+	// [DDoSDynamicRuleExposedCredentialCheck],
+	// [ForceConnectionCloseRuleExposedCredentialCheck].
+	ExposedCredentialCheck interface{} `json:"exposed_credential_check,required"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// The unique ID of the rule.
@@ -745,6 +988,16 @@ type RulesetUpdateResponseRule struct {
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
+	// This field can have the runtime type of [BlockRuleRatelimit],
+	// [RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit],
+	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
+	// [RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit],
+	// [LogRuleRatelimit], [ManagedChallengeRuleRatelimit], [RedirectRuleRatelimit],
+	// [RewriteRuleRatelimit], [RouteRuleRatelimit], [ScoreRuleRatelimit],
+	// [ServeErrorRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit],
+	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
+	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
+	Ratelimit interface{} `json:"ratelimit,required"`
 	// The reference of the rule (the rule ID by default).
 	Ref string `json:"ref"`
 	// The version of the rule.
@@ -756,19 +1009,21 @@ type RulesetUpdateResponseRule struct {
 // rulesetUpdateResponseRuleJSON contains the JSON metadata for the struct
 // [RulesetUpdateResponseRule]
 type rulesetUpdateResponseRuleJSON struct {
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	ID               apijson.Field
-	LastUpdated      apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	Version          apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	ID                     apijson.Field
+	LastUpdated            apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	Version                apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r rulesetUpdateResponseRuleJSON) RawJSON() string {
@@ -927,10 +1182,14 @@ type RulesetUpdateResponseRulesRulesetsChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck RulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                              `json:"ref"`
 	JSON rulesetUpdateResponseRulesRulesetsChallengeRuleJSON `json:"-"`
@@ -939,19 +1198,21 @@ type RulesetUpdateResponseRulesRulesetsChallengeRule struct {
 // rulesetUpdateResponseRulesRulesetsChallengeRuleJSON contains the JSON metadata
 // for the struct [RulesetUpdateResponseRulesRulesetsChallengeRule]
 type rulesetUpdateResponseRulesRulesetsChallengeRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *RulesetUpdateResponseRulesRulesetsChallengeRule) UnmarshalJSON(data []byte) (err error) {
@@ -980,6 +1241,102 @@ func (r RulesetUpdateResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
+// Configure checks for exposed credentials.
+type RulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                    `json:"username_expression,required"`
+	JSON               rulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON
+// contains the JSON metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck]
+type rulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName int64                                                        `json:"score_response_header_name"`
+	JSON                    rulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitJSON contains the JSON
+// metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit]
+type rulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+// Period in seconds over which the counter is being incremented.
+type RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod int64
+
+const (
+	RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod10   RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod = 10
+	RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod60   RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod = 60
+	RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod600  RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod = 600
+	RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod3600 RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod10, RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod60, RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod600, RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitPeriod3600:
+		return true
+	}
+	return false
+}
+
 type RulesetUpdateResponseRulesRulesetsJSChallengeRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -997,10 +1354,14 @@ type RulesetUpdateResponseRulesRulesetsJSChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck RulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                                `json:"ref"`
 	JSON rulesetUpdateResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
@@ -1009,19 +1370,21 @@ type RulesetUpdateResponseRulesRulesetsJSChallengeRule struct {
 // rulesetUpdateResponseRulesRulesetsJSChallengeRuleJSON contains the JSON metadata
 // for the struct [RulesetUpdateResponseRulesRulesetsJSChallengeRule]
 type rulesetUpdateResponseRulesRulesetsJSChallengeRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *RulesetUpdateResponseRulesRulesetsJSChallengeRule) UnmarshalJSON(data []byte) (err error) {
@@ -1045,6 +1408,102 @@ const (
 func (r RulesetUpdateResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	switch r {
 	case RulesetUpdateResponseRulesRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
+}
+
+// Configure checks for exposed credentials.
+type RulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                      `json:"username_expression,required"`
+	JSON               rulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON
+// contains the JSON metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck]
+type rulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetUpdateResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName int64                                                          `json:"score_response_header_name"`
+	JSON                    rulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitJSON contains the JSON
+// metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit]
+type rulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+// Period in seconds over which the counter is being incremented.
+type RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod int64
+
+const (
+	RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10   RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
+	RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60   RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
+	RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600  RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
+	RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600 RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10, RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60, RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600, RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
 		return true
 	}
 	return false
@@ -1184,6 +1643,20 @@ type RulesetGetResponseRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
+	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
+	// [RulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
+	// [CompressResponseRuleExposedCredentialCheck],
+	// [ExecuteRuleExposedCredentialCheck],
+	// [RulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck],
+	// [LogRuleExposedCredentialCheck], [ManagedChallengeRuleExposedCredentialCheck],
+	// [RedirectRuleExposedCredentialCheck], [RewriteRuleExposedCredentialCheck],
+	// [RouteRuleExposedCredentialCheck], [ScoreRuleExposedCredentialCheck],
+	// [ServeErrorRuleExposedCredentialCheck], [SetConfigRuleExposedCredentialCheck],
+	// [SkipRuleExposedCredentialCheck], [SetCacheSettingsRuleExposedCredentialCheck],
+	// [LogCustomFieldRuleExposedCredentialCheck],
+	// [DDoSDynamicRuleExposedCredentialCheck],
+	// [ForceConnectionCloseRuleExposedCredentialCheck].
+	ExposedCredentialCheck interface{} `json:"exposed_credential_check,required"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// The unique ID of the rule.
@@ -1192,6 +1665,16 @@ type RulesetGetResponseRule struct {
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
+	// This field can have the runtime type of [BlockRuleRatelimit],
+	// [RulesetGetResponseRulesRulesetsChallengeRuleRatelimit],
+	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
+	// [RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit], [LogRuleRatelimit],
+	// [ManagedChallengeRuleRatelimit], [RedirectRuleRatelimit],
+	// [RewriteRuleRatelimit], [RouteRuleRatelimit], [ScoreRuleRatelimit],
+	// [ServeErrorRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit],
+	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
+	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
+	Ratelimit interface{} `json:"ratelimit,required"`
 	// The reference of the rule (the rule ID by default).
 	Ref string `json:"ref"`
 	// The version of the rule.
@@ -1203,19 +1686,21 @@ type RulesetGetResponseRule struct {
 // rulesetGetResponseRuleJSON contains the JSON metadata for the struct
 // [RulesetGetResponseRule]
 type rulesetGetResponseRuleJSON struct {
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	ID               apijson.Field
-	LastUpdated      apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	Version          apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	ID                     apijson.Field
+	LastUpdated            apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	Version                apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r rulesetGetResponseRuleJSON) RawJSON() string {
@@ -1374,10 +1859,14 @@ type RulesetGetResponseRulesRulesetsChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck RulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit RulesetGetResponseRulesRulesetsChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                           `json:"ref"`
 	JSON rulesetGetResponseRulesRulesetsChallengeRuleJSON `json:"-"`
@@ -1386,19 +1875,21 @@ type RulesetGetResponseRulesRulesetsChallengeRule struct {
 // rulesetGetResponseRulesRulesetsChallengeRuleJSON contains the JSON metadata for
 // the struct [RulesetGetResponseRulesRulesetsChallengeRule]
 type rulesetGetResponseRulesRulesetsChallengeRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *RulesetGetResponseRulesRulesetsChallengeRule) UnmarshalJSON(data []byte) (err error) {
@@ -1426,6 +1917,101 @@ func (r RulesetGetResponseRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
+// Configure checks for exposed credentials.
+type RulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                 `json:"username_expression,required"`
+	JSON               rulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// rulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON contains
+// the JSON metadata for the struct
+// [RulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck]
+type rulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetGetResponseRulesRulesetsChallengeRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RulesetGetResponseRulesRulesetsChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName int64                                                     `json:"score_response_header_name"`
+	JSON                    rulesetGetResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
+}
+
+// rulesetGetResponseRulesRulesetsChallengeRuleRatelimitJSON contains the JSON
+// metadata for the struct [RulesetGetResponseRulesRulesetsChallengeRuleRatelimit]
+type rulesetGetResponseRulesRulesetsChallengeRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RulesetGetResponseRulesRulesetsChallengeRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetGetResponseRulesRulesetsChallengeRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+// Period in seconds over which the counter is being incremented.
+type RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod int64
+
+const (
+	RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod10   RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 10
+	RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod60   RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 60
+	RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod600  RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 600
+	RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod3600 RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod10, RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod60, RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod600, RulesetGetResponseRulesRulesetsChallengeRuleRatelimitPeriod3600:
+		return true
+	}
+	return false
+}
+
 type RulesetGetResponseRulesRulesetsJSChallengeRule struct {
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
@@ -1443,10 +2029,14 @@ type RulesetGetResponseRulesRulesetsJSChallengeRule struct {
 	Description string `json:"description"`
 	// Whether the rule should be executed.
 	Enabled bool `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck RulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression string `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging Logging `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref  string                                             `json:"ref"`
 	JSON rulesetGetResponseRulesRulesetsJSChallengeRuleJSON `json:"-"`
@@ -1455,19 +2045,21 @@ type RulesetGetResponseRulesRulesetsJSChallengeRule struct {
 // rulesetGetResponseRulesRulesetsJSChallengeRuleJSON contains the JSON metadata
 // for the struct [RulesetGetResponseRulesRulesetsJSChallengeRule]
 type rulesetGetResponseRulesRulesetsJSChallengeRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	LastUpdated            apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
+	Description            apijson.Field
+	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
+	Expression             apijson.Field
+	Logging                apijson.Field
+	Ratelimit              apijson.Field
+	Ref                    apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *RulesetGetResponseRulesRulesetsJSChallengeRule) UnmarshalJSON(data []byte) (err error) {
@@ -1490,6 +2082,102 @@ const (
 func (r RulesetGetResponseRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	switch r {
 	case RulesetGetResponseRulesRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
+}
+
+// Configure checks for exposed credentials.
+type RulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression string `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression string                                                                   `json:"username_expression,required"`
+	JSON               rulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON `json:"-"`
+}
+
+// rulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON
+// contains the JSON metadata for the struct
+// [RulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck]
+type rulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON struct {
+	PasswordExpression apijson.Field
+	UsernameExpression apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *RulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetGetResponseRulesRulesetsJSChallengeRuleExposedCredentialCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics []string `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression string `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout int64 `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod int64 `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin bool `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod int64 `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName int64                                                       `json:"score_response_header_name"`
+	JSON                    rulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
+}
+
+// rulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON contains the JSON
+// metadata for the struct
+// [RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit]
+type rulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON struct {
+	Characteristics         apijson.Field
+	Period                  apijson.Field
+	CountingExpression      apijson.Field
+	MitigationTimeout       apijson.Field
+	RequestsPerPeriod       apijson.Field
+	RequestsToOrigin        apijson.Field
+	ScorePerPeriod          apijson.Field
+	ScoreResponseHeaderName apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON) RawJSON() string {
+	return r.raw
+}
+
+// Period in seconds over which the counter is being incremented.
+type RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod int64
+
+const (
+	RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10   RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
+	RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60   RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
+	RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600  RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
+	RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600 RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod10, RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod60, RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod600, RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
 		return true
 	}
 	return false
@@ -1556,13 +2244,15 @@ type RulesetNewParamsRule struct {
 	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
+	Enabled                param.Field[bool]        `json:"enabled"`
+	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check,required"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
+	Logging   param.Field[LoggingParam] `json:"logging"`
+	Ratelimit param.Field[interface{}]  `json:"ratelimit,required"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -1599,10 +2289,14 @@ type RulesetNewParamsRulesRulesetsChallengeRule struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck param.Field[RulesetNewParamsRulesRulesetsChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit param.Field[RulesetNewParamsRulesRulesetsChallengeRuleRatelimit] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -1628,6 +2322,66 @@ func (r RulesetNewParamsRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
+// Configure checks for exposed credentials.
+type RulesetNewParamsRulesRulesetsChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
+}
+
+func (r RulesetNewParamsRulesRulesetsChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RulesetNewParamsRulesRulesetsChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod] `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName param.Field[int64] `json:"score_response_header_name"`
+}
+
+func (r RulesetNewParamsRulesRulesetsChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Period in seconds over which the counter is being incremented.
+type RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod int64
+
+const (
+	RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod10   RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod = 10
+	RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod60   RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod = 60
+	RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod600  RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod = 600
+	RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod3600 RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod10, RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod60, RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod600, RulesetNewParamsRulesRulesetsChallengeRuleRatelimitPeriod3600:
+		return true
+	}
+	return false
+}
+
 type RulesetNewParamsRulesRulesetsJSChallengeRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
@@ -1639,10 +2393,14 @@ type RulesetNewParamsRulesRulesetsJSChallengeRule struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck param.Field[RulesetNewParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit param.Field[RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -1663,6 +2421,66 @@ const (
 func (r RulesetNewParamsRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	switch r {
 	case RulesetNewParamsRulesRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
+}
+
+// Configure checks for exposed credentials.
+type RulesetNewParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
+}
+
+func (r RulesetNewParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod] `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName param.Field[int64] `json:"score_response_header_name"`
+}
+
+func (r RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Period in seconds over which the counter is being incremented.
+type RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod int64
+
+const (
+	RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod10   RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
+	RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod60   RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
+	RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod600  RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
+	RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod3600 RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod10, RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod60, RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod600, RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
 		return true
 	}
 	return false
@@ -1880,13 +2698,15 @@ type RulesetUpdateParamsRule struct {
 	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
+	Enabled                param.Field[bool]        `json:"enabled"`
+	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check,required"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// An object configuring the rule's logging behavior.
-	Logging param.Field[LoggingParam] `json:"logging"`
+	Logging   param.Field[LoggingParam] `json:"logging"`
+	Ratelimit param.Field[interface{}]  `json:"ratelimit,required"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -1923,10 +2743,14 @@ type RulesetUpdateParamsRulesRulesetsChallengeRule struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck param.Field[RulesetUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit param.Field[RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -1953,6 +2777,66 @@ func (r RulesetUpdateParamsRulesRulesetsChallengeRuleAction) IsKnown() bool {
 	return false
 }
 
+// Configure checks for exposed credentials.
+type RulesetUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod] `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName param.Field[int64] `json:"score_response_header_name"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Period in seconds over which the counter is being incremented.
+type RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod int64
+
+const (
+	RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod10   RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod = 10
+	RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod60   RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod = 60
+	RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod600  RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod = 600
+	RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod3600 RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod10, RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod60, RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod600, RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimitPeriod3600:
+		return true
+	}
+	return false
+}
+
 type RulesetUpdateParamsRulesRulesetsJSChallengeRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
@@ -1964,10 +2848,14 @@ type RulesetUpdateParamsRulesRulesetsJSChallengeRule struct {
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck param.Field[RulesetUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit param.Field[RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -1989,6 +2877,66 @@ const (
 func (r RulesetUpdateParamsRulesRulesetsJSChallengeRuleAction) IsKnown() bool {
 	switch r {
 	case RulesetUpdateParamsRulesRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
+}
+
+// Configure checks for exposed credentials.
+type RulesetUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsJSChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod] `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName param.Field[int64] `json:"score_response_header_name"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Period in seconds over which the counter is being incremented.
+type RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod int64
+
+const (
+	RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod10   RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 10
+	RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod60   RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 60
+	RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod600  RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 600
+	RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod3600 RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod10, RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod60, RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod600, RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimitPeriod3600:
 		return true
 	}
 	return false
