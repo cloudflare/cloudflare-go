@@ -402,6 +402,8 @@ type DeviceInput struct {
 	IsActive bool `json:"is_active"`
 	// Network status of device.
 	NetworkStatus DeviceInputNetworkStatus `json:"network_status"`
+	// Agent operational state.
+	OperationalState DeviceInputOperationalState `json:"operational_state"`
 	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
 	Score float64         `json:"score"`
 	JSON  deviceInputJSON `json:"-"`
@@ -448,6 +450,7 @@ type deviceInputJSON struct {
 	Infected         apijson.Field
 	IsActive         apijson.Field
 	NetworkStatus    apijson.Field
+	OperationalState apijson.Field
 	Score            apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -1016,6 +1019,27 @@ func (r DeviceInputNetworkStatus) IsKnown() bool {
 	return false
 }
 
+// Agent operational state.
+type DeviceInputOperationalState string
+
+const (
+	DeviceInputOperationalStateNa                    DeviceInputOperationalState = "na"
+	DeviceInputOperationalStatePartiallyDisabled     DeviceInputOperationalState = "partially_disabled"
+	DeviceInputOperationalStateAutoFullyDisabled     DeviceInputOperationalState = "auto_fully_disabled"
+	DeviceInputOperationalStateFullyDisabled         DeviceInputOperationalState = "fully_disabled"
+	DeviceInputOperationalStateAutoPartiallyDisabled DeviceInputOperationalState = "auto_partially_disabled"
+	DeviceInputOperationalStateDisabledError         DeviceInputOperationalState = "disabled_error"
+	DeviceInputOperationalStateDBCorruption          DeviceInputOperationalState = "db_corruption"
+)
+
+func (r DeviceInputOperationalState) IsKnown() bool {
+	switch r {
+	case DeviceInputOperationalStateNa, DeviceInputOperationalStatePartiallyDisabled, DeviceInputOperationalStateAutoFullyDisabled, DeviceInputOperationalStateFullyDisabled, DeviceInputOperationalStateAutoPartiallyDisabled, DeviceInputOperationalStateDisabledError, DeviceInputOperationalStateDBCorruption:
+		return true
+	}
+	return false
+}
+
 // The value to be checked against.
 type DeviceInputParam struct {
 	// Whether or not file exists
@@ -1093,6 +1117,8 @@ type DeviceInputParam struct {
 	IsActive param.Field[bool] `json:"is_active"`
 	// Network status of device.
 	NetworkStatus param.Field[DeviceInputNetworkStatus] `json:"network_status"`
+	// Agent operational state.
+	OperationalState param.Field[DeviceInputOperationalState] `json:"operational_state"`
 	// A value between 0-100 assigned to devices set by the 3rd party posture provider.
 	Score param.Field[float64] `json:"score"`
 }
@@ -1852,6 +1878,8 @@ type SentineloneS2sInput struct {
 	IsActive bool `json:"is_active"`
 	// Network status of device.
 	NetworkStatus SentineloneS2sInputNetworkStatus `json:"network_status"`
+	// Agent operational state.
+	OperationalState SentineloneS2sInputOperationalState `json:"operational_state"`
 	// operator
 	Operator SentineloneS2sInputOperator `json:"operator"`
 	JSON     sentineloneS2sInputJSON     `json:"-"`
@@ -1860,14 +1888,15 @@ type SentineloneS2sInput struct {
 // sentineloneS2sInputJSON contains the JSON metadata for the struct
 // [SentineloneS2sInput]
 type sentineloneS2sInputJSON struct {
-	ConnectionID  apijson.Field
-	ActiveThreats apijson.Field
-	Infected      apijson.Field
-	IsActive      apijson.Field
-	NetworkStatus apijson.Field
-	Operator      apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ConnectionID     apijson.Field
+	ActiveThreats    apijson.Field
+	Infected         apijson.Field
+	IsActive         apijson.Field
+	NetworkStatus    apijson.Field
+	OperationalState apijson.Field
+	Operator         apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *SentineloneS2sInput) UnmarshalJSON(data []byte) (err error) {
@@ -1893,6 +1922,27 @@ const (
 func (r SentineloneS2sInputNetworkStatus) IsKnown() bool {
 	switch r {
 	case SentineloneS2sInputNetworkStatusConnected, SentineloneS2sInputNetworkStatusDisconnected, SentineloneS2sInputNetworkStatusDisconnecting, SentineloneS2sInputNetworkStatusConnecting:
+		return true
+	}
+	return false
+}
+
+// Agent operational state.
+type SentineloneS2sInputOperationalState string
+
+const (
+	SentineloneS2sInputOperationalStateNa                    SentineloneS2sInputOperationalState = "na"
+	SentineloneS2sInputOperationalStatePartiallyDisabled     SentineloneS2sInputOperationalState = "partially_disabled"
+	SentineloneS2sInputOperationalStateAutoFullyDisabled     SentineloneS2sInputOperationalState = "auto_fully_disabled"
+	SentineloneS2sInputOperationalStateFullyDisabled         SentineloneS2sInputOperationalState = "fully_disabled"
+	SentineloneS2sInputOperationalStateAutoPartiallyDisabled SentineloneS2sInputOperationalState = "auto_partially_disabled"
+	SentineloneS2sInputOperationalStateDisabledError         SentineloneS2sInputOperationalState = "disabled_error"
+	SentineloneS2sInputOperationalStateDBCorruption          SentineloneS2sInputOperationalState = "db_corruption"
+)
+
+func (r SentineloneS2sInputOperationalState) IsKnown() bool {
+	switch r {
+	case SentineloneS2sInputOperationalStateNa, SentineloneS2sInputOperationalStatePartiallyDisabled, SentineloneS2sInputOperationalStateAutoFullyDisabled, SentineloneS2sInputOperationalStateFullyDisabled, SentineloneS2sInputOperationalStateAutoPartiallyDisabled, SentineloneS2sInputOperationalStateDisabledError, SentineloneS2sInputOperationalStateDBCorruption:
 		return true
 	}
 	return false
@@ -1928,6 +1978,8 @@ type SentineloneS2sInputParam struct {
 	IsActive param.Field[bool] `json:"is_active"`
 	// Network status of device.
 	NetworkStatus param.Field[SentineloneS2sInputNetworkStatus] `json:"network_status"`
+	// Agent operational state.
+	OperationalState param.Field[SentineloneS2sInputOperationalState] `json:"operational_state"`
 	// operator
 	Operator param.Field[SentineloneS2sInputOperator] `json:"operator"`
 }
