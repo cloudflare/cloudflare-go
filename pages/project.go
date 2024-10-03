@@ -2030,7 +2030,7 @@ type ProjectDeleteParams struct {
 type ProjectDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ProjectDeleteResponse `json:"result,required"`
+	Result   ProjectDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeleteResponseEnvelopeJSON    `json:"-"`
@@ -2182,7 +2182,7 @@ type ProjectPurgeBuildCacheParams struct {
 type ProjectPurgeBuildCacheResponseEnvelope struct {
 	Errors   []shared.ResponseInfo          `json:"errors,required"`
 	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ProjectPurgeBuildCacheResponse `json:"result,required"`
+	Result   ProjectPurgeBuildCacheResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectPurgeBuildCacheResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectPurgeBuildCacheResponseEnvelopeJSON    `json:"-"`
