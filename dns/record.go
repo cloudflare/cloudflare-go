@@ -432,7 +432,8 @@ func (r CERTRecordType) IsKnown() bool {
 
 type CNAMERecordParam struct {
 	// A valid hostname. Must not match the record's name.
-	Content param.Field[string] `json:"content"`
+	Content  param.Field[string]                   `json:"content"`
+	Settings param.Field[CNAMERecordSettingsParam] `json:"settings"`
 	// Record type.
 	Type param.Field[CNAMERecordType] `json:"type"`
 }
@@ -442,6 +443,18 @@ func (r CNAMERecordParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r CNAMERecordParam) implementsDNSRecordUnionParam() {}
+
+type CNAMERecordSettingsParam struct {
+	// If enabled, causes the CNAME record to be resolved externally and the resulting
+	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
+	// itself. This setting has no effect on proxied records, which are always
+	// flattened.
+	FlattenCNAME param.Field[bool] `json:"flatten_cname"`
+}
+
+func (r CNAMERecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Record type.
 type CNAMERecordType string
@@ -825,7 +838,7 @@ type RecordParam struct {
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
 	// Settings for the DNS record.
-	Settings param.Field[RecordSettingsParam] `json:"settings"`
+	Settings param.Field[interface{}] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -835,19 +848,6 @@ type RecordParam struct {
 }
 
 func (r RecordParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Settings for the DNS record.
-type RecordSettingsParam struct {
-	// If enabled, causes the CNAME record to be resolved externally and the resulting
-	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting has no effect on proxied records, which are always
-	// flattened.
-	FlattenCNAME param.Field[bool] `json:"flatten_cname"`
-}
-
-func (r RecordSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1210,7 +1210,7 @@ type RecordNewResponse struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
 	// Settings for the DNS record.
-	Settings RecordNewResponseSettings `json:"settings,required"`
+	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1252,32 +1252,6 @@ func (r recordNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings for the DNS record.
-type RecordNewResponseSettings struct {
-	// If enabled, causes the CNAME record to be resolved externally and the resulting
-	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting has no effect on proxied records, which are always
-	// flattened.
-	FlattenCNAME bool                          `json:"flatten_cname"`
-	JSON         recordNewResponseSettingsJSON `json:"-"`
-}
-
-// recordNewResponseSettingsJSON contains the JSON metadata for the struct
-// [RecordNewResponseSettings]
-type recordNewResponseSettingsJSON struct {
-	FlattenCNAME apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RecordNewResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordNewResponseSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
 type RecordUpdateResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -1298,7 +1272,7 @@ type RecordUpdateResponse struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
 	// Settings for the DNS record.
-	Settings RecordUpdateResponseSettings `json:"settings,required"`
+	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1340,32 +1314,6 @@ func (r recordUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings for the DNS record.
-type RecordUpdateResponseSettings struct {
-	// If enabled, causes the CNAME record to be resolved externally and the resulting
-	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting has no effect on proxied records, which are always
-	// flattened.
-	FlattenCNAME bool                             `json:"flatten_cname"`
-	JSON         recordUpdateResponseSettingsJSON `json:"-"`
-}
-
-// recordUpdateResponseSettingsJSON contains the JSON metadata for the struct
-// [RecordUpdateResponseSettings]
-type recordUpdateResponseSettingsJSON struct {
-	FlattenCNAME apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RecordUpdateResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordUpdateResponseSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
 type RecordListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -1386,7 +1334,7 @@ type RecordListResponse struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
 	// Settings for the DNS record.
-	Settings RecordListResponseSettings `json:"settings,required"`
+	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1425,32 +1373,6 @@ func (r *RecordListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Settings for the DNS record.
-type RecordListResponseSettings struct {
-	// If enabled, causes the CNAME record to be resolved externally and the resulting
-	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting has no effect on proxied records, which are always
-	// flattened.
-	FlattenCNAME bool                           `json:"flatten_cname"`
-	JSON         recordListResponseSettingsJSON `json:"-"`
-}
-
-// recordListResponseSettingsJSON contains the JSON metadata for the struct
-// [RecordListResponseSettings]
-type recordListResponseSettingsJSON struct {
-	FlattenCNAME apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RecordListResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordListResponseSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1523,7 +1445,7 @@ type RecordBatchResponseDelete struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
 	// Settings for the DNS record.
-	Settings RecordBatchResponseDeletesSettings `json:"settings,required"`
+	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1565,32 +1487,6 @@ func (r recordBatchResponseDeleteJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings for the DNS record.
-type RecordBatchResponseDeletesSettings struct {
-	// If enabled, causes the CNAME record to be resolved externally and the resulting
-	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting has no effect on proxied records, which are always
-	// flattened.
-	FlattenCNAME bool                                   `json:"flatten_cname"`
-	JSON         recordBatchResponseDeletesSettingsJSON `json:"-"`
-}
-
-// recordBatchResponseDeletesSettingsJSON contains the JSON metadata for the struct
-// [RecordBatchResponseDeletesSettings]
-type recordBatchResponseDeletesSettingsJSON struct {
-	FlattenCNAME apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RecordBatchResponseDeletesSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordBatchResponseDeletesSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
 type RecordBatchResponsePatch struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -1611,7 +1507,7 @@ type RecordBatchResponsePatch struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
 	// Settings for the DNS record.
-	Settings RecordBatchResponsePatchesSettings `json:"settings,required"`
+	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1653,32 +1549,6 @@ func (r recordBatchResponsePatchJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings for the DNS record.
-type RecordBatchResponsePatchesSettings struct {
-	// If enabled, causes the CNAME record to be resolved externally and the resulting
-	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting has no effect on proxied records, which are always
-	// flattened.
-	FlattenCNAME bool                                   `json:"flatten_cname"`
-	JSON         recordBatchResponsePatchesSettingsJSON `json:"-"`
-}
-
-// recordBatchResponsePatchesSettingsJSON contains the JSON metadata for the struct
-// [RecordBatchResponsePatchesSettings]
-type recordBatchResponsePatchesSettingsJSON struct {
-	FlattenCNAME apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RecordBatchResponsePatchesSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordBatchResponsePatchesSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
 type RecordBatchResponsePost struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -1699,7 +1569,7 @@ type RecordBatchResponsePost struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
 	// Settings for the DNS record.
-	Settings RecordBatchResponsePostsSettings `json:"settings,required"`
+	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1741,32 +1611,6 @@ func (r recordBatchResponsePostJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings for the DNS record.
-type RecordBatchResponsePostsSettings struct {
-	// If enabled, causes the CNAME record to be resolved externally and the resulting
-	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting has no effect on proxied records, which are always
-	// flattened.
-	FlattenCNAME bool                                 `json:"flatten_cname"`
-	JSON         recordBatchResponsePostsSettingsJSON `json:"-"`
-}
-
-// recordBatchResponsePostsSettingsJSON contains the JSON metadata for the struct
-// [RecordBatchResponsePostsSettings]
-type recordBatchResponsePostsSettingsJSON struct {
-	FlattenCNAME apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RecordBatchResponsePostsSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordBatchResponsePostsSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
 type RecordBatchResponsePut struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -1787,7 +1631,7 @@ type RecordBatchResponsePut struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
 	// Settings for the DNS record.
-	Settings RecordBatchResponsePutsSettings `json:"settings,required"`
+	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1829,32 +1673,6 @@ func (r recordBatchResponsePutJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings for the DNS record.
-type RecordBatchResponsePutsSettings struct {
-	// If enabled, causes the CNAME record to be resolved externally and the resulting
-	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting has no effect on proxied records, which are always
-	// flattened.
-	FlattenCNAME bool                                `json:"flatten_cname"`
-	JSON         recordBatchResponsePutsSettingsJSON `json:"-"`
-}
-
-// recordBatchResponsePutsSettingsJSON contains the JSON metadata for the struct
-// [RecordBatchResponsePutsSettings]
-type recordBatchResponsePutsSettingsJSON struct {
-	FlattenCNAME apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RecordBatchResponsePutsSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordBatchResponsePutsSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
 type RecordEditResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -1875,7 +1693,7 @@ type RecordEditResponse struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
 	// Settings for the DNS record.
-	Settings RecordEditResponseSettings `json:"settings,required"`
+	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1917,32 +1735,6 @@ func (r recordEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Settings for the DNS record.
-type RecordEditResponseSettings struct {
-	// If enabled, causes the CNAME record to be resolved externally and the resulting
-	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting has no effect on proxied records, which are always
-	// flattened.
-	FlattenCNAME bool                           `json:"flatten_cname"`
-	JSON         recordEditResponseSettingsJSON `json:"-"`
-}
-
-// recordEditResponseSettingsJSON contains the JSON metadata for the struct
-// [RecordEditResponseSettings]
-type recordEditResponseSettingsJSON struct {
-	FlattenCNAME apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RecordEditResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordEditResponseSettingsJSON) RawJSON() string {
-	return r.raw
-}
-
 type RecordGetResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -1963,7 +1755,7 @@ type RecordGetResponse struct {
 	// Cloudflare.
 	Proxied bool `json:"proxied,required"`
 	// Settings for the DNS record.
-	Settings RecordGetResponseSettings `json:"settings,required"`
+	Settings interface{} `json:"settings,required"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags,required"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2002,32 +1794,6 @@ func (r *RecordGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r recordGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Settings for the DNS record.
-type RecordGetResponseSettings struct {
-	// If enabled, causes the CNAME record to be resolved externally and the resulting
-	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting has no effect on proxied records, which are always
-	// flattened.
-	FlattenCNAME bool                          `json:"flatten_cname"`
-	JSON         recordGetResponseSettingsJSON `json:"-"`
-}
-
-// recordGetResponseSettingsJSON contains the JSON metadata for the struct
-// [RecordGetResponseSettings]
-type recordGetResponseSettingsJSON struct {
-	FlattenCNAME apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RecordGetResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordGetResponseSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
