@@ -113,7 +113,8 @@ func (r *Binding) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [workers.KVNamespaceBinding],
 // [workers.ServiceBinding], [workers.DurableObjectBinding], [workers.R2Binding],
 // [workers.BindingWorkersQueueBinding], [workers.D1Binding],
-// [workers.DispatchNamespaceBinding], [workers.MTLSCERTBinding].
+// [workers.DispatchNamespaceBinding], [workers.MTLSCERTBinding],
+// [workers.BindingWorkersAssetsBinding].
 func (r Binding) AsUnion() BindingUnion {
 	return r.union
 }
@@ -123,7 +124,8 @@ func (r Binding) AsUnion() BindingUnion {
 // Union satisfied by [workers.KVNamespaceBinding], [workers.ServiceBinding],
 // [workers.DurableObjectBinding], [workers.R2Binding],
 // [workers.BindingWorkersQueueBinding], [workers.D1Binding],
-// [workers.DispatchNamespaceBinding] or [workers.MTLSCERTBinding].
+// [workers.DispatchNamespaceBinding], [workers.MTLSCERTBinding] or
+// [workers.BindingWorkersAssetsBinding].
 type BindingUnion interface {
 	implementsWorkersBinding()
 }
@@ -163,6 +165,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(MTLSCERTBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BindingWorkersAssetsBinding{}),
 		},
 	)
 }
@@ -212,6 +218,48 @@ func (r BindingWorkersQueueBindingType) IsKnown() bool {
 	return false
 }
 
+type BindingWorkersAssetsBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type BindingWorkersAssetsBindingType `json:"type,required"`
+	JSON bindingWorkersAssetsBindingJSON `json:"-"`
+}
+
+// bindingWorkersAssetsBindingJSON contains the JSON metadata for the struct
+// [BindingWorkersAssetsBinding]
+type bindingWorkersAssetsBindingJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingWorkersAssetsBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingWorkersAssetsBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingWorkersAssetsBinding) implementsWorkersBinding() {}
+
+// The class of resource that the binding provides.
+type BindingWorkersAssetsBindingType string
+
+const (
+	BindingWorkersAssetsBindingTypeAssets BindingWorkersAssetsBindingType = "assets"
+)
+
+func (r BindingWorkersAssetsBindingType) IsKnown() bool {
+	switch r {
+	case BindingWorkersAssetsBindingTypeAssets:
+		return true
+	}
+	return false
+}
+
 // The class of resource that the binding provides.
 type BindingType string
 
@@ -224,11 +272,12 @@ const (
 	BindingTypeD1                     BindingType = "d1"
 	BindingTypeDispatchNamespace      BindingType = "dispatch_namespace"
 	BindingTypeMTLSCertificate        BindingType = "mtls_certificate"
+	BindingTypeAssets                 BindingType = "assets"
 )
 
 func (r BindingType) IsKnown() bool {
 	switch r {
-	case BindingTypeKVNamespace, BindingTypeService, BindingTypeDurableObjectNamespace, BindingTypeR2Bucket, BindingTypeQueue, BindingTypeD1, BindingTypeDispatchNamespace, BindingTypeMTLSCertificate:
+	case BindingTypeKVNamespace, BindingTypeService, BindingTypeDurableObjectNamespace, BindingTypeR2Bucket, BindingTypeQueue, BindingTypeD1, BindingTypeDispatchNamespace, BindingTypeMTLSCertificate, BindingTypeAssets:
 		return true
 	}
 	return false
@@ -271,7 +320,7 @@ func (r BindingParam) implementsWorkersBindingUnionParam() {}
 // [workers.DurableObjectBindingParam], [workers.R2BindingParam],
 // [workers.BindingWorkersQueueBindingParam], [workers.D1BindingParam],
 // [workers.DispatchNamespaceBindingParam], [workers.MTLSCERTBindingParam],
-// [BindingParam].
+// [workers.BindingWorkersAssetsBindingParam], [BindingParam].
 type BindingUnionParam interface {
 	implementsWorkersBindingUnionParam()
 }
@@ -288,6 +337,17 @@ func (r BindingWorkersQueueBindingParam) MarshalJSON() (data []byte, err error) 
 }
 
 func (r BindingWorkersQueueBindingParam) implementsWorkersBindingUnionParam() {}
+
+type BindingWorkersAssetsBindingParam struct {
+	// The class of resource that the binding provides.
+	Type param.Field[BindingWorkersAssetsBindingType] `json:"type,required"`
+}
+
+func (r BindingWorkersAssetsBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BindingWorkersAssetsBindingParam) implementsWorkersBindingUnionParam() {}
 
 type D1Binding struct {
 	// ID of the D1 database to bind to
@@ -739,20 +799,20 @@ func (r MigrationStepTransferredClassParam) MarshalJSON() (data []byte, err erro
 }
 
 type MTLSCERTBinding struct {
+	// ID of the certificate to bind to
+	CertificateID string `json:"certificate_id,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
 	Type MTLSCERTBindingType `json:"type,required"`
-	// ID of the certificate to bind to
-	CertificateID string              `json:"certificate_id"`
-	JSON          mtlscertBindingJSON `json:"-"`
+	JSON mtlscertBindingJSON `json:"-"`
 }
 
 // mtlscertBindingJSON contains the JSON metadata for the struct [MTLSCERTBinding]
 type mtlscertBindingJSON struct {
+	CertificateID apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
-	CertificateID apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -783,10 +843,10 @@ func (r MTLSCERTBindingType) IsKnown() bool {
 }
 
 type MTLSCERTBindingParam struct {
+	// ID of the certificate to bind to
+	CertificateID param.Field[string] `json:"certificate_id,required"`
 	// The class of resource that the binding provides.
 	Type param.Field[MTLSCERTBindingType] `json:"type,required"`
-	// ID of the certificate to bind to
-	CertificateID param.Field[string] `json:"certificate_id"`
 }
 
 func (r MTLSCERTBindingParam) MarshalJSON() (data []byte, err error) {
