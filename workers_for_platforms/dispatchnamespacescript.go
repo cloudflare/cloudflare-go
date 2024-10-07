@@ -287,7 +287,9 @@ type DispatchNamespaceScriptUpdateParamsBodyObjectMetadata struct {
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion] `json:"migrations"`
-	Placement  param.Field[workers.PlacementConfigurationParam]                                  `json:"placement"`
+	// Observability settings for the Worker
+	Observability param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadataObservability] `json:"observability"`
+	Placement     param.Field[workers.PlacementConfigurationParam]                                `json:"placement"`
 	// List of strings to use as tags for this Worker
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -344,6 +346,19 @@ func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) Impleme
 // [DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations].
 type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion interface {
 	ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion()
+}
+
+// Observability settings for the Worker
+type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataObservability struct {
+	// Whether observability is enabled for the Worker
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Usage model to apply to invocations.
