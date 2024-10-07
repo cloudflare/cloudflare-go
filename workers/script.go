@@ -184,6 +184,8 @@ func (r scriptJSON) RawJSON() string {
 type ScriptSetting struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
+	// Observability settings for the Worker
+	Observability ScriptSettingObservability `json:"observability"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript  `json:"tail_consumers"`
 	JSON          scriptSettingJSON `json:"-"`
@@ -192,6 +194,7 @@ type ScriptSetting struct {
 // scriptSettingJSON contains the JSON metadata for the struct [ScriptSetting]
 type scriptSettingJSON struct {
 	Logpush       apijson.Field
+	Observability apijson.Field
 	TailConsumers apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -205,14 +208,56 @@ func (r scriptSettingJSON) RawJSON() string {
 	return r.raw
 }
 
+// Observability settings for the Worker
+type ScriptSettingObservability struct {
+	// Whether observability is enabled for the Worker
+	Enabled bool `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate float64                        `json:"head_sampling_rate,nullable"`
+	JSON             scriptSettingObservabilityJSON `json:"-"`
+}
+
+// scriptSettingObservabilityJSON contains the JSON metadata for the struct
+// [ScriptSettingObservability]
+type scriptSettingObservabilityJSON struct {
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSettingObservability) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSettingObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScriptSettingParam struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
+	// Observability settings for the Worker
+	Observability param.Field[ScriptSettingObservabilityParam] `json:"observability"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
 }
 
 func (r ScriptSettingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Observability settings for the Worker
+type ScriptSettingObservabilityParam struct {
+	// Whether observability is enabled for the Worker
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r ScriptSettingObservabilityParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -355,7 +400,9 @@ type ScriptUpdateParamsBodyObjectMetadata struct {
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations param.Field[ScriptUpdateParamsBodyObjectMetadataMigrationsUnion] `json:"migrations"`
-	Placement  param.Field[PlacementConfigurationParam]                         `json:"placement"`
+	// Observability settings for the Worker
+	Observability param.Field[ScriptUpdateParamsBodyObjectMetadataObservability] `json:"observability"`
+	Placement     param.Field[PlacementConfigurationParam]                       `json:"placement"`
 	// List of strings to use as tags for this Worker
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -412,6 +459,19 @@ func (r ScriptUpdateParamsBodyObjectMetadataMigrations) implementsWorkersScriptU
 // [ScriptUpdateParamsBodyObjectMetadataMigrations].
 type ScriptUpdateParamsBodyObjectMetadataMigrationsUnion interface {
 	implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion()
+}
+
+// Observability settings for the Worker
+type ScriptUpdateParamsBodyObjectMetadataObservability struct {
+	// Whether observability is enabled for the Worker
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r ScriptUpdateParamsBodyObjectMetadataObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Usage model to apply to invocations.
