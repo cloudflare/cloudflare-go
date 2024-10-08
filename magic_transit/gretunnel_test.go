@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestGRETunnelNew(t *testing.T) {
+func TestGRETunnelNewWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,8 +29,9 @@ func TestGRETunnelNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.GRETunnels.New(context.TODO(), magic_transit.GRETunnelNewParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:      map[string]interface{}{},
+		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body:              map[string]interface{}{},
+		XMagicNewHcTarget: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -64,15 +65,18 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 			InterfaceAddress:      cloudflare.F("192.0.2.0/31"),
 			Name:                  cloudflare.F("GRE_1"),
 			Description:           cloudflare.F("Tunnel for ISP X"),
-			HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
-				Direction: cloudflare.F(magic_transit.HealthCheckDirectionUnidirectional),
+			HealthCheck: cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheck{
+				Direction: cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheckDirectionUnidirectional),
 				Enabled:   cloudflare.F(true),
 				Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
-				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(magic_transit.HealthCheckTypeReply),
+				Target: cloudflare.F[magic_transit.GRETunnelUpdateParamsHealthCheckTargetUnion](magic_transit.GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget{
+					Saved: cloudflare.F("203.0.113.1"),
+				}),
+				Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
 			}),
-			Mtu: cloudflare.F(int64(0)),
-			TTL: cloudflare.F(int64(0)),
+			Mtu:               cloudflare.F(int64(0)),
+			TTL:               cloudflare.F(int64(0)),
+			XMagicNewHcTarget: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -84,7 +88,7 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestGRETunnelList(t *testing.T) {
+func TestGRETunnelListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -98,7 +102,8 @@ func TestGRETunnelList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.GRETunnels.List(context.TODO(), magic_transit.GRETunnelListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		XMagicNewHcTarget: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -109,7 +114,7 @@ func TestGRETunnelList(t *testing.T) {
 	}
 }
 
-func TestGRETunnelDelete(t *testing.T) {
+func TestGRETunnelDeleteWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -126,7 +131,8 @@ func TestGRETunnelDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.GRETunnelDeleteParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			XMagicNewHcTarget: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -138,7 +144,7 @@ func TestGRETunnelDelete(t *testing.T) {
 	}
 }
 
-func TestGRETunnelGet(t *testing.T) {
+func TestGRETunnelGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -155,7 +161,8 @@ func TestGRETunnelGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.GRETunnelGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			XMagicNewHcTarget: cloudflare.F(true),
 		},
 	)
 	if err != nil {

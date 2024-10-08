@@ -39,11 +39,14 @@ func TestCfInterconnectUpdateWithOptionalParams(t *testing.T) {
 			HealthCheck: cloudflare.F(magic_transit.CfInterconnectUpdateParamsHealthCheck{
 				Enabled: cloudflare.F(true),
 				Rate:    cloudflare.F(magic_transit.HealthCheckRateLow),
-				Target:  cloudflare.F("203.0.113.1"),
-				Type:    cloudflare.F(magic_transit.HealthCheckTypeReply),
+				Target: cloudflare.F[magic_transit.CfInterconnectUpdateParamsHealthCheckTargetUnion](magic_transit.CfInterconnectUpdateParamsHealthCheckTargetMagicHealthCheckTarget{
+					Saved: cloudflare.F("203.0.113.1"),
+				}),
+				Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
 			}),
-			InterfaceAddress: cloudflare.F("192.0.2.0/31"),
-			Mtu:              cloudflare.F(int64(0)),
+			InterfaceAddress:  cloudflare.F("192.0.2.0/31"),
+			Mtu:               cloudflare.F(int64(0)),
+			XMagicNewHcTarget: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -55,7 +58,7 @@ func TestCfInterconnectUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestCfInterconnectList(t *testing.T) {
+func TestCfInterconnectListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -69,7 +72,8 @@ func TestCfInterconnectList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.CfInterconnects.List(context.TODO(), magic_transit.CfInterconnectListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		XMagicNewHcTarget: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -80,7 +84,7 @@ func TestCfInterconnectList(t *testing.T) {
 	}
 }
 
-func TestCfInterconnectGet(t *testing.T) {
+func TestCfInterconnectGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -97,7 +101,8 @@ func TestCfInterconnectGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.CfInterconnectGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			XMagicNewHcTarget: cloudflare.F(true),
 		},
 	)
 	if err != nil {
