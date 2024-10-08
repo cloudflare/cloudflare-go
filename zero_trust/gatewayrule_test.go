@@ -116,6 +116,9 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			PayloadLog: cloudflare.F(zero_trust.RuleSettingPayloadLogParam{
 				Enabled: cloudflare.F(true),
 			}),
+			Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
+				FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe, zero_trust.RuleSettingQuarantineFileTypePdf, zero_trust.RuleSettingQuarantineFileTypeDoc}),
+			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
 			UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
 				Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionPassThrough),
@@ -246,6 +249,9 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
 				PayloadLog: cloudflare.F(zero_trust.RuleSettingPayloadLogParam{
 					Enabled: cloudflare.F(true),
+				}),
+				Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
+					FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe, zero_trust.RuleSettingQuarantineFileTypePdf, zero_trust.RuleSettingQuarantineFileTypeDoc}),
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
 				UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
