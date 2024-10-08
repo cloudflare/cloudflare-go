@@ -196,6 +196,7 @@ type DevicePostureRuleInput struct {
 	NetworkStatus    string               `json:"network_status,omitempty"`
 	Infected         *bool                `json:"infected,omitempty"`
 	IsActive         *bool                `json:"is_active,omitempty"`
+	OperationalState *string              `json:"operational_state,omitempty"`
 	EidLastSeen      string               `json:"eid_last_seen,omitempty"`
 	RiskLevel        string               `json:"risk_level,omitempty"`
 	State            string               `json:"state,omitempty"`
