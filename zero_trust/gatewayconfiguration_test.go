@@ -77,6 +77,10 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
 			}),
+			Sandbox: cloudflare.F(zero_trust.GatewayConfigurationSettingsSandboxParam{
+				Enabled:        cloudflare.F(true),
+				FallbackAction: cloudflare.F(zero_trust.GatewayConfigurationSettingsSandboxFallbackActionAllow),
+			}),
 			TLSDecrypt: cloudflare.F(zero_trust.TLSSettingsParam{
 				Enabled: cloudflare.F(true),
 			}),
@@ -153,6 +157,10 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
+			}),
+			Sandbox: cloudflare.F(zero_trust.GatewayConfigurationSettingsSandboxParam{
+				Enabled:        cloudflare.F(true),
+				FallbackAction: cloudflare.F(zero_trust.GatewayConfigurationSettingsSandboxFallbackActionAllow),
 			}),
 			TLSDecrypt: cloudflare.F(zero_trust.TLSSettingsParam{
 				Enabled: cloudflare.F(true),
