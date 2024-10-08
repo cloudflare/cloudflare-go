@@ -455,6 +455,8 @@ type GatewayConfigurationSettings struct {
 	Fips FipsSettings `json:"fips"`
 	// Protocol Detection settings.
 	ProtocolDetection ProtocolDetection `json:"protocol_detection"`
+	// Sandbox settings.
+	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox"`
 	// TLS interception settings.
 	TLSDecrypt TLSSettings                      `json:"tls_decrypt"`
 	JSON       gatewayConfigurationSettingsJSON `json:"-"`
@@ -473,6 +475,7 @@ type gatewayConfigurationSettingsJSON struct {
 	ExtendedEmailMatching apijson.Field
 	Fips                  apijson.Field
 	ProtocolDetection     apijson.Field
+	Sandbox               apijson.Field
 	TLSDecrypt            apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -511,6 +514,48 @@ func (r gatewayConfigurationSettingsCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
+// Sandbox settings.
+type GatewayConfigurationSettingsSandbox struct {
+	// Enable sandbox.
+	Enabled bool `json:"enabled"`
+	// Action to take when the file cannot be scanned.
+	FallbackAction GatewayConfigurationSettingsSandboxFallbackAction `json:"fallback_action"`
+	JSON           gatewayConfigurationSettingsSandboxJSON           `json:"-"`
+}
+
+// gatewayConfigurationSettingsSandboxJSON contains the JSON metadata for the
+// struct [GatewayConfigurationSettingsSandbox]
+type gatewayConfigurationSettingsSandboxJSON struct {
+	Enabled        apijson.Field
+	FallbackAction apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *GatewayConfigurationSettingsSandbox) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayConfigurationSettingsSandboxJSON) RawJSON() string {
+	return r.raw
+}
+
+// Action to take when the file cannot be scanned.
+type GatewayConfigurationSettingsSandboxFallbackAction string
+
+const (
+	GatewayConfigurationSettingsSandboxFallbackActionAllow GatewayConfigurationSettingsSandboxFallbackAction = "allow"
+	GatewayConfigurationSettingsSandboxFallbackActionBlock GatewayConfigurationSettingsSandboxFallbackAction = "block"
+)
+
+func (r GatewayConfigurationSettingsSandboxFallbackAction) IsKnown() bool {
+	switch r {
+	case GatewayConfigurationSettingsSandboxFallbackActionAllow, GatewayConfigurationSettingsSandboxFallbackActionBlock:
+		return true
+	}
+	return false
+}
+
 // account settings.
 type GatewayConfigurationSettingsParam struct {
 	// Activity log settings.
@@ -535,6 +580,8 @@ type GatewayConfigurationSettingsParam struct {
 	Fips param.Field[FipsSettingsParam] `json:"fips"`
 	// Protocol Detection settings.
 	ProtocolDetection param.Field[ProtocolDetectionParam] `json:"protocol_detection"`
+	// Sandbox settings.
+	Sandbox param.Field[GatewayConfigurationSettingsSandboxParam] `json:"sandbox"`
 	// TLS interception settings.
 	TLSDecrypt param.Field[TLSSettingsParam] `json:"tls_decrypt"`
 }
@@ -552,6 +599,18 @@ type GatewayConfigurationSettingsCertificateParam struct {
 }
 
 func (r GatewayConfigurationSettingsCertificateParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Sandbox settings.
+type GatewayConfigurationSettingsSandboxParam struct {
+	// Enable sandbox.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Action to take when the file cannot be scanned.
+	FallbackAction param.Field[GatewayConfigurationSettingsSandboxFallbackAction] `json:"fallback_action"`
+}
+
+func (r GatewayConfigurationSettingsSandboxParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

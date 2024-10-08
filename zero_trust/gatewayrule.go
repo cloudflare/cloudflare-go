@@ -347,11 +347,12 @@ const (
 	GatewayRuleActionEgress       GatewayRuleAction = "egress"
 	GatewayRuleActionAuditSSH     GatewayRuleAction = "audit_ssh"
 	GatewayRuleActionResolve      GatewayRuleAction = "resolve"
+	GatewayRuleActionQuarantine   GatewayRuleAction = "quarantine"
 )
 
 func (r GatewayRuleAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionAuditSSH, GatewayRuleActionResolve:
+	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionAuditSSH, GatewayRuleActionResolve, GatewayRuleActionQuarantine:
 		return true
 	}
 	return false
@@ -409,6 +410,8 @@ type RuleSetting struct {
 	OverrideIPs []string `json:"override_ips"`
 	// Configure DLP payload logging.
 	PayloadLog RuleSettingPayloadLog `json:"payload_log"`
+	// Settings that apply to quarantine rules
+	Quarantine RuleSettingQuarantine `json:"quarantine"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
 	// rule's action is set to 'resolve'.
@@ -439,6 +442,7 @@ type ruleSettingJSON struct {
 	OverrideHost                    apijson.Field
 	OverrideIPs                     apijson.Field
 	PayloadLog                      apijson.Field
+	Quarantine                      apijson.Field
 	ResolveDNSThroughCloudflare     apijson.Field
 	UntrustedCERT                   apijson.Field
 	raw                             string
@@ -677,6 +681,55 @@ func (r ruleSettingPayloadLogJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings that apply to quarantine rules
+type RuleSettingQuarantine struct {
+	// Types of files to sandbox.
+	FileTypes []RuleSettingQuarantineFileType `json:"file_types"`
+	JSON      ruleSettingQuarantineJSON       `json:"-"`
+}
+
+// ruleSettingQuarantineJSON contains the JSON metadata for the struct
+// [RuleSettingQuarantine]
+type ruleSettingQuarantineJSON struct {
+	FileTypes   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleSettingQuarantine) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleSettingQuarantineJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleSettingQuarantineFileType string
+
+const (
+	RuleSettingQuarantineFileTypeExe  RuleSettingQuarantineFileType = "exe"
+	RuleSettingQuarantineFileTypePdf  RuleSettingQuarantineFileType = "pdf"
+	RuleSettingQuarantineFileTypeDoc  RuleSettingQuarantineFileType = "doc"
+	RuleSettingQuarantineFileTypeDocm RuleSettingQuarantineFileType = "docm"
+	RuleSettingQuarantineFileTypeDocx RuleSettingQuarantineFileType = "docx"
+	RuleSettingQuarantineFileTypeRtf  RuleSettingQuarantineFileType = "rtf"
+	RuleSettingQuarantineFileTypePpt  RuleSettingQuarantineFileType = "ppt"
+	RuleSettingQuarantineFileTypePptx RuleSettingQuarantineFileType = "pptx"
+	RuleSettingQuarantineFileTypeXls  RuleSettingQuarantineFileType = "xls"
+	RuleSettingQuarantineFileTypeXlsm RuleSettingQuarantineFileType = "xlsm"
+	RuleSettingQuarantineFileTypeXlsx RuleSettingQuarantineFileType = "xlsx"
+	RuleSettingQuarantineFileTypeZip  RuleSettingQuarantineFileType = "zip"
+	RuleSettingQuarantineFileTypeRar  RuleSettingQuarantineFileType = "rar"
+)
+
+func (r RuleSettingQuarantineFileType) IsKnown() bool {
+	switch r {
+	case RuleSettingQuarantineFileTypeExe, RuleSettingQuarantineFileTypePdf, RuleSettingQuarantineFileTypeDoc, RuleSettingQuarantineFileTypeDocm, RuleSettingQuarantineFileTypeDocx, RuleSettingQuarantineFileTypeRtf, RuleSettingQuarantineFileTypePpt, RuleSettingQuarantineFileTypePptx, RuleSettingQuarantineFileTypeXls, RuleSettingQuarantineFileTypeXlsm, RuleSettingQuarantineFileTypeXlsx, RuleSettingQuarantineFileTypeZip, RuleSettingQuarantineFileTypeRar:
+		return true
+	}
+	return false
+}
+
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
 type RuleSettingUntrustedCERT struct {
 	// The action performed when an untrusted certificate is seen. The default action
@@ -771,6 +824,8 @@ type RuleSettingParam struct {
 	OverrideIPs param.Field[[]string] `json:"override_ips"`
 	// Configure DLP payload logging.
 	PayloadLog param.Field[RuleSettingPayloadLogParam] `json:"payload_log"`
+	// Settings that apply to quarantine rules
+	Quarantine param.Field[RuleSettingQuarantineParam] `json:"quarantine"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
 	// rule's action is set to 'resolve'.
@@ -889,6 +944,16 @@ type RuleSettingPayloadLogParam struct {
 }
 
 func (r RuleSettingPayloadLogParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Settings that apply to quarantine rules
+type RuleSettingQuarantineParam struct {
+	// Types of files to sandbox.
+	FileTypes param.Field[[]RuleSettingQuarantineFileType] `json:"file_types"`
+}
+
+func (r RuleSettingQuarantineParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1069,11 +1134,12 @@ const (
 	GatewayRuleNewParamsActionEgress       GatewayRuleNewParamsAction = "egress"
 	GatewayRuleNewParamsActionAuditSSH     GatewayRuleNewParamsAction = "audit_ssh"
 	GatewayRuleNewParamsActionResolve      GatewayRuleNewParamsAction = "resolve"
+	GatewayRuleNewParamsActionQuarantine   GatewayRuleNewParamsAction = "quarantine"
 )
 
 func (r GatewayRuleNewParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionAuditSSH, GatewayRuleNewParamsActionResolve:
+	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionAuditSSH, GatewayRuleNewParamsActionResolve, GatewayRuleNewParamsActionQuarantine:
 		return true
 	}
 	return false
@@ -1177,11 +1243,12 @@ const (
 	GatewayRuleUpdateParamsActionEgress       GatewayRuleUpdateParamsAction = "egress"
 	GatewayRuleUpdateParamsActionAuditSSH     GatewayRuleUpdateParamsAction = "audit_ssh"
 	GatewayRuleUpdateParamsActionResolve      GatewayRuleUpdateParamsAction = "resolve"
+	GatewayRuleUpdateParamsActionQuarantine   GatewayRuleUpdateParamsAction = "quarantine"
 )
 
 func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionAuditSSH, GatewayRuleUpdateParamsActionResolve:
+	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionAuditSSH, GatewayRuleUpdateParamsActionResolve, GatewayRuleUpdateParamsActionQuarantine:
 		return true
 	}
 	return false
