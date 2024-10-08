@@ -1,4 +1,72 @@
-## 0.101.0 (Unreleased)
+## 0.107.0 (Unreleased)
+
+## 0.106.0 (September 27th, 2024)
+
+ENHANCEMENTS:
+
+* access_application: added target contexts support for access application type infrastructure ([#3186](https://github.com/cloudflare/cloudflare-go/issues/3186))
+* access_policy: added infrastructure connection rule support for access policy ([#3186](https://github.com/cloudflare/cloudflare-go/issues/3186))
+
+## 0.105.0 (September 25th, 2024)
+
+ENHANCEMENTS:
+
+* device_posture_rule: add score field for custom_s2s posture rule ([#3031](https://github.com/cloudflare/cloudflare-go/issues/3031))
+* infrastructure_targets: initialize CRUD endpoints for infrastructure access endpoints ([#3184](https://github.com/cloudflare/cloudflare-go/issues/3184))
+* load_balancing: add account load balancer support ([#3027](https://github.com/cloudflare/cloudflare-go/issues/3027))
+
+## 0.104.0 (September 11th, 2024)
+
+BREAKING CHANGES:
+
+* dns: removed deprecated `ZoneID` and `ZoneName` fields ([#2986](https://github.com/cloudflare/cloudflare-go/issues/2986))
+
+ENHANCEMENTS:
+
+* bot_management: add ai_bots_protection to public API ([#2974](https://github.com/cloudflare/cloudflare-go/issues/2974))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.28.0 to 0.29.0 ([#3030](https://github.com/cloudflare/cloudflare-go/issues/3030))
+* deps: bumps golang.org/x/time from 0.5.0 to 0.6.0 ([#2816](https://github.com/cloudflare/cloudflare-go/issues/2816))
+
+## 0.103.0 (August 28th, 2024)
+
+ENHANCEMENTS:
+
+* errors: implement the Unwrap method for custom error types to access the wrapped errors via errors.Is and errors.As ([#2857](https://github.com/cloudflare/cloudflare-go/issues/2857))
+* rulesets: add "contains" field to custom cache key header ([#2935](https://github.com/cloudflare/cloudflare-go/issues/2935))
+* teams_certificates: renamed `enabled` to `in_use` ([#2937](https://github.com/cloudflare/cloudflare-go/issues/2937))
+* waiting_room: add support for `enabled_origin_commands` ([#2931](https://github.com/cloudflare/cloudflare-go/issues/2931))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.27.3 to 2.27.4 ([#2863](https://github.com/cloudflare/cloudflare-go/issues/2863))
+
+## 0.102.0 (August 14th, 2024)
+
+ENHANCEMENTS:
+
+* rulesets: Add `DeleteRulesetRule` ([#2833](https://github.com/cloudflare/cloudflare-go/issues/2833))
+* rulesets: Export `DeleteRulesetRuleParams` fields ([#2886](https://github.com/cloudflare/cloudflare-go/issues/2886))
+* teams_accounts: Add `disable_for_time` attribute ([#2797](https://github.com/cloudflare/cloudflare-go/issues/2797))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.27.0 to 0.28.0 ([#2835](https://github.com/cloudflare/cloudflare-go/issues/2835))
+
+## 0.101.0 (July 31st, 2024)
+
+ENHANCEMENTS:
+
+* access_application: add `skip_app_launcher_login_page` flag to skip the App Launcher landing page ([#2793](https://github.com/cloudflare/cloudflare-go/issues/2793))
+* device_posture_rule: support extended_key_usage, check_private_key, and locations for client_certificate_v2 posture rule ([#1685](https://github.com/cloudflare/cloudflare-go/issues/1685))
+* devices_policy: Add new tunnel_protocol field to policy ([#2778](https://github.com/cloudflare/cloudflare-go/issues/2778))
+* risk_score_integration: Add support for Risk Score Integrations ([#2786](https://github.com/cloudflare/cloudflare-go/issues/2786))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.27.2 to 2.27.3 ([#2787](https://github.com/cloudflare/cloudflare-go/issues/2787))
 
 ## 0.100.0 (July 18th, 2024)
 

@@ -1449,13 +1449,364 @@ func TestCreateLoadBalancer(t *testing.T) {
 	}
 }
 
-func TestCreateLoadBalancer_AccountIsNotSupported(t *testing.T) {
+func TestCreateAccountLoadBalancer(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.CreateLoadBalancer(context.Background(), AccountIdentifier(testAccountID), CreateLoadBalancerParams{})
-	if assert.Error(t, err) {
-		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, AccountRouteLevel), err.Error())
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		b, err := io.ReadAll(r.Body)
+		defer r.Body.Close()
+		if assert.NoError(t, err) {
+			assert.JSONEq(t, `{
+              "description": "Account Load Balancer",
+              "ttl": 30,
+              "fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
+              "default_pools": [
+                "de90f38ced07c2e2f4df50b1f61d4194",
+                "9290f38c5d07c2e2f4df57b1f61d4196",
+                "00920f38ce07c2e2f4df50b1f61d4194"
+              ],
+              "region_pools": {
+                "WNAM": [
+                  "de90f38ced07c2e2f4df50b1f61d4194",
+                  "9290f38c5d07c2e2f4df57b1f61d4196"
+                ],
+                "ENAM": [
+                  "00920f38ce07c2e2f4df50b1f61d4194"
+                ]
+              },
+              "country_pools": {
+                "US": [
+                  "de90f38ced07c2e2f4df50b1f61d4194"
+                ],
+                "GB": [
+                  "abd90f38ced07c2e2f4df50b1f61d4194"
+                ]
+              },
+              "pop_pools": {
+                "LAX": [
+                  "de90f38ced07c2e2f4df50b1f61d4194",
+                  "9290f38c5d07c2e2f4df57b1f61d4196"
+                ],
+                "LHR": [
+                  "abd90f38ced07c2e2f4df50b1f61d4194",
+                  "f9138c5d07c2e2f4df57b1f61d4196"
+                ],
+                "SJC": [
+                  "00920f38ce07c2e2f4df50b1f61d4194"
+                ]
+			  },
+			  "random_steering": {
+			    "default_weight": 0.2,
+			    "pool_weights": {
+			        "9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+			        "de90f38ced07c2e2f4df50b1f61d4194": 0.4
+			    }
+			  },
+			  "adaptive_routing": {
+				"failover_across_pools": true
+			  },
+			  "location_strategy": {
+				"prefer_ecs": "always",
+				"mode": "resolver_ip"
+			  },
+			  "rules": [
+				  {
+					  "name": "example rule",
+					  "condition": "cf.load_balancer.region == \"SAF\"",
+					  "disabled": false,
+					  "priority": 0,
+					  "overrides": {
+						  "region_pools": {
+							  "SAF": ["de90f38ced07c2e2f4df50b1f61d4194"]
+						  },
+						  "adaptive_routing": {
+							"failover_across_pools": false
+						  },
+						  "location_strategy": {
+							"prefer_ecs": "never",
+							"mode": "pop"
+						  }
+					  }
+				  }
+			  ],
+              "proxied": true,
+              "session_affinity": "cookie",
+              "session_affinity_ttl": 5000,
+              "session_affinity_attributes": {
+                "samesite": "Strict",
+                "secure": "Always",
+                "drain_duration": 60,
+                "zero_downtime_failover": "sticky"
+              }
+            }`, string(b))
+		}
+
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+                "id": "699d98642c564d2e855e9661899b7252",
+                "created_on": "2014-01-01T05:20:00.12345Z",
+                "modified_on": "2014-02-01T05:20:00.12345Z",
+                "description": "Account Load Balancer",
+                "ttl": 30,
+                "fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
+                "default_pools": [
+                  "de90f38ced07c2e2f4df50b1f61d4194",
+                  "9290f38c5d07c2e2f4df57b1f61d4196",
+                  "00920f38ce07c2e2f4df50b1f61d4194"
+                ],
+                "region_pools": {
+                  "WNAM": [
+                    "de90f38ced07c2e2f4df50b1f61d4194",
+                    "9290f38c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "ENAM": [
+                    "00920f38ce07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "country_pools": {
+                  "US": [
+                    "de90f38ced07c2e2f4df50b1f61d4194"
+                  ],
+                  "GB": [
+                    "abd90f38ced07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "pop_pools": {
+                  "LAX": [
+                    "de90f38ced07c2e2f4df50b1f61d4194",
+                    "9290f38c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "LHR": [
+                    "abd90f38ced07c2e2f4df50b1f61d4194",
+                    "f9138c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "SJC": [
+                    "00920f38ce07c2e2f4df50b1f61d4194"
+                  ]
+				},
+				"random_steering": {
+				   "default_weight": 0.2,
+				    "pool_weights": {
+				        "9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+				        "de90f38ced07c2e2f4df50b1f61d4194": 0.4
+				    }
+				},
+				"adaptive_routing": {
+					"failover_across_pools": true
+				},
+				"location_strategy": {
+					"prefer_ecs": "always",
+					"mode": "resolver_ip"
+				},
+				"rules": [
+				  {
+					  "name": "example rule",
+					  "condition": "cf.load_balancer.region == \"SAF\"",
+					  "overrides": {
+						  "region_pools": {
+							  "SAF": ["de90f38ced07c2e2f4df50b1f61d4194"]
+						  },
+						  "adaptive_routing": {
+							"failover_across_pools": false
+						  },
+						  "location_strategy": {
+							"prefer_ecs": "never",
+							"mode": "pop"
+						  }
+					  }
+				  }
+			  ],
+                "proxied": true,
+                "session_affinity": "cookie",
+                "session_affinity_ttl": 5000,
+                "session_affinity_attributes": {
+                    "samesite": "Strict",
+                    "secure": "Always",
+                    "drain_duration": 60,
+	                "zero_downtime_failover": "sticky"
+                }
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
+	want := LoadBalancer{
+		ID:           "699d98642c564d2e855e9661899b7252",
+		CreatedOn:    &createdOn,
+		ModifiedOn:   &modifiedOn,
+		Description:  "Account Load Balancer",
+		TTL:          30,
+		FallbackPool: "17b5962d775c646f3f9725cbc7a53df4",
+		DefaultPools: []string{
+			"de90f38ced07c2e2f4df50b1f61d4194",
+			"9290f38c5d07c2e2f4df57b1f61d4196",
+			"00920f38ce07c2e2f4df50b1f61d4194",
+		},
+		RegionPools: map[string][]string{
+			"WNAM": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+			},
+			"ENAM": {
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		CountryPools: map[string][]string{
+			"US": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+			},
+			"GB": {
+				"abd90f38ced07c2e2f4df50b1f61d4194",
+			},
+		},
+		PopPools: map[string][]string{
+			"LAX": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+			},
+			"LHR": {
+				"abd90f38ced07c2e2f4df50b1f61d4194",
+				"f9138c5d07c2e2f4df57b1f61d4196",
+			},
+			"SJC": {
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		RandomSteering: &RandomSteering{
+			DefaultWeight: 0.2,
+			PoolWeights: map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+				"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
+			},
+		},
+		AdaptiveRouting: &AdaptiveRouting{
+			FailoverAcrossPools: BoolPtr(true),
+		},
+		LocationStrategy: &LocationStrategy{
+			PreferECS: "always",
+			Mode:      "resolver_ip",
+		},
+		Rules: []*LoadBalancerRule{
+			{
+				Name:      "example rule",
+				Condition: "cf.load_balancer.region == \"SAF\"",
+				Overrides: LoadBalancerRuleOverrides{
+					RegionPools: map[string][]string{
+						"SAF": {"de90f38ced07c2e2f4df50b1f61d4194"},
+					},
+					AdaptiveRouting: &AdaptiveRouting{
+						FailoverAcrossPools: BoolPtr(false),
+					},
+					LocationStrategy: &LocationStrategy{
+						PreferECS: "never",
+						Mode:      "pop",
+					},
+				},
+			},
+		},
+		Proxied:        true,
+		Persistence:    "cookie",
+		PersistenceTTL: 5000,
+		SessionAffinityAttributes: &SessionAffinityAttributes{
+			SameSite:             "Strict",
+			Secure:               "Always",
+			DrainDuration:        60,
+			ZeroDowntimeFailover: "sticky",
+		},
+	}
+	request := LoadBalancer{
+		Description:  "Account Load Balancer",
+		TTL:          30,
+		FallbackPool: "17b5962d775c646f3f9725cbc7a53df4",
+		DefaultPools: []string{
+			"de90f38ced07c2e2f4df50b1f61d4194",
+			"9290f38c5d07c2e2f4df57b1f61d4196",
+			"00920f38ce07c2e2f4df50b1f61d4194",
+		},
+		RegionPools: map[string][]string{
+			"WNAM": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+			},
+			"ENAM": {
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		CountryPools: map[string][]string{
+			"US": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+			},
+			"GB": {
+				"abd90f38ced07c2e2f4df50b1f61d4194",
+			},
+		},
+		PopPools: map[string][]string{
+			"LAX": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+			},
+			"LHR": {
+				"abd90f38ced07c2e2f4df50b1f61d4194",
+				"f9138c5d07c2e2f4df57b1f61d4196",
+			},
+			"SJC": {
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		RandomSteering: &RandomSteering{
+			DefaultWeight: 0.2,
+			PoolWeights: map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+				"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
+			},
+		},
+		AdaptiveRouting: &AdaptiveRouting{
+			FailoverAcrossPools: BoolPtr(true),
+		},
+		LocationStrategy: &LocationStrategy{
+			PreferECS: "always",
+			Mode:      "resolver_ip",
+		},
+		Rules: []*LoadBalancerRule{
+			{
+				Name:      "example rule",
+				Condition: "cf.load_balancer.region == \"SAF\"",
+				Overrides: LoadBalancerRuleOverrides{
+					RegionPools: map[string][]string{
+						"SAF": {"de90f38ced07c2e2f4df50b1f61d4194"},
+					},
+					AdaptiveRouting: &AdaptiveRouting{
+						FailoverAcrossPools: BoolPtr(false),
+					},
+					LocationStrategy: &LocationStrategy{
+						PreferECS: "never",
+						Mode:      "pop",
+					},
+				},
+			},
+		},
+		Proxied:        true,
+		Persistence:    "cookie",
+		PersistenceTTL: 5000,
+		SessionAffinityAttributes: &SessionAffinityAttributes{
+			SameSite:             "Strict",
+			Secure:               "Always",
+			DrainDuration:        60,
+			ZeroDowntimeFailover: "sticky",
+		},
+	}
+
+	actual, err := client.CreateLoadBalancer(context.Background(), AccountIdentifier(testAccountID), CreateLoadBalancerParams{LoadBalancer: request})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
 	}
 }
 
@@ -1611,13 +1962,153 @@ func TestListLoadBalancers(t *testing.T) {
 	}
 }
 
-func TestListLoadBalancer_AccountIsNotSupported(t *testing.T) {
+func TestListAccountLoadBalancers(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.ListLoadBalancers(context.Background(), AccountIdentifier(testAccountID), ListLoadBalancerParams{})
-	if assert.Error(t, err) {
-		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, AccountRouteLevel), err.Error())
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": [
+                {
+                    "id": "699d98642c564d2e855e9661899b7252",
+                    "created_on": "2014-01-01T05:20:00.12345Z",
+                    "modified_on": "2014-02-01T05:20:00.12345Z",
+                    "description": "Account Load Balancer",
+                    "ttl": 30,
+                    "fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
+                    "default_pools": [
+                      "de90f38ced07c2e2f4df50b1f61d4194",
+                      "9290f38c5d07c2e2f4df57b1f61d4196",
+                      "00920f38ce07c2e2f4df50b1f61d4194"
+                    ],
+                    "region_pools": {
+                      "WNAM": [
+                        "de90f38ced07c2e2f4df50b1f61d4194",
+                        "9290f38c5d07c2e2f4df57b1f61d4196"
+                      ],
+                      "ENAM": [
+                        "00920f38ce07c2e2f4df50b1f61d4194"
+                      ]
+                    },
+                    "country_pools": {
+                      "US": [
+                        "de90f38ced07c2e2f4df50b1f61d4194"
+                      ],
+                      "GB": [
+                        "abd90f38ced07c2e2f4df50b1f61d4194"
+                      ]
+                    },
+                    "pop_pools": {
+                      "LAX": [
+                        "de90f38ced07c2e2f4df50b1f61d4194",
+                        "9290f38c5d07c2e2f4df57b1f61d4196"
+                      ],
+                      "LHR": [
+                        "abd90f38ced07c2e2f4df50b1f61d4194",
+                        "f9138c5d07c2e2f4df57b1f61d4196"
+                      ],
+                      "SJC": [
+                        "00920f38ce07c2e2f4df50b1f61d4194"
+                      ]
+                    },
+                    "random_steering": {
+                        "default_weight": 0.2,
+                        "pool_weights": {
+                            "9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+                            "de90f38ced07c2e2f4df50b1f61d4194": 0.4
+                        }
+                    },
+					"adaptive_routing": {
+						"failover_across_pools": true
+					},
+					"location_strategy": {
+						"prefer_ecs": "always",
+						"mode": "resolver_ip"
+					},
+                    "proxied": true
+                }
+            ],
+            "result_info": {
+                "page": 1,
+                "per_page": 20,
+                "count": 1,
+                "total_count": 1
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
+	want := []LoadBalancer{
+		{
+			ID:           "699d98642c564d2e855e9661899b7252",
+			CreatedOn:    &createdOn,
+			ModifiedOn:   &modifiedOn,
+			Description:  "Account Load Balancer",
+			TTL:          30,
+			FallbackPool: "17b5962d775c646f3f9725cbc7a53df4",
+			DefaultPools: []string{
+				"de90f38ced07c2e2f4df50b1f61d4194",
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+			RegionPools: map[string][]string{
+				"WNAM": {
+					"de90f38ced07c2e2f4df50b1f61d4194",
+					"9290f38c5d07c2e2f4df57b1f61d4196",
+				},
+				"ENAM": {
+					"00920f38ce07c2e2f4df50b1f61d4194",
+				},
+			},
+			CountryPools: map[string][]string{
+				"US": {
+					"de90f38ced07c2e2f4df50b1f61d4194",
+				},
+				"GB": {
+					"abd90f38ced07c2e2f4df50b1f61d4194",
+				},
+			},
+			PopPools: map[string][]string{
+				"LAX": {
+					"de90f38ced07c2e2f4df50b1f61d4194",
+					"9290f38c5d07c2e2f4df57b1f61d4196",
+				},
+				"LHR": {
+					"abd90f38ced07c2e2f4df50b1f61d4194",
+					"f9138c5d07c2e2f4df57b1f61d4196",
+				},
+				"SJC": {
+					"00920f38ce07c2e2f4df50b1f61d4194",
+				},
+			},
+			RandomSteering: &RandomSteering{
+				DefaultWeight: 0.2,
+				PoolWeights: map[string]float64{
+					"9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+					"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
+				},
+			},
+			AdaptiveRouting: &AdaptiveRouting{
+				FailoverAcrossPools: BoolPtr(true),
+			},
+			LocationStrategy: &LocationStrategy{
+				PreferECS: "always",
+				Mode:      "resolver_ip",
+			},
+			Proxied: true,
+		},
+	}
+
+	actual, err := client.ListLoadBalancers(context.Background(), AccountIdentifier(testAccountID), ListLoadBalancerParams{})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
 	}
 }
 
@@ -1766,14 +2257,147 @@ func TestGetLoadBalancer(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func TestGetLoadBalancer_AccountIsNotSupported(t *testing.T) {
+func TestGetAccountLoadBalancer(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.GetLoadBalancer(context.Background(), AccountIdentifier(testAccountID), "foo")
-	if assert.Error(t, err) {
-		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, AccountRouteLevel), err.Error())
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+                "id": "699d98642c564d2e855e9661899b7252",
+                "created_on": "2014-01-01T05:20:00.12345Z",
+                "modified_on": "2014-02-01T05:20:00.12345Z",
+                "description": "Account Load Balancer",
+                "ttl": 30,
+                "fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
+                "default_pools": [
+                  "de90f38ced07c2e2f4df50b1f61d4194",
+                  "9290f38c5d07c2e2f4df57b1f61d4196",
+                  "00920f38ce07c2e2f4df50b1f61d4194"
+                ],
+                "region_pools": {
+                  "WNAM": [
+                    "de90f38ced07c2e2f4df50b1f61d4194",
+                    "9290f38c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "ENAM": [
+                    "00920f38ce07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "country_pools": {
+                  "US": [
+                    "de90f38ced07c2e2f4df50b1f61d4194"
+                  ],
+                  "GB": [
+                    "abd90f38ced07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "pop_pools": {
+                  "LAX": [
+                    "de90f38ced07c2e2f4df50b1f61d4194",
+                    "9290f38c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "LHR": [
+                    "abd90f38ced07c2e2f4df50b1f61d4194",
+                    "f9138c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "SJC": [
+                    "00920f38ce07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "random_steering": {
+                    "default_weight": 0.2,
+                    "pool_weights": {
+                        "9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+                        "de90f38ced07c2e2f4df50b1f61d4194": 0.4
+                    }
+                },
+				"adaptive_routing": {
+					"failover_across_pools": true
+				},
+				"location_strategy": {
+					"prefer_ecs": "always",
+					"mode": "resolver_ip"
+				},
+                "proxied": true
+            }
+        }`)
 	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/699d98642c564d2e855e9661899b7252", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-02-01T05:20:00.12345Z")
+	want := LoadBalancer{
+		ID:           "699d98642c564d2e855e9661899b7252",
+		CreatedOn:    &createdOn,
+		ModifiedOn:   &modifiedOn,
+		Description:  "Account Load Balancer",
+		TTL:          30,
+		FallbackPool: "17b5962d775c646f3f9725cbc7a53df4",
+		DefaultPools: []string{
+			"de90f38ced07c2e2f4df50b1f61d4194",
+			"9290f38c5d07c2e2f4df57b1f61d4196",
+			"00920f38ce07c2e2f4df50b1f61d4194",
+		},
+		RegionPools: map[string][]string{
+			"WNAM": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+			},
+			"ENAM": {
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		CountryPools: map[string][]string{
+			"US": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+			},
+			"GB": {
+				"abd90f38ced07c2e2f4df50b1f61d4194",
+			},
+		},
+		PopPools: map[string][]string{
+			"LAX": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+			},
+			"LHR": {
+				"abd90f38ced07c2e2f4df50b1f61d4194",
+				"f9138c5d07c2e2f4df57b1f61d4196",
+			},
+			"SJC": {
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		RandomSteering: &RandomSteering{
+			DefaultWeight: 0.2,
+			PoolWeights: map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.6,
+				"de90f38ced07c2e2f4df50b1f61d4194": 0.4,
+			},
+		},
+		AdaptiveRouting: &AdaptiveRouting{
+			FailoverAcrossPools: BoolPtr(true),
+		},
+		LocationStrategy: &LocationStrategy{
+			PreferECS: "always",
+			Mode:      "resolver_ip",
+		},
+		Proxied: true,
+	}
+
+	actual, err := client.GetLoadBalancer(context.Background(), AccountIdentifier(testAccountID), "699d98642c564d2e855e9661899b7252")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	_, err = client.GetLoadBalancer(context.Background(), AccountIdentifier(testAccountID), "bar")
+	assert.Error(t, err)
 }
 
 func TestDeleteLoadBalancer(t *testing.T) {
@@ -1798,14 +2422,26 @@ func TestDeleteLoadBalancer(t *testing.T) {
 	assert.Error(t, client.DeleteLoadBalancer(context.Background(), ZoneIdentifier(testZoneID), "bar"))
 }
 
-func TestDeleteLoadBalancer_AccountIsNotSupported(t *testing.T) {
+func TestDeleteAccountLoadBalancer(t *testing.T) {
 	setup()
 	defer teardown()
 
-	err := client.DeleteLoadBalancer(context.Background(), AccountIdentifier(testAccountID), "foo")
-	if assert.Error(t, err) {
-		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, AccountRouteLevel), err.Error())
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+              "id": "699d98642c564d2e855e9661899b7252"
+            }
+        }`)
 	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/699d98642c564d2e855e9661899b7252", handler)
+	assert.NoError(t, client.DeleteLoadBalancer(context.Background(), AccountIdentifier(testAccountID), "699d98642c564d2e855e9661899b7252"))
+	assert.Error(t, client.DeleteLoadBalancer(context.Background(), AccountIdentifier(testAccountID), "bar"))
 }
 
 func TestUpdateLoadBalancer(t *testing.T) {
@@ -2068,13 +2704,259 @@ func TestUpdateLoadBalancer(t *testing.T) {
 	}
 }
 
-func TestUpdateLoadBalancer_AccountIsNotSupported(t *testing.T) {
+func TestUpdateAccountLoadBalancer(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateLoadBalancer(context.Background(), AccountIdentifier(testAccountID), UpdateLoadBalancerParams{LoadBalancer: LoadBalancer{}})
-	if assert.Error(t, err) {
-		assert.Equal(t, fmt.Sprintf(errInvalidResourceContainerAccess, AccountRouteLevel), err.Error())
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		b, err := io.ReadAll(r.Body)
+		defer r.Body.Close()
+		if assert.NoError(t, err) {
+			assert.JSONEq(t, `{
+                "id": "699d98642c564d2e855e9661899b7252",
+                "description": "Account Load Balancer",
+                "ttl": 30,
+                "fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
+                "default_pools": [
+                  "00920f38ce07c2e2f4df50b1f61d4194"
+                ],
+                "region_pools": {
+                  "WNAM": [
+                    "9290f38c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "ENAM": [
+                    "00920f38ce07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "country_pools": {
+                  "US": [
+                    "de90f38ced07c2e2f4df50b1f61d4194"
+                  ],
+                  "GB": [
+                    "f9138c5d07c2e2f4df57b1f61d4196"
+                  ]
+                },
+                "pop_pools": {
+                  "LAX": [
+                    "9290f38c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "LHR": [
+                    "f9138c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "SJC": [
+                    "00920f38ce07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "random_steering": {
+                    "default_weight": 0.5,
+                    "pool_weights": {
+                        "9290f38c5d07c2e2f4df57b1f61d4196": 0.2
+                    }
+                },
+				"adaptive_routing": {
+					"failover_across_pools": false
+				},
+				"location_strategy": {
+					"prefer_ecs": "never",
+					"mode": "pop"
+				},
+                "proxied": true,
+                "session_affinity": "none",
+                "session_affinity_attributes": {
+                  "samesite": "Strict",
+                  "secure": "Always",
+				  "zero_downtime_failover": "sticky"
+                }
+			}`, string(b))
+		}
+		fmt.Fprint(w, `{
+            "success": true,
+            "errors": [],
+            "messages": [],
+            "result": {
+                "id": "699d98642c564d2e855e9661899b7252",
+                "created_on": "2014-01-01T05:20:00.12345Z",
+                "modified_on": "2017-02-01T05:20:00.12345Z",
+                "description": "Account Load Balancer",
+                "ttl": 30,
+                "fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
+                "default_pools": [
+                  "00920f38ce07c2e2f4df50b1f61d4194"
+                ],
+                "region_pools": {
+                  "WNAM": [
+                    "9290f38c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "ENAM": [
+                    "00920f38ce07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "country_pools": {
+                  "US": [
+                    "de90f38ced07c2e2f4df50b1f61d4194"
+                  ],
+                  "GB": [
+                    "f9138c5d07c2e2f4df57b1f61d4196"
+                  ]
+                },
+                "pop_pools": {
+                  "LAX": [
+                    "9290f38c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "LHR": [
+                    "f9138c5d07c2e2f4df57b1f61d4196"
+                  ],
+                  "SJC": [
+                    "00920f38ce07c2e2f4df50b1f61d4194"
+                  ]
+                },
+                "random_steering": {
+                    "default_weight": 0.5,
+                    "pool_weights": {
+                        "9290f38c5d07c2e2f4df57b1f61d4196": 0.2
+                    }
+                },
+				"adaptive_routing": {
+					"failover_across_pools": false
+				},
+				"location_strategy": {
+					"prefer_ecs": "never",
+					"mode": "pop"
+				},
+                "proxied": true,
+                "session_affinity": "none",
+                "session_affinity_attributes": {
+                  "samesite": "Strict",
+                  "secure": "Always",
+	              "zero_downtime_failover": "sticky"
+                }
+            }
+        }`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/load_balancers/699d98642c564d2e855e9661899b7252", handler)
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2017-02-01T05:20:00.12345Z")
+	want := LoadBalancer{
+		ID:           "699d98642c564d2e855e9661899b7252",
+		CreatedOn:    &createdOn,
+		ModifiedOn:   &modifiedOn,
+		Description:  "Account Load Balancer",
+		TTL:          30,
+		FallbackPool: "17b5962d775c646f3f9725cbc7a53df4",
+		DefaultPools: []string{
+			"00920f38ce07c2e2f4df50b1f61d4194",
+		},
+		RegionPools: map[string][]string{
+			"WNAM": {
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+			},
+			"ENAM": {
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		CountryPools: map[string][]string{
+			"US": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+			},
+			"GB": {
+				"f9138c5d07c2e2f4df57b1f61d4196",
+			},
+		},
+		PopPools: map[string][]string{
+			"LAX": {
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+			},
+			"LHR": {
+				"f9138c5d07c2e2f4df57b1f61d4196",
+			},
+			"SJC": {
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		RandomSteering: &RandomSteering{
+			DefaultWeight: 0.5,
+			PoolWeights: map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.2,
+			},
+		},
+		AdaptiveRouting: &AdaptiveRouting{
+			FailoverAcrossPools: BoolPtr(false),
+		},
+		LocationStrategy: &LocationStrategy{
+			PreferECS: "never",
+			Mode:      "pop",
+		},
+		Proxied:     true,
+		Persistence: "none",
+		SessionAffinityAttributes: &SessionAffinityAttributes{
+			SameSite:             "Strict",
+			Secure:               "Always",
+			ZeroDowntimeFailover: "sticky",
+		},
+	}
+	request := LoadBalancer{
+		ID:           "699d98642c564d2e855e9661899b7252",
+		Description:  "Account Load Balancer",
+		TTL:          30,
+		FallbackPool: "17b5962d775c646f3f9725cbc7a53df4",
+		DefaultPools: []string{
+			"00920f38ce07c2e2f4df50b1f61d4194",
+		},
+		RegionPools: map[string][]string{
+			"WNAM": {
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+			},
+			"ENAM": {
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		CountryPools: map[string][]string{
+			"US": {
+				"de90f38ced07c2e2f4df50b1f61d4194",
+			},
+			"GB": {
+				"f9138c5d07c2e2f4df57b1f61d4196",
+			},
+		},
+		PopPools: map[string][]string{
+			"LAX": {
+				"9290f38c5d07c2e2f4df57b1f61d4196",
+			},
+			"LHR": {
+				"f9138c5d07c2e2f4df57b1f61d4196",
+			},
+			"SJC": {
+				"00920f38ce07c2e2f4df50b1f61d4194",
+			},
+		},
+		RandomSteering: &RandomSteering{
+			DefaultWeight: 0.5,
+			PoolWeights: map[string]float64{
+				"9290f38c5d07c2e2f4df57b1f61d4196": 0.2,
+			},
+		},
+		AdaptiveRouting: &AdaptiveRouting{
+			FailoverAcrossPools: BoolPtr(false),
+		},
+		LocationStrategy: &LocationStrategy{
+			PreferECS: "never",
+			Mode:      "pop",
+		},
+		Proxied:     true,
+		Persistence: "none",
+		SessionAffinityAttributes: &SessionAffinityAttributes{
+			SameSite:             "Strict",
+			Secure:               "Always",
+			ZeroDowntimeFailover: "sticky",
+		},
+	}
+
+	actual, err := client.UpdateLoadBalancer(context.Background(), AccountIdentifier(testAccountID), UpdateLoadBalancerParams{LoadBalancer: request})
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
 	}
 }
 

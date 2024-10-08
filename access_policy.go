@@ -30,12 +30,13 @@ type AccessPolicy struct {
 	Reusable   *bool      `json:"reusable,omitempty"`
 	Name       string     `json:"name"`
 
-	IsolationRequired            *bool                 `json:"isolation_required,omitempty"`
-	SessionDuration              *string               `json:"session_duration,omitempty"`
-	PurposeJustificationRequired *bool                 `json:"purpose_justification_required,omitempty"`
-	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
-	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
-	ApprovalGroups               []AccessApprovalGroup `json:"approval_groups"`
+	IsolationRequired             *bool                                `json:"isolation_required,omitempty"`
+	SessionDuration               *string                              `json:"session_duration,omitempty"`
+	PurposeJustificationRequired  *bool                                `json:"purpose_justification_required,omitempty"`
+	PurposeJustificationPrompt    *string                              `json:"purpose_justification_prompt,omitempty"`
+	ApprovalRequired              *bool                                `json:"approval_required,omitempty"`
+	ApprovalGroups                []AccessApprovalGroup                `json:"approval_groups"`
+	InfrastructureConnectionRules *AccessInfrastructureConnectionRules `json:"connection_rules,omitempty"`
 
 	// The include policy works like an OR logical operator. The user must
 	// satisfy one of the rules.
@@ -94,12 +95,13 @@ type CreateAccessPolicyParams struct {
 	Decision   string `json:"decision"`
 	Name       string `json:"name"`
 
-	IsolationRequired            *bool                 `json:"isolation_required,omitempty"`
-	SessionDuration              *string               `json:"session_duration,omitempty"`
-	PurposeJustificationRequired *bool                 `json:"purpose_justification_required,omitempty"`
-	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
-	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
-	ApprovalGroups               []AccessApprovalGroup `json:"approval_groups"`
+	IsolationRequired             *bool                                `json:"isolation_required,omitempty"`
+	SessionDuration               *string                              `json:"session_duration,omitempty"`
+	PurposeJustificationRequired  *bool                                `json:"purpose_justification_required,omitempty"`
+	PurposeJustificationPrompt    *string                              `json:"purpose_justification_prompt,omitempty"`
+	ApprovalRequired              *bool                                `json:"approval_required,omitempty"`
+	ApprovalGroups                []AccessApprovalGroup                `json:"approval_groups"`
+	InfrastructureConnectionRules *AccessInfrastructureConnectionRules `json:"connection_rules,omitempty"`
 
 	// The include policy works like an OR logical operator. The user must
 	// satisfy one of the rules.
@@ -127,12 +129,13 @@ type UpdateAccessPolicyParams struct {
 	Decision   string `json:"decision"`
 	Name       string `json:"name"`
 
-	IsolationRequired            *bool                 `json:"isolation_required,omitempty"`
-	SessionDuration              *string               `json:"session_duration,omitempty"`
-	PurposeJustificationRequired *bool                 `json:"purpose_justification_required,omitempty"`
-	PurposeJustificationPrompt   *string               `json:"purpose_justification_prompt,omitempty"`
-	ApprovalRequired             *bool                 `json:"approval_required,omitempty"`
-	ApprovalGroups               []AccessApprovalGroup `json:"approval_groups"`
+	IsolationRequired             *bool                                `json:"isolation_required,omitempty"`
+	SessionDuration               *string                              `json:"session_duration,omitempty"`
+	PurposeJustificationRequired  *bool                                `json:"purpose_justification_required,omitempty"`
+	PurposeJustificationPrompt    *string                              `json:"purpose_justification_prompt,omitempty"`
+	ApprovalRequired              *bool                                `json:"approval_required,omitempty"`
+	ApprovalGroups                []AccessApprovalGroup                `json:"approval_groups"`
+	InfrastructureConnectionRules *AccessInfrastructureConnectionRules `json:"connection_rules,omitempty"`
 
 	// The include policy works like an OR logical operator. The user must
 	// satisfy one of the rules.

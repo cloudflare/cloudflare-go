@@ -146,11 +146,12 @@ type ZoneRatePlanResponse struct {
 
 // ZoneSetting contains settings for a zone.
 type ZoneSetting struct {
-	ID            string      `json:"id"`
-	Editable      bool        `json:"editable"`
-	ModifiedOn    string      `json:"modified_on,omitempty"`
-	Value         interface{} `json:"value"`
-	TimeRemaining int         `json:"time_remaining"`
+	ID                string      `json:"id"`
+	Editable          bool        `json:"editable"`
+	ModifiedOn        string      `json:"modified_on,omitempty"`
+	Value             interface{} `json:"value"`
+	TimeRemaining     int         `json:"time_remaining"`
+	NextScheduledScan string      `json:"next_scheduled_scan,omitempty"`
 }
 
 // ZoneSettingResponse represents the response from the Zone Setting endpoint.
@@ -175,7 +176,6 @@ type ZoneSSLSetting struct {
 }
 
 // ZoneSSLSettingResponse represents the response from the Zone SSL Setting
-// endpoint.
 type ZoneSSLSettingResponse struct {
 	Response
 	Result ZoneSSLSetting `json:"result"`

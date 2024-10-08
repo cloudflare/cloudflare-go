@@ -46,6 +46,8 @@ const (
 	DispatchNamespaceBindingType WorkerBindingType = "dispatch_namespace"
 	// WorkerD1DataseBindingType is for D1 databases.
 	WorkerD1DataseBindingType WorkerBindingType = "d1"
+	// WorkerHyperdriveBindingType is for Hyperdrive config bindings.
+	WorkerHyperdriveBindingType WorkerBindingType = "hyperdrive"
 )
 
 type ListWorkerBindingsParams struct {
@@ -433,6 +435,32 @@ func (b WorkerD1DatabaseBinding) serialize(bindingName string) (workerBindingMet
 	}, nil, nil
 }
 
+// WorkerHyperdriveBinding is a binding to a Hyperdrive config.
+type WorkerHyperdriveBinding struct {
+	Binding  string
+	ConfigID string
+}
+
+// Type returns the type of the binding.
+func (b WorkerHyperdriveBinding) Type() WorkerBindingType {
+	return WorkerHyperdriveBindingType
+}
+
+func (b WorkerHyperdriveBinding) serialize(bindingName string) (workerBindingMeta, workerBindingBodyWriter, error) {
+	if b.Binding == "" {
+		return nil, nil, fmt.Errorf(`binding name for binding "%s" cannot be empty`, bindingName)
+	}
+	if b.ConfigID == "" {
+		return nil, nil, fmt.Errorf(`config ID for binding "%s" cannot be empty`, bindingName)
+	}
+
+	return workerBindingMeta{
+		"name": b.Binding,
+		"type": b.Type(),
+		"id":   b.ConfigID,
+	}, nil, nil
+}
+
 // UnsafeBinding is for experimental or deprecated bindings, and allows specifying any binding type or property.
 type UnsafeBinding map[string]interface{}
 
@@ -561,6 +589,12 @@ func (api *API) ListWorkerBindings(ctx context.Context, rc *ResourceContainer, p
 			database_id := jsonBinding["database_id"].(string)
 			bindingListItem.Binding = WorkerD1DatabaseBinding{
 				DatabaseID: database_id,
+			}
+		case WorkerHyperdriveBindingType:
+			id := jsonBinding["id"].(string)
+			bindingListItem.Binding = WorkerHyperdriveBinding{
+				Binding:  name,
+				ConfigID: id,
 			}
 		default:
 			bindingListItem.Binding = WorkerInheritBinding{}

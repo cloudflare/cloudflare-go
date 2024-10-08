@@ -1,0 +1,3 @@
+```release-notes:bug
+access_application: enable removing access application custom attributes and claims
+```

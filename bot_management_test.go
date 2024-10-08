@@ -24,7 +24,8 @@ func TestGetBotManagement(t *testing.T) {
 	"result": {
 		"enable_js": false,
 		"fight_mode": true,
-		"using_latest_model": true
+		"using_latest_model": true,
+        "ai_bots_protection": "disabled"
 	}
 }
 		`)
@@ -36,6 +37,7 @@ func TestGetBotManagement(t *testing.T) {
 		EnableJS:         BoolPtr(false),
 		FightMode:        BoolPtr(true),
 		UsingLatestModel: BoolPtr(true),
+		AIBotsProtection: StringPtr("disabled"),
 	}
 
 	actual, err := client.GetBotManagement(context.Background(), ZoneIdentifier(testZoneID))
@@ -60,7 +62,8 @@ func TestUpdateBotManagement(t *testing.T) {
 	"result": {
 		"enable_js": false,
 		"fight_mode": true,
-		"using_latest_model": true
+		"using_latest_model": true,
+        "ai_bots_protection": "block"
 	}
 }
 		`)
@@ -69,14 +72,16 @@ func TestUpdateBotManagement(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/bot_management", handler)
 
 	bmData := UpdateBotManagementParams{
-		EnableJS:  BoolPtr(false),
-		FightMode: BoolPtr(true),
+		EnableJS:         BoolPtr(false),
+		FightMode:        BoolPtr(true),
+		AIBotsProtection: StringPtr("block"),
 	}
 
 	want := BotManagement{
 		EnableJS:         BoolPtr(false),
 		FightMode:        BoolPtr(true),
 		UsingLatestModel: BoolPtr(true),
+		AIBotsProtection: StringPtr("block"),
 	}
 
 	actual, err := client.UpdateBotManagement(context.Background(), ZoneIdentifier(testZoneID), bmData)

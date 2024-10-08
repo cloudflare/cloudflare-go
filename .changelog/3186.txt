@@ -1,0 +1,7 @@
+```release-note:enhancement
+access_application: added target contexts support for access application type infrastructure
+```
+
+```release-note:enhancement
+access_policy: added infrastructure connection rule support for access policy 
+```

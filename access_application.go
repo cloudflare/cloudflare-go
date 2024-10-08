@@ -15,50 +15,52 @@ type AccessApplicationType string
 
 // These constants represent all valid application types.
 const (
-	SelfHosted  AccessApplicationType = "self_hosted"
-	SSH         AccessApplicationType = "ssh"
-	VNC         AccessApplicationType = "vnc"
-	Biso        AccessApplicationType = "biso"
-	AppLauncher AccessApplicationType = "app_launcher"
-	Warp        AccessApplicationType = "warp"
-	Bookmark    AccessApplicationType = "bookmark"
-	Saas        AccessApplicationType = "saas"
+	SelfHosted     AccessApplicationType = "self_hosted"
+	SSH            AccessApplicationType = "ssh"
+	VNC            AccessApplicationType = "vnc"
+	Biso           AccessApplicationType = "biso"
+	AppLauncher    AccessApplicationType = "app_launcher"
+	Warp           AccessApplicationType = "warp"
+	Bookmark       AccessApplicationType = "bookmark"
+	Saas           AccessApplicationType = "saas"
+	Infrastructure AccessApplicationType = "infrastructure"
 )
 
 // AccessApplication represents an Access application.
 type AccessApplication struct {
-	GatewayRules             []AccessApplicationGatewayRule `json:"gateway_rules,omitempty"`
-	AllowedIdps              []string                       `json:"allowed_idps,omitempty"`
-	CustomDenyMessage        string                         `json:"custom_deny_message,omitempty"`
-	LogoURL                  string                         `json:"logo_url,omitempty"`
-	AUD                      string                         `json:"aud,omitempty"`
-	Domain                   string                         `json:"domain"`
-	SelfHostedDomains        []string                       `json:"self_hosted_domains"`
-	Type                     AccessApplicationType          `json:"type,omitempty"`
-	SessionDuration          string                         `json:"session_duration,omitempty"`
-	SameSiteCookieAttribute  string                         `json:"same_site_cookie_attribute,omitempty"`
-	CustomDenyURL            string                         `json:"custom_deny_url,omitempty"`
-	CustomNonIdentityDenyURL string                         `json:"custom_non_identity_deny_url,omitempty"`
-	Name                     string                         `json:"name"`
-	ID                       string                         `json:"id,omitempty"`
-	PrivateAddress           string                         `json:"private_address"`
-	CorsHeaders              *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
-	CreatedAt                *time.Time                     `json:"created_at,omitempty"`
-	UpdatedAt                *time.Time                     `json:"updated_at,omitempty"`
-	SaasApplication          *SaasApplication               `json:"saas_app,omitempty"`
-	AutoRedirectToIdentity   *bool                          `json:"auto_redirect_to_identity,omitempty"`
-	SkipInterstitial         *bool                          `json:"skip_interstitial,omitempty"`
-	AppLauncherVisible       *bool                          `json:"app_launcher_visible,omitempty"`
-	EnableBindingCookie      *bool                          `json:"enable_binding_cookie,omitempty"`
-	HttpOnlyCookieAttribute  *bool                          `json:"http_only_cookie_attribute,omitempty"`
-	ServiceAuth401Redirect   *bool                          `json:"service_auth_401_redirect,omitempty"`
-	PathCookieAttribute      *bool                          `json:"path_cookie_attribute,omitempty"`
-	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
-	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
-	CustomPages              []string                       `json:"custom_pages,omitempty"`
-	Tags                     []string                       `json:"tags,omitempty"`
-	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
-	Policies                 []AccessPolicy                 `json:"policies,omitempty"`
+	GatewayRules             []AccessApplicationGatewayRule       `json:"gateway_rules,omitempty"`
+	AllowedIdps              []string                             `json:"allowed_idps,omitempty"`
+	CustomDenyMessage        string                               `json:"custom_deny_message,omitempty"`
+	LogoURL                  string                               `json:"logo_url,omitempty"`
+	AUD                      string                               `json:"aud,omitempty"`
+	Domain                   string                               `json:"domain"`
+	SelfHostedDomains        []string                             `json:"self_hosted_domains"`
+	Type                     AccessApplicationType                `json:"type,omitempty"`
+	SessionDuration          string                               `json:"session_duration,omitempty"`
+	SameSiteCookieAttribute  string                               `json:"same_site_cookie_attribute,omitempty"`
+	CustomDenyURL            string                               `json:"custom_deny_url,omitempty"`
+	CustomNonIdentityDenyURL string                               `json:"custom_non_identity_deny_url,omitempty"`
+	Name                     string                               `json:"name"`
+	ID                       string                               `json:"id,omitempty"`
+	PrivateAddress           string                               `json:"private_address"`
+	CorsHeaders              *AccessApplicationCorsHeaders        `json:"cors_headers,omitempty"`
+	CreatedAt                *time.Time                           `json:"created_at,omitempty"`
+	UpdatedAt                *time.Time                           `json:"updated_at,omitempty"`
+	SaasApplication          *SaasApplication                     `json:"saas_app,omitempty"`
+	AutoRedirectToIdentity   *bool                                `json:"auto_redirect_to_identity,omitempty"`
+	SkipInterstitial         *bool                                `json:"skip_interstitial,omitempty"`
+	AppLauncherVisible       *bool                                `json:"app_launcher_visible,omitempty"`
+	EnableBindingCookie      *bool                                `json:"enable_binding_cookie,omitempty"`
+	HttpOnlyCookieAttribute  *bool                                `json:"http_only_cookie_attribute,omitempty"`
+	ServiceAuth401Redirect   *bool                                `json:"service_auth_401_redirect,omitempty"`
+	PathCookieAttribute      *bool                                `json:"path_cookie_attribute,omitempty"`
+	AllowAuthenticateViaWarp *bool                                `json:"allow_authenticate_via_warp,omitempty"`
+	OptionsPreflightBypass   *bool                                `json:"options_preflight_bypass,omitempty"`
+	CustomPages              []string                             `json:"custom_pages,omitempty"`
+	Tags                     []string                             `json:"tags,omitempty"`
+	SCIMConfig               *AccessApplicationSCIMConfig         `json:"scim_config,omitempty"`
+	Policies                 []AccessPolicy                       `json:"policies,omitempty"`
+	TargetContexts           *[]AccessInfrastructureTargetContext `json:"target_criteria,omitempty"`
 	AccessAppLauncherCustomization
 }
 
@@ -224,15 +226,15 @@ type SaasApplication struct {
 	AuthType  string     `json:"auth_type,omitempty"`
 
 	// SAML saas app
-	ConsumerServiceUrl            string                `json:"consumer_service_url,omitempty"`
-	SPEntityID                    string                `json:"sp_entity_id,omitempty"`
-	IDPEntityID                   string                `json:"idp_entity_id,omitempty"`
-	NameIDFormat                  string                `json:"name_id_format,omitempty"`
-	SSOEndpoint                   string                `json:"sso_endpoint,omitempty"`
-	DefaultRelayState             string                `json:"default_relay_state,omitempty"`
-	CustomAttributes              []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
-	NameIDTransformJsonata        string                `json:"name_id_transform_jsonata,omitempty"`
-	SamlAttributeTransformJsonata string                `json:"saml_attribute_transform_jsonata"`
+	ConsumerServiceUrl            string                 `json:"consumer_service_url,omitempty"`
+	SPEntityID                    string                 `json:"sp_entity_id,omitempty"`
+	IDPEntityID                   string                 `json:"idp_entity_id,omitempty"`
+	NameIDFormat                  string                 `json:"name_id_format,omitempty"`
+	SSOEndpoint                   string                 `json:"sso_endpoint,omitempty"`
+	DefaultRelayState             string                 `json:"default_relay_state,omitempty"`
+	CustomAttributes              *[]SAMLAttributeConfig `json:"custom_attributes"`
+	NameIDTransformJsonata        string                 `json:"name_id_transform_jsonata,omitempty"`
+	SamlAttributeTransformJsonata string                 `json:"saml_attribute_transform_jsonata"`
 
 	// OIDC saas app
 	ClientID                     string                                     `json:"client_id,omitempty"`
@@ -242,7 +244,7 @@ type SaasApplication struct {
 	Scopes                       []string                                   `json:"scopes,omitempty"`
 	AppLauncherURL               string                                     `json:"app_launcher_url,omitempty"`
 	GroupFilterRegex             string                                     `json:"group_filter_regex,omitempty"`
-	CustomClaims                 []OIDCClaimConfig                          `json:"custom_claims,omitempty"`
+	CustomClaims                 *[]OIDCClaimConfig                         `json:"custom_claims"`
 	AllowPKCEWithoutClientSecret *bool                                      `json:"allow_pkce_without_client_secret,omitempty"`
 	RefreshTokenOptions          *RefreshTokenOptions                       `json:"refresh_token_options,omitempty"`
 	HybridAndImplicitOptions     *AccessApplicationHybridAndImplicitOptions `json:"hybrid_and_implicit_options,omitempty"`
@@ -250,11 +252,12 @@ type SaasApplication struct {
 }
 
 type AccessAppLauncherCustomization struct {
-	LandingPageDesign     AccessLandingPageDesign `json:"landing_page_design"`
-	LogoURL               string                  `json:"app_launcher_logo_url"`
-	HeaderBackgroundColor string                  `json:"header_bg_color"`
-	BackgroundColor       string                  `json:"bg_color"`
-	FooterLinks           []AccessFooterLink      `json:"footer_links"`
+	LandingPageDesign        AccessLandingPageDesign `json:"landing_page_design"`
+	LogoURL                  string                  `json:"app_launcher_logo_url"`
+	HeaderBackgroundColor    string                  `json:"header_bg_color"`
+	BackgroundColor          string                  `json:"bg_color"`
+	FooterLinks              []AccessFooterLink      `json:"footer_links"`
+	SkipAppLauncherLoginPage *bool                   `json:"skip_app_launcher_login_page,omitempty"`
 }
 
 type AccessFooterLink struct {
@@ -275,69 +278,71 @@ type ListAccessApplicationsParams struct {
 }
 
 type CreateAccessApplicationParams struct {
-	AllowedIdps              []string                       `json:"allowed_idps,omitempty"`
-	AppLauncherVisible       *bool                          `json:"app_launcher_visible,omitempty"`
-	AUD                      string                         `json:"aud,omitempty"`
-	AutoRedirectToIdentity   *bool                          `json:"auto_redirect_to_identity,omitempty"`
-	CorsHeaders              *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
-	CustomDenyMessage        string                         `json:"custom_deny_message,omitempty"`
-	CustomDenyURL            string                         `json:"custom_deny_url,omitempty"`
-	CustomNonIdentityDenyURL string                         `json:"custom_non_identity_deny_url,omitempty"`
-	Domain                   string                         `json:"domain"`
-	EnableBindingCookie      *bool                          `json:"enable_binding_cookie,omitempty"`
-	GatewayRules             []AccessApplicationGatewayRule `json:"gateway_rules,omitempty"`
-	HttpOnlyCookieAttribute  *bool                          `json:"http_only_cookie_attribute,omitempty"`
-	LogoURL                  string                         `json:"logo_url,omitempty"`
-	Name                     string                         `json:"name"`
-	PathCookieAttribute      *bool                          `json:"path_cookie_attribute,omitempty"`
-	PrivateAddress           string                         `json:"private_address"`
-	SaasApplication          *SaasApplication               `json:"saas_app,omitempty"`
-	SameSiteCookieAttribute  string                         `json:"same_site_cookie_attribute,omitempty"`
-	SelfHostedDomains        []string                       `json:"self_hosted_domains"`
-	ServiceAuth401Redirect   *bool                          `json:"service_auth_401_redirect,omitempty"`
-	SessionDuration          string                         `json:"session_duration,omitempty"`
-	SkipInterstitial         *bool                          `json:"skip_interstitial,omitempty"`
-	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
-	Type                     AccessApplicationType          `json:"type,omitempty"`
-	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
-	CustomPages              []string                       `json:"custom_pages,omitempty"`
-	Tags                     []string                       `json:"tags,omitempty"`
-	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
+	AllowedIdps              []string                             `json:"allowed_idps,omitempty"`
+	AppLauncherVisible       *bool                                `json:"app_launcher_visible,omitempty"`
+	AUD                      string                               `json:"aud,omitempty"`
+	AutoRedirectToIdentity   *bool                                `json:"auto_redirect_to_identity,omitempty"`
+	CorsHeaders              *AccessApplicationCorsHeaders        `json:"cors_headers,omitempty"`
+	CustomDenyMessage        string                               `json:"custom_deny_message,omitempty"`
+	CustomDenyURL            string                               `json:"custom_deny_url,omitempty"`
+	CustomNonIdentityDenyURL string                               `json:"custom_non_identity_deny_url,omitempty"`
+	Domain                   string                               `json:"domain"`
+	EnableBindingCookie      *bool                                `json:"enable_binding_cookie,omitempty"`
+	GatewayRules             []AccessApplicationGatewayRule       `json:"gateway_rules,omitempty"`
+	HttpOnlyCookieAttribute  *bool                                `json:"http_only_cookie_attribute,omitempty"`
+	LogoURL                  string                               `json:"logo_url,omitempty"`
+	Name                     string                               `json:"name"`
+	PathCookieAttribute      *bool                                `json:"path_cookie_attribute,omitempty"`
+	PrivateAddress           string                               `json:"private_address"`
+	SaasApplication          *SaasApplication                     `json:"saas_app,omitempty"`
+	SameSiteCookieAttribute  string                               `json:"same_site_cookie_attribute,omitempty"`
+	SelfHostedDomains        []string                             `json:"self_hosted_domains"`
+	ServiceAuth401Redirect   *bool                                `json:"service_auth_401_redirect,omitempty"`
+	SessionDuration          string                               `json:"session_duration,omitempty"`
+	SkipInterstitial         *bool                                `json:"skip_interstitial,omitempty"`
+	OptionsPreflightBypass   *bool                                `json:"options_preflight_bypass,omitempty"`
+	Type                     AccessApplicationType                `json:"type,omitempty"`
+	AllowAuthenticateViaWarp *bool                                `json:"allow_authenticate_via_warp,omitempty"`
+	CustomPages              []string                             `json:"custom_pages,omitempty"`
+	Tags                     []string                             `json:"tags,omitempty"`
+	SCIMConfig               *AccessApplicationSCIMConfig         `json:"scim_config,omitempty"`
+	TargetContexts           *[]AccessInfrastructureTargetContext `json:"target_criteria,omitempty"`
 	// List of policy ids to link to this application in ascending order of precedence.
 	Policies []string `json:"policies,omitempty"`
 	AccessAppLauncherCustomization
 }
 
 type UpdateAccessApplicationParams struct {
-	ID                       string                         `json:"id,omitempty"`
-	AllowedIdps              []string                       `json:"allowed_idps,omitempty"`
-	AppLauncherVisible       *bool                          `json:"app_launcher_visible,omitempty"`
-	AUD                      string                         `json:"aud,omitempty"`
-	AutoRedirectToIdentity   *bool                          `json:"auto_redirect_to_identity,omitempty"`
-	CorsHeaders              *AccessApplicationCorsHeaders  `json:"cors_headers,omitempty"`
-	CustomDenyMessage        string                         `json:"custom_deny_message,omitempty"`
-	CustomDenyURL            string                         `json:"custom_deny_url,omitempty"`
-	CustomNonIdentityDenyURL string                         `json:"custom_non_identity_deny_url,omitempty"`
-	Domain                   string                         `json:"domain"`
-	EnableBindingCookie      *bool                          `json:"enable_binding_cookie,omitempty"`
-	GatewayRules             []AccessApplicationGatewayRule `json:"gateway_rules,omitempty"`
-	HttpOnlyCookieAttribute  *bool                          `json:"http_only_cookie_attribute,omitempty"`
-	LogoURL                  string                         `json:"logo_url,omitempty"`
-	Name                     string                         `json:"name"`
-	PathCookieAttribute      *bool                          `json:"path_cookie_attribute,omitempty"`
-	PrivateAddress           string                         `json:"private_address"`
-	SaasApplication          *SaasApplication               `json:"saas_app,omitempty"`
-	SameSiteCookieAttribute  string                         `json:"same_site_cookie_attribute,omitempty"`
-	SelfHostedDomains        []string                       `json:"self_hosted_domains"`
-	ServiceAuth401Redirect   *bool                          `json:"service_auth_401_redirect,omitempty"`
-	SessionDuration          string                         `json:"session_duration,omitempty"`
-	SkipInterstitial         *bool                          `json:"skip_interstitial,omitempty"`
-	Type                     AccessApplicationType          `json:"type,omitempty"`
-	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
-	OptionsPreflightBypass   *bool                          `json:"options_preflight_bypass,omitempty"`
-	CustomPages              []string                       `json:"custom_pages,omitempty"`
-	Tags                     []string                       `json:"tags,omitempty"`
-	SCIMConfig               *AccessApplicationSCIMConfig   `json:"scim_config,omitempty"`
+	ID                       string                               `json:"id,omitempty"`
+	AllowedIdps              []string                             `json:"allowed_idps,omitempty"`
+	AppLauncherVisible       *bool                                `json:"app_launcher_visible,omitempty"`
+	AUD                      string                               `json:"aud,omitempty"`
+	AutoRedirectToIdentity   *bool                                `json:"auto_redirect_to_identity,omitempty"`
+	CorsHeaders              *AccessApplicationCorsHeaders        `json:"cors_headers,omitempty"`
+	CustomDenyMessage        string                               `json:"custom_deny_message,omitempty"`
+	CustomDenyURL            string                               `json:"custom_deny_url,omitempty"`
+	CustomNonIdentityDenyURL string                               `json:"custom_non_identity_deny_url,omitempty"`
+	Domain                   string                               `json:"domain"`
+	EnableBindingCookie      *bool                                `json:"enable_binding_cookie,omitempty"`
+	GatewayRules             []AccessApplicationGatewayRule       `json:"gateway_rules,omitempty"`
+	HttpOnlyCookieAttribute  *bool                                `json:"http_only_cookie_attribute,omitempty"`
+	LogoURL                  string                               `json:"logo_url,omitempty"`
+	Name                     string                               `json:"name"`
+	PathCookieAttribute      *bool                                `json:"path_cookie_attribute,omitempty"`
+	PrivateAddress           string                               `json:"private_address"`
+	SaasApplication          *SaasApplication                     `json:"saas_app,omitempty"`
+	SameSiteCookieAttribute  string                               `json:"same_site_cookie_attribute,omitempty"`
+	SelfHostedDomains        []string                             `json:"self_hosted_domains"`
+	ServiceAuth401Redirect   *bool                                `json:"service_auth_401_redirect,omitempty"`
+	SessionDuration          string                               `json:"session_duration,omitempty"`
+	SkipInterstitial         *bool                                `json:"skip_interstitial,omitempty"`
+	Type                     AccessApplicationType                `json:"type,omitempty"`
+	AllowAuthenticateViaWarp *bool                                `json:"allow_authenticate_via_warp,omitempty"`
+	OptionsPreflightBypass   *bool                                `json:"options_preflight_bypass,omitempty"`
+	CustomPages              []string                             `json:"custom_pages,omitempty"`
+	Tags                     []string                             `json:"tags,omitempty"`
+	SCIMConfig               *AccessApplicationSCIMConfig         `json:"scim_config,omitempty"`
+	TargetContexts           *[]AccessInfrastructureTargetContext `json:"target_criteria,omitempty"`
 	// List of policy ids to link to this application in ascending order of precedence.
 	// Can reference reusable policies and policies specific to this application.
 	// If this field is not provided, the existing policies will not be modified.
