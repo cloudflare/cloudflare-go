@@ -177,7 +177,7 @@ func TestSiteEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSiteGet(t *testing.T) {
+func TestSiteGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -194,7 +194,8 @@ func TestSiteGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.SiteGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			XMagicNewHcTarget: cloudflare.F(true),
 		},
 	)
 	if err != nil {

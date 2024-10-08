@@ -25,11 +25,36 @@ func (UnionString) ImplementsQueuesQueueDeleteResponseUnion()                {}
 func (UnionString) ImplementsQueuesConsumerDeleteResponseUnion()             {}
 func (UnionString) ImplementsSpectrumOriginPortUnionParam()                  {}
 func (UnionString) ImplementsSpectrumOriginPortUnion()                       {}
-func (UnionString) ImplementsRegistrarDomainUpdateResponseUnion()            {}
-func (UnionString) ImplementsRegistrarDomainListResponseResultUnion()        {}
-func (UnionString) ImplementsRegistrarDomainGetResponseUnion()               {}
-func (UnionString) ImplementsRulesListItemGetResponseUnion()                 {}
-func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()  {}
+func (UnionString) ImplementsMagicTransitCfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsMagicTransitCfInterconnectListResponseInterconnectsHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsMagicTransitCfInterconnectGetResponseInterconnectHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsMagicTransitCfInterconnectUpdateParamsHealthCheckTargetUnion()     {}
+func (UnionString) ImplementsMagicTransitGRETunnelNewResponseGRETunnelsHealthCheckTargetUnion() {}
+func (UnionString) ImplementsMagicTransitGRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsMagicTransitGRETunnelListResponseGRETunnelsHealthCheckTargetUnion() {}
+func (UnionString) ImplementsMagicTransitGRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsMagicTransitGRETunnelGetResponseGRETunnelHealthCheckTargetUnion()      {}
+func (UnionString) ImplementsMagicTransitGRETunnelUpdateParamsHealthCheckTargetUnion()              {}
+func (UnionString) ImplementsMagicTransitIPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion() {}
+func (UnionString) ImplementsMagicTransitIPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsMagicTransitIPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsMagicTransitIPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsMagicTransitIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion() {}
+func (UnionString) ImplementsMagicTransitIPSECTunnelNewParamsHealthCheckTargetUnion()              {}
+func (UnionString) ImplementsMagicTransitIPSECTunnelUpdateParamsHealthCheckTargetUnion()           {}
+func (UnionString) ImplementsRegistrarDomainUpdateResponseUnion()                                  {}
+func (UnionString) ImplementsRegistrarDomainListResponseResultUnion()                              {}
+func (UnionString) ImplementsRegistrarDomainGetResponseUnion()                                     {}
+func (UnionString) ImplementsRulesListItemGetResponseUnion()                                       {}
+func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                        {}
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {}

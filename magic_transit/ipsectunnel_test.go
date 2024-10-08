@@ -34,15 +34,18 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 		Name:               cloudflare.F("IPsec_1"),
 		CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 		Description:        cloudflare.F("Tunnel for ISP X"),
-		HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
-			Direction: cloudflare.F(magic_transit.HealthCheckDirectionUnidirectional),
+		HealthCheck: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheck{
+			Direction: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckDirectionUnidirectional),
 			Enabled:   cloudflare.F(true),
 			Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
-			Target:    cloudflare.F("203.0.113.1"),
-			Type:      cloudflare.F(magic_transit.HealthCheckTypeReply),
+			Target: cloudflare.F[magic_transit.IPSECTunnelNewParamsHealthCheckTargetUnion](magic_transit.IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget{
+				Saved: cloudflare.F("203.0.113.1"),
+			}),
+			Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
 		}),
-		PSK:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
-		ReplayProtection: cloudflare.F(false),
+		PSK:               cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
+		ReplayProtection:  cloudflare.F(false),
+		XMagicNewHcTarget: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -76,15 +79,18 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 			Name:               cloudflare.F("IPsec_1"),
 			CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 			Description:        cloudflare.F("Tunnel for ISP X"),
-			HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
-				Direction: cloudflare.F(magic_transit.HealthCheckDirectionUnidirectional),
+			HealthCheck: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheck{
+				Direction: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckDirectionUnidirectional),
 				Enabled:   cloudflare.F(true),
 				Rate:      cloudflare.F(magic_transit.HealthCheckRateLow),
-				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(magic_transit.HealthCheckTypeReply),
+				Target: cloudflare.F[magic_transit.IPSECTunnelUpdateParamsHealthCheckTargetUnion](magic_transit.IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget{
+					Saved: cloudflare.F("203.0.113.1"),
+				}),
+				Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
 			}),
-			PSK:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
-			ReplayProtection: cloudflare.F(false),
+			PSK:               cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
+			ReplayProtection:  cloudflare.F(false),
+			XMagicNewHcTarget: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -96,7 +102,7 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestIPSECTunnelList(t *testing.T) {
+func TestIPSECTunnelListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -110,7 +116,8 @@ func TestIPSECTunnelList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.IPSECTunnels.List(context.TODO(), magic_transit.IPSECTunnelListParams{
-		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		XMagicNewHcTarget: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -121,7 +128,7 @@ func TestIPSECTunnelList(t *testing.T) {
 	}
 }
 
-func TestIPSECTunnelDelete(t *testing.T) {
+func TestIPSECTunnelDeleteWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -138,7 +145,8 @@ func TestIPSECTunnelDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.IPSECTunnelDeleteParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			XMagicNewHcTarget: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -150,7 +158,7 @@ func TestIPSECTunnelDelete(t *testing.T) {
 	}
 }
 
-func TestIPSECTunnelGet(t *testing.T) {
+func TestIPSECTunnelGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -167,7 +175,8 @@ func TestIPSECTunnelGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.IPSECTunnelGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			XMagicNewHcTarget: cloudflare.F(true),
 		},
 	)
 	if err != nil {
