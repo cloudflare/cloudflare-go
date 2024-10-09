@@ -174,7 +174,8 @@ type DLPProfileCustomNewParamsProfile struct {
 	Entries param.Field[[]DLPProfileCustomNewParamsProfilesEntryUnion] `json:"entries,required"`
 	Name    param.Field[string]                                        `json:"name,required"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount param.Field[int64] `json:"allowed_match_count"`
+	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
+	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
@@ -431,9 +432,10 @@ func (r DLPProfileCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 type DLPProfileCustomUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Custom entries from this profile
-	Entries           param.Field[[]DLPProfileCustomUpdateParamsEntryUnion] `json:"entries,required"`
-	Name              param.Field[string]                                   `json:"name,required"`
-	AllowedMatchCount param.Field[int64]                                    `json:"allowed_match_count"`
+	Entries             param.Field[[]DLPProfileCustomUpdateParamsEntryUnion] `json:"entries,required"`
+	Name                param.Field[string]                                   `json:"name,required"`
+	AllowedMatchCount   param.Field[int64]                                    `json:"allowed_match_count"`
+	ConfidenceThreshold param.Field[string]                                   `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
