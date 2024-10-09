@@ -50,8 +50,8 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 							Dataset: cloudflare.F("api_analytics"),
 						},
 					}),
-					Browsers: cloudflare.F(map[string]interface{}{
-						"BROWSER": "bar",
+					Browsers: cloudflare.F(map[string]pages.ProjectDeploymentConfigsPreviewBrowserParam{
+						"BROWSER": {},
 					}),
 					CompatibilityDate:  cloudflare.F("2022-01-01"),
 					CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
@@ -124,8 +124,8 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 							Dataset: cloudflare.F("api_analytics"),
 						},
 					}),
-					Browsers: cloudflare.F(map[string]interface{}{
-						"BROWSER": "bar",
+					Browsers: cloudflare.F(map[string]pages.ProjectDeploymentConfigsProductionBrowserParam{
+						"BROWSER": {},
 					}),
 					CompatibilityDate:  cloudflare.F("2022-01-01"),
 					CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
@@ -294,8 +294,8 @@ func TestProjectEditWithOptionalParams(t *testing.T) {
 								Dataset: cloudflare.F("api_analytics"),
 							},
 						}),
-						Browsers: cloudflare.F(map[string]interface{}{
-							"BROWSER": "bar",
+						Browsers: cloudflare.F(map[string]pages.ProjectDeploymentConfigsPreviewBrowserParam{
+							"BROWSER": {},
 						}),
 						CompatibilityDate:  cloudflare.F("2022-01-01"),
 						CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
@@ -368,8 +368,8 @@ func TestProjectEditWithOptionalParams(t *testing.T) {
 								Dataset: cloudflare.F("api_analytics"),
 							},
 						}),
-						Browsers: cloudflare.F(map[string]interface{}{
-							"BROWSER": "bar",
+						Browsers: cloudflare.F(map[string]pages.ProjectDeploymentConfigsProductionBrowserParam{
+							"BROWSER": {},
 						}),
 						CompatibilityDate:  cloudflare.F("2022-01-01"),
 						CompatibilityFlags: cloudflare.F([]string{"url_standard"}),
