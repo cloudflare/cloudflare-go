@@ -1,4 +1,6 @@
-## 0.107.0 (Unreleased)
+## 0.108.0 (Unreleased)
+
+## 0.107.0 (October 9th, 2024)
 
 ENHANCEMENTS:
 
