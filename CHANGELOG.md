@@ -1,5 +1,14 @@
 ## 0.107.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* device_posture_rule: support operational_state for sentinelone_s2s posture rule ([#3234](https://github.com/cloudflare/cloudflare-go/issues/3234))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.29.0 to 0.30.0 ([#3336](https://github.com/cloudflare/cloudflare-go/issues/3336))
+* deps: bumps golang.org/x/time from 0.6.0 to 0.7.0 ([#3321](https://github.com/cloudflare/cloudflare-go/issues/3321))
+
 ## 0.106.0 (September 27th, 2024)
 
 ENHANCEMENTS:
