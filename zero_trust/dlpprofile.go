@@ -136,7 +136,8 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 
 type Profile struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount int64 `json:"allowed_match_count"`
+	AllowedMatchCount   int64                      `json:"allowed_match_count"`
+	ConfidenceThreshold ProfileConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
@@ -163,19 +164,20 @@ type Profile struct {
 
 // profileJSON contains the JSON metadata for the struct [Profile]
 type profileJSON struct {
-	AllowedMatchCount apijson.Field
-	ContextAwareness  apijson.Field
-	CreatedAt         apijson.Field
-	Description       apijson.Field
-	Entries           apijson.Field
-	ID                apijson.Field
-	Name              apijson.Field
-	OCREnabled        apijson.Field
-	UpdatedAt         apijson.Field
-	Type              apijson.Field
-	OpenAccess        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	AllowedMatchCount   apijson.Field
+	ConfidenceThreshold apijson.Field
+	ContextAwareness    apijson.Field
+	CreatedAt           apijson.Field
+	Description         apijson.Field
+	Entries             apijson.Field
+	ID                  apijson.Field
+	Name                apijson.Field
+	OCREnabled          apijson.Field
+	UpdatedAt           apijson.Field
+	Type                apijson.Field
+	OpenAccess          apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r profileJSON) RawJSON() string {
@@ -244,7 +246,8 @@ type ProfileCustom struct {
 	OCREnabled bool              `json:"ocr_enabled,required"`
 	Type       ProfileCustomType `json:"type,required"`
 	// When the profile was lasted updated
-	UpdatedAt time.Time `json:"updated_at,required" format:"date-time"`
+	UpdatedAt           time.Time                        `json:"updated_at,required" format:"date-time"`
+	ConfidenceThreshold ProfileCustomConfidenceThreshold `json:"confidence_threshold"`
 	// The description of the profile
 	Description string            `json:"description,nullable"`
 	JSON        profileCustomJSON `json:"-"`
@@ -252,18 +255,19 @@ type ProfileCustom struct {
 
 // profileCustomJSON contains the JSON metadata for the struct [ProfileCustom]
 type profileCustomJSON struct {
-	ID                apijson.Field
-	AllowedMatchCount apijson.Field
-	ContextAwareness  apijson.Field
-	CreatedAt         apijson.Field
-	Entries           apijson.Field
-	Name              apijson.Field
-	OCREnabled        apijson.Field
-	Type              apijson.Field
-	UpdatedAt         apijson.Field
-	Description       apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	ID                  apijson.Field
+	AllowedMatchCount   apijson.Field
+	ContextAwareness    apijson.Field
+	CreatedAt           apijson.Field
+	Entries             apijson.Field
+	Name                apijson.Field
+	OCREnabled          apijson.Field
+	Type                apijson.Field
+	UpdatedAt           apijson.Field
+	ConfidenceThreshold apijson.Field
+	Description         apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *ProfileCustom) UnmarshalJSON(data []byte) (err error) {
@@ -285,7 +289,10 @@ type ProfileCustomEntry struct {
 	ProfileID string                   `json:"profile_id,nullable" format:"uuid"`
 	UpdatedAt time.Time                `json:"updated_at" format:"date-time"`
 	Type      ProfileCustomEntriesType `json:"type,required"`
-	Secret    bool                     `json:"secret"`
+	// This field can have the runtime type of
+	// [ProfileCustomEntriesPredefinedConfidence].
+	Confidence interface{} `json:"confidence,required"`
+	Secret     bool        `json:"secret"`
 	// This field can have the runtime type of [interface{}].
 	WordList interface{}            `json:"word_list,required"`
 	JSON     profileCustomEntryJSON `json:"-"`
@@ -303,6 +310,7 @@ type profileCustomEntryJSON struct {
 	ProfileID   apijson.Field
 	UpdatedAt   apijson.Field
 	Type        apijson.Field
+	Confidence  apijson.Field
 	Secret      apijson.Field
 	WordList    apijson.Field
 	raw         string
@@ -427,18 +435,20 @@ func (r ProfileCustomEntriesCustomType) IsKnown() bool {
 }
 
 type ProfileCustomEntriesPredefined struct {
-	ID        string                             `json:"id,required" format:"uuid"`
-	Enabled   bool                               `json:"enabled,required"`
-	Name      string                             `json:"name,required"`
-	Type      ProfileCustomEntriesPredefinedType `json:"type,required"`
-	ProfileID string                             `json:"profile_id,nullable" format:"uuid"`
-	JSON      profileCustomEntriesPredefinedJSON `json:"-"`
+	ID         string                                   `json:"id,required" format:"uuid"`
+	Confidence ProfileCustomEntriesPredefinedConfidence `json:"confidence,required"`
+	Enabled    bool                                     `json:"enabled,required"`
+	Name       string                                   `json:"name,required"`
+	Type       ProfileCustomEntriesPredefinedType       `json:"type,required"`
+	ProfileID  string                                   `json:"profile_id,nullable" format:"uuid"`
+	JSON       profileCustomEntriesPredefinedJSON       `json:"-"`
 }
 
 // profileCustomEntriesPredefinedJSON contains the JSON metadata for the struct
 // [ProfileCustomEntriesPredefined]
 type profileCustomEntriesPredefinedJSON struct {
 	ID          apijson.Field
+	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -456,6 +466,30 @@ func (r profileCustomEntriesPredefinedJSON) RawJSON() string {
 }
 
 func (r ProfileCustomEntriesPredefined) implementsZeroTrustProfileCustomEntry() {}
+
+type ProfileCustomEntriesPredefinedConfidence struct {
+	// Indicates whether this entry can be made more or less sensitive by setting a
+	// confidence threshold. Profiles that use an entry with `available` set to true
+	// can use confidence thresholds
+	Available bool                                         `json:"available,required"`
+	JSON      profileCustomEntriesPredefinedConfidenceJSON `json:"-"`
+}
+
+// profileCustomEntriesPredefinedConfidenceJSON contains the JSON metadata for the
+// struct [ProfileCustomEntriesPredefinedConfidence]
+type profileCustomEntriesPredefinedConfidenceJSON struct {
+	Available   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileCustomEntriesPredefinedConfidence) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileCustomEntriesPredefinedConfidenceJSON) RawJSON() string {
+	return r.raw
+}
 
 type ProfileCustomEntriesPredefinedType string
 
@@ -652,14 +686,32 @@ func (r ProfileCustomType) IsKnown() bool {
 	return false
 }
 
+type ProfileCustomConfidenceThreshold string
+
+const (
+	ProfileCustomConfidenceThresholdLow      ProfileCustomConfidenceThreshold = "low"
+	ProfileCustomConfidenceThresholdMedium   ProfileCustomConfidenceThreshold = "medium"
+	ProfileCustomConfidenceThresholdHigh     ProfileCustomConfidenceThreshold = "high"
+	ProfileCustomConfidenceThresholdVeryHigh ProfileCustomConfidenceThreshold = "very_high"
+)
+
+func (r ProfileCustomConfidenceThreshold) IsKnown() bool {
+	switch r {
+	case ProfileCustomConfidenceThresholdLow, ProfileCustomConfidenceThresholdMedium, ProfileCustomConfidenceThresholdHigh, ProfileCustomConfidenceThresholdVeryHigh:
+		return true
+	}
+	return false
+}
+
 type ProfilePredefined struct {
 	// The id of the predefined profile (uuid)
 	ID                string                   `json:"id,required" format:"uuid"`
 	AllowedMatchCount int64                    `json:"allowed_match_count,required"`
 	Entries           []ProfilePredefinedEntry `json:"entries,required"`
 	// The name of the predefined profile
-	Name string                `json:"name,required"`
-	Type ProfilePredefinedType `json:"type,required"`
+	Name                string                               `json:"name,required"`
+	Type                ProfilePredefinedType                `json:"type,required"`
+	ConfidenceThreshold ProfilePredefinedConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
@@ -672,16 +724,17 @@ type ProfilePredefined struct {
 // profilePredefinedJSON contains the JSON metadata for the struct
 // [ProfilePredefined]
 type profilePredefinedJSON struct {
-	ID                apijson.Field
-	AllowedMatchCount apijson.Field
-	Entries           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	ContextAwareness  apijson.Field
-	OCREnabled        apijson.Field
-	OpenAccess        apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	ID                  apijson.Field
+	AllowedMatchCount   apijson.Field
+	Entries             apijson.Field
+	Name                apijson.Field
+	Type                apijson.Field
+	ConfidenceThreshold apijson.Field
+	ContextAwareness    apijson.Field
+	OCREnabled          apijson.Field
+	OpenAccess          apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
 func (r *ProfilePredefined) UnmarshalJSON(data []byte) (err error) {
@@ -703,7 +756,10 @@ type ProfilePredefinedEntry struct {
 	ProfileID string                       `json:"profile_id,nullable" format:"uuid"`
 	UpdatedAt time.Time                    `json:"updated_at" format:"date-time"`
 	Type      ProfilePredefinedEntriesType `json:"type,required"`
-	Secret    bool                         `json:"secret"`
+	// This field can have the runtime type of
+	// [ProfilePredefinedEntriesPredefinedConfidence].
+	Confidence interface{} `json:"confidence,required"`
+	Secret     bool        `json:"secret"`
 	// This field can have the runtime type of [interface{}].
 	WordList interface{}                `json:"word_list,required"`
 	JSON     profilePredefinedEntryJSON `json:"-"`
@@ -721,6 +777,7 @@ type profilePredefinedEntryJSON struct {
 	ProfileID   apijson.Field
 	UpdatedAt   apijson.Field
 	Type        apijson.Field
+	Confidence  apijson.Field
 	Secret      apijson.Field
 	WordList    apijson.Field
 	raw         string
@@ -846,18 +903,20 @@ func (r ProfilePredefinedEntriesCustomType) IsKnown() bool {
 }
 
 type ProfilePredefinedEntriesPredefined struct {
-	ID        string                                 `json:"id,required" format:"uuid"`
-	Enabled   bool                                   `json:"enabled,required"`
-	Name      string                                 `json:"name,required"`
-	Type      ProfilePredefinedEntriesPredefinedType `json:"type,required"`
-	ProfileID string                                 `json:"profile_id,nullable" format:"uuid"`
-	JSON      profilePredefinedEntriesPredefinedJSON `json:"-"`
+	ID         string                                       `json:"id,required" format:"uuid"`
+	Confidence ProfilePredefinedEntriesPredefinedConfidence `json:"confidence,required"`
+	Enabled    bool                                         `json:"enabled,required"`
+	Name       string                                       `json:"name,required"`
+	Type       ProfilePredefinedEntriesPredefinedType       `json:"type,required"`
+	ProfileID  string                                       `json:"profile_id,nullable" format:"uuid"`
+	JSON       profilePredefinedEntriesPredefinedJSON       `json:"-"`
 }
 
 // profilePredefinedEntriesPredefinedJSON contains the JSON metadata for the struct
 // [ProfilePredefinedEntriesPredefined]
 type profilePredefinedEntriesPredefinedJSON struct {
 	ID          apijson.Field
+	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -875,6 +934,30 @@ func (r profilePredefinedEntriesPredefinedJSON) RawJSON() string {
 }
 
 func (r ProfilePredefinedEntriesPredefined) implementsZeroTrustProfilePredefinedEntry() {}
+
+type ProfilePredefinedEntriesPredefinedConfidence struct {
+	// Indicates whether this entry can be made more or less sensitive by setting a
+	// confidence threshold. Profiles that use an entry with `available` set to true
+	// can use confidence thresholds
+	Available bool                                             `json:"available,required"`
+	JSON      profilePredefinedEntriesPredefinedConfidenceJSON `json:"-"`
+}
+
+// profilePredefinedEntriesPredefinedConfidenceJSON contains the JSON metadata for
+// the struct [ProfilePredefinedEntriesPredefinedConfidence]
+type profilePredefinedEntriesPredefinedConfidenceJSON struct {
+	Available   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfilePredefinedEntriesPredefinedConfidence) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profilePredefinedEntriesPredefinedConfidenceJSON) RawJSON() string {
+	return r.raw
+}
 
 type ProfilePredefinedEntriesPredefinedType string
 
@@ -1071,6 +1154,23 @@ func (r ProfilePredefinedType) IsKnown() bool {
 	return false
 }
 
+type ProfilePredefinedConfidenceThreshold string
+
+const (
+	ProfilePredefinedConfidenceThresholdLow      ProfilePredefinedConfidenceThreshold = "low"
+	ProfilePredefinedConfidenceThresholdMedium   ProfilePredefinedConfidenceThreshold = "medium"
+	ProfilePredefinedConfidenceThresholdHigh     ProfilePredefinedConfidenceThreshold = "high"
+	ProfilePredefinedConfidenceThresholdVeryHigh ProfilePredefinedConfidenceThreshold = "very_high"
+)
+
+func (r ProfilePredefinedConfidenceThreshold) IsKnown() bool {
+	switch r {
+	case ProfilePredefinedConfidenceThresholdLow, ProfilePredefinedConfidenceThresholdMedium, ProfilePredefinedConfidenceThresholdHigh, ProfilePredefinedConfidenceThresholdVeryHigh:
+		return true
+	}
+	return false
+}
+
 type ProfileIntegration struct {
 	ID        string                    `json:"id,required" format:"uuid"`
 	CreatedAt time.Time                 `json:"created_at,required" format:"date-time"`
@@ -1116,7 +1216,10 @@ type ProfileIntegrationEntry struct {
 	ProfileID string                        `json:"profile_id,nullable" format:"uuid"`
 	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
 	Type      ProfileIntegrationEntriesType `json:"type,required"`
-	Secret    bool                          `json:"secret"`
+	// This field can have the runtime type of
+	// [ProfileIntegrationEntriesPredefinedConfidence].
+	Confidence interface{} `json:"confidence,required"`
+	Secret     bool        `json:"secret"`
 	// This field can have the runtime type of [interface{}].
 	WordList interface{}                 `json:"word_list,required"`
 	JSON     profileIntegrationEntryJSON `json:"-"`
@@ -1134,6 +1237,7 @@ type profileIntegrationEntryJSON struct {
 	ProfileID   apijson.Field
 	UpdatedAt   apijson.Field
 	Type        apijson.Field
+	Confidence  apijson.Field
 	Secret      apijson.Field
 	WordList    apijson.Field
 	raw         string
@@ -1259,18 +1363,20 @@ func (r ProfileIntegrationEntriesCustomType) IsKnown() bool {
 }
 
 type ProfileIntegrationEntriesPredefined struct {
-	ID        string                                  `json:"id,required" format:"uuid"`
-	Enabled   bool                                    `json:"enabled,required"`
-	Name      string                                  `json:"name,required"`
-	Type      ProfileIntegrationEntriesPredefinedType `json:"type,required"`
-	ProfileID string                                  `json:"profile_id,nullable" format:"uuid"`
-	JSON      profileIntegrationEntriesPredefinedJSON `json:"-"`
+	ID         string                                        `json:"id,required" format:"uuid"`
+	Confidence ProfileIntegrationEntriesPredefinedConfidence `json:"confidence,required"`
+	Enabled    bool                                          `json:"enabled,required"`
+	Name       string                                        `json:"name,required"`
+	Type       ProfileIntegrationEntriesPredefinedType       `json:"type,required"`
+	ProfileID  string                                        `json:"profile_id,nullable" format:"uuid"`
+	JSON       profileIntegrationEntriesPredefinedJSON       `json:"-"`
 }
 
 // profileIntegrationEntriesPredefinedJSON contains the JSON metadata for the
 // struct [ProfileIntegrationEntriesPredefined]
 type profileIntegrationEntriesPredefinedJSON struct {
 	ID          apijson.Field
+	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -1288,6 +1394,30 @@ func (r profileIntegrationEntriesPredefinedJSON) RawJSON() string {
 }
 
 func (r ProfileIntegrationEntriesPredefined) implementsZeroTrustProfileIntegrationEntry() {}
+
+type ProfileIntegrationEntriesPredefinedConfidence struct {
+	// Indicates whether this entry can be made more or less sensitive by setting a
+	// confidence threshold. Profiles that use an entry with `available` set to true
+	// can use confidence thresholds
+	Available bool                                              `json:"available,required"`
+	JSON      profileIntegrationEntriesPredefinedConfidenceJSON `json:"-"`
+}
+
+// profileIntegrationEntriesPredefinedConfidenceJSON contains the JSON metadata for
+// the struct [ProfileIntegrationEntriesPredefinedConfidence]
+type profileIntegrationEntriesPredefinedConfidenceJSON struct {
+	Available   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProfileIntegrationEntriesPredefinedConfidence) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r profileIntegrationEntriesPredefinedConfidenceJSON) RawJSON() string {
+	return r.raw
+}
 
 type ProfileIntegrationEntriesPredefinedType string
 
@@ -1479,6 +1609,23 @@ const (
 func (r ProfileIntegrationType) IsKnown() bool {
 	switch r {
 	case ProfileIntegrationTypeIntegration:
+		return true
+	}
+	return false
+}
+
+type ProfileConfidenceThreshold string
+
+const (
+	ProfileConfidenceThresholdLow      ProfileConfidenceThreshold = "low"
+	ProfileConfidenceThresholdMedium   ProfileConfidenceThreshold = "medium"
+	ProfileConfidenceThresholdHigh     ProfileConfidenceThreshold = "high"
+	ProfileConfidenceThresholdVeryHigh ProfileConfidenceThreshold = "very_high"
+)
+
+func (r ProfileConfidenceThreshold) IsKnown() bool {
+	switch r {
+	case ProfileConfidenceThresholdLow, ProfileConfidenceThresholdMedium, ProfileConfidenceThresholdHigh, ProfileConfidenceThresholdVeryHigh:
 		return true
 	}
 	return false
