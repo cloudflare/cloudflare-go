@@ -82,9 +82,9 @@ func (r v4PagePaginationJSON) RawJSON() string {
 	return r.raw
 }
 
-// NextPage returns the next page as defined by this pagination style. When there
-// is no next page, this function will return a 'nil' for the page value, but will
-// not return an error
+// GetNextPage returns the next page as defined by this pagination style. When
+// there is no next page, this function will return a 'nil' for the page value, but
+// will not return an error
 func (r *V4PagePagination[T]) GetNextPage() (res *V4PagePagination[T], err error) {
 	u := r.cfg.Request.URL
 	currentPage, err := strconv.Atoi(u.Query().Get("page"))
@@ -206,9 +206,9 @@ func (r v4PagePaginationArrayJSON) RawJSON() string {
 	return r.raw
 }
 
-// NextPage returns the next page as defined by this pagination style. When there
-// is no next page, this function will return a 'nil' for the page value, but will
-// not return an error
+// GetNextPage returns the next page as defined by this pagination style. When
+// there is no next page, this function will return a 'nil' for the page value, but
+// will not return an error
 func (r *V4PagePaginationArray[T]) GetNextPage() (res *V4PagePaginationArray[T], err error) {
 	u := r.cfg.Request.URL
 	currentPage, err := strconv.Atoi(u.Query().Get("page"))
@@ -332,9 +332,9 @@ func (r cursorPaginationJSON) RawJSON() string {
 	return r.raw
 }
 
-// NextPage returns the next page as defined by this pagination style. When there
-// is no next page, this function will return a 'nil' for the page value, but will
-// not return an error
+// GetNextPage returns the next page as defined by this pagination style. When
+// there is no next page, this function will return a 'nil' for the page value, but
+// will not return an error
 func (r *CursorPagination[T]) GetNextPage() (res *CursorPagination[T], err error) {
 	next := r.ResultInfo.Cursor
 	if len(next) == 0 {
@@ -455,9 +455,9 @@ func (r cursorLimitPaginationJSON) RawJSON() string {
 	return r.raw
 }
 
-// NextPage returns the next page as defined by this pagination style. When there
-// is no next page, this function will return a 'nil' for the page value, but will
-// not return an error
+// GetNextPage returns the next page as defined by this pagination style. When
+// there is no next page, this function will return a 'nil' for the page value, but
+// will not return an error
 func (r *CursorLimitPagination[T]) GetNextPage() (res *CursorLimitPagination[T], err error) {
 	next := r.ResultInfo.Cursor
 	if len(next) == 0 {
@@ -550,9 +550,9 @@ func (r singlePageJSON) RawJSON() string {
 	return r.raw
 }
 
-// NextPage returns the next page as defined by this pagination style. When there
-// is no next page, this function will return a 'nil' for the page value, but will
-// not return an error
+// GetNextPage returns the next page as defined by this pagination style. When
+// there is no next page, this function will return a 'nil' for the page value, but
+// will not return an error
 func (r *SinglePage[T]) GetNextPage() (res *SinglePage[T], err error) {
 	// This page represents a response that isn't actually paginated at the API level
 	// so there will never be a next page.
