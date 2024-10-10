@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RiskScoringIntegrationService contains methods and other services that help with
@@ -532,7 +532,7 @@ type RiskScoringIntegrationDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RiskScoringIntegrationDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  RiskScoringIntegrationDeleteResponse                `json:"result,nullable"`
+	Result  RiskScoringIntegrationDeleteResponse                `json:"result"`
 	JSON    riskScoringIntegrationDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

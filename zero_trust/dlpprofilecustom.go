@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DLPProfileCustomService contains methods and other services that help with
@@ -174,7 +174,8 @@ type DLPProfileCustomNewParamsProfile struct {
 	Entries param.Field[[]DLPProfileCustomNewParamsProfilesEntryUnion] `json:"entries,required"`
 	Name    param.Field[string]                                        `json:"name,required"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount param.Field[int64] `json:"allowed_match_count"`
+	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
+	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
@@ -431,9 +432,10 @@ func (r DLPProfileCustomNewResponseEnvelopeSuccess) IsKnown() bool {
 type DLPProfileCustomUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Custom entries from this profile
-	Entries           param.Field[[]DLPProfileCustomUpdateParamsEntryUnion] `json:"entries,required"`
-	Name              param.Field[string]                                   `json:"name,required"`
-	AllowedMatchCount param.Field[int64]                                    `json:"allowed_match_count"`
+	Entries             param.Field[[]DLPProfileCustomUpdateParamsEntryUnion] `json:"entries,required"`
+	Name                param.Field[string]                                   `json:"name,required"`
+	AllowedMatchCount   param.Field[int64]                                    `json:"allowed_match_count"`
+	ConfidenceThreshold param.Field[string]                                   `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
@@ -667,7 +669,7 @@ type DLPProfileCustomDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DLPProfileCustomDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  DLPProfileCustomDeleteResponse                `json:"result,nullable"`
+	Result  DLPProfileCustomDeleteResponse                `json:"result"`
 	JSON    dlpProfileCustomDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // OrganizationService contains methods and other services that help with
@@ -24,6 +24,7 @@ import (
 // the [NewOrganizationService] method instead.
 type OrganizationService struct {
 	Options []option.RequestOption
+	DOH     *OrganizationDOHService
 }
 
 // NewOrganizationService generates a new service that applies the given options to
@@ -32,6 +33,7 @@ type OrganizationService struct {
 func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationService) {
 	r = &OrganizationService{}
 	r.Options = opts
+	r.DOH = NewOrganizationDOHService(opts...)
 	return
 }
 

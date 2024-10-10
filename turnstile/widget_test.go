@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/turnstile"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/turnstile"
 )
 
 func TestWidgetNewWithOptionalParams(t *testing.T) {
@@ -38,6 +38,7 @@ func TestWidgetNewWithOptionalParams(t *testing.T) {
 		PerPage:        cloudflare.F(5.000000),
 		BotFightMode:   cloudflare.F(false),
 		ClearanceLevel: cloudflare.F(turnstile.WidgetNewParamsClearanceLevelNoClearance),
+		EphemeralID:    cloudflare.F(false),
 		Offlabel:       cloudflare.F(false),
 		Region:         cloudflare.F(turnstile.WidgetNewParamsRegionWorld),
 	})
@@ -73,6 +74,7 @@ func TestWidgetUpdateWithOptionalParams(t *testing.T) {
 			Name:           cloudflare.F("blog.cloudflare.com login form"),
 			BotFightMode:   cloudflare.F(false),
 			ClearanceLevel: cloudflare.F(turnstile.WidgetUpdateParamsClearanceLevelNoClearance),
+			EphemeralID:    cloudflare.F(false),
 			Offlabel:       cloudflare.F(false),
 		},
 	)

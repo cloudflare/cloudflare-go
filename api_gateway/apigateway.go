@@ -3,7 +3,7 @@
 package api_gateway
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // APIGatewayService contains methods and other services that help with interacting
@@ -13,13 +13,14 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAPIGatewayService] method instead.
 type APIGatewayService struct {
-	Options        []option.RequestOption
-	Configurations *ConfigurationService
-	Discovery      *DiscoveryService
-	Operations     *OperationService
-	Schemas        *SchemaService
-	Settings       *SettingService
-	UserSchemas    *UserSchemaService
+	Options            []option.RequestOption
+	Configurations     *ConfigurationService
+	Discovery          *DiscoveryService
+	Operations         *OperationService
+	Schemas            *SchemaService
+	Settings           *SettingService
+	UserSchemas        *UserSchemaService
+	ExpressionTemplate *ExpressionTemplateService
 }
 
 // NewAPIGatewayService generates a new service that applies the given options to
@@ -34,5 +35,6 @@ func NewAPIGatewayService(opts ...option.RequestOption) (r *APIGatewayService) {
 	r.Schemas = NewSchemaService(opts...)
 	r.Settings = NewSettingService(opts...)
 	r.UserSchemas = NewUserSchemaService(opts...)
+	r.ExpressionTemplate = NewExpressionTemplateService(opts...)
 	return
 }

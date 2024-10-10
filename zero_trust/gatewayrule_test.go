@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
@@ -115,6 +115,9 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
 			PayloadLog: cloudflare.F(zero_trust.RuleSettingPayloadLogParam{
 				Enabled: cloudflare.F(true),
+			}),
+			Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
+				FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe, zero_trust.RuleSettingQuarantineFileTypePdf, zero_trust.RuleSettingQuarantineFileTypeDoc}),
 			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
 			UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
@@ -246,6 +249,9 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
 				PayloadLog: cloudflare.F(zero_trust.RuleSettingPayloadLogParam{
 					Enabled: cloudflare.F(true),
+				}),
+				Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
+					FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe, zero_trust.RuleSettingQuarantineFileTypePdf, zero_trust.RuleSettingQuarantineFileTypeDoc}),
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
 				UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
