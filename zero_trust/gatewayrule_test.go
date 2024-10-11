@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
@@ -34,9 +35,13 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		Description:   cloudflare.F("Block bad websites based on their host name."),
 		DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 		Enabled:       cloudflare.F(true),
-		Filters:       cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
-		Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
-		Precedence:    cloudflare.F(int64(0)),
+		Expiration: cloudflare.F(zero_trust.GatewayRuleNewParamsExpiration{
+			ExpiresAt: cloudflare.F(time.Now()),
+			Duration:  cloudflare.F(int64(10)),
+		}),
+		Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
+		Identity:   cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
+		Precedence: cloudflare.F(int64(0)),
 		RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
 			AddHeaders: cloudflare.F(map[string]string{
 				"foo": "string",
@@ -168,9 +173,13 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 			Description:   cloudflare.F("Block bad websites based on their host name."),
 			DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 			Enabled:       cloudflare.F(true),
-			Filters:       cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
-			Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
-			Precedence:    cloudflare.F(int64(0)),
+			Expiration: cloudflare.F(zero_trust.GatewayRuleUpdateParamsExpiration{
+				ExpiresAt: cloudflare.F(time.Now()),
+				Duration:  cloudflare.F(int64(10)),
+			}),
+			Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
+			Identity:   cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
+			Precedence: cloudflare.F(int64(0)),
 			RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
 				AddHeaders: cloudflare.F(map[string]string{
 					"foo": "string",
