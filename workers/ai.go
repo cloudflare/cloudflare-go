@@ -666,9 +666,6 @@ type AIRunParamsBodyPrompt struct {
 	Prompt param.Field[string] `json:"prompt,required"`
 	// Decreases the likelihood of the model repeating the same lines verbatim.
 	FrequencyPenalty param.Field[float64] `json:"frequency_penalty"`
-	// An array of integers that represent the image data constrained to 8-bit unsigned
-	// integer values
-	Image param.Field[[]float64] `json:"image"`
 	// Name of the LoRA (Low-Rank Adaptation) model to fine-tune the base model.
 	Lora param.Field[string] `json:"lora"`
 	// The maximum number of tokens to generate in the response.
@@ -710,9 +707,6 @@ type AIRunParamsBodyMessages struct {
 	// Decreases the likelihood of the model repeating the same lines verbatim.
 	FrequencyPenalty param.Field[float64]                           `json:"frequency_penalty"`
 	Functions        param.Field[[]AIRunParamsBodyMessagesFunction] `json:"functions"`
-	// An array of integers that represent the image data constrained to 8-bit unsigned
-	// integer values
-	Image param.Field[[]float64] `json:"image"`
 	// The maximum number of tokens to generate in the response.
 	MaxTokens param.Field[int64] `json:"max_tokens"`
 	// Increases the likelihood of the model introducing new topics.
