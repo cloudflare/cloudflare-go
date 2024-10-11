@@ -276,6 +276,11 @@ type GatewayRule struct {
 	DevicePosture string `json:"device_posture"`
 	// True if the rule is enabled.
 	Enabled bool `json:"enabled"`
+	// The expiration time stamp and default duration of a DNS policy. Takes precedence
+	// over the policy's `schedule` configuration, if any.
+	//
+	// This does not apply to HTTP or network policies.
+	Expiration GatewayRuleExpiration `json:"expiration"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
 	Filters []GatewayFilter `json:"filters"`
@@ -307,6 +312,7 @@ type gatewayRuleJSON struct {
 	Description   apijson.Field
 	DevicePosture apijson.Field
 	Enabled       apijson.Field
+	Expiration    apijson.Field
 	Filters       apijson.Field
 	Identity      apijson.Field
 	Name          apijson.Field
@@ -356,6 +362,44 @@ func (r GatewayRuleAction) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// The expiration time stamp and default duration of a DNS policy. Takes precedence
+// over the policy's `schedule` configuration, if any.
+//
+// This does not apply to HTTP or network policies.
+type GatewayRuleExpiration struct {
+	// The time stamp at which the policy will expire and cease to be applied.
+	//
+	// Must adhere to RFC 3339 and include a UTC offset. Non-zero offsets are accepted
+	// but will be converted to the equivalent value with offset zero (UTC+00:00) and
+	// will be returned as time stamps with offset zero denoted by a trailing 'Z'.
+	//
+	// Policies with an expiration do not consider the timezone of clients they are
+	// applied to, and expire "globally" at the point given by their `expires_at`
+	// value.
+	ExpiresAt time.Time `json:"expires_at,required" format:"date-time"`
+	// The default duration a policy will be active in minutes. Must be set in order to
+	// use the `reset_expiration` endpoint on this rule.
+	Duration int64                     `json:"duration"`
+	JSON     gatewayRuleExpirationJSON `json:"-"`
+}
+
+// gatewayRuleExpirationJSON contains the JSON metadata for the struct
+// [GatewayRuleExpiration]
+type gatewayRuleExpirationJSON struct {
+	ExpiresAt   apijson.Field
+	Duration    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleExpiration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayRuleExpirationJSON) RawJSON() string {
+	return r.raw
 }
 
 // Additional settings that modify the rule's action.
@@ -1092,6 +1136,11 @@ type GatewayRuleNewParams struct {
 	DevicePosture param.Field[string] `json:"device_posture"`
 	// True if the rule is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// The expiration time stamp and default duration of a DNS policy. Takes precedence
+	// over the policy's `schedule` configuration, if any.
+	//
+	// This does not apply to HTTP or network policies.
+	Expiration param.Field[GatewayRuleNewParamsExpiration] `json:"expiration"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
@@ -1143,6 +1192,30 @@ func (r GatewayRuleNewParamsAction) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// The expiration time stamp and default duration of a DNS policy. Takes precedence
+// over the policy's `schedule` configuration, if any.
+//
+// This does not apply to HTTP or network policies.
+type GatewayRuleNewParamsExpiration struct {
+	// The time stamp at which the policy will expire and cease to be applied.
+	//
+	// Must adhere to RFC 3339 and include a UTC offset. Non-zero offsets are accepted
+	// but will be converted to the equivalent value with offset zero (UTC+00:00) and
+	// will be returned as time stamps with offset zero denoted by a trailing 'Z'.
+	//
+	// Policies with an expiration do not consider the timezone of clients they are
+	// applied to, and expire "globally" at the point given by their `expires_at`
+	// value.
+	ExpiresAt param.Field[time.Time] `json:"expires_at,required" format:"date-time"`
+	// The default duration a policy will be active in minutes. Must be set in order to
+	// use the `reset_expiration` endpoint on this rule.
+	Duration param.Field[int64] `json:"duration"`
+}
+
+func (r GatewayRuleNewParamsExpiration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type GatewayRuleNewResponseEnvelope struct {
@@ -1201,6 +1274,11 @@ type GatewayRuleUpdateParams struct {
 	DevicePosture param.Field[string] `json:"device_posture"`
 	// True if the rule is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// The expiration time stamp and default duration of a DNS policy. Takes precedence
+	// over the policy's `schedule` configuration, if any.
+	//
+	// This does not apply to HTTP or network policies.
+	Expiration param.Field[GatewayRuleUpdateParamsExpiration] `json:"expiration"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
@@ -1252,6 +1330,30 @@ func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// The expiration time stamp and default duration of a DNS policy. Takes precedence
+// over the policy's `schedule` configuration, if any.
+//
+// This does not apply to HTTP or network policies.
+type GatewayRuleUpdateParamsExpiration struct {
+	// The time stamp at which the policy will expire and cease to be applied.
+	//
+	// Must adhere to RFC 3339 and include a UTC offset. Non-zero offsets are accepted
+	// but will be converted to the equivalent value with offset zero (UTC+00:00) and
+	// will be returned as time stamps with offset zero denoted by a trailing 'Z'.
+	//
+	// Policies with an expiration do not consider the timezone of clients they are
+	// applied to, and expire "globally" at the point given by their `expires_at`
+	// value.
+	ExpiresAt param.Field[time.Time] `json:"expires_at,required" format:"date-time"`
+	// The default duration a policy will be active in minutes. Must be set in order to
+	// use the `reset_expiration` endpoint on this rule.
+	Duration param.Field[int64] `json:"duration"`
+}
+
+func (r GatewayRuleUpdateParamsExpiration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type GatewayRuleUpdateResponseEnvelope struct {
