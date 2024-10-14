@@ -36,7 +36,7 @@ func NewIPService(opts ...option.RequestOption) (r *IPService) {
 	return
 }
 
-// Get IP Overview
+// Same as summary
 func (r *IPService) Get(ctx context.Context, params IPGetParams, opts ...option.RequestOption) (res *[]IP, err error) {
 	var env IPGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -58,7 +58,7 @@ type IP struct {
 	// to.
 	BelongsToRef IPBelongsToRef `json:"belongs_to_ref"`
 	IP           string         `json:"ip" format:"ipv4"`
-	RiskTypes    []interface{}  `json:"risk_types"`
+	RiskTypes    []IPRiskType   `json:"risk_types"`
 	JSON         ipJSON         `json:"-"`
 }
 
@@ -125,6 +125,30 @@ func (r IPBelongsToRefType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type IPRiskType struct {
+	ID              float64        `json:"id"`
+	Name            string         `json:"name"`
+	SuperCategoryID float64        `json:"super_category_id"`
+	JSON            ipRiskTypeJSON `json:"-"`
+}
+
+// ipRiskTypeJSON contains the JSON metadata for the struct [IPRiskType]
+type ipRiskTypeJSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *IPRiskType) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipRiskTypeJSON) RawJSON() string {
+	return r.raw
 }
 
 type IPGetParams struct {

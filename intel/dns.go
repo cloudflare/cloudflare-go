@@ -99,7 +99,7 @@ type DNSReverseRecord struct {
 	// First seen date of the DNS record during the time period.
 	FirstSeen time.Time `json:"first_seen" format:"date"`
 	// Hostname that the IP was observed resolving to.
-	Hostname interface{} `json:"hostname"`
+	Hostname string `json:"hostname"`
 	// Last seen date of the DNS record during the time period.
 	LastSeen time.Time            `json:"last_seen" format:"date"`
 	JSON     dnsReverseRecordJSON `json:"-"`
