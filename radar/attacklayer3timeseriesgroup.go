@@ -74,7 +74,7 @@ func (r *AttackLayer3TimeseriesGroupService) Get(ctx context.Context, query Atta
 	return
 }
 
-// Percentage distribution of attacks by industry used over time.
+// Percentage distribution of attacks by industry targeted over time.
 func (r *AttackLayer3TimeseriesGroupService) Industry(ctx context.Context, query AttackLayer3TimeseriesGroupIndustryParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupIndustryResponse, err error) {
 	var env AttackLayer3TimeseriesGroupIndustryResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -126,7 +126,7 @@ func (r *AttackLayer3TimeseriesGroupService) Vector(ctx context.Context, query A
 	return
 }
 
-// Percentage distribution of attacks by vertical used over time.
+// Percentage distribution of attacks by vertical targeted over time.
 func (r *AttackLayer3TimeseriesGroupService) Vertical(ctx context.Context, query AttackLayer3TimeseriesGroupVerticalParams, opts ...option.RequestOption) (res *AttackLayer3TimeseriesGroupVerticalResponse, err error) {
 	var env AttackLayer3TimeseriesGroupVerticalResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -34,7 +34,7 @@ func NewAS112TimeseriesGroupService(opts ...option.RequestOption) (r *AS112Times
 	return
 }
 
-// Percentage distribution of DNS AS112 queries by DNSSEC support over time.
+// Percentage distribution of AS112 DNS queries by DNSSEC support over time.
 func (r *AS112TimeseriesGroupService) DNSSEC(ctx context.Context, query AS112TimeseriesGroupDNSSECParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupDNSSECResponse, err error) {
 	var env AS112TimeseriesGroupDNSSECResponseEnvelope
 	opts = append(r.Options[:], opts...)

@@ -108,7 +108,7 @@ func (r entityGetResponseIPJSON) RawJSON() string {
 
 type EntityGetParams struct {
 	// IP address.
-	IP param.Field[string] `query:"ip,required"`
+	IP param.Field[string] `query:"ip,required" format:"ip"`
 	// Format results are returned in.
 	Format param.Field[EntityGetParamsFormat] `query:"format"`
 }
