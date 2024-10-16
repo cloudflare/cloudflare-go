@@ -9,10 +9,10 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
@@ -927,7 +927,7 @@ type ProjectDomainDeleteParams struct {
 type ProjectDomainDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo       `json:"errors,required"`
 	Messages []shared.ResponseInfo       `json:"messages,required"`
-	Result   ProjectDomainDeleteResponse `json:"result,required"`
+	Result   ProjectDomainDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDomainDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDomainDeleteResponseEnvelopeJSON    `json:"-"`

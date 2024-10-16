@@ -16,10 +16,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
@@ -450,7 +450,7 @@ func (r indexQueryResponseJSON) RawJSON() string {
 type IndexQueryResponseMatch struct {
 	// Identifier for a Vector
 	ID        string      `json:"id"`
-	Metadata  interface{} `json:"metadata"`
+	Metadata  interface{} `json:"metadata,nullable"`
 	Namespace string      `json:"namespace,nullable"`
 	// The score of the vector according to the index's distance metric
 	Score  float64                     `json:"score"`
@@ -662,7 +662,7 @@ type IndexDeleteParams struct {
 type IndexDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required,nullable"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success IndexDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    indexDeleteResponseEnvelopeJSON    `json:"-"`
