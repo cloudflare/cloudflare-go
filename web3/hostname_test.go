@@ -29,6 +29,7 @@ func TestHostnameNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Web3.Hostnames.New(context.TODO(), web3.HostnameNewParams{
 		ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:        cloudflare.F("gateway.example.com"),
 		Target:      cloudflare.F(web3.HostnameNewParamsTargetEthereum),
 		Description: cloudflare.F("This is my IPFS gateway."),
 		Dnslink:     cloudflare.F("/ipns/onboarding.ipfs.cloudflare.com"),
