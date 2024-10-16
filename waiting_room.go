@@ -104,7 +104,7 @@ type WaitingRoomRoute struct {
 	Path string `json:"path"`
 }
 
-// WaitingRoomCookieAttributes describes a WaitingRoomCookieAttributes object
+// WaitingRoomCookieAttributes describes a WaitingRoomCookieAttributes object.
 type WaitingRoomCookieAttributes struct {
 	Samesite string `json:"samesite"`
 	Secure   string `json:"secure"`
