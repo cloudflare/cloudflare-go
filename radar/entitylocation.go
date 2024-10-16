@@ -48,8 +48,8 @@ func (r *EntityLocationService) List(ctx context.Context, query EntityLocationLi
 	return
 }
 
-// Get the requested location information. A confidence level below `5` indicates a
-// low level of confidence in the traffic data - normally this happens because
+// Get the requested location information. (A confidence level below `5` indicates
+// a low level of confidence in the traffic data - normally this happens because
 // Cloudflare has a small amount of traffic from/to this location).
 func (r *EntityLocationService) Get(ctx context.Context, location string, query EntityLocationGetParams, opts ...option.RequestOption) (res *EntityLocationGetResponse, err error) {
 	var env EntityLocationGetResponseEnvelope
