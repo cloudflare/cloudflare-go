@@ -247,6 +247,8 @@ func (r hostnameDeleteResponseJSON) RawJSON() string {
 type HostnameNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	// The hostname that will point to the target gateway via CNAME.
+	Name param.Field[string] `json:"name,required"`
 	// Target gateway of the hostname.
 	Target param.Field[HostnameNewParamsTarget] `json:"target,required"`
 	// An optional description of the hostname.
