@@ -14,10 +14,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
@@ -305,7 +305,7 @@ type ProjectDeploymentDeleteParams struct {
 type ProjectDeploymentDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo           `json:"errors,required"`
 	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   ProjectDeploymentDeleteResponse `json:"result,required"`
+	Result   ProjectDeploymentDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDeploymentDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentDeleteResponseEnvelopeJSON    `json:"-"`
