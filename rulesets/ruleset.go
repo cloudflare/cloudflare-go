@@ -657,7 +657,7 @@ type RulesetNewResponseRulesRulesetsChallengeRuleRatelimit struct {
 	ScorePerPeriod int64 `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName int64                                                     `json:"score_response_header_name"`
+	ScoreResponseHeaderName string                                                    `json:"score_response_header_name"`
 	JSON                    rulesetNewResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
 }
 
@@ -827,7 +827,7 @@ type RulesetNewResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	ScorePerPeriod int64 `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName int64                                                       `json:"score_response_header_name"`
+	ScoreResponseHeaderName string                                                      `json:"score_response_header_name"`
 	JSON                    rulesetNewResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
 }
 
@@ -1291,7 +1291,7 @@ type RulesetUpdateResponseRulesRulesetsChallengeRuleRatelimit struct {
 	ScorePerPeriod int64 `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName int64                                                        `json:"score_response_header_name"`
+	ScoreResponseHeaderName string                                                       `json:"score_response_header_name"`
 	JSON                    rulesetUpdateResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
 }
 
@@ -1463,7 +1463,7 @@ type RulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	ScorePerPeriod int64 `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName int64                                                          `json:"score_response_header_name"`
+	ScoreResponseHeaderName string                                                         `json:"score_response_header_name"`
 	JSON                    rulesetUpdateResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
 }
 
@@ -1967,7 +1967,7 @@ type RulesetGetResponseRulesRulesetsChallengeRuleRatelimit struct {
 	ScorePerPeriod int64 `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName int64                                                     `json:"score_response_header_name"`
+	ScoreResponseHeaderName string                                                    `json:"score_response_header_name"`
 	JSON                    rulesetGetResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
 }
 
@@ -2137,7 +2137,7 @@ type RulesetGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	ScorePerPeriod int64 `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName int64                                                       `json:"score_response_header_name"`
+	ScoreResponseHeaderName string                                                      `json:"score_response_header_name"`
 	JSON                    rulesetGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
 }
 
@@ -2357,7 +2357,7 @@ type RulesetNewParamsRulesRulesetsChallengeRuleRatelimit struct {
 	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName param.Field[int64] `json:"score_response_header_name"`
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
 func (r RulesetNewParamsRulesRulesetsChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
@@ -2461,7 +2461,7 @@ type RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit struct {
 	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName param.Field[int64] `json:"score_response_header_name"`
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
 func (r RulesetNewParamsRulesRulesetsJSChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
@@ -2812,7 +2812,7 @@ type RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit struct {
 	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName param.Field[int64] `json:"score_response_header_name"`
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
 func (r RulesetUpdateParamsRulesRulesetsChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
@@ -2917,7 +2917,7 @@ type RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit struct {
 	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName param.Field[int64] `json:"score_response_header_name"`
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
 func (r RulesetUpdateParamsRulesRulesetsJSChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
