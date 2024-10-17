@@ -7,8 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
@@ -36,10 +38,12 @@ func NewNamespaceValueService(opts ...option.RequestOption) (r *NamespaceValueSe
 
 // Write a value identified by a key. Use URL-encoding to use special characters
 // (for example, `:`, `!`, `%`) in the key name. Body should be the value to be
-// stored along with JSON metadata to be associated with the key/value pair.
-// Existing values, expirations, and metadata will be overwritten. If neither
-// `expiration` nor `expiration_ttl` is specified, the key-value pair will never
-// expire. If both are set, `expiration_ttl` is used and `expiration` is ignored.
+// stored. If JSON metadata to be associated with the key/value pair is needed, use
+// `multipart/form-data` content type for your PUT request (see dropdown below in
+// `REQUEST BODY SCHEMA`). Existing values, expirations, and metadata will be
+// overwritten. If neither `expiration` nor `expiration_ttl` is specified, the
+// key-value pair will never expire. If both are set, `expiration_ttl` is used and
+// `expiration` is ignored.
 func (r *NamespaceValueService) Update(ctx context.Context, namespaceID string, keyName string, params NamespaceValueUpdateParams, opts ...option.RequestOption) (res *NamespaceValueUpdateResponse, err error) {
 	var env NamespaceValueUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -160,10 +164,25 @@ type NamespaceValueUpdateParams struct {
 	Metadata param.Field[string] `json:"metadata,required"`
 	// A byte sequence to be stored, up to 25 MiB in length.
 	Value param.Field[string] `json:"value,required"`
+	// The time, measured in number of seconds since the UNIX epoch, at which the key
+	// should expire.
+	Expiration param.Field[float64] `query:"expiration"`
+	// The number of seconds for which the key should be visible before it expires. At
+	// least 60.
+	ExpirationTTL param.Field[float64] `query:"expiration_ttl"`
 }
 
 func (r NamespaceValueUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [NamespaceValueUpdateParams]'s query parameters as
+// `url.Values`.
+func (r NamespaceValueUpdateParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type NamespaceValueUpdateResponseEnvelope struct {
