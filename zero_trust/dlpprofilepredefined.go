@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DLPProfilePredefinedService contains methods and other services that help with
@@ -77,9 +77,10 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 }
 
 type DLPProfilePredefinedUpdateParams struct {
-	AccountID         param.Field[string]                                  `path:"account_id,required"`
-	Entries           param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries,required"`
-	AllowedMatchCount param.Field[int64]                                   `json:"allowed_match_count"`
+	AccountID           param.Field[string]                                  `path:"account_id,required"`
+	Entries             param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries,required"`
+	AllowedMatchCount   param.Field[int64]                                   `json:"allowed_match_count"`
+	ConfidenceThreshold param.Field[string]                                  `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`

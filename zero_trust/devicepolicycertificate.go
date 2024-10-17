@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DevicePolicyCertificateService contains methods and other services that help
@@ -91,7 +91,7 @@ func (r DevicePolicyCertificateUpdateParams) MarshalJSON() (data []byte, err err
 type DevicePolicyCertificateUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCertificateUpdateResponseEnvelopeJSON    `json:"-"`
@@ -134,7 +134,7 @@ func (r DevicePolicyCertificateUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DevicePolicyCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyCertificateGetResponseEnvelopeJSON    `json:"-"`

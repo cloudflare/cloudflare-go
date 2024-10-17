@@ -7,11 +7,12 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
@@ -34,9 +35,13 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		Description:   cloudflare.F("Block bad websites based on their host name."),
 		DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 		Enabled:       cloudflare.F(true),
-		Filters:       cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
-		Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
-		Precedence:    cloudflare.F(int64(0)),
+		Expiration: cloudflare.F(zero_trust.GatewayRuleNewParamsExpiration{
+			ExpiresAt: cloudflare.F(time.Now()),
+			Duration:  cloudflare.F(int64(10)),
+		}),
+		Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
+		Identity:   cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
+		Precedence: cloudflare.F(int64(0)),
 		RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
 			AddHeaders: cloudflare.F(map[string]string{
 				"foo": "string",
@@ -116,6 +121,9 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 			PayloadLog: cloudflare.F(zero_trust.RuleSettingPayloadLogParam{
 				Enabled: cloudflare.F(true),
 			}),
+			Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
+				FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe, zero_trust.RuleSettingQuarantineFileTypePdf, zero_trust.RuleSettingQuarantineFileTypeDoc}),
+			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
 			UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
 				Action: cloudflare.F(zero_trust.RuleSettingUntrustedCERTActionPassThrough),
@@ -165,9 +173,13 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 			Description:   cloudflare.F("Block bad websites based on their host name."),
 			DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
 			Enabled:       cloudflare.F(true),
-			Filters:       cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
-			Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
-			Precedence:    cloudflare.F(int64(0)),
+			Expiration: cloudflare.F(zero_trust.GatewayRuleUpdateParamsExpiration{
+				ExpiresAt: cloudflare.F(time.Now()),
+				Duration:  cloudflare.F(int64(10)),
+			}),
+			Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
+			Identity:   cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
+			Precedence: cloudflare.F(int64(0)),
 			RuleSettings: cloudflare.F(zero_trust.RuleSettingParam{
 				AddHeaders: cloudflare.F(map[string]string{
 					"foo": "string",
@@ -246,6 +258,9 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 				OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
 				PayloadLog: cloudflare.F(zero_trust.RuleSettingPayloadLogParam{
 					Enabled: cloudflare.F(true),
+				}),
+				Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
+					FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe, zero_trust.RuleSettingQuarantineFileTypePdf, zero_trust.RuleSettingQuarantineFileTypeDoc}),
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
 				UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
