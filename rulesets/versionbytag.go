@@ -451,7 +451,7 @@ type VersionByTagGetResponseRulesRulesetsChallengeRuleRatelimit struct {
 	ScorePerPeriod int64 `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName int64                                                          `json:"score_response_header_name"`
+	ScoreResponseHeaderName string                                                         `json:"score_response_header_name"`
 	JSON                    versionByTagGetResponseRulesRulesetsChallengeRuleRatelimitJSON `json:"-"`
 }
 
@@ -623,7 +623,7 @@ type VersionByTagGetResponseRulesRulesetsJSChallengeRuleRatelimit struct {
 	ScorePerPeriod int64 `json:"score_per_period"`
 	// The response header name provided by the origin which should contain the score
 	// to increment ratelimit counter on.
-	ScoreResponseHeaderName int64                                                            `json:"score_response_header_name"`
+	ScoreResponseHeaderName string                                                           `json:"score_response_header_name"`
 	JSON                    versionByTagGetResponseRulesRulesetsJSChallengeRuleRatelimitJSON `json:"-"`
 }
 

@@ -60,7 +60,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 				RequestsPerPeriod:       cloudflare.F(int64(1000)),
 				RequestsToOrigin:        cloudflare.F(true),
 				ScorePerPeriod:          cloudflare.F(int64(400)),
-				ScoreResponseHeaderName: cloudflare.F(int64(0)),
+				ScoreResponseHeaderName: cloudflare.F("my-score"),
 			}),
 			Ref: cloudflare.F("my_ref"),
 		}, rulesets.BlockRuleParam{
@@ -91,7 +91,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 				RequestsPerPeriod:       cloudflare.F(int64(1000)),
 				RequestsToOrigin:        cloudflare.F(true),
 				ScorePerPeriod:          cloudflare.F(int64(400)),
-				ScoreResponseHeaderName: cloudflare.F(int64(0)),
+				ScoreResponseHeaderName: cloudflare.F("my-score"),
 			}),
 			Ref: cloudflare.F("my_ref"),
 		}, rulesets.BlockRuleParam{
@@ -122,7 +122,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 				RequestsPerPeriod:       cloudflare.F(int64(1000)),
 				RequestsToOrigin:        cloudflare.F(true),
 				ScorePerPeriod:          cloudflare.F(int64(400)),
-				ScoreResponseHeaderName: cloudflare.F(int64(0)),
+				ScoreResponseHeaderName: cloudflare.F("my-score"),
 			}),
 			Ref: cloudflare.F("my_ref"),
 		}}),
@@ -184,7 +184,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 					RequestsPerPeriod:       cloudflare.F(int64(1000)),
 					RequestsToOrigin:        cloudflare.F(true),
 					ScorePerPeriod:          cloudflare.F(int64(400)),
-					ScoreResponseHeaderName: cloudflare.F(int64(0)),
+					ScoreResponseHeaderName: cloudflare.F("my-score"),
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}, rulesets.BlockRuleParam{
@@ -215,7 +215,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 					RequestsPerPeriod:       cloudflare.F(int64(1000)),
 					RequestsToOrigin:        cloudflare.F(true),
 					ScorePerPeriod:          cloudflare.F(int64(400)),
-					ScoreResponseHeaderName: cloudflare.F(int64(0)),
+					ScoreResponseHeaderName: cloudflare.F("my-score"),
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}, rulesets.BlockRuleParam{
@@ -246,7 +246,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 					RequestsPerPeriod:       cloudflare.F(int64(1000)),
 					RequestsToOrigin:        cloudflare.F(true),
 					ScorePerPeriod:          cloudflare.F(int64(400)),
-					ScoreResponseHeaderName: cloudflare.F(int64(0)),
+					ScoreResponseHeaderName: cloudflare.F("my-score"),
 				}),
 				Ref: cloudflare.F("my_ref"),
 			}}),
