@@ -15,8 +15,6 @@ func (UnionTime) ImplementsAuditLogsAuditLogListParamsSinceUnion()  {}
 
 type UnionString string
 
-func (UnionString) ImplementsFirewallWAFPackageListResponseFirewallAPIResponseCollectionResultUnion() {
-}
 func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                 {}
 func (UnionString) ImplementsLogsReceivedGetParamsStartUnion()               {}
 func (UnionString) ImplementsWorkersAIRunResponseUnion()                     {}
