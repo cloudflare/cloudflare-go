@@ -41,7 +41,7 @@ func TestIPSECTunnelNewWithOptionalParams(t *testing.T) {
 			Target: cloudflare.F[magic_transit.IPSECTunnelNewParamsHealthCheckTargetUnion](magic_transit.IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget{
 				Saved: cloudflare.F("203.0.113.1"),
 			}),
-			Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
+			Type: cloudflare.F(magic_transit.IPSECTunnelNewParamsHealthCheckTypeReply),
 		}),
 		PSK:               cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 		ReplayProtection:  cloudflare.F(false),
@@ -86,7 +86,7 @@ func TestIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 				Target: cloudflare.F[magic_transit.IPSECTunnelUpdateParamsHealthCheckTargetUnion](magic_transit.IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget{
 					Saved: cloudflare.F("203.0.113.1"),
 				}),
-				Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
+				Type: cloudflare.F(magic_transit.IPSECTunnelUpdateParamsHealthCheckTypeReply),
 			}),
 			PSK:               cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 			ReplayProtection:  cloudflare.F(false),
