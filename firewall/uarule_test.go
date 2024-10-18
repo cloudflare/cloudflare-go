@@ -28,17 +28,14 @@ func TestUARuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.UARules.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		firewall.UARuleNewParams{
-			Configuration: cloudflare.F[firewall.UARuleNewParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
-				Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
-				Value:  cloudflare.F("198.51.100.4"),
-			}),
-			Mode: cloudflare.F(firewall.UARuleNewParamsModeBlock),
-		},
-	)
+	_, err := client.Firewall.UARules.New(context.TODO(), firewall.UARuleNewParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Configuration: cloudflare.F[firewall.UARuleNewParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
+			Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
+			Value:  cloudflare.F("198.51.100.4"),
+		}),
+		Mode: cloudflare.F(firewall.UARuleNewParamsModeBlock),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -64,9 +61,9 @@ func TestUARuleUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.UARules.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		firewall.UARuleUpdateParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Configuration: cloudflare.F[firewall.UARuleUpdateParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
 				Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
@@ -96,17 +93,14 @@ func TestUARuleListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.UARules.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		firewall.UARuleListParams{
-			Description:       cloudflare.F("abusive"),
-			DescriptionSearch: cloudflare.F("abusive"),
-			Page:              cloudflare.F(1.000000),
-			PerPage:           cloudflare.F(1.000000),
-			UASearch:          cloudflare.F("Safari"),
-		},
-	)
+	_, err := client.Firewall.UARules.List(context.TODO(), firewall.UARuleListParams{
+		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Description:       cloudflare.F("abusive"),
+		DescriptionSearch: cloudflare.F("abusive"),
+		Page:              cloudflare.F(1.000000),
+		PerPage:           cloudflare.F(1.000000),
+		UASearch:          cloudflare.F("Safari"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -131,8 +125,10 @@ func TestUARuleDelete(t *testing.T) {
 	)
 	_, err := client.Firewall.UARules.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
+		firewall.UARuleDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -158,8 +154,10 @@ func TestUARuleGet(t *testing.T) {
 	)
 	_, err := client.Firewall.UARules.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
+		firewall.UARuleGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

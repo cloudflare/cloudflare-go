@@ -143,6 +143,31 @@ func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query Gatew
 	return
 }
 
+// Resets the expiration of a Zero Trust Gateway Rule if its duration has elapsed
+// and it has a default duration.
+//
+// The Zero Trust Gateway Rule must have values for both `expiration.expires_at`
+// and `expiration.duration`.
+func (r *GatewayRuleService) ResetExpiration(ctx context.Context, ruleID string, body GatewayRuleResetExpirationParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
+	var env GatewayRuleResetExpirationResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/gateway/rules/%s/reset_expiration", body.AccountID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type DNSResolverSettingsV4 struct {
 	// IPv4 address of upstream resolver.
 	IP string `json:"ip,required"`
@@ -1492,6 +1517,53 @@ const (
 func (r GatewayRuleGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case GatewayRuleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type GatewayRuleResetExpirationParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type GatewayRuleResetExpirationResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success GatewayRuleResetExpirationResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayRule                                       `json:"result"`
+	JSON    gatewayRuleResetExpirationResponseEnvelopeJSON    `json:"-"`
+}
+
+// gatewayRuleResetExpirationResponseEnvelopeJSON contains the JSON metadata for
+// the struct [GatewayRuleResetExpirationResponseEnvelope]
+type gatewayRuleResetExpirationResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleResetExpirationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayRuleResetExpirationResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type GatewayRuleResetExpirationResponseEnvelopeSuccess bool
+
+const (
+	GatewayRuleResetExpirationResponseEnvelopeSuccessTrue GatewayRuleResetExpirationResponseEnvelopeSuccess = true
+)
+
+func (r GatewayRuleResetExpirationResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayRuleResetExpirationResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
