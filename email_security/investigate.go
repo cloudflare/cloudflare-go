@@ -182,7 +182,6 @@ type InvestigateListResponse struct {
 	DetectionReasons  []string    `json:"detection_reasons,required"`
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
-	MessageID         string      `json:"message_id,required"`
 	// Message identifier
 	PostfixID        string                                  `json:"postfix_id,required"`
 	Ts               string                                  `json:"ts,required"`
@@ -192,6 +191,7 @@ type InvestigateListResponse struct {
 	FinalDisposition InvestigateListResponseFinalDisposition `json:"final_disposition,nullable"`
 	From             string                                  `json:"from,nullable"`
 	FromName         string                                  `json:"from_name,nullable"`
+	MessageID        string                                  `json:"message_id,nullable"`
 	SentDate         string                                  `json:"sent_date,nullable"`
 	Subject          string                                  `json:"subject,nullable"`
 	ThreatCategories []string                                `json:"threat_categories,nullable"`
@@ -210,7 +210,6 @@ type investigateListResponseJSON struct {
 	DetectionReasons  apijson.Field
 	IsPhishSubmission apijson.Field
 	IsQuarantined     apijson.Field
-	MessageID         apijson.Field
 	PostfixID         apijson.Field
 	Ts                apijson.Field
 	AlertID           apijson.Field
@@ -219,6 +218,7 @@ type investigateListResponseJSON struct {
 	FinalDisposition  apijson.Field
 	From              apijson.Field
 	FromName          apijson.Field
+	MessageID         apijson.Field
 	SentDate          apijson.Field
 	Subject           apijson.Field
 	ThreatCategories  apijson.Field
@@ -665,7 +665,6 @@ type InvestigateGetResponse struct {
 	DetectionReasons  []string    `json:"detection_reasons,required"`
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
-	MessageID         string      `json:"message_id,required"`
 	// Message identifier
 	PostfixID        string                                 `json:"postfix_id,required"`
 	Ts               string                                 `json:"ts,required"`
@@ -675,6 +674,7 @@ type InvestigateGetResponse struct {
 	FinalDisposition InvestigateGetResponseFinalDisposition `json:"final_disposition,nullable"`
 	From             string                                 `json:"from,nullable"`
 	FromName         string                                 `json:"from_name,nullable"`
+	MessageID        string                                 `json:"message_id,nullable"`
 	SentDate         string                                 `json:"sent_date,nullable"`
 	Subject          string                                 `json:"subject,nullable"`
 	ThreatCategories []string                               `json:"threat_categories,nullable"`
@@ -693,7 +693,6 @@ type investigateGetResponseJSON struct {
 	DetectionReasons  apijson.Field
 	IsPhishSubmission apijson.Field
 	IsQuarantined     apijson.Field
-	MessageID         apijson.Field
 	PostfixID         apijson.Field
 	Ts                apijson.Field
 	AlertID           apijson.Field
@@ -702,6 +701,7 @@ type investigateGetResponseJSON struct {
 	FinalDisposition  apijson.Field
 	From              apijson.Field
 	FromName          apijson.Field
+	MessageID         apijson.Field
 	SentDate          apijson.Field
 	Subject           apijson.Field
 	ThreatCategories  apijson.Field
