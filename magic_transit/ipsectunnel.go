@@ -286,7 +286,7 @@ type IPSECTunnelNewResponseIPSECTunnelsHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                   `json:"type"`
+	Type IPSECTunnelNewResponseIPSECTunnelsHealthCheckType `json:"type"`
 	JSON ipsecTunnelNewResponseIPSECTunnelsHealthCheckJSON `json:"-"`
 }
 
@@ -396,6 +396,22 @@ func (r ipsecTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarge
 func (r IPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion() {
 }
 
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type IPSECTunnelNewResponseIPSECTunnelsHealthCheckType string
+
+const (
+	IPSECTunnelNewResponseIPSECTunnelsHealthCheckTypeReply   IPSECTunnelNewResponseIPSECTunnelsHealthCheckType = "reply"
+	IPSECTunnelNewResponseIPSECTunnelsHealthCheckTypeRequest IPSECTunnelNewResponseIPSECTunnelsHealthCheckType = "request"
+)
+
+func (r IPSECTunnelNewResponseIPSECTunnelsHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewResponseIPSECTunnelsHealthCheckTypeReply, IPSECTunnelNewResponseIPSECTunnelsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
+
 type IPSECTunnelUpdateResponse struct {
 	Modified            bool                                         `json:"modified"`
 	ModifiedIPSECTunnel IPSECTunnelUpdateResponseModifiedIPSECTunnel `json:"modified_ipsec_tunnel"`
@@ -497,7 +513,7 @@ type IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                             `json:"type"`
+	Type IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckType `json:"type"`
 	JSON ipsecTunnelUpdateResponseModifiedIPSECTunnelHealthCheckJSON `json:"-"`
 }
 
@@ -608,6 +624,22 @@ func (r ipsecTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetMagicHealth
 func (r IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTargetUnion() {
 }
 
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckType string
+
+const (
+	IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTypeReply   IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckType = "reply"
+	IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTypeRequest IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckType = "request"
+)
+
+func (r IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTypeReply, IPSECTunnelUpdateResponseModifiedIPSECTunnelHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
+
 type IPSECTunnelListResponse struct {
 	IPSECTunnels []IPSECTunnelListResponseIPSECTunnel `json:"ipsec_tunnels"`
 	JSON         ipsecTunnelListResponseJSON          `json:"-"`
@@ -707,7 +739,7 @@ type IPSECTunnelListResponseIPSECTunnelsHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                    `json:"type"`
+	Type IPSECTunnelListResponseIPSECTunnelsHealthCheckType `json:"type"`
 	JSON ipsecTunnelListResponseIPSECTunnelsHealthCheckJSON `json:"-"`
 }
 
@@ -817,6 +849,22 @@ func (r ipsecTunnelListResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarg
 func (r IPSECTunnelListResponseIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion() {
 }
 
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type IPSECTunnelListResponseIPSECTunnelsHealthCheckType string
+
+const (
+	IPSECTunnelListResponseIPSECTunnelsHealthCheckTypeReply   IPSECTunnelListResponseIPSECTunnelsHealthCheckType = "reply"
+	IPSECTunnelListResponseIPSECTunnelsHealthCheckTypeRequest IPSECTunnelListResponseIPSECTunnelsHealthCheckType = "request"
+)
+
+func (r IPSECTunnelListResponseIPSECTunnelsHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelListResponseIPSECTunnelsHealthCheckTypeReply, IPSECTunnelListResponseIPSECTunnelsHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
+
 type IPSECTunnelDeleteResponse struct {
 	Deleted            bool                                        `json:"deleted"`
 	DeletedIPSECTunnel IPSECTunnelDeleteResponseDeletedIPSECTunnel `json:"deleted_ipsec_tunnel"`
@@ -918,7 +966,7 @@ type IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                            `json:"type"`
+	Type IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckType `json:"type"`
 	JSON ipsecTunnelDeleteResponseDeletedIPSECTunnelHealthCheckJSON `json:"-"`
 }
 
@@ -1028,6 +1076,22 @@ func (r ipsecTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetMagicHealthC
 func (r IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion() {
 }
 
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckType string
+
+const (
+	IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTypeReply   IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckType = "reply"
+	IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTypeRequest IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckType = "request"
+)
+
+func (r IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTypeReply, IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
+
 type IPSECTunnelGetResponse struct {
 	IPSECTunnel IPSECTunnelGetResponseIPSECTunnel `json:"ipsec_tunnel"`
 	JSON        ipsecTunnelGetResponseJSON        `json:"-"`
@@ -1127,7 +1191,7 @@ type IPSECTunnelGetResponseIPSECTunnelHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target IPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type HealthCheckType                                  `json:"type"`
+	Type IPSECTunnelGetResponseIPSECTunnelHealthCheckType `json:"type"`
 	JSON ipsecTunnelGetResponseIPSECTunnelHealthCheckJSON `json:"-"`
 }
 
@@ -1237,6 +1301,22 @@ func (r ipsecTunnelGetResponseIPSECTunnelHealthCheckTargetMagicHealthCheckTarget
 func (r IPSECTunnelGetResponseIPSECTunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion() {
 }
 
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type IPSECTunnelGetResponseIPSECTunnelHealthCheckType string
+
+const (
+	IPSECTunnelGetResponseIPSECTunnelHealthCheckTypeReply   IPSECTunnelGetResponseIPSECTunnelHealthCheckType = "reply"
+	IPSECTunnelGetResponseIPSECTunnelHealthCheckTypeRequest IPSECTunnelGetResponseIPSECTunnelHealthCheckType = "request"
+)
+
+func (r IPSECTunnelGetResponseIPSECTunnelHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelGetResponseIPSECTunnelHealthCheckTypeReply, IPSECTunnelGetResponseIPSECTunnelHealthCheckTypeRequest:
+		return true
+	}
+	return false
+}
+
 type IPSECTunnelPSKGenerateResponse struct {
 	// Identifier
 	IPSECTunnelID string `json:"ipsec_tunnel_id"`
@@ -1313,7 +1393,7 @@ type IPSECTunnelNewParamsHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target param.Field[IPSECTunnelNewParamsHealthCheckTargetUnion] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[HealthCheckType] `json:"type"`
+	Type param.Field[IPSECTunnelNewParamsHealthCheckType] `json:"type"`
 }
 
 func (r IPSECTunnelNewParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -1370,6 +1450,22 @@ func (r IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget) MarshalJSON
 }
 
 func (r IPSECTunnelNewParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelNewParamsHealthCheckTargetUnion() {
+}
+
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type IPSECTunnelNewParamsHealthCheckType string
+
+const (
+	IPSECTunnelNewParamsHealthCheckTypeReply   IPSECTunnelNewParamsHealthCheckType = "reply"
+	IPSECTunnelNewParamsHealthCheckTypeRequest IPSECTunnelNewParamsHealthCheckType = "request"
+)
+
+func (r IPSECTunnelNewParamsHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelNewParamsHealthCheckTypeReply, IPSECTunnelNewParamsHealthCheckTypeRequest:
+		return true
+	}
+	return false
 }
 
 type IPSECTunnelNewResponseEnvelope struct {
@@ -1463,7 +1559,7 @@ type IPSECTunnelUpdateParamsHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target param.Field[IPSECTunnelUpdateParamsHealthCheckTargetUnion] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[HealthCheckType] `json:"type"`
+	Type param.Field[IPSECTunnelUpdateParamsHealthCheckType] `json:"type"`
 }
 
 func (r IPSECTunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -1520,6 +1616,22 @@ func (r IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) MarshalJ
 }
 
 func (r IPSECTunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelUpdateParamsHealthCheckTargetUnion() {
+}
+
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type IPSECTunnelUpdateParamsHealthCheckType string
+
+const (
+	IPSECTunnelUpdateParamsHealthCheckTypeReply   IPSECTunnelUpdateParamsHealthCheckType = "reply"
+	IPSECTunnelUpdateParamsHealthCheckTypeRequest IPSECTunnelUpdateParamsHealthCheckType = "request"
+)
+
+func (r IPSECTunnelUpdateParamsHealthCheckType) IsKnown() bool {
+	switch r {
+	case IPSECTunnelUpdateParamsHealthCheckTypeReply, IPSECTunnelUpdateParamsHealthCheckTypeRequest:
+		return true
+	}
+	return false
 }
 
 type IPSECTunnelUpdateResponseEnvelope struct {

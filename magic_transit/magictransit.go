@@ -57,19 +57,3 @@ func (r HealthCheckRate) IsKnown() bool {
 	}
 	return false
 }
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type HealthCheckType string
-
-const (
-	HealthCheckTypeReply   HealthCheckType = "reply"
-	HealthCheckTypeRequest HealthCheckType = "request"
-)
-
-func (r HealthCheckType) IsKnown() bool {
-	switch r {
-	case HealthCheckTypeReply, HealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
