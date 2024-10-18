@@ -42,7 +42,7 @@ func NewAccessRuleService(opts ...option.RequestOption) (r *AccessRuleService) {
 //
 // Note: To create an IP Access rule that applies to a single zone, refer to the
 // [IP Access rules for a zone](#ip-access-rules-for-a-zone) endpoints.
-func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *WAFRule, err error) {
+func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams, opts ...option.RequestOption) (res *interface{}, err error) {
 	var env AccessRuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -75,7 +75,7 @@ func (r *AccessRuleService) New(ctx context.Context, params AccessRuleNewParams,
 // Fetches IP Access rules of an account or zone. These rules apply to all the
 // zones in the account or zone. You can filter the results using several optional
 // parameters.
-func (r *AccessRuleService) List(ctx context.Context, params AccessRuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFRule], err error) {
+func (r *AccessRuleService) List(ctx context.Context, params AccessRuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessRuleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -113,117 +113,8 @@ func (r *AccessRuleService) List(ctx context.Context, params AccessRuleListParam
 // Fetches IP Access rules of an account or zone. These rules apply to all the
 // zones in the account or zone. You can filter the results using several optional
 // parameters.
-func (r *AccessRuleService) ListAutoPaging(ctx context.Context, params AccessRuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WAFRule] {
+func (r *AccessRuleService) ListAutoPaging(ctx context.Context, params AccessRuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessRuleListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
-}
-
-// Deletes an existing IP Access rule defined.
-//
-// Note: This operation will affect all zones in the account or zone.
-func (r *AccessRuleService) Delete(ctx context.Context, ruleID string, body AccessRuleDeleteParams, opts ...option.RequestOption) (res *AccessRuleDeleteResponse, err error) {
-	var env AccessRuleDeleteResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if body.AccountID.Value != "" && body.ZoneID.Value != "" {
-		err = errors.New("account ID and zone ID are mutually exclusive")
-		return
-	}
-	if body.AccountID.Value == "" && body.ZoneID.Value == "" {
-		err = errors.New("either account ID or zone ID must be provided")
-		return
-	}
-	if body.AccountID.Value != "" {
-		accountOrZone = "accounts"
-		accountOrZoneID = body.AccountID
-	}
-	if body.ZoneID.Value != "" {
-		accountOrZone = "zones"
-		accountOrZoneID = body.ZoneID
-	}
-	if ruleID == "" {
-		err = errors.New("missing required rule_id parameter")
-		return
-	}
-	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%s", accountOrZone, accountOrZoneID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Updates an IP Access rule defined.
-//
-// Note: This operation will affect all zones in the account or zone.
-func (r *AccessRuleService) Edit(ctx context.Context, ruleID string, params AccessRuleEditParams, opts ...option.RequestOption) (res *WAFRule, err error) {
-	var env AccessRuleEditResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
-		err = errors.New("account ID and zone ID are mutually exclusive")
-		return
-	}
-	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
-		err = errors.New("either account ID or zone ID must be provided")
-		return
-	}
-	if params.AccountID.Value != "" {
-		accountOrZone = "accounts"
-		accountOrZoneID = params.AccountID
-	}
-	if params.ZoneID.Value != "" {
-		accountOrZone = "zones"
-		accountOrZoneID = params.ZoneID
-	}
-	if ruleID == "" {
-		err = errors.New("missing required rule_id parameter")
-		return
-	}
-	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%s", accountOrZone, accountOrZoneID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Fetches the details of an IP Access rule defined.
-func (r *AccessRuleService) Get(ctx context.Context, ruleID string, query AccessRuleGetParams, opts ...option.RequestOption) (res *WAFRule, err error) {
-	var env AccessRuleGetResponseEnvelope
-	opts = append(r.Options[:], opts...)
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
-		err = errors.New("account ID and zone ID are mutually exclusive")
-		return
-	}
-	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
-		err = errors.New("either account ID or zone ID must be provided")
-		return
-	}
-	if query.AccountID.Value != "" {
-		accountOrZone = "accounts"
-		accountOrZoneID = query.AccountID
-	}
-	if query.ZoneID.Value != "" {
-		accountOrZone = "zones"
-		accountOrZoneID = query.ZoneID
-	}
-	if ruleID == "" {
-		err = errors.New("missing required rule_id parameter")
-		return
-	}
-	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%s", accountOrZone, accountOrZoneID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
 }
 
 type AccessRuleCIDRConfigurationParam struct {
@@ -240,13 +131,6 @@ func (r AccessRuleCIDRConfigurationParam) MarshalJSON() (data []byte, err error)
 }
 
 func (r AccessRuleCIDRConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
-
-func (r AccessRuleCIDRConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {
-}
-
-func (r AccessRuleCIDRConfigurationParam) implementsFirewallUARuleNewParamsConfigurationUnion() {}
-
-func (r AccessRuleCIDRConfigurationParam) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
@@ -279,12 +163,6 @@ func (r AccessRuleIPConfigurationParam) MarshalJSON() (data []byte, err error) {
 
 func (r AccessRuleIPConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
 
-func (r AccessRuleIPConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
-
-func (r AccessRuleIPConfigurationParam) implementsFirewallUARuleNewParamsConfigurationUnion() {}
-
-func (r AccessRuleIPConfigurationParam) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
-
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the rule.
 type AccessRuleIPConfigurationTarget string
@@ -314,12 +192,6 @@ func (r ASNConfigurationParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r ASNConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
-
-func (r ASNConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
-
-func (r ASNConfigurationParam) implementsFirewallUARuleNewParamsConfigurationUnion() {}
-
-func (r ASNConfigurationParam) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
@@ -352,12 +224,6 @@ func (r CountryConfigurationParam) MarshalJSON() (data []byte, err error) {
 
 func (r CountryConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
 
-func (r CountryConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
-
-func (r CountryConfigurationParam) implementsFirewallUARuleNewParamsConfigurationUnion() {}
-
-func (r CountryConfigurationParam) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
-
 // The configuration target. You must set the target to `country` when specifying a
 // country code in the rule.
 type CountryConfigurationTarget string
@@ -388,12 +254,6 @@ func (r IPV6ConfigurationParam) MarshalJSON() (data []byte, err error) {
 
 func (r IPV6ConfigurationParam) implementsFirewallAccessRuleNewParamsConfigurationUnion() {}
 
-func (r IPV6ConfigurationParam) implementsFirewallAccessRuleEditParamsConfigurationUnion() {}
-
-func (r IPV6ConfigurationParam) implementsFirewallUARuleNewParamsConfigurationUnion() {}
-
-func (r IPV6ConfigurationParam) implementsFirewallUARuleUpdateParamsConfigurationUnion() {}
-
 // The configuration target. You must set the target to `ip6` when specifying an
 // IPv6 address in the rule.
 type IPV6ConfigurationTarget string
@@ -410,27 +270,7 @@ func (r IPV6ConfigurationTarget) IsKnown() bool {
 	return false
 }
 
-type AccessRuleDeleteResponse struct {
-	// Identifier
-	ID   string                       `json:"id,required"`
-	JSON accessRuleDeleteResponseJSON `json:"-"`
-}
-
-// accessRuleDeleteResponseJSON contains the JSON metadata for the struct
-// [AccessRuleDeleteResponse]
-type accessRuleDeleteResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
+type AccessRuleListResponse = interface{}
 
 type AccessRuleNewParams struct {
 	// The rule configuration.
@@ -517,12 +357,7 @@ func (r AccessRuleNewParamsMode) IsKnown() bool {
 type AccessRuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// An object that allows you to override the action of specific WAF rules. Each key
-	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
-	// action. Unless you are disabling a rule, ensure that you also enable the rule
-	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
-	// you must provide a `groups` object or a `rules` object.
-	Result WAFRule `json:"result,required"`
+	Result   interface{}           `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessRuleNewResponseEnvelopeJSON    `json:"-"`
@@ -696,242 +531,6 @@ const (
 func (r AccessRuleListParamsOrder) IsKnown() bool {
 	switch r {
 	case AccessRuleListParamsOrderConfigurationTarget, AccessRuleListParamsOrderConfigurationValue, AccessRuleListParamsOrderMode:
-		return true
-	}
-	return false
-}
-
-type AccessRuleDeleteParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-type AccessRuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   AccessRuleDeleteResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success AccessRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessRuleDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessRuleDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessRuleDeleteResponseEnvelope]
-type accessRuleDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AccessRuleDeleteResponseEnvelopeSuccess bool
-
-const (
-	AccessRuleDeleteResponseEnvelopeSuccessTrue AccessRuleDeleteResponseEnvelopeSuccess = true
-)
-
-func (r AccessRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccessRuleDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AccessRuleEditParams struct {
-	// The rule configuration.
-	Configuration param.Field[AccessRuleEditParamsConfigurationUnion] `json:"configuration,required"`
-	// The action to apply to a matched request.
-	Mode param.Field[AccessRuleEditParamsMode] `json:"mode,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-	// An informative summary of the rule, typically used as a reminder or explanation.
-	Notes param.Field[string] `json:"notes"`
-}
-
-func (r AccessRuleEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The rule configuration.
-type AccessRuleEditParamsConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the rule.
-	Target param.Field[AccessRuleEditParamsConfigurationTarget] `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r AccessRuleEditParamsConfiguration) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessRuleEditParamsConfiguration) implementsFirewallAccessRuleEditParamsConfigurationUnion() {
-}
-
-// The rule configuration.
-//
-// Satisfied by [firewall.AccessRuleIPConfigurationParam],
-// [firewall.IPV6ConfigurationParam], [firewall.AccessRuleCIDRConfigurationParam],
-// [firewall.ASNConfigurationParam], [firewall.CountryConfigurationParam],
-// [AccessRuleEditParamsConfiguration].
-type AccessRuleEditParamsConfigurationUnion interface {
-	implementsFirewallAccessRuleEditParamsConfigurationUnion()
-}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the rule.
-type AccessRuleEditParamsConfigurationTarget string
-
-const (
-	AccessRuleEditParamsConfigurationTargetIP      AccessRuleEditParamsConfigurationTarget = "ip"
-	AccessRuleEditParamsConfigurationTargetIp6     AccessRuleEditParamsConfigurationTarget = "ip6"
-	AccessRuleEditParamsConfigurationTargetIPRange AccessRuleEditParamsConfigurationTarget = "ip_range"
-	AccessRuleEditParamsConfigurationTargetASN     AccessRuleEditParamsConfigurationTarget = "asn"
-	AccessRuleEditParamsConfigurationTargetCountry AccessRuleEditParamsConfigurationTarget = "country"
-)
-
-func (r AccessRuleEditParamsConfigurationTarget) IsKnown() bool {
-	switch r {
-	case AccessRuleEditParamsConfigurationTargetIP, AccessRuleEditParamsConfigurationTargetIp6, AccessRuleEditParamsConfigurationTargetIPRange, AccessRuleEditParamsConfigurationTargetASN, AccessRuleEditParamsConfigurationTargetCountry:
-		return true
-	}
-	return false
-}
-
-// The action to apply to a matched request.
-type AccessRuleEditParamsMode string
-
-const (
-	AccessRuleEditParamsModeBlock            AccessRuleEditParamsMode = "block"
-	AccessRuleEditParamsModeChallenge        AccessRuleEditParamsMode = "challenge"
-	AccessRuleEditParamsModeWhitelist        AccessRuleEditParamsMode = "whitelist"
-	AccessRuleEditParamsModeJSChallenge      AccessRuleEditParamsMode = "js_challenge"
-	AccessRuleEditParamsModeManagedChallenge AccessRuleEditParamsMode = "managed_challenge"
-)
-
-func (r AccessRuleEditParamsMode) IsKnown() bool {
-	switch r {
-	case AccessRuleEditParamsModeBlock, AccessRuleEditParamsModeChallenge, AccessRuleEditParamsModeWhitelist, AccessRuleEditParamsModeJSChallenge, AccessRuleEditParamsModeManagedChallenge:
-		return true
-	}
-	return false
-}
-
-type AccessRuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// An object that allows you to override the action of specific WAF rules. Each key
-	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
-	// action. Unless you are disabling a rule, ensure that you also enable the rule
-	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
-	// you must provide a `groups` object or a `rules` object.
-	Result WAFRule `json:"result,required"`
-	// Whether the API call was successful
-	Success AccessRuleEditResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessRuleEditResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessRuleEditResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessRuleEditResponseEnvelope]
-type accessRuleEditResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleEditResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AccessRuleEditResponseEnvelopeSuccess bool
-
-const (
-	AccessRuleEditResponseEnvelopeSuccessTrue AccessRuleEditResponseEnvelopeSuccess = true
-)
-
-func (r AccessRuleEditResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccessRuleEditResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AccessRuleGetParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-type AccessRuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// An object that allows you to override the action of specific WAF rules. Each key
-	// of this object must be the ID of a WAF rule, and each value must be a valid WAF
-	// action. Unless you are disabling a rule, ensure that you also enable the rule
-	// group that this WAF rule belongs to. When creating a new URI-based WAF override,
-	// you must provide a `groups` object or a `rules` object.
-	Result WAFRule `json:"result,required"`
-	// Whether the API call was successful
-	Success AccessRuleGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessRuleGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessRuleGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessRuleGetResponseEnvelope]
-type accessRuleGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessRuleGetResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AccessRuleGetResponseEnvelopeSuccess bool
-
-const (
-	AccessRuleGetResponseEnvelopeSuccessTrue AccessRuleGetResponseEnvelopeSuccess = true
-)
-
-func (r AccessRuleGetResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AccessRuleGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
