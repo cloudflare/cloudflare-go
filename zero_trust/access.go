@@ -134,7 +134,7 @@ type AccessRule struct {
 	IP interface{} `json:"ip,required"`
 	// This field can have the runtime type of [IPListRuleIPList].
 	IPList interface{} `json:"ip_list,required"`
-	// This field can have the runtime type of [interface{}].
+	// This field can have the runtime type of [CertificateRuleCertificate].
 	Certificate interface{} `json:"certificate,required"`
 	// This field can have the runtime type of [GroupRuleGroup].
 	Group interface{} `json:"group,required"`
@@ -541,8 +541,8 @@ func (r AzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
 
 // Matches any valid client certificate.
 type CertificateRule struct {
-	Certificate interface{}         `json:"certificate,required"`
-	JSON        certificateRuleJSON `json:"-"`
+	Certificate CertificateRuleCertificate `json:"certificate,required"`
+	JSON        certificateRuleJSON        `json:"-"`
 }
 
 // certificateRuleJSON contains the JSON metadata for the struct [CertificateRule]
@@ -562,9 +562,28 @@ func (r certificateRuleJSON) RawJSON() string {
 
 func (r CertificateRule) implementsZeroTrustAccessRule() {}
 
+type CertificateRuleCertificate struct {
+	JSON certificateRuleCertificateJSON `json:"-"`
+}
+
+// certificateRuleCertificateJSON contains the JSON metadata for the struct
+// [CertificateRuleCertificate]
+type certificateRuleCertificateJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateRuleCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateRuleCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type CertificateRuleParam struct {
-	Certificate param.Field[interface{}] `json:"certificate,required"`
+	Certificate param.Field[CertificateRuleCertificateParam] `json:"certificate,required"`
 }
 
 func (r CertificateRuleParam) MarshalJSON() (data []byte, err error) {
@@ -572,6 +591,13 @@ func (r CertificateRuleParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type CertificateRuleCertificateParam struct {
+}
+
+func (r CertificateRuleCertificateParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Matches a specific country
 type CountryRule struct {
