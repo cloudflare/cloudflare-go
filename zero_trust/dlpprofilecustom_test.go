@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestDLPProfileCustomNew(t *testing.T) {
@@ -52,8 +52,9 @@ func TestDLPProfileCustomNew(t *testing.T) {
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
 			}}),
-			Name:              cloudflare.F("name"),
-			AllowedMatchCount: cloudflare.F(int64(5)),
+			Name:                cloudflare.F("name"),
+			AllowedMatchCount:   cloudflare.F(int64(5)),
+			ConfidenceThreshold: cloudflare.F("confidence_threshold"),
 			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
 				Enabled: cloudflare.F(true),
 				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
@@ -98,8 +99,9 @@ func TestDLPProfileCustomNew(t *testing.T) {
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
 			}}),
-			Name:              cloudflare.F("name"),
-			AllowedMatchCount: cloudflare.F(int64(5)),
+			Name:                cloudflare.F("name"),
+			AllowedMatchCount:   cloudflare.F(int64(5)),
+			ConfidenceThreshold: cloudflare.F("confidence_threshold"),
 			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
 				Enabled: cloudflare.F(true),
 				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
@@ -144,8 +146,9 @@ func TestDLPProfileCustomNew(t *testing.T) {
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
 			}}),
-			Name:              cloudflare.F("name"),
-			AllowedMatchCount: cloudflare.F(int64(5)),
+			Name:                cloudflare.F("name"),
+			AllowedMatchCount:   cloudflare.F(int64(5)),
+			ConfidenceThreshold: cloudflare.F("confidence_threshold"),
 			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
 				Enabled: cloudflare.F(true),
 				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
@@ -221,8 +224,9 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
 			}}),
-			Name:              cloudflare.F("name"),
-			AllowedMatchCount: cloudflare.F(int64(0)),
+			Name:                cloudflare.F("name"),
+			AllowedMatchCount:   cloudflare.F(int64(0)),
+			ConfidenceThreshold: cloudflare.F("confidence_threshold"),
 			ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
 				Enabled: cloudflare.F(true),
 				Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
