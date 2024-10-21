@@ -56,10 +56,10 @@ func (r *DomainManagedService) Update(ctx context.Context, bucketName string, pa
 }
 
 // Gets state of public access over the bucket's R2-managed (r2.dev) domain.
-func (r *DomainManagedService) List(ctx context.Context, bucketName string, params DomainManagedListParams, opts ...option.RequestOption) (res *DomainManagedListResponse, err error) {
+func (r *DomainManagedService) List(ctx context.Context, bucketName string, query DomainManagedListParams, opts ...option.RequestOption) (res *DomainManagedListResponse, err error) {
 	var env DomainManagedListResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -67,7 +67,7 @@ func (r *DomainManagedService) List(ctx context.Context, bucketName string, para
 		err = errors.New("missing required bucket_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/managed", params.AccountID, bucketName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/managed", query.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -137,29 +137,10 @@ type DomainManagedUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether to enable public bucket access at the r2.dev domain
 	Enabled param.Field[bool] `json:"enabled,required"`
-	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[DomainManagedUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r DomainManagedUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// The bucket jurisdiction
-type DomainManagedUpdateParamsCfR2Jurisdiction string
-
-const (
-	DomainManagedUpdateParamsCfR2JurisdictionDefault DomainManagedUpdateParamsCfR2Jurisdiction = "default"
-	DomainManagedUpdateParamsCfR2JurisdictionEu      DomainManagedUpdateParamsCfR2Jurisdiction = "eu"
-	DomainManagedUpdateParamsCfR2JurisdictionFedramp DomainManagedUpdateParamsCfR2Jurisdiction = "fedramp"
-)
-
-func (r DomainManagedUpdateParamsCfR2Jurisdiction) IsKnown() bool {
-	switch r {
-	case DomainManagedUpdateParamsCfR2JurisdictionDefault, DomainManagedUpdateParamsCfR2JurisdictionEu, DomainManagedUpdateParamsCfR2JurisdictionFedramp:
-		return true
-	}
-	return false
 }
 
 type DomainManagedUpdateResponseEnvelope struct {
@@ -208,25 +189,6 @@ func (r DomainManagedUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DomainManagedListParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[DomainManagedListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
-}
-
-// The bucket jurisdiction
-type DomainManagedListParamsCfR2Jurisdiction string
-
-const (
-	DomainManagedListParamsCfR2JurisdictionDefault DomainManagedListParamsCfR2Jurisdiction = "default"
-	DomainManagedListParamsCfR2JurisdictionEu      DomainManagedListParamsCfR2Jurisdiction = "eu"
-	DomainManagedListParamsCfR2JurisdictionFedramp DomainManagedListParamsCfR2Jurisdiction = "fedramp"
-)
-
-func (r DomainManagedListParamsCfR2Jurisdiction) IsKnown() bool {
-	switch r {
-	case DomainManagedListParamsCfR2JurisdictionDefault, DomainManagedListParamsCfR2JurisdictionEu, DomainManagedListParamsCfR2JurisdictionFedramp:
-		return true
-	}
-	return false
 }
 
 type DomainManagedListResponseEnvelope struct {

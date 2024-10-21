@@ -31,12 +31,11 @@ func TestDomainCustomNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.DomainCustomNewParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Domain:           cloudflare.F("prefix.example-domain.com"),
-			ZoneID:           cloudflare.F("36ca64a6d92827b8a6b90be344bb1bfd"),
-			Enabled:          cloudflare.F(true),
-			MinTLS:           cloudflare.F(r2.DomainCustomNewParamsMinTLS1_0),
-			CfR2Jurisdiction: cloudflare.F(r2.DomainCustomNewParamsCfR2JurisdictionDefault),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Domain:    cloudflare.F("prefix.example-domain.com"),
+			ZoneID:    cloudflare.F("36ca64a6d92827b8a6b90be344bb1bfd"),
+			Enabled:   cloudflare.F(true),
+			MinTLS:    cloudflare.F(r2.DomainCustomNewParamsMinTLS1_0),
 		},
 	)
 	if err != nil {
@@ -66,10 +65,9 @@ func TestDomainCustomUpdateWithOptionalParams(t *testing.T) {
 		"example-bucket",
 		"example-domain/custom-domain.com",
 		r2.DomainCustomUpdateParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Enabled:          cloudflare.F(true),
-			MinTLS:           cloudflare.F(r2.DomainCustomUpdateParamsMinTLS1_0),
-			CfR2Jurisdiction: cloudflare.F(r2.DomainCustomUpdateParamsCfR2JurisdictionDefault),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Enabled:   cloudflare.F(true),
+			MinTLS:    cloudflare.F(r2.DomainCustomUpdateParamsMinTLS1_0),
 		},
 	)
 	if err != nil {
@@ -81,7 +79,7 @@ func TestDomainCustomUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDomainCustomListWithOptionalParams(t *testing.T) {
+func TestDomainCustomList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -98,8 +96,7 @@ func TestDomainCustomListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.DomainCustomListParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.DomainCustomListParamsCfR2JurisdictionDefault),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -111,7 +108,7 @@ func TestDomainCustomListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDomainCustomDeleteWithOptionalParams(t *testing.T) {
+func TestDomainCustomDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -129,8 +126,7 @@ func TestDomainCustomDeleteWithOptionalParams(t *testing.T) {
 		"example-bucket",
 		"example-domain/custom-domain.com",
 		r2.DomainCustomDeleteParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.DomainCustomDeleteParamsCfR2JurisdictionDefault),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

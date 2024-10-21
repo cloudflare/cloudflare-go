@@ -240,48 +240,6 @@ func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, 
 	return
 }
 
-// A group of email addresses that can approve a temporary authentication request.
-type ApprovalGroup struct {
-	// The number of approvals needed to obtain access.
-	ApprovalsNeeded float64 `json:"approvals_needed,required"`
-	// A list of emails that can approve the access request.
-	EmailAddresses []string `json:"email_addresses"`
-	// The UUID of an re-usable email list.
-	EmailListUUID string            `json:"email_list_uuid"`
-	JSON          approvalGroupJSON `json:"-"`
-}
-
-// approvalGroupJSON contains the JSON metadata for the struct [ApprovalGroup]
-type approvalGroupJSON struct {
-	ApprovalsNeeded apijson.Field
-	EmailAddresses  apijson.Field
-	EmailListUUID   apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ApprovalGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r approvalGroupJSON) RawJSON() string {
-	return r.raw
-}
-
-// A group of email addresses that can approve a temporary authentication request.
-type ApprovalGroupParam struct {
-	// The number of approvals needed to obtain access.
-	ApprovalsNeeded param.Field[float64] `json:"approvals_needed,required"`
-	// A list of emails that can approve the access request.
-	EmailAddresses param.Field[[]string] `json:"email_addresses"`
-	// The UUID of an re-usable email list.
-	EmailListUUID param.Field[string] `json:"email_list_uuid"`
-}
-
-func (r ApprovalGroupParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type AccessApplicationPolicyDeleteResponse struct {
 	// UUID
 	ID   string                                    `json:"id"`
