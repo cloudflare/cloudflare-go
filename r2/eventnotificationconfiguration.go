@@ -37,10 +37,10 @@ func NewEventNotificationConfigurationService(opts ...option.RequestOption) (r *
 }
 
 // List all event notification rules for a bucket.
-func (r *EventNotificationConfigurationService) Get(ctx context.Context, bucketName string, query EventNotificationConfigurationGetParams, opts ...option.RequestOption) (res *EventNotificationConfigurationGetResponse, err error) {
+func (r *EventNotificationConfigurationService) Get(ctx context.Context, bucketName string, params EventNotificationConfigurationGetParams, opts ...option.RequestOption) (res *EventNotificationConfigurationGetResponse, err error) {
 	var env EventNotificationConfigurationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -48,7 +48,7 @@ func (r *EventNotificationConfigurationService) Get(ctx context.Context, bucketN
 		err = errors.New("missing required bucket_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration", query.AccountID, bucketName)
+	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -164,6 +164,25 @@ func (r EventNotificationConfigurationGetResponseQueuesRulesAction) IsKnown() bo
 type EventNotificationConfigurationGetParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+	// The bucket jurisdiction
+	CfR2Jurisdiction param.Field[EventNotificationConfigurationGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+}
+
+// The bucket jurisdiction
+type EventNotificationConfigurationGetParamsCfR2Jurisdiction string
+
+const (
+	EventNotificationConfigurationGetParamsCfR2JurisdictionDefault EventNotificationConfigurationGetParamsCfR2Jurisdiction = "default"
+	EventNotificationConfigurationGetParamsCfR2JurisdictionEu      EventNotificationConfigurationGetParamsCfR2Jurisdiction = "eu"
+	EventNotificationConfigurationGetParamsCfR2JurisdictionFedramp EventNotificationConfigurationGetParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r EventNotificationConfigurationGetParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case EventNotificationConfigurationGetParamsCfR2JurisdictionDefault, EventNotificationConfigurationGetParamsCfR2JurisdictionEu, EventNotificationConfigurationGetParamsCfR2JurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type EventNotificationConfigurationGetResponseEnvelope struct {
