@@ -81,10 +81,10 @@ func (r *DomainCustomService) Update(ctx context.Context, bucketName string, dom
 }
 
 // Gets a list of all custom domains registered with an existing R2 bucket.
-func (r *DomainCustomService) List(ctx context.Context, bucketName string, query DomainCustomListParams, opts ...option.RequestOption) (res *DomainCustomListResponse, err error) {
+func (r *DomainCustomService) List(ctx context.Context, bucketName string, params DomainCustomListParams, opts ...option.RequestOption) (res *DomainCustomListResponse, err error) {
 	var env DomainCustomListResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -92,7 +92,7 @@ func (r *DomainCustomService) List(ctx context.Context, bucketName string, query
 		err = errors.New("missing required bucket_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom", query.AccountID, bucketName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -102,10 +102,10 @@ func (r *DomainCustomService) List(ctx context.Context, bucketName string, query
 }
 
 // Remove custom domain registration from an existing R2 bucket
-func (r *DomainCustomService) Delete(ctx context.Context, bucketName string, domainName string, body DomainCustomDeleteParams, opts ...option.RequestOption) (res *DomainCustomDeleteResponse, err error) {
+func (r *DomainCustomService) Delete(ctx context.Context, bucketName string, domainName string, params DomainCustomDeleteParams, opts ...option.RequestOption) (res *DomainCustomDeleteResponse, err error) {
 	var env DomainCustomDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -117,7 +117,7 @@ func (r *DomainCustomService) Delete(ctx context.Context, bucketName string, dom
 		err = errors.New("missing required domain_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", body.AccountID, bucketName, domainName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -399,6 +399,8 @@ type DomainCustomNewParams struct {
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
 	MinTLS param.Field[DomainCustomNewParamsMinTLS] `json:"minTLS"`
+	// The bucket jurisdiction
+	CfR2Jurisdiction param.Field[DomainCustomNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r DomainCustomNewParams) MarshalJSON() (data []byte, err error) {
@@ -419,6 +421,23 @@ const (
 func (r DomainCustomNewParamsMinTLS) IsKnown() bool {
 	switch r {
 	case DomainCustomNewParamsMinTLS1_0, DomainCustomNewParamsMinTLS1_1, DomainCustomNewParamsMinTLS1_2, DomainCustomNewParamsMinTLS1_3:
+		return true
+	}
+	return false
+}
+
+// The bucket jurisdiction
+type DomainCustomNewParamsCfR2Jurisdiction string
+
+const (
+	DomainCustomNewParamsCfR2JurisdictionDefault DomainCustomNewParamsCfR2Jurisdiction = "default"
+	DomainCustomNewParamsCfR2JurisdictionEu      DomainCustomNewParamsCfR2Jurisdiction = "eu"
+	DomainCustomNewParamsCfR2JurisdictionFedramp DomainCustomNewParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r DomainCustomNewParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case DomainCustomNewParamsCfR2JurisdictionDefault, DomainCustomNewParamsCfR2JurisdictionEu, DomainCustomNewParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -475,6 +494,8 @@ type DomainCustomUpdateParams struct {
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to previous value.
 	MinTLS param.Field[DomainCustomUpdateParamsMinTLS] `json:"minTLS"`
+	// The bucket jurisdiction
+	CfR2Jurisdiction param.Field[DomainCustomUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r DomainCustomUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -495,6 +516,23 @@ const (
 func (r DomainCustomUpdateParamsMinTLS) IsKnown() bool {
 	switch r {
 	case DomainCustomUpdateParamsMinTLS1_0, DomainCustomUpdateParamsMinTLS1_1, DomainCustomUpdateParamsMinTLS1_2, DomainCustomUpdateParamsMinTLS1_3:
+		return true
+	}
+	return false
+}
+
+// The bucket jurisdiction
+type DomainCustomUpdateParamsCfR2Jurisdiction string
+
+const (
+	DomainCustomUpdateParamsCfR2JurisdictionDefault DomainCustomUpdateParamsCfR2Jurisdiction = "default"
+	DomainCustomUpdateParamsCfR2JurisdictionEu      DomainCustomUpdateParamsCfR2Jurisdiction = "eu"
+	DomainCustomUpdateParamsCfR2JurisdictionFedramp DomainCustomUpdateParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r DomainCustomUpdateParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case DomainCustomUpdateParamsCfR2JurisdictionDefault, DomainCustomUpdateParamsCfR2JurisdictionEu, DomainCustomUpdateParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -546,6 +584,25 @@ func (r DomainCustomUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type DomainCustomListParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+	// The bucket jurisdiction
+	CfR2Jurisdiction param.Field[DomainCustomListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+}
+
+// The bucket jurisdiction
+type DomainCustomListParamsCfR2Jurisdiction string
+
+const (
+	DomainCustomListParamsCfR2JurisdictionDefault DomainCustomListParamsCfR2Jurisdiction = "default"
+	DomainCustomListParamsCfR2JurisdictionEu      DomainCustomListParamsCfR2Jurisdiction = "eu"
+	DomainCustomListParamsCfR2JurisdictionFedramp DomainCustomListParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r DomainCustomListParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case DomainCustomListParamsCfR2JurisdictionDefault, DomainCustomListParamsCfR2JurisdictionEu, DomainCustomListParamsCfR2JurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type DomainCustomListResponseEnvelope struct {
@@ -594,6 +651,25 @@ func (r DomainCustomListResponseEnvelopeSuccess) IsKnown() bool {
 type DomainCustomDeleteParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+	// The bucket jurisdiction
+	CfR2Jurisdiction param.Field[DomainCustomDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+}
+
+// The bucket jurisdiction
+type DomainCustomDeleteParamsCfR2Jurisdiction string
+
+const (
+	DomainCustomDeleteParamsCfR2JurisdictionDefault DomainCustomDeleteParamsCfR2Jurisdiction = "default"
+	DomainCustomDeleteParamsCfR2JurisdictionEu      DomainCustomDeleteParamsCfR2Jurisdiction = "eu"
+	DomainCustomDeleteParamsCfR2JurisdictionFedramp DomainCustomDeleteParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r DomainCustomDeleteParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case DomainCustomDeleteParamsCfR2JurisdictionDefault, DomainCustomDeleteParamsCfR2JurisdictionEu, DomainCustomDeleteParamsCfR2JurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type DomainCustomDeleteResponseEnvelope struct {

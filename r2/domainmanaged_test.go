@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/r2"
 )
 
-func TestDomainManagedUpdate(t *testing.T) {
+func TestDomainManagedUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -31,8 +31,9 @@ func TestDomainManagedUpdate(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.DomainManagedUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Enabled:   cloudflare.F(true),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Enabled:          cloudflare.F(true),
+			CfR2Jurisdiction: cloudflare.F(r2.DomainManagedUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -44,7 +45,7 @@ func TestDomainManagedUpdate(t *testing.T) {
 	}
 }
 
-func TestDomainManagedList(t *testing.T) {
+func TestDomainManagedListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -61,7 +62,8 @@ func TestDomainManagedList(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.DomainManagedListParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.DomainManagedListParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
