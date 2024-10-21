@@ -232,7 +232,7 @@ type GRETunnelNewResponseGRETunnelsHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelNewResponseGRETunnelsHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type GRETunnelNewResponseGRETunnelsHealthCheckType `json:"type"`
+	Type HealthCheckType                               `json:"type"`
 	JSON greTunnelNewResponseGRETunnelsHealthCheckJSON `json:"-"`
 }
 
@@ -342,22 +342,6 @@ func (r greTunnelNewResponseGRETunnelsHealthCheckTargetMagicHealthCheckTargetJSO
 func (r GRETunnelNewResponseGRETunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelNewResponseGRETunnelsHealthCheckTargetUnion() {
 }
 
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type GRETunnelNewResponseGRETunnelsHealthCheckType string
-
-const (
-	GRETunnelNewResponseGRETunnelsHealthCheckTypeReply   GRETunnelNewResponseGRETunnelsHealthCheckType = "reply"
-	GRETunnelNewResponseGRETunnelsHealthCheckTypeRequest GRETunnelNewResponseGRETunnelsHealthCheckType = "request"
-)
-
-func (r GRETunnelNewResponseGRETunnelsHealthCheckType) IsKnown() bool {
-	switch r {
-	case GRETunnelNewResponseGRETunnelsHealthCheckTypeReply, GRETunnelNewResponseGRETunnelsHealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
 type GRETunnelUpdateResponse struct {
 	Modified          bool                                     `json:"modified"`
 	ModifiedGRETunnel GRETunnelUpdateResponseModifiedGRETunnel `json:"modified_gre_tunnel"`
@@ -455,7 +439,7 @@ type GRETunnelUpdateResponseModifiedGRETunnelHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type GRETunnelUpdateResponseModifiedGRETunnelHealthCheckType `json:"type"`
+	Type HealthCheckType                                         `json:"type"`
 	JSON greTunnelUpdateResponseModifiedGRETunnelHealthCheckJSON `json:"-"`
 }
 
@@ -565,22 +549,6 @@ func (r greTunnelUpdateResponseModifiedGRETunnelHealthCheckTargetMagicHealthChec
 func (r GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion() {
 }
 
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type GRETunnelUpdateResponseModifiedGRETunnelHealthCheckType string
-
-const (
-	GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTypeReply   GRETunnelUpdateResponseModifiedGRETunnelHealthCheckType = "reply"
-	GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTypeRequest GRETunnelUpdateResponseModifiedGRETunnelHealthCheckType = "request"
-)
-
-func (r GRETunnelUpdateResponseModifiedGRETunnelHealthCheckType) IsKnown() bool {
-	switch r {
-	case GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTypeReply, GRETunnelUpdateResponseModifiedGRETunnelHealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
 type GRETunnelListResponse struct {
 	GRETunnels []GRETunnelListResponseGRETunnel `json:"gre_tunnels"`
 	JSON       greTunnelListResponseJSON        `json:"-"`
@@ -676,7 +644,7 @@ type GRETunnelListResponseGRETunnelsHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelListResponseGRETunnelsHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type GRETunnelListResponseGRETunnelsHealthCheckType `json:"type"`
+	Type HealthCheckType                                `json:"type"`
 	JSON greTunnelListResponseGRETunnelsHealthCheckJSON `json:"-"`
 }
 
@@ -786,22 +754,6 @@ func (r greTunnelListResponseGRETunnelsHealthCheckTargetMagicHealthCheckTargetJS
 func (r GRETunnelListResponseGRETunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelListResponseGRETunnelsHealthCheckTargetUnion() {
 }
 
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type GRETunnelListResponseGRETunnelsHealthCheckType string
-
-const (
-	GRETunnelListResponseGRETunnelsHealthCheckTypeReply   GRETunnelListResponseGRETunnelsHealthCheckType = "reply"
-	GRETunnelListResponseGRETunnelsHealthCheckTypeRequest GRETunnelListResponseGRETunnelsHealthCheckType = "request"
-)
-
-func (r GRETunnelListResponseGRETunnelsHealthCheckType) IsKnown() bool {
-	switch r {
-	case GRETunnelListResponseGRETunnelsHealthCheckTypeReply, GRETunnelListResponseGRETunnelsHealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
 type GRETunnelDeleteResponse struct {
 	Deleted          bool                                    `json:"deleted"`
 	DeletedGRETunnel GRETunnelDeleteResponseDeletedGRETunnel `json:"deleted_gre_tunnel"`
@@ -899,7 +851,7 @@ type GRETunnelDeleteResponseDeletedGRETunnelHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type GRETunnelDeleteResponseDeletedGRETunnelHealthCheckType `json:"type"`
+	Type HealthCheckType                                        `json:"type"`
 	JSON greTunnelDeleteResponseDeletedGRETunnelHealthCheckJSON `json:"-"`
 }
 
@@ -1009,22 +961,6 @@ func (r greTunnelDeleteResponseDeletedGRETunnelHealthCheckTargetMagicHealthCheck
 func (r GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion() {
 }
 
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type GRETunnelDeleteResponseDeletedGRETunnelHealthCheckType string
-
-const (
-	GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTypeReply   GRETunnelDeleteResponseDeletedGRETunnelHealthCheckType = "reply"
-	GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTypeRequest GRETunnelDeleteResponseDeletedGRETunnelHealthCheckType = "request"
-)
-
-func (r GRETunnelDeleteResponseDeletedGRETunnelHealthCheckType) IsKnown() bool {
-	switch r {
-	case GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTypeReply, GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
 type GRETunnelGetResponse struct {
 	GRETunnel GRETunnelGetResponseGRETunnel `json:"gre_tunnel"`
 	JSON      greTunnelGetResponseJSON      `json:"-"`
@@ -1120,7 +1056,7 @@ type GRETunnelGetResponseGRETunnelHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target GRETunnelGetResponseGRETunnelHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type GRETunnelGetResponseGRETunnelHealthCheckType `json:"type"`
+	Type HealthCheckType                              `json:"type"`
 	JSON greTunnelGetResponseGRETunnelHealthCheckJSON `json:"-"`
 }
 
@@ -1230,22 +1166,6 @@ func (r greTunnelGetResponseGRETunnelHealthCheckTargetMagicHealthCheckTargetJSON
 func (r GRETunnelGetResponseGRETunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelGetResponseGRETunnelHealthCheckTargetUnion() {
 }
 
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type GRETunnelGetResponseGRETunnelHealthCheckType string
-
-const (
-	GRETunnelGetResponseGRETunnelHealthCheckTypeReply   GRETunnelGetResponseGRETunnelHealthCheckType = "reply"
-	GRETunnelGetResponseGRETunnelHealthCheckTypeRequest GRETunnelGetResponseGRETunnelHealthCheckType = "request"
-)
-
-func (r GRETunnelGetResponseGRETunnelHealthCheckType) IsKnown() bool {
-	switch r {
-	case GRETunnelGetResponseGRETunnelHealthCheckTypeReply, GRETunnelGetResponseGRETunnelHealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
 type GRETunnelNewParams struct {
 	// Identifier
 	AccountID         param.Field[string] `path:"account_id,required"`
@@ -1348,7 +1268,7 @@ type GRETunnelUpdateParamsHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target param.Field[GRETunnelUpdateParamsHealthCheckTargetUnion] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[GRETunnelUpdateParamsHealthCheckType] `json:"type"`
+	Type param.Field[HealthCheckType] `json:"type"`
 }
 
 func (r GRETunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -1405,22 +1325,6 @@ func (r GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) MarshalJSO
 }
 
 func (r GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelUpdateParamsHealthCheckTargetUnion() {
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type GRETunnelUpdateParamsHealthCheckType string
-
-const (
-	GRETunnelUpdateParamsHealthCheckTypeReply   GRETunnelUpdateParamsHealthCheckType = "reply"
-	GRETunnelUpdateParamsHealthCheckTypeRequest GRETunnelUpdateParamsHealthCheckType = "request"
-)
-
-func (r GRETunnelUpdateParamsHealthCheckType) IsKnown() bool {
-	switch r {
-	case GRETunnelUpdateParamsHealthCheckTypeReply, GRETunnelUpdateParamsHealthCheckTypeRequest:
-		return true
-	}
-	return false
 }
 
 type GRETunnelUpdateResponseEnvelope struct {

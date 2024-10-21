@@ -15,14 +15,10 @@ func (UnionTime) ImplementsAuditLogsAuditLogListParamsSinceUnion()  {}
 
 type UnionString string
 
-func (UnionString) ImplementsFirewallWAFPackageListResponseFirewallAPIResponseCollectionResultUnion() {
-}
 func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                 {}
 func (UnionString) ImplementsLogsReceivedGetParamsStartUnion()               {}
 func (UnionString) ImplementsWorkersAIRunResponseUnion()                     {}
 func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion() {}
-func (UnionString) ImplementsQueuesQueueDeleteResponseUnion()                {}
-func (UnionString) ImplementsQueuesConsumerDeleteResponseUnion()             {}
 func (UnionString) ImplementsSpectrumOriginPortUnionParam()                  {}
 func (UnionString) ImplementsSpectrumOriginPortUnion()                       {}
 func (UnionString) ImplementsMagicTransitCfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion() {
@@ -50,11 +46,7 @@ func (UnionString) ImplementsMagicTransitIPSECTunnelDeleteResponseDeletedIPSECTu
 func (UnionString) ImplementsMagicTransitIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion() {}
 func (UnionString) ImplementsMagicTransitIPSECTunnelNewParamsHealthCheckTargetUnion()              {}
 func (UnionString) ImplementsMagicTransitIPSECTunnelUpdateParamsHealthCheckTargetUnion()           {}
-func (UnionString) ImplementsRegistrarDomainUpdateResponseUnion()                                  {}
-func (UnionString) ImplementsRegistrarDomainListResponseResultUnion()                              {}
-func (UnionString) ImplementsRegistrarDomainGetResponseUnion()                                     {}
 func (UnionString) ImplementsRulesListItemGetResponseUnion()                                       {}
-func (UnionString) ImplementsWARPConnectorWARPConnectorTokenResponseUnion()                        {}
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {}
@@ -81,8 +73,6 @@ func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnr
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
-func (UnionString) ImplementsZeroTrustTunnelTokenGetResponseUnion()            {}
-func (UnionString) ImplementsZeroTrustTunnelManagementNewResponseUnion()       {}
 func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union() {}
 func (UnionString) ImplementsHostnamesSettingValueUnionParam()                 {}
 func (UnionString) ImplementsHostnamesSettingValueUnion()                      {}

@@ -72,7 +72,7 @@ func TestGRETunnelUpdateWithOptionalParams(t *testing.T) {
 				Target: cloudflare.F[magic_transit.GRETunnelUpdateParamsHealthCheckTargetUnion](magic_transit.GRETunnelUpdateParamsHealthCheckTargetMagicHealthCheckTarget{
 					Saved: cloudflare.F("203.0.113.1"),
 				}),
-				Type: cloudflare.F(magic_transit.GRETunnelUpdateParamsHealthCheckTypeReply),
+				Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
 			}),
 			Mtu:               cloudflare.F(int64(0)),
 			TTL:               cloudflare.F(int64(0)),
