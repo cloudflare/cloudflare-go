@@ -210,7 +210,7 @@ type CfInterconnectUpdateResponseModifiedInterconnectHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type CfInterconnectUpdateResponseModifiedInterconnectHealthCheckType `json:"type"`
+	Type HealthCheckType                                                 `json:"type"`
 	JSON cfInterconnectUpdateResponseModifiedInterconnectHealthCheckJSON `json:"-"`
 }
 
@@ -299,22 +299,6 @@ func (r cfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHe
 }
 
 func (r CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitCfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion() {
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type CfInterconnectUpdateResponseModifiedInterconnectHealthCheckType string
-
-const (
-	CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTypeReply   CfInterconnectUpdateResponseModifiedInterconnectHealthCheckType = "reply"
-	CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTypeRequest CfInterconnectUpdateResponseModifiedInterconnectHealthCheckType = "request"
-)
-
-func (r CfInterconnectUpdateResponseModifiedInterconnectHealthCheckType) IsKnown() bool {
-	switch r {
-	case CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTypeReply, CfInterconnectUpdateResponseModifiedInterconnectHealthCheckTypeRequest:
-		return true
-	}
-	return false
 }
 
 type CfInterconnectListResponse struct {
@@ -427,7 +411,7 @@ type CfInterconnectListResponseInterconnectsHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target CfInterconnectListResponseInterconnectsHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type CfInterconnectListResponseInterconnectsHealthCheckType `json:"type"`
+	Type HealthCheckType                                        `json:"type"`
 	JSON cfInterconnectListResponseInterconnectsHealthCheckJSON `json:"-"`
 }
 
@@ -515,22 +499,6 @@ func (r cfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheck
 }
 
 func (r CfInterconnectListResponseInterconnectsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitCfInterconnectListResponseInterconnectsHealthCheckTargetUnion() {
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type CfInterconnectListResponseInterconnectsHealthCheckType string
-
-const (
-	CfInterconnectListResponseInterconnectsHealthCheckTypeReply   CfInterconnectListResponseInterconnectsHealthCheckType = "reply"
-	CfInterconnectListResponseInterconnectsHealthCheckTypeRequest CfInterconnectListResponseInterconnectsHealthCheckType = "request"
-)
-
-func (r CfInterconnectListResponseInterconnectsHealthCheckType) IsKnown() bool {
-	switch r {
-	case CfInterconnectListResponseInterconnectsHealthCheckTypeReply, CfInterconnectListResponseInterconnectsHealthCheckTypeRequest:
-		return true
-	}
-	return false
 }
 
 type CfInterconnectGetResponse struct {
@@ -643,7 +611,7 @@ type CfInterconnectGetResponseInterconnectHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target CfInterconnectGetResponseInterconnectHealthCheckTargetUnion `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type CfInterconnectGetResponseInterconnectHealthCheckType `json:"type"`
+	Type HealthCheckType                                      `json:"type"`
 	JSON cfInterconnectGetResponseInterconnectHealthCheckJSON `json:"-"`
 }
 
@@ -733,22 +701,6 @@ func (r cfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTa
 func (r CfInterconnectGetResponseInterconnectHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitCfInterconnectGetResponseInterconnectHealthCheckTargetUnion() {
 }
 
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type CfInterconnectGetResponseInterconnectHealthCheckType string
-
-const (
-	CfInterconnectGetResponseInterconnectHealthCheckTypeReply   CfInterconnectGetResponseInterconnectHealthCheckType = "reply"
-	CfInterconnectGetResponseInterconnectHealthCheckTypeRequest CfInterconnectGetResponseInterconnectHealthCheckType = "request"
-)
-
-func (r CfInterconnectGetResponseInterconnectHealthCheckType) IsKnown() bool {
-	switch r {
-	case CfInterconnectGetResponseInterconnectHealthCheckTypeReply, CfInterconnectGetResponseInterconnectHealthCheckTypeRequest:
-		return true
-	}
-	return false
-}
-
 type CfInterconnectUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -796,7 +748,7 @@ type CfInterconnectUpdateParamsHealthCheck struct {
 	// if x-magic-new-hc-target is absent or set to false.
 	Target param.Field[CfInterconnectUpdateParamsHealthCheckTargetUnion] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[CfInterconnectUpdateParamsHealthCheckType] `json:"type"`
+	Type param.Field[HealthCheckType] `json:"type"`
 }
 
 func (r CfInterconnectUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
@@ -834,22 +786,6 @@ func (r CfInterconnectUpdateParamsHealthCheckTargetMagicHealthCheckTarget) Marsh
 }
 
 func (r CfInterconnectUpdateParamsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitCfInterconnectUpdateParamsHealthCheckTargetUnion() {
-}
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type CfInterconnectUpdateParamsHealthCheckType string
-
-const (
-	CfInterconnectUpdateParamsHealthCheckTypeReply   CfInterconnectUpdateParamsHealthCheckType = "reply"
-	CfInterconnectUpdateParamsHealthCheckTypeRequest CfInterconnectUpdateParamsHealthCheckType = "request"
-)
-
-func (r CfInterconnectUpdateParamsHealthCheckType) IsKnown() bool {
-	switch r {
-	case CfInterconnectUpdateParamsHealthCheckTypeReply, CfInterconnectUpdateParamsHealthCheckTypeRequest:
-		return true
-	}
-	return false
 }
 
 type CfInterconnectUpdateResponseEnvelope struct {
