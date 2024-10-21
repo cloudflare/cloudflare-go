@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
@@ -15,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/tidwall/gjson"
 )
 
 // QueueService contains methods and other services that help with interacting with
@@ -107,7 +105,7 @@ func (r *QueueService) ListAutoPaging(ctx context.Context, query QueueListParams
 }
 
 // Deletes a queue.
-func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *QueueDeleteResponseUnion, err error) {
+func (r *QueueService) Delete(ctx context.Context, queueID string, body QueueDeleteParams, opts ...option.RequestOption) (res *[]QueueDeleteResponse, err error) {
 	var env QueueDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -256,29 +254,7 @@ func (r queueUpdatedJSON) RawJSON() string {
 	return r.raw
 }
 
-// Union satisfied by [queues.QueueDeleteResponseArray] or [shared.UnionString].
-type QueueDeleteResponseUnion interface {
-	ImplementsQueuesQueueDeleteResponseUnion()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*QueueDeleteResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(QueueDeleteResponseArray{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type QueueDeleteResponseArray []interface{}
-
-func (r QueueDeleteResponseArray) ImplementsQueuesQueueDeleteResponseUnion() {}
+type QueueDeleteResponse = interface{}
 
 type QueueNewParams struct {
 	// Identifier.
@@ -463,9 +439,9 @@ type QueueDeleteParams struct {
 }
 
 type QueueDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   QueueDeleteResponseUnion `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []QueueDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    QueueDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueDeleteResponseEnvelopeResultInfo `json:"result_info"`
