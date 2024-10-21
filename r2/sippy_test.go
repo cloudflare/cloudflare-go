@@ -46,7 +46,6 @@ func TestSippyUpdateWithOptionalParams(t *testing.T) {
 					SecretAccessKey: cloudflare.F("secretAccessKey"),
 				}),
 			},
-			CfR2Jurisdiction: cloudflare.F(r2.SippyUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -58,7 +57,7 @@ func TestSippyUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSippyDeleteWithOptionalParams(t *testing.T) {
+func TestSippyDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -75,8 +74,7 @@ func TestSippyDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.SippyDeleteParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.SippyDeleteParamsCfR2JurisdictionDefault),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -88,7 +86,7 @@ func TestSippyDeleteWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSippyGetWithOptionalParams(t *testing.T) {
+func TestSippyGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -105,8 +103,7 @@ func TestSippyGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.SippyGetParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.SippyGetParamsCfR2JurisdictionDefault),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
