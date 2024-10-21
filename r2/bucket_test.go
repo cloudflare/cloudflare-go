@@ -28,10 +28,11 @@ func TestBucketNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.R2.Buckets.New(context.TODO(), r2.BucketNewParams{
-		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Name:         cloudflare.F("example-bucket"),
-		LocationHint: cloudflare.F(r2.BucketNewParamsLocationHintApac),
-		StorageClass: cloudflare.F(r2.BucketNewParamsStorageClassStandard),
+		AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:             cloudflare.F("example-bucket"),
+		LocationHint:     cloudflare.F(r2.BucketNewParamsLocationHintApac),
+		StorageClass:     cloudflare.F(r2.BucketNewParamsStorageClassStandard),
+		CfR2Jurisdiction: cloudflare.F(r2.BucketNewParamsCfR2JurisdictionDefault),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -56,13 +57,14 @@ func TestBucketListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.R2.Buckets.List(context.TODO(), r2.BucketListParams{
-		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Cursor:       cloudflare.F("cursor"),
-		Direction:    cloudflare.F(r2.BucketListParamsDirectionAsc),
-		NameContains: cloudflare.F("my-bucket"),
-		Order:        cloudflare.F(r2.BucketListParamsOrderName),
-		PerPage:      cloudflare.F(1.000000),
-		StartAfter:   cloudflare.F("my-bucket"),
+		AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Cursor:           cloudflare.F("cursor"),
+		Direction:        cloudflare.F(r2.BucketListParamsDirectionAsc),
+		NameContains:     cloudflare.F("my-bucket"),
+		Order:            cloudflare.F(r2.BucketListParamsOrderName),
+		PerPage:          cloudflare.F(1.000000),
+		StartAfter:       cloudflare.F("my-bucket"),
+		CfR2Jurisdiction: cloudflare.F(r2.BucketListParamsCfR2JurisdictionDefault),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -73,7 +75,7 @@ func TestBucketListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestBucketDelete(t *testing.T) {
+func TestBucketDeleteWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -90,7 +92,8 @@ func TestBucketDelete(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketDeleteParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketDeleteParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -102,7 +105,7 @@ func TestBucketDelete(t *testing.T) {
 	}
 }
 
-func TestBucketGet(t *testing.T) {
+func TestBucketGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -119,7 +122,8 @@ func TestBucketGet(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CfR2Jurisdiction: cloudflare.F(r2.BucketGetParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
