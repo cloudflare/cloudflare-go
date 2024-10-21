@@ -56,10 +56,10 @@ func (r *SippyService) Update(ctx context.Context, bucketName string, params Sip
 }
 
 // Disables Sippy on this bucket
-func (r *SippyService) Delete(ctx context.Context, bucketName string, params SippyDeleteParams, opts ...option.RequestOption) (res *SippyDeleteResponse, err error) {
+func (r *SippyService) Delete(ctx context.Context, bucketName string, body SippyDeleteParams, opts ...option.RequestOption) (res *SippyDeleteResponse, err error) {
 	var env SippyDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
+	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -67,7 +67,7 @@ func (r *SippyService) Delete(ctx context.Context, bucketName string, params Sip
 		err = errors.New("missing required bucket_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.AccountID, bucketName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", body.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -77,10 +77,10 @@ func (r *SippyService) Delete(ctx context.Context, bucketName string, params Sip
 }
 
 // Gets configuration for Sippy for an existing R2 bucket.
-func (r *SippyService) Get(ctx context.Context, bucketName string, params SippyGetParams, opts ...option.RequestOption) (res *Sippy, err error) {
+func (r *SippyService) Get(ctx context.Context, bucketName string, query SippyGetParams, opts ...option.RequestOption) (res *Sippy, err error) {
 	var env SippyGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.AccountID.Value == "" {
+	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -88,7 +88,7 @@ func (r *SippyService) Get(ctx context.Context, bucketName string, params SippyG
 		err = errors.New("missing required bucket_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.AccountID, bucketName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", query.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -249,8 +249,6 @@ type SippyUpdateParams struct {
 	// Account ID
 	AccountID param.Field[string]        `path:"account_id,required"`
 	Body      SippyUpdateParamsBodyUnion `json:"body,required"`
-	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[SippyUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r SippyUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -406,23 +404,6 @@ func (r SippyUpdateParamsBodyR2EnableSippyGcsSourceProvider) IsKnown() bool {
 	return false
 }
 
-// The bucket jurisdiction
-type SippyUpdateParamsCfR2Jurisdiction string
-
-const (
-	SippyUpdateParamsCfR2JurisdictionDefault SippyUpdateParamsCfR2Jurisdiction = "default"
-	SippyUpdateParamsCfR2JurisdictionEu      SippyUpdateParamsCfR2Jurisdiction = "eu"
-	SippyUpdateParamsCfR2JurisdictionFedramp SippyUpdateParamsCfR2Jurisdiction = "fedramp"
-)
-
-func (r SippyUpdateParamsCfR2Jurisdiction) IsKnown() bool {
-	switch r {
-	case SippyUpdateParamsCfR2JurisdictionDefault, SippyUpdateParamsCfR2JurisdictionEu, SippyUpdateParamsCfR2JurisdictionFedramp:
-		return true
-	}
-	return false
-}
-
 type SippyUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []string              `json:"messages,required"`
@@ -469,25 +450,6 @@ func (r SippyUpdateResponseEnvelopeSuccess) IsKnown() bool {
 type SippyDeleteParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[SippyDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
-}
-
-// The bucket jurisdiction
-type SippyDeleteParamsCfR2Jurisdiction string
-
-const (
-	SippyDeleteParamsCfR2JurisdictionDefault SippyDeleteParamsCfR2Jurisdiction = "default"
-	SippyDeleteParamsCfR2JurisdictionEu      SippyDeleteParamsCfR2Jurisdiction = "eu"
-	SippyDeleteParamsCfR2JurisdictionFedramp SippyDeleteParamsCfR2Jurisdiction = "fedramp"
-)
-
-func (r SippyDeleteParamsCfR2Jurisdiction) IsKnown() bool {
-	switch r {
-	case SippyDeleteParamsCfR2JurisdictionDefault, SippyDeleteParamsCfR2JurisdictionEu, SippyDeleteParamsCfR2JurisdictionFedramp:
-		return true
-	}
-	return false
 }
 
 type SippyDeleteResponseEnvelope struct {
@@ -536,25 +498,6 @@ func (r SippyDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type SippyGetParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[SippyGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
-}
-
-// The bucket jurisdiction
-type SippyGetParamsCfR2Jurisdiction string
-
-const (
-	SippyGetParamsCfR2JurisdictionDefault SippyGetParamsCfR2Jurisdiction = "default"
-	SippyGetParamsCfR2JurisdictionEu      SippyGetParamsCfR2Jurisdiction = "eu"
-	SippyGetParamsCfR2JurisdictionFedramp SippyGetParamsCfR2Jurisdiction = "fedramp"
-)
-
-func (r SippyGetParamsCfR2Jurisdiction) IsKnown() bool {
-	switch r {
-	case SippyGetParamsCfR2JurisdictionDefault, SippyGetParamsCfR2JurisdictionEu, SippyGetParamsCfR2JurisdictionFedramp:
-		return true
-	}
-	return false
 }
 
 type SippyGetResponseEnvelope struct {

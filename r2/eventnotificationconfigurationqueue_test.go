@@ -46,7 +46,6 @@ func TestEventNotificationConfigurationQueueUpdateWithOptionalParams(t *testing.
 				Prefix:  cloudflare.F("img/"),
 				Suffix:  cloudflare.F(".jpeg"),
 			}}),
-			CfR2Jurisdiction: cloudflare.F(r2.EventNotificationConfigurationQueueUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -58,7 +57,7 @@ func TestEventNotificationConfigurationQueueUpdateWithOptionalParams(t *testing.
 	}
 }
 
-func TestEventNotificationConfigurationQueueDeleteWithOptionalParams(t *testing.T) {
+func TestEventNotificationConfigurationQueueDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -76,8 +75,7 @@ func TestEventNotificationConfigurationQueueDeleteWithOptionalParams(t *testing.
 		"example-bucket",
 		"queue_id",
 		r2.EventNotificationConfigurationQueueDeleteParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.EventNotificationConfigurationQueueDeleteParamsCfR2JurisdictionDefault),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
