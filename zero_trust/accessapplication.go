@@ -603,9 +603,9 @@ type OIDCSaaSApp struct {
 	// The application client id
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
-	ClientSecret string                  `json:"client_secret"`
-	CreatedAt    time.Time               `json:"created_at" format:"date-time"`
-	CustomClaims OIDCSaaSAppCustomClaims `json:"custom_claims"`
+	ClientSecret string                   `json:"client_secret"`
+	CreatedAt    time.Time                `json:"created_at" format:"date-time"`
+	CustomClaims []OIDCSaaSAppCustomClaim `json:"custom_claims"`
 	// The OIDC flows supported by this application
 	GrantTypes []OIDCSaaSAppGrantType `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
@@ -679,7 +679,7 @@ func (r OIDCSaaSAppAuthType) IsKnown() bool {
 	return false
 }
 
-type OIDCSaaSAppCustomClaims struct {
+type OIDCSaaSAppCustomClaim struct {
 	// The name of the claim.
 	Name string `json:"name"`
 	// If the claim is required when building an OIDC token.
@@ -687,12 +687,12 @@ type OIDCSaaSAppCustomClaims struct {
 	// The scope of the claim.
 	Scope  OIDCSaaSAppCustomClaimsScope  `json:"scope"`
 	Source OIDCSaaSAppCustomClaimsSource `json:"source"`
-	JSON   oidcSaaSAppCustomClaimsJSON   `json:"-"`
+	JSON   oidcSaaSAppCustomClaimJSON    `json:"-"`
 }
 
-// oidcSaaSAppCustomClaimsJSON contains the JSON metadata for the struct
-// [OIDCSaaSAppCustomClaims]
-type oidcSaaSAppCustomClaimsJSON struct {
+// oidcSaaSAppCustomClaimJSON contains the JSON metadata for the struct
+// [OIDCSaaSAppCustomClaim]
+type oidcSaaSAppCustomClaimJSON struct {
 	Name        apijson.Field
 	Required    apijson.Field
 	Scope       apijson.Field
@@ -701,11 +701,11 @@ type oidcSaaSAppCustomClaimsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OIDCSaaSAppCustomClaims) UnmarshalJSON(data []byte) (err error) {
+func (r *OIDCSaaSAppCustomClaim) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r oidcSaaSAppCustomClaimsJSON) RawJSON() string {
+func (r oidcSaaSAppCustomClaimJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -850,8 +850,8 @@ type OIDCSaaSAppParam struct {
 	// The application client id
 	ClientID param.Field[string] `json:"client_id"`
 	// The application client secret, only returned on POST request.
-	ClientSecret param.Field[string]                       `json:"client_secret"`
-	CustomClaims param.Field[OIDCSaaSAppCustomClaimsParam] `json:"custom_claims"`
+	ClientSecret param.Field[string]                        `json:"client_secret"`
+	CustomClaims param.Field[[]OIDCSaaSAppCustomClaimParam] `json:"custom_claims"`
 	// The OIDC flows supported by this application
 	GrantTypes param.Field[[]OIDCSaaSAppGrantType] `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
@@ -878,7 +878,7 @@ func (r OIDCSaaSAppParam) implementsZeroTrustAccessApplicationNewParamsBodySaaSA
 func (r OIDCSaaSAppParam) implementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationSaaSAppUnion() {
 }
 
-type OIDCSaaSAppCustomClaimsParam struct {
+type OIDCSaaSAppCustomClaimParam struct {
 	// The name of the claim.
 	Name param.Field[string] `json:"name"`
 	// If the claim is required when building an OIDC token.
@@ -888,7 +888,7 @@ type OIDCSaaSAppCustomClaimsParam struct {
 	Source param.Field[OIDCSaaSAppCustomClaimsSourceParam] `json:"source"`
 }
 
-func (r OIDCSaaSAppCustomClaimsParam) MarshalJSON() (data []byte, err error) {
+func (r OIDCSaaSAppCustomClaimParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2585,7 +2585,7 @@ type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [OIDCSaaSAppCustomClaims].
+	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
 	CustomClaims interface{} `json:"custom_claims,required"`
 	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
 	GrantTypes interface{} `json:"grant_types,required"`
@@ -5435,7 +5435,7 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [OIDCSaaSAppCustomClaims].
+	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
 	CustomClaims interface{} `json:"custom_claims,required"`
 	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
 	GrantTypes interface{} `json:"grant_types,required"`
@@ -8287,7 +8287,7 @@ type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [OIDCSaaSAppCustomClaims].
+	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
 	CustomClaims interface{} `json:"custom_claims,required"`
 	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
 	GrantTypes interface{} `json:"grant_types,required"`
@@ -11159,7 +11159,7 @@ type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
 	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [OIDCSaaSAppCustomClaims].
+	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
 	CustomClaims interface{} `json:"custom_claims,required"`
 	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
 	GrantTypes interface{} `json:"grant_types,required"`
