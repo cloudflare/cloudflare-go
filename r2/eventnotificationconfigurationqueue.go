@@ -62,10 +62,10 @@ func (r *EventNotificationConfigurationQueueService) Update(ctx context.Context,
 
 // Delete an event notification rule. **If no body is provided, all rules for
 // specified queue will be deleted**.
-func (r *EventNotificationConfigurationQueueService) Delete(ctx context.Context, bucketName string, queueID string, body EventNotificationConfigurationQueueDeleteParams, opts ...option.RequestOption) (res *EventNotificationConfigurationQueueDeleteResponse, err error) {
+func (r *EventNotificationConfigurationQueueService) Delete(ctx context.Context, bucketName string, queueID string, params EventNotificationConfigurationQueueDeleteParams, opts ...option.RequestOption) (res *EventNotificationConfigurationQueueDeleteResponse, err error) {
 	var env EventNotificationConfigurationQueueDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -77,7 +77,7 @@ func (r *EventNotificationConfigurationQueueService) Delete(ctx context.Context,
 		err = errors.New("missing required queue_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration/queues/%s", body.AccountID, bucketName, queueID)
+	path := fmt.Sprintf("accounts/%s/event_notifications/r2/%s/configuration/queues/%s", params.AccountID, bucketName, queueID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -95,6 +95,8 @@ type EventNotificationConfigurationQueueUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Array of rules to drive notifications
 	Rules param.Field[[]EventNotificationConfigurationQueueUpdateParamsRule] `json:"rules"`
+	// The bucket jurisdiction
+	CfR2Jurisdiction param.Field[EventNotificationConfigurationQueueUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r EventNotificationConfigurationQueueUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -127,6 +129,23 @@ const (
 func (r EventNotificationConfigurationQueueUpdateParamsRulesAction) IsKnown() bool {
 	switch r {
 	case EventNotificationConfigurationQueueUpdateParamsRulesActionPutObject, EventNotificationConfigurationQueueUpdateParamsRulesActionCopyObject, EventNotificationConfigurationQueueUpdateParamsRulesActionDeleteObject, EventNotificationConfigurationQueueUpdateParamsRulesActionCompleteMultipartUpload, EventNotificationConfigurationQueueUpdateParamsRulesActionLifecycleDeletion:
+		return true
+	}
+	return false
+}
+
+// The bucket jurisdiction
+type EventNotificationConfigurationQueueUpdateParamsCfR2Jurisdiction string
+
+const (
+	EventNotificationConfigurationQueueUpdateParamsCfR2JurisdictionDefault EventNotificationConfigurationQueueUpdateParamsCfR2Jurisdiction = "default"
+	EventNotificationConfigurationQueueUpdateParamsCfR2JurisdictionEu      EventNotificationConfigurationQueueUpdateParamsCfR2Jurisdiction = "eu"
+	EventNotificationConfigurationQueueUpdateParamsCfR2JurisdictionFedramp EventNotificationConfigurationQueueUpdateParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r EventNotificationConfigurationQueueUpdateParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case EventNotificationConfigurationQueueUpdateParamsCfR2JurisdictionDefault, EventNotificationConfigurationQueueUpdateParamsCfR2JurisdictionEu, EventNotificationConfigurationQueueUpdateParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -179,6 +198,25 @@ func (r EventNotificationConfigurationQueueUpdateResponseEnvelopeSuccess) IsKnow
 type EventNotificationConfigurationQueueDeleteParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+	// The bucket jurisdiction
+	CfR2Jurisdiction param.Field[EventNotificationConfigurationQueueDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+}
+
+// The bucket jurisdiction
+type EventNotificationConfigurationQueueDeleteParamsCfR2Jurisdiction string
+
+const (
+	EventNotificationConfigurationQueueDeleteParamsCfR2JurisdictionDefault EventNotificationConfigurationQueueDeleteParamsCfR2Jurisdiction = "default"
+	EventNotificationConfigurationQueueDeleteParamsCfR2JurisdictionEu      EventNotificationConfigurationQueueDeleteParamsCfR2Jurisdiction = "eu"
+	EventNotificationConfigurationQueueDeleteParamsCfR2JurisdictionFedramp EventNotificationConfigurationQueueDeleteParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r EventNotificationConfigurationQueueDeleteParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case EventNotificationConfigurationQueueDeleteParamsCfR2JurisdictionDefault, EventNotificationConfigurationQueueDeleteParamsCfR2JurisdictionEu, EventNotificationConfigurationQueueDeleteParamsCfR2JurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type EventNotificationConfigurationQueueDeleteResponseEnvelope struct {
