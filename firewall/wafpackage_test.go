@@ -28,15 +28,18 @@ func TestWAFPackageListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.WAF.Packages.List(context.TODO(), firewall.WAFPackageListParams{
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction: cloudflare.F(firewall.WAFPackageListParamsDirectionAsc),
-		Match:     cloudflare.F(firewall.WAFPackageListParamsMatchAny),
-		Name:      cloudflare.F("USER"),
-		Order:     cloudflare.F(firewall.WAFPackageListParamsOrderName),
-		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(5.000000),
-	})
+	_, err := client.Firewall.WAF.Packages.List(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		firewall.WAFPackageListParams{
+			Direction: cloudflare.F(firewall.WAFPackageListParamsDirectionAsc),
+			Match:     cloudflare.F(firewall.WAFPackageListParamsMatchAny),
+			Name:      cloudflare.F("USER"),
+			Order:     cloudflare.F(firewall.WAFPackageListParamsOrderName),
+			Page:      cloudflare.F(1.000000),
+			PerPage:   cloudflare.F(5.000000),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -62,9 +65,7 @@ func TestWAFPackageGet(t *testing.T) {
 	_, err := client.Firewall.WAF.Packages.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		firewall.WAFPackageGetParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		},
+		"023e105f4ecef8ad9ca31a8372d0c353",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
