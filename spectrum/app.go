@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 	"github.com/tidwall/gjson"
 )
@@ -80,20 +81,30 @@ func (r *AppService) Update(ctx context.Context, appID string, params AppUpdateP
 }
 
 // Retrieves a list of currently existing Spectrum applications inside a zone.
-func (r *AppService) List(ctx context.Context, params AppListParams, opts ...option.RequestOption) (res *AppListResponseUnion, err error) {
-	var env AppListResponseEnvelope
+func (r *AppService) List(ctx context.Context, params AppListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AppListResponse], err error) {
+	var raw *http.Response
 	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
 	path := fmt.Sprintf("zones/%s/spectrum/apps", params.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Retrieves a list of currently existing Spectrum applications inside a zone.
+func (r *AppService) ListAutoPaging(ctx context.Context, params AppListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AppListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a previously existing application.
@@ -839,32 +850,76 @@ func (r AppUpdateResponseTrafficType) IsKnown() bool {
 	return false
 }
 
-// Union satisfied by [spectrum.AppListResponseArray] or
-// [spectrum.AppListResponseArray].
-type AppListResponseUnion interface {
-	implementsSpectrumAppListResponseUnion()
+type AppListResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success    AppListResponseSuccess     `json:"success,required"`
+	Result     AppListResponseResultUnion `json:"result"`
+	ResultInfo AppListResponseResultInfo  `json:"result_info"`
+	JSON       appListResponseJSON        `json:"-"`
+}
+
+// appListResponseJSON contains the JSON metadata for the struct [AppListResponse]
+type appListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AppListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r appListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type AppListResponseSuccess bool
+
+const (
+	AppListResponseSuccessTrue AppListResponseSuccess = true
+)
+
+func (r AppListResponseSuccess) IsKnown() bool {
+	switch r {
+	case AppListResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
+// Union satisfied by [spectrum.AppListResponseResultArray] or
+// [spectrum.AppListResponseResultArray].
+type AppListResponseResultUnion interface {
+	implementsSpectrumAppListResponseResultUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AppListResponseUnion)(nil)).Elem(),
+		reflect.TypeOf((*AppListResponseResultUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AppListResponseArray{}),
+			Type:       reflect.TypeOf(AppListResponseResultArray{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AppListResponseArray{}),
+			Type:       reflect.TypeOf(AppListResponseResultArray{}),
 		},
 	)
 }
 
-type AppListResponseArray []AppListResponseArrayItem
+type AppListResponseResultArray []AppListResponseResultArrayItem
 
-func (r AppListResponseArray) implementsSpectrumAppListResponseUnion() {}
+func (r AppListResponseResultArray) implementsSpectrumAppListResponseResultUnion() {}
 
-type AppListResponseArrayItem struct {
+type AppListResponseResultArrayItem struct {
 	// App identifier.
 	ID string `json:"id,required"`
 	// When the Application was created.
@@ -883,15 +938,15 @@ type AppListResponseArrayItem struct {
 	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
 	// Proxy Protocol.
-	ProxyProtocol AppListResponseArrayProxyProtocol `json:"proxy_protocol,required"`
+	ProxyProtocol AppListResponseResultArrayProxyProtocol `json:"proxy_protocol,required"`
 	// The type of TLS termination associated with the application.
-	TLS AppListResponseArrayTLS `json:"tls,required"`
+	TLS AppListResponseResultArrayTLS `json:"tls,required"`
 	// Determines how data travels from the edge to your origin. When set to "direct",
 	// Spectrum will send traffic directly to your origin, and the application's type
 	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
 	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
 	// the application type matches this property exactly.
-	TrafficType AppListResponseArrayTrafficType `json:"traffic_type,required"`
+	TrafficType AppListResponseResultArrayTrafficType `json:"traffic_type,required"`
 	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
 	// applications with traffic_type set to "direct".
 	ArgoSmartRouting bool `json:"argo_smart_routing"`
@@ -907,13 +962,13 @@ type AppListResponseArrayItem struct {
 	// `1000`, or a string to specify a range of origin ports, for example
 	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
 	// range must match the number of ports specified in the "protocol" field.
-	OriginPort OriginPortUnion              `json:"origin_port"`
-	JSON       appListResponseArrayItemJSON `json:"-"`
+	OriginPort OriginPortUnion                    `json:"origin_port"`
+	JSON       appListResponseResultArrayItemJSON `json:"-"`
 }
 
-// appListResponseArrayItemJSON contains the JSON metadata for the struct
-// [AppListResponseArrayItem]
-type appListResponseArrayItemJSON struct {
+// appListResponseResultArrayItemJSON contains the JSON metadata for the struct
+// [AppListResponseResultArrayItem]
+type appListResponseResultArrayItemJSON struct {
 	ID               apijson.Field
 	CreatedOn        apijson.Field
 	DNS              apijson.Field
@@ -932,11 +987,11 @@ type appListResponseArrayItemJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *AppListResponseArrayItem) UnmarshalJSON(data []byte) (err error) {
+func (r *AppListResponseResultArrayItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r appListResponseArrayItemJSON) RawJSON() string {
+func (r appListResponseResultArrayItemJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -944,36 +999,36 @@ func (r appListResponseArrayItemJSON) RawJSON() string {
 // [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
 // for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
 // Proxy Protocol.
-type AppListResponseArrayProxyProtocol string
+type AppListResponseResultArrayProxyProtocol string
 
 const (
-	AppListResponseArrayProxyProtocolOff    AppListResponseArrayProxyProtocol = "off"
-	AppListResponseArrayProxyProtocolV1     AppListResponseArrayProxyProtocol = "v1"
-	AppListResponseArrayProxyProtocolV2     AppListResponseArrayProxyProtocol = "v2"
-	AppListResponseArrayProxyProtocolSimple AppListResponseArrayProxyProtocol = "simple"
+	AppListResponseResultArrayProxyProtocolOff    AppListResponseResultArrayProxyProtocol = "off"
+	AppListResponseResultArrayProxyProtocolV1     AppListResponseResultArrayProxyProtocol = "v1"
+	AppListResponseResultArrayProxyProtocolV2     AppListResponseResultArrayProxyProtocol = "v2"
+	AppListResponseResultArrayProxyProtocolSimple AppListResponseResultArrayProxyProtocol = "simple"
 )
 
-func (r AppListResponseArrayProxyProtocol) IsKnown() bool {
+func (r AppListResponseResultArrayProxyProtocol) IsKnown() bool {
 	switch r {
-	case AppListResponseArrayProxyProtocolOff, AppListResponseArrayProxyProtocolV1, AppListResponseArrayProxyProtocolV2, AppListResponseArrayProxyProtocolSimple:
+	case AppListResponseResultArrayProxyProtocolOff, AppListResponseResultArrayProxyProtocolV1, AppListResponseResultArrayProxyProtocolV2, AppListResponseResultArrayProxyProtocolSimple:
 		return true
 	}
 	return false
 }
 
 // The type of TLS termination associated with the application.
-type AppListResponseArrayTLS string
+type AppListResponseResultArrayTLS string
 
 const (
-	AppListResponseArrayTLSOff      AppListResponseArrayTLS = "off"
-	AppListResponseArrayTLSFlexible AppListResponseArrayTLS = "flexible"
-	AppListResponseArrayTLSFull     AppListResponseArrayTLS = "full"
-	AppListResponseArrayTLSStrict   AppListResponseArrayTLS = "strict"
+	AppListResponseResultArrayTLSOff      AppListResponseResultArrayTLS = "off"
+	AppListResponseResultArrayTLSFlexible AppListResponseResultArrayTLS = "flexible"
+	AppListResponseResultArrayTLSFull     AppListResponseResultArrayTLS = "full"
+	AppListResponseResultArrayTLSStrict   AppListResponseResultArrayTLS = "strict"
 )
 
-func (r AppListResponseArrayTLS) IsKnown() bool {
+func (r AppListResponseResultArrayTLS) IsKnown() bool {
 	switch r {
-	case AppListResponseArrayTLSOff, AppListResponseArrayTLSFlexible, AppListResponseArrayTLSFull, AppListResponseArrayTLSStrict:
+	case AppListResponseResultArrayTLSOff, AppListResponseResultArrayTLSFlexible, AppListResponseResultArrayTLSFull, AppListResponseResultArrayTLSStrict:
 		return true
 	}
 	return false
@@ -984,20 +1039,51 @@ func (r AppListResponseArrayTLS) IsKnown() bool {
 // is derived from the `protocol`. When set to "http" or "https", Spectrum will
 // apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
 // the application type matches this property exactly.
-type AppListResponseArrayTrafficType string
+type AppListResponseResultArrayTrafficType string
 
 const (
-	AppListResponseArrayTrafficTypeDirect AppListResponseArrayTrafficType = "direct"
-	AppListResponseArrayTrafficTypeHTTP   AppListResponseArrayTrafficType = "http"
-	AppListResponseArrayTrafficTypeHTTPS  AppListResponseArrayTrafficType = "https"
+	AppListResponseResultArrayTrafficTypeDirect AppListResponseResultArrayTrafficType = "direct"
+	AppListResponseResultArrayTrafficTypeHTTP   AppListResponseResultArrayTrafficType = "http"
+	AppListResponseResultArrayTrafficTypeHTTPS  AppListResponseResultArrayTrafficType = "https"
 )
 
-func (r AppListResponseArrayTrafficType) IsKnown() bool {
+func (r AppListResponseResultArrayTrafficType) IsKnown() bool {
 	switch r {
-	case AppListResponseArrayTrafficTypeDirect, AppListResponseArrayTrafficTypeHTTP, AppListResponseArrayTrafficTypeHTTPS:
+	case AppListResponseResultArrayTrafficTypeDirect, AppListResponseResultArrayTrafficTypeHTTP, AppListResponseResultArrayTrafficTypeHTTPS:
 		return true
 	}
 	return false
+}
+
+type AppListResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                       `json:"total_count"`
+	JSON       appListResponseResultInfoJSON `json:"-"`
+}
+
+// appListResponseResultInfoJSON contains the JSON metadata for the struct
+// [AppListResponseResultInfo]
+type appListResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AppListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r appListResponseResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type AppDeleteResponse struct {
@@ -2002,82 +2088,6 @@ func (r AppListParamsOrder) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type AppListResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    AppListResponseEnvelopeSuccess    `json:"success,required"`
-	Result     AppListResponseUnion              `json:"result"`
-	ResultInfo AppListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       appListResponseEnvelopeJSON       `json:"-"`
-}
-
-// appListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AppListResponseEnvelope]
-type appListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AppListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r appListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type AppListResponseEnvelopeSuccess bool
-
-const (
-	AppListResponseEnvelopeSuccessTrue AppListResponseEnvelopeSuccess = true
-)
-
-func (r AppListResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case AppListResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type AppListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                               `json:"total_count"`
-	JSON       appListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// appListResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [AppListResponseEnvelopeResultInfo]
-type appListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AppListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r appListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
 
 type AppDeleteParams struct {
