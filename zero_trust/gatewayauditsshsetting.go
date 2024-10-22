@@ -35,7 +35,8 @@ func NewGatewayAuditSSHSettingService(opts ...option.RequestOption) (r *GatewayA
 	return
 }
 
-// Updates Zero Trust Audit SSH settings.
+// Updates Zero Trust Audit SSH and SSH with Access for Infrastructure settings for
+// an account.
 func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params GatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
 	var env GatewayAuditSSHSettingUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -52,7 +53,8 @@ func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params Gatew
 	return
 }
 
-// Get all Zero Trust Audit SSH settings for an account.
+// Gets all Zero Trust Audit SSH and SSH with Access for Infrastructure settings
+// for an account.
 func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *GatewaySettings, err error) {
 	var env GatewayAuditSSHSettingGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -71,7 +73,8 @@ func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAu
 
 type GatewaySettings struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// SSH encryption public key
+	// Base64 encoded HPKE public key used to encrypt all your ssh session logs.
+	// https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/ssh-infrastructure-access/#enable-ssh-command-logging
 	PublicKey string `json:"public_key"`
 	// Seed ID
 	SeedID    string              `json:"seed_id"`
@@ -99,10 +102,9 @@ func (r gatewaySettingsJSON) RawJSON() string {
 
 type GatewayAuditSSHSettingUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// SSH encryption public key
+	// Base64 encoded HPKE public key used to encrypt all your ssh session logs.
+	// https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/use-cases/ssh/ssh-infrastructure-access/#enable-ssh-command-logging
 	PublicKey param.Field[string] `json:"public_key,required"`
-	// Seed ID
-	SeedID param.Field[string] `json:"seed_id"`
 }
 
 func (r GatewayAuditSSHSettingUpdateParams) MarshalJSON() (data []byte, err error) {
