@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
-func TestGatewayAuditSSHSettingUpdateWithOptionalParams(t *testing.T) {
+func TestGatewayAuditSSHSettingUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -30,7 +30,6 @@ func TestGatewayAuditSSHSettingUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.ZeroTrust.Gateway.AuditSSHSettings.Update(context.TODO(), zero_trust.GatewayAuditSSHSettingUpdateParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		PublicKey: cloudflare.F("1pyl6I1tL7xfJuFYVzXlUW8uXXlpxegHXBzGCBKaSFA="),
-		SeedID:    cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
