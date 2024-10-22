@@ -423,6 +423,10 @@ func (r BlockRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r BlockRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
+func (r BlockRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r BlockRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
+
 // The parameters configuring the rule's action.
 type BlockRuleActionParametersParam struct {
 	// The response to show when the block is applied.
@@ -776,6 +780,10 @@ func (r CompressResponseRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnio
 
 func (r CompressResponseRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
+func (r CompressResponseRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r CompressResponseRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
+
 // The parameters configuring the rule's action.
 type CompressResponseRuleActionParametersParam struct {
 	// Custom order for compression algorithms.
@@ -1058,6 +1066,10 @@ func (r DDoSDynamicRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
 func (r DDoSDynamicRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r DDoSDynamicRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+
+func (r DDoSDynamicRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r DDoSDynamicRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // Configure checks for exposed credentials.
 type DDoSDynamicRuleExposedCredentialCheckParam struct {
@@ -1535,6 +1547,10 @@ func (r ExecuteRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ExecuteRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
+func (r ExecuteRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r ExecuteRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
+
 // The parameters configuring the rule's action.
 type ExecuteRuleActionParametersParam struct {
 	// The ID of the ruleset to execute.
@@ -1878,6 +1894,10 @@ func (r ForceConnectionCloseRuleParam) implementsRulesetsRulesetNewParamsRuleUni
 func (r ForceConnectionCloseRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ForceConnectionCloseRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+
+func (r ForceConnectionCloseRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r ForceConnectionCloseRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // Configure checks for exposed credentials.
 type ForceConnectionCloseRuleExposedCredentialCheckParam struct {
@@ -2241,6 +2261,10 @@ func (r LogCustomFieldRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion(
 
 func (r LogCustomFieldRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
+func (r LogCustomFieldRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r LogCustomFieldRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
+
 // The parameters configuring the rule's action.
 type LogCustomFieldRuleActionParametersParam struct {
 	// The cookie fields to log.
@@ -2548,6 +2572,10 @@ func (r LogRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r LogRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
+func (r LogRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r LogRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
+
 // Configure checks for exposed credentials.
 type LogRuleExposedCredentialCheckParam struct {
 	// Expression that selects the password used in the credentials check.
@@ -2843,6 +2871,10 @@ func (r ManagedChallengeRuleParam) implementsRulesetsRulesetNewParamsRuleUnion()
 func (r ManagedChallengeRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ManagedChallengeRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+
+func (r ManagedChallengeRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r ManagedChallengeRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // Configure checks for exposed credentials.
 type ManagedChallengeRuleExposedCredentialCheckParam struct {
@@ -3324,6 +3356,10 @@ func (r RedirectRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
 func (r RedirectRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r RedirectRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+
+func (r RedirectRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r RedirectRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // The parameters configuring the rule's action.
 type RedirectRuleActionParametersParam struct {
@@ -3938,6 +3974,10 @@ func (r RewriteRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r RewriteRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
+func (r RewriteRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r RewriteRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
+
 // The parameters configuring the rule's action.
 type RewriteRuleActionParametersParam struct {
 	// Map of request headers to modify.
@@ -4518,6 +4558,10 @@ func (r RouteRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r RouteRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
+func (r RouteRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r RouteRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
+
 // The parameters configuring the rule's action.
 type RouteRuleActionParametersParam struct {
 	// Rewrite the HTTP Host header.
@@ -4841,6 +4885,10 @@ func (r ScoreRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ScoreRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
+func (r ScoreRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r ScoreRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
+
 // The parameters configuring the rule's action.
 type ScoreRuleActionParametersParam struct {
 	// Increment contains the delta to change the score and can be either positive or
@@ -5161,6 +5209,10 @@ func (r ServeErrorRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
 func (r ServeErrorRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ServeErrorRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+
+func (r ServeErrorRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r ServeErrorRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // The parameters configuring the rule's action.
 type ServeErrorRuleActionParametersParam struct {
@@ -5997,6 +6049,10 @@ func (r SetCacheSettingsRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnio
 
 func (r SetCacheSettingsRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
+func (r SetCacheSettingsRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r SetCacheSettingsRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
+
 // The parameters configuring the rule's action.
 type SetCacheSettingsRuleActionParametersParam struct {
 	// List of additional ports that caching can be enabled on.
@@ -6734,6 +6790,10 @@ func (r SetConfigRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r SetConfigRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
+func (r SetConfigRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r SetConfigRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
+
 // The parameters configuring the rule's action.
 type SetConfigRuleActionParametersParam struct {
 	// Turn on or off Automatic HTTPS Rewrites.
@@ -7128,6 +7188,10 @@ func (r SkipRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
 func (r SkipRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r SkipRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
+
+func (r SkipRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+func (r SkipRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // The parameters configuring the rule's action.
 type SkipRuleActionParametersParam struct {
@@ -9090,82 +9154,298 @@ func (r RuleEditResponseRulesAction) IsKnown() bool {
 }
 
 type RuleNewParams struct {
+	Body RuleNewParamsBodyUnion `json:"body,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-	// An object configuring where the rule will be placed.
-	Position param.Field[RuleNewParamsPositionUnion] `json:"position"`
 }
 
 func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type RuleNewParamsBody struct {
+	// The action to perform when the rule matches.
+	Action           param.Field[RuleNewParamsBodyAction] `json:"action"`
+	ActionParameters param.Field[interface{}]             `json:"action_parameters,required"`
+	Categories       param.Field[interface{}]             `json:"categories,required"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled                param.Field[bool]        `json:"enabled"`
+	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check,required"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// An object configuring the rule's logging behavior.
+	Logging   param.Field[LoggingParam] `json:"logging"`
+	Ratelimit param.Field[interface{}]  `json:"ratelimit,required"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleNewParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// An object configuring where the rule will be placed.
-type RuleNewParamsPosition struct {
-	// The ID of another rule to place the rule before. An empty value causes the rule
-	// to be placed at the top.
-	Before param.Field[string] `json:"before"`
-	// The ID of another rule to place the rule after. An empty value causes the rule
-	// to be placed at the bottom.
-	After param.Field[string] `json:"after"`
-	// An index at which to place the rule, where index 1 is the first rule.
-	Index param.Field[float64] `json:"index"`
+func (r RuleNewParamsBody) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// Satisfied by [rulesets.BlockRuleParam],
+// [rulesets.RuleNewParamsBodyRulesetsChallengeRule],
+// [rulesets.CompressResponseRuleParam], [rulesets.ExecuteRuleParam],
+// [rulesets.RuleNewParamsBodyRulesetsJSChallengeRule], [rulesets.LogRuleParam],
+// [rulesets.ManagedChallengeRuleParam], [rulesets.RedirectRuleParam],
+// [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
+// [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
+// [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam],
+// [rulesets.SetCacheSettingsRuleParam], [rulesets.LogCustomFieldRuleParam],
+// [rulesets.DDoSDynamicRuleParam], [rulesets.ForceConnectionCloseRuleParam],
+// [RuleNewParamsBody].
+type RuleNewParamsBodyUnion interface {
+	implementsRulesetsRuleNewParamsBodyUnion()
 }
 
-func (r RuleNewParamsPosition) MarshalJSON() (data []byte, err error) {
+type RuleNewParamsBodyRulesetsChallengeRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RuleNewParamsBodyRulesetsChallengeRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[interface{}] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck param.Field[RuleNewParamsBodyRulesetsChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit param.Field[RuleNewParamsBodyRulesetsChallengeRuleRatelimit] `json:"ratelimit"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleNewParamsBodyRulesetsChallengeRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsPosition) implementsRulesetsRuleNewParamsPositionUnion() {}
+func (r RuleNewParamsBodyRulesetsChallengeRule) implementsRulesetsRuleNewParamsBodyUnion() {}
 
-// An object configuring where the rule will be placed.
-//
-// Satisfied by [rulesets.RuleNewParamsPositionBeforePosition],
-// [rulesets.RuleNewParamsPositionAfterPosition],
-// [rulesets.RuleNewParamsPositionIndexPosition], [RuleNewParamsPosition].
-type RuleNewParamsPositionUnion interface {
-	implementsRulesetsRuleNewParamsPositionUnion()
+// The action to perform when the rule matches.
+type RuleNewParamsBodyRulesetsChallengeRuleAction string
+
+const (
+	RuleNewParamsBodyRulesetsChallengeRuleActionChallenge RuleNewParamsBodyRulesetsChallengeRuleAction = "challenge"
+)
+
+func (r RuleNewParamsBodyRulesetsChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodyRulesetsChallengeRuleActionChallenge:
+		return true
+	}
+	return false
 }
 
-// An object configuring where the rule will be placed.
-type RuleNewParamsPositionBeforePosition struct {
-	// The ID of another rule to place the rule before. An empty value causes the rule
-	// to be placed at the top.
-	Before param.Field[string] `json:"before"`
+// Configure checks for exposed credentials.
+type RuleNewParamsBodyRulesetsChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
-func (r RuleNewParamsPositionBeforePosition) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBodyRulesetsChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsPositionBeforePosition) implementsRulesetsRuleNewParamsPositionUnion() {}
-
-// An object configuring where the rule will be placed.
-type RuleNewParamsPositionAfterPosition struct {
-	// The ID of another rule to place the rule after. An empty value causes the rule
-	// to be placed at the bottom.
-	After param.Field[string] `json:"after"`
+// An object configuring the rule's ratelimit behavior.
+type RuleNewParamsBodyRulesetsChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod] `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
-func (r RuleNewParamsPositionAfterPosition) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBodyRulesetsChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsPositionAfterPosition) implementsRulesetsRuleNewParamsPositionUnion() {}
+// Period in seconds over which the counter is being incremented.
+type RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod int64
 
-// An object configuring where the rule will be placed.
-type RuleNewParamsPositionIndexPosition struct {
-	// An index at which to place the rule, where index 1 is the first rule.
-	Index param.Field[float64] `json:"index"`
+const (
+	RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod10   RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod = 10
+	RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod60   RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod = 60
+	RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod600  RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod = 600
+	RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod3600 RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod10, RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod60, RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod600, RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod3600:
+		return true
+	}
+	return false
 }
 
-func (r RuleNewParamsPositionIndexPosition) MarshalJSON() (data []byte, err error) {
+type RuleNewParamsBodyRulesetsJSChallengeRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RuleNewParamsBodyRulesetsJSChallengeRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[interface{}] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck param.Field[RuleNewParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit param.Field[RuleNewParamsBodyRulesetsJSChallengeRuleRatelimit] `json:"ratelimit"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleNewParamsBodyRulesetsJSChallengeRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsPositionIndexPosition) implementsRulesetsRuleNewParamsPositionUnion() {}
+func (r RuleNewParamsBodyRulesetsJSChallengeRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// The action to perform when the rule matches.
+type RuleNewParamsBodyRulesetsJSChallengeRuleAction string
+
+const (
+	RuleNewParamsBodyRulesetsJSChallengeRuleActionJSChallenge RuleNewParamsBodyRulesetsJSChallengeRuleAction = "js_challenge"
+)
+
+func (r RuleNewParamsBodyRulesetsJSChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodyRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
+}
+
+// Configure checks for exposed credentials.
+type RuleNewParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
+}
+
+func (r RuleNewParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RuleNewParamsBodyRulesetsJSChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod] `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
+}
+
+func (r RuleNewParamsBodyRulesetsJSChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Period in seconds over which the counter is being incremented.
+type RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod int64
+
+const (
+	RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod10   RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 10
+	RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod60   RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 60
+	RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod600  RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 600
+	RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod3600 RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod10, RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod60, RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod600, RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod3600:
+		return true
+	}
+	return false
+}
+
+// The action to perform when the rule matches.
+type RuleNewParamsBodyAction string
+
+const (
+	RuleNewParamsBodyActionBlock                RuleNewParamsBodyAction = "block"
+	RuleNewParamsBodyActionChallenge            RuleNewParamsBodyAction = "challenge"
+	RuleNewParamsBodyActionCompressResponse     RuleNewParamsBodyAction = "compress_response"
+	RuleNewParamsBodyActionExecute              RuleNewParamsBodyAction = "execute"
+	RuleNewParamsBodyActionJSChallenge          RuleNewParamsBodyAction = "js_challenge"
+	RuleNewParamsBodyActionLog                  RuleNewParamsBodyAction = "log"
+	RuleNewParamsBodyActionManagedChallenge     RuleNewParamsBodyAction = "managed_challenge"
+	RuleNewParamsBodyActionRedirect             RuleNewParamsBodyAction = "redirect"
+	RuleNewParamsBodyActionRewrite              RuleNewParamsBodyAction = "rewrite"
+	RuleNewParamsBodyActionRoute                RuleNewParamsBodyAction = "route"
+	RuleNewParamsBodyActionScore                RuleNewParamsBodyAction = "score"
+	RuleNewParamsBodyActionServeError           RuleNewParamsBodyAction = "serve_error"
+	RuleNewParamsBodyActionSetConfig            RuleNewParamsBodyAction = "set_config"
+	RuleNewParamsBodyActionSkip                 RuleNewParamsBodyAction = "skip"
+	RuleNewParamsBodyActionSetCacheSettings     RuleNewParamsBodyAction = "set_cache_settings"
+	RuleNewParamsBodyActionLogCustomField       RuleNewParamsBodyAction = "log_custom_field"
+	RuleNewParamsBodyActionDDoSDynamic          RuleNewParamsBodyAction = "ddos_dynamic"
+	RuleNewParamsBodyActionForceConnectionClose RuleNewParamsBodyAction = "force_connection_close"
+)
+
+func (r RuleNewParamsBodyAction) IsKnown() bool {
+	switch r {
+	case RuleNewParamsBodyActionBlock, RuleNewParamsBodyActionChallenge, RuleNewParamsBodyActionCompressResponse, RuleNewParamsBodyActionExecute, RuleNewParamsBodyActionJSChallenge, RuleNewParamsBodyActionLog, RuleNewParamsBodyActionManagedChallenge, RuleNewParamsBodyActionRedirect, RuleNewParamsBodyActionRewrite, RuleNewParamsBodyActionRoute, RuleNewParamsBodyActionScore, RuleNewParamsBodyActionServeError, RuleNewParamsBodyActionSetConfig, RuleNewParamsBodyActionSkip, RuleNewParamsBodyActionSetCacheSettings, RuleNewParamsBodyActionLogCustomField, RuleNewParamsBodyActionDDoSDynamic, RuleNewParamsBodyActionForceConnectionClose:
+		return true
+	}
+	return false
+}
 
 // A response object.
 type RuleNewResponseEnvelope struct {
@@ -9477,82 +9757,298 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleEditParams struct {
+	Body RuleEditParamsBodyUnion `json:"body,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
-	// An object configuring where the rule will be placed.
-	Position param.Field[RuleEditParamsPositionUnion] `json:"position"`
 }
 
 func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type RuleEditParamsBody struct {
+	// The action to perform when the rule matches.
+	Action           param.Field[RuleEditParamsBodyAction] `json:"action"`
+	ActionParameters param.Field[interface{}]              `json:"action_parameters,required"`
+	Categories       param.Field[interface{}]              `json:"categories,required"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled                param.Field[bool]        `json:"enabled"`
+	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check,required"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// An object configuring the rule's logging behavior.
+	Logging   param.Field[LoggingParam] `json:"logging"`
+	Ratelimit param.Field[interface{}]  `json:"ratelimit,required"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleEditParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// An object configuring where the rule will be placed.
-type RuleEditParamsPosition struct {
-	// The ID of another rule to place the rule before. An empty value causes the rule
-	// to be placed at the top.
-	Before param.Field[string] `json:"before"`
-	// The ID of another rule to place the rule after. An empty value causes the rule
-	// to be placed at the bottom.
-	After param.Field[string] `json:"after"`
-	// An index at which to place the rule, where index 1 is the first rule.
-	Index param.Field[float64] `json:"index"`
+func (r RuleEditParamsBody) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// Satisfied by [rulesets.BlockRuleParam],
+// [rulesets.RuleEditParamsBodyRulesetsChallengeRule],
+// [rulesets.CompressResponseRuleParam], [rulesets.ExecuteRuleParam],
+// [rulesets.RuleEditParamsBodyRulesetsJSChallengeRule], [rulesets.LogRuleParam],
+// [rulesets.ManagedChallengeRuleParam], [rulesets.RedirectRuleParam],
+// [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
+// [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
+// [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam],
+// [rulesets.SetCacheSettingsRuleParam], [rulesets.LogCustomFieldRuleParam],
+// [rulesets.DDoSDynamicRuleParam], [rulesets.ForceConnectionCloseRuleParam],
+// [RuleEditParamsBody].
+type RuleEditParamsBodyUnion interface {
+	implementsRulesetsRuleEditParamsBodyUnion()
 }
 
-func (r RuleEditParamsPosition) MarshalJSON() (data []byte, err error) {
+type RuleEditParamsBodyRulesetsChallengeRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RuleEditParamsBodyRulesetsChallengeRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[interface{}] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck param.Field[RuleEditParamsBodyRulesetsChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit param.Field[RuleEditParamsBodyRulesetsChallengeRuleRatelimit] `json:"ratelimit"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleEditParamsBodyRulesetsChallengeRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsPosition) implementsRulesetsRuleEditParamsPositionUnion() {}
+func (r RuleEditParamsBodyRulesetsChallengeRule) implementsRulesetsRuleEditParamsBodyUnion() {}
 
-// An object configuring where the rule will be placed.
-//
-// Satisfied by [rulesets.RuleEditParamsPositionBeforePosition],
-// [rulesets.RuleEditParamsPositionAfterPosition],
-// [rulesets.RuleEditParamsPositionIndexPosition], [RuleEditParamsPosition].
-type RuleEditParamsPositionUnion interface {
-	implementsRulesetsRuleEditParamsPositionUnion()
+// The action to perform when the rule matches.
+type RuleEditParamsBodyRulesetsChallengeRuleAction string
+
+const (
+	RuleEditParamsBodyRulesetsChallengeRuleActionChallenge RuleEditParamsBodyRulesetsChallengeRuleAction = "challenge"
+)
+
+func (r RuleEditParamsBodyRulesetsChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodyRulesetsChallengeRuleActionChallenge:
+		return true
+	}
+	return false
 }
 
-// An object configuring where the rule will be placed.
-type RuleEditParamsPositionBeforePosition struct {
-	// The ID of another rule to place the rule before. An empty value causes the rule
-	// to be placed at the top.
-	Before param.Field[string] `json:"before"`
+// Configure checks for exposed credentials.
+type RuleEditParamsBodyRulesetsChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
-func (r RuleEditParamsPositionBeforePosition) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBodyRulesetsChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsPositionBeforePosition) implementsRulesetsRuleEditParamsPositionUnion() {}
-
-// An object configuring where the rule will be placed.
-type RuleEditParamsPositionAfterPosition struct {
-	// The ID of another rule to place the rule after. An empty value causes the rule
-	// to be placed at the bottom.
-	After param.Field[string] `json:"after"`
+// An object configuring the rule's ratelimit behavior.
+type RuleEditParamsBodyRulesetsChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod] `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
-func (r RuleEditParamsPositionAfterPosition) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBodyRulesetsChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsPositionAfterPosition) implementsRulesetsRuleEditParamsPositionUnion() {}
+// Period in seconds over which the counter is being incremented.
+type RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod int64
 
-// An object configuring where the rule will be placed.
-type RuleEditParamsPositionIndexPosition struct {
-	// An index at which to place the rule, where index 1 is the first rule.
-	Index param.Field[float64] `json:"index"`
+const (
+	RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod10   RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod = 10
+	RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod60   RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod = 60
+	RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod600  RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod = 600
+	RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod3600 RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod10, RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod60, RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod600, RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod3600:
+		return true
+	}
+	return false
 }
 
-func (r RuleEditParamsPositionIndexPosition) MarshalJSON() (data []byte, err error) {
+type RuleEditParamsBodyRulesetsJSChallengeRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RuleEditParamsBodyRulesetsJSChallengeRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[interface{}] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Configure checks for exposed credentials.
+	ExposedCredentialCheck param.Field[RuleEditParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring the rule's ratelimit behavior.
+	Ratelimit param.Field[RuleEditParamsBodyRulesetsJSChallengeRuleRatelimit] `json:"ratelimit"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RuleEditParamsBodyRulesetsJSChallengeRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsPositionIndexPosition) implementsRulesetsRuleEditParamsPositionUnion() {}
+func (r RuleEditParamsBodyRulesetsJSChallengeRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// The action to perform when the rule matches.
+type RuleEditParamsBodyRulesetsJSChallengeRuleAction string
+
+const (
+	RuleEditParamsBodyRulesetsJSChallengeRuleActionJSChallenge RuleEditParamsBodyRulesetsJSChallengeRuleAction = "js_challenge"
+)
+
+func (r RuleEditParamsBodyRulesetsJSChallengeRuleAction) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodyRulesetsJSChallengeRuleActionJSChallenge:
+		return true
+	}
+	return false
+}
+
+// Configure checks for exposed credentials.
+type RuleEditParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck struct {
+	// Expression that selects the password used in the credentials check.
+	PasswordExpression param.Field[string] `json:"password_expression,required"`
+	// Expression that selects the user ID used in the credentials check.
+	UsernameExpression param.Field[string] `json:"username_expression,required"`
+}
+
+func (r RuleEditParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring the rule's ratelimit behavior.
+type RuleEditParamsBodyRulesetsJSChallengeRuleRatelimit struct {
+	// Characteristics of the request on which the ratelimiter counter will be
+	// incremented.
+	Characteristics param.Field[[]string] `json:"characteristics,required"`
+	// Period in seconds over which the counter is being incremented.
+	Period param.Field[RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod] `json:"period,required"`
+	// Defines when the ratelimit counter should be incremented. It is optional and
+	// defaults to the same as the rule's expression.
+	CountingExpression param.Field[string] `json:"counting_expression"`
+	// Period of time in seconds after which the action will be disabled following its
+	// first execution.
+	MitigationTimeout param.Field[int64] `json:"mitigation_timeout"`
+	// The threshold of requests per period after which the action will be executed for
+	// the first time.
+	RequestsPerPeriod param.Field[int64] `json:"requests_per_period"`
+	// Defines if ratelimit counting is only done when an origin is reached.
+	RequestsToOrigin param.Field[bool] `json:"requests_to_origin"`
+	// The score threshold per period for which the action will be executed the first
+	// time.
+	ScorePerPeriod param.Field[int64] `json:"score_per_period"`
+	// The response header name provided by the origin which should contain the score
+	// to increment ratelimit counter on.
+	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
+}
+
+func (r RuleEditParamsBodyRulesetsJSChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Period in seconds over which the counter is being incremented.
+type RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod int64
+
+const (
+	RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod10   RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 10
+	RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod60   RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 60
+	RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod600  RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 600
+	RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod3600 RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 3600
+)
+
+func (r RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod10, RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod60, RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod600, RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod3600:
+		return true
+	}
+	return false
+}
+
+// The action to perform when the rule matches.
+type RuleEditParamsBodyAction string
+
+const (
+	RuleEditParamsBodyActionBlock                RuleEditParamsBodyAction = "block"
+	RuleEditParamsBodyActionChallenge            RuleEditParamsBodyAction = "challenge"
+	RuleEditParamsBodyActionCompressResponse     RuleEditParamsBodyAction = "compress_response"
+	RuleEditParamsBodyActionExecute              RuleEditParamsBodyAction = "execute"
+	RuleEditParamsBodyActionJSChallenge          RuleEditParamsBodyAction = "js_challenge"
+	RuleEditParamsBodyActionLog                  RuleEditParamsBodyAction = "log"
+	RuleEditParamsBodyActionManagedChallenge     RuleEditParamsBodyAction = "managed_challenge"
+	RuleEditParamsBodyActionRedirect             RuleEditParamsBodyAction = "redirect"
+	RuleEditParamsBodyActionRewrite              RuleEditParamsBodyAction = "rewrite"
+	RuleEditParamsBodyActionRoute                RuleEditParamsBodyAction = "route"
+	RuleEditParamsBodyActionScore                RuleEditParamsBodyAction = "score"
+	RuleEditParamsBodyActionServeError           RuleEditParamsBodyAction = "serve_error"
+	RuleEditParamsBodyActionSetConfig            RuleEditParamsBodyAction = "set_config"
+	RuleEditParamsBodyActionSkip                 RuleEditParamsBodyAction = "skip"
+	RuleEditParamsBodyActionSetCacheSettings     RuleEditParamsBodyAction = "set_cache_settings"
+	RuleEditParamsBodyActionLogCustomField       RuleEditParamsBodyAction = "log_custom_field"
+	RuleEditParamsBodyActionDDoSDynamic          RuleEditParamsBodyAction = "ddos_dynamic"
+	RuleEditParamsBodyActionForceConnectionClose RuleEditParamsBodyAction = "force_connection_close"
+)
+
+func (r RuleEditParamsBodyAction) IsKnown() bool {
+	switch r {
+	case RuleEditParamsBodyActionBlock, RuleEditParamsBodyActionChallenge, RuleEditParamsBodyActionCompressResponse, RuleEditParamsBodyActionExecute, RuleEditParamsBodyActionJSChallenge, RuleEditParamsBodyActionLog, RuleEditParamsBodyActionManagedChallenge, RuleEditParamsBodyActionRedirect, RuleEditParamsBodyActionRewrite, RuleEditParamsBodyActionRoute, RuleEditParamsBodyActionScore, RuleEditParamsBodyActionServeError, RuleEditParamsBodyActionSetConfig, RuleEditParamsBodyActionSkip, RuleEditParamsBodyActionSetCacheSettings, RuleEditParamsBodyActionLogCustomField, RuleEditParamsBodyActionDDoSDynamic, RuleEditParamsBodyActionForceConnectionClose:
+		return true
+	}
+	return false
+}
 
 // A response object.
 type RuleEditResponseEnvelope struct {
