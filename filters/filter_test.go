@@ -28,10 +28,13 @@ func TestFilterNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Filters.New(context.TODO(), filters.FilterNewParams{
-		ZoneID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Expression: cloudflare.F("(http.request.uri.path ~ \".*wp-login.php\" or http.request.uri.path ~ \".*xmlrpc.php\") and ip.addr ne 172.16.22.155"),
-	})
+	_, err := client.Filters.New(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		filters.FilterNewParams{
+			Expression: cloudflare.F("(http.request.uri.path ~ \".*wp-login.php\" or http.request.uri.path ~ \".*xmlrpc.php\") and ip.addr ne 172.16.22.155"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -57,10 +60,10 @@ func TestFilterUpdate(t *testing.T) {
 	)
 	_, err := client.Filters.Update(
 		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b61",
 		filters.FilterUpdateParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:   map[string]interface{}{},
+			Body: map[string]interface{}{},
 		},
 	)
 	if err != nil {
@@ -85,16 +88,19 @@ func TestFilterListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Filters.List(context.TODO(), filters.FilterListParams{
-		ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ID:          cloudflare.F("372e67954025e0ba6aaa6d586b9e0b61"),
-		Description: cloudflare.F("browsers"),
-		Expression:  cloudflare.F("php"),
-		Page:        cloudflare.F(1.000000),
-		Paused:      cloudflare.F(false),
-		PerPage:     cloudflare.F(5.000000),
-		Ref:         cloudflare.F("FIL-100"),
-	})
+	_, err := client.Filters.List(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		filters.FilterListParams{
+			ID:          cloudflare.F("372e67954025e0ba6aaa6d586b9e0b61"),
+			Description: cloudflare.F("browsers"),
+			Expression:  cloudflare.F("php"),
+			Page:        cloudflare.F(1.000000),
+			Paused:      cloudflare.F(false),
+			PerPage:     cloudflare.F(5.000000),
+			Ref:         cloudflare.F("FIL-100"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -119,10 +125,8 @@ func TestFilterDelete(t *testing.T) {
 	)
 	_, err := client.Filters.Delete(
 		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b61",
-		filters.FilterDeleteParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -148,10 +152,8 @@ func TestFilterGet(t *testing.T) {
 	)
 	_, err := client.Filters.Get(
 		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b61",
-		filters.FilterGetParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
