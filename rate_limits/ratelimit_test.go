@@ -28,42 +28,45 @@ func TestRateLimitNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RateLimits.New(context.TODO(), rate_limits.RateLimitNewParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Action: cloudflare.F(rate_limits.RateLimitNewParamsAction{
-			Mode: cloudflare.F(rate_limits.RateLimitNewParamsActionModeSimulate),
-			Response: cloudflare.F(rate_limits.RateLimitNewParamsActionResponse{
-				Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
-				ContentType: cloudflare.F("text/xml"),
+	_, err := client.RateLimits.New(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		rate_limits.RateLimitNewParams{
+			Action: cloudflare.F(rate_limits.RateLimitNewParamsAction{
+				Mode: cloudflare.F(rate_limits.RateLimitNewParamsActionModeSimulate),
+				Response: cloudflare.F(rate_limits.RateLimitNewParamsActionResponse{
+					Body:        cloudflare.F("<error>This request has been rate-limited.</error>"),
+					ContentType: cloudflare.F("text/xml"),
+				}),
+				Timeout: cloudflare.F(86400.000000),
 			}),
-			Timeout: cloudflare.F(86400.000000),
-		}),
-		Match: cloudflare.F(rate_limits.RateLimitNewParamsMatch{
-			Headers: cloudflare.F([]rate_limits.RateLimitNewParamsMatchHeader{{
-				Name:  cloudflare.F("Cf-Cache-Status"),
-				Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
-				Value: cloudflare.F("HIT"),
-			}, {
-				Name:  cloudflare.F("Cf-Cache-Status"),
-				Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
-				Value: cloudflare.F("HIT"),
-			}, {
-				Name:  cloudflare.F("Cf-Cache-Status"),
-				Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
-				Value: cloudflare.F("HIT"),
-			}}),
-			Request: cloudflare.F(rate_limits.RateLimitNewParamsMatchRequest{
-				Methods: cloudflare.F([]rate_limits.Methods{rate_limits.MethodsGet, rate_limits.MethodsPost}),
-				Schemes: cloudflare.F([]string{"HTTP", "HTTPS"}),
-				URL:     cloudflare.F("*.example.org/path*"),
+			Match: cloudflare.F(rate_limits.RateLimitNewParamsMatch{
+				Headers: cloudflare.F([]rate_limits.RateLimitNewParamsMatchHeader{{
+					Name:  cloudflare.F("Cf-Cache-Status"),
+					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
+					Value: cloudflare.F("HIT"),
+				}, {
+					Name:  cloudflare.F("Cf-Cache-Status"),
+					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
+					Value: cloudflare.F("HIT"),
+				}, {
+					Name:  cloudflare.F("Cf-Cache-Status"),
+					Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
+					Value: cloudflare.F("HIT"),
+				}}),
+				Request: cloudflare.F(rate_limits.RateLimitNewParamsMatchRequest{
+					Methods: cloudflare.F([]rate_limits.Methods{rate_limits.MethodsGet, rate_limits.MethodsPost}),
+					Schemes: cloudflare.F([]string{"HTTP", "HTTPS"}),
+					URL:     cloudflare.F("*.example.org/path*"),
+				}),
+				Response: cloudflare.F(rate_limits.RateLimitNewParamsMatchResponse{
+					OriginTraffic: cloudflare.F(true),
+				}),
 			}),
-			Response: cloudflare.F(rate_limits.RateLimitNewParamsMatchResponse{
-				OriginTraffic: cloudflare.F(true),
-			}),
-		}),
-		Period:    cloudflare.F(900.000000),
-		Threshold: cloudflare.F(60.000000),
-	})
+			Period:    cloudflare.F(900.000000),
+			Threshold: cloudflare.F(60.000000),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -86,11 +89,14 @@ func TestRateLimitListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.RateLimits.List(context.TODO(), rate_limits.RateLimitListParams{
-		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Page:    cloudflare.F(1.000000),
-		PerPage: cloudflare.F(1.000000),
-	})
+	_, err := client.RateLimits.List(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		rate_limits.RateLimitListParams{
+			Page:    cloudflare.F(1.000000),
+			PerPage: cloudflare.F(1.000000),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -115,10 +121,8 @@ func TestRateLimitDelete(t *testing.T) {
 	)
 	_, err := client.RateLimits.Delete(
 		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
-		rate_limits.RateLimitDeleteParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -145,9 +149,9 @@ func TestRateLimitEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RateLimits.Edit(
 		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		rate_limits.RateLimitEditParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Action: cloudflare.F(rate_limits.RateLimitEditParamsAction{
 				Mode: cloudflare.F(rate_limits.RateLimitEditParamsActionModeSimulate),
 				Response: cloudflare.F(rate_limits.RateLimitEditParamsActionResponse{
@@ -207,10 +211,8 @@ func TestRateLimitGet(t *testing.T) {
 	)
 	_, err := client.RateLimits.Get(
 		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
-		rate_limits.RateLimitGetParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
