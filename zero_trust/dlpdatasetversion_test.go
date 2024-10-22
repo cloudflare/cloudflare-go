@@ -34,11 +34,17 @@ func TestDLPDatasetVersionNew(t *testing.T) {
 		zero_trust.DLPDatasetVersionNewParams{
 			AccountID: cloudflare.F("account_id"),
 			Body: []zero_trust.DLPDatasetVersionNewParamsBodyUnion{zero_trust.DLPDatasetVersionNewParamsBodyExistingColumn{
-				EntryID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				EntryID:    cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				HeaderName: cloudflare.F("header_name"),
+				NumCells:   cloudflare.F(int64(0)),
 			}, zero_trust.DLPDatasetVersionNewParamsBodyExistingColumn{
-				EntryID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				EntryID:    cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				HeaderName: cloudflare.F("header_name"),
+				NumCells:   cloudflare.F(int64(0)),
 			}, zero_trust.DLPDatasetVersionNewParamsBodyExistingColumn{
-				EntryID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				EntryID:    cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				HeaderName: cloudflare.F("header_name"),
+				NumCells:   cloudflare.F(int64(0)),
 			}},
 		},
 	)

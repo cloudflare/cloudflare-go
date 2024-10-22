@@ -32,10 +32,39 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		rulesets.RuleNewParams{
+			Body: rulesets.BlockRuleParam{
+				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
+					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
+				}),
+				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F(true),
+				ExposedCredentialCheck: cloudflare.F(rulesets.BlockRuleExposedCredentialCheckParam{
+					PasswordExpression: cloudflare.F("url_decode(http.request.body.form[\\\"password\\\"][0])"),
+					UsernameExpression: cloudflare.F("url_decode(http.request.body.form[\\\"username\\\"][0])"),
+				}),
+				Expression: cloudflare.F("ip.src ne 1.1.1.1"),
+				Logging: cloudflare.F(rulesets.LoggingParam{
+					Enabled: cloudflare.F(true),
+				}),
+				Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
+					Characteristics:         cloudflare.F([]string{"ip.src"}),
+					Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod10),
+					CountingExpression:      cloudflare.F("http.request.body.raw eq \"abcd\""),
+					MitigationTimeout:       cloudflare.F(int64(600)),
+					RequestsPerPeriod:       cloudflare.F(int64(1000)),
+					RequestsToOrigin:        cloudflare.F(true),
+					ScorePerPeriod:          cloudflare.F(int64(400)),
+					ScoreResponseHeaderName: cloudflare.F("my-score"),
+				}),
+				Ref: cloudflare.F("my_ref"),
+			},
 			AccountID: cloudflare.F("account_id"),
-			Position: cloudflare.F[rulesets.RuleNewParamsPositionUnion](rulesets.RuleNewParamsPositionBeforePosition{
-				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
-			}),
 		},
 	)
 	if err != nil {
@@ -97,10 +126,39 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		"3a03d665bac047339bb530ecb439a90d",
 		rulesets.RuleEditParams{
+			Body: rulesets.BlockRuleParam{
+				ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
+				Action: cloudflare.F(rulesets.BlockRuleActionBlock),
+				ActionParameters: cloudflare.F(rulesets.BlockRuleActionParametersParam{
+					Response: cloudflare.F(rulesets.BlockRuleActionParametersResponseParam{
+						Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
+						ContentType: cloudflare.F("application/json"),
+						StatusCode:  cloudflare.F(int64(400)),
+					}),
+				}),
+				Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
+				Enabled:     cloudflare.F(true),
+				ExposedCredentialCheck: cloudflare.F(rulesets.BlockRuleExposedCredentialCheckParam{
+					PasswordExpression: cloudflare.F("url_decode(http.request.body.form[\\\"password\\\"][0])"),
+					UsernameExpression: cloudflare.F("url_decode(http.request.body.form[\\\"username\\\"][0])"),
+				}),
+				Expression: cloudflare.F("ip.src ne 1.1.1.1"),
+				Logging: cloudflare.F(rulesets.LoggingParam{
+					Enabled: cloudflare.F(true),
+				}),
+				Ratelimit: cloudflare.F(rulesets.BlockRuleRatelimitParam{
+					Characteristics:         cloudflare.F([]string{"ip.src"}),
+					Period:                  cloudflare.F(rulesets.BlockRuleRatelimitPeriod10),
+					CountingExpression:      cloudflare.F("http.request.body.raw eq \"abcd\""),
+					MitigationTimeout:       cloudflare.F(int64(600)),
+					RequestsPerPeriod:       cloudflare.F(int64(1000)),
+					RequestsToOrigin:        cloudflare.F(true),
+					ScorePerPeriod:          cloudflare.F(int64(400)),
+					ScoreResponseHeaderName: cloudflare.F("my-score"),
+				}),
+				Ref: cloudflare.F("my_ref"),
+			},
 			AccountID: cloudflare.F("account_id"),
-			Position: cloudflare.F[rulesets.RuleEditParamsPositionUnion](rulesets.RuleEditParamsPositionBeforePosition{
-				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
-			}),
 		},
 	)
 	if err != nil {
