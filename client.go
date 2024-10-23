@@ -181,6 +181,7 @@ type Client struct {
 	CloudConnector              *cloud_connector.CloudConnectorService
 	BotnetFeed                  *botnet_feed.BotnetFeedService
 	SecurityTXT                 *SecurityTXTService
+	Workflows                   *WorkflowService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -289,6 +290,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CloudConnector = cloud_connector.NewCloudConnectorService(opts...)
 	r.BotnetFeed = botnet_feed.NewBotnetFeedService(opts...)
 	r.SecurityTXT = NewSecurityTXTService(opts...)
+	r.Workflows = NewWorkflowService(opts...)
 
 	return
 }
