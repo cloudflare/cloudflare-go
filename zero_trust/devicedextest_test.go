@@ -187,7 +187,7 @@ func TestDeviceDEXTestGet(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.DEXTests.Get(
 		context.TODO(),
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		"372e67954025e0ba6aaa6d586b9e0b59",
 		zero_trust.DeviceDEXTestGetParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},

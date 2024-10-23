@@ -102,7 +102,7 @@ func (r *DeviceDEXTestService) ListAutoPaging(ctx context.Context, query DeviceD
 
 // Delete a Device DEX test. Returns the remaining device dex tests for the
 // account.
-func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, body DeviceDEXTestDeleteParams, opts ...option.RequestOption) (res *[]SchemaHTTP, err error) {
+func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, body DeviceDEXTestDeleteParams, opts ...option.RequestOption) (res *DeviceDEXTestDeleteResponse, err error) {
 	var env DeviceDEXTestDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -202,7 +202,9 @@ type SchemaHTTP struct {
 	// Device settings profiles targeted by this test
 	TargetPolicies []SchemaHTTPTargetPolicy `json:"target_policies"`
 	Targeted       bool                     `json:"targeted"`
-	JSON           schemaHTTPJSON           `json:"-"`
+	// The unique identifier for the test.
+	TestID string         `json:"test_id"`
+	JSON   schemaHTTPJSON `json:"-"`
 }
 
 // schemaHTTPJSON contains the JSON metadata for the struct [SchemaHTTP]
@@ -214,6 +216,7 @@ type schemaHTTPJSON struct {
 	Description    apijson.Field
 	TargetPolicies apijson.Field
 	Targeted       apijson.Field
+	TestID         apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -286,6 +289,27 @@ type SchemaHTTPTargetPolicyParam struct {
 
 func (r SchemaHTTPTargetPolicyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type DeviceDEXTestDeleteResponse struct {
+	DEXTests []SchemaHTTP                    `json:"dex_tests"`
+	JSON     deviceDEXTestDeleteResponseJSON `json:"-"`
+}
+
+// deviceDEXTestDeleteResponseJSON contains the JSON metadata for the struct
+// [DeviceDEXTestDeleteResponse]
+type deviceDEXTestDeleteResponseJSON struct {
+	DEXTests    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceDEXTestDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceDEXTestDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type DeviceDEXTestNewParams struct {
@@ -401,9 +425,9 @@ type DeviceDEXTestDeleteParams struct {
 }
 
 type DeviceDEXTestDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []SchemaHTTP          `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   DeviceDEXTestDeleteResponse `json:"result,required"`
 	// Whether the API call was successful.
 	Success DeviceDEXTestDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceDEXTestDeleteResponseEnvelopeJSON    `json:"-"`
