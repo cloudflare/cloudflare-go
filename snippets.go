@@ -17,9 +17,9 @@ type SnippetsResponse struct {
 }
 
 type Snippet struct {
-	CreatedOn   time.Time `json:"created_on"`
-	ModifiedOn  time.Time `json:"modified_on"`
-	SnippetName string    `json:"snippet_name"`
+	CreatedOn   *time.Time `json:"created_on"`
+	ModifiedOn  *time.Time `json:"modified_on"`
+	SnippetName string     `json:"snippet_name"`
 }
 
 type SnippetFile struct {

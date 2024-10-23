@@ -40,13 +40,13 @@ func TestSnippets(t *testing.T) {
 	want := []Snippet{
 		{
 			SnippetName: "some_id_1",
-			CreatedOn:   time.Time{},
-			ModifiedOn:  time.Time{},
+			CreatedOn:   &time.Time{},
+			ModifiedOn:  &time.Time{},
 		},
 		{
 			SnippetName: "some_id_2",
-			CreatedOn:   time.Time{},
-			ModifiedOn:  time.Time{},
+			CreatedOn:   &time.Time{},
+			ModifiedOn:  &time.Time{},
 		},
 	}
 
@@ -100,13 +100,13 @@ func TestUpdateSnippets(t *testing.T) {
 	want := []Snippet{
 		{
 			SnippetName: "some_id_1",
-			CreatedOn:   time.Time{},
-			ModifiedOn:  time.Time{},
+			CreatedOn:   &time.Time{},
+			ModifiedOn:  &time.Time{},
 		},
 		{
 			SnippetName: "some_id_2",
-			CreatedOn:   time.Time{},
-			ModifiedOn:  time.Time{},
+			CreatedOn:   &time.Time{},
+			ModifiedOn:  &time.Time{},
 		},
 	}
 	zoneActual, err := client.UpdateZoneSnippet(context.Background(), ZoneIdentifier(testZoneID), toUpdate)
