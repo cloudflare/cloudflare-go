@@ -25,8 +25,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAIGatewayService] method instead.
 type AIGatewayService struct {
-	Options []option.RequestOption
-	Logs    *LogService
+	Options         []option.RequestOption
+	EvaluationTypes *EvaluationTypeService
+	Logs            *LogService
+	Datasets        *DatasetService
+	Evaluations     *EvaluationService
 }
 
 // NewAIGatewayService generates a new service that applies the given options to
@@ -35,7 +38,10 @@ type AIGatewayService struct {
 func NewAIGatewayService(opts ...option.RequestOption) (r *AIGatewayService) {
 	r = &AIGatewayService{}
 	r.Options = opts
+	r.EvaluationTypes = NewEvaluationTypeService(opts...)
 	r.Logs = NewLogService(opts...)
+	r.Datasets = NewDatasetService(opts...)
+	r.Evaluations = NewEvaluationService(opts...)
 	return
 }
 

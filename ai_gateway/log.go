@@ -84,6 +84,96 @@ func (r *LogService) Delete(ctx context.Context, gatewayID string, params LogDel
 	return
 }
 
+// Patch Gateway Log
+func (r *LogService) Edit(ctx context.Context, gatewayID string, id string, params LogEditParams, opts ...option.RequestOption) (res *LogEditResponse, err error) {
+	var env LogEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if gatewayID == "" {
+		err = errors.New("missing required gateway_id parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs/%s", params.AccountID, gatewayID, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get Gateway Log Detail
+func (r *LogService) Get(ctx context.Context, gatewayID string, id string, query LogGetParams, opts ...option.RequestOption) (res *LogGetResponse, err error) {
+	var env LogGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if gatewayID == "" {
+		err = errors.New("missing required gateway_id parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs/%s", query.AccountID, gatewayID, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get Gateway Log Request
+func (r *LogService) Request(ctx context.Context, gatewayID string, id string, query LogRequestParams, opts ...option.RequestOption) (res *LogRequestResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if gatewayID == "" {
+		err = errors.New("missing required gateway_id parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs/%s/request", query.AccountID, gatewayID, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+// Get Gateway Log Response
+func (r *LogService) Response(ctx context.Context, gatewayID string, id string, query LogResponseParams, opts ...option.RequestOption) (res *LogResponseResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if gatewayID == "" {
+		err = errors.New("missing required gateway_id parameter")
+		return
+	}
+	if id == "" {
+		err = errors.New("missing required id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/ai-gateway/gateways/%s/logs/%s/response", query.AccountID, gatewayID, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 type LogListResponse struct {
 	ID                  string              `json:"id,required"`
 	Cached              bool                `json:"cached,required"`
@@ -160,6 +250,80 @@ func (r *LogDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 func (r logDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
+
+type LogEditResponse = interface{}
+
+type LogGetResponse struct {
+	ID                   string             `json:"id,required"`
+	Cached               bool               `json:"cached,required"`
+	CreatedAt            time.Time          `json:"created_at,required" format:"date-time"`
+	Duration             int64              `json:"duration,required"`
+	Model                string             `json:"model,required"`
+	Path                 string             `json:"path,required"`
+	Provider             string             `json:"provider,required"`
+	Success              bool               `json:"success,required"`
+	TokensIn             int64              `json:"tokens_in,required,nullable"`
+	TokensOut            int64              `json:"tokens_out,required,nullable"`
+	Cost                 float64            `json:"cost"`
+	CustomCost           bool               `json:"custom_cost"`
+	Metadata             string             `json:"metadata"`
+	ModelType            string             `json:"model_type"`
+	RequestContentType   string             `json:"request_content_type"`
+	RequestHead          string             `json:"request_head"`
+	RequestHeadComplete  bool               `json:"request_head_complete"`
+	RequestSize          int64              `json:"request_size"`
+	RequestType          string             `json:"request_type"`
+	ResponseContentType  string             `json:"response_content_type"`
+	ResponseHead         string             `json:"response_head"`
+	ResponseHeadComplete bool               `json:"response_head_complete"`
+	ResponseSize         int64              `json:"response_size"`
+	StatusCode           int64              `json:"status_code"`
+	Step                 int64              `json:"step"`
+	JSON                 logGetResponseJSON `json:"-"`
+}
+
+// logGetResponseJSON contains the JSON metadata for the struct [LogGetResponse]
+type logGetResponseJSON struct {
+	ID                   apijson.Field
+	Cached               apijson.Field
+	CreatedAt            apijson.Field
+	Duration             apijson.Field
+	Model                apijson.Field
+	Path                 apijson.Field
+	Provider             apijson.Field
+	Success              apijson.Field
+	TokensIn             apijson.Field
+	TokensOut            apijson.Field
+	Cost                 apijson.Field
+	CustomCost           apijson.Field
+	Metadata             apijson.Field
+	ModelType            apijson.Field
+	RequestContentType   apijson.Field
+	RequestHead          apijson.Field
+	RequestHeadComplete  apijson.Field
+	RequestSize          apijson.Field
+	RequestType          apijson.Field
+	ResponseContentType  apijson.Field
+	ResponseHead         apijson.Field
+	ResponseHeadComplete apijson.Field
+	ResponseSize         apijson.Field
+	StatusCode           apijson.Field
+	Step                 apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *LogGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type LogRequestResponse = interface{}
+
+type LogResponseResponse = interface{}
 
 type LogListParams struct {
 	AccountID           param.Field[string]                        `path:"account_id,required"`
@@ -444,4 +608,78 @@ func (r LogDeleteParamsOrderByDirection) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type LogEditParams struct {
+	AccountID param.Field[string]                                `path:"account_id,required"`
+	Feedback  param.Field[float64]                               `json:"feedback"`
+	Metadata  param.Field[map[string]LogEditParamsMetadataUnion] `json:"metadata"`
+	Score     param.Field[float64]                               `json:"score"`
+}
+
+func (r LogEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Satisfied by [shared.UnionString], [shared.UnionFloat], [shared.UnionBool].
+type LogEditParamsMetadataUnion interface {
+	ImplementsAIGatewayLogEditParamsMetadataUnion()
+}
+
+type LogEditResponseEnvelope struct {
+	Result  LogEditResponse             `json:"result,required"`
+	Success bool                        `json:"success,required"`
+	JSON    logEditResponseEnvelopeJSON `json:"-"`
+}
+
+// logEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [LogEditResponseEnvelope]
+type logEditResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LogEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type LogGetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type LogGetResponseEnvelope struct {
+	Result  LogGetResponse             `json:"result,required"`
+	Success bool                       `json:"success,required"`
+	JSON    logGetResponseEnvelopeJSON `json:"-"`
+}
+
+// logGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [LogGetResponseEnvelope]
+type logGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LogGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type LogRequestParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type LogResponseParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 }
