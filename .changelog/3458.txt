@@ -1,0 +1,7 @@
+```release-note:enhancement
+snippets: add CRUD support
+```
+
+```release-note:enhancement
+snippets_rules: add CRUD support
+```
