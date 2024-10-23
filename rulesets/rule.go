@@ -227,8 +227,6 @@ func (r BlockRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r BlockRule) implementsRulesetsVersionGetResponseRule() {}
 
-func (r BlockRule) implementsRulesetsVersionByTagGetResponseRule() {}
-
 // The action to perform when the rule matches.
 type BlockRuleAction string
 
@@ -570,8 +568,6 @@ func (r CompressResponseRule) implementsRulesetsRuleDeleteResponseRule() {}
 func (r CompressResponseRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r CompressResponseRule) implementsRulesetsVersionGetResponseRule() {}
-
-func (r CompressResponseRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type CompressResponseRuleAction string
@@ -923,8 +919,6 @@ func (r DDoSDynamicRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r DDoSDynamicRule) implementsRulesetsVersionGetResponseRule() {}
 
-func (r DDoSDynamicRule) implementsRulesetsVersionByTagGetResponseRule() {}
-
 // The action to perform when the rule matches.
 type DDoSDynamicRuleAction string
 
@@ -1189,8 +1183,6 @@ func (r ExecuteRule) implementsRulesetsRuleDeleteResponseRule() {}
 func (r ExecuteRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r ExecuteRule) implementsRulesetsVersionGetResponseRule() {}
-
-func (r ExecuteRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type ExecuteRuleAction string
@@ -1751,8 +1743,6 @@ func (r ForceConnectionCloseRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r ForceConnectionCloseRule) implementsRulesetsVersionGetResponseRule() {}
 
-func (r ForceConnectionCloseRule) implementsRulesetsVersionByTagGetResponseRule() {}
-
 // The action to perform when the rule matches.
 type ForceConnectionCloseRuleAction string
 
@@ -2018,8 +2008,6 @@ func (r LogCustomFieldRule) implementsRulesetsRuleDeleteResponseRule() {}
 func (r LogCustomFieldRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r LogCustomFieldRule) implementsRulesetsVersionGetResponseRule() {}
-
-func (r LogCustomFieldRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type LogCustomFieldRuleAction string
@@ -2428,8 +2416,6 @@ func (r LogRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r LogRule) implementsRulesetsVersionGetResponseRule() {}
 
-func (r LogRule) implementsRulesetsVersionByTagGetResponseRule() {}
-
 // The action to perform when the rule matches.
 type LogRuleAction string
 
@@ -2728,8 +2714,6 @@ func (r ManagedChallengeRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r ManagedChallengeRule) implementsRulesetsVersionGetResponseRule() {}
 
-func (r ManagedChallengeRule) implementsRulesetsVersionByTagGetResponseRule() {}
-
 // The action to perform when the rule matches.
 type ManagedChallengeRuleAction string
 
@@ -2994,8 +2978,6 @@ func (r RedirectRule) implementsRulesetsRuleDeleteResponseRule() {}
 func (r RedirectRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r RedirectRule) implementsRulesetsVersionGetResponseRule() {}
-
-func (r RedirectRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type RedirectRuleAction string
@@ -3566,8 +3548,6 @@ func (r RewriteRule) implementsRulesetsRuleDeleteResponseRule() {}
 func (r RewriteRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r RewriteRule) implementsRulesetsVersionGetResponseRule() {}
-
-func (r RewriteRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type RewriteRuleAction string
@@ -4336,8 +4316,6 @@ func (r RouteRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r RouteRule) implementsRulesetsVersionGetResponseRule() {}
 
-func (r RouteRule) implementsRulesetsVersionByTagGetResponseRule() {}
-
 // The action to perform when the rule matches.
 type RouteRuleAction string
 
@@ -4717,8 +4695,6 @@ func (r ScoreRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r ScoreRule) implementsRulesetsVersionGetResponseRule() {}
 
-func (r ScoreRule) implementsRulesetsVersionByTagGetResponseRule() {}
-
 // The action to perform when the rule matches.
 type ScoreRuleAction string
 
@@ -5018,8 +4994,6 @@ func (r ServeErrorRule) implementsRulesetsRuleDeleteResponseRule() {}
 func (r ServeErrorRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r ServeErrorRule) implementsRulesetsVersionGetResponseRule() {}
-
-func (r ServeErrorRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type ServeErrorRuleAction string
@@ -5347,8 +5321,6 @@ func (r SetCacheSettingsRule) implementsRulesetsRuleDeleteResponseRule() {}
 func (r SetCacheSettingsRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r SetCacheSettingsRule) implementsRulesetsVersionGetResponseRule() {}
-
-func (r SetCacheSettingsRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type SetCacheSettingsRuleAction string
@@ -6445,8 +6417,6 @@ func (r SetConfigRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r SetConfigRule) implementsRulesetsVersionGetResponseRule() {}
 
-func (r SetConfigRule) implementsRulesetsVersionByTagGetResponseRule() {}
-
 // The action to perform when the rule matches.
 type SetConfigRuleAction string
 
@@ -6968,8 +6938,6 @@ func (r SkipRule) implementsRulesetsRuleDeleteResponseRule() {}
 func (r SkipRule) implementsRulesetsRuleEditResponseRule() {}
 
 func (r SkipRule) implementsRulesetsVersionGetResponseRule() {}
-
-func (r SkipRule) implementsRulesetsVersionByTagGetResponseRule() {}
 
 // The action to perform when the rule matches.
 type SkipRuleAction string
