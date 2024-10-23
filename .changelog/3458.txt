@@ -1,3 +1,7 @@
 ```release-note:enhancement
-Add Snippets API client
+snippets: add CRUD support
+```
+
+```release-note:enhancement
+snippet_rules: add CRUD support
 ```
