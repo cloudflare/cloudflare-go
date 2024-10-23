@@ -3,5 +3,5 @@ snippets: add CRUD support
 ```
 
 ```release-note:enhancement
-snippet_rules: add CRUD support
+snippets_rules: add CRUD support
 ```
