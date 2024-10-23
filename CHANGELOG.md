@@ -1,5 +1,15 @@
 ## 0.108.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* snippets: add CRUD support ([#3458](https://github.com/cloudflare/cloudflare-go/issues/3458))
+* snippets_rules: add CRUD support ([#3458](https://github.com/cloudflare/cloudflare-go/issues/3458))
+* waiting_room: Add CookieAttributes property ([#3388](https://github.com/cloudflare/cloudflare-go/issues/3388))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/urfave/cli/v2 from 2.27.4 to 2.27.5 ([#3391](https://github.com/cloudflare/cloudflare-go/issues/3391))
+
 ## 0.107.0 (October 9th, 2024)
 
 ENHANCEMENTS:
