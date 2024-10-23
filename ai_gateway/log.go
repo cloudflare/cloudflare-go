@@ -92,8 +92,6 @@ type LogListResponse struct {
 	Model               string              `json:"model,required"`
 	Path                string              `json:"path,required"`
 	Provider            string              `json:"provider,required"`
-	Request             string              `json:"request,required"`
-	Response            string              `json:"response,required"`
 	Success             bool                `json:"success,required"`
 	TokensIn            int64               `json:"tokens_in,required,nullable"`
 	TokensOut           int64               `json:"tokens_out,required,nullable"`
@@ -118,8 +116,6 @@ type logListResponseJSON struct {
 	Model               apijson.Field
 	Path                apijson.Field
 	Provider            apijson.Field
-	Request             apijson.Field
-	Response            apijson.Field
 	Success             apijson.Field
 	TokensIn            apijson.Field
 	TokensOut           apijson.Field
