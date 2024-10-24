@@ -15,19 +15,14 @@ func (UnionTime) ImplementsAuditLogsAuditLogListParamsSinceUnion()  {}
 
 type UnionString string
 
-func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                 {}
-func (UnionString) ImplementsLogsReceivedGetParamsStartUnion()               {}
-func (UnionString) ImplementsWorkersAIRunResponseUnion()                     {}
-func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion() {}
-func (UnionString) ImplementsSpectrumOriginPortUnionParam()                  {}
-func (UnionString) ImplementsSpectrumOriginPortUnion()                       {}
-func (UnionString) ImplementsMagicTransitCfInterconnectUpdateResponseModifiedInterconnectHealthCheckTargetUnion() {
-}
-func (UnionString) ImplementsMagicTransitCfInterconnectListResponseInterconnectsHealthCheckTargetUnion() {
-}
-func (UnionString) ImplementsMagicTransitCfInterconnectGetResponseInterconnectHealthCheckTargetUnion() {
-}
-func (UnionString) ImplementsMagicTransitCfInterconnectUpdateParamsHealthCheckTargetUnion()     {}
+func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                                    {}
+func (UnionString) ImplementsLogsReceivedGetParamsStartUnion()                                  {}
+func (UnionString) ImplementsWorkersAIRunResponseUnion()                                        {}
+func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion()                    {}
+func (UnionString) ImplementsSpectrumOriginPortUnionParam()                                     {}
+func (UnionString) ImplementsSpectrumOriginPortUnion()                                          {}
+func (UnionString) ImplementsMagicTransitHealthCheckTargetUnionParam()                          {}
+func (UnionString) ImplementsMagicTransitHealthCheckTargetUnion()                               {}
 func (UnionString) ImplementsMagicTransitGRETunnelNewResponseGRETunnelsHealthCheckTargetUnion() {}
 func (UnionString) ImplementsMagicTransitGRETunnelUpdateResponseModifiedGRETunnelHealthCheckTargetUnion() {
 }
