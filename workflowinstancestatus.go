@@ -93,13 +93,12 @@ const (
 	WorkflowInstanceStatusEditResponseStatusTerminated      WorkflowInstanceStatusEditResponseStatus = "terminated"
 	WorkflowInstanceStatusEditResponseStatusComplete        WorkflowInstanceStatusEditResponseStatus = "complete"
 	WorkflowInstanceStatusEditResponseStatusWaitingForPause WorkflowInstanceStatusEditResponseStatus = "waitingForPause"
-	WorkflowInstanceStatusEditResponseStatusWaiting         WorkflowInstanceStatusEditResponseStatus = "waiting"
 	WorkflowInstanceStatusEditResponseStatusUnknown         WorkflowInstanceStatusEditResponseStatus = "unknown"
 )
 
 func (r WorkflowInstanceStatusEditResponseStatus) IsKnown() bool {
 	switch r {
-	case WorkflowInstanceStatusEditResponseStatusQueued, WorkflowInstanceStatusEditResponseStatusRunning, WorkflowInstanceStatusEditResponseStatusPaused, WorkflowInstanceStatusEditResponseStatusErrored, WorkflowInstanceStatusEditResponseStatusTerminated, WorkflowInstanceStatusEditResponseStatusComplete, WorkflowInstanceStatusEditResponseStatusWaitingForPause, WorkflowInstanceStatusEditResponseStatusWaiting, WorkflowInstanceStatusEditResponseStatusUnknown:
+	case WorkflowInstanceStatusEditResponseStatusQueued, WorkflowInstanceStatusEditResponseStatusRunning, WorkflowInstanceStatusEditResponseStatusPaused, WorkflowInstanceStatusEditResponseStatusErrored, WorkflowInstanceStatusEditResponseStatusTerminated, WorkflowInstanceStatusEditResponseStatusComplete, WorkflowInstanceStatusEditResponseStatusWaitingForPause, WorkflowInstanceStatusEditResponseStatusUnknown:
 		return true
 	}
 	return false

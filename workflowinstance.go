@@ -156,13 +156,12 @@ const (
 	WorkflowInstanceNewResponseStatusTerminated      WorkflowInstanceNewResponseStatus = "terminated"
 	WorkflowInstanceNewResponseStatusComplete        WorkflowInstanceNewResponseStatus = "complete"
 	WorkflowInstanceNewResponseStatusWaitingForPause WorkflowInstanceNewResponseStatus = "waitingForPause"
-	WorkflowInstanceNewResponseStatusWaiting         WorkflowInstanceNewResponseStatus = "waiting"
 	WorkflowInstanceNewResponseStatusUnknown         WorkflowInstanceNewResponseStatus = "unknown"
 )
 
 func (r WorkflowInstanceNewResponseStatus) IsKnown() bool {
 	switch r {
-	case WorkflowInstanceNewResponseStatusQueued, WorkflowInstanceNewResponseStatusRunning, WorkflowInstanceNewResponseStatusPaused, WorkflowInstanceNewResponseStatusErrored, WorkflowInstanceNewResponseStatusTerminated, WorkflowInstanceNewResponseStatusComplete, WorkflowInstanceNewResponseStatusWaitingForPause, WorkflowInstanceNewResponseStatusWaiting, WorkflowInstanceNewResponseStatusUnknown:
+	case WorkflowInstanceNewResponseStatusQueued, WorkflowInstanceNewResponseStatusRunning, WorkflowInstanceNewResponseStatusPaused, WorkflowInstanceNewResponseStatusErrored, WorkflowInstanceNewResponseStatusTerminated, WorkflowInstanceNewResponseStatusComplete, WorkflowInstanceNewResponseStatusWaitingForPause, WorkflowInstanceNewResponseStatusUnknown:
 		return true
 	}
 	return false
@@ -209,13 +208,12 @@ const (
 	WorkflowInstanceListResponseStatusTerminated      WorkflowInstanceListResponseStatus = "terminated"
 	WorkflowInstanceListResponseStatusComplete        WorkflowInstanceListResponseStatus = "complete"
 	WorkflowInstanceListResponseStatusWaitingForPause WorkflowInstanceListResponseStatus = "waitingForPause"
-	WorkflowInstanceListResponseStatusWaiting         WorkflowInstanceListResponseStatus = "waiting"
 	WorkflowInstanceListResponseStatusUnknown         WorkflowInstanceListResponseStatus = "unknown"
 )
 
 func (r WorkflowInstanceListResponseStatus) IsKnown() bool {
 	switch r {
-	case WorkflowInstanceListResponseStatusQueued, WorkflowInstanceListResponseStatusRunning, WorkflowInstanceListResponseStatusPaused, WorkflowInstanceListResponseStatusErrored, WorkflowInstanceListResponseStatusTerminated, WorkflowInstanceListResponseStatusComplete, WorkflowInstanceListResponseStatusWaitingForPause, WorkflowInstanceListResponseStatusWaiting, WorkflowInstanceListResponseStatusUnknown:
+	case WorkflowInstanceListResponseStatusQueued, WorkflowInstanceListResponseStatusRunning, WorkflowInstanceListResponseStatusPaused, WorkflowInstanceListResponseStatusErrored, WorkflowInstanceListResponseStatusTerminated, WorkflowInstanceListResponseStatusComplete, WorkflowInstanceListResponseStatusWaitingForPause, WorkflowInstanceListResponseStatusUnknown:
 		return true
 	}
 	return false
@@ -315,13 +313,12 @@ const (
 	WorkflowInstanceGetResponseStatusTerminated      WorkflowInstanceGetResponseStatus = "terminated"
 	WorkflowInstanceGetResponseStatusComplete        WorkflowInstanceGetResponseStatus = "complete"
 	WorkflowInstanceGetResponseStatusWaitingForPause WorkflowInstanceGetResponseStatus = "waitingForPause"
-	WorkflowInstanceGetResponseStatusWaiting         WorkflowInstanceGetResponseStatus = "waiting"
 	WorkflowInstanceGetResponseStatusUnknown         WorkflowInstanceGetResponseStatus = "unknown"
 )
 
 func (r WorkflowInstanceGetResponseStatus) IsKnown() bool {
 	switch r {
-	case WorkflowInstanceGetResponseStatusQueued, WorkflowInstanceGetResponseStatusRunning, WorkflowInstanceGetResponseStatusPaused, WorkflowInstanceGetResponseStatusErrored, WorkflowInstanceGetResponseStatusTerminated, WorkflowInstanceGetResponseStatusComplete, WorkflowInstanceGetResponseStatusWaitingForPause, WorkflowInstanceGetResponseStatusWaiting, WorkflowInstanceGetResponseStatusUnknown:
+	case WorkflowInstanceGetResponseStatusQueued, WorkflowInstanceGetResponseStatusRunning, WorkflowInstanceGetResponseStatusPaused, WorkflowInstanceGetResponseStatusErrored, WorkflowInstanceGetResponseStatusTerminated, WorkflowInstanceGetResponseStatusComplete, WorkflowInstanceGetResponseStatusWaitingForPause, WorkflowInstanceGetResponseStatusUnknown:
 		return true
 	}
 	return false
@@ -836,13 +833,12 @@ const (
 	WorkflowInstanceListParamsStatusTerminated      WorkflowInstanceListParamsStatus = "terminated"
 	WorkflowInstanceListParamsStatusComplete        WorkflowInstanceListParamsStatus = "complete"
 	WorkflowInstanceListParamsStatusWaitingForPause WorkflowInstanceListParamsStatus = "waitingForPause"
-	WorkflowInstanceListParamsStatusWaiting         WorkflowInstanceListParamsStatus = "waiting"
 	WorkflowInstanceListParamsStatusUnknown         WorkflowInstanceListParamsStatus = "unknown"
 )
 
 func (r WorkflowInstanceListParamsStatus) IsKnown() bool {
 	switch r {
-	case WorkflowInstanceListParamsStatusQueued, WorkflowInstanceListParamsStatusRunning, WorkflowInstanceListParamsStatusPaused, WorkflowInstanceListParamsStatusErrored, WorkflowInstanceListParamsStatusTerminated, WorkflowInstanceListParamsStatusComplete, WorkflowInstanceListParamsStatusWaitingForPause, WorkflowInstanceListParamsStatusWaiting, WorkflowInstanceListParamsStatusUnknown:
+	case WorkflowInstanceListParamsStatusQueued, WorkflowInstanceListParamsStatusRunning, WorkflowInstanceListParamsStatusPaused, WorkflowInstanceListParamsStatusErrored, WorkflowInstanceListParamsStatusTerminated, WorkflowInstanceListParamsStatusComplete, WorkflowInstanceListParamsStatusWaitingForPause, WorkflowInstanceListParamsStatusUnknown:
 		return true
 	}
 	return false
