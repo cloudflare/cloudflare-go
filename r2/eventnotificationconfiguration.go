@@ -114,6 +114,9 @@ type EventNotificationConfigurationGetResponseQueuesRule struct {
 	Actions []EventNotificationConfigurationGetResponseQueuesRulesAction `json:"actions,required"`
 	// Timestamp when the rule was created
 	CreatedAt string `json:"createdAt"`
+	// A description that can be used to identify the event notification rule after
+	// creation
+	Description string `json:"description"`
 	// Notifications will be sent only for objects with this prefix
 	Prefix string `json:"prefix"`
 	// Rule ID
@@ -128,6 +131,7 @@ type EventNotificationConfigurationGetResponseQueuesRule struct {
 type eventNotificationConfigurationGetResponseQueuesRuleJSON struct {
 	Actions     apijson.Field
 	CreatedAt   apijson.Field
+	Description apijson.Field
 	Prefix      apijson.Field
 	RuleID      apijson.Field
 	Suffix      apijson.Field
