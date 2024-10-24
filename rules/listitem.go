@@ -91,7 +91,7 @@ func (r *ListItemService) Update(ctx context.Context, listID string, params List
 }
 
 // Fetches all the items in the list.
-func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[ListItemListResponse], err error) {
+func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[ListItemListResponseUnion], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -117,7 +117,7 @@ func (r *ListItemService) List(ctx context.Context, listID string, params ListIt
 }
 
 // Fetches all the items in the list.
-func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[ListItemListResponse] {
+func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[ListItemListResponseUnion] {
 	return pagination.NewCursorPaginationAutoPager(r.List(ctx, listID, params, opts...))
 }
 
@@ -237,7 +237,37 @@ func (r listItemUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListItemListResponse = interface{}
+// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+// maximum of /64.
+//
+// Union satisfied by [shared.UnionString], [rules.Redirect], [rules.Hostname] or
+// [shared.UnionInt].
+type ListItemListResponseUnion interface {
+	ImplementsRulesListItemListResponseUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ListItemListResponseUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(Redirect{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(Hostname{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionInt(0)),
+		},
+	)
+}
 
 type ListItemDeleteResponse struct {
 	// The unique operation ID of the asynchronous action.
@@ -325,7 +355,7 @@ func (r ListItemNewParamsBody) MarshalJSON() (data []byte, err error) {
 type ListItemNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ListItemNewResponse   `json:"result,required,nullable"`
+	Result   ListItemNewResponse   `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemNewResponseEnvelopeJSON    `json:"-"`
@@ -397,7 +427,7 @@ func (r ListItemUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 type ListItemUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
 	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ListItemUpdateResponse `json:"result,required,nullable"`
+	Result   ListItemUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemUpdateResponseEnvelopeJSON    `json:"-"`
@@ -470,7 +500,7 @@ type ListItemDeleteParams struct {
 type ListItemDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo  `json:"errors,required"`
 	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ListItemDeleteResponse `json:"result,required,nullable"`
+	Result   ListItemDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemDeleteResponseEnvelopeJSON    `json:"-"`
@@ -515,7 +545,7 @@ type ListItemGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 	// maximum of /64.
-	Result ListItemGetResponseUnion `json:"result,required,nullable"`
+	Result ListItemGetResponseUnion `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemGetResponseEnvelopeJSON    `json:"-"`

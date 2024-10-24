@@ -41,6 +41,7 @@ func (UnionString) ImplementsMagicTransitIPSECTunnelDeleteResponseDeletedIPSECTu
 func (UnionString) ImplementsMagicTransitIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion() {}
 func (UnionString) ImplementsMagicTransitIPSECTunnelNewParamsHealthCheckTargetUnion()              {}
 func (UnionString) ImplementsMagicTransitIPSECTunnelUpdateParamsHealthCheckTargetUnion()           {}
+func (UnionString) ImplementsRulesListItemListResponseUnion()                                      {}
 func (UnionString) ImplementsRulesListItemGetResponseUnion()                                       {}
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
 }
@@ -114,6 +115,7 @@ func (UnionInt) ImplementsLogsReceivedGetParamsEndUnion()   {}
 func (UnionInt) ImplementsLogsReceivedGetParamsStartUnion() {}
 func (UnionInt) ImplementsSpectrumOriginPortUnionParam()    {}
 func (UnionInt) ImplementsSpectrumOriginPortUnion()         {}
+func (UnionInt) ImplementsRulesListItemListResponseUnion()  {}
 func (UnionInt) ImplementsRulesListItemGetResponseUnion()   {}
 
 type UnionFloat float64
