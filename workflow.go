@@ -188,6 +188,7 @@ type WorkflowListResponseInstances struct {
 	Running         float64                           `json:"running"`
 	Terminated      float64                           `json:"terminated"`
 	Unknown         float64                           `json:"unknown"`
+	Waiting         float64                           `json:"waiting"`
 	WaitingForPause float64                           `json:"waitingForPause"`
 	JSON            workflowListResponseInstancesJSON `json:"-"`
 }
@@ -202,6 +203,7 @@ type workflowListResponseInstancesJSON struct {
 	Running         apijson.Field
 	Terminated      apijson.Field
 	Unknown         apijson.Field
+	Waiting         apijson.Field
 	WaitingForPause apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
@@ -258,6 +260,7 @@ type WorkflowGetResponseInstances struct {
 	Running         float64                          `json:"running"`
 	Terminated      float64                          `json:"terminated"`
 	Unknown         float64                          `json:"unknown"`
+	Waiting         float64                          `json:"waiting"`
 	WaitingForPause float64                          `json:"waitingForPause"`
 	JSON            workflowGetResponseInstancesJSON `json:"-"`
 }
@@ -272,6 +275,7 @@ type workflowGetResponseInstancesJSON struct {
 	Running         apijson.Field
 	Terminated      apijson.Field
 	Unknown         apijson.Field
+	Waiting         apijson.Field
 	WaitingForPause apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
