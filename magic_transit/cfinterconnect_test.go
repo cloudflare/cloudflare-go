@@ -36,10 +36,10 @@ func TestCfInterconnectUpdateWithOptionalParams(t *testing.T) {
 			GRE: cloudflare.F(magic_transit.CfInterconnectUpdateParamsGRE{
 				CloudflareEndpoint: cloudflare.F("203.0.113.1"),
 			}),
-			HealthCheck: cloudflare.F(magic_transit.CfInterconnectUpdateParamsHealthCheck{
+			HealthCheck: cloudflare.F(magic_transit.HealthCheckParam{
 				Enabled: cloudflare.F(true),
 				Rate:    cloudflare.F(magic_transit.HealthCheckRateLow),
-				Target: cloudflare.F[magic_transit.CfInterconnectUpdateParamsHealthCheckTargetUnion](magic_transit.CfInterconnectUpdateParamsHealthCheckTargetMagicHealthCheckTarget{
+				Target: cloudflare.F[magic_transit.HealthCheckTargetUnionParam](magic_transit.HealthCheckTargetMagicHealthCheckTargetParam{
 					Saved: cloudflare.F("203.0.113.1"),
 				}),
 				Type: cloudflare.F(magic_transit.HealthCheckTypeReply),
