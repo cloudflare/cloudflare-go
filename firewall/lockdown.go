@@ -11,13 +11,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -41,15 +41,15 @@ func NewLockdownService(opts ...option.RequestOption) (r *LockdownService) {
 }
 
 // Creates a new Zone Lockdown rule.
-func (r *LockdownService) New(ctx context.Context, zoneIdentifier string, body LockdownNewParams, opts ...option.RequestOption) (res *Lockdown, err error) {
+func (r *LockdownService) New(ctx context.Context, params LockdownNewParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,19 +58,19 @@ func (r *LockdownService) New(ctx context.Context, zoneIdentifier string, body L
 }
 
 // Updates an existing Zone Lockdown rule.
-func (r *LockdownService) Update(ctx context.Context, zoneIdentifier string, id string, body LockdownUpdateParams, opts ...option.RequestOption) (res *Lockdown, err error) {
+func (r *LockdownService) Update(ctx context.Context, lockDownsID string, params LockdownUpdateParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if lockDownsID == "" {
+		err = errors.New("missing required lock_downs_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", params.ZoneID, lockDownsID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -80,16 +80,16 @@ func (r *LockdownService) Update(ctx context.Context, zoneIdentifier string, id 
 
 // Fetches Zone Lockdown rules. You can filter the results using several optional
 // parameters.
-func (r *LockdownService) List(ctx context.Context, zoneIdentifier string, query LockdownListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Lockdown], err error) {
+func (r *LockdownService) List(ctx context.Context, params LockdownListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[Lockdown], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns", zoneIdentifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -103,23 +103,23 @@ func (r *LockdownService) List(ctx context.Context, zoneIdentifier string, query
 
 // Fetches Zone Lockdown rules. You can filter the results using several optional
 // parameters.
-func (r *LockdownService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query LockdownListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Lockdown] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+func (r *LockdownService) ListAutoPaging(ctx context.Context, params LockdownListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[Lockdown] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing Zone Lockdown rule.
-func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
+func (r *LockdownService) Delete(ctx context.Context, lockDownsID string, body LockdownDeleteParams, opts ...option.RequestOption) (res *LockdownDeleteResponse, err error) {
 	var env LockdownDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if lockDownsID == "" {
+		err = errors.New("missing required lock_downs_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", body.ZoneID, lockDownsID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -129,18 +129,18 @@ func (r *LockdownService) Delete(ctx context.Context, zoneIdentifier string, id 
 }
 
 // Fetches the details of a Zone Lockdown rule.
-func (r *LockdownService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *Lockdown, err error) {
+func (r *LockdownService) Get(ctx context.Context, lockDownsID string, query LockdownGetParams, opts ...option.RequestOption) (res *Lockdown, err error) {
 	var env LockdownGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if query.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if lockDownsID == "" {
+		err = errors.New("missing required lock_downs_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", query.ZoneID, lockDownsID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -449,6 +449,8 @@ func (r lockdownDeleteResponseJSON) RawJSON() string {
 }
 
 type LockdownNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 	// specified in the Zone Lockdown rule. You can include any number of `ip` or
 	// `ip_range` configurations.
@@ -507,6 +509,8 @@ func (r LockdownNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LockdownUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 	// specified in the Zone Lockdown rule. You can include any number of `ip` or
 	// `ip_range` configurations.
@@ -565,6 +569,8 @@ func (r LockdownUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LockdownListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The timestamp of when the rule was created.
 	CreatedOn param.Field[time.Time] `query:"created_on" format:"date-time"`
 	// A string to search for in the description of existing rules.
@@ -600,6 +606,11 @@ func (r LockdownListParams) URLQuery() (v url.Values) {
 	})
 }
 
+type LockdownDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type LockdownDeleteResponseEnvelope struct {
 	Result LockdownDeleteResponse             `json:"result"`
 	JSON   lockdownDeleteResponseEnvelopeJSON `json:"-"`
@@ -619,6 +630,11 @@ func (r *LockdownDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 
 func (r lockdownDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+type LockdownGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type LockdownGetResponseEnvelope struct {

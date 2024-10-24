@@ -11,14 +11,14 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ProjectDeploymentService contains methods and other services that help with
@@ -305,7 +305,7 @@ type ProjectDeploymentDeleteParams struct {
 type ProjectDeploymentDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo           `json:"errors,required"`
 	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   ProjectDeploymentDeleteResponse `json:"result,required,nullable"`
+	Result   ProjectDeploymentDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ProjectDeploymentDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentDeleteResponseEnvelopeJSON    `json:"-"`

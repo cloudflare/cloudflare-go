@@ -10,15 +10,15 @@ import (
 	"net/url"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/filters"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/rate_limits"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/filters"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/rate_limits"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -47,15 +47,15 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleNewParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
+func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
 	var env RuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/rules", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -69,19 +69,19 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, body RuleN
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id string, body RuleUpdateParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
+func (r *RuleService) Update(ctx context.Context, ruleID string, params RuleUpdateParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	var env RuleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/rules/%s", params.ZoneID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -96,16 +96,16 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, id stri
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallRule], err error) {
+func (r *RuleService) List(ctx context.Context, params RuleListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallRule], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/rules", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -124,8 +124,8 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, query Rul
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallRule] {
-	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+func (r *RuleService) ListAutoPaging(ctx context.Context, params RuleListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallRule] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing firewall rule.
@@ -134,18 +134,18 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string,
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	var env RuleDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
+	path := fmt.Sprintf("zones/%s/firewall/rules/%s", body.ZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -160,18 +160,18 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, id stri
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string, body RuleEditParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
+func (r *RuleService) Edit(ctx context.Context, ruleID string, body RuleEditParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
 	var env RuleEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if id == "" {
-		err = errors.New("missing required id parameter")
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
+	path := fmt.Sprintf("zones/%s/firewall/rules/%s", body.ZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -186,18 +186,18 @@ func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, id string
 // Engine. See
 // https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
 // for full details.
-func (r *RuleService) Get(ctx context.Context, zoneIdentifier string, params RuleGetParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
+func (r *RuleService) Get(ctx context.Context, ruleID string, params RuleGetParams, opts ...option.RequestOption) (res *FirewallRule, err error) {
 	var env RuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
-	if params.PathID.Value == "" {
-		err = errors.New("missing required path_id parameter")
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	if zoneIdentifier == "" {
-		err = errors.New("missing required zone_identifier parameter")
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, params.PathID)
+	path := fmt.Sprintf("zones/%s/firewall/rules/%s", params.ZoneID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -370,6 +370,8 @@ func (r deletedFilterJSON) RawJSON() string {
 func (r DeletedFilter) ImplementsFirewallFirewallRuleFilter() {}
 
 type RuleNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
 	Action param.Field[RuleNewParamsAction]         `json:"action,required"`
@@ -518,6 +520,8 @@ func (r ruleNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type RuleUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
 	Action param.Field[RuleUpdateParamsAction]      `json:"action,required"`
@@ -633,6 +637,8 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The unique identifier of the firewall rule.
 	ID param.Field[string] `query:"id"`
 	// The action to search for. Must be an exact match.
@@ -653,6 +659,11 @@ func (r RuleListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+type RuleDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type RuleDeleteResponseEnvelope struct {
@@ -699,6 +710,8 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
@@ -782,10 +795,10 @@ func (r ruleEditResponseEnvelopeResultInfoJSON) RawJSON() string {
 }
 
 type RuleGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The unique identifier of the firewall rule.
-	PathID param.Field[string] `path:"id,required"`
-	// The unique identifier of the firewall rule.
-	QueryID param.Field[string] `query:"id"`
+	ID param.Field[string] `query:"id"`
 }
 
 // URLQuery serializes [RuleGetParams]'s query parameters as `url.Values`.

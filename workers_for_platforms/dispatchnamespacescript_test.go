@@ -10,11 +10,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/workers"
-	"github.com/cloudflare/cloudflare-go/v3/workers_for_platforms"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
+	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
 )
 
 func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
@@ -79,6 +79,10 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 							FromScript: cloudflare.F("from_script"),
 							To:         cloudflare.F("to"),
 						}}),
+					}),
+					Observability: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataObservability{
+						Enabled:          cloudflare.F(true),
+						HeadSamplingRate: cloudflare.F(0.100000),
 					}),
 					Placement: cloudflare.F(workers.PlacementConfigurationParam{
 						Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
