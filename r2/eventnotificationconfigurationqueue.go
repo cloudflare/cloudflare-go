@@ -106,6 +106,9 @@ func (r EventNotificationConfigurationQueueUpdateParams) MarshalJSON() (data []b
 type EventNotificationConfigurationQueueUpdateParamsRule struct {
 	// Array of R2 object actions that will trigger notifications
 	Actions param.Field[[]EventNotificationConfigurationQueueUpdateParamsRulesAction] `json:"actions,required"`
+	// A description that can be used to identify the event notification rule after
+	// creation
+	Description param.Field[string] `json:"description"`
 	// Notifications will be sent only for objects with this prefix
 	Prefix param.Field[string] `json:"prefix"`
 	// Notifications will be sent only for objects with this suffix
