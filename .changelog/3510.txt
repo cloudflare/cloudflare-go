@@ -1,3 +1,3 @@
 ```release-note:enhancement
-snippets: add support for controlling schema strictness in Access SCIM application provisioning mappings
+access_application: add support for controlling schema strictness in Access SCIM application provisioning mappings
 ```
