@@ -1418,7 +1418,8 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 								"create": true,
 								"update": true,
 								"delete": true
-							}
+							},
+							"strictness": "passthrough"
 						}
 					]
 				}
@@ -1471,6 +1472,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 						Update: BoolPtr(true),
 						Delete: BoolPtr(true),
 					},
+					Strictness: "passthrough",
 				},
 			},
 		},
@@ -1502,6 +1504,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 						Update: BoolPtr(true),
 						Delete: BoolPtr(true),
 					},
+					Strictness: "strict",
 				},
 			},
 		},
@@ -1537,6 +1540,7 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 						Update: BoolPtr(true),
 						Delete: BoolPtr(true),
 					},
+					Strictness: "strict",
 				},
 			},
 		},
