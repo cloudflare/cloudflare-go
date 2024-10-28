@@ -86,6 +86,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
 					}),
+					Strictness:       cloudflare.F(zero_trust.SCIMConfigMappingStrictnessStrict),
 					TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 				}, {
 					Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
@@ -96,6 +97,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
 					}),
+					Strictness:       cloudflare.F(zero_trust.SCIMConfigMappingStrictnessStrict),
 					TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 				}, {
 					Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
@@ -106,6 +108,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 						Delete: cloudflare.F(true),
 						Update: cloudflare.F(true),
 					}),
+					Strictness:       cloudflare.F(zero_trust.SCIMConfigMappingStrictnessStrict),
 					TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 				}}),
 			}),
@@ -201,6 +204,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
 						}),
+						Strictness:       cloudflare.F(zero_trust.SCIMConfigMappingStrictnessStrict),
 						TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 					}, {
 						Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
@@ -211,6 +215,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
 						}),
+						Strictness:       cloudflare.F(zero_trust.SCIMConfigMappingStrictnessStrict),
 						TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 					}, {
 						Schema:  cloudflare.F("urn:ietf:params:scim:schemas:core:2.0:User"),
@@ -221,6 +226,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 							Delete: cloudflare.F(true),
 							Update: cloudflare.F(true),
 						}),
+						Strictness:       cloudflare.F(zero_trust.SCIMConfigMappingStrictnessStrict),
 						TransformJsonata: cloudflare.F("$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])"),
 					}}),
 				}),

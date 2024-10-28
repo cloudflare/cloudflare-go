@@ -1737,6 +1737,10 @@ type SCIMConfigMapping struct {
 	Filter string `json:"filter"`
 	// Whether or not this mapping applies to creates, updates, or deletes.
 	Operations SCIMConfigMappingOperations `json:"operations"`
+	// The level of adherence to outbound resource schemas when provisioning to this
+	// mapping. ‘Strict’ removes unknown values, while ‘passthrough’ passes unknown
+	// values to the target.
+	Strictness SCIMConfigMappingStrictness `json:"strictness"`
 	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
 	// provisioning it in the application.
 	TransformJsonata string                `json:"transform_jsonata"`
@@ -1750,6 +1754,7 @@ type scimConfigMappingJSON struct {
 	Enabled          apijson.Field
 	Filter           apijson.Field
 	Operations       apijson.Field
+	Strictness       apijson.Field
 	TransformJsonata apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -1792,6 +1797,24 @@ func (r scimConfigMappingOperationsJSON) RawJSON() string {
 	return r.raw
 }
 
+// The level of adherence to outbound resource schemas when provisioning to this
+// mapping. ‘Strict’ removes unknown values, while ‘passthrough’ passes unknown
+// values to the target.
+type SCIMConfigMappingStrictness string
+
+const (
+	SCIMConfigMappingStrictnessStrict      SCIMConfigMappingStrictness = "strict"
+	SCIMConfigMappingStrictnessPassthrough SCIMConfigMappingStrictness = "passthrough"
+)
+
+func (r SCIMConfigMappingStrictness) IsKnown() bool {
+	switch r {
+	case SCIMConfigMappingStrictnessStrict, SCIMConfigMappingStrictnessPassthrough:
+		return true
+	}
+	return false
+}
+
 // Transformations and filters applied to resources before they are provisioned in
 // the remote SCIM service.
 type SCIMConfigMappingParam struct {
@@ -1805,6 +1828,10 @@ type SCIMConfigMappingParam struct {
 	Filter param.Field[string] `json:"filter"`
 	// Whether or not this mapping applies to creates, updates, or deletes.
 	Operations param.Field[SCIMConfigMappingOperationsParam] `json:"operations"`
+	// The level of adherence to outbound resource schemas when provisioning to this
+	// mapping. ‘Strict’ removes unknown values, while ‘passthrough’ passes unknown
+	// values to the target.
+	Strictness param.Field[SCIMConfigMappingStrictness] `json:"strictness"`
 	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
 	// provisioning it in the application.
 	TransformJsonata param.Field[string] `json:"transform_jsonata"`
