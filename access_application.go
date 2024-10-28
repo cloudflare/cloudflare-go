@@ -163,6 +163,7 @@ type AccessApplicationScimMapping struct {
 	Filter           string                                  `json:"filter,omitempty"`
 	TransformJsonata string                                  `json:"transform_jsonata,omitempty"`
 	Operations       *AccessApplicationScimMappingOperations `json:"operations,omitempty"`
+	Strictness       string                                  `json:"strictness,omitempty"`
 }
 
 type AccessApplicationScimMappingOperations struct {
