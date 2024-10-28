@@ -40,7 +40,7 @@ func NewVariantService(opts ...option.RequestOption) (r *VariantService) {
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 // does not serve the variant requested, the response will not be cached. This will
 // be indicated with BYPASS cache status in the response headers.
-func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, opts ...option.RequestOption) (res *CacheVariant, err error) {
+func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, opts ...option.RequestOption) (res *VariantDeleteResponse, err error) {
 	var env VariantDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
@@ -98,35 +98,6 @@ func (r *VariantService) Get(ctx context.Context, query VariantGetParams, opts .
 	return
 }
 
-// Variant support enables caching variants of images with certain file extensions
-// in addition to the original. This only applies when the origin server sends the
-// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
-// does not serve the variant requested, the response will not be cached. This will
-// be indicated with BYPASS cache status in the response headers.
-type CacheVariant struct {
-	// ID of the zone setting.
-	ID CacheVariantIdentifier `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time        `json:"modified_on,required,nullable" format:"date-time"`
-	JSON       cacheVariantJSON `json:"-"`
-}
-
-// cacheVariantJSON contains the JSON metadata for the struct [CacheVariant]
-type cacheVariantJSON struct {
-	ID          apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheVariant) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r cacheVariantJSON) RawJSON() string {
-	return r.raw
-}
-
 // ID of the zone setting.
 type CacheVariantIdentifier string
 
@@ -140,6 +111,36 @@ func (r CacheVariantIdentifier) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+// Variant support enables caching variants of images with certain file extensions
+// in addition to the original. This only applies when the origin server sends the
+// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
+// does not serve the variant requested, the response will not be cached. This will
+// be indicated with BYPASS cache status in the response headers.
+type VariantDeleteResponse struct {
+	// ID of the zone setting.
+	ID CacheVariantIdentifier `json:"id,required"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                 `json:"modified_on,required,nullable" format:"date-time"`
+	JSON       variantDeleteResponseJSON `json:"-"`
+}
+
+// variantDeleteResponseJSON contains the JSON metadata for the struct
+// [VariantDeleteResponse]
+type variantDeleteResponseJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VariantDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r variantDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Variant support enables caching variants of images with certain file extensions
@@ -349,7 +350,7 @@ type VariantDeleteResponseEnvelope struct {
 	// 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 	// does not serve the variant requested, the response will not be cached. This will
 	// be indicated with BYPASS cache status in the response headers.
-	Result CacheVariant `json:"result,required"`
+	Result VariantDeleteResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success VariantDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    variantDeleteResponseEnvelopeJSON    `json:"-"`
