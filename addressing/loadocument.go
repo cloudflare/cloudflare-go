@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"mime/multipart"
 	"net/http"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
@@ -57,15 +58,32 @@ func (r *LOADocumentService) New(ctx context.Context, params LOADocumentNewParam
 }
 
 type LOADocumentNewResponse struct {
-	// Name of LOA document.
-	Filename string                     `json:"filename"`
-	JSON     loaDocumentNewResponseJSON `json:"-"`
+	// Identifier for the uploaded LOA document.
+	ID string `json:"id,nullable"`
+	// Identifier
+	AccountID string    `json:"account_id"`
+	Created   time.Time `json:"created" format:"date-time"`
+	// Name of LOA document. Max file size 10MB, and supported filetype is pdf.
+	Filename string `json:"filename"`
+	// File size of the uploaded LOA document.
+	SizeBytes int64 `json:"size_bytes"`
+	// Whether the LOA has been verified by Cloudflare staff.
+	Verified bool `json:"verified"`
+	// Timestamp of the moment the LOA was marked as validated.
+	VerifiedAt time.Time                  `json:"verified_at,nullable" format:"date-time"`
+	JSON       loaDocumentNewResponseJSON `json:"-"`
 }
 
 // loaDocumentNewResponseJSON contains the JSON metadata for the struct
 // [LOADocumentNewResponse]
 type loaDocumentNewResponseJSON struct {
+	ID          apijson.Field
+	AccountID   apijson.Field
+	Created     apijson.Field
 	Filename    apijson.Field
+	SizeBytes   apijson.Field
+	Verified    apijson.Field
+	VerifiedAt  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
