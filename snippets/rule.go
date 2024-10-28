@@ -79,6 +79,18 @@ func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, 
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
+// Delete All Rules
+func (r *RuleService) Delete(ctx context.Context, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/snippets/snippet_rules", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
+}
+
 type RuleUpdateResponse struct {
 	Description string `json:"description"`
 	Enabled     bool   `json:"enabled"`
@@ -133,6 +145,47 @@ func (r *RuleListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r ruleListResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type RuleDeleteResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success RuleDeleteResponseSuccess `json:"success,required"`
+	JSON    ruleDeleteResponseJSON    `json:"-"`
+}
+
+// ruleDeleteResponseJSON contains the JSON metadata for the struct
+// [RuleDeleteResponse]
+type ruleDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RuleDeleteResponseSuccess bool
+
+const (
+	RuleDeleteResponseSuccessTrue RuleDeleteResponseSuccess = true
+)
+
+func (r RuleDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case RuleDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type RuleUpdateParams struct {
@@ -203,6 +256,11 @@ func (r RuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RuleListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type RuleDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
