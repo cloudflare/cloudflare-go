@@ -305,7 +305,7 @@ type ProjectDeploymentDeleteParams struct {
 type ProjectDeploymentDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo           `json:"errors,required"`
 	Messages []shared.ResponseInfo           `json:"messages,required"`
-	Result   ProjectDeploymentDeleteResponse `json:"result,required"`
+	Result   ProjectDeploymentDeleteResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ProjectDeploymentDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    projectDeploymentDeleteResponseEnvelopeJSON    `json:"-"`
