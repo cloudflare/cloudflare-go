@@ -43,7 +43,7 @@ func NewWorkflowInstanceService(opts ...option.RequestOption) (r *WorkflowInstan
 }
 
 // Create a new workflow instance
-func (r *WorkflowInstanceService) New(ctx context.Context, workflowName string, params WorkflowInstanceNewParams, opts ...option.RequestOption) (res *[]WorkflowInstanceNewResponse, err error) {
+func (r *WorkflowInstanceService) New(ctx context.Context, workflowName string, params WorkflowInstanceNewParams, opts ...option.RequestOption) (res *WorkflowInstanceNewResponse, err error) {
 	var env WorkflowInstanceNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -693,7 +693,7 @@ func (r WorkflowInstanceNewParams) MarshalJSON() (data []byte, err error) {
 type WorkflowInstanceNewResponseEnvelope struct {
 	Errors     []WorkflowInstanceNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages   []WorkflowInstanceNewResponseEnvelopeMessages `json:"messages,required"`
-	Result     []WorkflowInstanceNewResponse                 `json:"result,required"`
+	Result     WorkflowInstanceNewResponse                   `json:"result,required"`
 	Success    WorkflowInstanceNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo WorkflowInstanceNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       workflowInstanceNewResponseEnvelopeJSON       `json:"-"`
