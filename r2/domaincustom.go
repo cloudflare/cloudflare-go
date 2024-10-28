@@ -126,6 +126,31 @@ func (r *DomainCustomService) Delete(ctx context.Context, bucketName string, dom
 	return
 }
 
+// Get the configuration for a custom domain on an existing R2 bucket.
+func (r *DomainCustomService) Get(ctx context.Context, bucketName string, domainName string, params DomainCustomGetParams, opts ...option.RequestOption) (res *DomainCustomGetResponse, err error) {
+	var env DomainCustomGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if bucketName == "" {
+		err = errors.New("missing required bucket_name parameter")
+		return
+	}
+	if domainName == "" {
+		err = errors.New("missing required domain_name parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/domains/custom/%s", params.AccountID, bucketName, domainName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type DomainCustomNewResponse struct {
 	// Domain name of the affected custom domain
 	Domain string `json:"domain,required"`
@@ -384,6 +409,127 @@ func (r *DomainCustomDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r domainCustomDeleteResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+type DomainCustomGetResponse struct {
+	// Domain name of the custom domain to be added
+	Domain string `json:"domain,required"`
+	// Whether this bucket is publicly accessible at the specified custom domain
+	Enabled bool                          `json:"enabled,required"`
+	Status  DomainCustomGetResponseStatus `json:"status,required"`
+	// Minimum TLS Version the custom domain will accept for incoming connections. If
+	// not set, defaults to 1.0.
+	MinTLS DomainCustomGetResponseMinTLS `json:"minTLS"`
+	// Zone ID of the custom domain resides in
+	ZoneID string `json:"zoneId"`
+	// Zone that the custom domain resides in
+	ZoneName string                      `json:"zoneName"`
+	JSON     domainCustomGetResponseJSON `json:"-"`
+}
+
+// domainCustomGetResponseJSON contains the JSON metadata for the struct
+// [DomainCustomGetResponse]
+type domainCustomGetResponseJSON struct {
+	Domain      apijson.Field
+	Enabled     apijson.Field
+	Status      apijson.Field
+	MinTLS      apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainCustomGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainCustomGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type DomainCustomGetResponseStatus struct {
+	// Ownership status of the domain
+	Ownership DomainCustomGetResponseStatusOwnership `json:"ownership,required"`
+	// SSL certificate status
+	SSL  DomainCustomGetResponseStatusSSL  `json:"ssl,required"`
+	JSON domainCustomGetResponseStatusJSON `json:"-"`
+}
+
+// domainCustomGetResponseStatusJSON contains the JSON metadata for the struct
+// [DomainCustomGetResponseStatus]
+type domainCustomGetResponseStatusJSON struct {
+	Ownership   apijson.Field
+	SSL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainCustomGetResponseStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainCustomGetResponseStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+// Ownership status of the domain
+type DomainCustomGetResponseStatusOwnership string
+
+const (
+	DomainCustomGetResponseStatusOwnershipPending     DomainCustomGetResponseStatusOwnership = "pending"
+	DomainCustomGetResponseStatusOwnershipActive      DomainCustomGetResponseStatusOwnership = "active"
+	DomainCustomGetResponseStatusOwnershipDeactivated DomainCustomGetResponseStatusOwnership = "deactivated"
+	DomainCustomGetResponseStatusOwnershipBlocked     DomainCustomGetResponseStatusOwnership = "blocked"
+	DomainCustomGetResponseStatusOwnershipError       DomainCustomGetResponseStatusOwnership = "error"
+	DomainCustomGetResponseStatusOwnershipUnknown     DomainCustomGetResponseStatusOwnership = "unknown"
+)
+
+func (r DomainCustomGetResponseStatusOwnership) IsKnown() bool {
+	switch r {
+	case DomainCustomGetResponseStatusOwnershipPending, DomainCustomGetResponseStatusOwnershipActive, DomainCustomGetResponseStatusOwnershipDeactivated, DomainCustomGetResponseStatusOwnershipBlocked, DomainCustomGetResponseStatusOwnershipError, DomainCustomGetResponseStatusOwnershipUnknown:
+		return true
+	}
+	return false
+}
+
+// SSL certificate status
+type DomainCustomGetResponseStatusSSL string
+
+const (
+	DomainCustomGetResponseStatusSSLInitializing DomainCustomGetResponseStatusSSL = "initializing"
+	DomainCustomGetResponseStatusSSLPending      DomainCustomGetResponseStatusSSL = "pending"
+	DomainCustomGetResponseStatusSSLActive       DomainCustomGetResponseStatusSSL = "active"
+	DomainCustomGetResponseStatusSSLDeactivated  DomainCustomGetResponseStatusSSL = "deactivated"
+	DomainCustomGetResponseStatusSSLError        DomainCustomGetResponseStatusSSL = "error"
+	DomainCustomGetResponseStatusSSLUnknown      DomainCustomGetResponseStatusSSL = "unknown"
+)
+
+func (r DomainCustomGetResponseStatusSSL) IsKnown() bool {
+	switch r {
+	case DomainCustomGetResponseStatusSSLInitializing, DomainCustomGetResponseStatusSSLPending, DomainCustomGetResponseStatusSSLActive, DomainCustomGetResponseStatusSSLDeactivated, DomainCustomGetResponseStatusSSLError, DomainCustomGetResponseStatusSSLUnknown:
+		return true
+	}
+	return false
+}
+
+// Minimum TLS Version the custom domain will accept for incoming connections. If
+// not set, defaults to 1.0.
+type DomainCustomGetResponseMinTLS string
+
+const (
+	DomainCustomGetResponseMinTLS1_0 DomainCustomGetResponseMinTLS = "1.0"
+	DomainCustomGetResponseMinTLS1_1 DomainCustomGetResponseMinTLS = "1.1"
+	DomainCustomGetResponseMinTLS1_2 DomainCustomGetResponseMinTLS = "1.2"
+	DomainCustomGetResponseMinTLS1_3 DomainCustomGetResponseMinTLS = "1.3"
+)
+
+func (r DomainCustomGetResponseMinTLS) IsKnown() bool {
+	switch r {
+	case DomainCustomGetResponseMinTLS1_0, DomainCustomGetResponseMinTLS1_1, DomainCustomGetResponseMinTLS1_2, DomainCustomGetResponseMinTLS1_3:
+		return true
+	}
+	return false
 }
 
 type DomainCustomNewParams struct {
@@ -710,6 +856,73 @@ const (
 func (r DomainCustomDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case DomainCustomDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type DomainCustomGetParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The bucket jurisdiction
+	CfR2Jurisdiction param.Field[DomainCustomGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+}
+
+// The bucket jurisdiction
+type DomainCustomGetParamsCfR2Jurisdiction string
+
+const (
+	DomainCustomGetParamsCfR2JurisdictionDefault DomainCustomGetParamsCfR2Jurisdiction = "default"
+	DomainCustomGetParamsCfR2JurisdictionEu      DomainCustomGetParamsCfR2Jurisdiction = "eu"
+	DomainCustomGetParamsCfR2JurisdictionFedramp DomainCustomGetParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r DomainCustomGetParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case DomainCustomGetParamsCfR2JurisdictionDefault, DomainCustomGetParamsCfR2JurisdictionEu, DomainCustomGetParamsCfR2JurisdictionFedramp:
+		return true
+	}
+	return false
+}
+
+type DomainCustomGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo   `json:"errors,required"`
+	Messages []string                `json:"messages,required"`
+	Result   DomainCustomGetResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success DomainCustomGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    domainCustomGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// domainCustomGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DomainCustomGetResponseEnvelope]
+type domainCustomGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DomainCustomGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r domainCustomGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DomainCustomGetResponseEnvelopeSuccess bool
+
+const (
+	DomainCustomGetResponseEnvelopeSuccessTrue DomainCustomGetResponseEnvelopeSuccess = true
+)
+
+func (r DomainCustomGetResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DomainCustomGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
