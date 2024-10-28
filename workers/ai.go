@@ -70,7 +70,8 @@ func (r *AIService) Run(ctx context.Context, modelName string, params AIRunParam
 // An array of classification results for the input text
 //
 // Union satisfied by [workers.AIRunResponseTextClassification],
-// [shared.UnionString], [workers.AIRunResponseTextEmbeddings],
+// [shared.UnionString], [workers.AIRunResponseAudio],
+// [workers.AIRunResponseTextEmbeddings],
 // [workers.AIRunResponseAutomaticSpeechRecognition],
 // [workers.AIRunResponseImageClassification],
 // [workers.AIRunResponseObjectDetection], [workers.AIRunResponseObject],
@@ -91,6 +92,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AIRunResponseAudio{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -156,6 +161,30 @@ func (r *AIRunResponseTextClassificationItem) UnmarshalJSON(data []byte) (err er
 func (r aiRunResponseTextClassificationItemJSON) RawJSON() string {
 	return r.raw
 }
+
+type AIRunResponseAudio struct {
+	// The generated audio in MP3 format, base64-encoded
+	Audio string                 `json:"audio"`
+	JSON  aiRunResponseAudioJSON `json:"-"`
+}
+
+// aiRunResponseAudioJSON contains the JSON metadata for the struct
+// [AIRunResponseAudio]
+type aiRunResponseAudioJSON struct {
+	Audio       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIRunResponseAudio) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiRunResponseAudioJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AIRunResponseAudio) ImplementsWorkersAIRunResponseUnion() {}
 
 type AIRunResponseTextEmbeddings struct {
 	// Embeddings of the requested text values
@@ -489,7 +518,10 @@ type AIRunParamsBody struct {
 	// during img2img tasks; lower values make the output closer to the input image
 	Strength param.Field[float64] `json:"strength"`
 	// The width of the generated image in pixels
-	Width param.Field[int64]       `json:"width"`
+	Width param.Field[int64] `json:"width"`
+	// The speech language (e.g., 'en' for English, 'fr' for French). Defaults to 'en'
+	// if not specified
+	Lang  param.Field[string]      `json:"lang"`
 	Audio param.Field[interface{}] `json:"audio,required"`
 	// The language of the recorded audio
 	SourceLang param.Field[string] `json:"source_lang"`
@@ -539,7 +571,8 @@ func (r AIRunParamsBody) MarshalJSON() (data []byte, err error) {
 func (r AIRunParamsBody) implementsWorkersAIRunParamsBodyUnion() {}
 
 // Satisfied by [workers.AIRunParamsBodyTextClassification],
-// [workers.AIRunParamsBodyTextToImage], [workers.AIRunParamsBodyTextEmbeddings],
+// [workers.AIRunParamsBodyTextToImage], [workers.AIRunParamsBodyTextToSpeech],
+// [workers.AIRunParamsBodyTextEmbeddings],
 // [workers.AIRunParamsBodyAutomaticSpeechRecognition],
 // [workers.AIRunParamsBodyImageClassification],
 // [workers.AIRunParamsBodyObjectDetection], [workers.AIRunParamsBodyPrompt],
@@ -595,6 +628,20 @@ func (r AIRunParamsBodyTextToImage) MarshalJSON() (data []byte, err error) {
 }
 
 func (r AIRunParamsBodyTextToImage) implementsWorkersAIRunParamsBodyUnion() {}
+
+type AIRunParamsBodyTextToSpeech struct {
+	// A text description of the image you want to generate
+	Prompt param.Field[string] `json:"prompt,required"`
+	// The speech language (e.g., 'en' for English, 'fr' for French). Defaults to 'en'
+	// if not specified
+	Lang param.Field[string] `json:"lang"`
+}
+
+func (r AIRunParamsBodyTextToSpeech) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsBodyTextToSpeech) implementsWorkersAIRunParamsBodyUnion() {}
 
 type AIRunParamsBodyTextEmbeddings struct {
 	// The text to embed
