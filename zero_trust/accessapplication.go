@@ -16759,7 +16759,7 @@ type AccessApplicationRevokeTokensParams struct {
 }
 
 type AccessApplicationRevokeTokensResponseEnvelope struct {
-	Result  AccessApplicationRevokeTokensResponse                `json:"result"`
+	Result  AccessApplicationRevokeTokensResponse                `json:"result,nullable"`
 	Success AccessApplicationRevokeTokensResponseEnvelopeSuccess `json:"success"`
 	JSON    accessApplicationRevokeTokensResponseEnvelopeJSON    `json:"-"`
 }
