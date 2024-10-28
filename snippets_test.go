@@ -56,6 +56,58 @@ func TestSnippets(t *testing.T) {
 	}
 }
 
+func TestGetSnippet(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+      "result": {
+			"snippet_name": "some_id_1",
+			"created_on":"0001-01-01T00:00:00Z",
+			"modified_on":"0001-01-01T00:00:00Z"
+		},
+      "success": true,
+      "errors": [],
+      "messages": []
+    }`)
+	}
+	mux.HandleFunc("/zones/"+testZoneID+"/snippets/some_id_1", handler)
+
+	want := Snippet{
+		SnippetName: "some_id_1",
+		CreatedOn:   &time.Time{},
+		ModifiedOn:  &time.Time{},
+	}
+
+	zoneActual, err := client.GetZoneSnippet(context.Background(), ZoneIdentifier(testZoneID), "some_id_1")
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, *zoneActual)
+	}
+}
+
+func TestDeleteSnippet(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodDelete, r.Method, "Expected method 'DELETE', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"result": null,
+			"success": true,
+			"errors": [],
+			"messages": []
+		}`)
+	}
+	mux.HandleFunc("/zones/"+testZoneID+"/snippets/some_id_1", handler)
+
+	err := client.DeleteZoneSnippet(context.Background(), ZoneIdentifier(testZoneID), "some_id_1")
+	assert.NoError(t, err)
+}
+
 func TestUpdateSnippets(t *testing.T) {
 	setup()
 	defer teardown()
