@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"mime/multipart"
 	"net/http"
@@ -14,6 +15,11 @@ import (
 type SnippetsResponse struct {
 	Response
 	Result []Snippet `json:"result"`
+}
+
+type SnippetResponse struct {
+	Response
+	Result *Snippet `json:"result"`
 }
 
 type Snippet struct {
@@ -31,6 +37,48 @@ type SnippetRequest struct {
 	SnippetName string        `json:"snippet_name"`
 	MainFile    string        `json:"main_file"`
 	Files       []SnippetFile `json:"files"`
+}
+
+func (api *API) DeleteZoneSnippet(ctx context.Context, rc *ResourceContainer, snippetName string) error {
+	if rc.Identifier == "" {
+		return ErrMissingZoneID
+	}
+
+	uri := buildURI(fmt.Sprintf("/zones/%s/snippets/%s", rc.Identifier, snippetName), nil)
+	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
+	if err != nil {
+		return err
+	}
+
+	result := SnippetResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	if !result.Success {
+		return errors.New(result.Messages[0].Message)
+	}
+
+	return nil
+}
+
+func (api *API) GetZoneSnippet(ctx context.Context, rc *ResourceContainer, snippetName string) (*Snippet, error) {
+	if rc.Identifier == "" {
+		return nil, ErrMissingZoneID
+	}
+
+	uri := buildURI(fmt.Sprintf("/zones/%s/snippets/%s", rc.Identifier, snippetName), nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	result := SnippetResponse{}
+	if err := json.Unmarshal(res, &result); err != nil {
+		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return result.Result, nil
 }
 
 func (api *API) ListZoneSnippets(ctx context.Context, rc *ResourceContainer) ([]Snippet, error) {

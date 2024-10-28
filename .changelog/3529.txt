@@ -1,0 +1,3 @@
+```release-note:enhancement
+snippets: add missing delete and get a single snippet methods
+```
