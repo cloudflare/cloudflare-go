@@ -24,7 +24,8 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewBucketService] method instead.
 type BucketService struct {
-	Options []option.RequestOption
+	Options   []option.RequestOption
+	Lifecycle *BucketLifecycleService
 }
 
 // NewBucketService generates a new service that applies the given options to each
@@ -33,6 +34,7 @@ type BucketService struct {
 func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 	r = &BucketService{}
 	r.Options = opts
+	r.Lifecycle = NewBucketLifecycleService(opts...)
 	return
 }
 
