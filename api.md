@@ -615,6 +615,7 @@ Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache#CacheReserve">CacheReserve</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache#CacheReserveClear">CacheReserveClear</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache#State">State</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache#CacheReserveClearResponse">CacheReserveClearResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache#CacheReserveEditResponse">CacheReserveEditResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache#CacheReserveGetResponse">CacheReserveGetResponse</a>
