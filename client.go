@@ -182,6 +182,7 @@ type Client struct {
 	BotnetFeed                  *botnet_feed.BotnetFeedService
 	SecurityTXT                 *SecurityTXTService
 	Workflows                   *WorkflowService
+	ResourceSharing             *ResourceSharingService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -291,6 +292,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.BotnetFeed = botnet_feed.NewBotnetFeedService(opts...)
 	r.SecurityTXT = NewSecurityTXTService(opts...)
 	r.Workflows = NewWorkflowService(opts...)
+	r.ResourceSharing = NewResourceSharingService(opts...)
 
 	return
 }
