@@ -31,12 +31,10 @@ func TestRequestPriorityNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudforce_one.RequestPriorityNewParams{
-			PriorityEdit: cloudforce_one.PriorityEditParam{
-				Labels:      cloudflare.F([]cloudforce_one.LabelParam{"DoS", "CVE"}),
-				Priority:    cloudflare.F(int64(1)),
-				Requirement: cloudflare.F("DoS attacks carried out by CVEs"),
-				Tlp:         cloudflare.F(cloudforce_one.PriorityEditTlpClear),
-			},
+			Labels:      cloudflare.F([]string{"DoS", "CVE"}),
+			Priority:    cloudflare.F(int64(1)),
+			Requirement: cloudflare.F("DoS attacks carried out by CVEs"),
+			Tlp:         cloudflare.F(cloudforce_one.RequestPriorityNewParamsTlpClear),
 		},
 	)
 	if err != nil {
@@ -66,12 +64,10 @@ func TestRequestPriorityUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudforce_one.RequestPriorityUpdateParams{
-			PriorityEdit: cloudforce_one.PriorityEditParam{
-				Labels:      cloudflare.F([]cloudforce_one.LabelParam{"DoS", "CVE"}),
-				Priority:    cloudflare.F(int64(1)),
-				Requirement: cloudflare.F("DoS attacks carried out by CVEs"),
-				Tlp:         cloudflare.F(cloudforce_one.PriorityEditTlpClear),
-			},
+			Labels:      cloudflare.F([]string{"DoS", "CVE"}),
+			Priority:    cloudflare.F(int64(1)),
+			Requirement: cloudflare.F("DoS attacks carried out by CVEs"),
+			Tlp:         cloudflare.F(cloudforce_one.RequestPriorityUpdateParamsTlpClear),
 		},
 	)
 	if err != nil {

@@ -36,7 +36,7 @@ func NewRequestMessageService(opts ...option.RequestOption) (r *RequestMessageSe
 }
 
 // Create a New Request Message
-func (r *RequestMessageService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageNewParams, opts ...option.RequestOption) (res *Message, err error) {
+func (r *RequestMessageService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageNewParams, opts ...option.RequestOption) (res *RequestMessageNewResponse, err error) {
 	var env RequestMessageNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -57,7 +57,7 @@ func (r *RequestMessageService) New(ctx context.Context, accountIdentifier strin
 }
 
 // Update a Request Message
-func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, body RequestMessageUpdateParams, opts ...option.RequestOption) (res *Message, err error) {
+func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, body RequestMessageUpdateParams, opts ...option.RequestOption) (res *RequestMessageUpdateResponse, err error) {
 	var env RequestMessageUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -94,7 +94,7 @@ func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier st
 }
 
 // List Request Messages
-func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) (res *[]Message, err error) {
+func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) (res *[]RequestMessageGetResponse, err error) {
 	var env RequestMessageGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -114,7 +114,7 @@ func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier strin
 	return
 }
 
-type Message struct {
+type RequestMessageNewResponse struct {
 	// Message ID
 	ID int64 `json:"id,required"`
 	// Author of message
@@ -126,12 +126,13 @@ type Message struct {
 	// Message last updated time
 	Updated time.Time `json:"updated,required" format:"date-time"`
 	// Message creation time
-	Created time.Time   `json:"created" format:"date-time"`
-	JSON    messageJSON `json:"-"`
+	Created time.Time                     `json:"created" format:"date-time"`
+	JSON    requestMessageNewResponseJSON `json:"-"`
 }
 
-// messageJSON contains the JSON metadata for the struct [Message]
-type messageJSON struct {
+// requestMessageNewResponseJSON contains the JSON metadata for the struct
+// [RequestMessageNewResponse]
+type requestMessageNewResponseJSON struct {
 	ID                apijson.Field
 	Author            apijson.Field
 	Content           apijson.Field
@@ -142,11 +143,48 @@ type messageJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *Message) UnmarshalJSON(data []byte) (err error) {
+func (r *RequestMessageNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r messageJSON) RawJSON() string {
+func (r requestMessageNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestMessageUpdateResponse struct {
+	// Message ID
+	ID int64 `json:"id,required"`
+	// Author of message
+	Author string `json:"author,required"`
+	// Content of message
+	Content string `json:"content,required"`
+	// Whether the message is a follow-on request
+	IsFollowOnRequest bool `json:"is_follow_on_request,required"`
+	// Message last updated time
+	Updated time.Time `json:"updated,required" format:"date-time"`
+	// Message creation time
+	Created time.Time                        `json:"created" format:"date-time"`
+	JSON    requestMessageUpdateResponseJSON `json:"-"`
+}
+
+// requestMessageUpdateResponseJSON contains the JSON metadata for the struct
+// [RequestMessageUpdateResponse]
+type requestMessageUpdateResponseJSON struct {
+	ID                apijson.Field
+	Author            apijson.Field
+	Content           apijson.Field
+	IsFollowOnRequest apijson.Field
+	Updated           apijson.Field
+	Created           apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *RequestMessageUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestMessageUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -191,6 +229,43 @@ func (r RequestMessageDeleteResponseSuccess) IsKnown() bool {
 	return false
 }
 
+type RequestMessageGetResponse struct {
+	// Message ID
+	ID int64 `json:"id,required"`
+	// Author of message
+	Author string `json:"author,required"`
+	// Content of message
+	Content string `json:"content,required"`
+	// Whether the message is a follow-on request
+	IsFollowOnRequest bool `json:"is_follow_on_request,required"`
+	// Message last updated time
+	Updated time.Time `json:"updated,required" format:"date-time"`
+	// Message creation time
+	Created time.Time                     `json:"created" format:"date-time"`
+	JSON    requestMessageGetResponseJSON `json:"-"`
+}
+
+// requestMessageGetResponseJSON contains the JSON metadata for the struct
+// [RequestMessageGetResponse]
+type requestMessageGetResponseJSON struct {
+	ID                apijson.Field
+	Author            apijson.Field
+	Content           apijson.Field
+	IsFollowOnRequest apijson.Field
+	Updated           apijson.Field
+	Created           apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *RequestMessageGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestMessageGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RequestMessageNewParams struct {
 	// Content of message
 	Content param.Field[string] `json:"content"`
@@ -205,7 +280,7 @@ type RequestMessageNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestMessageNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  Message                                  `json:"result"`
+	Result  RequestMessageNewResponse                `json:"result"`
 	JSON    requestMessageNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -257,7 +332,7 @@ type RequestMessageUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestMessageUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Message                                     `json:"result"`
+	Result  RequestMessageUpdateResponse                `json:"result"`
 	JSON    requestMessageUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -335,7 +410,7 @@ type RequestMessageGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestMessageGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  []Message                                `json:"result"`
+	Result  []RequestMessageGetResponse              `json:"result"`
 	JSON    requestMessageGetResponseEnvelopeJSON    `json:"-"`
 }
 
