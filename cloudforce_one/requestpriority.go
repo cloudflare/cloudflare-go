@@ -139,7 +139,7 @@ type RequestPriorityNewResponse struct {
 	// Requirement
 	Requirement string `json:"requirement,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp RequestPriorityNewResponseTlp `json:"tlp,required"`
+	TLP RequestPriorityNewResponseTLP `json:"tlp,required"`
 	// Priority last updated time
 	Updated time.Time                      `json:"updated,required" format:"date-time"`
 	JSON    requestPriorityNewResponseJSON `json:"-"`
@@ -153,7 +153,7 @@ type requestPriorityNewResponseJSON struct {
 	Labels      apijson.Field
 	Priority    apijson.Field
 	Requirement apijson.Field
-	Tlp         apijson.Field
+	TLP         apijson.Field
 	Updated     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -168,19 +168,19 @@ func (r requestPriorityNewResponseJSON) RawJSON() string {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityNewResponseTlp string
+type RequestPriorityNewResponseTLP string
 
 const (
-	RequestPriorityNewResponseTlpClear       RequestPriorityNewResponseTlp = "clear"
-	RequestPriorityNewResponseTlpAmber       RequestPriorityNewResponseTlp = "amber"
-	RequestPriorityNewResponseTlpAmberStrict RequestPriorityNewResponseTlp = "amber-strict"
-	RequestPriorityNewResponseTlpGreen       RequestPriorityNewResponseTlp = "green"
-	RequestPriorityNewResponseTlpRed         RequestPriorityNewResponseTlp = "red"
+	RequestPriorityNewResponseTLPClear       RequestPriorityNewResponseTLP = "clear"
+	RequestPriorityNewResponseTLPAmber       RequestPriorityNewResponseTLP = "amber"
+	RequestPriorityNewResponseTLPAmberStrict RequestPriorityNewResponseTLP = "amber-strict"
+	RequestPriorityNewResponseTLPGreen       RequestPriorityNewResponseTLP = "green"
+	RequestPriorityNewResponseTLPRed         RequestPriorityNewResponseTLP = "red"
 )
 
-func (r RequestPriorityNewResponseTlp) IsKnown() bool {
+func (r RequestPriorityNewResponseTLP) IsKnown() bool {
 	switch r {
-	case RequestPriorityNewResponseTlpClear, RequestPriorityNewResponseTlpAmber, RequestPriorityNewResponseTlpAmberStrict, RequestPriorityNewResponseTlpGreen, RequestPriorityNewResponseTlpRed:
+	case RequestPriorityNewResponseTLPClear, RequestPriorityNewResponseTLPAmber, RequestPriorityNewResponseTLPAmberStrict, RequestPriorityNewResponseTLPGreen, RequestPriorityNewResponseTLPRed:
 		return true
 	}
 	return false
@@ -198,7 +198,7 @@ type RequestPriorityUpdateResponse struct {
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp       RequestPriorityUpdateResponseTlp `json:"tlp,required"`
+	TLP       RequestPriorityUpdateResponseTLP `json:"tlp,required"`
 	Updated   time.Time                        `json:"updated,required" format:"date-time"`
 	Completed time.Time                        `json:"completed" format:"date-time"`
 	// Tokens for the request messages
@@ -221,7 +221,7 @@ type requestPriorityUpdateResponseJSON struct {
 	Priority      apijson.Field
 	Request       apijson.Field
 	Summary       apijson.Field
-	Tlp           apijson.Field
+	TLP           apijson.Field
 	Updated       apijson.Field
 	Completed     apijson.Field
 	MessageTokens apijson.Field
@@ -241,19 +241,19 @@ func (r requestPriorityUpdateResponseJSON) RawJSON() string {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityUpdateResponseTlp string
+type RequestPriorityUpdateResponseTLP string
 
 const (
-	RequestPriorityUpdateResponseTlpClear       RequestPriorityUpdateResponseTlp = "clear"
-	RequestPriorityUpdateResponseTlpAmber       RequestPriorityUpdateResponseTlp = "amber"
-	RequestPriorityUpdateResponseTlpAmberStrict RequestPriorityUpdateResponseTlp = "amber-strict"
-	RequestPriorityUpdateResponseTlpGreen       RequestPriorityUpdateResponseTlp = "green"
-	RequestPriorityUpdateResponseTlpRed         RequestPriorityUpdateResponseTlp = "red"
+	RequestPriorityUpdateResponseTLPClear       RequestPriorityUpdateResponseTLP = "clear"
+	RequestPriorityUpdateResponseTLPAmber       RequestPriorityUpdateResponseTLP = "amber"
+	RequestPriorityUpdateResponseTLPAmberStrict RequestPriorityUpdateResponseTLP = "amber-strict"
+	RequestPriorityUpdateResponseTLPGreen       RequestPriorityUpdateResponseTLP = "green"
+	RequestPriorityUpdateResponseTLPRed         RequestPriorityUpdateResponseTLP = "red"
 )
 
-func (r RequestPriorityUpdateResponseTlp) IsKnown() bool {
+func (r RequestPriorityUpdateResponseTLP) IsKnown() bool {
 	switch r {
-	case RequestPriorityUpdateResponseTlpClear, RequestPriorityUpdateResponseTlpAmber, RequestPriorityUpdateResponseTlpAmberStrict, RequestPriorityUpdateResponseTlpGreen, RequestPriorityUpdateResponseTlpRed:
+	case RequestPriorityUpdateResponseTLPClear, RequestPriorityUpdateResponseTLPAmber, RequestPriorityUpdateResponseTLPAmberStrict, RequestPriorityUpdateResponseTLPGreen, RequestPriorityUpdateResponseTLPRed:
 		return true
 	}
 	return false
@@ -332,7 +332,7 @@ type RequestPriorityGetResponse struct {
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp       RequestPriorityGetResponseTlp `json:"tlp,required"`
+	TLP       RequestPriorityGetResponseTLP `json:"tlp,required"`
 	Updated   time.Time                     `json:"updated,required" format:"date-time"`
 	Completed time.Time                     `json:"completed" format:"date-time"`
 	// Tokens for the request messages
@@ -355,7 +355,7 @@ type requestPriorityGetResponseJSON struct {
 	Priority      apijson.Field
 	Request       apijson.Field
 	Summary       apijson.Field
-	Tlp           apijson.Field
+	TLP           apijson.Field
 	Updated       apijson.Field
 	Completed     apijson.Field
 	MessageTokens apijson.Field
@@ -375,19 +375,19 @@ func (r requestPriorityGetResponseJSON) RawJSON() string {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityGetResponseTlp string
+type RequestPriorityGetResponseTLP string
 
 const (
-	RequestPriorityGetResponseTlpClear       RequestPriorityGetResponseTlp = "clear"
-	RequestPriorityGetResponseTlpAmber       RequestPriorityGetResponseTlp = "amber"
-	RequestPriorityGetResponseTlpAmberStrict RequestPriorityGetResponseTlp = "amber-strict"
-	RequestPriorityGetResponseTlpGreen       RequestPriorityGetResponseTlp = "green"
-	RequestPriorityGetResponseTlpRed         RequestPriorityGetResponseTlp = "red"
+	RequestPriorityGetResponseTLPClear       RequestPriorityGetResponseTLP = "clear"
+	RequestPriorityGetResponseTLPAmber       RequestPriorityGetResponseTLP = "amber"
+	RequestPriorityGetResponseTLPAmberStrict RequestPriorityGetResponseTLP = "amber-strict"
+	RequestPriorityGetResponseTLPGreen       RequestPriorityGetResponseTLP = "green"
+	RequestPriorityGetResponseTLPRed         RequestPriorityGetResponseTLP = "red"
 )
 
-func (r RequestPriorityGetResponseTlp) IsKnown() bool {
+func (r RequestPriorityGetResponseTLP) IsKnown() bool {
 	switch r {
-	case RequestPriorityGetResponseTlpClear, RequestPriorityGetResponseTlpAmber, RequestPriorityGetResponseTlpAmberStrict, RequestPriorityGetResponseTlpGreen, RequestPriorityGetResponseTlpRed:
+	case RequestPriorityGetResponseTLPClear, RequestPriorityGetResponseTLPAmber, RequestPriorityGetResponseTLPAmberStrict, RequestPriorityGetResponseTLPGreen, RequestPriorityGetResponseTLPRed:
 		return true
 	}
 	return false
@@ -452,7 +452,7 @@ type RequestPriorityNewParams struct {
 	// Requirement
 	Requirement param.Field[string] `json:"requirement,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp param.Field[RequestPriorityNewParamsTlp] `json:"tlp,required"`
+	TLP param.Field[RequestPriorityNewParamsTLP] `json:"tlp,required"`
 }
 
 func (r RequestPriorityNewParams) MarshalJSON() (data []byte, err error) {
@@ -460,19 +460,19 @@ func (r RequestPriorityNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityNewParamsTlp string
+type RequestPriorityNewParamsTLP string
 
 const (
-	RequestPriorityNewParamsTlpClear       RequestPriorityNewParamsTlp = "clear"
-	RequestPriorityNewParamsTlpAmber       RequestPriorityNewParamsTlp = "amber"
-	RequestPriorityNewParamsTlpAmberStrict RequestPriorityNewParamsTlp = "amber-strict"
-	RequestPriorityNewParamsTlpGreen       RequestPriorityNewParamsTlp = "green"
-	RequestPriorityNewParamsTlpRed         RequestPriorityNewParamsTlp = "red"
+	RequestPriorityNewParamsTLPClear       RequestPriorityNewParamsTLP = "clear"
+	RequestPriorityNewParamsTLPAmber       RequestPriorityNewParamsTLP = "amber"
+	RequestPriorityNewParamsTLPAmberStrict RequestPriorityNewParamsTLP = "amber-strict"
+	RequestPriorityNewParamsTLPGreen       RequestPriorityNewParamsTLP = "green"
+	RequestPriorityNewParamsTLPRed         RequestPriorityNewParamsTLP = "red"
 )
 
-func (r RequestPriorityNewParamsTlp) IsKnown() bool {
+func (r RequestPriorityNewParamsTLP) IsKnown() bool {
 	switch r {
-	case RequestPriorityNewParamsTlpClear, RequestPriorityNewParamsTlpAmber, RequestPriorityNewParamsTlpAmberStrict, RequestPriorityNewParamsTlpGreen, RequestPriorityNewParamsTlpRed:
+	case RequestPriorityNewParamsTLPClear, RequestPriorityNewParamsTLPAmber, RequestPriorityNewParamsTLPAmberStrict, RequestPriorityNewParamsTLPGreen, RequestPriorityNewParamsTLPRed:
 		return true
 	}
 	return false
@@ -529,7 +529,7 @@ type RequestPriorityUpdateParams struct {
 	// Requirement
 	Requirement param.Field[string] `json:"requirement,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp param.Field[RequestPriorityUpdateParamsTlp] `json:"tlp,required"`
+	TLP param.Field[RequestPriorityUpdateParamsTLP] `json:"tlp,required"`
 }
 
 func (r RequestPriorityUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -537,19 +537,19 @@ func (r RequestPriorityUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityUpdateParamsTlp string
+type RequestPriorityUpdateParamsTLP string
 
 const (
-	RequestPriorityUpdateParamsTlpClear       RequestPriorityUpdateParamsTlp = "clear"
-	RequestPriorityUpdateParamsTlpAmber       RequestPriorityUpdateParamsTlp = "amber"
-	RequestPriorityUpdateParamsTlpAmberStrict RequestPriorityUpdateParamsTlp = "amber-strict"
-	RequestPriorityUpdateParamsTlpGreen       RequestPriorityUpdateParamsTlp = "green"
-	RequestPriorityUpdateParamsTlpRed         RequestPriorityUpdateParamsTlp = "red"
+	RequestPriorityUpdateParamsTLPClear       RequestPriorityUpdateParamsTLP = "clear"
+	RequestPriorityUpdateParamsTLPAmber       RequestPriorityUpdateParamsTLP = "amber"
+	RequestPriorityUpdateParamsTLPAmberStrict RequestPriorityUpdateParamsTLP = "amber-strict"
+	RequestPriorityUpdateParamsTLPGreen       RequestPriorityUpdateParamsTLP = "green"
+	RequestPriorityUpdateParamsTLPRed         RequestPriorityUpdateParamsTLP = "red"
 )
 
-func (r RequestPriorityUpdateParamsTlp) IsKnown() bool {
+func (r RequestPriorityUpdateParamsTLP) IsKnown() bool {
 	switch r {
-	case RequestPriorityUpdateParamsTlpClear, RequestPriorityUpdateParamsTlpAmber, RequestPriorityUpdateParamsTlpAmberStrict, RequestPriorityUpdateParamsTlpGreen, RequestPriorityUpdateParamsTlpRed:
+	case RequestPriorityUpdateParamsTLPClear, RequestPriorityUpdateParamsTLPAmber, RequestPriorityUpdateParamsTLPAmberStrict, RequestPriorityUpdateParamsTLPGreen, RequestPriorityUpdateParamsTLPRed:
 		return true
 	}
 	return false
