@@ -34,7 +34,7 @@ func TestRequestPriorityNew(t *testing.T) {
 			Labels:      cloudflare.F([]string{"DoS", "CVE"}),
 			Priority:    cloudflare.F(int64(1)),
 			Requirement: cloudflare.F("DoS attacks carried out by CVEs"),
-			Tlp:         cloudflare.F(cloudforce_one.RequestPriorityNewParamsTlpClear),
+			TLP:         cloudflare.F(cloudforce_one.RequestPriorityNewParamsTLPClear),
 		},
 	)
 	if err != nil {
@@ -67,7 +67,7 @@ func TestRequestPriorityUpdate(t *testing.T) {
 			Labels:      cloudflare.F([]string{"DoS", "CVE"}),
 			Priority:    cloudflare.F(int64(1)),
 			Requirement: cloudflare.F("DoS attacks carried out by CVEs"),
-			Tlp:         cloudflare.F(cloudforce_one.RequestPriorityUpdateParamsTlpClear),
+			TLP:         cloudflare.F(cloudforce_one.RequestPriorityUpdateParamsTLPClear),
 		},
 	)
 	if err != nil {
