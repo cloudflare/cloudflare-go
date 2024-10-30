@@ -36,7 +36,7 @@ func TestRequestNewWithOptionalParams(t *testing.T) {
 			Priority:    cloudflare.F("routine"),
 			RequestType: cloudflare.F("Victomology"),
 			Summary:     cloudflare.F("DoS attack"),
-			Tlp:         cloudflare.F(cloudforce_one.RequestNewParamsTlpClear),
+			TLP:         cloudflare.F(cloudforce_one.RequestNewParamsTLPClear),
 		},
 	)
 	if err != nil {
@@ -70,7 +70,7 @@ func TestRequestUpdateWithOptionalParams(t *testing.T) {
 			Priority:    cloudflare.F("routine"),
 			RequestType: cloudflare.F("Victomology"),
 			Summary:     cloudflare.F("DoS attack"),
-			Tlp:         cloudflare.F(cloudforce_one.RequestUpdateParamsTlpClear),
+			TLP:         cloudflare.F(cloudforce_one.RequestUpdateParamsTLPClear),
 		},
 	)
 	if err != nil {

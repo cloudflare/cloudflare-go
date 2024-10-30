@@ -211,7 +211,7 @@ type RequestNewResponse struct {
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp       RequestNewResponseTlp `json:"tlp,required"`
+	TLP       RequestNewResponseTLP `json:"tlp,required"`
 	Updated   time.Time             `json:"updated,required" format:"date-time"`
 	Completed time.Time             `json:"completed" format:"date-time"`
 	// Tokens for the request messages
@@ -234,7 +234,7 @@ type requestNewResponseJSON struct {
 	Priority      apijson.Field
 	Request       apijson.Field
 	Summary       apijson.Field
-	Tlp           apijson.Field
+	TLP           apijson.Field
 	Updated       apijson.Field
 	Completed     apijson.Field
 	MessageTokens apijson.Field
@@ -254,19 +254,19 @@ func (r requestNewResponseJSON) RawJSON() string {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestNewResponseTlp string
+type RequestNewResponseTLP string
 
 const (
-	RequestNewResponseTlpClear       RequestNewResponseTlp = "clear"
-	RequestNewResponseTlpAmber       RequestNewResponseTlp = "amber"
-	RequestNewResponseTlpAmberStrict RequestNewResponseTlp = "amber-strict"
-	RequestNewResponseTlpGreen       RequestNewResponseTlp = "green"
-	RequestNewResponseTlpRed         RequestNewResponseTlp = "red"
+	RequestNewResponseTLPClear       RequestNewResponseTLP = "clear"
+	RequestNewResponseTLPAmber       RequestNewResponseTLP = "amber"
+	RequestNewResponseTLPAmberStrict RequestNewResponseTLP = "amber-strict"
+	RequestNewResponseTLPGreen       RequestNewResponseTLP = "green"
+	RequestNewResponseTLPRed         RequestNewResponseTLP = "red"
 )
 
-func (r RequestNewResponseTlp) IsKnown() bool {
+func (r RequestNewResponseTLP) IsKnown() bool {
 	switch r {
-	case RequestNewResponseTlpClear, RequestNewResponseTlpAmber, RequestNewResponseTlpAmberStrict, RequestNewResponseTlpGreen, RequestNewResponseTlpRed:
+	case RequestNewResponseTLPClear, RequestNewResponseTLPAmber, RequestNewResponseTLPAmberStrict, RequestNewResponseTLPGreen, RequestNewResponseTLPRed:
 		return true
 	}
 	return false
@@ -304,7 +304,7 @@ type RequestUpdateResponse struct {
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp       RequestUpdateResponseTlp `json:"tlp,required"`
+	TLP       RequestUpdateResponseTLP `json:"tlp,required"`
 	Updated   time.Time                `json:"updated,required" format:"date-time"`
 	Completed time.Time                `json:"completed" format:"date-time"`
 	// Tokens for the request messages
@@ -327,7 +327,7 @@ type requestUpdateResponseJSON struct {
 	Priority      apijson.Field
 	Request       apijson.Field
 	Summary       apijson.Field
-	Tlp           apijson.Field
+	TLP           apijson.Field
 	Updated       apijson.Field
 	Completed     apijson.Field
 	MessageTokens apijson.Field
@@ -347,19 +347,19 @@ func (r requestUpdateResponseJSON) RawJSON() string {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestUpdateResponseTlp string
+type RequestUpdateResponseTLP string
 
 const (
-	RequestUpdateResponseTlpClear       RequestUpdateResponseTlp = "clear"
-	RequestUpdateResponseTlpAmber       RequestUpdateResponseTlp = "amber"
-	RequestUpdateResponseTlpAmberStrict RequestUpdateResponseTlp = "amber-strict"
-	RequestUpdateResponseTlpGreen       RequestUpdateResponseTlp = "green"
-	RequestUpdateResponseTlpRed         RequestUpdateResponseTlp = "red"
+	RequestUpdateResponseTLPClear       RequestUpdateResponseTLP = "clear"
+	RequestUpdateResponseTLPAmber       RequestUpdateResponseTLP = "amber"
+	RequestUpdateResponseTLPAmberStrict RequestUpdateResponseTLP = "amber-strict"
+	RequestUpdateResponseTLPGreen       RequestUpdateResponseTLP = "green"
+	RequestUpdateResponseTLPRed         RequestUpdateResponseTLP = "red"
 )
 
-func (r RequestUpdateResponseTlp) IsKnown() bool {
+func (r RequestUpdateResponseTLP) IsKnown() bool {
 	switch r {
-	case RequestUpdateResponseTlpClear, RequestUpdateResponseTlpAmber, RequestUpdateResponseTlpAmberStrict, RequestUpdateResponseTlpGreen, RequestUpdateResponseTlpRed:
+	case RequestUpdateResponseTLPClear, RequestUpdateResponseTLPAmber, RequestUpdateResponseTLPAmberStrict, RequestUpdateResponseTLPGreen, RequestUpdateResponseTLPRed:
 		return true
 	}
 	return false
@@ -396,7 +396,7 @@ type RequestListResponse struct {
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp RequestListResponseTlp `json:"tlp,required"`
+	TLP RequestListResponseTLP `json:"tlp,required"`
 	// Request last updated time
 	Updated time.Time `json:"updated,required" format:"date-time"`
 	// Request completion time
@@ -420,7 +420,7 @@ type requestListResponseJSON struct {
 	Priority      apijson.Field
 	Request       apijson.Field
 	Summary       apijson.Field
-	Tlp           apijson.Field
+	TLP           apijson.Field
 	Updated       apijson.Field
 	Completed     apijson.Field
 	MessageTokens apijson.Field
@@ -456,19 +456,19 @@ func (r RequestListResponsePriority) IsKnown() bool {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestListResponseTlp string
+type RequestListResponseTLP string
 
 const (
-	RequestListResponseTlpClear       RequestListResponseTlp = "clear"
-	RequestListResponseTlpAmber       RequestListResponseTlp = "amber"
-	RequestListResponseTlpAmberStrict RequestListResponseTlp = "amber-strict"
-	RequestListResponseTlpGreen       RequestListResponseTlp = "green"
-	RequestListResponseTlpRed         RequestListResponseTlp = "red"
+	RequestListResponseTLPClear       RequestListResponseTLP = "clear"
+	RequestListResponseTLPAmber       RequestListResponseTLP = "amber"
+	RequestListResponseTLPAmberStrict RequestListResponseTLP = "amber-strict"
+	RequestListResponseTLPGreen       RequestListResponseTLP = "green"
+	RequestListResponseTLPRed         RequestListResponseTLP = "red"
 )
 
-func (r RequestListResponseTlp) IsKnown() bool {
+func (r RequestListResponseTLP) IsKnown() bool {
 	switch r {
-	case RequestListResponseTlpClear, RequestListResponseTlpAmber, RequestListResponseTlpAmberStrict, RequestListResponseTlpGreen, RequestListResponseTlpRed:
+	case RequestListResponseTLPClear, RequestListResponseTLPAmber, RequestListResponseTLPAmberStrict, RequestListResponseTLPGreen, RequestListResponseTLPRed:
 		return true
 	}
 	return false
@@ -538,7 +538,7 @@ func (r RequestDeleteResponseSuccess) IsKnown() bool {
 type RequestConstantsResponse struct {
 	Priority []RequestConstantsResponsePriority `json:"priority"`
 	Status   []RequestConstantsResponseStatus   `json:"status"`
-	Tlp      []RequestConstantsResponseTlp      `json:"tlp"`
+	TLP      []RequestConstantsResponseTLP      `json:"tlp"`
 	JSON     requestConstantsResponseJSON       `json:"-"`
 }
 
@@ -547,7 +547,7 @@ type RequestConstantsResponse struct {
 type requestConstantsResponseJSON struct {
 	Priority    apijson.Field
 	Status      apijson.Field
-	Tlp         apijson.Field
+	TLP         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -597,19 +597,19 @@ func (r RequestConstantsResponseStatus) IsKnown() bool {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestConstantsResponseTlp string
+type RequestConstantsResponseTLP string
 
 const (
-	RequestConstantsResponseTlpClear       RequestConstantsResponseTlp = "clear"
-	RequestConstantsResponseTlpAmber       RequestConstantsResponseTlp = "amber"
-	RequestConstantsResponseTlpAmberStrict RequestConstantsResponseTlp = "amber-strict"
-	RequestConstantsResponseTlpGreen       RequestConstantsResponseTlp = "green"
-	RequestConstantsResponseTlpRed         RequestConstantsResponseTlp = "red"
+	RequestConstantsResponseTLPClear       RequestConstantsResponseTLP = "clear"
+	RequestConstantsResponseTLPAmber       RequestConstantsResponseTLP = "amber"
+	RequestConstantsResponseTLPAmberStrict RequestConstantsResponseTLP = "amber-strict"
+	RequestConstantsResponseTLPGreen       RequestConstantsResponseTLP = "green"
+	RequestConstantsResponseTLPRed         RequestConstantsResponseTLP = "red"
 )
 
-func (r RequestConstantsResponseTlp) IsKnown() bool {
+func (r RequestConstantsResponseTLP) IsKnown() bool {
 	switch r {
-	case RequestConstantsResponseTlpClear, RequestConstantsResponseTlpAmber, RequestConstantsResponseTlpAmberStrict, RequestConstantsResponseTlpGreen, RequestConstantsResponseTlpRed:
+	case RequestConstantsResponseTLPClear, RequestConstantsResponseTLPAmber, RequestConstantsResponseTLPAmberStrict, RequestConstantsResponseTLPGreen, RequestConstantsResponseTLPRed:
 		return true
 	}
 	return false
@@ -627,7 +627,7 @@ type RequestGetResponse struct {
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp       RequestGetResponseTlp `json:"tlp,required"`
+	TLP       RequestGetResponseTLP `json:"tlp,required"`
 	Updated   time.Time             `json:"updated,required" format:"date-time"`
 	Completed time.Time             `json:"completed" format:"date-time"`
 	// Tokens for the request messages
@@ -650,7 +650,7 @@ type requestGetResponseJSON struct {
 	Priority      apijson.Field
 	Request       apijson.Field
 	Summary       apijson.Field
-	Tlp           apijson.Field
+	TLP           apijson.Field
 	Updated       apijson.Field
 	Completed     apijson.Field
 	MessageTokens apijson.Field
@@ -670,19 +670,19 @@ func (r requestGetResponseJSON) RawJSON() string {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestGetResponseTlp string
+type RequestGetResponseTLP string
 
 const (
-	RequestGetResponseTlpClear       RequestGetResponseTlp = "clear"
-	RequestGetResponseTlpAmber       RequestGetResponseTlp = "amber"
-	RequestGetResponseTlpAmberStrict RequestGetResponseTlp = "amber-strict"
-	RequestGetResponseTlpGreen       RequestGetResponseTlp = "green"
-	RequestGetResponseTlpRed         RequestGetResponseTlp = "red"
+	RequestGetResponseTLPClear       RequestGetResponseTLP = "clear"
+	RequestGetResponseTLPAmber       RequestGetResponseTLP = "amber"
+	RequestGetResponseTLPAmberStrict RequestGetResponseTLP = "amber-strict"
+	RequestGetResponseTLPGreen       RequestGetResponseTLP = "green"
+	RequestGetResponseTLPRed         RequestGetResponseTLP = "red"
 )
 
-func (r RequestGetResponseTlp) IsKnown() bool {
+func (r RequestGetResponseTLP) IsKnown() bool {
 	switch r {
-	case RequestGetResponseTlpClear, RequestGetResponseTlpAmber, RequestGetResponseTlpAmberStrict, RequestGetResponseTlpGreen, RequestGetResponseTlpRed:
+	case RequestGetResponseTLPClear, RequestGetResponseTLPAmber, RequestGetResponseTLPAmberStrict, RequestGetResponseTLPGreen, RequestGetResponseTLPRed:
 		return true
 	}
 	return false
@@ -749,7 +749,7 @@ type RequestNewParams struct {
 	// Brief description of the request
 	Summary param.Field[string] `json:"summary"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp param.Field[RequestNewParamsTlp] `json:"tlp"`
+	TLP param.Field[RequestNewParamsTLP] `json:"tlp"`
 }
 
 func (r RequestNewParams) MarshalJSON() (data []byte, err error) {
@@ -757,19 +757,19 @@ func (r RequestNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestNewParamsTlp string
+type RequestNewParamsTLP string
 
 const (
-	RequestNewParamsTlpClear       RequestNewParamsTlp = "clear"
-	RequestNewParamsTlpAmber       RequestNewParamsTlp = "amber"
-	RequestNewParamsTlpAmberStrict RequestNewParamsTlp = "amber-strict"
-	RequestNewParamsTlpGreen       RequestNewParamsTlp = "green"
-	RequestNewParamsTlpRed         RequestNewParamsTlp = "red"
+	RequestNewParamsTLPClear       RequestNewParamsTLP = "clear"
+	RequestNewParamsTLPAmber       RequestNewParamsTLP = "amber"
+	RequestNewParamsTLPAmberStrict RequestNewParamsTLP = "amber-strict"
+	RequestNewParamsTLPGreen       RequestNewParamsTLP = "green"
+	RequestNewParamsTLPRed         RequestNewParamsTLP = "red"
 )
 
-func (r RequestNewParamsTlp) IsKnown() bool {
+func (r RequestNewParamsTLP) IsKnown() bool {
 	switch r {
-	case RequestNewParamsTlpClear, RequestNewParamsTlpAmber, RequestNewParamsTlpAmberStrict, RequestNewParamsTlpGreen, RequestNewParamsTlpRed:
+	case RequestNewParamsTLPClear, RequestNewParamsTLPAmber, RequestNewParamsTLPAmberStrict, RequestNewParamsTLPGreen, RequestNewParamsTLPRed:
 		return true
 	}
 	return false
@@ -828,7 +828,7 @@ type RequestUpdateParams struct {
 	// Brief description of the request
 	Summary param.Field[string] `json:"summary"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp param.Field[RequestUpdateParamsTlp] `json:"tlp"`
+	TLP param.Field[RequestUpdateParamsTLP] `json:"tlp"`
 }
 
 func (r RequestUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -836,19 +836,19 @@ func (r RequestUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestUpdateParamsTlp string
+type RequestUpdateParamsTLP string
 
 const (
-	RequestUpdateParamsTlpClear       RequestUpdateParamsTlp = "clear"
-	RequestUpdateParamsTlpAmber       RequestUpdateParamsTlp = "amber"
-	RequestUpdateParamsTlpAmberStrict RequestUpdateParamsTlp = "amber-strict"
-	RequestUpdateParamsTlpGreen       RequestUpdateParamsTlp = "green"
-	RequestUpdateParamsTlpRed         RequestUpdateParamsTlp = "red"
+	RequestUpdateParamsTLPClear       RequestUpdateParamsTLP = "clear"
+	RequestUpdateParamsTLPAmber       RequestUpdateParamsTLP = "amber"
+	RequestUpdateParamsTLPAmberStrict RequestUpdateParamsTLP = "amber-strict"
+	RequestUpdateParamsTLPGreen       RequestUpdateParamsTLP = "green"
+	RequestUpdateParamsTLPRed         RequestUpdateParamsTLP = "red"
 )
 
-func (r RequestUpdateParamsTlp) IsKnown() bool {
+func (r RequestUpdateParamsTLP) IsKnown() bool {
 	switch r {
-	case RequestUpdateParamsTlpClear, RequestUpdateParamsTlpAmber, RequestUpdateParamsTlpAmberStrict, RequestUpdateParamsTlpGreen, RequestUpdateParamsTlpRed:
+	case RequestUpdateParamsTLPClear, RequestUpdateParamsTLPAmber, RequestUpdateParamsTLPAmberStrict, RequestUpdateParamsTLPGreen, RequestUpdateParamsTLPRed:
 		return true
 	}
 	return false
