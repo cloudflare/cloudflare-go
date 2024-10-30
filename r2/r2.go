@@ -15,10 +15,7 @@ import (
 type R2Service struct {
 	Options              []option.RequestOption
 	Buckets              *BucketService
-	Sippy                *SippyService
 	TemporaryCredentials *TemporaryCredentialService
-	Domains              *DomainService
-	EventNotifications   *EventNotificationService
 }
 
 // NewR2Service generates a new service that applies the given options to each
@@ -28,9 +25,6 @@ func NewR2Service(opts ...option.RequestOption) (r *R2Service) {
 	r = &R2Service{}
 	r.Options = opts
 	r.Buckets = NewBucketService(opts...)
-	r.Sippy = NewSippyService(opts...)
 	r.TemporaryCredentials = NewTemporaryCredentialService(opts...)
-	r.Domains = NewDomainService(opts...)
-	r.EventNotifications = NewEventNotificationService(opts...)
 	return
 }
