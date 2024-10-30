@@ -45,7 +45,7 @@ func NewRequestService(opts ...option.RequestOption) (r *RequestService) {
 // Creating a request adds the request into the Cloudforce One queue for analysis.
 // In addition to the content, a short title, type, priority, and releasability
 // should be provided. If one is not provided, a default will be assigned.
-func (r *RequestService) New(ctx context.Context, accountIdentifier string, body RequestNewParams, opts ...option.RequestOption) (res *Item, err error) {
+func (r *RequestService) New(ctx context.Context, accountIdentifier string, body RequestNewParams, opts ...option.RequestOption) (res *RequestNewResponse, err error) {
 	var env RequestNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -64,7 +64,7 @@ func (r *RequestService) New(ctx context.Context, accountIdentifier string, body
 // Updating a request alters the request in the Cloudforce One queue. This API may
 // be used to update any attributes of the request after the initial submission.
 // Only fields that you choose to update need to be add to the request body.
-func (r *RequestService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
+func (r *RequestService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestUpdateParams, opts ...option.RequestOption) (res *RequestUpdateResponse, err error) {
 	var env RequestUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -85,7 +85,7 @@ func (r *RequestService) Update(ctx context.Context, accountIdentifier string, r
 }
 
 // List Requests
-func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ListItem], err error) {
+func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[RequestListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -107,7 +107,7 @@ func (r *RequestService) List(ctx context.Context, accountIdentifier string, bod
 }
 
 // List Requests
-func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ListItem] {
+func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[RequestListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, body, opts...))
 }
 
@@ -128,7 +128,7 @@ func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, r
 }
 
 // Get Request Priority, Status, and TLP constants
-func (r *RequestService) Constants(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestConstants, err error) {
+func (r *RequestService) Constants(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestConstantsResponse, err error) {
 	var env RequestConstantsResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -145,7 +145,7 @@ func (r *RequestService) Constants(ctx context.Context, accountIdentifier string
 }
 
 // Get a Request
-func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *Item, err error) {
+func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *RequestGetResponse, err error) {
 	var env RequestGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -166,7 +166,7 @@ func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requ
 }
 
 // Get Request Quota
-func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *Quota, err error) {
+func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestQuotaResponse, err error) {
 	var env RequestQuotaResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -183,7 +183,7 @@ func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, op
 }
 
 // Get Request Types
-func (r *RequestService) Types(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestTypes, err error) {
+func (r *RequestService) Types(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]string, err error) {
 	var env RequestTypesResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -199,7 +199,7 @@ func (r *RequestService) Types(ctx context.Context, accountIdentifier string, op
 	return
 }
 
-type Item struct {
+type RequestNewResponse struct {
 	// UUID
 	ID string `json:"id,required"`
 	// Request content
@@ -211,22 +211,23 @@ type Item struct {
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp       ItemTlp   `json:"tlp,required"`
-	Updated   time.Time `json:"updated,required" format:"date-time"`
-	Completed time.Time `json:"completed" format:"date-time"`
+	Tlp       RequestNewResponseTlp `json:"tlp,required"`
+	Updated   time.Time             `json:"updated,required" format:"date-time"`
+	Completed time.Time             `json:"completed" format:"date-time"`
 	// Tokens for the request messages
 	MessageTokens int64 `json:"message_tokens"`
 	// Readable Request ID
 	ReadableID string `json:"readable_id"`
 	// Request Status
-	Status ItemStatus `json:"status"`
+	Status RequestNewResponseStatus `json:"status"`
 	// Tokens for the request
-	Tokens int64    `json:"tokens"`
-	JSON   itemJSON `json:"-"`
+	Tokens int64                  `json:"tokens"`
+	JSON   requestNewResponseJSON `json:"-"`
 }
 
-// itemJSON contains the JSON metadata for the struct [Item]
-type itemJSON struct {
+// requestNewResponseJSON contains the JSON metadata for the struct
+// [RequestNewResponse]
+type requestNewResponseJSON struct {
 	ID            apijson.Field
 	Content       apijson.Field
 	Created       apijson.Field
@@ -244,65 +245,158 @@ type itemJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *Item) UnmarshalJSON(data []byte) (err error) {
+func (r *RequestNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r itemJSON) RawJSON() string {
+func (r requestNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type ItemTlp string
+type RequestNewResponseTlp string
 
 const (
-	ItemTlpClear       ItemTlp = "clear"
-	ItemTlpAmber       ItemTlp = "amber"
-	ItemTlpAmberStrict ItemTlp = "amber-strict"
-	ItemTlpGreen       ItemTlp = "green"
-	ItemTlpRed         ItemTlp = "red"
+	RequestNewResponseTlpClear       RequestNewResponseTlp = "clear"
+	RequestNewResponseTlpAmber       RequestNewResponseTlp = "amber"
+	RequestNewResponseTlpAmberStrict RequestNewResponseTlp = "amber-strict"
+	RequestNewResponseTlpGreen       RequestNewResponseTlp = "green"
+	RequestNewResponseTlpRed         RequestNewResponseTlp = "red"
 )
 
-func (r ItemTlp) IsKnown() bool {
+func (r RequestNewResponseTlp) IsKnown() bool {
 	switch r {
-	case ItemTlpClear, ItemTlpAmber, ItemTlpAmberStrict, ItemTlpGreen, ItemTlpRed:
+	case RequestNewResponseTlpClear, RequestNewResponseTlpAmber, RequestNewResponseTlpAmberStrict, RequestNewResponseTlpGreen, RequestNewResponseTlpRed:
 		return true
 	}
 	return false
 }
 
 // Request Status
-type ItemStatus string
+type RequestNewResponseStatus string
 
 const (
-	ItemStatusOpen      ItemStatus = "open"
-	ItemStatusAccepted  ItemStatus = "accepted"
-	ItemStatusReported  ItemStatus = "reported"
-	ItemStatusApproved  ItemStatus = "approved"
-	ItemStatusCompleted ItemStatus = "completed"
-	ItemStatusDeclined  ItemStatus = "declined"
+	RequestNewResponseStatusOpen      RequestNewResponseStatus = "open"
+	RequestNewResponseStatusAccepted  RequestNewResponseStatus = "accepted"
+	RequestNewResponseStatusReported  RequestNewResponseStatus = "reported"
+	RequestNewResponseStatusApproved  RequestNewResponseStatus = "approved"
+	RequestNewResponseStatusCompleted RequestNewResponseStatus = "completed"
+	RequestNewResponseStatusDeclined  RequestNewResponseStatus = "declined"
 )
 
-func (r ItemStatus) IsKnown() bool {
+func (r RequestNewResponseStatus) IsKnown() bool {
 	switch r {
-	case ItemStatusOpen, ItemStatusAccepted, ItemStatusReported, ItemStatusApproved, ItemStatusCompleted, ItemStatusDeclined:
+	case RequestNewResponseStatusOpen, RequestNewResponseStatusAccepted, RequestNewResponseStatusReported, RequestNewResponseStatusApproved, RequestNewResponseStatusCompleted, RequestNewResponseStatusDeclined:
 		return true
 	}
 	return false
 }
 
-type ListItem struct {
+type RequestUpdateResponse struct {
 	// UUID
 	ID string `json:"id,required"`
-	// Request creation time
-	Created  time.Time        `json:"created,required" format:"date-time"`
-	Priority ListItemPriority `json:"priority,required"`
+	// Request content
+	Content  string    `json:"content,required"`
+	Created  time.Time `json:"created,required" format:"date-time"`
+	Priority time.Time `json:"priority,required" format:"date-time"`
 	// Requested information from request
 	Request string `json:"request,required"`
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp ListItemTlp `json:"tlp,required"`
+	Tlp       RequestUpdateResponseTlp `json:"tlp,required"`
+	Updated   time.Time                `json:"updated,required" format:"date-time"`
+	Completed time.Time                `json:"completed" format:"date-time"`
+	// Tokens for the request messages
+	MessageTokens int64 `json:"message_tokens"`
+	// Readable Request ID
+	ReadableID string `json:"readable_id"`
+	// Request Status
+	Status RequestUpdateResponseStatus `json:"status"`
+	// Tokens for the request
+	Tokens int64                     `json:"tokens"`
+	JSON   requestUpdateResponseJSON `json:"-"`
+}
+
+// requestUpdateResponseJSON contains the JSON metadata for the struct
+// [RequestUpdateResponse]
+type requestUpdateResponseJSON struct {
+	ID            apijson.Field
+	Content       apijson.Field
+	Created       apijson.Field
+	Priority      apijson.Field
+	Request       apijson.Field
+	Summary       apijson.Field
+	Tlp           apijson.Field
+	Updated       apijson.Field
+	Completed     apijson.Field
+	MessageTokens apijson.Field
+	ReadableID    apijson.Field
+	Status        apijson.Field
+	Tokens        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *RequestUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The CISA defined Traffic Light Protocol (TLP)
+type RequestUpdateResponseTlp string
+
+const (
+	RequestUpdateResponseTlpClear       RequestUpdateResponseTlp = "clear"
+	RequestUpdateResponseTlpAmber       RequestUpdateResponseTlp = "amber"
+	RequestUpdateResponseTlpAmberStrict RequestUpdateResponseTlp = "amber-strict"
+	RequestUpdateResponseTlpGreen       RequestUpdateResponseTlp = "green"
+	RequestUpdateResponseTlpRed         RequestUpdateResponseTlp = "red"
+)
+
+func (r RequestUpdateResponseTlp) IsKnown() bool {
+	switch r {
+	case RequestUpdateResponseTlpClear, RequestUpdateResponseTlpAmber, RequestUpdateResponseTlpAmberStrict, RequestUpdateResponseTlpGreen, RequestUpdateResponseTlpRed:
+		return true
+	}
+	return false
+}
+
+// Request Status
+type RequestUpdateResponseStatus string
+
+const (
+	RequestUpdateResponseStatusOpen      RequestUpdateResponseStatus = "open"
+	RequestUpdateResponseStatusAccepted  RequestUpdateResponseStatus = "accepted"
+	RequestUpdateResponseStatusReported  RequestUpdateResponseStatus = "reported"
+	RequestUpdateResponseStatusApproved  RequestUpdateResponseStatus = "approved"
+	RequestUpdateResponseStatusCompleted RequestUpdateResponseStatus = "completed"
+	RequestUpdateResponseStatusDeclined  RequestUpdateResponseStatus = "declined"
+)
+
+func (r RequestUpdateResponseStatus) IsKnown() bool {
+	switch r {
+	case RequestUpdateResponseStatusOpen, RequestUpdateResponseStatusAccepted, RequestUpdateResponseStatusReported, RequestUpdateResponseStatusApproved, RequestUpdateResponseStatusCompleted, RequestUpdateResponseStatusDeclined:
+		return true
+	}
+	return false
+}
+
+type RequestListResponse struct {
+	// UUID
+	ID string `json:"id,required"`
+	// Request creation time
+	Created  time.Time                   `json:"created,required" format:"date-time"`
+	Priority RequestListResponsePriority `json:"priority,required"`
+	// Requested information from request
+	Request string `json:"request,required"`
+	// Brief description of the request
+	Summary string `json:"summary,required"`
+	// The CISA defined Traffic Light Protocol (TLP)
+	Tlp RequestListResponseTlp `json:"tlp,required"`
 	// Request last updated time
 	Updated time.Time `json:"updated,required" format:"date-time"`
 	// Request completion time
@@ -312,14 +406,15 @@ type ListItem struct {
 	// Readable Request ID
 	ReadableID string `json:"readable_id"`
 	// Request Status
-	Status ListItemStatus `json:"status"`
+	Status RequestListResponseStatus `json:"status"`
 	// Tokens for the request
-	Tokens int64        `json:"tokens"`
-	JSON   listItemJSON `json:"-"`
+	Tokens int64                   `json:"tokens"`
+	JSON   requestListResponseJSON `json:"-"`
 }
 
-// listItemJSON contains the JSON metadata for the struct [ListItem]
-type listItemJSON struct {
+// requestListResponseJSON contains the JSON metadata for the struct
+// [RequestListResponse]
+type requestListResponseJSON struct {
 	ID            apijson.Field
 	Created       apijson.Field
 	Priority      apijson.Field
@@ -336,180 +431,68 @@ type listItemJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ListItem) UnmarshalJSON(data []byte) (err error) {
+func (r *RequestListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r listItemJSON) RawJSON() string {
+func (r requestListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ListItemPriority string
+type RequestListResponsePriority string
 
 const (
-	ListItemPriorityRoutine ListItemPriority = "routine"
-	ListItemPriorityHigh    ListItemPriority = "high"
-	ListItemPriorityUrgent  ListItemPriority = "urgent"
+	RequestListResponsePriorityRoutine RequestListResponsePriority = "routine"
+	RequestListResponsePriorityHigh    RequestListResponsePriority = "high"
+	RequestListResponsePriorityUrgent  RequestListResponsePriority = "urgent"
 )
 
-func (r ListItemPriority) IsKnown() bool {
+func (r RequestListResponsePriority) IsKnown() bool {
 	switch r {
-	case ListItemPriorityRoutine, ListItemPriorityHigh, ListItemPriorityUrgent:
+	case RequestListResponsePriorityRoutine, RequestListResponsePriorityHigh, RequestListResponsePriorityUrgent:
 		return true
 	}
 	return false
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type ListItemTlp string
+type RequestListResponseTlp string
 
 const (
-	ListItemTlpClear       ListItemTlp = "clear"
-	ListItemTlpAmber       ListItemTlp = "amber"
-	ListItemTlpAmberStrict ListItemTlp = "amber-strict"
-	ListItemTlpGreen       ListItemTlp = "green"
-	ListItemTlpRed         ListItemTlp = "red"
+	RequestListResponseTlpClear       RequestListResponseTlp = "clear"
+	RequestListResponseTlpAmber       RequestListResponseTlp = "amber"
+	RequestListResponseTlpAmberStrict RequestListResponseTlp = "amber-strict"
+	RequestListResponseTlpGreen       RequestListResponseTlp = "green"
+	RequestListResponseTlpRed         RequestListResponseTlp = "red"
 )
 
-func (r ListItemTlp) IsKnown() bool {
+func (r RequestListResponseTlp) IsKnown() bool {
 	switch r {
-	case ListItemTlpClear, ListItemTlpAmber, ListItemTlpAmberStrict, ListItemTlpGreen, ListItemTlpRed:
+	case RequestListResponseTlpClear, RequestListResponseTlpAmber, RequestListResponseTlpAmberStrict, RequestListResponseTlpGreen, RequestListResponseTlpRed:
 		return true
 	}
 	return false
 }
 
 // Request Status
-type ListItemStatus string
+type RequestListResponseStatus string
 
 const (
-	ListItemStatusOpen      ListItemStatus = "open"
-	ListItemStatusAccepted  ListItemStatus = "accepted"
-	ListItemStatusReported  ListItemStatus = "reported"
-	ListItemStatusApproved  ListItemStatus = "approved"
-	ListItemStatusCompleted ListItemStatus = "completed"
-	ListItemStatusDeclined  ListItemStatus = "declined"
+	RequestListResponseStatusOpen      RequestListResponseStatus = "open"
+	RequestListResponseStatusAccepted  RequestListResponseStatus = "accepted"
+	RequestListResponseStatusReported  RequestListResponseStatus = "reported"
+	RequestListResponseStatusApproved  RequestListResponseStatus = "approved"
+	RequestListResponseStatusCompleted RequestListResponseStatus = "completed"
+	RequestListResponseStatusDeclined  RequestListResponseStatus = "declined"
 )
 
-func (r ListItemStatus) IsKnown() bool {
+func (r RequestListResponseStatus) IsKnown() bool {
 	switch r {
-	case ListItemStatusOpen, ListItemStatusAccepted, ListItemStatusReported, ListItemStatusApproved, ListItemStatusCompleted, ListItemStatusDeclined:
+	case RequestListResponseStatusOpen, RequestListResponseStatusAccepted, RequestListResponseStatusReported, RequestListResponseStatusApproved, RequestListResponseStatusCompleted, RequestListResponseStatusDeclined:
 		return true
 	}
 	return false
 }
-
-type Quota struct {
-	// Anniversary date is when annual quota limit is refresh
-	AnniversaryDate time.Time `json:"anniversary_date" format:"date-time"`
-	// Quater anniversary date is when quota limit is refreshed each quarter
-	QuarterAnniversaryDate time.Time `json:"quarter_anniversary_date" format:"date-time"`
-	// Tokens for the quarter
-	Quota int64 `json:"quota"`
-	// Tokens remaining for the quarter
-	Remaining int64     `json:"remaining"`
-	JSON      quotaJSON `json:"-"`
-}
-
-// quotaJSON contains the JSON metadata for the struct [Quota]
-type quotaJSON struct {
-	AnniversaryDate        apijson.Field
-	QuarterAnniversaryDate apijson.Field
-	Quota                  apijson.Field
-	Remaining              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *Quota) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r quotaJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestConstants struct {
-	Priority []RequestConstantsPriority `json:"priority"`
-	Status   []RequestConstantsStatus   `json:"status"`
-	Tlp      []RequestConstantsTlp      `json:"tlp"`
-	JSON     requestConstantsJSON       `json:"-"`
-}
-
-// requestConstantsJSON contains the JSON metadata for the struct
-// [RequestConstants]
-type requestConstantsJSON struct {
-	Priority    apijson.Field
-	Status      apijson.Field
-	Tlp         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestConstants) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestConstantsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestConstantsPriority string
-
-const (
-	RequestConstantsPriorityRoutine RequestConstantsPriority = "routine"
-	RequestConstantsPriorityHigh    RequestConstantsPriority = "high"
-	RequestConstantsPriorityUrgent  RequestConstantsPriority = "urgent"
-)
-
-func (r RequestConstantsPriority) IsKnown() bool {
-	switch r {
-	case RequestConstantsPriorityRoutine, RequestConstantsPriorityHigh, RequestConstantsPriorityUrgent:
-		return true
-	}
-	return false
-}
-
-// Request Status
-type RequestConstantsStatus string
-
-const (
-	RequestConstantsStatusOpen      RequestConstantsStatus = "open"
-	RequestConstantsStatusAccepted  RequestConstantsStatus = "accepted"
-	RequestConstantsStatusReported  RequestConstantsStatus = "reported"
-	RequestConstantsStatusApproved  RequestConstantsStatus = "approved"
-	RequestConstantsStatusCompleted RequestConstantsStatus = "completed"
-	RequestConstantsStatusDeclined  RequestConstantsStatus = "declined"
-)
-
-func (r RequestConstantsStatus) IsKnown() bool {
-	switch r {
-	case RequestConstantsStatusOpen, RequestConstantsStatusAccepted, RequestConstantsStatusReported, RequestConstantsStatusApproved, RequestConstantsStatusCompleted, RequestConstantsStatusDeclined:
-		return true
-	}
-	return false
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type RequestConstantsTlp string
-
-const (
-	RequestConstantsTlpClear       RequestConstantsTlp = "clear"
-	RequestConstantsTlpAmber       RequestConstantsTlp = "amber"
-	RequestConstantsTlpAmberStrict RequestConstantsTlp = "amber-strict"
-	RequestConstantsTlpGreen       RequestConstantsTlp = "green"
-	RequestConstantsTlpRed         RequestConstantsTlp = "red"
-)
-
-func (r RequestConstantsTlp) IsKnown() bool {
-	switch r {
-	case RequestConstantsTlpClear, RequestConstantsTlpAmber, RequestConstantsTlpAmberStrict, RequestConstantsTlpGreen, RequestConstantsTlpRed:
-		return true
-	}
-	return false
-}
-
-type RequestTypes []string
 
 type RequestDeleteResponse struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
@@ -550,6 +533,210 @@ func (r RequestDeleteResponseSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RequestConstantsResponse struct {
+	Priority []RequestConstantsResponsePriority `json:"priority"`
+	Status   []RequestConstantsResponseStatus   `json:"status"`
+	Tlp      []RequestConstantsResponseTlp      `json:"tlp"`
+	JSON     requestConstantsResponseJSON       `json:"-"`
+}
+
+// requestConstantsResponseJSON contains the JSON metadata for the struct
+// [RequestConstantsResponse]
+type requestConstantsResponseJSON struct {
+	Priority    apijson.Field
+	Status      apijson.Field
+	Tlp         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RequestConstantsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestConstantsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RequestConstantsResponsePriority string
+
+const (
+	RequestConstantsResponsePriorityRoutine RequestConstantsResponsePriority = "routine"
+	RequestConstantsResponsePriorityHigh    RequestConstantsResponsePriority = "high"
+	RequestConstantsResponsePriorityUrgent  RequestConstantsResponsePriority = "urgent"
+)
+
+func (r RequestConstantsResponsePriority) IsKnown() bool {
+	switch r {
+	case RequestConstantsResponsePriorityRoutine, RequestConstantsResponsePriorityHigh, RequestConstantsResponsePriorityUrgent:
+		return true
+	}
+	return false
+}
+
+// Request Status
+type RequestConstantsResponseStatus string
+
+const (
+	RequestConstantsResponseStatusOpen      RequestConstantsResponseStatus = "open"
+	RequestConstantsResponseStatusAccepted  RequestConstantsResponseStatus = "accepted"
+	RequestConstantsResponseStatusReported  RequestConstantsResponseStatus = "reported"
+	RequestConstantsResponseStatusApproved  RequestConstantsResponseStatus = "approved"
+	RequestConstantsResponseStatusCompleted RequestConstantsResponseStatus = "completed"
+	RequestConstantsResponseStatusDeclined  RequestConstantsResponseStatus = "declined"
+)
+
+func (r RequestConstantsResponseStatus) IsKnown() bool {
+	switch r {
+	case RequestConstantsResponseStatusOpen, RequestConstantsResponseStatusAccepted, RequestConstantsResponseStatusReported, RequestConstantsResponseStatusApproved, RequestConstantsResponseStatusCompleted, RequestConstantsResponseStatusDeclined:
+		return true
+	}
+	return false
+}
+
+// The CISA defined Traffic Light Protocol (TLP)
+type RequestConstantsResponseTlp string
+
+const (
+	RequestConstantsResponseTlpClear       RequestConstantsResponseTlp = "clear"
+	RequestConstantsResponseTlpAmber       RequestConstantsResponseTlp = "amber"
+	RequestConstantsResponseTlpAmberStrict RequestConstantsResponseTlp = "amber-strict"
+	RequestConstantsResponseTlpGreen       RequestConstantsResponseTlp = "green"
+	RequestConstantsResponseTlpRed         RequestConstantsResponseTlp = "red"
+)
+
+func (r RequestConstantsResponseTlp) IsKnown() bool {
+	switch r {
+	case RequestConstantsResponseTlpClear, RequestConstantsResponseTlpAmber, RequestConstantsResponseTlpAmberStrict, RequestConstantsResponseTlpGreen, RequestConstantsResponseTlpRed:
+		return true
+	}
+	return false
+}
+
+type RequestGetResponse struct {
+	// UUID
+	ID string `json:"id,required"`
+	// Request content
+	Content  string    `json:"content,required"`
+	Created  time.Time `json:"created,required" format:"date-time"`
+	Priority time.Time `json:"priority,required" format:"date-time"`
+	// Requested information from request
+	Request string `json:"request,required"`
+	// Brief description of the request
+	Summary string `json:"summary,required"`
+	// The CISA defined Traffic Light Protocol (TLP)
+	Tlp       RequestGetResponseTlp `json:"tlp,required"`
+	Updated   time.Time             `json:"updated,required" format:"date-time"`
+	Completed time.Time             `json:"completed" format:"date-time"`
+	// Tokens for the request messages
+	MessageTokens int64 `json:"message_tokens"`
+	// Readable Request ID
+	ReadableID string `json:"readable_id"`
+	// Request Status
+	Status RequestGetResponseStatus `json:"status"`
+	// Tokens for the request
+	Tokens int64                  `json:"tokens"`
+	JSON   requestGetResponseJSON `json:"-"`
+}
+
+// requestGetResponseJSON contains the JSON metadata for the struct
+// [RequestGetResponse]
+type requestGetResponseJSON struct {
+	ID            apijson.Field
+	Content       apijson.Field
+	Created       apijson.Field
+	Priority      apijson.Field
+	Request       apijson.Field
+	Summary       apijson.Field
+	Tlp           apijson.Field
+	Updated       apijson.Field
+	Completed     apijson.Field
+	MessageTokens apijson.Field
+	ReadableID    apijson.Field
+	Status        apijson.Field
+	Tokens        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *RequestGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The CISA defined Traffic Light Protocol (TLP)
+type RequestGetResponseTlp string
+
+const (
+	RequestGetResponseTlpClear       RequestGetResponseTlp = "clear"
+	RequestGetResponseTlpAmber       RequestGetResponseTlp = "amber"
+	RequestGetResponseTlpAmberStrict RequestGetResponseTlp = "amber-strict"
+	RequestGetResponseTlpGreen       RequestGetResponseTlp = "green"
+	RequestGetResponseTlpRed         RequestGetResponseTlp = "red"
+)
+
+func (r RequestGetResponseTlp) IsKnown() bool {
+	switch r {
+	case RequestGetResponseTlpClear, RequestGetResponseTlpAmber, RequestGetResponseTlpAmberStrict, RequestGetResponseTlpGreen, RequestGetResponseTlpRed:
+		return true
+	}
+	return false
+}
+
+// Request Status
+type RequestGetResponseStatus string
+
+const (
+	RequestGetResponseStatusOpen      RequestGetResponseStatus = "open"
+	RequestGetResponseStatusAccepted  RequestGetResponseStatus = "accepted"
+	RequestGetResponseStatusReported  RequestGetResponseStatus = "reported"
+	RequestGetResponseStatusApproved  RequestGetResponseStatus = "approved"
+	RequestGetResponseStatusCompleted RequestGetResponseStatus = "completed"
+	RequestGetResponseStatusDeclined  RequestGetResponseStatus = "declined"
+)
+
+func (r RequestGetResponseStatus) IsKnown() bool {
+	switch r {
+	case RequestGetResponseStatusOpen, RequestGetResponseStatusAccepted, RequestGetResponseStatusReported, RequestGetResponseStatusApproved, RequestGetResponseStatusCompleted, RequestGetResponseStatusDeclined:
+		return true
+	}
+	return false
+}
+
+type RequestQuotaResponse struct {
+	// Anniversary date is when annual quota limit is refresh
+	AnniversaryDate time.Time `json:"anniversary_date" format:"date-time"`
+	// Quater anniversary date is when quota limit is refreshed each quarter
+	QuarterAnniversaryDate time.Time `json:"quarter_anniversary_date" format:"date-time"`
+	// Tokens for the quarter
+	Quota int64 `json:"quota"`
+	// Tokens remaining for the quarter
+	Remaining int64                    `json:"remaining"`
+	JSON      requestQuotaResponseJSON `json:"-"`
+}
+
+// requestQuotaResponseJSON contains the JSON metadata for the struct
+// [RequestQuotaResponse]
+type requestQuotaResponseJSON struct {
+	AnniversaryDate        apijson.Field
+	QuarterAnniversaryDate apijson.Field
+	Quota                  apijson.Field
+	Remaining              apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RequestQuotaResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestQuotaResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RequestNewParams struct {
@@ -593,7 +780,7 @@ type RequestNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  Item                              `json:"result"`
+	Result  RequestNewResponse                `json:"result"`
 	JSON    requestNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -672,7 +859,7 @@ type RequestUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Item                                 `json:"result"`
+	Result  RequestUpdateResponse                `json:"result"`
 	JSON    requestUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -778,7 +965,7 @@ type RequestConstantsResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestConstantsResponseEnvelopeSuccess `json:"success,required"`
-	Result  RequestConstants                        `json:"result"`
+	Result  RequestConstantsResponse                `json:"result"`
 	JSON    requestConstantsResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -821,7 +1008,7 @@ type RequestGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  Item                              `json:"result"`
+	Result  RequestGetResponse                `json:"result"`
 	JSON    requestGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -864,7 +1051,7 @@ type RequestQuotaResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestQuotaResponseEnvelopeSuccess `json:"success,required"`
-	Result  Quota                               `json:"result"`
+	Result  RequestQuotaResponse                `json:"result"`
 	JSON    requestQuotaResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -907,7 +1094,7 @@ type RequestTypesResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestTypesResponseEnvelopeSuccess `json:"success,required"`
-	Result  RequestTypes                        `json:"result"`
+	Result  []string                            `json:"result"`
 	JSON    requestTypesResponseEnvelopeJSON    `json:"-"`
 }
 
