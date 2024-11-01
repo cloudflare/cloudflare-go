@@ -238,35 +238,34 @@ func (r Kind) IsKnown() bool {
 type Phase string
 
 const (
-	PhaseDDoSL4                         Phase = "ddos_l4"
-	PhaseDDoSL7                         Phase = "ddos_l7"
-	PhaseHTTPConfigSettings             Phase = "http_config_settings"
-	PhaseHTTPCustomErrors               Phase = "http_custom_errors"
-	PhaseHTTPLogCustomFields            Phase = "http_log_custom_fields"
-	PhaseHTTPRatelimit                  Phase = "http_ratelimit"
-	PhaseHTTPRequestCacheSettings       Phase = "http_request_cache_settings"
-	PhaseHTTPRequestDynamicRedirect     Phase = "http_request_dynamic_redirect"
-	PhaseHTTPRequestFirewallCustom      Phase = "http_request_firewall_custom"
-	PhaseHTTPRequestFirewallManaged     Phase = "http_request_firewall_managed"
-	PhaseHTTPRequestLateTransform       Phase = "http_request_late_transform"
-	PhaseHTTPRequestOrigin              Phase = "http_request_origin"
-	PhaseHTTPRequestRedirect            Phase = "http_request_redirect"
-	PhaseHTTPRequestSanitize            Phase = "http_request_sanitize"
-	PhaseHTTPRequestSBFM                Phase = "http_request_sbfm"
-	PhaseHTTPRequestSelectConfiguration Phase = "http_request_select_configuration"
-	PhaseHTTPRequestTransform           Phase = "http_request_transform"
-	PhaseHTTPResponseCompression        Phase = "http_response_compression"
-	PhaseHTTPResponseFirewallManaged    Phase = "http_response_firewall_managed"
-	PhaseHTTPResponseHeadersTransform   Phase = "http_response_headers_transform"
-	PhaseMagicTransit                   Phase = "magic_transit"
-	PhaseMagicTransitIDsManaged         Phase = "magic_transit_ids_managed"
-	PhaseMagicTransitManaged            Phase = "magic_transit_managed"
-	PhaseMagicTransitRatelimit          Phase = "magic_transit_ratelimit"
+	PhaseDDoSL4                       Phase = "ddos_l4"
+	PhaseDDoSL7                       Phase = "ddos_l7"
+	PhaseHTTPConfigSettings           Phase = "http_config_settings"
+	PhaseHTTPCustomErrors             Phase = "http_custom_errors"
+	PhaseHTTPLogCustomFields          Phase = "http_log_custom_fields"
+	PhaseHTTPRatelimit                Phase = "http_ratelimit"
+	PhaseHTTPRequestCacheSettings     Phase = "http_request_cache_settings"
+	PhaseHTTPRequestDynamicRedirect   Phase = "http_request_dynamic_redirect"
+	PhaseHTTPRequestFirewallCustom    Phase = "http_request_firewall_custom"
+	PhaseHTTPRequestFirewallManaged   Phase = "http_request_firewall_managed"
+	PhaseHTTPRequestLateTransform     Phase = "http_request_late_transform"
+	PhaseHTTPRequestOrigin            Phase = "http_request_origin"
+	PhaseHTTPRequestRedirect          Phase = "http_request_redirect"
+	PhaseHTTPRequestSanitize          Phase = "http_request_sanitize"
+	PhaseHTTPRequestSBFM              Phase = "http_request_sbfm"
+	PhaseHTTPRequestTransform         Phase = "http_request_transform"
+	PhaseHTTPResponseCompression      Phase = "http_response_compression"
+	PhaseHTTPResponseFirewallManaged  Phase = "http_response_firewall_managed"
+	PhaseHTTPResponseHeadersTransform Phase = "http_response_headers_transform"
+	PhaseMagicTransit                 Phase = "magic_transit"
+	PhaseMagicTransitIDsManaged       Phase = "magic_transit_ids_managed"
+	PhaseMagicTransitManaged          Phase = "magic_transit_managed"
+	PhaseMagicTransitRatelimit        Phase = "magic_transit_ratelimit"
 )
 
 func (r Phase) IsKnown() bool {
 	switch r {
-	case PhaseDDoSL4, PhaseDDoSL7, PhaseHTTPConfigSettings, PhaseHTTPCustomErrors, PhaseHTTPLogCustomFields, PhaseHTTPRatelimit, PhaseHTTPRequestCacheSettings, PhaseHTTPRequestDynamicRedirect, PhaseHTTPRequestFirewallCustom, PhaseHTTPRequestFirewallManaged, PhaseHTTPRequestLateTransform, PhaseHTTPRequestOrigin, PhaseHTTPRequestRedirect, PhaseHTTPRequestSanitize, PhaseHTTPRequestSBFM, PhaseHTTPRequestSelectConfiguration, PhaseHTTPRequestTransform, PhaseHTTPResponseCompression, PhaseHTTPResponseFirewallManaged, PhaseHTTPResponseHeadersTransform, PhaseMagicTransit, PhaseMagicTransitIDsManaged, PhaseMagicTransitManaged, PhaseMagicTransitRatelimit:
+	case PhaseDDoSL4, PhaseDDoSL7, PhaseHTTPConfigSettings, PhaseHTTPCustomErrors, PhaseHTTPLogCustomFields, PhaseHTTPRatelimit, PhaseHTTPRequestCacheSettings, PhaseHTTPRequestDynamicRedirect, PhaseHTTPRequestFirewallCustom, PhaseHTTPRequestFirewallManaged, PhaseHTTPRequestLateTransform, PhaseHTTPRequestOrigin, PhaseHTTPRequestRedirect, PhaseHTTPRequestSanitize, PhaseHTTPRequestSBFM, PhaseHTTPRequestTransform, PhaseHTTPResponseCompression, PhaseHTTPResponseFirewallManaged, PhaseHTTPResponseHeadersTransform, PhaseMagicTransit, PhaseMagicTransitIDsManaged, PhaseMagicTransitManaged, PhaseMagicTransitRatelimit:
 		return true
 	}
 	return false
