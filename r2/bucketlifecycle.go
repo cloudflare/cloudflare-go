@@ -167,7 +167,7 @@ func (r bucketLifecycleGetResponseRulesConditionsJSON) RawJSON() string {
 // Transition to abort ongoing multipart uploads
 type BucketLifecycleGetResponseRulesAbortMultipartUploadsTransition struct {
 	// Condition for lifecycle transitions to apply after an object reaches an age in
-	// days
+	// seconds
 	Condition BucketLifecycleGetResponseRulesAbortMultipartUploadsTransitionCondition `json:"condition"`
 	JSON      bucketLifecycleGetResponseRulesAbortMultipartUploadsTransitionJSON      `json:"-"`
 }
@@ -190,7 +190,7 @@ func (r bucketLifecycleGetResponseRulesAbortMultipartUploadsTransitionJSON) RawJ
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 type BucketLifecycleGetResponseRulesAbortMultipartUploadsTransitionCondition struct {
 	MaxAge int64                                                                       `json:"maxAge,required"`
 	Type   BucketLifecycleGetResponseRulesAbortMultipartUploadsTransitionConditionType `json:"type,required"`
@@ -232,7 +232,7 @@ func (r BucketLifecycleGetResponseRulesAbortMultipartUploadsTransitionConditionT
 // Transition to delete objects
 type BucketLifecycleGetResponseRulesDeleteObjectsTransition struct {
 	// Condition for lifecycle transitions to apply after an object reaches an age in
-	// days
+	// seconds
 	Condition BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition `json:"condition"`
 	JSON      bucketLifecycleGetResponseRulesDeleteObjectsTransitionJSON      `json:"-"`
 }
@@ -254,7 +254,7 @@ func (r bucketLifecycleGetResponseRulesDeleteObjectsTransitionJSON) RawJSON() st
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 type BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition struct {
 	MaxAge int64                                                               `json:"maxAge"`
 	Type   BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionType `json:"type,required"`
@@ -299,7 +299,7 @@ func (r BucketLifecycleGetResponseRulesDeleteObjectsTransitionCondition) AsUnion
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 //
 // Union satisfied by
 // [r2.BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition]
@@ -325,7 +325,7 @@ func init() {
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 type BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition struct {
 	MaxAge int64                                                                                      `json:"maxAge,required"`
 	Type   BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionR2LifecycleAgeConditionType `json:"type,required"`
@@ -426,7 +426,7 @@ func (r BucketLifecycleGetResponseRulesDeleteObjectsTransitionConditionType) IsK
 
 type BucketLifecycleGetResponseRulesStorageClassTransition struct {
 	// Condition for lifecycle transitions to apply after an object reaches an age in
-	// days
+	// seconds
 	Condition    BucketLifecycleGetResponseRulesStorageClassTransitionsCondition    `json:"condition,required"`
 	StorageClass BucketLifecycleGetResponseRulesStorageClassTransitionsStorageClass `json:"storageClass,required"`
 	JSON         bucketLifecycleGetResponseRulesStorageClassTransitionJSON          `json:"-"`
@@ -450,7 +450,7 @@ func (r bucketLifecycleGetResponseRulesStorageClassTransitionJSON) RawJSON() str
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 type BucketLifecycleGetResponseRulesStorageClassTransitionsCondition struct {
 	MaxAge int64                                                               `json:"maxAge"`
 	Type   BucketLifecycleGetResponseRulesStorageClassTransitionsConditionType `json:"type,required"`
@@ -495,7 +495,7 @@ func (r BucketLifecycleGetResponseRulesStorageClassTransitionsCondition) AsUnion
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 //
 // Union satisfied by
 // [r2.BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleAgeCondition]
@@ -521,7 +521,7 @@ func init() {
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 type BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleAgeCondition struct {
 	MaxAge int64                                                                                      `json:"maxAge,required"`
 	Type   BucketLifecycleGetResponseRulesStorageClassTransitionsConditionR2LifecycleAgeConditionType `json:"type,required"`
@@ -680,7 +680,7 @@ func (r BucketLifecycleUpdateParamsRulesConditions) MarshalJSON() (data []byte, 
 // Transition to abort ongoing multipart uploads
 type BucketLifecycleUpdateParamsRulesAbortMultipartUploadsTransition struct {
 	// Condition for lifecycle transitions to apply after an object reaches an age in
-	// days
+	// seconds
 	Condition param.Field[BucketLifecycleUpdateParamsRulesAbortMultipartUploadsTransitionCondition] `json:"condition"`
 }
 
@@ -689,7 +689,7 @@ func (r BucketLifecycleUpdateParamsRulesAbortMultipartUploadsTransition) Marshal
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 type BucketLifecycleUpdateParamsRulesAbortMultipartUploadsTransitionCondition struct {
 	MaxAge param.Field[int64]                                                                        `json:"maxAge,required"`
 	Type   param.Field[BucketLifecycleUpdateParamsRulesAbortMultipartUploadsTransitionConditionType] `json:"type,required"`
@@ -716,7 +716,7 @@ func (r BucketLifecycleUpdateParamsRulesAbortMultipartUploadsTransitionCondition
 // Transition to delete objects
 type BucketLifecycleUpdateParamsRulesDeleteObjectsTransition struct {
 	// Condition for lifecycle transitions to apply after an object reaches an age in
-	// days
+	// seconds
 	Condition param.Field[BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion] `json:"condition"`
 }
 
@@ -725,7 +725,7 @@ func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransition) MarshalJSON() (
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 type BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionCondition struct {
 	MaxAge param.Field[int64]                                                                `json:"maxAge"`
 	Type   param.Field[BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionType] `json:"type,required"`
@@ -740,7 +740,7 @@ func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionCondition) implem
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 //
 // Satisfied by
 // [r2.BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition],
@@ -751,7 +751,7 @@ type BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionUnion inter
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 type BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleAgeCondition struct {
 	MaxAge param.Field[int64]                                                                                       `json:"maxAge,required"`
 	Type   param.Field[BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionR2LifecycleAgeConditionType] `json:"type,required"`
@@ -822,7 +822,7 @@ func (r BucketLifecycleUpdateParamsRulesDeleteObjectsTransitionConditionType) Is
 
 type BucketLifecycleUpdateParamsRulesStorageClassTransition struct {
 	// Condition for lifecycle transitions to apply after an object reaches an age in
-	// days
+	// seconds
 	Condition    param.Field[BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion] `json:"condition,required"`
 	StorageClass param.Field[BucketLifecycleUpdateParamsRulesStorageClassTransitionsStorageClass]   `json:"storageClass,required"`
 }
@@ -832,7 +832,7 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransition) MarshalJSON() (d
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 type BucketLifecycleUpdateParamsRulesStorageClassTransitionsCondition struct {
 	MaxAge param.Field[int64]                                                                `json:"maxAge"`
 	Type   param.Field[BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionType] `json:"type,required"`
@@ -847,7 +847,7 @@ func (r BucketLifecycleUpdateParamsRulesStorageClassTransitionsCondition) implem
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 //
 // Satisfied by
 // [r2.BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleAgeCondition],
@@ -858,7 +858,7 @@ type BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionUnion inter
 }
 
 // Condition for lifecycle transitions to apply after an object reaches an age in
-// days
+// seconds
 type BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleAgeCondition struct {
 	MaxAge param.Field[int64]                                                                                       `json:"maxAge,required"`
 	Type   param.Field[BucketLifecycleUpdateParamsRulesStorageClassTransitionsConditionR2LifecycleAgeConditionType] `json:"type,required"`
