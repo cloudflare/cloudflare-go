@@ -212,7 +212,7 @@ func (r regionalTieredCacheGetResponseValueJSON) RawJSON() string {
 
 type RegionalTieredCacheEditParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
 	// Value of the Regional Tiered Cache zone setting.
 	Value param.Field[RegionalTieredCacheEditParamsValue] `json:"value,required"`
 }
@@ -285,7 +285,7 @@ func (r RegionalTieredCacheEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type RegionalTieredCacheGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
 }
 
 type RegionalTieredCacheGetResponseEnvelope struct {
