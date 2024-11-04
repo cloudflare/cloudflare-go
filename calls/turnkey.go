@@ -49,7 +49,7 @@ func (r *TURNKeyService) New(ctx context.Context, params TURNKeyNewParams, opts 
 }
 
 // Edit details for a single TURN key.
-func (r *TURNKeyService) Update(ctx context.Context, keyID string, params TURNKeyUpdateParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *TURNKeyService) Update(ctx context.Context, keyID string, params TURNKeyUpdateParams, opts ...option.RequestOption) (res *TURNKeyUpdateResponse, err error) {
 	var env TURNKeyUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -70,7 +70,7 @@ func (r *TURNKeyService) Update(ctx context.Context, keyID string, params TURNKe
 }
 
 // Lists all TURN keys in the Cloudflare account
-func (r *TURNKeyService) List(ctx context.Context, query TURNKeyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
+func (r *TURNKeyService) List(ctx context.Context, query TURNKeyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[TURNKeyListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -92,12 +92,12 @@ func (r *TURNKeyService) List(ctx context.Context, query TURNKeyListParams, opts
 }
 
 // Lists all TURN keys in the Cloudflare account
-func (r *TURNKeyService) ListAutoPaging(ctx context.Context, query TURNKeyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
+func (r *TURNKeyService) ListAutoPaging(ctx context.Context, query TURNKeyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[TURNKeyListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes a TURN key from Cloudflare Calls
-func (r *TURNKeyService) Delete(ctx context.Context, keyID string, body TURNKeyDeleteParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *TURNKeyService) Delete(ctx context.Context, keyID string, body TURNKeyDeleteParams, opts ...option.RequestOption) (res *TURNKeyDeleteResponse, err error) {
 	var env TURNKeyDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -118,7 +118,7 @@ func (r *TURNKeyService) Delete(ctx context.Context, keyID string, body TURNKeyD
 }
 
 // Fetches details for a single TURN key.
-func (r *TURNKeyService) Get(ctx context.Context, keyID string, query TURNKeyGetParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *TURNKeyService) Get(ctx context.Context, keyID string, query TURNKeyGetParams, opts ...option.RequestOption) (res *TURNKeyGetResponse, err error) {
 	var env TURNKeyGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -172,6 +172,130 @@ func (r turnKeyNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type TURNKeyUpdateResponse struct {
+	// The date and time the item was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The date and time the item was last modified.
+	Modified time.Time `json:"modified" format:"date-time"`
+	// A short description of Calls app, not shown to end users.
+	Name string `json:"name"`
+	// A Cloudflare-generated unique identifier for a item.
+	UID  string                    `json:"uid"`
+	JSON turnKeyUpdateResponseJSON `json:"-"`
+}
+
+// turnKeyUpdateResponseJSON contains the JSON metadata for the struct
+// [TURNKeyUpdateResponse]
+type turnKeyUpdateResponseJSON struct {
+	Created     apijson.Field
+	Modified    apijson.Field
+	Name        apijson.Field
+	UID         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TURNKeyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r turnKeyUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type TURNKeyListResponse struct {
+	// The date and time the item was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The date and time the item was last modified.
+	Modified time.Time `json:"modified" format:"date-time"`
+	// A short description of Calls app, not shown to end users.
+	Name string `json:"name"`
+	// A Cloudflare-generated unique identifier for a item.
+	UID  string                  `json:"uid"`
+	JSON turnKeyListResponseJSON `json:"-"`
+}
+
+// turnKeyListResponseJSON contains the JSON metadata for the struct
+// [TURNKeyListResponse]
+type turnKeyListResponseJSON struct {
+	Created     apijson.Field
+	Modified    apijson.Field
+	Name        apijson.Field
+	UID         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TURNKeyListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r turnKeyListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type TURNKeyDeleteResponse struct {
+	// The date and time the item was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The date and time the item was last modified.
+	Modified time.Time `json:"modified" format:"date-time"`
+	// A short description of Calls app, not shown to end users.
+	Name string `json:"name"`
+	// A Cloudflare-generated unique identifier for a item.
+	UID  string                    `json:"uid"`
+	JSON turnKeyDeleteResponseJSON `json:"-"`
+}
+
+// turnKeyDeleteResponseJSON contains the JSON metadata for the struct
+// [TURNKeyDeleteResponse]
+type turnKeyDeleteResponseJSON struct {
+	Created     apijson.Field
+	Modified    apijson.Field
+	Name        apijson.Field
+	UID         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TURNKeyDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r turnKeyDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type TURNKeyGetResponse struct {
+	// The date and time the item was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The date and time the item was last modified.
+	Modified time.Time `json:"modified" format:"date-time"`
+	// A short description of Calls app, not shown to end users.
+	Name string `json:"name"`
+	// A Cloudflare-generated unique identifier for a item.
+	UID  string                 `json:"uid"`
+	JSON turnKeyGetResponseJSON `json:"-"`
+}
+
+// turnKeyGetResponseJSON contains the JSON metadata for the struct
+// [TURNKeyGetResponse]
+type turnKeyGetResponseJSON struct {
+	Created     apijson.Field
+	Modified    apijson.Field
+	Name        apijson.Field
+	UID         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TURNKeyGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r turnKeyGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type TURNKeyNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -199,9 +323,8 @@ type TURNKeyUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TURNKeyUpdateResponseEnvelopeSuccess `json:"success,required"`
-	// Bearer token
-	Result string                            `json:"result"`
-	JSON   turnKeyUpdateResponseEnvelopeJSON `json:"-"`
+	Result  TURNKeyUpdateResponse                `json:"result"`
+	JSON    turnKeyUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // turnKeyUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -253,9 +376,8 @@ type TURNKeyDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TURNKeyDeleteResponseEnvelopeSuccess `json:"success,required"`
-	// Bearer token
-	Result string                            `json:"result"`
-	JSON   turnKeyDeleteResponseEnvelopeJSON `json:"-"`
+	Result  TURNKeyDeleteResponse                `json:"result"`
+	JSON    turnKeyDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
 // turnKeyDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -302,9 +424,8 @@ type TURNKeyGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TURNKeyGetResponseEnvelopeSuccess `json:"success,required"`
-	// Bearer token
-	Result string                         `json:"result"`
-	JSON   turnKeyGetResponseEnvelopeJSON `json:"-"`
+	Result  TURNKeyGetResponse                `json:"result"`
+	JSON    turnKeyGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // turnKeyGetResponseEnvelopeJSON contains the JSON metadata for the struct

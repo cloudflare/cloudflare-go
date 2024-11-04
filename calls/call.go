@@ -78,7 +78,7 @@ func (r *CallService) Update(ctx context.Context, appID string, params CallUpdat
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *pagination.SinglePage[string], err error) {
+func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *pagination.SinglePage[CallsApp], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -100,7 +100,7 @@ func (r *CallService) List(ctx context.Context, query CallListParams, opts ...op
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[string] {
+func (r *CallService) ListAutoPaging(ctx context.Context, query CallListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[CallsApp] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
