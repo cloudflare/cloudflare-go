@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestCallNewWithOptionalParams(t *testing.T) {
+func TestTURNNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,9 +27,9 @@ func TestCallNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Calls.New(context.TODO(), calls.CallNewParams{
+	_, err := client.Calls.TURN.New(context.TODO(), calls.TURNNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Name:      cloudflare.F("production-realtime-app"),
+		Name:      cloudflare.F("my-turn-key"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -40,7 +40,7 @@ func TestCallNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestCallUpdateWithOptionalParams(t *testing.T) {
+func TestTURNUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -53,12 +53,12 @@ func TestCallUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Calls.Update(
+	_, err := client.Calls.TURN.Update(
 		context.TODO(),
 		"2a95132c15732412d22c1476fa83f27a",
-		calls.CallUpdateParams{
+		calls.TURNUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("production-realtime-app"),
+			Name:      cloudflare.F("my-turn-key"),
 		},
 	)
 	if err != nil {
@@ -70,7 +70,7 @@ func TestCallUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestCallList(t *testing.T) {
+func TestTURNList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -83,7 +83,7 @@ func TestCallList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Calls.List(context.TODO(), calls.CallListParams{
+	_, err := client.Calls.TURN.List(context.TODO(), calls.TURNListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
@@ -95,7 +95,7 @@ func TestCallList(t *testing.T) {
 	}
 }
 
-func TestCallDelete(t *testing.T) {
+func TestTURNDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -108,10 +108,10 @@ func TestCallDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Calls.Delete(
+	_, err := client.Calls.TURN.Delete(
 		context.TODO(),
 		"2a95132c15732412d22c1476fa83f27a",
-		calls.CallDeleteParams{
+		calls.TURNDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -124,7 +124,7 @@ func TestCallDelete(t *testing.T) {
 	}
 }
 
-func TestCallGet(t *testing.T) {
+func TestTURNGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -137,10 +137,10 @@ func TestCallGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Calls.Get(
+	_, err := client.Calls.TURN.Get(
 		context.TODO(),
 		"2a95132c15732412d22c1476fa83f27a",
-		calls.CallGetParams{
+		calls.TURNGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
