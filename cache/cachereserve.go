@@ -343,8 +343,8 @@ func (r cacheReserveStatusResponseJSON) RawJSON() string {
 
 type CacheReserveClearParams struct {
 	// Identifier
-	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
-	Body   interface{}                              `json:"body,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
 }
 
 func (r CacheReserveClearParams) MarshalJSON() (data []byte, err error) {
@@ -400,7 +400,7 @@ func (r CacheReserveClearResponseEnvelopeSuccess) IsKnown() bool {
 
 type CacheReserveEditParams struct {
 	// Identifier
-	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the Cache Reserve zone setting.
 	Value param.Field[CacheReserveEditParamsValue] `json:"value,required"`
 }
@@ -476,7 +476,7 @@ func (r CacheReserveEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type CacheReserveGetParams struct {
 	// Identifier
-	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type CacheReserveGetResponseEnvelope struct {
@@ -530,7 +530,7 @@ func (r CacheReserveGetResponseEnvelopeSuccess) IsKnown() bool {
 
 type CacheReserveStatusParams struct {
 	// Identifier
-	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type CacheReserveStatusResponseEnvelope struct {

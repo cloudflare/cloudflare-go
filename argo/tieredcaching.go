@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/cache"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
@@ -166,7 +165,7 @@ func (r TieredCachingGetResponseValue) IsKnown() bool {
 
 type TieredCachingEditParams struct {
 	// Identifier
-	ZoneID param.Field[cache.CacheVariantIdentifierParam] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Enables Tiered Caching.
 	Value param.Field[TieredCachingEditParamsValue] `json:"value,required"`
 }
@@ -236,7 +235,7 @@ func (r TieredCachingEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type TieredCachingGetParams struct {
 	// Identifier
-	ZoneID param.Field[cache.CacheVariantIdentifierParam] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type TieredCachingGetResponseEnvelope struct {
