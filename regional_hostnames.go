@@ -17,6 +17,7 @@ type Region struct {
 type RegionalHostname struct {
 	Hostname  string     `json:"hostname"`
 	RegionKey string     `json:"region_key"`
+	Routing   string     `json:"routing,omitempty"`
 	CreatedOn *time.Time `json:"created_on,omitempty"`
 }
 
