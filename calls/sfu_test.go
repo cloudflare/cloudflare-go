@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestSfuNewWithOptionalParams(t *testing.T) {
+func TestSFUNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,7 +27,7 @@ func TestSfuNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Calls.Sfu.New(context.TODO(), calls.SfuNewParams{
+	_, err := client.Calls.SFU.New(context.TODO(), calls.SFUNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("production-realtime-app"),
 	})
@@ -40,7 +40,7 @@ func TestSfuNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSfuUpdateWithOptionalParams(t *testing.T) {
+func TestSFUUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -53,10 +53,10 @@ func TestSfuUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Calls.Sfu.Update(
+	_, err := client.Calls.SFU.Update(
 		context.TODO(),
 		"2a95132c15732412d22c1476fa83f27a",
-		calls.SfuUpdateParams{
+		calls.SFUUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("production-realtime-app"),
 		},
@@ -70,7 +70,7 @@ func TestSfuUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestSfuList(t *testing.T) {
+func TestSFUList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -83,7 +83,7 @@ func TestSfuList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Calls.Sfu.List(context.TODO(), calls.SfuListParams{
+	_, err := client.Calls.SFU.List(context.TODO(), calls.SFUListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
@@ -95,7 +95,7 @@ func TestSfuList(t *testing.T) {
 	}
 }
 
-func TestSfuDelete(t *testing.T) {
+func TestSFUDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -108,10 +108,10 @@ func TestSfuDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Calls.Sfu.Delete(
+	_, err := client.Calls.SFU.Delete(
 		context.TODO(),
 		"2a95132c15732412d22c1476fa83f27a",
-		calls.SfuDeleteParams{
+		calls.SFUDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -124,7 +124,7 @@ func TestSfuDelete(t *testing.T) {
 	}
 }
 
-func TestSfuGet(t *testing.T) {
+func TestSFUGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -137,10 +137,10 @@ func TestSfuGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Calls.Sfu.Get(
+	_, err := client.Calls.SFU.Get(
 		context.TODO(),
 		"2a95132c15732412d22c1476fa83f27a",
-		calls.SfuGetParams{
+		calls.SFUGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
