@@ -127,9 +127,10 @@ type DNSListResponse struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success DNSListResponseSuccess `json:"success,required"`
-	Result  DNS                    `json:"result"`
-	JSON    dnsListResponseJSON    `json:"-"`
+	Success    DNSListResponseSuccess    `json:"success,required"`
+	Result     DNS                       `json:"result"`
+	ResultInfo DNSListResponseResultInfo `json:"result_info"`
+	JSON       dnsListResponseJSON       `json:"-"`
 }
 
 // dnsListResponseJSON contains the JSON metadata for the struct [DNSListResponse]
@@ -138,6 +139,7 @@ type dnsListResponseJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -163,6 +165,37 @@ func (r DNSListResponseSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type DNSListResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                       `json:"total_count"`
+	JSON       dnsListResponseResultInfoJSON `json:"-"`
+}
+
+// dnsListResponseResultInfoJSON contains the JSON metadata for the struct
+// [DNSListResponseResultInfo]
+type dnsListResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsListResponseResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type DNSListParams struct {
