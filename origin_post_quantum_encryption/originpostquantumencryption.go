@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-go/v3/cache"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
@@ -80,7 +81,7 @@ func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query Orig
 
 type OriginPostQuantumEncryptionUpdateParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[cache.CacheVariantIdentifierParam] `path:"zone_id,required"`
 	// Value of the Origin Post Quantum Encryption Setting.
 	Value param.Field[OriginPostQuantumEncryptionUpdateParamsValue] `json:"value,required"`
 }
@@ -151,7 +152,7 @@ func (r OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess) IsKnown() bool
 
 type OriginPostQuantumEncryptionGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[cache.CacheVariantIdentifierParam] `path:"zone_id,required"`
 }
 
 type OriginPostQuantumEncryptionGetResponseEnvelope struct {

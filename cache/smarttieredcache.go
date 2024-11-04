@@ -229,7 +229,7 @@ func (r SmartTieredCacheGetResponseValue) IsKnown() bool {
 
 type SmartTieredCacheDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
 }
 
 type SmartTieredCacheDeleteResponseEnvelope struct {
@@ -277,7 +277,7 @@ func (r SmartTieredCacheDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type SmartTieredCacheEditParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
 	// Enable or disable the Smart Tiered Cache
 	Value param.Field[SmartTieredCacheEditParamsValue] `json:"value,required"`
 }
@@ -347,7 +347,7 @@ func (r SmartTieredCacheEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SmartTieredCacheGetParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
 }
 
 type SmartTieredCacheGetResponseEnvelope struct {

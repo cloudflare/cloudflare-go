@@ -36,7 +36,7 @@ func NewRequestPriorityService(opts ...option.RequestOption) (r *RequestPriority
 }
 
 // Create a New Priority Intelligence Requirement
-func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier string, body RequestPriorityNewParams, opts ...option.RequestOption) (res *RequestPriorityNewResponse, err error) {
+func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier string, body RequestPriorityNewParams, opts ...option.RequestOption) (res *Priority, err error) {
 	var env RequestPriorityNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -53,7 +53,7 @@ func (r *RequestPriorityService) New(ctx context.Context, accountIdentifier stri
 }
 
 // Update a Priority Intelligence Requirement
-func (r *RequestPriorityService) Update(ctx context.Context, accountIdentifier string, priorityIdentifer string, body RequestPriorityUpdateParams, opts ...option.RequestOption) (res *RequestPriorityUpdateResponse, err error) {
+func (r *RequestPriorityService) Update(ctx context.Context, accountIdentifier string, priorityIdentifer string, body RequestPriorityUpdateParams, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestPriorityUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -90,7 +90,7 @@ func (r *RequestPriorityService) Delete(ctx context.Context, accountIdentifier s
 }
 
 // Get a Priority Intelligence Requirement
-func (r *RequestPriorityService) Get(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *RequestPriorityGetResponse, err error) {
+func (r *RequestPriorityService) Get(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *Item, err error) {
 	var env RequestPriorityGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -111,7 +111,7 @@ func (r *RequestPriorityService) Get(ctx context.Context, accountIdentifier stri
 }
 
 // Get Priority Intelligence Requirement Quota
-func (r *RequestPriorityService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestPriorityQuotaResponse, err error) {
+func (r *RequestPriorityService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *Quota, err error) {
 	var env RequestPriorityQuotaResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -127,27 +127,30 @@ func (r *RequestPriorityService) Quota(ctx context.Context, accountIdentifier st
 	return
 }
 
-type RequestPriorityNewResponse struct {
+type Label = string
+
+type LabelParam = string
+
+type Priority struct {
 	// UUID
 	ID string `json:"id,required"`
 	// Priority creation time
 	Created time.Time `json:"created,required" format:"date-time"`
 	// List of labels
-	Labels []string `json:"labels,required"`
+	Labels []Label `json:"labels,required"`
 	// Priority
 	Priority int64 `json:"priority,required"`
 	// Requirement
 	Requirement string `json:"requirement,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	TLP RequestPriorityNewResponseTLP `json:"tlp,required"`
+	TLP PriorityTLP `json:"tlp,required"`
 	// Priority last updated time
-	Updated time.Time                      `json:"updated,required" format:"date-time"`
-	JSON    requestPriorityNewResponseJSON `json:"-"`
+	Updated time.Time    `json:"updated,required" format:"date-time"`
+	JSON    priorityJSON `json:"-"`
 }
 
-// requestPriorityNewResponseJSON contains the JSON metadata for the struct
-// [RequestPriorityNewResponse]
-type requestPriorityNewResponseJSON struct {
+// priorityJSON contains the JSON metadata for the struct [Priority]
+type priorityJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Labels      apijson.Field
@@ -159,121 +162,62 @@ type requestPriorityNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RequestPriorityNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Priority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r requestPriorityNewResponseJSON) RawJSON() string {
+func (r priorityJSON) RawJSON() string {
 	return r.raw
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityNewResponseTLP string
+type PriorityTLP string
 
 const (
-	RequestPriorityNewResponseTLPClear       RequestPriorityNewResponseTLP = "clear"
-	RequestPriorityNewResponseTLPAmber       RequestPriorityNewResponseTLP = "amber"
-	RequestPriorityNewResponseTLPAmberStrict RequestPriorityNewResponseTLP = "amber-strict"
-	RequestPriorityNewResponseTLPGreen       RequestPriorityNewResponseTLP = "green"
-	RequestPriorityNewResponseTLPRed         RequestPriorityNewResponseTLP = "red"
+	PriorityTLPClear       PriorityTLP = "clear"
+	PriorityTLPAmber       PriorityTLP = "amber"
+	PriorityTLPAmberStrict PriorityTLP = "amber-strict"
+	PriorityTLPGreen       PriorityTLP = "green"
+	PriorityTLPRed         PriorityTLP = "red"
 )
 
-func (r RequestPriorityNewResponseTLP) IsKnown() bool {
+func (r PriorityTLP) IsKnown() bool {
 	switch r {
-	case RequestPriorityNewResponseTLPClear, RequestPriorityNewResponseTLPAmber, RequestPriorityNewResponseTLPAmberStrict, RequestPriorityNewResponseTLPGreen, RequestPriorityNewResponseTLPRed:
+	case PriorityTLPClear, PriorityTLPAmber, PriorityTLPAmberStrict, PriorityTLPGreen, PriorityTLPRed:
 		return true
 	}
 	return false
 }
 
-type RequestPriorityUpdateResponse struct {
-	// UUID
-	ID string `json:"id,required"`
-	// Request content
-	Content  string    `json:"content,required"`
-	Created  time.Time `json:"created,required" format:"date-time"`
-	Priority time.Time `json:"priority,required" format:"date-time"`
-	// Requested information from request
-	Request string `json:"request,required"`
-	// Brief description of the request
-	Summary string `json:"summary,required"`
+type PriorityEditParam struct {
+	// List of labels
+	Labels param.Field[[]LabelParam] `json:"labels,required"`
+	// Priority
+	Priority param.Field[int64] `json:"priority,required"`
+	// Requirement
+	Requirement param.Field[string] `json:"requirement,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	TLP       RequestPriorityUpdateResponseTLP `json:"tlp,required"`
-	Updated   time.Time                        `json:"updated,required" format:"date-time"`
-	Completed time.Time                        `json:"completed" format:"date-time"`
-	// Tokens for the request messages
-	MessageTokens int64 `json:"message_tokens"`
-	// Readable Request ID
-	ReadableID string `json:"readable_id"`
-	// Request Status
-	Status RequestPriorityUpdateResponseStatus `json:"status"`
-	// Tokens for the request
-	Tokens int64                             `json:"tokens"`
-	JSON   requestPriorityUpdateResponseJSON `json:"-"`
+	TLP param.Field[PriorityEditTLP] `json:"tlp,required"`
 }
 
-// requestPriorityUpdateResponseJSON contains the JSON metadata for the struct
-// [RequestPriorityUpdateResponse]
-type requestPriorityUpdateResponseJSON struct {
-	ID            apijson.Field
-	Content       apijson.Field
-	Created       apijson.Field
-	Priority      apijson.Field
-	Request       apijson.Field
-	Summary       apijson.Field
-	TLP           apijson.Field
-	Updated       apijson.Field
-	Completed     apijson.Field
-	MessageTokens apijson.Field
-	ReadableID    apijson.Field
-	Status        apijson.Field
-	Tokens        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *RequestPriorityUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityUpdateResponseJSON) RawJSON() string {
-	return r.raw
+func (r PriorityEditParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityUpdateResponseTLP string
+type PriorityEditTLP string
 
 const (
-	RequestPriorityUpdateResponseTLPClear       RequestPriorityUpdateResponseTLP = "clear"
-	RequestPriorityUpdateResponseTLPAmber       RequestPriorityUpdateResponseTLP = "amber"
-	RequestPriorityUpdateResponseTLPAmberStrict RequestPriorityUpdateResponseTLP = "amber-strict"
-	RequestPriorityUpdateResponseTLPGreen       RequestPriorityUpdateResponseTLP = "green"
-	RequestPriorityUpdateResponseTLPRed         RequestPriorityUpdateResponseTLP = "red"
+	PriorityEditTLPClear       PriorityEditTLP = "clear"
+	PriorityEditTLPAmber       PriorityEditTLP = "amber"
+	PriorityEditTLPAmberStrict PriorityEditTLP = "amber-strict"
+	PriorityEditTLPGreen       PriorityEditTLP = "green"
+	PriorityEditTLPRed         PriorityEditTLP = "red"
 )
 
-func (r RequestPriorityUpdateResponseTLP) IsKnown() bool {
+func (r PriorityEditTLP) IsKnown() bool {
 	switch r {
-	case RequestPriorityUpdateResponseTLPClear, RequestPriorityUpdateResponseTLPAmber, RequestPriorityUpdateResponseTLPAmberStrict, RequestPriorityUpdateResponseTLPGreen, RequestPriorityUpdateResponseTLPRed:
-		return true
-	}
-	return false
-}
-
-// Request Status
-type RequestPriorityUpdateResponseStatus string
-
-const (
-	RequestPriorityUpdateResponseStatusOpen      RequestPriorityUpdateResponseStatus = "open"
-	RequestPriorityUpdateResponseStatusAccepted  RequestPriorityUpdateResponseStatus = "accepted"
-	RequestPriorityUpdateResponseStatusReported  RequestPriorityUpdateResponseStatus = "reported"
-	RequestPriorityUpdateResponseStatusApproved  RequestPriorityUpdateResponseStatus = "approved"
-	RequestPriorityUpdateResponseStatusCompleted RequestPriorityUpdateResponseStatus = "completed"
-	RequestPriorityUpdateResponseStatusDeclined  RequestPriorityUpdateResponseStatus = "declined"
-)
-
-func (r RequestPriorityUpdateResponseStatus) IsKnown() bool {
-	switch r {
-	case RequestPriorityUpdateResponseStatusOpen, RequestPriorityUpdateResponseStatusAccepted, RequestPriorityUpdateResponseStatusReported, RequestPriorityUpdateResponseStatusApproved, RequestPriorityUpdateResponseStatusCompleted, RequestPriorityUpdateResponseStatusDeclined:
+	case PriorityEditTLPClear, PriorityEditTLPAmber, PriorityEditTLPAmberStrict, PriorityEditTLPGreen, PriorityEditTLPRed:
 		return true
 	}
 	return false
@@ -320,162 +264,12 @@ func (r RequestPriorityDeleteResponseSuccess) IsKnown() bool {
 	return false
 }
 
-type RequestPriorityGetResponse struct {
-	// UUID
-	ID string `json:"id,required"`
-	// Request content
-	Content  string    `json:"content,required"`
-	Created  time.Time `json:"created,required" format:"date-time"`
-	Priority time.Time `json:"priority,required" format:"date-time"`
-	// Requested information from request
-	Request string `json:"request,required"`
-	// Brief description of the request
-	Summary string `json:"summary,required"`
-	// The CISA defined Traffic Light Protocol (TLP)
-	TLP       RequestPriorityGetResponseTLP `json:"tlp,required"`
-	Updated   time.Time                     `json:"updated,required" format:"date-time"`
-	Completed time.Time                     `json:"completed" format:"date-time"`
-	// Tokens for the request messages
-	MessageTokens int64 `json:"message_tokens"`
-	// Readable Request ID
-	ReadableID string `json:"readable_id"`
-	// Request Status
-	Status RequestPriorityGetResponseStatus `json:"status"`
-	// Tokens for the request
-	Tokens int64                          `json:"tokens"`
-	JSON   requestPriorityGetResponseJSON `json:"-"`
-}
-
-// requestPriorityGetResponseJSON contains the JSON metadata for the struct
-// [RequestPriorityGetResponse]
-type requestPriorityGetResponseJSON struct {
-	ID            apijson.Field
-	Content       apijson.Field
-	Created       apijson.Field
-	Priority      apijson.Field
-	Request       apijson.Field
-	Summary       apijson.Field
-	TLP           apijson.Field
-	Updated       apijson.Field
-	Completed     apijson.Field
-	MessageTokens apijson.Field
-	ReadableID    apijson.Field
-	Status        apijson.Field
-	Tokens        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *RequestPriorityGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityGetResponseTLP string
-
-const (
-	RequestPriorityGetResponseTLPClear       RequestPriorityGetResponseTLP = "clear"
-	RequestPriorityGetResponseTLPAmber       RequestPriorityGetResponseTLP = "amber"
-	RequestPriorityGetResponseTLPAmberStrict RequestPriorityGetResponseTLP = "amber-strict"
-	RequestPriorityGetResponseTLPGreen       RequestPriorityGetResponseTLP = "green"
-	RequestPriorityGetResponseTLPRed         RequestPriorityGetResponseTLP = "red"
-)
-
-func (r RequestPriorityGetResponseTLP) IsKnown() bool {
-	switch r {
-	case RequestPriorityGetResponseTLPClear, RequestPriorityGetResponseTLPAmber, RequestPriorityGetResponseTLPAmberStrict, RequestPriorityGetResponseTLPGreen, RequestPriorityGetResponseTLPRed:
-		return true
-	}
-	return false
-}
-
-// Request Status
-type RequestPriorityGetResponseStatus string
-
-const (
-	RequestPriorityGetResponseStatusOpen      RequestPriorityGetResponseStatus = "open"
-	RequestPriorityGetResponseStatusAccepted  RequestPriorityGetResponseStatus = "accepted"
-	RequestPriorityGetResponseStatusReported  RequestPriorityGetResponseStatus = "reported"
-	RequestPriorityGetResponseStatusApproved  RequestPriorityGetResponseStatus = "approved"
-	RequestPriorityGetResponseStatusCompleted RequestPriorityGetResponseStatus = "completed"
-	RequestPriorityGetResponseStatusDeclined  RequestPriorityGetResponseStatus = "declined"
-)
-
-func (r RequestPriorityGetResponseStatus) IsKnown() bool {
-	switch r {
-	case RequestPriorityGetResponseStatusOpen, RequestPriorityGetResponseStatusAccepted, RequestPriorityGetResponseStatusReported, RequestPriorityGetResponseStatusApproved, RequestPriorityGetResponseStatusCompleted, RequestPriorityGetResponseStatusDeclined:
-		return true
-	}
-	return false
-}
-
-type RequestPriorityQuotaResponse struct {
-	// Anniversary date is when annual quota limit is refresh
-	AnniversaryDate time.Time `json:"anniversary_date" format:"date-time"`
-	// Quater anniversary date is when quota limit is refreshed each quarter
-	QuarterAnniversaryDate time.Time `json:"quarter_anniversary_date" format:"date-time"`
-	// Tokens for the quarter
-	Quota int64 `json:"quota"`
-	// Tokens remaining for the quarter
-	Remaining int64                            `json:"remaining"`
-	JSON      requestPriorityQuotaResponseJSON `json:"-"`
-}
-
-// requestPriorityQuotaResponseJSON contains the JSON metadata for the struct
-// [RequestPriorityQuotaResponse]
-type requestPriorityQuotaResponseJSON struct {
-	AnniversaryDate        apijson.Field
-	QuarterAnniversaryDate apijson.Field
-	Quota                  apijson.Field
-	Remaining              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *RequestPriorityQuotaResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestPriorityQuotaResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type RequestPriorityNewParams struct {
-	// List of labels
-	Labels param.Field[[]string] `json:"labels,required"`
-	// Priority
-	Priority param.Field[int64] `json:"priority,required"`
-	// Requirement
-	Requirement param.Field[string] `json:"requirement,required"`
-	// The CISA defined Traffic Light Protocol (TLP)
-	TLP param.Field[RequestPriorityNewParamsTLP] `json:"tlp,required"`
+	PriorityEdit PriorityEditParam `json:"priority_edit,required"`
 }
 
 func (r RequestPriorityNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityNewParamsTLP string
-
-const (
-	RequestPriorityNewParamsTLPClear       RequestPriorityNewParamsTLP = "clear"
-	RequestPriorityNewParamsTLPAmber       RequestPriorityNewParamsTLP = "amber"
-	RequestPriorityNewParamsTLPAmberStrict RequestPriorityNewParamsTLP = "amber-strict"
-	RequestPriorityNewParamsTLPGreen       RequestPriorityNewParamsTLP = "green"
-	RequestPriorityNewParamsTLPRed         RequestPriorityNewParamsTLP = "red"
-)
-
-func (r RequestPriorityNewParamsTLP) IsKnown() bool {
-	switch r {
-	case RequestPriorityNewParamsTLPClear, RequestPriorityNewParamsTLPAmber, RequestPriorityNewParamsTLPAmberStrict, RequestPriorityNewParamsTLPGreen, RequestPriorityNewParamsTLPRed:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.PriorityEdit)
 }
 
 type RequestPriorityNewResponseEnvelope struct {
@@ -483,7 +277,7 @@ type RequestPriorityNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestPriorityNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  RequestPriorityNewResponse                `json:"result"`
+	Result  Priority                                  `json:"result"`
 	JSON    requestPriorityNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -522,37 +316,11 @@ func (r RequestPriorityNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type RequestPriorityUpdateParams struct {
-	// List of labels
-	Labels param.Field[[]string] `json:"labels,required"`
-	// Priority
-	Priority param.Field[int64] `json:"priority,required"`
-	// Requirement
-	Requirement param.Field[string] `json:"requirement,required"`
-	// The CISA defined Traffic Light Protocol (TLP)
-	TLP param.Field[RequestPriorityUpdateParamsTLP] `json:"tlp,required"`
+	PriorityEdit PriorityEditParam `json:"priority_edit,required"`
 }
 
 func (r RequestPriorityUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type RequestPriorityUpdateParamsTLP string
-
-const (
-	RequestPriorityUpdateParamsTLPClear       RequestPriorityUpdateParamsTLP = "clear"
-	RequestPriorityUpdateParamsTLPAmber       RequestPriorityUpdateParamsTLP = "amber"
-	RequestPriorityUpdateParamsTLPAmberStrict RequestPriorityUpdateParamsTLP = "amber-strict"
-	RequestPriorityUpdateParamsTLPGreen       RequestPriorityUpdateParamsTLP = "green"
-	RequestPriorityUpdateParamsTLPRed         RequestPriorityUpdateParamsTLP = "red"
-)
-
-func (r RequestPriorityUpdateParamsTLP) IsKnown() bool {
-	switch r {
-	case RequestPriorityUpdateParamsTLPClear, RequestPriorityUpdateParamsTLPAmber, RequestPriorityUpdateParamsTLPAmberStrict, RequestPriorityUpdateParamsTLPGreen, RequestPriorityUpdateParamsTLPRed:
-		return true
-	}
-	return false
+	return apijson.MarshalRoot(r.PriorityEdit)
 }
 
 type RequestPriorityUpdateResponseEnvelope struct {
@@ -560,7 +328,7 @@ type RequestPriorityUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestPriorityUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  RequestPriorityUpdateResponse                `json:"result"`
+	Result  Item                                         `json:"result"`
 	JSON    requestPriorityUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -603,7 +371,7 @@ type RequestPriorityGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestPriorityGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  RequestPriorityGetResponse                `json:"result"`
+	Result  Item                                      `json:"result"`
 	JSON    requestPriorityGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -646,7 +414,7 @@ type RequestPriorityQuotaResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RequestPriorityQuotaResponseEnvelopeSuccess `json:"success,required"`
-	Result  RequestPriorityQuotaResponse                `json:"result"`
+	Result  Quota                                       `json:"result"`
 	JSON    requestPriorityQuotaResponseEnvelopeJSON    `json:"-"`
 }
 
