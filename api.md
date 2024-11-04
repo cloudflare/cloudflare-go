@@ -644,10 +644,6 @@ Methods:
 
 ## Variants
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache#CacheVariantIdentifierParam">CacheVariantIdentifierParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache">cache</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/cache#CacheVariant">CacheVariant</a>

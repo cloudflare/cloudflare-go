@@ -142,8 +142,6 @@ func (r CacheVariantID) IsKnown() bool {
 	return false
 }
 
-type CacheVariantIdentifierParam = string
-
 // Variant support enables caching variants of images with certain file extensions
 // in addition to the original. This only applies when the origin server sends the
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
@@ -370,7 +368,7 @@ func (r variantGetResponseValueJSON) RawJSON() string {
 
 type VariantDeleteParams struct {
 	// Identifier
-	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type VariantDeleteResponseEnvelope struct {
@@ -423,7 +421,7 @@ func (r VariantDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type VariantEditParams struct {
 	// Identifier
-	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[VariantEditParamsValue] `json:"value,required"`
 }
@@ -523,7 +521,7 @@ func (r VariantEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type VariantGetParams struct {
 	// Identifier
-	ZoneID param.Field[CacheVariantIdentifierParam] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type VariantGetResponseEnvelope struct {
