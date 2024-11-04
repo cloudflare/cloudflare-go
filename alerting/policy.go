@@ -354,7 +354,7 @@ type PolicyFilter struct {
 	// Usage depends on specific alert type
 	PoolID []string `json:"pool_id"`
 	// Usage depends on specific alert type
-	PopName []string `json:"pop_name"`
+	POPName []string `json:"pop_name"`
 	// Used for configuring billing_usage_alert
 	Product []string `json:"product"`
 	// Used for configuring pages_event_alert
@@ -417,7 +417,7 @@ type policyFilterJSON struct {
 	NewStatus                    apijson.Field
 	PacketsPerSecond             apijson.Field
 	PoolID                       apijson.Field
-	PopName                      apijson.Field
+	POPName                      apijson.Field
 	Product                      apijson.Field
 	ProjectID                    apijson.Field
 	Protocol                     apijson.Field
@@ -529,7 +529,7 @@ type PolicyFilterParam struct {
 	// Usage depends on specific alert type
 	PoolID param.Field[[]string] `json:"pool_id"`
 	// Usage depends on specific alert type
-	PopName param.Field[[]string] `json:"pop_name"`
+	POPName param.Field[[]string] `json:"pop_name"`
 	// Used for configuring billing_usage_alert
 	Product param.Field[[]string] `json:"product"`
 	// Used for configuring pages_event_alert

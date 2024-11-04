@@ -41,11 +41,11 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 		}),
 		Description: cloudflare.F("Load Balancer for www.example.com"),
 		LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-			Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+			Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 			PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 		}),
 		Networks: cloudflare.F([]string{"string", "string", "string"}),
-		PopPools: cloudflare.F(map[string][]string{
+		POPPools: cloudflare.F(map[string][]string{
 			"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 			"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 			"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -83,10 +83,10 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 				FallbackPool: cloudflare.F("fallback_pool"),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-					Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+					Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
-				PopPools: cloudflare.F(map[string][]string{
+				POPPools: cloudflare.F(map[string][]string{
 					"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 					"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -138,10 +138,10 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 				FallbackPool: cloudflare.F("fallback_pool"),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-					Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+					Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
-				PopPools: cloudflare.F(map[string][]string{
+				POPPools: cloudflare.F(map[string][]string{
 					"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 					"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -193,10 +193,10 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 				DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 				FallbackPool: cloudflare.F("fallback_pool"),
 				LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-					Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+					Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 					PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 				}),
-				PopPools: cloudflare.F(map[string][]string{
+				POPPools: cloudflare.F(map[string][]string{
 					"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 					"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 					"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -281,11 +281,11 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("Load Balancer for www.example.com"),
 			Enabled:     cloudflare.F(true),
 			LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-				Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+				Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 				PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 			}),
 			Networks: cloudflare.F([]string{"string", "string", "string"}),
-			PopPools: cloudflare.F(map[string][]string{
+			POPPools: cloudflare.F(map[string][]string{
 				"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 				"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 				"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -323,10 +323,10 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F(map[string][]string{
+					POPPools: cloudflare.F(map[string][]string{
 						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -378,10 +378,10 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F(map[string][]string{
+					POPPools: cloudflare.F(map[string][]string{
 						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -433,10 +433,10 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F(map[string][]string{
+					POPPools: cloudflare.F(map[string][]string{
 						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -575,11 +575,11 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 			Enabled:      cloudflare.F(true),
 			FallbackPool: cloudflare.F("fallback_pool"),
 			LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-				Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+				Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 				PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 			}),
 			Name: cloudflare.F("www.example.com"),
-			PopPools: cloudflare.F(map[string][]string{
+			POPPools: cloudflare.F(map[string][]string{
 				"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 				"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 				"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -617,10 +617,10 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F(map[string][]string{
+					POPPools: cloudflare.F(map[string][]string{
 						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -672,10 +672,10 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F(map[string][]string{
+					POPPools: cloudflare.F(map[string][]string{
 						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
@@ -727,10 +727,10 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 					DefaultPools: cloudflare.F([]load_balancers.DefaultPoolsParam{"17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"}),
 					FallbackPool: cloudflare.F("fallback_pool"),
 					LocationStrategy: cloudflare.F(load_balancers.LocationStrategyParam{
-						Mode:      cloudflare.F(load_balancers.LocationStrategyModePop),
+						Mode:      cloudflare.F(load_balancers.LocationStrategyModePOP),
 						PreferECS: cloudflare.F(load_balancers.LocationStrategyPreferECSAlways),
 					}),
-					PopPools: cloudflare.F(map[string][]string{
+					POPPools: cloudflare.F(map[string][]string{
 						"LAX": {"de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"},
 						"LHR": {"abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"},
 						"SJC": {"00920f38ce07c2e2f4df50b1f61d4194"},
