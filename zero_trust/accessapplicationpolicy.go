@@ -263,13 +263,6 @@ func (r accessApplicationPolicyDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessApplicationPolicyNewParams struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -279,12 +272,6 @@ type AccessApplicationPolicyNewParams struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationPolicyNewParamsConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -296,9 +283,6 @@ type AccessApplicationPolicyNewParams struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -306,29 +290,6 @@ type AccessApplicationPolicyNewParams struct {
 }
 
 func (r AccessApplicationPolicyNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationPolicyNewParamsConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationPolicyNewParamsConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationPolicyNewParamsConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationPolicyNewParamsConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationPolicyNewParamsConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -376,13 +337,6 @@ func (r AccessApplicationPolicyNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AccessApplicationPolicyUpdateParams struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -392,12 +346,6 @@ type AccessApplicationPolicyUpdateParams struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationPolicyUpdateParamsConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -409,9 +357,6 @@ type AccessApplicationPolicyUpdateParams struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -419,29 +364,6 @@ type AccessApplicationPolicyUpdateParams struct {
 }
 
 func (r AccessApplicationPolicyUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationPolicyUpdateParamsConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationPolicyUpdateParamsConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationPolicyUpdateParamsConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationPolicyUpdateParamsConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationPolicyUpdateParamsConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

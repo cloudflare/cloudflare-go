@@ -296,17 +296,10 @@ type AppIDParam = string
 
 type ApplicationPolicy struct {
 	// The UUID of the policy
-	ID string `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired bool `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules ApplicationPolicyConnectionRules `json:"connection_rules"`
-	CreatedAt       time.Time                        `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy.
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
@@ -314,47 +307,28 @@ type ApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired bool `json:"isolation_required"`
 	// The name of the Access policy.
 	Name string `json:"name"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired bool `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
-	Require []AccessRule `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration string                `json:"session_duration"`
-	UpdatedAt       time.Time             `json:"updated_at" format:"date-time"`
-	JSON            applicationPolicyJSON `json:"-"`
+	Require   []AccessRule          `json:"require"`
+	UpdatedAt time.Time             `json:"updated_at" format:"date-time"`
+	JSON      applicationPolicyJSON `json:"-"`
 }
 
 // applicationPolicyJSON contains the JSON metadata for the struct
 // [ApplicationPolicy]
 type applicationPolicyJSON struct {
-	ID                           apijson.Field
-	ApprovalGroups               apijson.Field
-	ApprovalRequired             apijson.Field
-	ConnectionRules              apijson.Field
-	CreatedAt                    apijson.Field
-	Decision                     apijson.Field
-	Exclude                      apijson.Field
-	Include                      apijson.Field
-	IsolationRequired            apijson.Field
-	Name                         apijson.Field
-	PurposeJustificationPrompt   apijson.Field
-	PurposeJustificationRequired apijson.Field
-	Require                      apijson.Field
-	SessionDuration              apijson.Field
-	UpdatedAt                    apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *ApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -365,67 +339,11 @@ func (r applicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
-// The rules that define how users may connect to the targets secured by your
-// application.
-type ApplicationPolicyConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH  ApplicationPolicyConnectionRulesSSH  `json:"ssh"`
-	JSON applicationPolicyConnectionRulesJSON `json:"-"`
-}
-
-// applicationPolicyConnectionRulesJSON contains the JSON metadata for the struct
-// [ApplicationPolicyConnectionRules]
-type applicationPolicyConnectionRulesJSON struct {
-	SSH         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ApplicationPolicyConnectionRules) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r applicationPolicyConnectionRulesJSON) RawJSON() string {
-	return r.raw
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type ApplicationPolicyConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames []string                                `json:"usernames,required"`
-	JSON      applicationPolicyConnectionRulesSSHJSON `json:"-"`
-}
-
-// applicationPolicyConnectionRulesSSHJSON contains the JSON metadata for the
-// struct [ApplicationPolicyConnectionRulesSSH]
-type applicationPolicyConnectionRulesSSHJSON struct {
-	Usernames   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ApplicationPolicyConnectionRulesSSH) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r applicationPolicyConnectionRulesSSHJSON) RawJSON() string {
-	return r.raw
-}
-
 type ApplicationPolicyParam struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[ApplicationPolicyConnectionRulesParam] `json:"connection_rules"`
-	// The action Access will take if a user matches this policy.
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision param.Field[Decision] `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
@@ -433,49 +351,14 @@ type ApplicationPolicyParam struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r ApplicationPolicyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type ApplicationPolicyConnectionRulesParam struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[ApplicationPolicyConnectionRulesSSHParam] `json:"ssh"`
-}
-
-func (r ApplicationPolicyConnectionRulesParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type ApplicationPolicyConnectionRulesSSHParam struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r ApplicationPolicyConnectionRulesSSHParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -570,7 +453,8 @@ func (r CORSHeadersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The action Access will take if a user matches this policy.
+// The action Access will take if a user matches this policy. Infrastructure
+// application policies can only use the Allow action.
 type Decision string
 
 const (
@@ -2053,7 +1937,8 @@ type AccessApplicationNewResponse struct {
 	Tags interface{} `json:"tags,required"`
 	// The application type.
 	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationNewResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationNewResponseSaaSApplicationSaaSApp].
@@ -4583,8 +4468,8 @@ type AccessApplicationNewResponseInfrastructureApplication struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                        `json:"name"`
+	Policies []AccessApplicationNewResponseInfrastructureApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
@@ -4662,6 +4547,52 @@ func (r AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProto
 		return true
 	}
 	return false
+}
+
+type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                    `json:"require"`
+	UpdatedAt time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationPolicy]
+type accessApplicationNewResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -4903,7 +4834,8 @@ type AccessApplicationUpdateResponse struct {
 	Tags interface{} `json:"tags,required"`
 	// The application type.
 	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationUpdateResponseSaaSApplicationSaaSApp].
@@ -7434,8 +7366,8 @@ type AccessApplicationUpdateResponseInfrastructureApplication struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                           `json:"name"`
+	Policies []AccessApplicationUpdateResponseInfrastructureApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
@@ -7514,6 +7446,52 @@ func (r AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaPr
 		return true
 	}
 	return false
+}
+
+type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                       `json:"require"`
+	UpdatedAt time.Time                                                          `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationPolicy]
+type accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -7755,7 +7733,8 @@ type AccessApplicationListResponse struct {
 	Tags interface{} `json:"tags,required"`
 	// The application type.
 	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationListResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationListResponseSaaSApplicationSaaSApp].
@@ -10285,8 +10264,8 @@ type AccessApplicationListResponseInfrastructureApplication struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                         `json:"name"`
+	Policies []AccessApplicationListResponseInfrastructureApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
@@ -10364,6 +10343,52 @@ func (r AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProt
 		return true
 	}
 	return false
+}
+
+type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                     `json:"require"`
+	UpdatedAt time.Time                                                        `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationPolicy]
+type accessApplicationListResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -10627,7 +10652,8 @@ type AccessApplicationGetResponse struct {
 	Tags interface{} `json:"tags,required"`
 	// The application type.
 	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationGetResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationGetResponseSaaSApplicationSaaSApp].
@@ -13157,8 +13183,8 @@ type AccessApplicationGetResponseInfrastructureApplication struct {
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                        `json:"name"`
+	Policies []AccessApplicationGetResponseInfrastructureApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
@@ -13236,6 +13262,52 @@ func (r AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProto
 		return true
 	}
 	return false
+}
+
+type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                    `json:"require"`
+	UpdatedAt time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationPolicy]
+type accessApplicationGetResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -13553,7 +13625,7 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
@@ -13595,23 +13667,15 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13653,13 +13717,6 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPoli
 }
 
 type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -13667,12 +13724,6 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -13684,9 +13735,6 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13698,29 +13746,6 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject) Marsh
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -13824,7 +13849,7 @@ type AccessApplicationNewParamsBodySaaSApplication struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
@@ -13856,23 +13881,15 @@ type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13914,13 +13931,6 @@ func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink
 }
 
 type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -13928,12 +13938,6 @@ type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -13945,9 +13949,6 @@ type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13959,29 +13960,6 @@ func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObject) MarshalJSON
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
@@ -14201,7 +14179,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
@@ -14243,23 +14221,15 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14301,13 +14271,6 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPoli
 }
 
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -14315,12 +14278,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -14332,9 +14289,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14346,29 +14300,6 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject) Marsh
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -14504,7 +14435,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
@@ -14546,23 +14477,15 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14604,13 +14527,6 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPoli
 }
 
 type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -14618,12 +14534,6 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -14635,9 +14545,6 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14649,29 +14556,6 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject) Marsh
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -14779,7 +14663,7 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
@@ -14840,23 +14724,15 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14898,13 +14774,6 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPol
 }
 
 type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -14912,12 +14781,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -14929,9 +14792,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14943,29 +14803,6 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject) Mars
 }
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -15073,7 +14910,7 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -15134,23 +14971,15 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy 
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15192,13 +15021,6 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 }
 
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -15206,12 +15028,6 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicie
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -15223,9 +15039,6 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicie
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15237,29 +15050,6 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 }
 
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -15367,7 +15157,7 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -15428,23 +15218,15 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy 
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15486,13 +15268,6 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 }
 
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -15500,12 +15275,6 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicie
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -15517,9 +15286,6 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicie
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15531,29 +15297,6 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 }
 
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -15759,8 +15502,9 @@ type AccessApplicationNewParamsBodyInfrastructureApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
 	// The name of the application.
-	Name     param.Field[string]                   `json:"name"`
-	Policies param.Field[[]ApplicationPolicyParam] `json:"policies"`
+	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application.
+	Policies param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationPolicy] `json:"policies"`
 }
 
 func (r AccessApplicationNewParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
@@ -15797,6 +15541,27 @@ func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaPro
 		return true
 	}
 	return false
+}
+
+type AccessApplicationNewParamsBodyInfrastructureApplicationPolicy struct {
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision param.Field[Decision] `json:"decision,required"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	// The name of the Access policy.
+	Name param.Field[string] `json:"name,required"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationNewResponseEnvelope struct {
@@ -15996,7 +15761,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
@@ -16038,23 +15803,15 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16096,13 +15853,6 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppP
 }
 
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -16110,12 +15860,6 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -16127,9 +15871,6 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16141,29 +15882,6 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject) Ma
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -16267,7 +15985,7 @@ type AccessApplicationUpdateParamsBodySaaSApplication struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
@@ -16299,23 +16017,15 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16357,13 +16067,6 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyL
 }
 
 type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -16371,12 +16074,6 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -16388,9 +16085,6 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16402,29 +16096,6 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject) MarshalJ
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
@@ -16644,7 +16315,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
@@ -16686,23 +16357,15 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16744,13 +16407,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppP
 }
 
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -16758,12 +16414,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -16775,9 +16425,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16789,29 +16436,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject) Ma
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -16947,7 +16571,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
@@ -16989,23 +16613,15 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -17047,13 +16663,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppP
 }
 
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -17061,12 +16670,6 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -17078,9 +16681,6 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -17092,29 +16692,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject) Ma
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -17222,7 +16799,7 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
@@ -17283,23 +16860,15 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -17341,13 +16910,6 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessApp
 }
 
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -17355,12 +16917,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struc
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -17372,9 +16928,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struc
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -17386,29 +16939,6 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject) M
 }
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -17516,7 +17046,7 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -17577,23 +17107,15 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -17635,13 +17157,6 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 }
 
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -17649,12 +17164,6 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -17666,9 +17175,6 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -17680,29 +17186,6 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 }
 
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -17810,7 +17293,7 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -17871,23 +17354,15 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
-	ApprovalRequired param.Field[bool]        `json:"approval_required"`
-	ConnectionRules  param.Field[interface{}] `json:"connection_rules,required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -17929,13 +17404,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 }
 
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -17943,12 +17411,6 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The rules that define how users may connect to the targets secured by your
-	// application.
-	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules] `json:"connection_rules"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -17960,9 +17422,6 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -17974,29 +17433,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
-}
-
-// The rules that define how users may connect to the targets secured by your
-// application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules struct {
-	// The SSH-specific rules that define how users may connect to the targets secured
-	// by your application.
-	SSH param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH] `json:"ssh"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRules) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The SSH-specific rules that define how users may connect to the targets secured
-// by your application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH struct {
-	// Contains the Unix usernames that may be used when connecting over SSH.
-	Usernames param.Field[[]string] `json:"usernames,required"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObjectConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -18202,8 +17638,9 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplication struct {
 	// The application type.
 	Type param.Field[ApplicationType] `json:"type,required"`
 	// The name of the application.
-	Name     param.Field[string]                   `json:"name"`
-	Policies param.Field[[]ApplicationPolicyParam] `json:"policies"`
+	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application.
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy] `json:"policies"`
 }
 
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
@@ -18240,6 +17677,27 @@ func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteria
 		return true
 	}
 	return false
+}
+
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy struct {
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision param.Field[Decision] `json:"decision,required"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	// The name of the Access policy.
+	Name param.Field[string] `json:"name,required"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {
