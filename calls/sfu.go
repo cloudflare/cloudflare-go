@@ -17,29 +17,29 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
-// SfuService contains methods and other services that help with interacting with
+// SFUService contains methods and other services that help with interacting with
 // the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewSfuService] method instead.
-type SfuService struct {
+// the [NewSFUService] method instead.
+type SFUService struct {
 	Options []option.RequestOption
 }
 
-// NewSfuService generates a new service that applies the given options to each
+// NewSFUService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewSfuService(opts ...option.RequestOption) (r *SfuService) {
-	r = &SfuService{}
+func NewSFUService(opts ...option.RequestOption) (r *SFUService) {
+	r = &SFUService{}
 	r.Options = opts
 	return
 }
 
 // Creates a new Cloudflare calls app. An app is an unique enviroment where each
 // Session can access all Tracks within the app.
-func (r *SfuService) New(ctx context.Context, params SfuNewParams, opts ...option.RequestOption) (res *SfuNewResponse, err error) {
-	var env SfuNewResponseEnvelope
+func (r *SFUService) New(ctx context.Context, params SFUNewParams, opts ...option.RequestOption) (res *SFUNewResponse, err error) {
+	var env SFUNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -55,8 +55,8 @@ func (r *SfuService) New(ctx context.Context, params SfuNewParams, opts ...optio
 }
 
 // Edit details for a single app.
-func (r *SfuService) Update(ctx context.Context, appID string, params SfuUpdateParams, opts ...option.RequestOption) (res *SfuUpdateResponse, err error) {
-	var env SfuUpdateResponseEnvelope
+func (r *SFUService) Update(ctx context.Context, appID string, params SFUUpdateParams, opts ...option.RequestOption) (res *SFUUpdateResponse, err error) {
+	var env SFUUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -76,7 +76,7 @@ func (r *SfuService) Update(ctx context.Context, appID string, params SfuUpdateP
 }
 
 // Lists all apps in the Cloudflare account
-func (r *SfuService) List(ctx context.Context, query SfuListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SfuListResponse], err error) {
+func (r *SFUService) List(ctx context.Context, query SFUListParams, opts ...option.RequestOption) (res *pagination.SinglePage[SFUListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -98,13 +98,13 @@ func (r *SfuService) List(ctx context.Context, query SfuListParams, opts ...opti
 }
 
 // Lists all apps in the Cloudflare account
-func (r *SfuService) ListAutoPaging(ctx context.Context, query SfuListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SfuListResponse] {
+func (r *SFUService) ListAutoPaging(ctx context.Context, query SFUListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[SFUListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes an app from Cloudflare Calls
-func (r *SfuService) Delete(ctx context.Context, appID string, body SfuDeleteParams, opts ...option.RequestOption) (res *SfuDeleteResponse, err error) {
-	var env SfuDeleteResponseEnvelope
+func (r *SFUService) Delete(ctx context.Context, appID string, body SFUDeleteParams, opts ...option.RequestOption) (res *SFUDeleteResponse, err error) {
+	var env SFUDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -124,8 +124,8 @@ func (r *SfuService) Delete(ctx context.Context, appID string, body SfuDeletePar
 }
 
 // Fetches details for a single Calls app.
-func (r *SfuService) Get(ctx context.Context, appID string, query SfuGetParams, opts ...option.RequestOption) (res *SfuGetResponse, err error) {
-	var env SfuGetResponseEnvelope
+func (r *SFUService) Get(ctx context.Context, appID string, query SFUGetParams, opts ...option.RequestOption) (res *SFUGetResponse, err error) {
+	var env SFUGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -144,7 +144,7 @@ func (r *SfuService) Get(ctx context.Context, appID string, query SfuGetParams, 
 	return
 }
 
-type SfuNewResponse struct {
+type SFUNewResponse struct {
 	// The date and time the item was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The date and time the item was last modified.
@@ -158,7 +158,7 @@ type SfuNewResponse struct {
 	JSON sfuNewResponseJSON `json:"-"`
 }
 
-// sfuNewResponseJSON contains the JSON metadata for the struct [SfuNewResponse]
+// sfuNewResponseJSON contains the JSON metadata for the struct [SFUNewResponse]
 type sfuNewResponseJSON struct {
 	Created     apijson.Field
 	Modified    apijson.Field
@@ -169,7 +169,7 @@ type sfuNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SfuNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SFUNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -177,7 +177,7 @@ func (r sfuNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SfuUpdateResponse struct {
+type SFUUpdateResponse struct {
 	// The date and time the item was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The date and time the item was last modified.
@@ -190,7 +190,7 @@ type SfuUpdateResponse struct {
 }
 
 // sfuUpdateResponseJSON contains the JSON metadata for the struct
-// [SfuUpdateResponse]
+// [SFUUpdateResponse]
 type sfuUpdateResponseJSON struct {
 	Created     apijson.Field
 	Modified    apijson.Field
@@ -200,7 +200,7 @@ type sfuUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SfuUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SFUUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -208,7 +208,7 @@ func (r sfuUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SfuListResponse struct {
+type SFUListResponse struct {
 	// The date and time the item was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The date and time the item was last modified.
@@ -220,7 +220,7 @@ type SfuListResponse struct {
 	JSON sfuListResponseJSON `json:"-"`
 }
 
-// sfuListResponseJSON contains the JSON metadata for the struct [SfuListResponse]
+// sfuListResponseJSON contains the JSON metadata for the struct [SFUListResponse]
 type sfuListResponseJSON struct {
 	Created     apijson.Field
 	Modified    apijson.Field
@@ -230,7 +230,7 @@ type sfuListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SfuListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SFUListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -238,7 +238,7 @@ func (r sfuListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SfuDeleteResponse struct {
+type SFUDeleteResponse struct {
 	// The date and time the item was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The date and time the item was last modified.
@@ -251,7 +251,7 @@ type SfuDeleteResponse struct {
 }
 
 // sfuDeleteResponseJSON contains the JSON metadata for the struct
-// [SfuDeleteResponse]
+// [SFUDeleteResponse]
 type sfuDeleteResponseJSON struct {
 	Created     apijson.Field
 	Modified    apijson.Field
@@ -261,7 +261,7 @@ type sfuDeleteResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SfuDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SFUDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -269,7 +269,7 @@ func (r sfuDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SfuGetResponse struct {
+type SFUGetResponse struct {
 	// The date and time the item was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The date and time the item was last modified.
@@ -281,7 +281,7 @@ type SfuGetResponse struct {
 	JSON sfuGetResponseJSON `json:"-"`
 }
 
-// sfuGetResponseJSON contains the JSON metadata for the struct [SfuGetResponse]
+// sfuGetResponseJSON contains the JSON metadata for the struct [SFUGetResponse]
 type sfuGetResponseJSON struct {
 	Created     apijson.Field
 	Modified    apijson.Field
@@ -291,7 +291,7 @@ type sfuGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SfuGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SFUGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -299,28 +299,28 @@ func (r sfuGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type SfuNewParams struct {
+type SFUNewParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A short description of Calls app, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r SfuNewParams) MarshalJSON() (data []byte, err error) {
+func (r SFUNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SfuNewResponseEnvelope struct {
+type SFUNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success SfuNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  SfuNewResponse                `json:"result"`
+	Success SFUNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  SFUNewResponse                `json:"result"`
 	JSON    sfuNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // sfuNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SfuNewResponseEnvelope]
+// [SFUNewResponseEnvelope]
 type sfuNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -330,7 +330,7 @@ type sfuNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SfuNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SFUNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -339,42 +339,42 @@ func (r sfuNewResponseEnvelopeJSON) RawJSON() string {
 }
 
 // Whether the API call was successful
-type SfuNewResponseEnvelopeSuccess bool
+type SFUNewResponseEnvelopeSuccess bool
 
 const (
-	SfuNewResponseEnvelopeSuccessTrue SfuNewResponseEnvelopeSuccess = true
+	SFUNewResponseEnvelopeSuccessTrue SFUNewResponseEnvelopeSuccess = true
 )
 
-func (r SfuNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r SFUNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SfuNewResponseEnvelopeSuccessTrue:
+	case SFUNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SfuUpdateParams struct {
+type SFUUpdateParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A short description of Calls app, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r SfuUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SFUUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SfuUpdateResponseEnvelope struct {
+type SFUUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success SfuUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  SfuUpdateResponse                `json:"result"`
+	Success SFUUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  SFUUpdateResponse                `json:"result"`
 	JSON    sfuUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // sfuUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SfuUpdateResponseEnvelope]
+// [SFUUpdateResponseEnvelope]
 type sfuUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -384,7 +384,7 @@ type sfuUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SfuUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SFUUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -393,41 +393,41 @@ func (r sfuUpdateResponseEnvelopeJSON) RawJSON() string {
 }
 
 // Whether the API call was successful
-type SfuUpdateResponseEnvelopeSuccess bool
+type SFUUpdateResponseEnvelopeSuccess bool
 
 const (
-	SfuUpdateResponseEnvelopeSuccessTrue SfuUpdateResponseEnvelopeSuccess = true
+	SFUUpdateResponseEnvelopeSuccessTrue SFUUpdateResponseEnvelopeSuccess = true
 )
 
-func (r SfuUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r SFUUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SfuUpdateResponseEnvelopeSuccessTrue:
+	case SFUUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SfuListParams struct {
+type SFUListParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SfuDeleteParams struct {
+type SFUDeleteParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SfuDeleteResponseEnvelope struct {
+type SFUDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success SfuDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  SfuDeleteResponse                `json:"result"`
+	Success SFUDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  SFUDeleteResponse                `json:"result"`
 	JSON    sfuDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
 // sfuDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SfuDeleteResponseEnvelope]
+// [SFUDeleteResponseEnvelope]
 type sfuDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -437,7 +437,7 @@ type sfuDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SfuDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SFUDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -446,36 +446,36 @@ func (r sfuDeleteResponseEnvelopeJSON) RawJSON() string {
 }
 
 // Whether the API call was successful
-type SfuDeleteResponseEnvelopeSuccess bool
+type SFUDeleteResponseEnvelopeSuccess bool
 
 const (
-	SfuDeleteResponseEnvelopeSuccessTrue SfuDeleteResponseEnvelopeSuccess = true
+	SFUDeleteResponseEnvelopeSuccessTrue SFUDeleteResponseEnvelopeSuccess = true
 )
 
-func (r SfuDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r SFUDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SfuDeleteResponseEnvelopeSuccessTrue:
+	case SFUDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type SfuGetParams struct {
+type SFUGetParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type SfuGetResponseEnvelope struct {
+type SFUGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success SfuGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  SfuGetResponse                `json:"result"`
+	Success SFUGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  SFUGetResponse                `json:"result"`
 	JSON    sfuGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // sfuGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SfuGetResponseEnvelope]
+// [SFUGetResponseEnvelope]
 type sfuGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -485,7 +485,7 @@ type sfuGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SfuGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SFUGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -494,15 +494,15 @@ func (r sfuGetResponseEnvelopeJSON) RawJSON() string {
 }
 
 // Whether the API call was successful
-type SfuGetResponseEnvelopeSuccess bool
+type SFUGetResponseEnvelopeSuccess bool
 
 const (
-	SfuGetResponseEnvelopeSuccessTrue SfuGetResponseEnvelopeSuccess = true
+	SFUGetResponseEnvelopeSuccessTrue SFUGetResponseEnvelopeSuccess = true
 )
 
-func (r SfuGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r SFUGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case SfuGetResponseEnvelopeSuccessTrue:
+	case SFUGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
