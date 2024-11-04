@@ -379,9 +379,10 @@ func (r settingDomainDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SettingDomainEditParams struct {
 	// Account Identifier
-	AccountID    param.Field[string] `path:"account_id,required"`
-	Domain       param.Field[string] `json:"domain"`
-	LookbackHops param.Field[int64]  `json:"lookback_hops"`
+	AccountID     param.Field[string] `path:"account_id,required"`
+	Domain        param.Field[string] `json:"domain"`
+	IntegrationID param.Field[string] `json:"integration_id" format:"uuid"`
+	LookbackHops  param.Field[int64]  `json:"lookback_hops"`
 }
 
 func (r SettingDomainEditParams) MarshalJSON() (data []byte, err error) {
