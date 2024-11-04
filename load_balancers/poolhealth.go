@@ -107,7 +107,7 @@ type PoolHealthGetResponse struct {
 	// Pool ID
 	PoolID string `json:"pool_id"`
 	// List of regions and associated health status.
-	PopHealth PoolHealthGetResponsePopHealth `json:"pop_health"`
+	POPHealth PoolHealthGetResponsePOPHealth `json:"pop_health"`
 	JSON      poolHealthGetResponseJSON      `json:"-"`
 }
 
@@ -115,7 +115,7 @@ type PoolHealthGetResponse struct {
 // [PoolHealthGetResponse]
 type poolHealthGetResponseJSON struct {
 	PoolID      apijson.Field
-	PopHealth   apijson.Field
+	POPHealth   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -129,52 +129,52 @@ func (r poolHealthGetResponseJSON) RawJSON() string {
 }
 
 // List of regions and associated health status.
-type PoolHealthGetResponsePopHealth struct {
+type PoolHealthGetResponsePOPHealth struct {
 	// Whether health check in region is healthy.
 	Healthy bool                                   `json:"healthy"`
-	Origins []PoolHealthGetResponsePopHealthOrigin `json:"origins"`
-	JSON    poolHealthGetResponsePopHealthJSON     `json:"-"`
+	Origins []PoolHealthGetResponsePOPHealthOrigin `json:"origins"`
+	JSON    poolHealthGetResponsePOPHealthJSON     `json:"-"`
 }
 
-// poolHealthGetResponsePopHealthJSON contains the JSON metadata for the struct
-// [PoolHealthGetResponsePopHealth]
-type poolHealthGetResponsePopHealthJSON struct {
+// poolHealthGetResponsePOPHealthJSON contains the JSON metadata for the struct
+// [PoolHealthGetResponsePOPHealth]
+type poolHealthGetResponsePOPHealthJSON struct {
 	Healthy     apijson.Field
 	Origins     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PoolHealthGetResponsePopHealth) UnmarshalJSON(data []byte) (err error) {
+func (r *PoolHealthGetResponsePOPHealth) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r poolHealthGetResponsePopHealthJSON) RawJSON() string {
+func (r poolHealthGetResponsePOPHealthJSON) RawJSON() string {
 	return r.raw
 }
 
-type PoolHealthGetResponsePopHealthOrigin struct {
-	IP   PoolHealthGetResponsePopHealthOriginsIP  `json:"ip"`
-	JSON poolHealthGetResponsePopHealthOriginJSON `json:"-"`
+type PoolHealthGetResponsePOPHealthOrigin struct {
+	IP   PoolHealthGetResponsePOPHealthOriginsIP  `json:"ip"`
+	JSON poolHealthGetResponsePOPHealthOriginJSON `json:"-"`
 }
 
-// poolHealthGetResponsePopHealthOriginJSON contains the JSON metadata for the
-// struct [PoolHealthGetResponsePopHealthOrigin]
-type poolHealthGetResponsePopHealthOriginJSON struct {
+// poolHealthGetResponsePOPHealthOriginJSON contains the JSON metadata for the
+// struct [PoolHealthGetResponsePOPHealthOrigin]
+type poolHealthGetResponsePOPHealthOriginJSON struct {
 	IP          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PoolHealthGetResponsePopHealthOrigin) UnmarshalJSON(data []byte) (err error) {
+func (r *PoolHealthGetResponsePOPHealthOrigin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r poolHealthGetResponsePopHealthOriginJSON) RawJSON() string {
+func (r poolHealthGetResponsePOPHealthOriginJSON) RawJSON() string {
 	return r.raw
 }
 
-type PoolHealthGetResponsePopHealthOriginsIP struct {
+type PoolHealthGetResponsePOPHealthOriginsIP struct {
 	// Failure reason.
 	FailureReason string `json:"failure_reason"`
 	// Origin health status.
@@ -183,12 +183,12 @@ type PoolHealthGetResponsePopHealthOriginsIP struct {
 	ResponseCode float64 `json:"response_code"`
 	// Origin RTT (Round Trip Time) response.
 	RTT  string                                      `json:"rtt"`
-	JSON poolHealthGetResponsePopHealthOriginsIPJSON `json:"-"`
+	JSON poolHealthGetResponsePOPHealthOriginsIPJSON `json:"-"`
 }
 
-// poolHealthGetResponsePopHealthOriginsIPJSON contains the JSON metadata for the
-// struct [PoolHealthGetResponsePopHealthOriginsIP]
-type poolHealthGetResponsePopHealthOriginsIPJSON struct {
+// poolHealthGetResponsePOPHealthOriginsIPJSON contains the JSON metadata for the
+// struct [PoolHealthGetResponsePOPHealthOriginsIP]
+type poolHealthGetResponsePOPHealthOriginsIPJSON struct {
 	FailureReason apijson.Field
 	Healthy       apijson.Field
 	ResponseCode  apijson.Field
@@ -197,11 +197,11 @@ type poolHealthGetResponsePopHealthOriginsIPJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *PoolHealthGetResponsePopHealthOriginsIP) UnmarshalJSON(data []byte) (err error) {
+func (r *PoolHealthGetResponsePOPHealthOriginsIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r poolHealthGetResponsePopHealthOriginsIPJSON) RawJSON() string {
+func (r poolHealthGetResponsePOPHealthOriginsIPJSON) RawJSON() string {
 	return r.raw
 }
 
