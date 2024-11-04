@@ -381,7 +381,7 @@ type LoadBalancer struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools map[string][]string `json:"pop_pools"`
+	POPPools map[string][]string `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied bool `json:"proxied"`
 	// Configures pool weights.
@@ -480,7 +480,7 @@ type loadBalancerJSON struct {
 	ModifiedOn                apijson.Field
 	Name                      apijson.Field
 	Networks                  apijson.Field
-	PopPools                  apijson.Field
+	POPPools                  apijson.Field
 	Proxied                   apijson.Field
 	RandomSteering            apijson.Field
 	RegionPools               apijson.Field
@@ -643,13 +643,13 @@ func (r locationStrategyJSON) RawJSON() string {
 type LocationStrategyMode string
 
 const (
-	LocationStrategyModePop        LocationStrategyMode = "pop"
+	LocationStrategyModePOP        LocationStrategyMode = "pop"
 	LocationStrategyModeResolverIP LocationStrategyMode = "resolver_ip"
 )
 
 func (r LocationStrategyMode) IsKnown() bool {
 	switch r {
-	case LocationStrategyModePop, LocationStrategyModeResolverIP:
+	case LocationStrategyModePOP, LocationStrategyModeResolverIP:
 		return true
 	}
 	return false
@@ -1090,7 +1090,7 @@ type RulesOverrides struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools map[string][]string `json:"pop_pools"`
+	POPPools map[string][]string `json:"pop_pools"`
 	// Configures pool weights.
 	//
 	//   - `steering_policy="random"`: A random pool is selected with probability
@@ -1177,7 +1177,7 @@ type rulesOverridesJSON struct {
 	DefaultPools              apijson.Field
 	FallbackPool              apijson.Field
 	LocationStrategy          apijson.Field
-	PopPools                  apijson.Field
+	POPPools                  apijson.Field
 	RandomSteering            apijson.Field
 	RegionPools               apijson.Field
 	SessionAffinity           apijson.Field
@@ -1276,7 +1276,7 @@ type RulesOverridesParam struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[map[string][]string] `json:"pop_pools"`
+	POPPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Configures pool weights.
 	//
 	//   - `steering_policy="random"`: A random pool is selected with probability
@@ -1686,7 +1686,7 @@ type LoadBalancerNewParams struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[map[string][]string] `json:"pop_pools"`
+	POPPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -1853,7 +1853,7 @@ type LoadBalancerUpdateParams struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[map[string][]string] `json:"pop_pools"`
+	POPPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
@@ -2069,7 +2069,7 @@ type LoadBalancerEditParams struct {
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[map[string][]string] `json:"pop_pools"`
+	POPPools param.Field[map[string][]string] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
 	// Configures pool weights.
