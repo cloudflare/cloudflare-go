@@ -743,9 +743,9 @@ func (r attackLayer7SummaryIPVersionResponseSummary0JSON) RawJSON() string {
 }
 
 type AttackLayer7SummaryManagedRulesResponse struct {
-	Meta     AttackLayer7SummaryManagedRulesResponseMeta     `json:"meta,required"`
-	Summary0 AttackLayer7SummaryManagedRulesResponseSummary0 `json:"summary_0,required"`
-	JSON     attackLayer7SummaryManagedRulesResponseJSON     `json:"-"`
+	Meta     AttackLayer7SummaryManagedRulesResponseMeta `json:"meta,required"`
+	Summary0 map[string][]string                         `json:"summary_0,required"`
+	JSON     attackLayer7SummaryManagedRulesResponseJSON `json:"-"`
 }
 
 // attackLayer7SummaryManagedRulesResponseJSON contains the JSON metadata for the
@@ -872,29 +872,6 @@ func (r *AttackLayer7SummaryManagedRulesResponseMetaConfidenceInfoAnnotation) Un
 }
 
 func (r attackLayer7SummaryManagedRulesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AttackLayer7SummaryManagedRulesResponseSummary0 struct {
-	Bot         string                                              `json:"Bot,required"`
-	HTTPAnomaly string                                              `json:"HTTP Anomaly,required"`
-	JSON        attackLayer7SummaryManagedRulesResponseSummary0JSON `json:"-"`
-}
-
-// attackLayer7SummaryManagedRulesResponseSummary0JSON contains the JSON metadata
-// for the struct [AttackLayer7SummaryManagedRulesResponseSummary0]
-type attackLayer7SummaryManagedRulesResponseSummary0JSON struct {
-	Bot         apijson.Field
-	HTTPAnomaly apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AttackLayer7SummaryManagedRulesResponseSummary0) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r attackLayer7SummaryManagedRulesResponseSummary0JSON) RawJSON() string {
 	return r.raw
 }
 
