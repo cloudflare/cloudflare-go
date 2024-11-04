@@ -515,15 +515,14 @@ func (r attackLayer7TimeseriesGroupManagedRulesResponseJSON) RawJSON() string {
 }
 
 type AttackLayer7TimeseriesGroupManagedRulesResponseSerie0 struct {
-	Bot        []string                                                  `json:"Bot,required"`
-	Timestamps []string                                                  `json:"timestamps,required"`
-	JSON       attackLayer7TimeseriesGroupManagedRulesResponseSerie0JSON `json:"-"`
+	Timestamps  []string                                                  `json:"timestamps,required"`
+	ExtraFields map[string][]string                                       `json:"-,extras"`
+	JSON        attackLayer7TimeseriesGroupManagedRulesResponseSerie0JSON `json:"-"`
 }
 
 // attackLayer7TimeseriesGroupManagedRulesResponseSerie0JSON contains the JSON
 // metadata for the struct [AttackLayer7TimeseriesGroupManagedRulesResponseSerie0]
 type attackLayer7TimeseriesGroupManagedRulesResponseSerie0JSON struct {
-	Bot         apijson.Field
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
