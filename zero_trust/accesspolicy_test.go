@@ -44,21 +44,6 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 			}),
 		}}),
 		Name: cloudflare.F("Allow devs"),
-		ApprovalGroups: cloudflare.F([]zero_trust.ApprovalGroupParam{{
-			ApprovalsNeeded: cloudflare.F(1.000000),
-			EmailAddresses:  cloudflare.F([]string{"test1@cloudflare.com", "test2@cloudflare.com"}),
-			EmailListUUID:   cloudflare.F("email_list_uuid"),
-		}, {
-			ApprovalsNeeded: cloudflare.F(3.000000),
-			EmailAddresses:  cloudflare.F([]string{"test@cloudflare.com", "test2@cloudflare.com"}),
-			EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
-		}}),
-		ApprovalRequired: cloudflare.F(true),
-		ConnectionRules: cloudflare.F(zero_trust.AccessPolicyNewParamsConnectionRules{
-			SSH: cloudflare.F(zero_trust.AccessPolicyNewParamsConnectionRulesSSH{
-				Usernames: cloudflare.F([]string{"root", "ubuntu"}),
-			}),
-		}),
 		Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
@@ -72,9 +57,6 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 				Email: cloudflare.F("test@example.com"),
 			}),
 		}}),
-		IsolationRequired:            cloudflare.F(false),
-		PurposeJustificationPrompt:   cloudflare.F("Please enter a justification for entering this protected domain."),
-		PurposeJustificationRequired: cloudflare.F(true),
 		Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
@@ -88,7 +70,6 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 				Email: cloudflare.F("test@example.com"),
 			}),
 		}}),
-		SessionDuration: cloudflare.F("24h"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -132,21 +113,6 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 				}),
 			}}),
 			Name: cloudflare.F("Allow devs"),
-			ApprovalGroups: cloudflare.F([]zero_trust.ApprovalGroupParam{{
-				ApprovalsNeeded: cloudflare.F(1.000000),
-				EmailAddresses:  cloudflare.F([]string{"test1@cloudflare.com", "test2@cloudflare.com"}),
-				EmailListUUID:   cloudflare.F("email_list_uuid"),
-			}, {
-				ApprovalsNeeded: cloudflare.F(3.000000),
-				EmailAddresses:  cloudflare.F([]string{"test@cloudflare.com", "test2@cloudflare.com"}),
-				EmailListUUID:   cloudflare.F("597147a1-976b-4ef2-9af0-81d5d007fc34"),
-			}}),
-			ApprovalRequired: cloudflare.F(true),
-			ConnectionRules: cloudflare.F(zero_trust.AccessPolicyUpdateParamsConnectionRules{
-				SSH: cloudflare.F(zero_trust.AccessPolicyUpdateParamsConnectionRulesSSH{
-					Usernames: cloudflare.F([]string{"root", "ubuntu"}),
-				}),
-			}),
 			Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
@@ -160,9 +126,6 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 					Email: cloudflare.F("test@example.com"),
 				}),
 			}}),
-			IsolationRequired:            cloudflare.F(false),
-			PurposeJustificationPrompt:   cloudflare.F("Please enter a justification for entering this protected domain."),
-			PurposeJustificationRequired: cloudflare.F(true),
 			Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
@@ -176,7 +139,6 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 					Email: cloudflare.F("test@example.com"),
 				}),
 			}}),
-			SessionDuration: cloudflare.F("24h"),
 		},
 	)
 	if err != nil {
