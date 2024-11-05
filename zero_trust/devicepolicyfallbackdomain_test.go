@@ -32,7 +32,7 @@ func TestDevicePolicyFallbackDomainUpdate(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePolicyFallbackDomainUpdateParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-			Body: []zero_trust.FallbackDomainParam{{
+			Domains: []zero_trust.FallbackDomainParam{{
 				Suffix:      cloudflare.F("example.com"),
 				Description: cloudflare.F("Domain bypass for local development"),
 				DNSServer:   cloudflare.F([]string{"1.1.1.1", "1.1.1.1", "1.1.1.1"}),
