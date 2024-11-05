@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestAccessRuleNewWithOptionalParams(t *testing.T) {
+func TestWAFOverrideNew(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,14 +28,9 @@ func TestAccessRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.AccessRules.New(context.TODO(), firewall.AccessRuleNewParams{
-		Configuration: cloudflare.F[firewall.AccessRuleNewParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
-			Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
-			Value:  cloudflare.F("198.51.100.4"),
-		}),
-		Mode:      cloudflare.F(firewall.AccessRuleNewParamsModeBlock),
-		AccountID: cloudflare.F("account_id"),
-		Notes:     cloudflare.F("This rule is enabled because of an event that occurred on date X."),
+	_, err := client.Firewall.WAF.Overrides.New(context.TODO(), firewall.WAFOverrideNewParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		URLs:   cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -46,7 +41,7 @@ func TestAccessRuleNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessRuleListWithOptionalParams(t *testing.T) {
+func TestWAFOverrideUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -60,84 +55,23 @@ func TestAccessRuleListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.AccessRules.List(context.TODO(), firewall.AccessRuleListParams{
-		AccountID: cloudflare.F("account_id"),
-		Configuration: cloudflare.F(firewall.AccessRuleListParamsConfiguration{
-			Target: cloudflare.F(firewall.AccessRuleListParamsConfigurationTargetIP),
-			Value:  cloudflare.F("198.51.100.4"),
-		}),
-		Direction: cloudflare.F(firewall.AccessRuleListParamsDirectionAsc),
-		Match:     cloudflare.F(firewall.AccessRuleListParamsMatchAny),
-		Mode:      cloudflare.F(firewall.AccessRuleListParamsModeBlock),
-		Notes:     cloudflare.F("my note"),
-		Order:     cloudflare.F(firewall.AccessRuleListParamsOrderConfigurationTarget),
-		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(20.000000),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestAccessRuleDeleteWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Firewall.AccessRules.Delete(
+	_, err := client.Firewall.WAF.Overrides.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		firewall.AccessRuleDeleteParams{
-			AccountID: cloudflare.F("account_id"),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestAccessRuleEditWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Firewall.AccessRules.Edit(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		firewall.AccessRuleEditParams{
-			Configuration: cloudflare.F[firewall.AccessRuleEditParamsConfigurationUnion](firewall.AccessRuleIPConfigurationParam{
-				Target: cloudflare.F(firewall.AccessRuleIPConfigurationTargetIP),
-				Value:  cloudflare.F("198.51.100.4"),
+		"de677e5818985db1285d0e80225f06e5",
+		firewall.WAFOverrideUpdateParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			RewriteAction: cloudflare.F(firewall.RewriteActionParam{
+				Block:     cloudflare.F(firewall.RewriteActionBlockChallenge),
+				Challenge: cloudflare.F(firewall.RewriteActionChallengeChallenge),
+				Default:   cloudflare.F(firewall.RewriteActionDefaultChallenge),
+				Disable:   cloudflare.F(firewall.RewriteActionDisableChallenge),
+				Simulate:  cloudflare.F(firewall.RewriteActionSimulateChallenge),
 			}),
-			Mode:      cloudflare.F(firewall.AccessRuleEditParamsModeBlock),
-			AccountID: cloudflare.F("account_id"),
-			Notes:     cloudflare.F("This rule is enabled because of an event that occurred on date X."),
+			Rules: cloudflare.F(firewall.WAFRuleParam{
+				"100015": firewall.WAFRuleItemChallenge,
+			}),
+			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
 		},
 	)
 	if err != nil {
@@ -149,8 +83,7 @@ func TestAccessRuleEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessRuleGetWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
+func TestWAFOverrideListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -163,11 +96,67 @@ func TestAccessRuleGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.AccessRules.Get(
+	_, err := client.Firewall.WAF.Overrides.List(context.TODO(), firewall.WAFOverrideListParams{
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:    cloudflare.F(1.000000),
+		PerPage: cloudflare.F(5.000000),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestWAFOverrideDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Firewall.WAF.Overrides.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		firewall.AccessRuleGetParams{
-			AccountID: cloudflare.F("account_id"),
+		"de677e5818985db1285d0e80225f06e5",
+		firewall.WAFOverrideDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestWAFOverrideGet(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Firewall.WAF.Overrides.Get(
+		context.TODO(),
+		"de677e5818985db1285d0e80225f06e5",
+		firewall.WAFOverrideGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
