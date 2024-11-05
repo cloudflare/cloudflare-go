@@ -152,11 +152,11 @@ func (r FallbackDomainParam) MarshalJSON() (data []byte, err error) {
 
 type DevicePolicyFallbackDomainUpdateParams struct {
 	AccountID param.Field[string]   `path:"account_id,required"`
-	Body      []FallbackDomainParam `json:"body,required"`
+	Domains   []FallbackDomainParam `json:"domains,required"`
 }
 
 func (r DevicePolicyFallbackDomainUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r.Domains)
 }
 
 type DevicePolicyFallbackDomainUpdateResponseEnvelope struct {
