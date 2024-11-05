@@ -296,14 +296,10 @@ type AppIDParam = string
 
 type ApplicationPolicy struct {
 	// The UUID of the policy
-	ID string `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired bool      `json:"approval_required"`
-	CreatedAt        time.Time `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy.
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
@@ -311,46 +307,28 @@ type ApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired bool `json:"isolation_required"`
 	// The name of the Access policy.
 	Name string `json:"name"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired bool `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
-	Require []AccessRule `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration string                `json:"session_duration"`
-	UpdatedAt       time.Time             `json:"updated_at" format:"date-time"`
-	JSON            applicationPolicyJSON `json:"-"`
+	Require   []AccessRule          `json:"require"`
+	UpdatedAt time.Time             `json:"updated_at" format:"date-time"`
+	JSON      applicationPolicyJSON `json:"-"`
 }
 
 // applicationPolicyJSON contains the JSON metadata for the struct
 // [ApplicationPolicy]
 type applicationPolicyJSON struct {
-	ID                           apijson.Field
-	ApprovalGroups               apijson.Field
-	ApprovalRequired             apijson.Field
-	CreatedAt                    apijson.Field
-	Decision                     apijson.Field
-	Exclude                      apijson.Field
-	Include                      apijson.Field
-	IsolationRequired            apijson.Field
-	Name                         apijson.Field
-	PurposeJustificationPrompt   apijson.Field
-	PurposeJustificationRequired apijson.Field
-	Require                      apijson.Field
-	SessionDuration              apijson.Field
-	UpdatedAt                    apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *ApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -364,12 +342,8 @@ func (r applicationPolicyJSON) RawJSON() string {
 type ApplicationPolicyParam struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision param.Field[Decision] `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
@@ -377,23 +351,11 @@ type ApplicationPolicyParam struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r ApplicationPolicyParam) MarshalJSON() (data []byte, err error) {
@@ -490,7 +452,8 @@ func (r CORSHeadersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The action Access will take if a user matches this policy.
+// The action Access will take if a user matches this policy. Infrastructure
+// application policies can only use the Allow action.
 type Decision string
 
 const (
@@ -1936,7 +1899,8 @@ type AccessApplicationNewResponse struct {
 	Tags interface{} `json:"tags,required"`
 	// The application type.
 	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationNewResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationNewResponseSaaSApplicationSaaSApp].
@@ -4446,6 +4410,304 @@ func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationS
 	return false
 }
 
+type AccessApplicationNewResponseInfrastructureApplication struct {
+	TargetCriteria []AccessApplicationNewResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// Audience tag.
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The name of the application.
+	Name     string                                                        `json:"name"`
+	Policies []AccessApplicationNewResponseInfrastructureApplicationPolicy `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	SCIMConfig AccessApplicationNewResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
+	UpdatedAt  time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON       accessApplicationNewResponseInfrastructureApplicationJSON       `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationJSON contains the JSON
+// metadata for the struct [AccessApplicationNewResponseInfrastructureApplication]
+type accessApplicationNewResponseInfrastructureApplicationJSON struct {
+	TargetCriteria apijson.Field
+	Type           apijson.Field
+	ID             apijson.Field
+	AUD            apijson.Field
+	CreatedAt      apijson.Field
+	Name           apijson.Field
+	Policies       apijson.Field
+	SCIMConfig     apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseInfrastructureApplication) implementsZeroTrustAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port int64 `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes map[string][]string                                                      `json:"target_attributes,required"`
+	JSON             accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationTargetCriterion]
+type accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON struct {
+	Port             apijson.Field
+	Protocol         apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The communication protocol your application secures.
+type AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                    `json:"require"`
+	UpdatedAt time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationPolicy]
+type accessApplicationNewResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationNewResponseInfrastructureApplicationSCIMConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID string `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI string `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete bool `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled bool `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings []SCIMConfigMapping                                                 `json:"mappings"`
+	JSON     accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfig]
+type accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON struct {
+	IdPUID             apijson.Field
+	RemoteURI          apijson.Field
+	Authentication     apijson.Field
+	DeactivateOnDelete apijson.Field
+	Enabled            apijson.Field
+	Mappings           apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User string `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token string `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL string `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID string `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL string                                                                            `json:"token_url"`
+	JSON     accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union    AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
+}
+
+// accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication]
+type accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
+	Password         apijson.Field
+	Scheme           apijson.Field
+	User             apijson.Field
+	Token            apijson.Field
+	AuthorizationURL apijson.Field
+	ClientID         apijson.Field
+	ClientSecret     apijson.Field
+	Scopes           apijson.Field
+	TokenURL         apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
+	return r.union
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
+		},
+	)
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
+
+const (
+	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationUpdateResponse struct {
 	// Audience tag.
 	AUD       string    `json:"aud"`
@@ -4523,7 +4785,8 @@ type AccessApplicationUpdateResponse struct {
 	Tags interface{} `json:"tags,required"`
 	// The application type.
 	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationUpdateResponseSaaSApplicationSaaSApp].
@@ -7034,6 +7297,305 @@ func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticati
 	return false
 }
 
+type AccessApplicationUpdateResponseInfrastructureApplication struct {
+	TargetCriteria []AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// Audience tag.
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The name of the application.
+	Name     string                                                           `json:"name"`
+	Policies []AccessApplicationUpdateResponseInfrastructureApplicationPolicy `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	SCIMConfig AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
+	UpdatedAt  time.Time                                                          `json:"updated_at" format:"date-time"`
+	JSON       accessApplicationUpdateResponseInfrastructureApplicationJSON       `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplication]
+type accessApplicationUpdateResponseInfrastructureApplicationJSON struct {
+	TargetCriteria apijson.Field
+	Type           apijson.Field
+	ID             apijson.Field
+	AUD            apijson.Field
+	CreatedAt      apijson.Field
+	Name           apijson.Field
+	Policies       apijson.Field
+	SCIMConfig     apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseInfrastructureApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port int64 `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes map[string][]string                                                         `json:"target_attributes,required"`
+	JSON             accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion]
+type accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON struct {
+	Port             apijson.Field
+	Protocol         apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The communication protocol your application secures.
+type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                       `json:"require"`
+	UpdatedAt time.Time                                                          `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationPolicy]
+type accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID string `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI string `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete bool `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled bool `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings []SCIMConfigMapping                                                    `json:"mappings"`
+	JSON     accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig]
+type accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON struct {
+	IdPUID             apijson.Field
+	RemoteURI          apijson.Field
+	Authentication     apijson.Field
+	DeactivateOnDelete apijson.Field
+	Enabled            apijson.Field
+	Mappings           apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User string `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token string `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL string `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID string `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL string                                                                               `json:"token_url"`
+	JSON     accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union    AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication]
+type accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
+	Password         apijson.Field
+	Scheme           apijson.Field
+	User             apijson.Field
+	Token            apijson.Field
+	AuthorizationURL apijson.Field
+	ClientID         apijson.Field
+	ClientSecret     apijson.Field
+	Scopes           apijson.Field
+	TokenURL         apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
+	return r.union
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
+		},
+	)
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
+
+const (
+	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationListResponse struct {
 	// Audience tag.
 	AUD       string    `json:"aud"`
@@ -7111,7 +7673,8 @@ type AccessApplicationListResponse struct {
 	Tags interface{} `json:"tags,required"`
 	// The application type.
 	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationListResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationListResponseSaaSApplicationSaaSApp].
@@ -9621,6 +10184,304 @@ func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication
 	return false
 }
 
+type AccessApplicationListResponseInfrastructureApplication struct {
+	TargetCriteria []AccessApplicationListResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// Audience tag.
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The name of the application.
+	Name     string                                                         `json:"name"`
+	Policies []AccessApplicationListResponseInfrastructureApplicationPolicy `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	SCIMConfig AccessApplicationListResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
+	UpdatedAt  time.Time                                                        `json:"updated_at" format:"date-time"`
+	JSON       accessApplicationListResponseInfrastructureApplicationJSON       `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationJSON contains the JSON
+// metadata for the struct [AccessApplicationListResponseInfrastructureApplication]
+type accessApplicationListResponseInfrastructureApplicationJSON struct {
+	TargetCriteria apijson.Field
+	Type           apijson.Field
+	ID             apijson.Field
+	AUD            apijson.Field
+	CreatedAt      apijson.Field
+	Name           apijson.Field
+	Policies       apijson.Field
+	SCIMConfig     apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseInfrastructureApplication) implementsZeroTrustAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port int64 `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes map[string][]string                                                       `json:"target_attributes,required"`
+	JSON             accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationTargetCriterion]
+type accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON struct {
+	Port             apijson.Field
+	Protocol         apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The communication protocol your application secures.
+type AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                     `json:"require"`
+	UpdatedAt time.Time                                                        `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationPolicy]
+type accessApplicationListResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationListResponseInfrastructureApplicationSCIMConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID string `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI string `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete bool `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled bool `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings []SCIMConfigMapping                                                  `json:"mappings"`
+	JSON     accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationSCIMConfig]
+type accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON struct {
+	IdPUID             apijson.Field
+	RemoteURI          apijson.Field
+	Authentication     apijson.Field
+	DeactivateOnDelete apijson.Field
+	Enabled            apijson.Field
+	Mappings           apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User string `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token string `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL string `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID string `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL string                                                                             `json:"token_url"`
+	JSON     accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union    AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
+}
+
+// accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication]
+type accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
+	Password         apijson.Field
+	Scheme           apijson.Field
+	User             apijson.Field
+	Token            apijson.Field
+	AuthorizationURL apijson.Field
+	ClientID         apijson.Field
+	ClientSecret     apijson.Field
+	Scopes           apijson.Field
+	TokenURL         apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
+	return r.union
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
+		},
+	)
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
+
+const (
+	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationDeleteResponse struct {
 	// UUID
 	ID   string                              `json:"id"`
@@ -9720,7 +10581,8 @@ type AccessApplicationGetResponse struct {
 	Tags interface{} `json:"tags,required"`
 	// The application type.
 	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationGetResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies,required"`
 	// This field can have the runtime type of
 	// [AccessApplicationGetResponseSaaSApplicationSaaSApp].
@@ -12230,6 +13092,304 @@ func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationS
 	return false
 }
 
+type AccessApplicationGetResponseInfrastructureApplication struct {
+	TargetCriteria []AccessApplicationGetResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// Audience tag.
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The name of the application.
+	Name     string                                                        `json:"name"`
+	Policies []AccessApplicationGetResponseInfrastructureApplicationPolicy `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	SCIMConfig AccessApplicationGetResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
+	UpdatedAt  time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON       accessApplicationGetResponseInfrastructureApplicationJSON       `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationJSON contains the JSON
+// metadata for the struct [AccessApplicationGetResponseInfrastructureApplication]
+type accessApplicationGetResponseInfrastructureApplicationJSON struct {
+	TargetCriteria apijson.Field
+	Type           apijson.Field
+	ID             apijson.Field
+	AUD            apijson.Field
+	CreatedAt      apijson.Field
+	Name           apijson.Field
+	Policies       apijson.Field
+	SCIMConfig     apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseInfrastructureApplication) implementsZeroTrustAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port int64 `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes map[string][]string                                                      `json:"target_attributes,required"`
+	JSON             accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationTargetCriterion]
+type accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON struct {
+	Port             apijson.Field
+	Protocol         apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The communication protocol your application secures.
+type AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                    `json:"require"`
+	UpdatedAt time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationPolicy]
+type accessApplicationGetResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationGetResponseInfrastructureApplicationSCIMConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID string `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI string `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete bool `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled bool `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings []SCIMConfigMapping                                                 `json:"mappings"`
+	JSON     accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfig]
+type accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON struct {
+	IdPUID             apijson.Field
+	RemoteURI          apijson.Field
+	Authentication     apijson.Field
+	DeactivateOnDelete apijson.Field
+	Enabled            apijson.Field
+	Mappings           apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication struct {
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	// User name used to authenticate with the remote SCIM service.
+	User string `json:"user"`
+	// Token used to authenticate with the remote SCIM service.
+	Token string `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL string `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID string `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret string `json:"client_secret"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes,required"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL string                                                                            `json:"token_url"`
+	JSON     accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union    AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
+}
+
+// accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication]
+type accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
+	Password         apijson.Field
+	Scheme           apijson.Field
+	User             apijson.Field
+	Token            apijson.Field
+	AuthorizationURL apijson.Field
+	ClientID         apijson.Field
+	ClientSecret     apijson.Field
+	Scopes           apijson.Field
+	TokenURL         apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
+	return r.union
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
+		},
+	)
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
+
+const (
+	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationRevokeTokensResponse = interface{}
 
 type AccessApplicationNewParams struct {
@@ -12382,7 +13542,7 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
@@ -12425,21 +13585,14 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -12481,13 +13634,6 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPoli
 }
 
 type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -12495,9 +13641,6 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -12509,9 +13652,6 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -12626,7 +13766,7 @@ type AccessApplicationNewParamsBodySaaSApplication struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
@@ -12667,13 +13807,10 @@ type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -12715,13 +13852,6 @@ func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink
 }
 
 type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -12743,9 +13873,6 @@ type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -12976,7 +14103,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
@@ -13019,21 +14146,14 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13075,13 +14195,6 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPoli
 }
 
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -13089,9 +14202,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -13103,9 +14213,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13252,7 +14359,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
@@ -13295,21 +14402,14 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13351,13 +14451,6 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPoli
 }
 
 type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -13365,9 +14458,6 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -13379,9 +14469,6 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13500,7 +14587,7 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
@@ -13562,21 +14649,14 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13618,13 +14698,6 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPol
 }
 
 type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -13632,9 +14705,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -13646,9 +14716,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13767,7 +14834,7 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -13829,21 +14896,14 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy 
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13885,13 +14945,6 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 }
 
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -13899,9 +14952,6 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicie
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -13913,9 +14963,6 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicie
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14034,7 +15081,7 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -14096,21 +15143,14 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy 
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14152,13 +15192,6 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 }
 
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -14166,9 +15199,6 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicie
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -14180,9 +15210,6 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicie
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14394,6 +15421,73 @@ func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticatio
 	return false
 }
 
+type AccessApplicationNewParamsBodyInfrastructureApplication struct {
+	TargetCriteria param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria,required"`
+	// The application type.
+	Type param.Field[ApplicationType] `json:"type,required"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application.
+	Policies param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationPolicy] `json:"policies"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
+}
+
+type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port param.Field[int64] `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes,required"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The communication protocol your application secures.
+type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodyInfrastructureApplicationPolicy struct {
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision param.Field[Decision] `json:"decision,required"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	// The name of the Access policy.
+	Name param.Field[string] `json:"name,required"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AccessApplicationNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
@@ -14589,7 +15683,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
@@ -14632,21 +15726,14 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14688,13 +15775,6 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppP
 }
 
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -14702,9 +15782,6 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -14716,9 +15793,6 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14833,7 +15907,7 @@ type AccessApplicationUpdateParamsBodySaaSApplication struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
@@ -14866,21 +15940,14 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14922,13 +15989,6 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyL
 }
 
 type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -14936,9 +15996,6 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -14950,9 +16007,6 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15183,7 +16237,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
@@ -15226,21 +16280,14 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15282,13 +16329,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppP
 }
 
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -15296,9 +16336,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -15310,9 +16347,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15459,7 +16493,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
@@ -15502,21 +16536,14 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15558,13 +16585,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppP
 }
 
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -15572,9 +16592,6 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -15586,9 +16603,6 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15707,7 +16721,7 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
@@ -15769,21 +16783,14 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15825,13 +16832,6 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessApp
 }
 
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -15839,9 +16839,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struc
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -15853,9 +16850,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struc
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15974,7 +16968,7 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -16036,21 +17030,14 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16092,13 +17079,6 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 }
 
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -16106,9 +17086,6 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -16120,9 +17097,6 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16241,7 +17215,7 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -16303,21 +17277,14 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16359,13 +17326,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 }
 
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -16373,9 +17333,6 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -16387,9 +17344,6 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16599,6 +17553,73 @@ func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthentica
 		return true
 	}
 	return false
+}
+
+type AccessApplicationUpdateParamsBodyInfrastructureApplication struct {
+	TargetCriteria param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria,required"`
+	// The application type.
+	Type param.Field[ApplicationType] `json:"type,required"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application.
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy] `json:"policies"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port param.Field[int64] `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The communication protocol your application secures.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy struct {
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision param.Field[Decision] `json:"decision,required"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	// The name of the Access policy.
+	Name param.Field[string] `json:"name,required"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {

@@ -5020,7 +5020,6 @@ Params Types:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#ApprovalGroup">ApprovalGroup</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#AccessPolicyNewResponse">AccessPolicyNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#AccessPolicyUpdateResponse">AccessPolicyUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#AccessPolicyListResponse">AccessPolicyListResponse</a>
