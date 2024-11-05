@@ -496,54 +496,59 @@ func (r AIRunParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AIRunParamsBody struct {
-	Text param.Field[interface{}] `json:"text,required"`
+	Audio     param.Field[interface{}] `json:"audio,required"`
+	Functions param.Field[interface{}] `json:"functions,required"`
+	Image     param.Field[interface{}] `json:"image,required"`
+	Mask      param.Field[interface{}] `json:"mask,required"`
+	Messages  param.Field[interface{}] `json:"messages,required"`
+	Text      param.Field[interface{}] `json:"text,required"`
+	Tools     param.Field[interface{}] `json:"tools,required"`
+	// Decreases the likelihood of the model repeating the same lines verbatim.
+	FrequencyPenalty param.Field[float64] `json:"frequency_penalty"`
 	// Controls how closely the generated image should adhere to the prompt; higher
 	// values make the image more aligned with the prompt
 	Guidance param.Field[float64] `json:"guidance"`
 	// The height of the generated image in pixels
-	Height param.Field[int64]       `json:"height"`
-	Image  param.Field[interface{}] `json:"image,required"`
+	Height param.Field[int64] `json:"height"`
 	// For use with img2img tasks. A base64-encoded string of the input image
-	ImageB64 param.Field[string]      `json:"image_b64"`
-	Mask     param.Field[interface{}] `json:"mask,required"`
+	ImageB64 param.Field[string] `json:"image_b64"`
+	// The text that you want the model to summarize
+	InputText param.Field[string] `json:"input_text"`
+	// The speech language (e.g., 'en' for English, 'fr' for French). Defaults to 'en'
+	// if not specified
+	Lang param.Field[string] `json:"lang"`
+	// Name of the LoRA (Low-Rank Adaptation) model to fine-tune the base model.
+	Lora param.Field[string] `json:"lora"`
+	// The maximum length of the generated summary in tokens
+	MaxLength param.Field[int64] `json:"max_length"`
+	// The maximum number of tokens to generate in the response.
+	MaxTokens param.Field[int64] `json:"max_tokens"`
 	// Text describing elements to avoid in the generated image
 	NegativePrompt param.Field[string] `json:"negative_prompt"`
 	// The number of diffusion steps; higher values can improve quality but take longer
 	NumSteps param.Field[int64] `json:"num_steps"`
-	// A text description of the image you want to generate
-	Prompt param.Field[string] `json:"prompt"`
-	// Random seed for reproducibility of the image generation
-	Seed param.Field[int64] `json:"seed"`
-	// A value between 0 and 1 indicating how strongly to apply the transformation
-	// during img2img tasks; lower values make the output closer to the input image
-	Strength param.Field[float64] `json:"strength"`
-	// The width of the generated image in pixels
-	Width param.Field[int64] `json:"width"`
-	// The speech language (e.g., 'en' for English, 'fr' for French). Defaults to 'en'
-	// if not specified
-	Lang  param.Field[string]      `json:"lang"`
-	Audio param.Field[interface{}] `json:"audio,required"`
-	// The language of the recorded audio
-	SourceLang param.Field[string] `json:"source_lang"`
-	// The language to translate the transcription into. Currently only English is
-	// supported.
-	TargetLang param.Field[string] `json:"target_lang"`
-	// Decreases the likelihood of the model repeating the same lines verbatim.
-	FrequencyPenalty param.Field[float64] `json:"frequency_penalty"`
-	// Name of the LoRA (Low-Rank Adaptation) model to fine-tune the base model.
-	Lora param.Field[string] `json:"lora"`
-	// The maximum number of tokens to generate in the response.
-	MaxTokens param.Field[int64] `json:"max_tokens"`
 	// Increases the likelihood of the model introducing new topics.
 	PresencePenalty param.Field[float64] `json:"presence_penalty"`
+	// A text description of the image you want to generate
+	Prompt param.Field[string] `json:"prompt"`
 	// If true, a chat template is not applied and you must adhere to the specific
 	// model's expected formatting.
 	Raw param.Field[bool] `json:"raw"`
 	// Penalty for repeated tokens; higher values discourage repetition.
 	RepetitionPenalty param.Field[float64] `json:"repetition_penalty"`
+	// Random seed for reproducibility of the image generation
+	Seed param.Field[int64] `json:"seed"`
+	// The language of the recorded audio
+	SourceLang param.Field[string] `json:"source_lang"`
 	// If true, the response will be streamed back incrementally using SSE, Server Sent
 	// Events.
 	Stream param.Field[bool] `json:"stream"`
+	// A value between 0 and 1 indicating how strongly to apply the transformation
+	// during img2img tasks; lower values make the output closer to the input image
+	Strength param.Field[float64] `json:"strength"`
+	// The language to translate the transcription into. Currently only English is
+	// supported.
+	TargetLang param.Field[string] `json:"target_lang"`
 	// Controls the randomness of the output; higher values produce more random
 	// results.
 	Temperature param.Field[float64] `json:"temperature"`
@@ -554,14 +559,9 @@ type AIRunParamsBody struct {
 	// Adjusts the creativity of the AI's responses by controlling how many possible
 	// words it considers. Lower values make outputs more predictable; higher values
 	// allow for more varied and creative responses.
-	TopP      param.Field[float64]     `json:"top_p"`
-	Functions param.Field[interface{}] `json:"functions,required"`
-	Messages  param.Field[interface{}] `json:"messages,required"`
-	Tools     param.Field[interface{}] `json:"tools,required"`
-	// The text that you want the model to summarize
-	InputText param.Field[string] `json:"input_text"`
-	// The maximum length of the generated summary in tokens
-	MaxLength param.Field[int64] `json:"max_length"`
+	TopP param.Field[float64] `json:"top_p"`
+	// The width of the generated image in pixels
+	Width param.Field[int64] `json:"width"`
 }
 
 func (r AIRunParamsBody) MarshalJSON() (data []byte, err error) {
@@ -806,12 +806,12 @@ func (r AIRunParamsBodyMessagesFunction) MarshalJSON() (data []byte, err error) 
 }
 
 type AIRunParamsBodyMessagesTool struct {
+	Function   param.Field[interface{}] `json:"function,required"`
+	Parameters param.Field[interface{}] `json:"parameters,required"`
 	// A brief description of what the tool does.
 	Description param.Field[string] `json:"description"`
 	// The name of the tool. More descriptive the better.
-	Name       param.Field[string]      `json:"name"`
-	Parameters param.Field[interface{}] `json:"parameters,required"`
-	Function   param.Field[interface{}] `json:"function,required"`
+	Name param.Field[string] `json:"name"`
 	// Specifies the type of tool (e.g., 'function').
 	Type param.Field[string] `json:"type"`
 }

@@ -166,11 +166,6 @@ func (r dispatchNamespaceScriptSettingEditResponseLimitsJSON) RawJSON() string {
 
 // Migrations to apply for Durable Objects associated with this Worker.
 type DispatchNamespaceScriptSettingEditResponseMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
 	// This field can have the runtime type of [[]string].
 	DeletedClasses interface{} `json:"deleted_classes,required"`
 	// This field can have the runtime type of [[]string].
@@ -180,26 +175,31 @@ type DispatchNamespaceScriptSettingEditResponseMigrations struct {
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationRenamedClass].
 	RenamedClasses interface{} `json:"renamed_classes,required"`
+	// This field can have the runtime type of [[]workers.MigrationStep].
+	Steps interface{} `json:"steps,required"`
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationTransferredClass].
 	TransferredClasses interface{} `json:"transferred_classes,required"`
-	// This field can have the runtime type of [[]workers.MigrationStep].
-	Steps interface{}                                              `json:"steps,required"`
-	JSON  dispatchNamespaceScriptSettingEditResponseMigrationsJSON `json:"-"`
-	union DispatchNamespaceScriptSettingEditResponseMigrationsUnion
+	// Tag to set as the latest migration tag.
+	NewTag string `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag string                                                   `json:"old_tag"`
+	JSON   dispatchNamespaceScriptSettingEditResponseMigrationsJSON `json:"-"`
+	union  DispatchNamespaceScriptSettingEditResponseMigrationsUnion
 }
 
 // dispatchNamespaceScriptSettingEditResponseMigrationsJSON contains the JSON
 // metadata for the struct [DispatchNamespaceScriptSettingEditResponseMigrations]
 type dispatchNamespaceScriptSettingEditResponseMigrationsJSON struct {
-	NewTag             apijson.Field
-	OldTag             apijson.Field
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewSqliteClasses   apijson.Field
 	RenamedClasses     apijson.Field
-	TransferredClasses apijson.Field
 	Steps              apijson.Field
+	TransferredClasses apijson.Field
+	NewTag             apijson.Field
+	OldTag             apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -352,11 +352,6 @@ func (r dispatchNamespaceScriptSettingGetResponseLimitsJSON) RawJSON() string {
 
 // Migrations to apply for Durable Objects associated with this Worker.
 type DispatchNamespaceScriptSettingGetResponseMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
 	// This field can have the runtime type of [[]string].
 	DeletedClasses interface{} `json:"deleted_classes,required"`
 	// This field can have the runtime type of [[]string].
@@ -366,26 +361,31 @@ type DispatchNamespaceScriptSettingGetResponseMigrations struct {
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationRenamedClass].
 	RenamedClasses interface{} `json:"renamed_classes,required"`
+	// This field can have the runtime type of [[]workers.MigrationStep].
+	Steps interface{} `json:"steps,required"`
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationTransferredClass].
 	TransferredClasses interface{} `json:"transferred_classes,required"`
-	// This field can have the runtime type of [[]workers.MigrationStep].
-	Steps interface{}                                             `json:"steps,required"`
-	JSON  dispatchNamespaceScriptSettingGetResponseMigrationsJSON `json:"-"`
-	union DispatchNamespaceScriptSettingGetResponseMigrationsUnion
+	// Tag to set as the latest migration tag.
+	NewTag string `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag string                                                  `json:"old_tag"`
+	JSON   dispatchNamespaceScriptSettingGetResponseMigrationsJSON `json:"-"`
+	union  DispatchNamespaceScriptSettingGetResponseMigrationsUnion
 }
 
 // dispatchNamespaceScriptSettingGetResponseMigrationsJSON contains the JSON
 // metadata for the struct [DispatchNamespaceScriptSettingGetResponseMigrations]
 type dispatchNamespaceScriptSettingGetResponseMigrationsJSON struct {
-	NewTag             apijson.Field
-	OldTag             apijson.Field
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewSqliteClasses   apijson.Field
 	RenamedClasses     apijson.Field
-	TransferredClasses apijson.Field
 	Steps              apijson.Field
+	TransferredClasses apijson.Field
+	NewTag             apijson.Field
+	OldTag             apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -522,17 +522,17 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsLimits) MarshalJSON() (d
 
 // Migrations to apply for Durable Objects associated with this Worker.
 type DispatchNamespaceScriptSettingEditParamsSettingsMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag param.Field[string] `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag             param.Field[string]      `json:"old_tag"`
 	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
 	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
 	NewSqliteClasses   param.Field[interface{}] `json:"new_sqlite_classes,required"`
 	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
-	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
 	Steps              param.Field[interface{}] `json:"steps,required"`
+	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag param.Field[string] `json:"old_tag"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) MarshalJSON() (data []byte, err error) {
