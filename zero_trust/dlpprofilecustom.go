@@ -194,8 +194,8 @@ func (r DLPProfileCustomNewParamsProfile) MarshalJSON() (data []byte, err error)
 type DLPProfileCustomNewParamsProfilesEntry struct {
 	Enabled param.Field[bool]         `json:"enabled,required"`
 	Name    param.Field[string]       `json:"name,required"`
-	Pattern param.Field[PatternParam] `json:"pattern"`
 	Words   param.Field[interface{}]  `json:"words,required"`
+	Pattern param.Field[PatternParam] `json:"pattern"`
 }
 
 func (r DLPProfileCustomNewParamsProfilesEntry) MarshalJSON() (data []byte, err error) {

@@ -544,17 +544,17 @@ func (r RuleEditParamsAction) IsKnown() bool {
 
 // Reorder the position of a rule
 type RuleEditParamsPosition struct {
+	// Places the rule after rule <RULE_ID>. Use this argument with an empty rule ID
+	// value ("") to set the rule as the last rule in the ruleset.
+	After param.Field[string] `json:"after"`
+	// Places the rule before rule <RULE_ID>. Use this argument with an empty rule ID
+	// value ("") to set the rule as the first rule in the ruleset.
+	Before param.Field[string] `json:"before"`
 	// Places the rule in the exact position specified by the integer number
 	// <POSITION_NUMBER>. Position numbers start with 1. Existing rules in the ruleset
 	// from the specified position number onward are shifted one position (no rule is
 	// overwritten).
 	Index param.Field[int64] `json:"index"`
-	// Places the rule before rule <RULE_ID>. Use this argument with an empty rule ID
-	// value ("") to set the rule as the first rule in the ruleset.
-	Before param.Field[string] `json:"before"`
-	// Places the rule after rule <RULE_ID>. Use this argument with an empty rule ID
-	// value ("") to set the rule as the last rule in the ruleset.
-	After param.Field[string] `json:"after"`
 }
 
 func (r RuleEditParamsPosition) MarshalJSON() (data []byte, err error) {

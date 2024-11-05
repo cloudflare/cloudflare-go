@@ -122,72 +122,72 @@ func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, e
 
 // Matches a specific email.
 type AccessRule struct {
-	// This field can have the runtime type of [EmailRuleEmail].
-	Email interface{} `json:"email,required"`
-	// This field can have the runtime type of [EmailListRuleEmailList].
-	EmailList interface{} `json:"email_list,required"`
-	// This field can have the runtime type of [DomainRuleEmailDomain].
-	EmailDomain interface{} `json:"email_domain,required"`
-	// This field can have the runtime type of [EveryoneRuleEveryone].
-	Everyone interface{} `json:"everyone,required"`
-	// This field can have the runtime type of [IPRuleIP].
-	IP interface{} `json:"ip,required"`
-	// This field can have the runtime type of [IPListRuleIPList].
-	IPList interface{} `json:"ip_list,required"`
-	// This field can have the runtime type of [CertificateRuleCertificate].
-	Certificate interface{} `json:"certificate,required"`
-	// This field can have the runtime type of [GroupRuleGroup].
-	Group interface{} `json:"group,required"`
-	// This field can have the runtime type of [AzureGroupRuleAzureAD].
-	AzureAD interface{} `json:"azureAD,required"`
-	// This field can have the runtime type of
-	// [GitHubOrganizationRuleGitHubOrganization].
-	GitHubOrganization interface{} `json:"github-organization,required"`
-	// This field can have the runtime type of [GSuiteGroupRuleGSuite].
-	GSuite interface{} `json:"gsuite,required"`
-	// This field can have the runtime type of [OktaGroupRuleOkta].
-	Okta interface{} `json:"okta,required"`
-	// This field can have the runtime type of [SAMLGroupRuleSAML].
-	SAML interface{} `json:"saml,required"`
-	// This field can have the runtime type of [ServiceTokenRuleServiceToken].
-	ServiceToken interface{} `json:"service_token,required"`
 	// This field can have the runtime type of
 	// [AnyValidServiceTokenRuleAnyValidServiceToken].
 	AnyValidServiceToken interface{} `json:"any_valid_service_token,required"`
+	// This field can have the runtime type of [AuthenticationMethodRuleAuthMethod].
+	AuthMethod interface{} `json:"auth_method,required"`
+	// This field can have the runtime type of [AzureGroupRuleAzureAD].
+	AzureAD interface{} `json:"azureAD,required"`
+	// This field can have the runtime type of [CertificateRuleCertificate].
+	Certificate interface{} `json:"certificate,required"`
+	// This field can have the runtime type of [AccessDevicePostureRuleDevicePosture].
+	DevicePosture interface{} `json:"device_posture,required"`
+	// This field can have the runtime type of [EmailRuleEmail].
+	Email interface{} `json:"email,required"`
+	// This field can have the runtime type of [DomainRuleEmailDomain].
+	EmailDomain interface{} `json:"email_domain,required"`
+	// This field can have the runtime type of [EmailListRuleEmailList].
+	EmailList interface{} `json:"email_list,required"`
+	// This field can have the runtime type of [EveryoneRuleEveryone].
+	Everyone interface{} `json:"everyone,required"`
 	// This field can have the runtime type of
 	// [ExternalEvaluationRuleExternalEvaluation].
 	ExternalEvaluation interface{} `json:"external_evaluation,required"`
 	// This field can have the runtime type of [CountryRuleGeo].
 	Geo interface{} `json:"geo,required"`
-	// This field can have the runtime type of [AuthenticationMethodRuleAuthMethod].
-	AuthMethod interface{} `json:"auth_method,required"`
-	// This field can have the runtime type of [AccessDevicePostureRuleDevicePosture].
-	DevicePosture interface{}    `json:"device_posture,required"`
-	JSON          accessRuleJSON `json:"-"`
-	union         AccessRuleUnion
+	// This field can have the runtime type of
+	// [GitHubOrganizationRuleGitHubOrganization].
+	GitHubOrganization interface{} `json:"github-organization,required"`
+	// This field can have the runtime type of [GroupRuleGroup].
+	Group interface{} `json:"group,required"`
+	// This field can have the runtime type of [GSuiteGroupRuleGSuite].
+	GSuite interface{} `json:"gsuite,required"`
+	// This field can have the runtime type of [IPRuleIP].
+	IP interface{} `json:"ip,required"`
+	// This field can have the runtime type of [IPListRuleIPList].
+	IPList interface{} `json:"ip_list,required"`
+	// This field can have the runtime type of [OktaGroupRuleOkta].
+	Okta interface{} `json:"okta,required"`
+	// This field can have the runtime type of [SAMLGroupRuleSAML].
+	SAML interface{} `json:"saml,required"`
+	// This field can have the runtime type of [ServiceTokenRuleServiceToken].
+	ServiceToken interface{}    `json:"service_token,required"`
+	JSON         accessRuleJSON `json:"-"`
+	union        AccessRuleUnion
 }
 
 // accessRuleJSON contains the JSON metadata for the struct [AccessRule]
 type accessRuleJSON struct {
+	AnyValidServiceToken apijson.Field
+	AuthMethod           apijson.Field
+	AzureAD              apijson.Field
+	Certificate          apijson.Field
+	DevicePosture        apijson.Field
 	Email                apijson.Field
-	EmailList            apijson.Field
 	EmailDomain          apijson.Field
+	EmailList            apijson.Field
 	Everyone             apijson.Field
+	ExternalEvaluation   apijson.Field
+	Geo                  apijson.Field
+	GitHubOrganization   apijson.Field
+	Group                apijson.Field
+	GSuite               apijson.Field
 	IP                   apijson.Field
 	IPList               apijson.Field
-	Certificate          apijson.Field
-	Group                apijson.Field
-	AzureAD              apijson.Field
-	GitHubOrganization   apijson.Field
-	GSuite               apijson.Field
 	Okta                 apijson.Field
 	SAML                 apijson.Field
 	ServiceToken         apijson.Field
-	AnyValidServiceToken apijson.Field
-	ExternalEvaluation   apijson.Field
-	Geo                  apijson.Field
-	AuthMethod           apijson.Field
-	DevicePosture        apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -321,25 +321,25 @@ func init() {
 
 // Matches a specific email.
 type AccessRuleParam struct {
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
+	AzureAD              param.Field[interface{}] `json:"azureAD,required"`
+	Certificate          param.Field[interface{}] `json:"certificate,required"`
+	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
 	Email                param.Field[interface{}] `json:"email,required"`
-	EmailList            param.Field[interface{}] `json:"email_list,required"`
 	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
+	EmailList            param.Field[interface{}] `json:"email_list,required"`
 	Everyone             param.Field[interface{}] `json:"everyone,required"`
+	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
+	Geo                  param.Field[interface{}] `json:"geo,required"`
+	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
+	Group                param.Field[interface{}] `json:"group,required"`
+	GSuite               param.Field[interface{}] `json:"gsuite,required"`
 	IP                   param.Field[interface{}] `json:"ip,required"`
 	IPList               param.Field[interface{}] `json:"ip_list,required"`
-	Certificate          param.Field[interface{}] `json:"certificate,required"`
-	Group                param.Field[interface{}] `json:"group,required"`
-	AzureAD              param.Field[interface{}] `json:"azureAD,required"`
-	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
-	GSuite               param.Field[interface{}] `json:"gsuite,required"`
 	Okta                 param.Field[interface{}] `json:"okta,required"`
 	SAML                 param.Field[interface{}] `json:"saml,required"`
 	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
-	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
-	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}] `json:"geo,required"`
-	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
-	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
 }
 
 func (r AccessRuleParam) MarshalJSON() (data []byte, err error) {

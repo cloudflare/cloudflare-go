@@ -3096,19 +3096,19 @@ func (r RedirectRuleActionParametersFromValueStatusCode) IsKnown() bool {
 
 // The URL to redirect the request to.
 type RedirectRuleActionParametersFromValueTargetURL struct {
-	// The URL to redirect the request to.
-	Value string `json:"value"`
 	// An expression to evaluate to get the URL to redirect the request to.
-	Expression string                                             `json:"expression"`
-	JSON       redirectRuleActionParametersFromValueTargetURLJSON `json:"-"`
-	union      RedirectRuleActionParametersFromValueTargetURLUnion
+	Expression string `json:"expression"`
+	// The URL to redirect the request to.
+	Value string                                             `json:"value"`
+	JSON  redirectRuleActionParametersFromValueTargetURLJSON `json:"-"`
+	union RedirectRuleActionParametersFromValueTargetURLUnion
 }
 
 // redirectRuleActionParametersFromValueTargetURLJSON contains the JSON metadata
 // for the struct [RedirectRuleActionParametersFromValueTargetURL]
 type redirectRuleActionParametersFromValueTargetURLJSON struct {
-	Value       apijson.Field
 	Expression  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3383,10 +3383,10 @@ func (r RedirectRuleActionParametersFromValueParam) MarshalJSON() (data []byte, 
 
 // The URL to redirect the request to.
 type RedirectRuleActionParametersFromValueTargetURLParam struct {
-	// The URL to redirect the request to.
-	Value param.Field[string] `json:"value"`
 	// An expression to evaluate to get the URL to redirect the request to.
 	Expression param.Field[string] `json:"expression"`
+	// The URL to redirect the request to.
+	Value param.Field[string] `json:"value"`
 }
 
 func (r RedirectRuleActionParametersFromValueTargetURLParam) MarshalJSON() (data []byte, err error) {
@@ -3593,20 +3593,20 @@ func (r rewriteRuleActionParametersJSON) RawJSON() string {
 // Remove the header from the request.
 type RewriteRuleActionParametersHeader struct {
 	Operation RewriteRuleActionParametersHeadersOperation `json:"operation,required"`
-	// Static value for the header.
-	Value string `json:"value"`
 	// Expression for the header value.
-	Expression string                                `json:"expression"`
-	JSON       rewriteRuleActionParametersHeaderJSON `json:"-"`
-	union      RewriteRuleActionParametersHeadersUnion
+	Expression string `json:"expression"`
+	// Static value for the header.
+	Value string                                `json:"value"`
+	JSON  rewriteRuleActionParametersHeaderJSON `json:"-"`
+	union RewriteRuleActionParametersHeadersUnion
 }
 
 // rewriteRuleActionParametersHeaderJSON contains the JSON metadata for the struct
 // [RewriteRuleActionParametersHeader]
 type rewriteRuleActionParametersHeaderJSON struct {
 	Operation   apijson.Field
-	Value       apijson.Field
 	Expression  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3973,10 +3973,10 @@ func (r RewriteRuleActionParametersParam) MarshalJSON() (data []byte, err error)
 // Remove the header from the request.
 type RewriteRuleActionParametersHeaderParam struct {
 	Operation param.Field[RewriteRuleActionParametersHeadersOperation] `json:"operation,required"`
-	// Static value for the header.
-	Value param.Field[string] `json:"value"`
 	// Expression for the header value.
 	Expression param.Field[string] `json:"expression"`
+	// Static value for the header.
+	Value param.Field[string] `json:"value"`
 }
 
 func (r RewriteRuleActionParametersHeaderParam) MarshalJSON() (data []byte, err error) {
@@ -4091,18 +4091,18 @@ func (r RewriteRuleRatelimitParam) MarshalJSON() (data []byte, err error) {
 }
 
 type RewriteURIPart struct {
-	// Predefined replacement value.
-	Value string `json:"value"`
 	// Expression to evaluate for the replacement value.
-	Expression string             `json:"expression"`
-	JSON       rewriteURIPartJSON `json:"-"`
-	union      RewriteURIPartUnion
+	Expression string `json:"expression"`
+	// Predefined replacement value.
+	Value string             `json:"value"`
+	JSON  rewriteURIPartJSON `json:"-"`
+	union RewriteURIPartUnion
 }
 
 // rewriteURIPartJSON contains the JSON metadata for the struct [RewriteURIPart]
 type rewriteURIPartJSON struct {
-	Value       apijson.Field
 	Expression  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4199,10 +4199,10 @@ func (r rewriteURIPartDynamicValueJSON) RawJSON() string {
 func (r RewriteURIPartDynamicValue) implementsRulesetsRewriteURIPart() {}
 
 type RewriteURIPartParam struct {
-	// Predefined replacement value.
-	Value param.Field[string] `json:"value"`
 	// Expression to evaluate for the replacement value.
 	Expression param.Field[string] `json:"expression"`
+	// Predefined replacement value.
+	Value param.Field[string] `json:"value"`
 }
 
 func (r RewriteURIPartParam) MarshalJSON() (data []byte, err error) {
@@ -7269,8 +7269,6 @@ func (r ruleNewResponseJSON) RawJSON() string {
 }
 
 type RuleNewResponseRule struct {
-	// The action to perform when the rule matches.
-	Action RuleNewResponseRulesAction `json:"action"`
 	// This field can have the runtime type of [BlockRuleActionParameters],
 	// [interface{}], [CompressResponseRuleActionParameters],
 	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
@@ -7281,10 +7279,6 @@ type RuleNewResponseRule struct {
 	ActionParameters interface{} `json:"action_parameters,required"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories,required"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [RuleNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
@@ -7299,14 +7293,8 @@ type RuleNewResponseRule struct {
 	// [DDoSDynamicRuleExposedCredentialCheck],
 	// [ForceConnectionCloseRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check,required"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [RuleNewResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -7317,30 +7305,42 @@ type RuleNewResponseRule struct {
 	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
 	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit,required"`
-	// The reference of the rule (the rule ID by default).
-	Ref string `json:"ref"`
 	// The version of the rule.
-	Version string                  `json:"version,required"`
-	JSON    ruleNewResponseRuleJSON `json:"-"`
-	union   RuleNewResponseRulesUnion
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleNewResponseRulesAction `json:"action"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref   string                  `json:"ref"`
+	JSON  ruleNewResponseRuleJSON `json:"-"`
+	union RuleNewResponseRulesUnion
 }
 
 // ruleNewResponseRuleJSON contains the JSON metadata for the struct
 // [RuleNewResponseRule]
 type ruleNewResponseRuleJSON struct {
-	Action                 apijson.Field
 	ActionParameters       apijson.Field
 	Categories             apijson.Field
+	ExposedCredentialCheck apijson.Field
+	LastUpdated            apijson.Field
+	Ratelimit              apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
 	Description            apijson.Field
 	Enabled                apijson.Field
-	ExposedCredentialCheck apijson.Field
 	Expression             apijson.Field
-	ID                     apijson.Field
-	LastUpdated            apijson.Field
 	Logging                apijson.Field
-	Ratelimit              apijson.Field
 	Ref                    apijson.Field
-	Version                apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -7901,8 +7901,6 @@ func (r ruleDeleteResponseJSON) RawJSON() string {
 }
 
 type RuleDeleteResponseRule struct {
-	// The action to perform when the rule matches.
-	Action RuleDeleteResponseRulesAction `json:"action"`
 	// This field can have the runtime type of [BlockRuleActionParameters],
 	// [interface{}], [CompressResponseRuleActionParameters],
 	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
@@ -7913,10 +7911,6 @@ type RuleDeleteResponseRule struct {
 	ActionParameters interface{} `json:"action_parameters,required"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories,required"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [RuleDeleteResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
@@ -7931,14 +7925,8 @@ type RuleDeleteResponseRule struct {
 	// [DDoSDynamicRuleExposedCredentialCheck],
 	// [ForceConnectionCloseRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check,required"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [RuleDeleteResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -7949,30 +7937,42 @@ type RuleDeleteResponseRule struct {
 	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
 	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit,required"`
-	// The reference of the rule (the rule ID by default).
-	Ref string `json:"ref"`
 	// The version of the rule.
-	Version string                     `json:"version,required"`
-	JSON    ruleDeleteResponseRuleJSON `json:"-"`
-	union   RuleDeleteResponseRulesUnion
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleDeleteResponseRulesAction `json:"action"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref   string                     `json:"ref"`
+	JSON  ruleDeleteResponseRuleJSON `json:"-"`
+	union RuleDeleteResponseRulesUnion
 }
 
 // ruleDeleteResponseRuleJSON contains the JSON metadata for the struct
 // [RuleDeleteResponseRule]
 type ruleDeleteResponseRuleJSON struct {
-	Action                 apijson.Field
 	ActionParameters       apijson.Field
 	Categories             apijson.Field
+	ExposedCredentialCheck apijson.Field
+	LastUpdated            apijson.Field
+	Ratelimit              apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
 	Description            apijson.Field
 	Enabled                apijson.Field
-	ExposedCredentialCheck apijson.Field
 	Expression             apijson.Field
-	ID                     apijson.Field
-	LastUpdated            apijson.Field
 	Logging                apijson.Field
-	Ratelimit              apijson.Field
 	Ref                    apijson.Field
-	Version                apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -8534,8 +8534,6 @@ func (r ruleEditResponseJSON) RawJSON() string {
 }
 
 type RuleEditResponseRule struct {
-	// The action to perform when the rule matches.
-	Action RuleEditResponseRulesAction `json:"action"`
 	// This field can have the runtime type of [BlockRuleActionParameters],
 	// [interface{}], [CompressResponseRuleActionParameters],
 	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
@@ -8546,10 +8544,6 @@ type RuleEditResponseRule struct {
 	ActionParameters interface{} `json:"action_parameters,required"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories,required"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [RuleEditResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
@@ -8564,14 +8558,8 @@ type RuleEditResponseRule struct {
 	// [DDoSDynamicRuleExposedCredentialCheck],
 	// [ForceConnectionCloseRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check,required"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [RuleEditResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -8582,30 +8570,42 @@ type RuleEditResponseRule struct {
 	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
 	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit,required"`
-	// The reference of the rule (the rule ID by default).
-	Ref string `json:"ref"`
 	// The version of the rule.
-	Version string                   `json:"version,required"`
-	JSON    ruleEditResponseRuleJSON `json:"-"`
-	union   RuleEditResponseRulesUnion
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RuleEditResponseRulesAction `json:"action"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref   string                   `json:"ref"`
+	JSON  ruleEditResponseRuleJSON `json:"-"`
+	union RuleEditResponseRulesUnion
 }
 
 // ruleEditResponseRuleJSON contains the JSON metadata for the struct
 // [RuleEditResponseRule]
 type ruleEditResponseRuleJSON struct {
-	Action                 apijson.Field
 	ActionParameters       apijson.Field
 	Categories             apijson.Field
+	ExposedCredentialCheck apijson.Field
+	LastUpdated            apijson.Field
+	Ratelimit              apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
 	Description            apijson.Field
 	Enabled                apijson.Field
-	ExposedCredentialCheck apijson.Field
 	Expression             apijson.Field
-	ID                     apijson.Field
-	LastUpdated            apijson.Field
 	Logging                apijson.Field
-	Ratelimit              apijson.Field
 	Ref                    apijson.Field
-	Version                apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
@@ -9134,22 +9134,22 @@ func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleNewParamsBody struct {
+	ActionParameters       param.Field[interface{}] `json:"action_parameters,required"`
+	Categories             param.Field[interface{}] `json:"categories,required"`
+	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check,required"`
+	Ratelimit              param.Field[interface{}] `json:"ratelimit,required"`
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action           param.Field[RuleNewParamsBodyAction] `json:"action"`
-	ActionParameters param.Field[interface{}]             `json:"action_parameters,required"`
-	Categories       param.Field[interface{}]             `json:"categories,required"`
+	Action param.Field[RuleNewParamsBodyAction] `json:"action"`
 	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
-	Enabled                param.Field[bool]        `json:"enabled"`
-	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check,required"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
 	// An object configuring the rule's logging behavior.
-	Logging   param.Field[LoggingParam] `json:"logging"`
-	Ratelimit param.Field[interface{}]  `json:"ratelimit,required"`
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
@@ -9737,22 +9737,22 @@ func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleEditParamsBody struct {
+	ActionParameters       param.Field[interface{}] `json:"action_parameters,required"`
+	Categories             param.Field[interface{}] `json:"categories,required"`
+	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check,required"`
+	Ratelimit              param.Field[interface{}] `json:"ratelimit,required"`
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action           param.Field[RuleEditParamsBodyAction] `json:"action"`
-	ActionParameters param.Field[interface{}]              `json:"action_parameters,required"`
-	Categories       param.Field[interface{}]              `json:"categories,required"`
+	Action param.Field[RuleEditParamsBodyAction] `json:"action"`
 	// An informative description of the rule.
 	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
-	Enabled                param.Field[bool]        `json:"enabled"`
-	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check,required"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
 	// An object configuring the rule's logging behavior.
-	Logging   param.Field[LoggingParam] `json:"logging"`
-	Ratelimit param.Field[interface{}]  `json:"ratelimit,required"`
+	Logging param.Field[LoggingParam] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }

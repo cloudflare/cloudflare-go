@@ -1671,15 +1671,15 @@ func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
 func (r PTRRecordParam) implementsDNSRecordUnionParam() {}
 
 type RecordParam struct {
-	// A valid IPv4 address.
-	Content param.Field[string] `json:"content" format:"ipv4"`
-	// Record type.
-	Type     param.Field[RecordType]  `json:"type"`
 	Data     param.Field[interface{}] `json:"data,required"`
 	Settings param.Field[interface{}] `json:"settings,required"`
+	// A valid IPv4 address.
+	Content param.Field[string] `json:"content" format:"ipv4"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority param.Field[float64] `json:"priority"`
+	// Record type.
+	Type param.Field[RecordType] `json:"type"`
 }
 
 func (r RecordParam) MarshalJSON() (data []byte, err error) {
@@ -2583,10 +2583,6 @@ func (r URIRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordNewResponse struct {
-	// A valid IPv4 address.
-	Content string `json:"content" format:"ipv4"`
-	// Record type.
-	Type RecordNewResponseType `json:"type"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
 	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
@@ -2594,21 +2590,25 @@ type RecordNewResponse struct {
 	Data interface{} `json:"data,required"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings,required"`
+	// A valid IPv4 address.
+	Content string `json:"content" format:"ipv4"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
-	Priority float64               `json:"priority"`
-	JSON     recordNewResponseJSON `json:"-"`
-	union    RecordNewResponseUnion
+	Priority float64 `json:"priority"`
+	// Record type.
+	Type  RecordNewResponseType `json:"type"`
+	JSON  recordNewResponseJSON `json:"-"`
+	union RecordNewResponseUnion
 }
 
 // recordNewResponseJSON contains the JSON metadata for the struct
 // [RecordNewResponse]
 type recordNewResponseJSON struct {
-	Content     apijson.Field
-	Type        apijson.Field
 	Data        apijson.Field
 	Settings    apijson.Field
+	Content     apijson.Field
 	Priority    apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2839,10 +2839,6 @@ func (r RecordNewResponseType) IsKnown() bool {
 }
 
 type RecordUpdateResponse struct {
-	// A valid IPv4 address.
-	Content string `json:"content" format:"ipv4"`
-	// Record type.
-	Type RecordUpdateResponseType `json:"type"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
 	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
@@ -2850,21 +2846,25 @@ type RecordUpdateResponse struct {
 	Data interface{} `json:"data,required"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings,required"`
+	// A valid IPv4 address.
+	Content string `json:"content" format:"ipv4"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
-	Priority float64                  `json:"priority"`
-	JSON     recordUpdateResponseJSON `json:"-"`
-	union    RecordUpdateResponseUnion
+	Priority float64 `json:"priority"`
+	// Record type.
+	Type  RecordUpdateResponseType `json:"type"`
+	JSON  recordUpdateResponseJSON `json:"-"`
+	union RecordUpdateResponseUnion
 }
 
 // recordUpdateResponseJSON contains the JSON metadata for the struct
 // [RecordUpdateResponse]
 type recordUpdateResponseJSON struct {
-	Content     apijson.Field
-	Type        apijson.Field
 	Data        apijson.Field
 	Settings    apijson.Field
+	Content     apijson.Field
 	Priority    apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3095,10 +3095,6 @@ func (r RecordUpdateResponseType) IsKnown() bool {
 }
 
 type RecordListResponse struct {
-	// A valid IPv4 address.
-	Content string `json:"content" format:"ipv4"`
-	// Record type.
-	Type RecordListResponseType `json:"type"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
 	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
@@ -3106,21 +3102,25 @@ type RecordListResponse struct {
 	Data interface{} `json:"data,required"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings,required"`
+	// A valid IPv4 address.
+	Content string `json:"content" format:"ipv4"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
-	Priority float64                `json:"priority"`
-	JSON     recordListResponseJSON `json:"-"`
-	union    RecordListResponseUnion
+	Priority float64 `json:"priority"`
+	// Record type.
+	Type  RecordListResponseType `json:"type"`
+	JSON  recordListResponseJSON `json:"-"`
+	union RecordListResponseUnion
 }
 
 // recordListResponseJSON contains the JSON metadata for the struct
 // [RecordListResponse]
 type recordListResponseJSON struct {
-	Content     apijson.Field
-	Type        apijson.Field
 	Data        apijson.Field
 	Settings    apijson.Field
+	Content     apijson.Field
 	Priority    apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3400,10 +3400,6 @@ func (r recordBatchResponseJSON) RawJSON() string {
 }
 
 type RecordBatchResponseDelete struct {
-	// A valid IPv4 address.
-	Content string `json:"content" format:"ipv4"`
-	// Record type.
-	Type RecordBatchResponseDeletesType `json:"type"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
 	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
@@ -3411,21 +3407,25 @@ type RecordBatchResponseDelete struct {
 	Data interface{} `json:"data,required"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings,required"`
+	// A valid IPv4 address.
+	Content string `json:"content" format:"ipv4"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
-	Priority float64                       `json:"priority"`
-	JSON     recordBatchResponseDeleteJSON `json:"-"`
-	union    RecordBatchResponseDeletesUnion
+	Priority float64 `json:"priority"`
+	// Record type.
+	Type  RecordBatchResponseDeletesType `json:"type"`
+	JSON  recordBatchResponseDeleteJSON  `json:"-"`
+	union RecordBatchResponseDeletesUnion
 }
 
 // recordBatchResponseDeleteJSON contains the JSON metadata for the struct
 // [RecordBatchResponseDelete]
 type recordBatchResponseDeleteJSON struct {
-	Content     apijson.Field
-	Type        apijson.Field
 	Data        apijson.Field
 	Settings    apijson.Field
+	Content     apijson.Field
 	Priority    apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3656,10 +3656,6 @@ func (r RecordBatchResponseDeletesType) IsKnown() bool {
 }
 
 type RecordBatchResponsePatch struct {
-	// A valid IPv4 address.
-	Content string `json:"content" format:"ipv4"`
-	// Record type.
-	Type RecordBatchResponsePatchesType `json:"type"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
 	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
@@ -3667,21 +3663,25 @@ type RecordBatchResponsePatch struct {
 	Data interface{} `json:"data,required"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings,required"`
+	// A valid IPv4 address.
+	Content string `json:"content" format:"ipv4"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
-	Priority float64                      `json:"priority"`
-	JSON     recordBatchResponsePatchJSON `json:"-"`
-	union    RecordBatchResponsePatchesUnion
+	Priority float64 `json:"priority"`
+	// Record type.
+	Type  RecordBatchResponsePatchesType `json:"type"`
+	JSON  recordBatchResponsePatchJSON   `json:"-"`
+	union RecordBatchResponsePatchesUnion
 }
 
 // recordBatchResponsePatchJSON contains the JSON metadata for the struct
 // [RecordBatchResponsePatch]
 type recordBatchResponsePatchJSON struct {
-	Content     apijson.Field
-	Type        apijson.Field
 	Data        apijson.Field
 	Settings    apijson.Field
+	Content     apijson.Field
 	Priority    apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3912,10 +3912,6 @@ func (r RecordBatchResponsePatchesType) IsKnown() bool {
 }
 
 type RecordBatchResponsePost struct {
-	// A valid IPv4 address.
-	Content string `json:"content" format:"ipv4"`
-	// Record type.
-	Type RecordBatchResponsePostsType `json:"type"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
 	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
@@ -3923,21 +3919,25 @@ type RecordBatchResponsePost struct {
 	Data interface{} `json:"data,required"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings,required"`
+	// A valid IPv4 address.
+	Content string `json:"content" format:"ipv4"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
-	Priority float64                     `json:"priority"`
-	JSON     recordBatchResponsePostJSON `json:"-"`
-	union    RecordBatchResponsePostsUnion
+	Priority float64 `json:"priority"`
+	// Record type.
+	Type  RecordBatchResponsePostsType `json:"type"`
+	JSON  recordBatchResponsePostJSON  `json:"-"`
+	union RecordBatchResponsePostsUnion
 }
 
 // recordBatchResponsePostJSON contains the JSON metadata for the struct
 // [RecordBatchResponsePost]
 type recordBatchResponsePostJSON struct {
-	Content     apijson.Field
-	Type        apijson.Field
 	Data        apijson.Field
 	Settings    apijson.Field
+	Content     apijson.Field
 	Priority    apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4168,10 +4168,6 @@ func (r RecordBatchResponsePostsType) IsKnown() bool {
 }
 
 type RecordBatchResponsePut struct {
-	// A valid IPv4 address.
-	Content string `json:"content" format:"ipv4"`
-	// Record type.
-	Type RecordBatchResponsePutsType `json:"type"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
 	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
@@ -4179,21 +4175,25 @@ type RecordBatchResponsePut struct {
 	Data interface{} `json:"data,required"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings,required"`
+	// A valid IPv4 address.
+	Content string `json:"content" format:"ipv4"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
-	Priority float64                    `json:"priority"`
-	JSON     recordBatchResponsePutJSON `json:"-"`
-	union    RecordBatchResponsePutsUnion
+	Priority float64 `json:"priority"`
+	// Record type.
+	Type  RecordBatchResponsePutsType `json:"type"`
+	JSON  recordBatchResponsePutJSON  `json:"-"`
+	union RecordBatchResponsePutsUnion
 }
 
 // recordBatchResponsePutJSON contains the JSON metadata for the struct
 // [RecordBatchResponsePut]
 type recordBatchResponsePutJSON struct {
-	Content     apijson.Field
-	Type        apijson.Field
 	Data        apijson.Field
 	Settings    apijson.Field
+	Content     apijson.Field
 	Priority    apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4424,10 +4424,6 @@ func (r RecordBatchResponsePutsType) IsKnown() bool {
 }
 
 type RecordEditResponse struct {
-	// A valid IPv4 address.
-	Content string `json:"content" format:"ipv4"`
-	// Record type.
-	Type RecordEditResponseType `json:"type"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
 	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
@@ -4435,21 +4431,25 @@ type RecordEditResponse struct {
 	Data interface{} `json:"data,required"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings,required"`
+	// A valid IPv4 address.
+	Content string `json:"content" format:"ipv4"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
-	Priority float64                `json:"priority"`
-	JSON     recordEditResponseJSON `json:"-"`
-	union    RecordEditResponseUnion
+	Priority float64 `json:"priority"`
+	// Record type.
+	Type  RecordEditResponseType `json:"type"`
+	JSON  recordEditResponseJSON `json:"-"`
+	union RecordEditResponseUnion
 }
 
 // recordEditResponseJSON contains the JSON metadata for the struct
 // [RecordEditResponse]
 type recordEditResponseJSON struct {
-	Content     apijson.Field
-	Type        apijson.Field
 	Data        apijson.Field
 	Settings    apijson.Field
+	Content     apijson.Field
 	Priority    apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4680,10 +4680,6 @@ func (r RecordEditResponseType) IsKnown() bool {
 }
 
 type RecordGetResponse struct {
-	// A valid IPv4 address.
-	Content string `json:"content" format:"ipv4"`
-	// Record type.
-	Type RecordGetResponseType `json:"type"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
 	// [DNSKEYRecordData], [DSRecordData], [HTTPSRecordData], [LOCRecordData],
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
@@ -4691,21 +4687,25 @@ type RecordGetResponse struct {
 	Data interface{} `json:"data,required"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings,required"`
+	// A valid IPv4 address.
+	Content string `json:"content" format:"ipv4"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
-	Priority float64               `json:"priority"`
-	JSON     recordGetResponseJSON `json:"-"`
-	union    RecordGetResponseUnion
+	Priority float64 `json:"priority"`
+	// Record type.
+	Type  RecordGetResponseType `json:"type"`
+	JSON  recordGetResponseJSON `json:"-"`
+	union RecordGetResponseUnion
 }
 
 // recordGetResponseJSON contains the JSON metadata for the struct
 // [RecordGetResponse]
 type recordGetResponseJSON struct {
-	Content     apijson.Field
-	Type        apijson.Field
 	Data        apijson.Field
 	Settings    apijson.Field
+	Content     apijson.Field
 	Priority    apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -424,6 +424,14 @@ func (r GenericOAuthConfigParam) MarshalJSON() (data []byte, err error) {
 }
 
 type IdentityProvider struct {
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type IdentityProviderType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
 	// This field can have the runtime type of [AzureADConfig],
 	// [IdentityProviderAccessCentrifyConfig], [GenericOAuthConfig],
 	// [IdentityProviderAccessGoogleConfig], [IdentityProviderAccessGoogleAppsConfig],
@@ -431,29 +439,21 @@ type IdentityProvider struct {
 	// [IdentityProviderAccessOneloginConfig], [IdentityProviderAccessPingoneConfig],
 	// [IdentityProviderAccessSAMLConfig], [interface{}].
 	Config interface{} `json:"config"`
-	// UUID
-	ID string `json:"id"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	SCIMConfig IdentityProviderSCIMConfig `json:"scim_config"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type  IdentityProviderType `json:"type,required"`
-	JSON  identityProviderJSON `json:"-"`
-	union IdentityProviderUnion
+	JSON       identityProviderJSON       `json:"-"`
+	union      IdentityProviderUnion
 }
 
 // identityProviderJSON contains the JSON metadata for the struct
 // [IdentityProvider]
 type identityProviderJSON struct {
-	Config      apijson.Field
-	ID          apijson.Field
 	Name        apijson.Field
-	SCIMConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	Config      apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1449,16 +1449,16 @@ func (r identityProviderAccessOnetimepinJSON) RawJSON() string {
 func (r IdentityProviderAccessOnetimepin) implementsZeroTrustIdentityProvider() {}
 
 type IdentityProviderParam struct {
-	Config param.Field[interface{}] `json:"config"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[IdentityProviderType] `json:"type,required"`
+	Type   param.Field[IdentityProviderType] `json:"type,required"`
+	Config param.Field[interface{}]          `json:"config"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderParam) MarshalJSON() (data []byte, err error) {
@@ -2057,6 +2057,14 @@ func (r IdentityProviderType) IsKnown() bool {
 }
 
 type IdentityProviderListResponse struct {
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type IdentityProviderType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
 	// This field can have the runtime type of [AzureADConfig],
 	// [IdentityProviderListResponseAccessCentrifyConfig], [GenericOAuthConfig],
 	// [IdentityProviderListResponseAccessGoogleConfig],
@@ -2067,29 +2075,21 @@ type IdentityProviderListResponse struct {
 	// [IdentityProviderListResponseAccessPingoneConfig],
 	// [IdentityProviderListResponseAccessSAMLConfig].
 	Config interface{} `json:"config"`
-	// UUID
-	ID string `json:"id"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig `json:"scim_config"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type  IdentityProviderType             `json:"type,required"`
-	JSON  identityProviderListResponseJSON `json:"-"`
-	union IdentityProviderListResponseUnion
+	SCIMConfig IdentityProviderSCIMConfig       `json:"scim_config"`
+	JSON       identityProviderListResponseJSON `json:"-"`
+	union      IdentityProviderListResponseUnion
 }
 
 // identityProviderListResponseJSON contains the JSON metadata for the struct
 // [IdentityProviderListResponse]
 type identityProviderListResponseJSON struct {
-	Config      apijson.Field
-	ID          apijson.Field
 	Name        apijson.Field
-	SCIMConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	Config      apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

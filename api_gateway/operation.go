@@ -190,20 +190,20 @@ func (r APIShieldMethod) IsKnown() bool {
 
 type APIShieldFeatures struct {
 	// This field can have the runtime type of
-	// [APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds].
-	Thresholds interface{} `json:"thresholds,required"`
-	// This field can have the runtime type of
-	// [APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
-	ParameterSchemas interface{} `json:"parameter_schemas,required"`
-	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
 	APIRouting interface{} `json:"api_routing,required"`
 	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
 	ConfidenceIntervals interface{} `json:"confidence_intervals,required"`
 	// This field can have the runtime type of
+	// [APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
+	ParameterSchemas interface{} `json:"parameter_schemas,required"`
+	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
-	SchemaInfo interface{}           `json:"schema_info,required"`
+	SchemaInfo interface{} `json:"schema_info,required"`
+	// This field can have the runtime type of
+	// [APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds].
+	Thresholds interface{}           `json:"thresholds,required"`
 	JSON       apiShieldFeaturesJSON `json:"-"`
 	union      APIShieldFeaturesUnion
 }
@@ -211,11 +211,11 @@ type APIShieldFeatures struct {
 // apiShieldFeaturesJSON contains the JSON metadata for the struct
 // [APIShieldFeatures]
 type apiShieldFeaturesJSON struct {
-	Thresholds          apijson.Field
-	ParameterSchemas    apijson.Field
 	APIRouting          apijson.Field
 	ConfidenceIntervals apijson.Field
+	ParameterSchemas    apijson.Field
 	SchemaInfo          apijson.Field
+	Thresholds          apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -831,20 +831,20 @@ func (r OperationListResponseMethod) IsKnown() bool {
 
 type OperationListResponseFeatures struct {
 	// This field can have the runtime type of
-	// [OperationListResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
-	Thresholds interface{} `json:"thresholds,required"`
-	// This field can have the runtime type of
-	// [OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
-	ParameterSchemas interface{} `json:"parameter_schemas,required"`
-	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
 	APIRouting interface{} `json:"api_routing,required"`
 	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
 	ConfidenceIntervals interface{} `json:"confidence_intervals,required"`
 	// This field can have the runtime type of
+	// [OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
+	ParameterSchemas interface{} `json:"parameter_schemas,required"`
+	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
-	SchemaInfo interface{}                       `json:"schema_info,required"`
+	SchemaInfo interface{} `json:"schema_info,required"`
+	// This field can have the runtime type of
+	// [OperationListResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
+	Thresholds interface{}                       `json:"thresholds,required"`
 	JSON       operationListResponseFeaturesJSON `json:"-"`
 	union      OperationListResponseFeaturesUnion
 }
@@ -852,11 +852,11 @@ type OperationListResponseFeatures struct {
 // operationListResponseFeaturesJSON contains the JSON metadata for the struct
 // [OperationListResponseFeatures]
 type operationListResponseFeaturesJSON struct {
-	Thresholds          apijson.Field
-	ParameterSchemas    apijson.Field
 	APIRouting          apijson.Field
 	ConfidenceIntervals apijson.Field
+	ParameterSchemas    apijson.Field
 	SchemaInfo          apijson.Field
+	Thresholds          apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -1517,20 +1517,20 @@ func (r OperationGetResponseMethod) IsKnown() bool {
 
 type OperationGetResponseFeatures struct {
 	// This field can have the runtime type of
-	// [OperationGetResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
-	Thresholds interface{} `json:"thresholds,required"`
-	// This field can have the runtime type of
-	// [OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
-	ParameterSchemas interface{} `json:"parameter_schemas,required"`
-	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
 	APIRouting interface{} `json:"api_routing,required"`
 	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
 	ConfidenceIntervals interface{} `json:"confidence_intervals,required"`
 	// This field can have the runtime type of
+	// [OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
+	ParameterSchemas interface{} `json:"parameter_schemas,required"`
+	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
-	SchemaInfo interface{}                      `json:"schema_info,required"`
+	SchemaInfo interface{} `json:"schema_info,required"`
+	// This field can have the runtime type of
+	// [OperationGetResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
+	Thresholds interface{}                      `json:"thresholds,required"`
 	JSON       operationGetResponseFeaturesJSON `json:"-"`
 	union      OperationGetResponseFeaturesUnion
 }
@@ -1538,11 +1538,11 @@ type OperationGetResponseFeatures struct {
 // operationGetResponseFeaturesJSON contains the JSON metadata for the struct
 // [OperationGetResponseFeatures]
 type operationGetResponseFeaturesJSON struct {
-	Thresholds          apijson.Field
-	ParameterSchemas    apijson.Field
 	APIRouting          apijson.Field
 	ConfidenceIntervals apijson.Field
+	ParameterSchemas    apijson.Field
 	SchemaInfo          apijson.Field
+	Thresholds          apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }

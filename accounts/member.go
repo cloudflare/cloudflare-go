@@ -1375,9 +1375,9 @@ func (r MemberNewParams) MarshalJSON() (data []byte, err error) {
 type MemberNewParamsBody struct {
 	// The contact email address of the user.
 	Email    param.Field[string]                    `json:"email,required"`
+	Policies param.Field[interface{}]               `json:"policies,required"`
 	Roles    param.Field[interface{}]               `json:"roles,required"`
 	Status   param.Field[MemberNewParamsBodyStatus] `json:"status"`
-	Policies param.Field[interface{}]               `json:"policies,required"`
 }
 
 func (r MemberNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -1570,9 +1570,9 @@ func (r MemberUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type MemberUpdateParamsBody struct {
+	Policies param.Field[interface{}] `json:"policies,required"`
 	Roles    param.Field[interface{}] `json:"roles,required"`
 	User     param.Field[interface{}] `json:"user,required"`
-	Policies param.Field[interface{}] `json:"policies,required"`
 }
 
 func (r MemberUpdateParamsBody) MarshalJSON() (data []byte, err error) {

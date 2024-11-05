@@ -114,10 +114,10 @@ func (r DLPDatasetVersionNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPDatasetVersionNewParamsBody struct {
-	HeaderName param.Field[string] `json:"header_name"`
-	NumCells   param.Field[int64]  `json:"num_cells"`
 	EntryID    param.Field[string] `json:"entry_id" format:"uuid"`
 	EntryName  param.Field[string] `json:"entry_name"`
+	HeaderName param.Field[string] `json:"header_name"`
+	NumCells   param.Field[int64]  `json:"num_cells"`
 }
 
 func (r DLPDatasetVersionNewParamsBody) MarshalJSON() (data []byte, err error) {

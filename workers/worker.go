@@ -44,52 +44,52 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 type Binding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id"`
-	// The class of resource that the binding provides.
-	Type BindingType `json:"type,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Name of Worker to bind to
-	Service string `json:"service"`
-	// The exported class name of the Durable Object
-	ClassName string `json:"class_name"`
-	// The script where the Durable Object is defined, if it is external to this Worker
-	ScriptName string `json:"script_name"`
-	// R2 bucket to bind to
-	BucketName string `json:"bucket_name"`
-	// Name of the Queue to bind to
-	QueueName string `json:"queue_name"`
-	// A JavaScript variable name for the binding.
-	Binding string `json:"binding"`
-	// ID of the D1 database to bind to
-	ID string `json:"id"`
-	// Namespace to bind to
-	Namespace string `json:"namespace"`
 	// This field can have the runtime type of [DispatchNamespaceBindingOutbound].
 	Outbound interface{} `json:"outbound,required"`
+	// The class of resource that the binding provides.
+	Type BindingType `json:"type,required"`
+	// ID of the D1 database to bind to
+	ID string `json:"id"`
+	// A JavaScript variable name for the binding.
+	Binding string `json:"binding"`
+	// R2 bucket to bind to
+	BucketName string `json:"bucket_name"`
 	// ID of the certificate to bind to
-	CertificateID string      `json:"certificate_id"`
-	JSON          bindingJSON `json:"-"`
-	union         BindingUnion
+	CertificateID string `json:"certificate_id"`
+	// The exported class name of the Durable Object
+	ClassName string `json:"class_name"`
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment"`
+	// Namespace to bind to
+	Namespace string `json:"namespace"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id"`
+	// Name of the Queue to bind to
+	QueueName string `json:"queue_name"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName string `json:"script_name"`
+	// Name of Worker to bind to
+	Service string      `json:"service"`
+	JSON    bindingJSON `json:"-"`
+	union   BindingUnion
 }
 
 // bindingJSON contains the JSON metadata for the struct [Binding]
 type bindingJSON struct {
 	Name          apijson.Field
-	NamespaceID   apijson.Field
-	Type          apijson.Field
-	Environment   apijson.Field
-	Service       apijson.Field
-	ClassName     apijson.Field
-	ScriptName    apijson.Field
-	BucketName    apijson.Field
-	QueueName     apijson.Field
-	Binding       apijson.Field
-	ID            apijson.Field
-	Namespace     apijson.Field
 	Outbound      apijson.Field
+	Type          apijson.Field
+	ID            apijson.Field
+	Binding       apijson.Field
+	BucketName    apijson.Field
 	CertificateID apijson.Field
+	ClassName     apijson.Field
+	Environment   apijson.Field
+	Namespace     apijson.Field
+	NamespaceID   apijson.Field
+	QueueName     apijson.Field
+	ScriptName    apijson.Field
+	Service       apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -285,27 +285,27 @@ func (r BindingType) IsKnown() bool {
 
 // A binding to allow the Worker to communicate with resources
 type BindingParam struct {
+	Outbound param.Field[interface{}] `json:"outbound,required"`
 	// The class of resource that the binding provides.
 	Type param.Field[BindingType] `json:"type,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment param.Field[string] `json:"environment"`
-	// Name of Worker to bind to
-	Service param.Field[string] `json:"service"`
-	// The exported class name of the Durable Object
-	ClassName param.Field[string] `json:"class_name"`
-	// The script where the Durable Object is defined, if it is external to this Worker
-	ScriptName param.Field[string] `json:"script_name"`
-	// R2 bucket to bind to
-	BucketName param.Field[string] `json:"bucket_name"`
-	// Name of the Queue to bind to
-	QueueName param.Field[string] `json:"queue_name"`
 	// ID of the D1 database to bind to
 	ID param.Field[string] `json:"id"`
-	// Namespace to bind to
-	Namespace param.Field[string]      `json:"namespace"`
-	Outbound  param.Field[interface{}] `json:"outbound,required"`
+	// R2 bucket to bind to
+	BucketName param.Field[string] `json:"bucket_name"`
 	// ID of the certificate to bind to
 	CertificateID param.Field[string] `json:"certificate_id"`
+	// The exported class name of the Durable Object
+	ClassName param.Field[string] `json:"class_name"`
+	// Optional environment if the Worker utilizes one.
+	Environment param.Field[string] `json:"environment"`
+	// Namespace to bind to
+	Namespace param.Field[string] `json:"namespace"`
+	// Name of the Queue to bind to
+	QueueName param.Field[string] `json:"queue_name"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName param.Field[string] `json:"script_name"`
+	// Name of Worker to bind to
+	Service param.Field[string] `json:"service"`
 }
 
 func (r BindingParam) MarshalJSON() (data []byte, err error) {
