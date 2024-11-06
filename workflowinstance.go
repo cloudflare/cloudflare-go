@@ -334,22 +334,22 @@ type WorkflowInstanceGetResponseStep struct {
 	// This field can have the runtime type of
 	// [WorkflowInstanceGetResponseStepsObjectConfig].
 	Config interface{} `json:"config,required"`
-	End    time.Time   `json:"end,nullable" format:"date-time"`
-	Name   string      `json:"name"`
-	// This field can have the runtime type of [interface{}].
-	Output  interface{}                          `json:"output,required"`
-	Start   time.Time                            `json:"start" format:"date-time"`
-	Success bool                                 `json:"success,nullable"`
-	Type    WorkflowInstanceGetResponseStepsType `json:"type,required"`
 	// This field can have the runtime type of
 	// [WorkflowInstanceGetResponseStepsObjectError].
-	Error    interface{} `json:"error,required"`
-	Finished bool        `json:"finished"`
+	Error interface{} `json:"error,required"`
+	// This field can have the runtime type of [interface{}].
+	Output interface{} `json:"output,required"`
 	// This field can have the runtime type of
 	// [WorkflowInstanceGetResponseStepsObjectTrigger].
-	Trigger interface{}                         `json:"trigger,required"`
-	JSON    workflowInstanceGetResponseStepJSON `json:"-"`
-	union   WorkflowInstanceGetResponseStepsUnion
+	Trigger  interface{}                          `json:"trigger,required"`
+	Type     WorkflowInstanceGetResponseStepsType `json:"type,required"`
+	End      time.Time                            `json:"end,nullable" format:"date-time"`
+	Finished bool                                 `json:"finished"`
+	Name     string                               `json:"name"`
+	Start    time.Time                            `json:"start" format:"date-time"`
+	Success  bool                                 `json:"success,nullable"`
+	JSON     workflowInstanceGetResponseStepJSON  `json:"-"`
+	union    WorkflowInstanceGetResponseStepsUnion
 }
 
 // workflowInstanceGetResponseStepJSON contains the JSON metadata for the struct
@@ -357,15 +357,15 @@ type WorkflowInstanceGetResponseStep struct {
 type workflowInstanceGetResponseStepJSON struct {
 	Attempts    apijson.Field
 	Config      apijson.Field
-	End         apijson.Field
-	Name        apijson.Field
+	Error       apijson.Field
 	Output      apijson.Field
+	Trigger     apijson.Field
+	Type        apijson.Field
+	End         apijson.Field
+	Finished    apijson.Field
+	Name        apijson.Field
 	Start       apijson.Field
 	Success     apijson.Field
-	Type        apijson.Field
-	Error       apijson.Field
-	Finished    apijson.Field
-	Trigger     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

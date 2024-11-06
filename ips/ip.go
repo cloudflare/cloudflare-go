@@ -114,24 +114,24 @@ func (r JDCloudIPsJSON) RawJSON() string {
 func (r JDCloudIPs) implementsIPsIPListResponse() {}
 
 type IPListResponse struct {
-	// A digest of the IP data. Useful for determining if the data has changed.
-	Etag string `json:"etag"`
 	// This field can have the runtime type of [[]string].
 	IPV4CIDRs interface{} `json:"ipv4_cidrs,required"`
 	// This field can have the runtime type of [[]string].
 	IPV6CIDRs interface{} `json:"ipv6_cidrs,required"`
 	// This field can have the runtime type of [[]string].
-	JDCloudCIDRs interface{}        `json:"jdcloud_cidrs,required"`
-	JSON         ipListResponseJSON `json:"-"`
-	union        IPListResponseUnion
+	JDCloudCIDRs interface{} `json:"jdcloud_cidrs,required"`
+	// A digest of the IP data. Useful for determining if the data has changed.
+	Etag  string             `json:"etag"`
+	JSON  ipListResponseJSON `json:"-"`
+	union IPListResponseUnion
 }
 
 // ipListResponseJSON contains the JSON metadata for the struct [IPListResponse]
 type ipListResponseJSON struct {
-	Etag         apijson.Field
 	IPV4CIDRs    apijson.Field
 	IPV6CIDRs    apijson.Field
 	JDCloudCIDRs apijson.Field
+	Etag         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }

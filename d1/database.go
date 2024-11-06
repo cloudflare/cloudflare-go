@@ -905,14 +905,14 @@ func (r DatabaseImportParams) MarshalJSON() (data []byte, err error) {
 type DatabaseImportParamsBody struct {
 	// Indicates you have a new SQL file to upload.
 	Action param.Field[DatabaseImportParamsBodyAction] `json:"action,required"`
+	// This identifies the currently-running import, checking its status.
+	CurrentBookmark param.Field[string] `json:"current_bookmark"`
 	// Required when action is 'init' or 'ingest'. An md5 hash of the file you're
 	// uploading. Used to check if it already exists, and validate its contents before
 	// ingesting.
 	Etag param.Field[string] `json:"etag"`
 	// The filename you have successfully uploaded.
 	Filename param.Field[string] `json:"filename"`
-	// This identifies the currently-running import, checking its status.
-	CurrentBookmark param.Field[string] `json:"current_bookmark"`
 }
 
 func (r DatabaseImportParamsBody) MarshalJSON() (data []byte, err error) {

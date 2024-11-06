@@ -259,21 +259,8 @@ func (r PCAPFilterParam) MarshalJSON() (data []byte, err error) {
 }
 
 type PCAPNewResponse struct {
-	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 PCAPFilter `json:"filter_v1"`
 	// The ID for the packet capture.
 	ID string `json:"id"`
-	// The status of the packet capture request.
-	Status PCAPNewResponseStatus `json:"status"`
-	// The RFC 3339 timestamp when the packet capture was created.
-	Submitted string `json:"submitted"`
-	// The system used to collect packet captures.
-	System PCAPNewResponseSystem `json:"system"`
-	// The packet capture duration in seconds.
-	TimeLimit float64 `json:"time_limit"`
-	// The type of packet capture. `Simple` captures sampled packets, and `full`
-	// captures entire payloads and non-sampled packets.
-	Type PCAPNewResponseType `json:"type"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
 	// captures.
 	ByteLimit float64 `json:"byte_limit"`
@@ -285,24 +272,37 @@ type PCAPNewResponse struct {
 	DestinationConf string `json:"destination_conf"`
 	// An error message that describes why the packet capture failed. This field only
 	// applies to `full` packet captures.
-	ErrorMessage string              `json:"error_message"`
-	JSON         pcapNewResponseJSON `json:"-"`
-	union        PCAPNewResponseUnion
+	ErrorMessage string `json:"error_message"`
+	// The packet capture filter. When this field is empty, all packets are captured.
+	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The status of the packet capture request.
+	Status PCAPNewResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when the packet capture was created.
+	Submitted string `json:"submitted"`
+	// The system used to collect packet captures.
+	System PCAPNewResponseSystem `json:"system"`
+	// The packet capture duration in seconds.
+	TimeLimit float64 `json:"time_limit"`
+	// The type of packet capture. `Simple` captures sampled packets, and `full`
+	// captures entire payloads and non-sampled packets.
+	Type  PCAPNewResponseType `json:"type"`
+	JSON  pcapNewResponseJSON `json:"-"`
+	union PCAPNewResponseUnion
 }
 
 // pcapNewResponseJSON contains the JSON metadata for the struct [PCAPNewResponse]
 type pcapNewResponseJSON struct {
-	FilterV1        apijson.Field
 	ID              apijson.Field
+	ByteLimit       apijson.Field
+	ColoName        apijson.Field
+	DestinationConf apijson.Field
+	ErrorMessage    apijson.Field
+	FilterV1        apijson.Field
 	Status          apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
 	Type            apijson.Field
-	ByteLimit       apijson.Field
-	ColoName        apijson.Field
-	DestinationConf apijson.Field
-	ErrorMessage    apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -518,21 +518,8 @@ func (r PCAPNewResponseType) IsKnown() bool {
 }
 
 type PCAPListResponse struct {
-	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 PCAPFilter `json:"filter_v1"`
 	// The ID for the packet capture.
 	ID string `json:"id"`
-	// The status of the packet capture request.
-	Status PCAPListResponseStatus `json:"status"`
-	// The RFC 3339 timestamp when the packet capture was created.
-	Submitted string `json:"submitted"`
-	// The system used to collect packet captures.
-	System PCAPListResponseSystem `json:"system"`
-	// The packet capture duration in seconds.
-	TimeLimit float64 `json:"time_limit"`
-	// The type of packet capture. `Simple` captures sampled packets, and `full`
-	// captures entire payloads and non-sampled packets.
-	Type PCAPListResponseType `json:"type"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
 	// captures.
 	ByteLimit float64 `json:"byte_limit"`
@@ -544,25 +531,38 @@ type PCAPListResponse struct {
 	DestinationConf string `json:"destination_conf"`
 	// An error message that describes why the packet capture failed. This field only
 	// applies to `full` packet captures.
-	ErrorMessage string               `json:"error_message"`
-	JSON         pcapListResponseJSON `json:"-"`
-	union        PCAPListResponseUnion
+	ErrorMessage string `json:"error_message"`
+	// The packet capture filter. When this field is empty, all packets are captured.
+	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The status of the packet capture request.
+	Status PCAPListResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when the packet capture was created.
+	Submitted string `json:"submitted"`
+	// The system used to collect packet captures.
+	System PCAPListResponseSystem `json:"system"`
+	// The packet capture duration in seconds.
+	TimeLimit float64 `json:"time_limit"`
+	// The type of packet capture. `Simple` captures sampled packets, and `full`
+	// captures entire payloads and non-sampled packets.
+	Type  PCAPListResponseType `json:"type"`
+	JSON  pcapListResponseJSON `json:"-"`
+	union PCAPListResponseUnion
 }
 
 // pcapListResponseJSON contains the JSON metadata for the struct
 // [PCAPListResponse]
 type pcapListResponseJSON struct {
-	FilterV1        apijson.Field
 	ID              apijson.Field
+	ByteLimit       apijson.Field
+	ColoName        apijson.Field
+	DestinationConf apijson.Field
+	ErrorMessage    apijson.Field
+	FilterV1        apijson.Field
 	Status          apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
 	Type            apijson.Field
-	ByteLimit       apijson.Field
-	ColoName        apijson.Field
-	DestinationConf apijson.Field
-	ErrorMessage    apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -778,21 +778,8 @@ func (r PCAPListResponseType) IsKnown() bool {
 }
 
 type PCAPGetResponse struct {
-	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 PCAPFilter `json:"filter_v1"`
 	// The ID for the packet capture.
 	ID string `json:"id"`
-	// The status of the packet capture request.
-	Status PCAPGetResponseStatus `json:"status"`
-	// The RFC 3339 timestamp when the packet capture was created.
-	Submitted string `json:"submitted"`
-	// The system used to collect packet captures.
-	System PCAPGetResponseSystem `json:"system"`
-	// The packet capture duration in seconds.
-	TimeLimit float64 `json:"time_limit"`
-	// The type of packet capture. `Simple` captures sampled packets, and `full`
-	// captures entire payloads and non-sampled packets.
-	Type PCAPGetResponseType `json:"type"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
 	// captures.
 	ByteLimit float64 `json:"byte_limit"`
@@ -804,24 +791,37 @@ type PCAPGetResponse struct {
 	DestinationConf string `json:"destination_conf"`
 	// An error message that describes why the packet capture failed. This field only
 	// applies to `full` packet captures.
-	ErrorMessage string              `json:"error_message"`
-	JSON         pcapGetResponseJSON `json:"-"`
-	union        PCAPGetResponseUnion
+	ErrorMessage string `json:"error_message"`
+	// The packet capture filter. When this field is empty, all packets are captured.
+	FilterV1 PCAPFilter `json:"filter_v1"`
+	// The status of the packet capture request.
+	Status PCAPGetResponseStatus `json:"status"`
+	// The RFC 3339 timestamp when the packet capture was created.
+	Submitted string `json:"submitted"`
+	// The system used to collect packet captures.
+	System PCAPGetResponseSystem `json:"system"`
+	// The packet capture duration in seconds.
+	TimeLimit float64 `json:"time_limit"`
+	// The type of packet capture. `Simple` captures sampled packets, and `full`
+	// captures entire payloads and non-sampled packets.
+	Type  PCAPGetResponseType `json:"type"`
+	JSON  pcapGetResponseJSON `json:"-"`
+	union PCAPGetResponseUnion
 }
 
 // pcapGetResponseJSON contains the JSON metadata for the struct [PCAPGetResponse]
 type pcapGetResponseJSON struct {
-	FilterV1        apijson.Field
 	ID              apijson.Field
+	ByteLimit       apijson.Field
+	ColoName        apijson.Field
+	DestinationConf apijson.Field
+	ErrorMessage    apijson.Field
+	FilterV1        apijson.Field
 	Status          apijson.Field
 	Submitted       apijson.Field
 	System          apijson.Field
 	TimeLimit       apijson.Field
 	Type            apijson.Field
-	ByteLimit       apijson.Field
-	ColoName        apijson.Field
-	DestinationConf apijson.Field
-	ErrorMessage    apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -1047,10 +1047,6 @@ func (r PCAPNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type PCAPNewParamsBody struct {
-	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 param.Field[PCAPFilterParam] `json:"filter_v1"`
-	// The limit of packets contained in a packet capture.
-	PacketLimit param.Field[float64] `json:"packet_limit"`
 	// The system used to collect packet captures.
 	System param.Field[PCAPNewParamsBodySystem] `json:"system,required"`
 	// The packet capture duration in seconds.
@@ -1067,6 +1063,10 @@ type PCAPNewParamsBody struct {
 	ColoName param.Field[string] `json:"colo_name"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf"`
+	// The packet capture filter. When this field is empty, all packets are captured.
+	FilterV1 param.Field[PCAPFilterParam] `json:"filter_v1"`
+	// The limit of packets contained in a packet capture.
+	PacketLimit param.Field[float64] `json:"packet_limit"`
 }
 
 func (r PCAPNewParamsBody) MarshalJSON() (data []byte, err error) {

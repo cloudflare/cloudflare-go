@@ -199,8 +199,6 @@ func (r phaseVersionGetResponseJSON) RawJSON() string {
 }
 
 type PhaseVersionGetResponseRule struct {
-	// The action to perform when the rule matches.
-	Action PhaseVersionGetResponseRulesAction `json:"action"`
 	// This field can have the runtime type of [BlockRuleActionParameters],
 	// [interface{}], [CompressResponseRuleActionParameters],
 	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
@@ -211,10 +209,6 @@ type PhaseVersionGetResponseRule struct {
 	ActionParameters interface{} `json:"action_parameters,required"`
 	// This field can have the runtime type of [[]string].
 	Categories interface{} `json:"categories,required"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [PhaseVersionGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
@@ -229,14 +223,8 @@ type PhaseVersionGetResponseRule struct {
 	// [DDoSDynamicRuleExposedCredentialCheck],
 	// [ForceConnectionCloseRuleExposedCredentialCheck].
 	ExposedCredentialCheck interface{} `json:"exposed_credential_check,required"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
 	// The timestamp of when the rule was last modified.
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [PhaseVersionGetResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -247,30 +235,42 @@ type PhaseVersionGetResponseRule struct {
 	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
 	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
 	Ratelimit interface{} `json:"ratelimit,required"`
-	// The reference of the rule (the rule ID by default).
-	Ref string `json:"ref"`
 	// The version of the rule.
-	Version string                          `json:"version,required"`
-	JSON    phaseVersionGetResponseRuleJSON `json:"-"`
-	union   PhaseVersionGetResponseRulesUnion
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action PhaseVersionGetResponseRulesAction `json:"action"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref   string                          `json:"ref"`
+	JSON  phaseVersionGetResponseRuleJSON `json:"-"`
+	union PhaseVersionGetResponseRulesUnion
 }
 
 // phaseVersionGetResponseRuleJSON contains the JSON metadata for the struct
 // [PhaseVersionGetResponseRule]
 type phaseVersionGetResponseRuleJSON struct {
-	Action                 apijson.Field
 	ActionParameters       apijson.Field
 	Categories             apijson.Field
+	ExposedCredentialCheck apijson.Field
+	LastUpdated            apijson.Field
+	Ratelimit              apijson.Field
+	Version                apijson.Field
+	ID                     apijson.Field
+	Action                 apijson.Field
 	Description            apijson.Field
 	Enabled                apijson.Field
-	ExposedCredentialCheck apijson.Field
 	Expression             apijson.Field
-	ID                     apijson.Field
-	LastUpdated            apijson.Field
 	Logging                apijson.Field
-	Ratelimit              apijson.Field
 	Ref                    apijson.Field
-	Version                apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }

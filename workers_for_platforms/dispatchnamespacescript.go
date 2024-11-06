@@ -319,17 +319,17 @@ func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataBinding) MarshalJSO
 
 // Migrations to apply for Durable Objects associated with this Worker.
 type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag param.Field[string] `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag             param.Field[string]      `json:"old_tag"`
 	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
 	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
 	NewSqliteClasses   param.Field[interface{}] `json:"new_sqlite_classes,required"`
 	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
-	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
 	Steps              param.Field[interface{}] `json:"steps,required"`
+	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag param.Field[string] `json:"old_tag"`
 }
 
 func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) MarshalJSON() (data []byte, err error) {

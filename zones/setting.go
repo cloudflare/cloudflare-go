@@ -4988,13 +4988,6 @@ func (r ZeroRTTParam) implementsZonesSettingEditParamsBodyUnion() {}
 
 // 0-RTT session resumption enabled for this zone.
 type SettingEditResponse struct {
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingEditResponseEditable `json:"editable"`
-	// ID of the zone setting.
-	ID SettingEditResponseID `json:"id"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
 	// [AlwaysOnlineValue], [AlwaysUseHTTPSValue], [AutomaticHTTPSRewritesValue],
 	// [BrotliValue], [BrowserCacheTTLValue], [BrowserCheckValue], [CacheLevelValue],
@@ -5015,25 +5008,32 @@ type SettingEditResponse struct {
 	// [TLSClientAuthValue], [TrueClientIPHeaderValue], [WAFValue], [WebPValue],
 	// [WebsocketValue].
 	Value interface{} `json:"value,required"`
+	// ID of the zone setting.
+	ID SettingEditResponseID `json:"id"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingEditResponseEditable `json:"editable"`
+	// ssl-recommender enrollment setting.
+	Enabled bool `json:"enabled"`
+	// last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: The interval (in seconds) from when
 	// development mode expires (positive integer) or last expired (negative integer)
 	// for the domain. If development mode has never been enabled, this value is false.
-	TimeRemaining float64 `json:"time_remaining"`
-	// ssl-recommender enrollment setting.
-	Enabled bool                    `json:"enabled"`
-	JSON    settingEditResponseJSON `json:"-"`
-	union   SettingEditResponseUnion
+	TimeRemaining float64                 `json:"time_remaining"`
+	JSON          settingEditResponseJSON `json:"-"`
+	union         SettingEditResponseUnion
 }
 
 // settingEditResponseJSON contains the JSON metadata for the struct
 // [SettingEditResponse]
 type settingEditResponseJSON struct {
-	Editable      apijson.Field
-	ID            apijson.Field
-	ModifiedOn    apijson.Field
 	Value         apijson.Field
-	TimeRemaining apijson.Field
+	ID            apijson.Field
+	Editable      apijson.Field
 	Enabled       apijson.Field
+	ModifiedOn    apijson.Field
+	TimeRemaining apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -5917,23 +5917,6 @@ func (r SettingEditResponseZonesTLS1_2OnlyEditable) IsKnown() bool {
 	return false
 }
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingEditResponseEditable bool
-
-const (
-	SettingEditResponseEditableTrue  SettingEditResponseEditable = true
-	SettingEditResponseEditableFalse SettingEditResponseEditable = false
-)
-
-func (r SettingEditResponseEditable) IsKnown() bool {
-	switch r {
-	case SettingEditResponseEditableTrue, SettingEditResponseEditableFalse:
-		return true
-	}
-	return false
-}
-
 // ID of the zone setting.
 type SettingEditResponseID string
 
@@ -6001,15 +5984,25 @@ func (r SettingEditResponseID) IsKnown() bool {
 	return false
 }
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditResponseEditable bool
+
+const (
+	SettingEditResponseEditableTrue  SettingEditResponseEditable = true
+	SettingEditResponseEditableFalse SettingEditResponseEditable = false
+)
+
+func (r SettingEditResponseEditable) IsKnown() bool {
+	switch r {
+	case SettingEditResponseEditableTrue, SettingEditResponseEditableFalse:
+		return true
+	}
+	return false
+}
+
 // 0-RTT session resumption enabled for this zone.
 type SettingGetResponse struct {
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingGetResponseEditable `json:"editable"`
-	// ID of the zone setting.
-	ID SettingGetResponseID `json:"id"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
 	// [AlwaysOnlineValue], [AlwaysUseHTTPSValue], [AutomaticHTTPSRewritesValue],
 	// [BrotliValue], [BrowserCacheTTLValue], [BrowserCheckValue], [CacheLevelValue],
@@ -6030,25 +6023,32 @@ type SettingGetResponse struct {
 	// [TLSClientAuthValue], [TrueClientIPHeaderValue], [WAFValue], [WebPValue],
 	// [WebsocketValue].
 	Value interface{} `json:"value,required"`
+	// ID of the zone setting.
+	ID SettingGetResponseID `json:"id"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingGetResponseEditable `json:"editable"`
+	// ssl-recommender enrollment setting.
+	Enabled bool `json:"enabled"`
+	// last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: The interval (in seconds) from when
 	// development mode expires (positive integer) or last expired (negative integer)
 	// for the domain. If development mode has never been enabled, this value is false.
-	TimeRemaining float64 `json:"time_remaining"`
-	// ssl-recommender enrollment setting.
-	Enabled bool                   `json:"enabled"`
-	JSON    settingGetResponseJSON `json:"-"`
-	union   SettingGetResponseUnion
+	TimeRemaining float64                `json:"time_remaining"`
+	JSON          settingGetResponseJSON `json:"-"`
+	union         SettingGetResponseUnion
 }
 
 // settingGetResponseJSON contains the JSON metadata for the struct
 // [SettingGetResponse]
 type settingGetResponseJSON struct {
-	Editable      apijson.Field
-	ID            apijson.Field
-	ModifiedOn    apijson.Field
 	Value         apijson.Field
-	TimeRemaining apijson.Field
+	ID            apijson.Field
+	Editable      apijson.Field
 	Enabled       apijson.Field
+	ModifiedOn    apijson.Field
+	TimeRemaining apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -6932,23 +6932,6 @@ func (r SettingGetResponseZonesTLS1_2OnlyEditable) IsKnown() bool {
 	return false
 }
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingGetResponseEditable bool
-
-const (
-	SettingGetResponseEditableTrue  SettingGetResponseEditable = true
-	SettingGetResponseEditableFalse SettingGetResponseEditable = false
-)
-
-func (r SettingGetResponseEditable) IsKnown() bool {
-	switch r {
-	case SettingGetResponseEditableTrue, SettingGetResponseEditableFalse:
-		return true
-	}
-	return false
-}
-
 // ID of the zone setting.
 type SettingGetResponseID string
 
@@ -7016,6 +6999,23 @@ func (r SettingGetResponseID) IsKnown() bool {
 	return false
 }
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingGetResponseEditable bool
+
+const (
+	SettingGetResponseEditableTrue  SettingGetResponseEditable = true
+	SettingGetResponseEditableFalse SettingGetResponseEditable = false
+)
+
+func (r SettingGetResponseEditable) IsKnown() bool {
+	switch r {
+	case SettingGetResponseEditableTrue, SettingGetResponseEditableFalse:
+		return true
+	}
+	return false
+}
+
 type SettingEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -7029,9 +7029,9 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 
 // 0-RTT session resumption enabled for this zone.
 type SettingEditParamsBody struct {
+	Value param.Field[interface{}] `json:"value,required"`
 	// ID of the zone setting.
-	ID    param.Field[SettingEditParamsBodyID] `json:"id"`
-	Value param.Field[interface{}]             `json:"value,required"`
+	ID param.Field[SettingEditParamsBodyID] `json:"id"`
 	// ssl-recommender enrollment setting.
 	Enabled param.Field[bool] `json:"enabled"`
 }
@@ -7517,23 +7517,6 @@ func (r SettingEditParamsBodyZonesTLS1_2OnlyEditable) IsKnown() bool {
 	return false
 }
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingEditParamsBodyEditable bool
-
-const (
-	SettingEditParamsBodyEditableTrue  SettingEditParamsBodyEditable = true
-	SettingEditParamsBodyEditableFalse SettingEditParamsBodyEditable = false
-)
-
-func (r SettingEditParamsBodyEditable) IsKnown() bool {
-	switch r {
-	case SettingEditParamsBodyEditableTrue, SettingEditParamsBodyEditableFalse:
-		return true
-	}
-	return false
-}
-
 // ID of the zone setting.
 type SettingEditParamsBodyID string
 
@@ -7596,6 +7579,23 @@ const (
 func (r SettingEditParamsBodyID) IsKnown() bool {
 	switch r {
 	case SettingEditParamsBodyID0rtt, SettingEditParamsBodyIDAdvancedDDoS, SettingEditParamsBodyIDAlwaysOnline, SettingEditParamsBodyIDAlwaysUseHTTPS, SettingEditParamsBodyIDAutomaticHTTPSRewrites, SettingEditParamsBodyIDBrotli, SettingEditParamsBodyIDBrowserCacheTTL, SettingEditParamsBodyIDBrowserCheck, SettingEditParamsBodyIDCacheLevel, SettingEditParamsBodyIDChallengeTTL, SettingEditParamsBodyIDCiphers, SettingEditParamsBodyIDCNAMEFlattening, SettingEditParamsBodyIDDevelopmentMode, SettingEditParamsBodyIDEarlyHints, SettingEditParamsBodyIDEdgeCacheTTL, SettingEditParamsBodyIDEmailObfuscation, SettingEditParamsBodyIDH2Prioritization, SettingEditParamsBodyIDHotlinkProtection, SettingEditParamsBodyIDHTTP2, SettingEditParamsBodyIDHTTP3, SettingEditParamsBodyIDImageResizing, SettingEditParamsBodyIDIPGeolocation, SettingEditParamsBodyIDIPV6, SettingEditParamsBodyIDMaxUpload, SettingEditParamsBodyIDMinTLSVersion, SettingEditParamsBodyIDMirage, SettingEditParamsBodyIDNEL, SettingEditParamsBodyIDOpportunisticEncryption, SettingEditParamsBodyIDOpportunisticOnion, SettingEditParamsBodyIDOrangeToOrange, SettingEditParamsBodyIDOriginErrorPagePassThru, SettingEditParamsBodyIDPolish, SettingEditParamsBodyIDPrefetchPreload, SettingEditParamsBodyIDProxyReadTimeout, SettingEditParamsBodyIDPseudoIPV4, SettingEditParamsBodyIDReplaceInsecureJS, SettingEditParamsBodyIDResponseBuffering, SettingEditParamsBodyIDRocketLoader, SettingEditParamsBodyIDAutomaticPlatformOptimization, SettingEditParamsBodyIDSecurityHeader, SettingEditParamsBodyIDSecurityLevel, SettingEditParamsBodyIDServerSideExclude, SettingEditParamsBodyIDSha1Support, SettingEditParamsBodyIDSortQueryStringForCache, SettingEditParamsBodyIDSSL, SettingEditParamsBodyIDSSLRecommender, SettingEditParamsBodyIDTLS1_2Only, SettingEditParamsBodyIDTLS1_3, SettingEditParamsBodyIDTLSClientAuth, SettingEditParamsBodyIDTrueClientIPHeader, SettingEditParamsBodyIDWAF, SettingEditParamsBodyIDWebP, SettingEditParamsBodyIDWebsockets:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type SettingEditParamsBodyEditable bool
+
+const (
+	SettingEditParamsBodyEditableTrue  SettingEditParamsBodyEditable = true
+	SettingEditParamsBodyEditableFalse SettingEditParamsBodyEditable = false
+)
+
+func (r SettingEditParamsBodyEditable) IsKnown() bool {
+	switch r {
+	case SettingEditParamsBodyEditableTrue, SettingEditParamsBodyEditableFalse:
 		return true
 	}
 	return false
