@@ -39,7 +39,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Create network monitoring rules for account. Currently only supports creating a
 // single rule per API request.
-func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
+func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...option.RequestOption) (res *RuleNewResponse, err error) {
 	var env RuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -56,7 +56,7 @@ func (r *RuleService) New(ctx context.Context, params RuleNewParams, opts ...opt
 }
 
 // Update network monitoring rules for account.
-func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
+func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts ...option.RequestOption) (res *RuleUpdateResponse, err error) {
 	var env RuleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -73,7 +73,7 @@ func (r *RuleService) Update(ctx context.Context, params RuleUpdateParams, opts 
 }
 
 // Lists network monitoring rules for account.
-func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[MagicNetworkMonitoringRule], err error) {
+func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RuleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -95,12 +95,12 @@ func (r *RuleService) List(ctx context.Context, query RuleListParams, opts ...op
 }
 
 // Lists network monitoring rules for account.
-func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[MagicNetworkMonitoringRule] {
+func (r *RuleService) ListAutoPaging(ctx context.Context, query RuleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RuleListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete a network monitoring rule for account.
-func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
+func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDeleteParams, opts ...option.RequestOption) (res *RuleDeleteResponse, err error) {
 	var env RuleDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -121,7 +121,7 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 }
 
 // Update a network monitoring rule for account.
-func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
+func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditParams, opts ...option.RequestOption) (res *RuleEditResponse, err error) {
 	var env RuleEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -142,7 +142,7 @@ func (r *RuleService) Edit(ctx context.Context, ruleID string, params RuleEditPa
 }
 
 // List a single network monitoring rule for account.
-func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParams, opts ...option.RequestOption) (res *MagicNetworkMonitoringRule, err error) {
+func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParams, opts ...option.RequestOption) (res *RuleGetResponse, err error) {
 	var env RuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -162,7 +162,7 @@ func (r *RuleService) Get(ctx context.Context, ruleID string, query RuleGetParam
 	return
 }
 
-type MagicNetworkMonitoringRule struct {
+type RuleNewResponse struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
@@ -185,13 +185,12 @@ type MagicNetworkMonitoringRule struct {
 	BandwidthThreshold float64 `json:"bandwidth_threshold"`
 	// The number of packets per second for the rule. When this value is exceeded for
 	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	PacketThreshold float64                        `json:"packet_threshold"`
-	JSON            magicNetworkMonitoringRuleJSON `json:"-"`
+	PacketThreshold float64             `json:"packet_threshold"`
+	JSON            ruleNewResponseJSON `json:"-"`
 }
 
-// magicNetworkMonitoringRuleJSON contains the JSON metadata for the struct
-// [MagicNetworkMonitoringRule]
-type magicNetworkMonitoringRuleJSON struct {
+// ruleNewResponseJSON contains the JSON metadata for the struct [RuleNewResponse]
+type ruleNewResponseJSON struct {
 	AutomaticAdvertisement apijson.Field
 	Duration               apijson.Field
 	Name                   apijson.Field
@@ -203,11 +202,255 @@ type magicNetworkMonitoringRuleJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *MagicNetworkMonitoringRule) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r magicNetworkMonitoringRuleJSON) RawJSON() string {
+func (r ruleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleUpdateResponse struct {
+	// Toggle on if you would like Cloudflare to automatically advertise the IP
+	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
+	// available for users of Magic Transit.
+	AutomaticAdvertisement bool `json:"automatic_advertisement,required,nullable"`
+	// The amount of time that the rule threshold must be exceeded to send an alert
+	// notification. The final value must be equivalent to one of the following 8
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
+	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
+	// least one unit must be provided.
+	Duration string `json:"duration,required"`
+	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
+	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
+	// the rule name. Max 256 characters.
+	Name     string   `json:"name,required"`
+	Prefixes []string `json:"prefixes,required"`
+	// The id of the rule. Must be unique.
+	ID string `json:"id"`
+	// The number of bits per second for the rule. When this value is exceeded for the
+	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	BandwidthThreshold float64 `json:"bandwidth_threshold"`
+	// The number of packets per second for the rule. When this value is exceeded for
+	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	PacketThreshold float64                `json:"packet_threshold"`
+	JSON            ruleUpdateResponseJSON `json:"-"`
+}
+
+// ruleUpdateResponseJSON contains the JSON metadata for the struct
+// [RuleUpdateResponse]
+type ruleUpdateResponseJSON struct {
+	AutomaticAdvertisement apijson.Field
+	Duration               apijson.Field
+	Name                   apijson.Field
+	Prefixes               apijson.Field
+	ID                     apijson.Field
+	BandwidthThreshold     apijson.Field
+	PacketThreshold        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleListResponse struct {
+	// Toggle on if you would like Cloudflare to automatically advertise the IP
+	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
+	// available for users of Magic Transit.
+	AutomaticAdvertisement bool `json:"automatic_advertisement,required,nullable"`
+	// The amount of time that the rule threshold must be exceeded to send an alert
+	// notification. The final value must be equivalent to one of the following 8
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
+	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
+	// least one unit must be provided.
+	Duration string `json:"duration,required"`
+	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
+	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
+	// the rule name. Max 256 characters.
+	Name     string   `json:"name,required"`
+	Prefixes []string `json:"prefixes,required"`
+	// The id of the rule. Must be unique.
+	ID string `json:"id"`
+	// The number of bits per second for the rule. When this value is exceeded for the
+	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	BandwidthThreshold float64 `json:"bandwidth_threshold"`
+	// The number of packets per second for the rule. When this value is exceeded for
+	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	PacketThreshold float64              `json:"packet_threshold"`
+	JSON            ruleListResponseJSON `json:"-"`
+}
+
+// ruleListResponseJSON contains the JSON metadata for the struct
+// [RuleListResponse]
+type ruleListResponseJSON struct {
+	AutomaticAdvertisement apijson.Field
+	Duration               apijson.Field
+	Name                   apijson.Field
+	Prefixes               apijson.Field
+	ID                     apijson.Field
+	BandwidthThreshold     apijson.Field
+	PacketThreshold        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleDeleteResponse struct {
+	// Toggle on if you would like Cloudflare to automatically advertise the IP
+	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
+	// available for users of Magic Transit.
+	AutomaticAdvertisement bool `json:"automatic_advertisement,required,nullable"`
+	// The amount of time that the rule threshold must be exceeded to send an alert
+	// notification. The final value must be equivalent to one of the following 8
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
+	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
+	// least one unit must be provided.
+	Duration string `json:"duration,required"`
+	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
+	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
+	// the rule name. Max 256 characters.
+	Name     string   `json:"name,required"`
+	Prefixes []string `json:"prefixes,required"`
+	// The id of the rule. Must be unique.
+	ID string `json:"id"`
+	// The number of bits per second for the rule. When this value is exceeded for the
+	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	BandwidthThreshold float64 `json:"bandwidth_threshold"`
+	// The number of packets per second for the rule. When this value is exceeded for
+	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	PacketThreshold float64                `json:"packet_threshold"`
+	JSON            ruleDeleteResponseJSON `json:"-"`
+}
+
+// ruleDeleteResponseJSON contains the JSON metadata for the struct
+// [RuleDeleteResponse]
+type ruleDeleteResponseJSON struct {
+	AutomaticAdvertisement apijson.Field
+	Duration               apijson.Field
+	Name                   apijson.Field
+	Prefixes               apijson.Field
+	ID                     apijson.Field
+	BandwidthThreshold     apijson.Field
+	PacketThreshold        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleEditResponse struct {
+	// Toggle on if you would like Cloudflare to automatically advertise the IP
+	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
+	// available for users of Magic Transit.
+	AutomaticAdvertisement bool `json:"automatic_advertisement,required,nullable"`
+	// The amount of time that the rule threshold must be exceeded to send an alert
+	// notification. The final value must be equivalent to one of the following 8
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
+	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
+	// least one unit must be provided.
+	Duration string `json:"duration,required"`
+	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
+	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
+	// the rule name. Max 256 characters.
+	Name     string   `json:"name,required"`
+	Prefixes []string `json:"prefixes,required"`
+	// The id of the rule. Must be unique.
+	ID string `json:"id"`
+	// The number of bits per second for the rule. When this value is exceeded for the
+	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	BandwidthThreshold float64 `json:"bandwidth_threshold"`
+	// The number of packets per second for the rule. When this value is exceeded for
+	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	PacketThreshold float64              `json:"packet_threshold"`
+	JSON            ruleEditResponseJSON `json:"-"`
+}
+
+// ruleEditResponseJSON contains the JSON metadata for the struct
+// [RuleEditResponse]
+type ruleEditResponseJSON struct {
+	AutomaticAdvertisement apijson.Field
+	Duration               apijson.Field
+	Name                   apijson.Field
+	Prefixes               apijson.Field
+	ID                     apijson.Field
+	BandwidthThreshold     apijson.Field
+	PacketThreshold        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleGetResponse struct {
+	// Toggle on if you would like Cloudflare to automatically advertise the IP
+	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
+	// available for users of Magic Transit.
+	AutomaticAdvertisement bool `json:"automatic_advertisement,required,nullable"`
+	// The amount of time that the rule threshold must be exceeded to send an alert
+	// notification. The final value must be equivalent to one of the following 8
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
+	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
+	// least one unit must be provided.
+	Duration string `json:"duration,required"`
+	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
+	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
+	// the rule name. Max 256 characters.
+	Name     string   `json:"name,required"`
+	Prefixes []string `json:"prefixes,required"`
+	// The id of the rule. Must be unique.
+	ID string `json:"id"`
+	// The number of bits per second for the rule. When this value is exceeded for the
+	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	BandwidthThreshold float64 `json:"bandwidth_threshold"`
+	// The number of packets per second for the rule. When this value is exceeded for
+	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	PacketThreshold float64             `json:"packet_threshold"`
+	JSON            ruleGetResponseJSON `json:"-"`
+}
+
+// ruleGetResponseJSON contains the JSON metadata for the struct [RuleGetResponse]
+type ruleGetResponseJSON struct {
+	AutomaticAdvertisement apijson.Field
+	Duration               apijson.Field
+	Name                   apijson.Field
+	Prefixes               apijson.Field
+	ID                     apijson.Field
+	BandwidthThreshold     apijson.Field
+	PacketThreshold        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *RuleGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -241,9 +484,9 @@ func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RuleNewResponse       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleNewResponseEnvelopeJSON    `json:"-"`
@@ -315,9 +558,9 @@ func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RuleUpdateResponse    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleUpdateResponseEnvelopeJSON    `json:"-"`
@@ -366,9 +609,9 @@ type RuleDeleteParams struct {
 }
 
 type RuleDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RuleDeleteResponse    `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleDeleteResponseEnvelopeJSON    `json:"-"`
@@ -438,9 +681,9 @@ func (r RuleEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RuleEditResponse      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleEditResponseEnvelopeJSON    `json:"-"`
@@ -485,9 +728,9 @@ type RuleGetParams struct {
 }
 
 type RuleGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo      `json:"errors,required"`
-	Messages []shared.ResponseInfo      `json:"messages,required"`
-	Result   MagicNetworkMonitoringRule `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   RuleGetResponse       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleGetResponseEnvelopeJSON    `json:"-"`
