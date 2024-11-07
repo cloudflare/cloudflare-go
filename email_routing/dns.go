@@ -139,6 +139,8 @@ func (r dnsRecordJSON) RawJSON() string {
 	return r.raw
 }
 
+// Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
+// for 'automatic'.
 type DNSRecordTTL float64
 
 const (
