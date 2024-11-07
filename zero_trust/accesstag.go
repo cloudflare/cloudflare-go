@@ -198,11 +198,11 @@ type AccessTagNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the tag
-	Body string `json:"body,required"`
+	Name param.Field[string] `json:"name"`
 }
 
 func (r AccessTagNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type AccessTagNewResponseEnvelope struct {

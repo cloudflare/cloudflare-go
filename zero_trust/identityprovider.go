@@ -2013,10 +2013,6 @@ type IdentityProviderSCIMConfigParam struct {
 	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
 	// enabled.
 	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
 	// A flag to enable revoking a user's session in Access and Gateway when they have
 	// been deprovisioned in the Identity Provider.
 	UserDeprovision param.Field[bool] `json:"user_deprovision"`
