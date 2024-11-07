@@ -37,7 +37,7 @@ func NewConfigService(opts ...option.RequestOption) (r *ConfigService) {
 }
 
 // Create a new network monitoring configuration.
-func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *ConfigNewResponse, err error) {
+func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -55,7 +55,7 @@ func (r *ConfigService) New(ctx context.Context, params ConfigNewParams, opts ..
 
 // Update an existing network monitoring configuration, requires the entire
 // configuration to be updated at once.
-func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, opts ...option.RequestOption) (res *ConfigUpdateResponse, err error) {
+func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -72,7 +72,7 @@ func (r *ConfigService) Update(ctx context.Context, params ConfigUpdateParams, o
 }
 
 // Delete an existing network monitoring configuration.
-func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opts ...option.RequestOption) (res *ConfigDeleteResponse, err error) {
+func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -89,7 +89,7 @@ func (r *ConfigService) Delete(ctx context.Context, body ConfigDeleteParams, opt
 }
 
 // Update fields in an existing network monitoring configuration.
-func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts ...option.RequestOption) (res *ConfigEditResponse, err error) {
+func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -106,7 +106,7 @@ func (r *ConfigService) Edit(ctx context.Context, params ConfigEditParams, opts 
 }
 
 // Lists default sampling, router IPs and warp devices for account.
-func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...option.RequestOption) (res *ConfigGetResponse, err error) {
+func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -122,20 +122,19 @@ func (r *ConfigService) Get(ctx context.Context, query ConfigGetParams, opts ...
 	return
 }
 
-type ConfigNewResponse struct {
+type Configuration struct {
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
 	DefaultSampling float64 `json:"default_sampling,required"`
 	// The account name.
-	Name        string                        `json:"name,required"`
-	RouterIPs   []string                      `json:"router_ips,required"`
-	WARPDevices []ConfigNewResponseWARPDevice `json:"warp_devices,required"`
-	JSON        configNewResponseJSON         `json:"-"`
+	Name        string                    `json:"name,required"`
+	RouterIPs   []string                  `json:"router_ips,required"`
+	WARPDevices []ConfigurationWARPDevice `json:"warp_devices,required"`
+	JSON        configurationJSON         `json:"-"`
 }
 
-// configNewResponseJSON contains the JSON metadata for the struct
-// [ConfigNewResponse]
-type configNewResponseJSON struct {
+// configurationJSON contains the JSON metadata for the struct [Configuration]
+type configurationJSON struct {
 	DefaultSampling apijson.Field
 	Name            apijson.Field
 	RouterIPs       apijson.Field
@@ -144,29 +143,29 @@ type configNewResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *ConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Configuration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r configNewResponseJSON) RawJSON() string {
+func (r configurationJSON) RawJSON() string {
 	return r.raw
 }
 
 // Object representing a warp device with an ID and name.
-type ConfigNewResponseWARPDevice struct {
+type ConfigurationWARPDevice struct {
 	// Unique identifier for the warp device.
 	ID string `json:"id,required"`
 	// Name of the warp device.
 	Name string `json:"name,required"`
 	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
 	// Only /32 addresses are currently supported.
-	RouterIP string                          `json:"router_ip,required"`
-	JSON     configNewResponseWARPDeviceJSON `json:"-"`
+	RouterIP string                      `json:"router_ip,required"`
+	JSON     configurationWARPDeviceJSON `json:"-"`
 }
 
-// configNewResponseWARPDeviceJSON contains the JSON metadata for the struct
-// [ConfigNewResponseWARPDevice]
-type configNewResponseWARPDeviceJSON struct {
+// configurationWARPDeviceJSON contains the JSON metadata for the struct
+// [ConfigurationWARPDevice]
+type configurationWARPDeviceJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	RouterIP    apijson.Field
@@ -174,251 +173,11 @@ type configNewResponseWARPDeviceJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ConfigNewResponseWARPDevice) UnmarshalJSON(data []byte) (err error) {
+func (r *ConfigurationWARPDevice) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r configNewResponseWARPDeviceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigUpdateResponse struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
-	// The account name.
-	Name        string                           `json:"name,required"`
-	RouterIPs   []string                         `json:"router_ips,required"`
-	WARPDevices []ConfigUpdateResponseWARPDevice `json:"warp_devices,required"`
-	JSON        configUpdateResponseJSON         `json:"-"`
-}
-
-// configUpdateResponseJSON contains the JSON metadata for the struct
-// [ConfigUpdateResponse]
-type configUpdateResponseJSON struct {
-	DefaultSampling apijson.Field
-	Name            apijson.Field
-	RouterIPs       apijson.Field
-	WARPDevices     apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Object representing a warp device with an ID and name.
-type ConfigUpdateResponseWARPDevice struct {
-	// Unique identifier for the warp device.
-	ID string `json:"id,required"`
-	// Name of the warp device.
-	Name string `json:"name,required"`
-	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
-	// Only /32 addresses are currently supported.
-	RouterIP string                             `json:"router_ip,required"`
-	JSON     configUpdateResponseWARPDeviceJSON `json:"-"`
-}
-
-// configUpdateResponseWARPDeviceJSON contains the JSON metadata for the struct
-// [ConfigUpdateResponseWARPDevice]
-type configUpdateResponseWARPDeviceJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	RouterIP    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigUpdateResponseWARPDevice) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configUpdateResponseWARPDeviceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigDeleteResponse struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
-	// The account name.
-	Name        string                           `json:"name,required"`
-	RouterIPs   []string                         `json:"router_ips,required"`
-	WARPDevices []ConfigDeleteResponseWARPDevice `json:"warp_devices,required"`
-	JSON        configDeleteResponseJSON         `json:"-"`
-}
-
-// configDeleteResponseJSON contains the JSON metadata for the struct
-// [ConfigDeleteResponse]
-type configDeleteResponseJSON struct {
-	DefaultSampling apijson.Field
-	Name            apijson.Field
-	RouterIPs       apijson.Field
-	WARPDevices     apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ConfigDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Object representing a warp device with an ID and name.
-type ConfigDeleteResponseWARPDevice struct {
-	// Unique identifier for the warp device.
-	ID string `json:"id,required"`
-	// Name of the warp device.
-	Name string `json:"name,required"`
-	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
-	// Only /32 addresses are currently supported.
-	RouterIP string                             `json:"router_ip,required"`
-	JSON     configDeleteResponseWARPDeviceJSON `json:"-"`
-}
-
-// configDeleteResponseWARPDeviceJSON contains the JSON metadata for the struct
-// [ConfigDeleteResponseWARPDevice]
-type configDeleteResponseWARPDeviceJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	RouterIP    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigDeleteResponseWARPDevice) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configDeleteResponseWARPDeviceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigEditResponse struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
-	// The account name.
-	Name        string                         `json:"name,required"`
-	RouterIPs   []string                       `json:"router_ips,required"`
-	WARPDevices []ConfigEditResponseWARPDevice `json:"warp_devices,required"`
-	JSON        configEditResponseJSON         `json:"-"`
-}
-
-// configEditResponseJSON contains the JSON metadata for the struct
-// [ConfigEditResponse]
-type configEditResponseJSON struct {
-	DefaultSampling apijson.Field
-	Name            apijson.Field
-	RouterIPs       apijson.Field
-	WARPDevices     apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ConfigEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Object representing a warp device with an ID and name.
-type ConfigEditResponseWARPDevice struct {
-	// Unique identifier for the warp device.
-	ID string `json:"id,required"`
-	// Name of the warp device.
-	Name string `json:"name,required"`
-	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
-	// Only /32 addresses are currently supported.
-	RouterIP string                           `json:"router_ip,required"`
-	JSON     configEditResponseWARPDeviceJSON `json:"-"`
-}
-
-// configEditResponseWARPDeviceJSON contains the JSON metadata for the struct
-// [ConfigEditResponseWARPDevice]
-type configEditResponseWARPDeviceJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	RouterIP    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigEditResponseWARPDevice) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configEditResponseWARPDeviceJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConfigGetResponse struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
-	// The account name.
-	Name        string                        `json:"name,required"`
-	RouterIPs   []string                      `json:"router_ips,required"`
-	WARPDevices []ConfigGetResponseWARPDevice `json:"warp_devices,required"`
-	JSON        configGetResponseJSON         `json:"-"`
-}
-
-// configGetResponseJSON contains the JSON metadata for the struct
-// [ConfigGetResponse]
-type configGetResponseJSON struct {
-	DefaultSampling apijson.Field
-	Name            apijson.Field
-	RouterIPs       apijson.Field
-	WARPDevices     apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Object representing a warp device with an ID and name.
-type ConfigGetResponseWARPDevice struct {
-	// Unique identifier for the warp device.
-	ID string `json:"id,required"`
-	// Name of the warp device.
-	Name string `json:"name,required"`
-	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
-	// Only /32 addresses are currently supported.
-	RouterIP string                          `json:"router_ip,required"`
-	JSON     configGetResponseWARPDeviceJSON `json:"-"`
-}
-
-// configGetResponseWARPDeviceJSON contains the JSON metadata for the struct
-// [ConfigGetResponseWARPDevice]
-type configGetResponseWARPDeviceJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	RouterIP    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigGetResponseWARPDevice) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configGetResponseWARPDeviceJSON) RawJSON() string {
+func (r configurationWARPDeviceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -455,7 +214,7 @@ func (r ConfigNewParamsWARPDevice) MarshalJSON() (data []byte, err error) {
 type ConfigNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigNewResponse     `json:"result,required"`
+	Result   Configuration         `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configNewResponseEnvelopeJSON    `json:"-"`
@@ -528,7 +287,7 @@ func (r ConfigUpdateParamsWARPDevice) MarshalJSON() (data []byte, err error) {
 type ConfigUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigUpdateResponse  `json:"result,required"`
+	Result   Configuration         `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configUpdateResponseEnvelopeJSON    `json:"-"`
@@ -575,7 +334,7 @@ type ConfigDeleteParams struct {
 type ConfigDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigDeleteResponse  `json:"result,required"`
+	Result   Configuration         `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configDeleteResponseEnvelopeJSON    `json:"-"`
@@ -648,7 +407,7 @@ func (r ConfigEditParamsWARPDevice) MarshalJSON() (data []byte, err error) {
 type ConfigEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigEditResponse    `json:"result,required"`
+	Result   Configuration         `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configEditResponseEnvelopeJSON    `json:"-"`
@@ -695,7 +454,7 @@ type ConfigGetParams struct {
 type ConfigGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigGetResponse     `json:"result,required"`
+	Result   Configuration         `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configGetResponseEnvelopeJSON    `json:"-"`
