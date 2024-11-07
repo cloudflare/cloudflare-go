@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestLockdownNewWithOptionalParams(t *testing.T) {
+func TestLockdownNew(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -31,10 +31,16 @@ func TestLockdownNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.Lockdowns.New(context.TODO(), firewall.LockdownNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Configurations: cloudflare.F[firewall.ConfigurationUnionParam](firewall.LockdownIPConfigurationParam{
+		Configurations: cloudflare.F([]firewall.ConfigurationItemUnionParam{firewall.LockdownIPConfigurationParam{
 			Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
-		}),
+		}, firewall.LockdownIPConfigurationParam{
+			Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
+			Value:  cloudflare.F("198.51.100.4"),
+		}, firewall.LockdownIPConfigurationParam{
+			Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
+			Value:  cloudflare.F("198.51.100.4"),
+		}}),
 		URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
 	})
 	if err != nil {
@@ -46,7 +52,7 @@ func TestLockdownNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLockdownUpdateWithOptionalParams(t *testing.T) {
+func TestLockdownUpdate(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -65,10 +71,16 @@ func TestLockdownUpdateWithOptionalParams(t *testing.T) {
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		firewall.LockdownUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Configurations: cloudflare.F[firewall.ConfigurationUnionParam](firewall.LockdownIPConfigurationParam{
+			Configurations: cloudflare.F([]firewall.ConfigurationItemUnionParam{firewall.LockdownIPConfigurationParam{
 				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
-			}),
+			}, firewall.LockdownIPConfigurationParam{
+				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
+				Value:  cloudflare.F("198.51.100.4"),
+			}, firewall.LockdownIPConfigurationParam{
+				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
+				Value:  cloudflare.F("198.51.100.4"),
+			}}),
 			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
 		},
 	)
