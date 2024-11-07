@@ -83,20 +83,14 @@ func (r *NamespaceBulkService) Delete(ctx context.Context, namespaceID string, b
 }
 
 type NamespaceBulkUpdateResponse struct {
-	// Number of keys successfully updated
-	SuccessfulKeyCount float64 `json:"successful_key_count"`
-	// Name of the keys that failed to be fully updated
-	UnsuccessfulKeys []string                        `json:"unsuccessful_keys"`
-	JSON             namespaceBulkUpdateResponseJSON `json:"-"`
+	JSON namespaceBulkUpdateResponseJSON `json:"-"`
 }
 
 // namespaceBulkUpdateResponseJSON contains the JSON metadata for the struct
 // [NamespaceBulkUpdateResponse]
 type namespaceBulkUpdateResponseJSON struct {
-	SuccessfulKeyCount apijson.Field
-	UnsuccessfulKeys   apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *NamespaceBulkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -108,20 +102,14 @@ func (r namespaceBulkUpdateResponseJSON) RawJSON() string {
 }
 
 type NamespaceBulkDeleteResponse struct {
-	// Number of keys successfully updated
-	SuccessfulKeyCount float64 `json:"successful_key_count"`
-	// Name of the keys that failed to be fully updated
-	UnsuccessfulKeys []string                        `json:"unsuccessful_keys"`
-	JSON             namespaceBulkDeleteResponseJSON `json:"-"`
+	JSON namespaceBulkDeleteResponseJSON `json:"-"`
 }
 
 // namespaceBulkDeleteResponseJSON contains the JSON metadata for the struct
 // [NamespaceBulkDeleteResponse]
 type namespaceBulkDeleteResponseJSON struct {
-	SuccessfulKeyCount apijson.Field
-	UnsuccessfulKeys   apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *NamespaceBulkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
