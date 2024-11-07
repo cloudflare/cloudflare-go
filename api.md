@@ -1326,7 +1326,7 @@ Methods:
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall#ConfigurationUnionParam">ConfigurationUnionParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall#ConfigurationParam">ConfigurationParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall#LockdownCIDRConfigurationParam">LockdownCIDRConfigurationParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall#LockdownIPConfigurationParam">LockdownIPConfigurationParam</a>
 
