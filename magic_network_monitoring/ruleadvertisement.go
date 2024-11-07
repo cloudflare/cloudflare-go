@@ -35,7 +35,7 @@ func NewRuleAdvertisementService(opts ...option.RequestOption) (r *RuleAdvertise
 }
 
 // Update advertisement for rule.
-func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, params RuleAdvertisementEditParams, opts ...option.RequestOption) (res *RuleAdvertisementEditResponse, err error) {
+func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, params RuleAdvertisementEditParams, opts ...option.RequestOption) (res *Advertisement, err error) {
 	var env RuleAdvertisementEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -55,27 +55,26 @@ func (r *RuleAdvertisementService) Edit(ctx context.Context, ruleID string, para
 	return
 }
 
-type RuleAdvertisementEditResponse struct {
+type Advertisement struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
-	AutomaticAdvertisement bool                              `json:"automatic_advertisement,required,nullable"`
-	JSON                   ruleAdvertisementEditResponseJSON `json:"-"`
+	AutomaticAdvertisement bool              `json:"automatic_advertisement,required,nullable"`
+	JSON                   advertisementJSON `json:"-"`
 }
 
-// ruleAdvertisementEditResponseJSON contains the JSON metadata for the struct
-// [RuleAdvertisementEditResponse]
-type ruleAdvertisementEditResponseJSON struct {
+// advertisementJSON contains the JSON metadata for the struct [Advertisement]
+type advertisementJSON struct {
 	AutomaticAdvertisement apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *RuleAdvertisementEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Advertisement) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleAdvertisementEditResponseJSON) RawJSON() string {
+func (r advertisementJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -89,9 +88,9 @@ func (r RuleAdvertisementEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RuleAdvertisementEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   RuleAdvertisementEditResponse `json:"result,required,nullable"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   Advertisement         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleAdvertisementEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleAdvertisementEditResponseEnvelopeJSON    `json:"-"`

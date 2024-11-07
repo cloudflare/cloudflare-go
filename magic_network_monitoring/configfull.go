@@ -35,7 +35,7 @@ func NewConfigFullService(opts ...option.RequestOption) (r *ConfigFullService) {
 }
 
 // Lists default sampling, router IPs, warp devices, and rules for account.
-func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, opts ...option.RequestOption) (res *ConfigFullGetResponse, err error) {
+func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, opts ...option.RequestOption) (res *Configuration, err error) {
 	var env ConfigFullGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -51,66 +51,6 @@ func (r *ConfigFullService) Get(ctx context.Context, query ConfigFullGetParams, 
 	return
 }
 
-type ConfigFullGetResponse struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
-	// The account name.
-	Name        string                            `json:"name,required"`
-	RouterIPs   []string                          `json:"router_ips,required"`
-	WARPDevices []ConfigFullGetResponseWARPDevice `json:"warp_devices,required"`
-	JSON        configFullGetResponseJSON         `json:"-"`
-}
-
-// configFullGetResponseJSON contains the JSON metadata for the struct
-// [ConfigFullGetResponse]
-type configFullGetResponseJSON struct {
-	DefaultSampling apijson.Field
-	Name            apijson.Field
-	RouterIPs       apijson.Field
-	WARPDevices     apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ConfigFullGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configFullGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Object representing a warp device with an ID and name.
-type ConfigFullGetResponseWARPDevice struct {
-	// Unique identifier for the warp device.
-	ID string `json:"id,required"`
-	// Name of the warp device.
-	Name string `json:"name,required"`
-	// IPv4 CIDR of the router sourcing flow data associated with this warp device.
-	// Only /32 addresses are currently supported.
-	RouterIP string                              `json:"router_ip,required"`
-	JSON     configFullGetResponseWARPDeviceJSON `json:"-"`
-}
-
-// configFullGetResponseWARPDeviceJSON contains the JSON metadata for the struct
-// [ConfigFullGetResponseWARPDevice]
-type configFullGetResponseWARPDeviceJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	RouterIP    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConfigFullGetResponseWARPDevice) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configFullGetResponseWARPDeviceJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConfigFullGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
@@ -118,7 +58,7 @@ type ConfigFullGetParams struct {
 type ConfigFullGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConfigFullGetResponse `json:"result,required"`
+	Result   Configuration         `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigFullGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configFullGetResponseEnvelopeJSON    `json:"-"`
