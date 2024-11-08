@@ -103,7 +103,7 @@ type DispatchNamespaceScriptSettingEditResponse struct {
 	Logpush bool `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations DispatchNamespaceScriptSettingEditResponseMigrations `json:"migrations"`
-	// Observability settings for the Worker
+	// Observability settings for the Worker.
 	Observability DispatchNamespaceScriptSettingEditResponseObservability `json:"observability"`
 	Placement     workers.PlacementConfiguration                          `json:"placement"`
 	// Tags to help you manage your Workers
@@ -248,9 +248,9 @@ func init() {
 	)
 }
 
-// Observability settings for the Worker
+// Observability settings for the Worker.
 type DispatchNamespaceScriptSettingEditResponseObservability struct {
-	// Whether observability is enabled for the Worker
+	// Whether observability is enabled for the Worker.
 	Enabled bool `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
@@ -289,7 +289,7 @@ type DispatchNamespaceScriptSettingGetResponse struct {
 	Logpush bool `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations DispatchNamespaceScriptSettingGetResponseMigrations `json:"migrations"`
-	// Observability settings for the Worker
+	// Observability settings for the Worker.
 	Observability DispatchNamespaceScriptSettingGetResponseObservability `json:"observability"`
 	Placement     workers.PlacementConfiguration                         `json:"placement"`
 	// Tags to help you manage your Workers
@@ -434,9 +434,9 @@ func init() {
 	)
 }
 
-// Observability settings for the Worker
+// Observability settings for the Worker.
 type DispatchNamespaceScriptSettingGetResponseObservability struct {
-	// Whether observability is enabled for the Worker
+	// Whether observability is enabled for the Worker.
 	Enabled bool `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.
@@ -495,7 +495,7 @@ type DispatchNamespaceScriptSettingEditParamsSettings struct {
 	Logpush param.Field[bool] `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations param.Field[DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion] `json:"migrations"`
-	// Observability settings for the Worker
+	// Observability settings for the Worker.
 	Observability param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservability] `json:"observability"`
 	Placement     param.Field[workers.PlacementConfigurationParam]                           `json:"placement"`
 	// Tags to help you manage your Workers
@@ -551,9 +551,9 @@ type DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion interface {
 	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion()
 }
 
-// Observability settings for the Worker
+// Observability settings for the Worker.
 type DispatchNamespaceScriptSettingEditParamsSettingsObservability struct {
-	// Whether observability is enabled for the Worker
+	// Whether observability is enabled for the Worker.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
 	// Default is 1.

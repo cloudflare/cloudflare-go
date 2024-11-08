@@ -40,6 +40,13 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 			Body: workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObject{
 				AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 				Metadata: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadata{
+					Assets: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssets{
+						Config: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfig{
+							HTMLHandling:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
+							NotFoundHandling: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingNone),
+						}),
+						JWT: cloudflare.F("jwt"),
+					}),
 					Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataBinding{{
 						Name: cloudflare.F("MY_ENV_VAR"),
 						Type: cloudflare.F("plain_text"),
@@ -47,6 +54,7 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					BodyPart:           cloudflare.F("worker.js"),
 					CompatibilityDate:  cloudflare.F("2023-07-25"),
 					CompatibilityFlags: cloudflare.F([]string{"string", "string", "string"}),
+					KeepAssets:         cloudflare.F(false),
 					KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
 					Logpush:            cloudflare.F(false),
 					MainModule:         cloudflare.F("worker.js"),
