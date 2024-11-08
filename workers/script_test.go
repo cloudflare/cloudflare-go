@@ -40,6 +40,13 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 			Body: workers.ScriptUpdateParamsBodyObject{
 				AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 				Metadata: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadata{
+					Assets: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssets{
+						Config: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssetsConfig{
+							HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
+							NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingNone),
+						}),
+						JWT: cloudflare.F("jwt"),
+					}),
 					Bindings: cloudflare.F([]workers.ScriptUpdateParamsBodyObjectMetadataBinding{{
 						Name: cloudflare.F("MY_ENV_VAR"),
 						Type: cloudflare.F("plain_text"),
@@ -47,6 +54,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 					BodyPart:           cloudflare.F("worker.js"),
 					CompatibilityDate:  cloudflare.F("2023-07-25"),
 					CompatibilityFlags: cloudflare.F([]string{"string", "string", "string"}),
+					KeepAssets:         cloudflare.F(false),
 					KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
 					Logpush:            cloudflare.F(false),
 					MainModule:         cloudflare.F("worker.js"),
