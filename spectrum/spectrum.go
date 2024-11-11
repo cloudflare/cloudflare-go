@@ -90,10 +90,10 @@ func (r DNSParam) MarshalJSON() (data []byte, err error) {
 
 // The anycast edge IP configuration for the hostname of this application.
 type EdgeIPs struct {
-	// This field can have the runtime type of [[]string].
-	IPs interface{} `json:"ips,required"`
 	// The IP versions supported for inbound connections on Spectrum anycast IPs.
 	Connectivity EdgeIPsConnectivity `json:"connectivity"`
+	// This field can have the runtime type of [[]string].
+	IPs interface{} `json:"ips"`
 	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
 	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 	// with CNAME DNS names.
@@ -104,8 +104,8 @@ type EdgeIPs struct {
 
 // edgeIPsJSON contains the JSON metadata for the struct [EdgeIPs]
 type edgeIPsJSON struct {
-	IPs          apijson.Field
 	Connectivity apijson.Field
+	IPs          apijson.Field
 	Type         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -254,9 +254,9 @@ func (r EdgeIPsType) IsKnown() bool {
 
 // The anycast edge IP configuration for the hostname of this application.
 type EdgeIPsParam struct {
-	IPs param.Field[interface{}] `json:"ips,required"`
 	// The IP versions supported for inbound connections on Spectrum anycast IPs.
 	Connectivity param.Field[EdgeIPsConnectivity] `json:"connectivity"`
+	IPs          param.Field[interface{}]         `json:"ips"`
 	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
 	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 	// with CNAME DNS names.

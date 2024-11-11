@@ -194,12 +194,12 @@ func (r appUpdateResponseJSON) RawJSON() string {
 
 // Collection of Hostnames and/or IP Subnets to associate with traffic decisions.
 type AppListResponse struct {
-	// This field can have the runtime type of [[]string].
-	Hostnames interface{} `json:"hostnames,required"`
-	// This field can have the runtime type of [[]string].
-	IPSubnets interface{} `json:"ip_subnets,required"`
 	// Magic account app ID.
 	AccountAppID string `json:"account_app_id"`
+	// This field can have the runtime type of [[]string].
+	Hostnames interface{} `json:"hostnames"`
+	// This field can have the runtime type of [[]string].
+	IPSubnets interface{} `json:"ip_subnets"`
 	// Managed app ID.
 	ManagedAppID string `json:"managed_app_id"`
 	// Display name for the app.
@@ -212,9 +212,9 @@ type AppListResponse struct {
 
 // appListResponseJSON contains the JSON metadata for the struct [AppListResponse]
 type appListResponseJSON struct {
+	AccountAppID apijson.Field
 	Hostnames    apijson.Field
 	IPSubnets    apijson.Field
-	AccountAppID apijson.Field
 	ManagedAppID apijson.Field
 	Name         apijson.Field
 	Type         apijson.Field

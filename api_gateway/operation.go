@@ -191,19 +191,19 @@ func (r APIShieldMethod) IsKnown() bool {
 type APIShieldFeatures struct {
 	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
-	APIRouting interface{} `json:"api_routing,required"`
+	APIRouting interface{} `json:"api_routing"`
 	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
-	ConfidenceIntervals interface{} `json:"confidence_intervals,required"`
+	ConfidenceIntervals interface{} `json:"confidence_intervals"`
 	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
-	ParameterSchemas interface{} `json:"parameter_schemas,required"`
+	ParameterSchemas interface{} `json:"parameter_schemas"`
 	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
-	SchemaInfo interface{} `json:"schema_info,required"`
+	SchemaInfo interface{} `json:"schema_info"`
 	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds].
-	Thresholds interface{}           `json:"thresholds,required"`
+	Thresholds interface{}           `json:"thresholds"`
 	JSON       apiShieldFeaturesJSON `json:"-"`
 	union      APIShieldFeaturesUnion
 }
@@ -832,19 +832,19 @@ func (r OperationListResponseMethod) IsKnown() bool {
 type OperationListResponseFeatures struct {
 	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
-	APIRouting interface{} `json:"api_routing,required"`
+	APIRouting interface{} `json:"api_routing"`
 	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
-	ConfidenceIntervals interface{} `json:"confidence_intervals,required"`
+	ConfidenceIntervals interface{} `json:"confidence_intervals"`
 	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
-	ParameterSchemas interface{} `json:"parameter_schemas,required"`
+	ParameterSchemas interface{} `json:"parameter_schemas"`
 	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
-	SchemaInfo interface{} `json:"schema_info,required"`
+	SchemaInfo interface{} `json:"schema_info"`
 	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
-	Thresholds interface{}                       `json:"thresholds,required"`
+	Thresholds interface{}                       `json:"thresholds"`
 	JSON       operationListResponseFeaturesJSON `json:"-"`
 	union      OperationListResponseFeaturesUnion
 }
@@ -1518,19 +1518,19 @@ func (r OperationGetResponseMethod) IsKnown() bool {
 type OperationGetResponseFeatures struct {
 	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
-	APIRouting interface{} `json:"api_routing,required"`
+	APIRouting interface{} `json:"api_routing"`
 	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
-	ConfidenceIntervals interface{} `json:"confidence_intervals,required"`
+	ConfidenceIntervals interface{} `json:"confidence_intervals"`
 	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
-	ParameterSchemas interface{} `json:"parameter_schemas,required"`
+	ParameterSchemas interface{} `json:"parameter_schemas"`
 	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
-	SchemaInfo interface{} `json:"schema_info,required"`
+	SchemaInfo interface{} `json:"schema_info"`
 	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
-	Thresholds interface{}                      `json:"thresholds,required"`
+	Thresholds interface{}                      `json:"thresholds"`
 	JSON       operationGetResponseFeaturesJSON `json:"-"`
 	union      OperationGetResponseFeaturesUnion
 }

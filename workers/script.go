@@ -354,11 +354,11 @@ func (r ScriptUpdateParams) URLQuery() (v url.Values) {
 }
 
 type ScriptUpdateParamsBody struct {
-	AnyPartName param.Field[interface{}] `json:"<any part name>,required"`
-	Metadata    param.Field[interface{}] `json:"metadata,required"`
+	AnyPartName param.Field[interface{}] `json:"<any part name>"`
 	// Rollback message to be associated with this deployment. Only parsed when query
 	// param `"rollback_to"` is present.
-	Message param.Field[string] `json:"message"`
+	Message  param.Field[string]      `json:"message"`
+	Metadata param.Field[interface{}] `json:"metadata"`
 }
 
 func (r ScriptUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -512,17 +512,17 @@ func (r ScriptUpdateParamsBodyObjectMetadataBinding) MarshalJSON() (data []byte,
 
 // Migrations to apply for Durable Objects associated with this Worker.
 type ScriptUpdateParamsBodyObjectMetadataMigrations struct {
-	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
-	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
-	NewSqliteClasses   param.Field[interface{}] `json:"new_sqlite_classes,required"`
-	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
-	Steps              param.Field[interface{}] `json:"steps,required"`
-	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
+	DeletedClasses   param.Field[interface{}] `json:"deleted_classes"`
+	NewClasses       param.Field[interface{}] `json:"new_classes"`
+	NewSqliteClasses param.Field[interface{}] `json:"new_sqlite_classes"`
 	// Tag to set as the latest migration tag.
 	NewTag param.Field[string] `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
-	OldTag param.Field[string] `json:"old_tag"`
+	OldTag             param.Field[string]      `json:"old_tag"`
+	RenamedClasses     param.Field[interface{}] `json:"renamed_classes"`
+	Steps              param.Field[interface{}] `json:"steps"`
+	TransferredClasses param.Field[interface{}] `json:"transferred_classes"`
 }
 
 func (r ScriptUpdateParamsBodyObjectMetadataMigrations) MarshalJSON() (data []byte, err error) {

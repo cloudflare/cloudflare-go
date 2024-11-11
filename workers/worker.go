@@ -44,8 +44,6 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 type Binding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// This field can have the runtime type of [DispatchNamespaceBindingOutbound].
-	Outbound interface{} `json:"outbound,required"`
 	// The class of resource that the binding provides.
 	Type BindingType `json:"type,required"`
 	// ID of the D1 database to bind to
@@ -64,6 +62,8 @@ type Binding struct {
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
+	// This field can have the runtime type of [DispatchNamespaceBindingOutbound].
+	Outbound interface{} `json:"outbound"`
 	// Name of the Queue to bind to
 	QueueName string `json:"queue_name"`
 	// The script where the Durable Object is defined, if it is external to this Worker
@@ -77,7 +77,6 @@ type Binding struct {
 // bindingJSON contains the JSON metadata for the struct [Binding]
 type bindingJSON struct {
 	Name          apijson.Field
-	Outbound      apijson.Field
 	Type          apijson.Field
 	ID            apijson.Field
 	Binding       apijson.Field
@@ -87,6 +86,7 @@ type bindingJSON struct {
 	Environment   apijson.Field
 	Namespace     apijson.Field
 	NamespaceID   apijson.Field
+	Outbound      apijson.Field
 	QueueName     apijson.Field
 	ScriptName    apijson.Field
 	Service       apijson.Field
@@ -285,7 +285,6 @@ func (r BindingType) IsKnown() bool {
 
 // A binding to allow the Worker to communicate with resources
 type BindingParam struct {
-	Outbound param.Field[interface{}] `json:"outbound,required"`
 	// The class of resource that the binding provides.
 	Type param.Field[BindingType] `json:"type,required"`
 	// ID of the D1 database to bind to
@@ -299,7 +298,8 @@ type BindingParam struct {
 	// Optional environment if the Worker utilizes one.
 	Environment param.Field[string] `json:"environment"`
 	// Namespace to bind to
-	Namespace param.Field[string] `json:"namespace"`
+	Namespace param.Field[string]      `json:"namespace"`
+	Outbound  param.Field[interface{}] `json:"outbound"`
 	// Name of the Queue to bind to
 	QueueName param.Field[string] `json:"queue_name"`
 	// The script where the Durable Object is defined, if it is external to this Worker

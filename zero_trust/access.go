@@ -124,45 +124,45 @@ func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, e
 type AccessRule struct {
 	// This field can have the runtime type of
 	// [AnyValidServiceTokenRuleAnyValidServiceToken].
-	AnyValidServiceToken interface{} `json:"any_valid_service_token,required"`
+	AnyValidServiceToken interface{} `json:"any_valid_service_token"`
 	// This field can have the runtime type of [AuthenticationMethodRuleAuthMethod].
-	AuthMethod interface{} `json:"auth_method,required"`
+	AuthMethod interface{} `json:"auth_method"`
 	// This field can have the runtime type of [AzureGroupRuleAzureAD].
-	AzureAD interface{} `json:"azureAD,required"`
+	AzureAD interface{} `json:"azureAD"`
 	// This field can have the runtime type of [CertificateRuleCertificate].
-	Certificate interface{} `json:"certificate,required"`
+	Certificate interface{} `json:"certificate"`
 	// This field can have the runtime type of [AccessDevicePostureRuleDevicePosture].
-	DevicePosture interface{} `json:"device_posture,required"`
+	DevicePosture interface{} `json:"device_posture"`
 	// This field can have the runtime type of [EmailRuleEmail].
-	Email interface{} `json:"email,required"`
+	Email interface{} `json:"email"`
 	// This field can have the runtime type of [DomainRuleEmailDomain].
-	EmailDomain interface{} `json:"email_domain,required"`
+	EmailDomain interface{} `json:"email_domain"`
 	// This field can have the runtime type of [EmailListRuleEmailList].
-	EmailList interface{} `json:"email_list,required"`
+	EmailList interface{} `json:"email_list"`
 	// This field can have the runtime type of [EveryoneRuleEveryone].
-	Everyone interface{} `json:"everyone,required"`
+	Everyone interface{} `json:"everyone"`
 	// This field can have the runtime type of
 	// [ExternalEvaluationRuleExternalEvaluation].
-	ExternalEvaluation interface{} `json:"external_evaluation,required"`
+	ExternalEvaluation interface{} `json:"external_evaluation"`
 	// This field can have the runtime type of [CountryRuleGeo].
-	Geo interface{} `json:"geo,required"`
+	Geo interface{} `json:"geo"`
 	// This field can have the runtime type of
 	// [GitHubOrganizationRuleGitHubOrganization].
-	GitHubOrganization interface{} `json:"github-organization,required"`
+	GitHubOrganization interface{} `json:"github-organization"`
 	// This field can have the runtime type of [GroupRuleGroup].
-	Group interface{} `json:"group,required"`
+	Group interface{} `json:"group"`
 	// This field can have the runtime type of [GSuiteGroupRuleGSuite].
-	GSuite interface{} `json:"gsuite,required"`
+	GSuite interface{} `json:"gsuite"`
 	// This field can have the runtime type of [IPRuleIP].
-	IP interface{} `json:"ip,required"`
+	IP interface{} `json:"ip"`
 	// This field can have the runtime type of [IPListRuleIPList].
-	IPList interface{} `json:"ip_list,required"`
+	IPList interface{} `json:"ip_list"`
 	// This field can have the runtime type of [OktaGroupRuleOkta].
-	Okta interface{} `json:"okta,required"`
+	Okta interface{} `json:"okta"`
 	// This field can have the runtime type of [SAMLGroupRuleSAML].
-	SAML interface{} `json:"saml,required"`
+	SAML interface{} `json:"saml"`
 	// This field can have the runtime type of [ServiceTokenRuleServiceToken].
-	ServiceToken interface{}    `json:"service_token,required"`
+	ServiceToken interface{}    `json:"service_token"`
 	JSON         accessRuleJSON `json:"-"`
 	union        AccessRuleUnion
 }
@@ -321,25 +321,25 @@ func init() {
 
 // Matches a specific email.
 type AccessRuleParam struct {
-	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
-	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
-	AzureAD              param.Field[interface{}] `json:"azureAD,required"`
-	Certificate          param.Field[interface{}] `json:"certificate,required"`
-	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
-	Email                param.Field[interface{}] `json:"email,required"`
-	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
-	EmailList            param.Field[interface{}] `json:"email_list,required"`
-	Everyone             param.Field[interface{}] `json:"everyone,required"`
-	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}] `json:"geo,required"`
-	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
-	Group                param.Field[interface{}] `json:"group,required"`
-	GSuite               param.Field[interface{}] `json:"gsuite,required"`
-	IP                   param.Field[interface{}] `json:"ip,required"`
-	IPList               param.Field[interface{}] `json:"ip_list,required"`
-	Okta                 param.Field[interface{}] `json:"okta,required"`
-	SAML                 param.Field[interface{}] `json:"saml,required"`
-	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token"`
+	AuthMethod           param.Field[interface{}] `json:"auth_method"`
+	AzureAD              param.Field[interface{}] `json:"azureAD"`
+	Certificate          param.Field[interface{}] `json:"certificate"`
+	DevicePosture        param.Field[interface{}] `json:"device_posture"`
+	Email                param.Field[interface{}] `json:"email"`
+	EmailDomain          param.Field[interface{}] `json:"email_domain"`
+	EmailList            param.Field[interface{}] `json:"email_list"`
+	Everyone             param.Field[interface{}] `json:"everyone"`
+	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation"`
+	Geo                  param.Field[interface{}] `json:"geo"`
+	GitHubOrganization   param.Field[interface{}] `json:"github-organization"`
+	Group                param.Field[interface{}] `json:"group"`
+	GSuite               param.Field[interface{}] `json:"gsuite"`
+	IP                   param.Field[interface{}] `json:"ip"`
+	IPList               param.Field[interface{}] `json:"ip_list"`
+	Okta                 param.Field[interface{}] `json:"okta"`
+	SAML                 param.Field[interface{}] `json:"saml"`
+	ServiceToken         param.Field[interface{}] `json:"service_token"`
 }
 
 func (r AccessRuleParam) MarshalJSON() (data []byte, err error) {

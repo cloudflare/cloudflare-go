@@ -496,20 +496,16 @@ func (r AIRunParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AIRunParamsBody struct {
-	Audio     param.Field[interface{}] `json:"audio,required"`
-	Functions param.Field[interface{}] `json:"functions,required"`
-	Image     param.Field[interface{}] `json:"image,required"`
-	Mask      param.Field[interface{}] `json:"mask,required"`
-	Messages  param.Field[interface{}] `json:"messages,required"`
-	Text      param.Field[interface{}] `json:"text,required"`
-	Tools     param.Field[interface{}] `json:"tools,required"`
+	Audio param.Field[interface{}] `json:"audio"`
 	// Decreases the likelihood of the model repeating the same lines verbatim.
-	FrequencyPenalty param.Field[float64] `json:"frequency_penalty"`
+	FrequencyPenalty param.Field[float64]     `json:"frequency_penalty"`
+	Functions        param.Field[interface{}] `json:"functions"`
 	// Controls how closely the generated image should adhere to the prompt; higher
 	// values make the image more aligned with the prompt
 	Guidance param.Field[float64] `json:"guidance"`
 	// The height of the generated image in pixels
-	Height param.Field[int64] `json:"height"`
+	Height param.Field[int64]       `json:"height"`
+	Image  param.Field[interface{}] `json:"image"`
 	// For use with img2img tasks. A base64-encoded string of the input image
 	ImageB64 param.Field[string] `json:"image_b64"`
 	// The text that you want the model to summarize
@@ -518,11 +514,13 @@ type AIRunParamsBody struct {
 	// if not specified
 	Lang param.Field[string] `json:"lang"`
 	// Name of the LoRA (Low-Rank Adaptation) model to fine-tune the base model.
-	Lora param.Field[string] `json:"lora"`
+	Lora param.Field[string]      `json:"lora"`
+	Mask param.Field[interface{}] `json:"mask"`
 	// The maximum length of the generated summary in tokens
 	MaxLength param.Field[int64] `json:"max_length"`
 	// The maximum number of tokens to generate in the response.
-	MaxTokens param.Field[int64] `json:"max_tokens"`
+	MaxTokens param.Field[int64]       `json:"max_tokens"`
+	Messages  param.Field[interface{}] `json:"messages"`
 	// Text describing elements to avoid in the generated image
 	NegativePrompt param.Field[string] `json:"negative_prompt"`
 	// The number of diffusion steps; higher values can improve quality but take longer
@@ -551,7 +549,9 @@ type AIRunParamsBody struct {
 	TargetLang param.Field[string] `json:"target_lang"`
 	// Controls the randomness of the output; higher values produce more random
 	// results.
-	Temperature param.Field[float64] `json:"temperature"`
+	Temperature param.Field[float64]     `json:"temperature"`
+	Text        param.Field[interface{}] `json:"text"`
+	Tools       param.Field[interface{}] `json:"tools"`
 	// Limits the AI to choose from the top 'k' most probable words. Lower values make
 	// responses more focused; higher values introduce more variety and potential
 	// surprises.
@@ -806,12 +806,12 @@ func (r AIRunParamsBodyMessagesFunction) MarshalJSON() (data []byte, err error) 
 }
 
 type AIRunParamsBodyMessagesTool struct {
-	Function   param.Field[interface{}] `json:"function,required"`
-	Parameters param.Field[interface{}] `json:"parameters,required"`
 	// A brief description of what the tool does.
-	Description param.Field[string] `json:"description"`
+	Description param.Field[string]      `json:"description"`
+	Function    param.Field[interface{}] `json:"function"`
 	// The name of the tool. More descriptive the better.
-	Name param.Field[string] `json:"name"`
+	Name       param.Field[string]      `json:"name"`
+	Parameters param.Field[interface{}] `json:"parameters"`
 	// Specifies the type of tool (e.g., 'function').
 	Type param.Field[string] `json:"type"`
 }
