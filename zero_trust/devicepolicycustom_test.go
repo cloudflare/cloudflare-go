@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
-func TestDevicePolicyNewWithOptionalParams(t *testing.T) {
+func TestDevicePolicyCustomNewWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,7 +28,7 @@ func TestDevicePolicyNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Policies.New(context.TODO(), zero_trust.DevicePolicyNewParams{
+	_, err := client.ZeroTrust.Devices.Policies.Custom.New(context.TODO(), zero_trust.DevicePolicyCustomNewParams{
 		AccountID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Match:               cloudflare.F("user.identity == \"test@cloudflare.com\""),
 		Name:                cloudflare.F("Allow Developers"),
@@ -44,7 +44,7 @@ func TestDevicePolicyNewWithOptionalParams(t *testing.T) {
 		ExcludeOfficeIPs:    cloudflare.F(true),
 		LANAllowMinutes:     cloudflare.F(30.000000),
 		LANAllowSubnetSize:  cloudflare.F(24.000000),
-		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyNewParamsServiceModeV2{
+		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyCustomNewParamsServiceModeV2{
 			Mode: cloudflare.F("proxy"),
 			Port: cloudflare.F(3000.000000),
 		}),
@@ -61,7 +61,7 @@ func TestDevicePolicyNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDevicePolicyList(t *testing.T) {
+func TestDevicePolicyCustomList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -74,7 +74,7 @@ func TestDevicePolicyList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Policies.List(context.TODO(), zero_trust.DevicePolicyListParams{
+	_, err := client.ZeroTrust.Devices.Policies.Custom.List(context.TODO(), zero_trust.DevicePolicyCustomListParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
@@ -86,7 +86,7 @@ func TestDevicePolicyList(t *testing.T) {
 	}
 }
 
-func TestDevicePolicyDelete(t *testing.T) {
+func TestDevicePolicyCustomDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -99,10 +99,10 @@ func TestDevicePolicyDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Policies.Delete(
+	_, err := client.ZeroTrust.Devices.Policies.Custom.Delete(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.DevicePolicyDeleteParams{
+		zero_trust.DevicePolicyCustomDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
@@ -115,7 +115,7 @@ func TestDevicePolicyDelete(t *testing.T) {
 	}
 }
 
-func TestDevicePolicyEditWithOptionalParams(t *testing.T) {
+func TestDevicePolicyCustomEditWithOptionalParams(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -129,10 +129,10 @@ func TestDevicePolicyEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Policies.Edit(
+	_, err := client.ZeroTrust.Devices.Policies.Custom.Edit(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.DevicePolicyEditParams{
+		zero_trust.DevicePolicyCustomEditParams{
 			AccountID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			AllowModeSwitch:     cloudflare.F(true),
 			AllowUpdates:        cloudflare.F(true),
@@ -146,7 +146,7 @@ func TestDevicePolicyEditWithOptionalParams(t *testing.T) {
 			Match:               cloudflare.F("user.identity == \"test@cloudflare.com\""),
 			Name:                cloudflare.F("Allow Developers"),
 			Precedence:          cloudflare.F(100.000000),
-			ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyEditParamsServiceModeV2{
+			ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyCustomEditParamsServiceModeV2{
 				Mode: cloudflare.F("proxy"),
 				Port: cloudflare.F(3000.000000),
 			}),
@@ -164,7 +164,7 @@ func TestDevicePolicyEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDevicePolicyGet(t *testing.T) {
+func TestDevicePolicyCustomGet(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -178,10 +178,10 @@ func TestDevicePolicyGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Policies.Get(
+	_, err := client.ZeroTrust.Devices.Policies.Custom.Get(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.DevicePolicyGetParams{
+		zero_trust.DevicePolicyCustomGetParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
