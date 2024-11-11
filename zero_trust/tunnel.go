@@ -159,15 +159,13 @@ func (r *TunnelService) Get(ctx context.Context, tunnelID string, query TunnelGe
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelNewResponse struct {
-	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
-	// [[]TunnelNewResponseTunnelWARPConnectorTunnelConnection].
-	Connections interface{} `json:"connections,required"`
-	// This field can have the runtime type of [interface{}].
-	Metadata interface{} `json:"metadata,required"`
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]TunnelNewResponseTunnelWARPConnectorTunnelConnection].
+	Connections interface{} `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
@@ -179,6 +177,8 @@ type TunnelNewResponse struct {
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
+	// This field can have the runtime type of [interface{}].
+	Metadata interface{} `json:"metadata"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
@@ -198,14 +198,14 @@ type TunnelNewResponse struct {
 // tunnelNewResponseJSON contains the JSON metadata for the struct
 // [TunnelNewResponse]
 type tunnelNewResponseJSON struct {
-	Connections     apijson.Field
-	Metadata        apijson.Field
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
 	CreatedAt       apijson.Field
 	DeletedAt       apijson.Field
+	Metadata        apijson.Field
 	Name            apijson.Field
 	RemoteConfig    apijson.Field
 	Status          apijson.Field
@@ -448,15 +448,13 @@ func (r TunnelNewResponseTunType) IsKnown() bool {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelListResponse struct {
-	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
-	// [[]TunnelListResponseTunnelWARPConnectorTunnelConnection].
-	Connections interface{} `json:"connections,required"`
-	// This field can have the runtime type of [interface{}].
-	Metadata interface{} `json:"metadata,required"`
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]TunnelListResponseTunnelWARPConnectorTunnelConnection].
+	Connections interface{} `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
@@ -468,6 +466,8 @@ type TunnelListResponse struct {
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
+	// This field can have the runtime type of [interface{}].
+	Metadata interface{} `json:"metadata"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
@@ -487,14 +487,14 @@ type TunnelListResponse struct {
 // tunnelListResponseJSON contains the JSON metadata for the struct
 // [TunnelListResponse]
 type tunnelListResponseJSON struct {
-	Connections     apijson.Field
-	Metadata        apijson.Field
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
 	CreatedAt       apijson.Field
 	DeletedAt       apijson.Field
+	Metadata        apijson.Field
 	Name            apijson.Field
 	RemoteConfig    apijson.Field
 	Status          apijson.Field
@@ -737,15 +737,13 @@ func (r TunnelListResponseTunType) IsKnown() bool {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelDeleteResponse struct {
-	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
-	// [[]TunnelDeleteResponseTunnelWARPConnectorTunnelConnection].
-	Connections interface{} `json:"connections,required"`
-	// This field can have the runtime type of [interface{}].
-	Metadata interface{} `json:"metadata,required"`
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]TunnelDeleteResponseTunnelWARPConnectorTunnelConnection].
+	Connections interface{} `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
@@ -757,6 +755,8 @@ type TunnelDeleteResponse struct {
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
+	// This field can have the runtime type of [interface{}].
+	Metadata interface{} `json:"metadata"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
@@ -776,14 +776,14 @@ type TunnelDeleteResponse struct {
 // tunnelDeleteResponseJSON contains the JSON metadata for the struct
 // [TunnelDeleteResponse]
 type tunnelDeleteResponseJSON struct {
-	Connections     apijson.Field
-	Metadata        apijson.Field
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
 	CreatedAt       apijson.Field
 	DeletedAt       apijson.Field
+	Metadata        apijson.Field
 	Name            apijson.Field
 	RemoteConfig    apijson.Field
 	Status          apijson.Field
@@ -1027,15 +1027,13 @@ func (r TunnelDeleteResponseTunType) IsKnown() bool {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelEditResponse struct {
-	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
-	// [[]TunnelEditResponseTunnelWARPConnectorTunnelConnection].
-	Connections interface{} `json:"connections,required"`
-	// This field can have the runtime type of [interface{}].
-	Metadata interface{} `json:"metadata,required"`
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]TunnelEditResponseTunnelWARPConnectorTunnelConnection].
+	Connections interface{} `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
@@ -1047,6 +1045,8 @@ type TunnelEditResponse struct {
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
+	// This field can have the runtime type of [interface{}].
+	Metadata interface{} `json:"metadata"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
@@ -1066,14 +1066,14 @@ type TunnelEditResponse struct {
 // tunnelEditResponseJSON contains the JSON metadata for the struct
 // [TunnelEditResponse]
 type tunnelEditResponseJSON struct {
-	Connections     apijson.Field
-	Metadata        apijson.Field
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
 	CreatedAt       apijson.Field
 	DeletedAt       apijson.Field
+	Metadata        apijson.Field
 	Name            apijson.Field
 	RemoteConfig    apijson.Field
 	Status          apijson.Field
@@ -1316,15 +1316,13 @@ func (r TunnelEditResponseTunType) IsKnown() bool {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelGetResponse struct {
-	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
-	// [[]TunnelGetResponseTunnelWARPConnectorTunnelConnection].
-	Connections interface{} `json:"connections,required"`
-	// This field can have the runtime type of [interface{}].
-	Metadata interface{} `json:"metadata,required"`
 	// UUID of the tunnel.
 	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
+	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
+	// [[]TunnelGetResponseTunnelWARPConnectorTunnelConnection].
+	Connections interface{} `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
@@ -1336,6 +1334,8 @@ type TunnelGetResponse struct {
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
+	// This field can have the runtime type of [interface{}].
+	Metadata interface{} `json:"metadata"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
@@ -1355,14 +1355,14 @@ type TunnelGetResponse struct {
 // tunnelGetResponseJSON contains the JSON metadata for the struct
 // [TunnelGetResponse]
 type tunnelGetResponseJSON struct {
-	Connections     apijson.Field
-	Metadata        apijson.Field
 	ID              apijson.Field
 	AccountTag      apijson.Field
+	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
 	CreatedAt       apijson.Field
 	DeletedAt       apijson.Field
+	Metadata        apijson.Field
 	Name            apijson.Field
 	RemoteConfig    apijson.Field
 	Status          apijson.Field

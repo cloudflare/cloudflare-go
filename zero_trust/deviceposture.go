@@ -322,14 +322,6 @@ func (r CrowdstrikeInputParam) implementsZeroTrustDeviceInputUnionParam() {}
 
 // The value to be checked against.
 type DeviceInput struct {
-	// This field can have the runtime type of [[]CarbonblackInput].
-	CheckDisks interface{} `json:"checkDisks,required"`
-	// This field can have the runtime type of
-	// [[]DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage].
-	ExtendedKeyUsage interface{} `json:"extended_key_usage,required"`
-	// This field can have the runtime type of
-	// [DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations].
-	Locations interface{} `json:"locations,required"`
 	// List ID.
 	ID string `json:"id"`
 	// The Number of active threats.
@@ -339,6 +331,8 @@ type DeviceInput struct {
 	// Confirm the certificate was not imported from another device. We recommend
 	// keeping this enabled unless the certificate was deployed without a private key.
 	CheckPrivateKey bool `json:"check_private_key"`
+	// This field can have the runtime type of [[]CarbonblackInput].
+	CheckDisks interface{} `json:"checkDisks"`
 	// Common Name that is protected by the certificate
 	Cn string `json:"cn"`
 	// Compliance Status
@@ -355,6 +349,9 @@ type DeviceInput struct {
 	Enabled bool `json:"enabled"`
 	// Whether or not file exists
 	Exists bool `json:"exists"`
+	// This field can have the runtime type of
+	// [[]DeviceInputTeamsDevicesClientCertificateV2InputRequestExtendedKeyUsage].
+	ExtendedKeyUsage interface{} `json:"extended_key_usage"`
 	// Whether device is infected.
 	Infected bool `json:"infected"`
 	// Whether device is active.
@@ -363,6 +360,9 @@ type DeviceInput struct {
 	IssueCount string `json:"issue_count"`
 	// For more details on last seen, please refer to the Crowdstrike documentation.
 	LastSeen string `json:"last_seen"`
+	// This field can have the runtime type of
+	// [DeviceInputTeamsDevicesClientCertificateV2InputRequestLocations].
+	Locations interface{} `json:"locations"`
 	// Network status of device.
 	NetworkStatus DeviceInputNetworkStatus `json:"network_status"`
 	// Operating system
@@ -412,13 +412,11 @@ type DeviceInput struct {
 
 // deviceInputJSON contains the JSON metadata for the struct [DeviceInput]
 type deviceInputJSON struct {
-	CheckDisks       apijson.Field
-	ExtendedKeyUsage apijson.Field
-	Locations        apijson.Field
 	ID               apijson.Field
 	ActiveThreats    apijson.Field
 	CertificateID    apijson.Field
 	CheckPrivateKey  apijson.Field
+	CheckDisks       apijson.Field
 	Cn               apijson.Field
 	ComplianceStatus apijson.Field
 	ConnectionID     apijson.Field
@@ -427,10 +425,12 @@ type deviceInputJSON struct {
 	EidLastSeen      apijson.Field
 	Enabled          apijson.Field
 	Exists           apijson.Field
+	ExtendedKeyUsage apijson.Field
 	Infected         apijson.Field
 	IsActive         apijson.Field
 	IssueCount       apijson.Field
 	LastSeen         apijson.Field
+	Locations        apijson.Field
 	NetworkStatus    apijson.Field
 	OperatingSystem  apijson.Field
 	OperationalState apijson.Field
@@ -1042,9 +1042,6 @@ func (r DeviceInputVersionOperator) IsKnown() bool {
 
 // The value to be checked against.
 type DeviceInputParam struct {
-	CheckDisks       param.Field[interface{}] `json:"checkDisks,required"`
-	ExtendedKeyUsage param.Field[interface{}] `json:"extended_key_usage,required"`
-	Locations        param.Field[interface{}] `json:"locations,required"`
 	// List ID.
 	ID param.Field[string] `json:"id"`
 	// The Number of active threats.
@@ -1053,7 +1050,8 @@ type DeviceInputParam struct {
 	CertificateID param.Field[string] `json:"certificate_id"`
 	// Confirm the certificate was not imported from another device. We recommend
 	// keeping this enabled unless the certificate was deployed without a private key.
-	CheckPrivateKey param.Field[bool] `json:"check_private_key"`
+	CheckPrivateKey param.Field[bool]        `json:"check_private_key"`
+	CheckDisks      param.Field[interface{}] `json:"checkDisks"`
 	// Common Name that is protected by the certificate
 	Cn param.Field[string] `json:"cn"`
 	// Compliance Status
@@ -1069,7 +1067,8 @@ type DeviceInputParam struct {
 	// Enabled
 	Enabled param.Field[bool] `json:"enabled"`
 	// Whether or not file exists
-	Exists param.Field[bool] `json:"exists"`
+	Exists           param.Field[bool]        `json:"exists"`
+	ExtendedKeyUsage param.Field[interface{}] `json:"extended_key_usage"`
 	// Whether device is infected.
 	Infected param.Field[bool] `json:"infected"`
 	// Whether device is active.
@@ -1077,7 +1076,8 @@ type DeviceInputParam struct {
 	// The Number of Issues.
 	IssueCount param.Field[string] `json:"issue_count"`
 	// For more details on last seen, please refer to the Crowdstrike documentation.
-	LastSeen param.Field[string] `json:"last_seen"`
+	LastSeen  param.Field[string]      `json:"last_seen"`
+	Locations param.Field[interface{}] `json:"locations"`
 	// Network status of device.
 	NetworkStatus param.Field[DeviceInputNetworkStatus] `json:"network_status"`
 	// Operating system

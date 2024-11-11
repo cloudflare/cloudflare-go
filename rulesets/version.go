@@ -242,6 +242,14 @@ func (r versionGetResponseJSON) RawJSON() string {
 }
 
 type VersionGetResponseRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action VersionGetResponseRulesAction `json:"action"`
 	// This field can have the runtime type of [BlockRuleActionParameters],
 	// [interface{}], [CompressResponseRuleActionParameters],
 	// [ExecuteRuleActionParameters], [RedirectRuleActionParameters],
@@ -249,9 +257,13 @@ type VersionGetResponseRule struct {
 	// [ScoreRuleActionParameters], [ServeErrorRuleActionParameters],
 	// [SetConfigRuleActionParameters], [SkipRuleActionParameters],
 	// [SetCacheSettingsRuleActionParameters], [LogCustomFieldRuleActionParameters].
-	ActionParameters interface{} `json:"action_parameters,required"`
+	ActionParameters interface{} `json:"action_parameters"`
 	// This field can have the runtime type of [[]string].
-	Categories interface{} `json:"categories,required"`
+	Categories interface{} `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [VersionGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
@@ -265,9 +277,11 @@ type VersionGetResponseRule struct {
 	// [LogCustomFieldRuleExposedCredentialCheck],
 	// [DDoSDynamicRuleExposedCredentialCheck],
 	// [ForceConnectionCloseRuleExposedCredentialCheck].
-	ExposedCredentialCheck interface{} `json:"exposed_credential_check,required"`
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	ExposedCredentialCheck interface{} `json:"exposed_credential_check"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging Logging `json:"logging"`
 	// This field can have the runtime type of [BlockRuleRatelimit],
 	// [VersionGetResponseRulesRulesetsChallengeRuleRatelimit],
 	// [CompressResponseRuleRatelimit], [ExecuteRuleRatelimit],
@@ -277,21 +291,7 @@ type VersionGetResponseRule struct {
 	// [ServeErrorRuleRatelimit], [SetConfigRuleRatelimit], [SkipRuleRatelimit],
 	// [SetCacheSettingsRuleRatelimit], [LogCustomFieldRuleRatelimit],
 	// [DDoSDynamicRuleRatelimit], [ForceConnectionCloseRuleRatelimit].
-	Ratelimit interface{} `json:"ratelimit,required"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action VersionGetResponseRulesAction `json:"action"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging Logging `json:"logging"`
+	Ratelimit interface{} `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref   string                     `json:"ref"`
 	JSON  versionGetResponseRuleJSON `json:"-"`
@@ -301,18 +301,18 @@ type VersionGetResponseRule struct {
 // versionGetResponseRuleJSON contains the JSON metadata for the struct
 // [VersionGetResponseRule]
 type versionGetResponseRuleJSON struct {
-	ActionParameters       apijson.Field
-	Categories             apijson.Field
-	ExposedCredentialCheck apijson.Field
 	LastUpdated            apijson.Field
-	Ratelimit              apijson.Field
 	Version                apijson.Field
 	ID                     apijson.Field
 	Action                 apijson.Field
+	ActionParameters       apijson.Field
+	Categories             apijson.Field
 	Description            apijson.Field
 	Enabled                apijson.Field
+	ExposedCredentialCheck apijson.Field
 	Expression             apijson.Field
 	Logging                apijson.Field
+	Ratelimit              apijson.Field
 	Ref                    apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
