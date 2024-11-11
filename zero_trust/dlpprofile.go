@@ -137,6 +137,9 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 type Profile struct {
 	// The id of the profile (uuid)
 	ID string `json:"id,required" format:"uuid"`
+	// This field can have the runtime type of [[]ProfileCustomEntry],
+	// [[]ProfilePredefinedEntry], [[]ProfileIntegrationEntry].
+	Entries interface{} `json:"entries,required"`
 	// The name of the profile
 	Name string      `json:"name,required"`
 	Type ProfileType `json:"type,required"`
@@ -150,10 +153,7 @@ type Profile struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The description of the profile
 	Description string `json:"description,nullable"`
-	// This field can have the runtime type of [[]ProfileCustomEntry],
-	// [[]ProfilePredefinedEntry], [[]ProfileIntegrationEntry].
-	Entries    interface{} `json:"entries"`
-	OCREnabled bool        `json:"ocr_enabled"`
+	OCREnabled  bool   `json:"ocr_enabled"`
 	// Whether this profile can be accessed by anyone
 	OpenAccess bool `json:"open_access"`
 	// When the profile was lasted updated
@@ -165,6 +165,7 @@ type Profile struct {
 // profileJSON contains the JSON metadata for the struct [Profile]
 type profileJSON struct {
 	ID                  apijson.Field
+	Entries             apijson.Field
 	Name                apijson.Field
 	Type                apijson.Field
 	AllowedMatchCount   apijson.Field
@@ -172,7 +173,6 @@ type profileJSON struct {
 	ContextAwareness    apijson.Field
 	CreatedAt           apijson.Field
 	Description         apijson.Field
-	Entries             apijson.Field
 	OCREnabled          apijson.Field
 	OpenAccess          apijson.Field
 	UpdatedAt           apijson.Field
@@ -281,38 +281,38 @@ func (r profileCustomJSON) RawJSON() string {
 func (r ProfileCustom) implementsZeroTrustProfile() {}
 
 type ProfileCustomEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID      string                   `json:"id,required" format:"uuid"`
+	Enabled bool                     `json:"enabled,required"`
+	Name    string                   `json:"name,required"`
+	Type    ProfileCustomEntriesType `json:"type,required"`
 	// This field can have the runtime type of
 	// [ProfileCustomEntriesPredefinedConfidence].
-	Confidence interface{}              `json:"confidence,required"`
-	Enabled    bool                     `json:"enabled,required"`
-	Name       string                   `json:"name,required"`
-	Type       ProfileCustomEntriesType `json:"type,required"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	Pattern    Pattern     `json:"pattern"`
+	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
+	Secret     bool        `json:"secret"`
+	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of [interface{}].
-	WordList  interface{}            `json:"word_list,required"`
-	CreatedAt time.Time              `json:"created_at" format:"date-time"`
-	Pattern   Pattern                `json:"pattern"`
-	ProfileID string                 `json:"profile_id,nullable" format:"uuid"`
-	Secret    bool                   `json:"secret"`
-	UpdatedAt time.Time              `json:"updated_at" format:"date-time"`
-	JSON      profileCustomEntryJSON `json:"-"`
-	union     ProfileCustomEntriesUnion
+	WordList interface{}            `json:"word_list"`
+	JSON     profileCustomEntryJSON `json:"-"`
+	union    ProfileCustomEntriesUnion
 }
 
 // profileCustomEntryJSON contains the JSON metadata for the struct
 // [ProfileCustomEntry]
 type profileCustomEntryJSON struct {
 	ID          apijson.Field
-	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
-	WordList    apijson.Field
+	Confidence  apijson.Field
 	CreatedAt   apijson.Field
 	Pattern     apijson.Field
 	ProfileID   apijson.Field
 	Secret      apijson.Field
 	UpdatedAt   apijson.Field
+	WordList    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -748,38 +748,38 @@ func (r profilePredefinedJSON) RawJSON() string {
 func (r ProfilePredefined) implementsZeroTrustProfile() {}
 
 type ProfilePredefinedEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID      string                       `json:"id,required" format:"uuid"`
+	Enabled bool                         `json:"enabled,required"`
+	Name    string                       `json:"name,required"`
+	Type    ProfilePredefinedEntriesType `json:"type,required"`
 	// This field can have the runtime type of
 	// [ProfilePredefinedEntriesPredefinedConfidence].
-	Confidence interface{}                  `json:"confidence,required"`
-	Enabled    bool                         `json:"enabled,required"`
-	Name       string                       `json:"name,required"`
-	Type       ProfilePredefinedEntriesType `json:"type,required"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	Pattern    Pattern     `json:"pattern"`
+	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
+	Secret     bool        `json:"secret"`
+	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of [interface{}].
-	WordList  interface{}                `json:"word_list,required"`
-	CreatedAt time.Time                  `json:"created_at" format:"date-time"`
-	Pattern   Pattern                    `json:"pattern"`
-	ProfileID string                     `json:"profile_id,nullable" format:"uuid"`
-	Secret    bool                       `json:"secret"`
-	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
-	JSON      profilePredefinedEntryJSON `json:"-"`
-	union     ProfilePredefinedEntriesUnion
+	WordList interface{}                `json:"word_list"`
+	JSON     profilePredefinedEntryJSON `json:"-"`
+	union    ProfilePredefinedEntriesUnion
 }
 
 // profilePredefinedEntryJSON contains the JSON metadata for the struct
 // [ProfilePredefinedEntry]
 type profilePredefinedEntryJSON struct {
 	ID          apijson.Field
-	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
-	WordList    apijson.Field
+	Confidence  apijson.Field
 	CreatedAt   apijson.Field
 	Pattern     apijson.Field
 	ProfileID   apijson.Field
 	Secret      apijson.Field
 	UpdatedAt   apijson.Field
+	WordList    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1208,38 +1208,38 @@ func (r profileIntegrationJSON) RawJSON() string {
 func (r ProfileIntegration) implementsZeroTrustProfile() {}
 
 type ProfileIntegrationEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID      string                        `json:"id,required" format:"uuid"`
+	Enabled bool                          `json:"enabled,required"`
+	Name    string                        `json:"name,required"`
+	Type    ProfileIntegrationEntriesType `json:"type,required"`
 	// This field can have the runtime type of
 	// [ProfileIntegrationEntriesPredefinedConfidence].
-	Confidence interface{}                   `json:"confidence,required"`
-	Enabled    bool                          `json:"enabled,required"`
-	Name       string                        `json:"name,required"`
-	Type       ProfileIntegrationEntriesType `json:"type,required"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	Pattern    Pattern     `json:"pattern"`
+	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
+	Secret     bool        `json:"secret"`
+	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of [interface{}].
-	WordList  interface{}                 `json:"word_list,required"`
-	CreatedAt time.Time                   `json:"created_at" format:"date-time"`
-	Pattern   Pattern                     `json:"pattern"`
-	ProfileID string                      `json:"profile_id,nullable" format:"uuid"`
-	Secret    bool                        `json:"secret"`
-	UpdatedAt time.Time                   `json:"updated_at" format:"date-time"`
-	JSON      profileIntegrationEntryJSON `json:"-"`
-	union     ProfileIntegrationEntriesUnion
+	WordList interface{}                 `json:"word_list"`
+	JSON     profileIntegrationEntryJSON `json:"-"`
+	union    ProfileIntegrationEntriesUnion
 }
 
 // profileIntegrationEntryJSON contains the JSON metadata for the struct
 // [ProfileIntegrationEntry]
 type profileIntegrationEntryJSON struct {
 	ID          apijson.Field
-	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
-	WordList    apijson.Field
+	Confidence  apijson.Field
 	CreatedAt   apijson.Field
 	Pattern     apijson.Field
 	ProfileID   apijson.Field
 	Secret      apijson.Field
 	UpdatedAt   apijson.Field
+	WordList    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

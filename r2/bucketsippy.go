@@ -258,8 +258,8 @@ func (r BucketSippyUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type BucketSippyUpdateParamsBody struct {
-	Destination param.Field[interface{}] `json:"destination,required"`
-	Source      param.Field[interface{}] `json:"source,required"`
+	Destination param.Field[interface{}] `json:"destination"`
+	Source      param.Field[interface{}] `json:"source"`
 }
 
 func (r BucketSippyUpdateParamsBody) MarshalJSON() (data []byte, err error) {

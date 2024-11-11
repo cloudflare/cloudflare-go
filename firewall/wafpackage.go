@@ -99,11 +99,11 @@ type WAFPackageListResponse = interface{}
 
 type WAFPackageGetResponse struct {
 	// This field can have the runtime type of [[]shared.ResponseInfo].
-	Errors interface{} `json:"errors,required"`
+	Errors interface{} `json:"errors"`
 	// This field can have the runtime type of [[]shared.ResponseInfo].
-	Messages interface{} `json:"messages,required"`
+	Messages interface{} `json:"messages"`
 	// This field can have the runtime type of [interface{}].
-	Result interface{} `json:"result,required"`
+	Result interface{} `json:"result"`
 	// Whether the API call was successful
 	Success WAFPackageGetResponseSuccess `json:"success"`
 	JSON    wafPackageGetResponseJSON    `json:"-"`

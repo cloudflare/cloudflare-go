@@ -156,13 +156,13 @@ func (r CachePurgeParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CachePurgeParamsBody struct {
-	Files    param.Field[interface{}] `json:"files,required"`
-	Hosts    param.Field[interface{}] `json:"hosts,required"`
-	Prefixes param.Field[interface{}] `json:"prefixes,required"`
-	Tags     param.Field[interface{}] `json:"tags,required"`
+	Files    param.Field[interface{}] `json:"files"`
+	Hosts    param.Field[interface{}] `json:"hosts"`
+	Prefixes param.Field[interface{}] `json:"prefixes"`
 	// For more information, please refer to
 	// [purge everything documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
-	PurgeEverything param.Field[bool] `json:"purge_everything"`
+	PurgeEverything param.Field[bool]        `json:"purge_everything"`
+	Tags            param.Field[interface{}] `json:"tags"`
 }
 
 func (r CachePurgeParamsBody) MarshalJSON() (data []byte, err error) {

@@ -4988,6 +4988,19 @@ func (r ZeroRTTParam) implementsZonesSettingEditParamsBodyUnion() {}
 
 // 0-RTT session resumption enabled for this zone.
 type SettingEditResponse struct {
+	// ID of the zone setting.
+	ID SettingEditResponseID `json:"id"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingEditResponseEditable `json:"editable"`
+	// ssl-recommender enrollment setting.
+	Enabled bool `json:"enabled"`
+	// last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting. Notes: The interval (in seconds) from when
+	// development mode expires (positive integer) or last expired (negative integer)
+	// for the domain. If development mode has never been enabled, this value is false.
+	TimeRemaining float64 `json:"time_remaining"`
 	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
 	// [AlwaysOnlineValue], [AlwaysUseHTTPSValue], [AutomaticHTTPSRewritesValue],
 	// [BrotliValue], [BrowserCacheTTLValue], [BrowserCheckValue], [CacheLevelValue],
@@ -5007,33 +5020,20 @@ type SettingEditResponse struct {
 	// [SSLValue], [SettingEditResponseZonesTLS1_2OnlyValue], [TLS1_3Value],
 	// [TLSClientAuthValue], [TrueClientIPHeaderValue], [WAFValue], [WebPValue],
 	// [WebsocketValue].
-	Value interface{} `json:"value,required"`
-	// ID of the zone setting.
-	ID SettingEditResponseID `json:"id"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingEditResponseEditable `json:"editable"`
-	// ssl-recommender enrollment setting.
-	Enabled bool `json:"enabled"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: The interval (in seconds) from when
-	// development mode expires (positive integer) or last expired (negative integer)
-	// for the domain. If development mode has never been enabled, this value is false.
-	TimeRemaining float64                 `json:"time_remaining"`
-	JSON          settingEditResponseJSON `json:"-"`
-	union         SettingEditResponseUnion
+	Value interface{}             `json:"value"`
+	JSON  settingEditResponseJSON `json:"-"`
+	union SettingEditResponseUnion
 }
 
 // settingEditResponseJSON contains the JSON metadata for the struct
 // [SettingEditResponse]
 type settingEditResponseJSON struct {
-	Value         apijson.Field
 	ID            apijson.Field
 	Editable      apijson.Field
 	Enabled       apijson.Field
 	ModifiedOn    apijson.Field
 	TimeRemaining apijson.Field
+	Value         apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -6003,6 +6003,19 @@ func (r SettingEditResponseEditable) IsKnown() bool {
 
 // 0-RTT session resumption enabled for this zone.
 type SettingGetResponse struct {
+	// ID of the zone setting.
+	ID SettingGetResponseID `json:"id"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable SettingGetResponseEditable `json:"editable"`
+	// ssl-recommender enrollment setting.
+	Enabled bool `json:"enabled"`
+	// last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting. Notes: The interval (in seconds) from when
+	// development mode expires (positive integer) or last expired (negative integer)
+	// for the domain. If development mode has never been enabled, this value is false.
+	TimeRemaining float64 `json:"time_remaining"`
 	// This field can have the runtime type of [ZeroRTTValue], [AdvancedDDoSValue],
 	// [AlwaysOnlineValue], [AlwaysUseHTTPSValue], [AutomaticHTTPSRewritesValue],
 	// [BrotliValue], [BrowserCacheTTLValue], [BrowserCheckValue], [CacheLevelValue],
@@ -6022,33 +6035,20 @@ type SettingGetResponse struct {
 	// [SSLValue], [SettingGetResponseZonesTLS1_2OnlyValue], [TLS1_3Value],
 	// [TLSClientAuthValue], [TrueClientIPHeaderValue], [WAFValue], [WebPValue],
 	// [WebsocketValue].
-	Value interface{} `json:"value,required"`
-	// ID of the zone setting.
-	ID SettingGetResponseID `json:"id"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingGetResponseEditable `json:"editable"`
-	// ssl-recommender enrollment setting.
-	Enabled bool `json:"enabled"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: The interval (in seconds) from when
-	// development mode expires (positive integer) or last expired (negative integer)
-	// for the domain. If development mode has never been enabled, this value is false.
-	TimeRemaining float64                `json:"time_remaining"`
-	JSON          settingGetResponseJSON `json:"-"`
-	union         SettingGetResponseUnion
+	Value interface{}            `json:"value"`
+	JSON  settingGetResponseJSON `json:"-"`
+	union SettingGetResponseUnion
 }
 
 // settingGetResponseJSON contains the JSON metadata for the struct
 // [SettingGetResponse]
 type settingGetResponseJSON struct {
-	Value         apijson.Field
 	ID            apijson.Field
 	Editable      apijson.Field
 	Enabled       apijson.Field
 	ModifiedOn    apijson.Field
 	TimeRemaining apijson.Field
+	Value         apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -7029,11 +7029,11 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 
 // 0-RTT session resumption enabled for this zone.
 type SettingEditParamsBody struct {
-	Value param.Field[interface{}] `json:"value,required"`
 	// ID of the zone setting.
 	ID param.Field[SettingEditParamsBodyID] `json:"id"`
 	// ssl-recommender enrollment setting.
-	Enabled param.Field[bool] `json:"enabled"`
+	Enabled param.Field[bool]        `json:"enabled"`
+	Value   param.Field[interface{}] `json:"value"`
 }
 
 func (r SettingEditParamsBody) MarshalJSON() (data []byte, err error) {

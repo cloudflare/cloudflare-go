@@ -246,38 +246,38 @@ func (r DLPProfileCustomNewResponseCustomProfile) implementsZeroTrustDLPProfileC
 }
 
 type DLPProfileCustomNewResponseCustomProfileEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID      string                                              `json:"id,required" format:"uuid"`
+	Enabled bool                                                `json:"enabled,required"`
+	Name    string                                              `json:"name,required"`
+	Type    DLPProfileCustomNewResponseCustomProfileEntriesType `json:"type,required"`
 	// This field can have the runtime type of
 	// [DLPProfileCustomNewResponseCustomProfileEntriesPredefinedConfidence].
-	Confidence interface{}                                         `json:"confidence,required"`
-	Enabled    bool                                                `json:"enabled,required"`
-	Name       string                                              `json:"name,required"`
-	Type       DLPProfileCustomNewResponseCustomProfileEntriesType `json:"type,required"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	Pattern    Pattern     `json:"pattern"`
+	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
+	Secret     bool        `json:"secret"`
+	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of [interface{}].
-	WordList  interface{}                                       `json:"word_list,required"`
-	CreatedAt time.Time                                         `json:"created_at" format:"date-time"`
-	Pattern   Pattern                                           `json:"pattern"`
-	ProfileID string                                            `json:"profile_id,nullable" format:"uuid"`
-	Secret    bool                                              `json:"secret"`
-	UpdatedAt time.Time                                         `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileCustomNewResponseCustomProfileEntryJSON `json:"-"`
-	union     DLPProfileCustomNewResponseCustomProfileEntriesUnion
+	WordList interface{}                                       `json:"word_list"`
+	JSON     dlpProfileCustomNewResponseCustomProfileEntryJSON `json:"-"`
+	union    DLPProfileCustomNewResponseCustomProfileEntriesUnion
 }
 
 // dlpProfileCustomNewResponseCustomProfileEntryJSON contains the JSON metadata for
 // the struct [DLPProfileCustomNewResponseCustomProfileEntry]
 type dlpProfileCustomNewResponseCustomProfileEntryJSON struct {
 	ID          apijson.Field
-	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
-	WordList    apijson.Field
+	Confidence  apijson.Field
 	CreatedAt   apijson.Field
 	Pattern     apijson.Field
 	ProfileID   apijson.Field
 	Secret      apijson.Field
 	UpdatedAt   apijson.Field
+	WordList    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -726,38 +726,38 @@ func (r DLPProfileCustomNewResponsePredefinedProfile) implementsZeroTrustDLPProf
 }
 
 type DLPProfileCustomNewResponsePredefinedProfileEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID      string                                                  `json:"id,required" format:"uuid"`
+	Enabled bool                                                    `json:"enabled,required"`
+	Name    string                                                  `json:"name,required"`
+	Type    DLPProfileCustomNewResponsePredefinedProfileEntriesType `json:"type,required"`
 	// This field can have the runtime type of
 	// [DLPProfileCustomNewResponsePredefinedProfileEntriesPredefinedConfidence].
-	Confidence interface{}                                             `json:"confidence,required"`
-	Enabled    bool                                                    `json:"enabled,required"`
-	Name       string                                                  `json:"name,required"`
-	Type       DLPProfileCustomNewResponsePredefinedProfileEntriesType `json:"type,required"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	Pattern    Pattern     `json:"pattern"`
+	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
+	Secret     bool        `json:"secret"`
+	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of [interface{}].
-	WordList  interface{}                                           `json:"word_list,required"`
-	CreatedAt time.Time                                             `json:"created_at" format:"date-time"`
-	Pattern   Pattern                                               `json:"pattern"`
-	ProfileID string                                                `json:"profile_id,nullable" format:"uuid"`
-	Secret    bool                                                  `json:"secret"`
-	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileCustomNewResponsePredefinedProfileEntryJSON `json:"-"`
-	union     DLPProfileCustomNewResponsePredefinedProfileEntriesUnion
+	WordList interface{}                                           `json:"word_list"`
+	JSON     dlpProfileCustomNewResponsePredefinedProfileEntryJSON `json:"-"`
+	union    DLPProfileCustomNewResponsePredefinedProfileEntriesUnion
 }
 
 // dlpProfileCustomNewResponsePredefinedProfileEntryJSON contains the JSON metadata
 // for the struct [DLPProfileCustomNewResponsePredefinedProfileEntry]
 type dlpProfileCustomNewResponsePredefinedProfileEntryJSON struct {
 	ID          apijson.Field
-	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
-	WordList    apijson.Field
+	Confidence  apijson.Field
 	CreatedAt   apijson.Field
 	Pattern     apijson.Field
 	ProfileID   apijson.Field
 	Secret      apijson.Field
 	UpdatedAt   apijson.Field
+	WordList    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1199,38 +1199,38 @@ func (r DLPProfileCustomNewResponseIntegrationProfile) implementsZeroTrustDLPPro
 }
 
 type DLPProfileCustomNewResponseIntegrationProfileEntry struct {
-	ID string `json:"id,required" format:"uuid"`
+	ID      string                                                   `json:"id,required" format:"uuid"`
+	Enabled bool                                                     `json:"enabled,required"`
+	Name    string                                                   `json:"name,required"`
+	Type    DLPProfileCustomNewResponseIntegrationProfileEntriesType `json:"type,required"`
 	// This field can have the runtime type of
 	// [DLPProfileCustomNewResponseIntegrationProfileEntriesPredefinedConfidence].
-	Confidence interface{}                                              `json:"confidence,required"`
-	Enabled    bool                                                     `json:"enabled,required"`
-	Name       string                                                   `json:"name,required"`
-	Type       DLPProfileCustomNewResponseIntegrationProfileEntriesType `json:"type,required"`
+	Confidence interface{} `json:"confidence"`
+	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
+	Pattern    Pattern     `json:"pattern"`
+	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
+	Secret     bool        `json:"secret"`
+	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of [interface{}].
-	WordList  interface{}                                            `json:"word_list,required"`
-	CreatedAt time.Time                                              `json:"created_at" format:"date-time"`
-	Pattern   Pattern                                                `json:"pattern"`
-	ProfileID string                                                 `json:"profile_id,nullable" format:"uuid"`
-	Secret    bool                                                   `json:"secret"`
-	UpdatedAt time.Time                                              `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileCustomNewResponseIntegrationProfileEntryJSON `json:"-"`
-	union     DLPProfileCustomNewResponseIntegrationProfileEntriesUnion
+	WordList interface{}                                            `json:"word_list"`
+	JSON     dlpProfileCustomNewResponseIntegrationProfileEntryJSON `json:"-"`
+	union    DLPProfileCustomNewResponseIntegrationProfileEntriesUnion
 }
 
 // dlpProfileCustomNewResponseIntegrationProfileEntryJSON contains the JSON
 // metadata for the struct [DLPProfileCustomNewResponseIntegrationProfileEntry]
 type dlpProfileCustomNewResponseIntegrationProfileEntryJSON struct {
 	ID          apijson.Field
-	Confidence  apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
-	WordList    apijson.Field
+	Confidence  apijson.Field
 	CreatedAt   apijson.Field
 	Pattern     apijson.Field
 	ProfileID   apijson.Field
 	Secret      apijson.Field
 	UpdatedAt   apijson.Field
+	WordList    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1633,9 +1633,6 @@ func (r DLPProfileCustomNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DLPProfileCustomNewParamsBody struct {
-	Entries       param.Field[interface{}] `json:"entries,required"`
-	Profiles      param.Field[interface{}] `json:"profiles,required"`
-	SharedEntries param.Field[interface{}] `json:"shared_entries,required"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount   param.Field[int64]  `json:"allowed_match_count"`
 	ConfidenceThreshold param.Field[string] `json:"confidence_threshold"`
@@ -1643,9 +1640,12 @@ type DLPProfileCustomNewParamsBody struct {
 	// keywords.
 	ContextAwareness param.Field[ContextAwarenessParam] `json:"context_awareness"`
 	// The description of the profile
-	Description param.Field[string] `json:"description"`
-	Name        param.Field[string] `json:"name"`
-	OCREnabled  param.Field[bool]   `json:"ocr_enabled"`
+	Description   param.Field[string]      `json:"description"`
+	Entries       param.Field[interface{}] `json:"entries"`
+	Name          param.Field[string]      `json:"name"`
+	OCREnabled    param.Field[bool]        `json:"ocr_enabled"`
+	Profiles      param.Field[interface{}] `json:"profiles"`
+	SharedEntries param.Field[interface{}] `json:"shared_entries"`
 }
 
 func (r DLPProfileCustomNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -1696,8 +1696,8 @@ func (r DLPProfileCustomNewParamsBodyProfilesProfile) MarshalJSON() (data []byte
 type DLPProfileCustomNewParamsBodyProfilesProfilesEntry struct {
 	Enabled param.Field[bool]         `json:"enabled,required"`
 	Name    param.Field[string]       `json:"name,required"`
-	Words   param.Field[interface{}]  `json:"words,required"`
 	Pattern param.Field[PatternParam] `json:"pattern"`
+	Words   param.Field[interface{}]  `json:"words"`
 }
 
 func (r DLPProfileCustomNewParamsBodyProfilesProfilesEntry) MarshalJSON() (data []byte, err error) {
@@ -1916,8 +1916,8 @@ func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfile) implementsZeroTrustDLP
 type DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntry struct {
 	Enabled param.Field[bool]         `json:"enabled,required"`
 	Name    param.Field[string]       `json:"name,required"`
-	Words   param.Field[interface{}]  `json:"words,required"`
 	Pattern param.Field[PatternParam] `json:"pattern"`
+	Words   param.Field[interface{}]  `json:"words"`
 }
 
 func (r DLPProfileCustomNewParamsBodyDLPNewCustomProfileEntry) MarshalJSON() (data []byte, err error) {

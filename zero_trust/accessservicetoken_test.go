@@ -90,6 +90,8 @@ func TestAccessServiceTokenListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.ServiceTokens.List(context.TODO(), zero_trust.AccessServiceTokenListParams{
 		AccountID: cloudflare.F("account_id"),
+		Name:      cloudflare.F("name"),
+		Search:    cloudflare.F("search"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
