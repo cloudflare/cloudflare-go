@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
-func TestDevicePolicyCertificateUpdate(t *testing.T) {
+func TestDevicePolicyDefaultEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,15 +27,23 @@ func TestDevicePolicyCertificateUpdate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Policies.Certificates.Update(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		zero_trust.DevicePolicyCertificateUpdateParams{
-			DevicePolicyCertificates: zero_trust.DevicePolicyCertificatesParam{
-				Enabled: cloudflare.F(true),
-			},
-		},
-	)
+	_, err := client.ZeroTrust.Devices.Policies.Default.Edit(context.TODO(), zero_trust.DevicePolicyDefaultEditParams{
+		AccountID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		AllowModeSwitch:     cloudflare.F(true),
+		AllowUpdates:        cloudflare.F(true),
+		AllowedToLeave:      cloudflare.F(true),
+		AutoConnect:         cloudflare.F(0.000000),
+		CaptivePortal:       cloudflare.F(180.000000),
+		DisableAutoFallback: cloudflare.F(true),
+		ExcludeOfficeIPs:    cloudflare.F(true),
+		ServiceModeV2: cloudflare.F(zero_trust.DevicePolicyDefaultEditParamsServiceModeV2{
+			Mode: cloudflare.F("proxy"),
+			Port: cloudflare.F(3000.000000),
+		}),
+		SupportURL:     cloudflare.F("https://1.1.1.1/help"),
+		SwitchLocked:   cloudflare.F(true),
+		TunnelProtocol: cloudflare.F("wireguard"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -45,7 +53,7 @@ func TestDevicePolicyCertificateUpdate(t *testing.T) {
 	}
 }
 
-func TestDevicePolicyCertificateGet(t *testing.T) {
+func TestDevicePolicyDefaultGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -58,7 +66,9 @@ func TestDevicePolicyCertificateGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Policies.Certificates.Get(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.ZeroTrust.Devices.Policies.Default.Get(context.TODO(), zero_trust.DevicePolicyDefaultGetParams{
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

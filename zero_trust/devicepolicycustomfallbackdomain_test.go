@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
-func TestDevicePolicyFallbackDomainUpdate(t *testing.T) {
+func TestDevicePolicyCustomFallbackDomainUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,10 @@ func TestDevicePolicyFallbackDomainUpdate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Policies.FallbackDomains.Update(
+	_, err := client.ZeroTrust.Devices.Policies.Custom.FallbackDomains.Update(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.DevicePolicyFallbackDomainUpdateParams{
+		zero_trust.DevicePolicyCustomFallbackDomainUpdateParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Domains: []zero_trust.FallbackDomainParam{{
 				Suffix:      cloudflare.F("example.com"),
@@ -56,7 +56,7 @@ func TestDevicePolicyFallbackDomainUpdate(t *testing.T) {
 	}
 }
 
-func TestDevicePolicyFallbackDomainList(t *testing.T) {
+func TestDevicePolicyCustomFallbackDomainGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -69,35 +69,10 @@ func TestDevicePolicyFallbackDomainList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Policies.FallbackDomains.List(context.TODO(), zero_trust.DevicePolicyFallbackDomainListParams{
-		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestDevicePolicyFallbackDomainGet(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.ZeroTrust.Devices.Policies.FallbackDomains.Get(
+	_, err := client.ZeroTrust.Devices.Policies.Custom.FallbackDomains.Get(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.DevicePolicyFallbackDomainGetParams{
+		zero_trust.DevicePolicyCustomFallbackDomainGetParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
