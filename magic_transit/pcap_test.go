@@ -29,12 +29,12 @@ func TestPCAPNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.MagicTransit.PCAPs.New(context.TODO(), magic_transit.PCAPNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body: magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimple{
+		Body: magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimple{
 			PacketLimit: cloudflare.F(10000.000000),
-			System:      cloudflare.F(magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleSystemMagicTransit),
+			System:      cloudflare.F(magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleSystemMagicTransit),
 			TimeLimit:   cloudflare.F(300.000000),
-			Type:        cloudflare.F(magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsRequestSimpleTypeSimple),
-			FilterV1: cloudflare.F(magic_transit.PCAPFilterParam{
+			Type:        cloudflare.F(magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleTypeSimple),
+			FilterV1: cloudflare.F(magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleFilterV1{
 				DestinationAddress: cloudflare.F("1.2.3.4"),
 				DestinationPort:    cloudflare.F(80.000000),
 				Protocol:           cloudflare.F(6.000000),
