@@ -206,8 +206,16 @@ func (r WaitingRoomRuleAction) IsKnown() bool {
 type RuleNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
+	Rules  RuleNewParamsRules  `json:"rules,required"`
+}
+
+func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Rules)
+}
+
+type RuleNewParamsRules struct {
 	// The action to take when the expression matches.
-	Action param.Field[RuleNewParamsAction] `json:"action,required"`
+	Action param.Field[RuleNewParamsRulesAction] `json:"action,required"`
 	// Criteria defining when there is a match for the current rule.
 	Expression param.Field[string] `json:"expression,required"`
 	// The description of the rule.
@@ -216,20 +224,20 @@ type RuleNewParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r RuleNewParams) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsRules) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action to take when the expression matches.
-type RuleNewParamsAction string
+type RuleNewParamsRulesAction string
 
 const (
-	RuleNewParamsActionBypassWaitingRoom RuleNewParamsAction = "bypass_waiting_room"
+	RuleNewParamsRulesActionBypassWaitingRoom RuleNewParamsRulesAction = "bypass_waiting_room"
 )
 
-func (r RuleNewParamsAction) IsKnown() bool {
+func (r RuleNewParamsRulesAction) IsKnown() bool {
 	switch r {
-	case RuleNewParamsActionBypassWaitingRoom:
+	case RuleNewParamsRulesActionBypassWaitingRoom:
 		return true
 	}
 	return false
@@ -314,16 +322,16 @@ func (r ruleNewResponseEnvelopeResultInfoJSON) RawJSON() string {
 type RuleUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string]    `path:"zone_id,required"`
-	Body   []RuleUpdateParamsBody `json:"body,required"`
+	Rules  []RuleUpdateParamsRule `json:"rules,required"`
 }
 
 func (r RuleUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r.Rules)
 }
 
-type RuleUpdateParamsBody struct {
+type RuleUpdateParamsRule struct {
 	// The action to take when the expression matches.
-	Action param.Field[RuleUpdateParamsBodyAction] `json:"action,required"`
+	Action param.Field[RuleUpdateParamsRulesAction] `json:"action,required"`
 	// Criteria defining when there is a match for the current rule.
 	Expression param.Field[string] `json:"expression,required"`
 	// The description of the rule.
@@ -332,20 +340,20 @@ type RuleUpdateParamsBody struct {
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r RuleUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+func (r RuleUpdateParamsRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action to take when the expression matches.
-type RuleUpdateParamsBodyAction string
+type RuleUpdateParamsRulesAction string
 
 const (
-	RuleUpdateParamsBodyActionBypassWaitingRoom RuleUpdateParamsBodyAction = "bypass_waiting_room"
+	RuleUpdateParamsRulesActionBypassWaitingRoom RuleUpdateParamsRulesAction = "bypass_waiting_room"
 )
 
-func (r RuleUpdateParamsBodyAction) IsKnown() bool {
+func (r RuleUpdateParamsRulesAction) IsKnown() bool {
 	switch r {
-	case RuleUpdateParamsBodyActionBypassWaitingRoom:
+	case RuleUpdateParamsRulesActionBypassWaitingRoom:
 		return true
 	}
 	return false
