@@ -134,7 +134,7 @@ func snippetMultipartBody(request SnippetRequest) (string, *bytes.Buffer, error)
 	return mw.Boundary(), body, nil
 }
 
-func (api *API) UpdateZoneSnippet(ctx context.Context, rc *ResourceContainer, params SnippetRequest) ([]Snippet, error) {
+func (api *API) UpdateZoneSnippet(ctx context.Context, rc *ResourceContainer, params SnippetRequest) (*Snippet, error) {
 	if rc.Identifier == "" {
 		return nil, ErrMissingZoneID
 	}
@@ -153,7 +153,7 @@ func (api *API) UpdateZoneSnippet(ctx context.Context, rc *ResourceContainer, pa
 		return nil, err
 	}
 
-	result := SnippetsResponse{}
+	result := SnippetResponse{}
 	if err := json.Unmarshal(res, &result); err != nil {
 		return nil, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
