@@ -2,11 +2,13 @@ package cloudflare
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestTeamsAccount(t *testing.T) {
@@ -112,7 +114,7 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 			Antivirus: &TeamsAntivirus{
 				EnabledDownloadPhase: true,
 				NotificationSettings: &TeamsNotificationSettings{
-					Enabled:    &trueValue,
+					Enabled:    BoolPtr(true),
 					Message:    "msg",
 					SupportURL: "https://hi.com",
 				},
@@ -231,7 +233,7 @@ func TestTeamsAccountGetLoggingConfiguration(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, actual, TeamsLoggingSettings{
-			RedactPii: true,
+			RedactPii: BoolPtr(true),
 			LoggingSettingsByRuleType: map[TeamsRuleType]TeamsAccountLoggingConfiguration{
 				TeamsDnsRuleType: {LogAll: false, LogBlocks: true},
 			},
@@ -257,7 +259,7 @@ func TestTeamsAccountUpdateLoggingConfiguration(t *testing.T) {
 	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/logging", handler)
 
 	actual, err := client.TeamsAccountUpdateLoggingConfiguration(context.Background(), testAccountID, TeamsLoggingSettings{
-		RedactPii: true,
+		RedactPii: BoolPtr(true),
 		LoggingSettingsByRuleType: map[TeamsRuleType]TeamsAccountLoggingConfiguration{
 			TeamsDnsRuleType: {
 				LogAll:    false,
@@ -274,7 +276,7 @@ func TestTeamsAccountUpdateLoggingConfiguration(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, actual, TeamsLoggingSettings{
-			RedactPii: true,
+			RedactPii: BoolPtr(true),
 			LoggingSettingsByRuleType: map[TeamsRuleType]TeamsAccountLoggingConfiguration{
 				TeamsDnsRuleType:  {LogAll: false, LogBlocks: true},
 				TeamsHttpRuleType: {LogAll: true, LogBlocks: false},
@@ -282,6 +284,54 @@ func TestTeamsAccountUpdateLoggingConfiguration(t *testing.T) {
 			},
 		})
 	}
+}
+
+func TestTeamsAccountDisableRedactPIILoggingConfiguration(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+
+		request := readJson(t, r)
+		require.False(t, request["redact_pii"].(bool))
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {"settings_by_rule_type":{"dns":{"log_all":false,"log_blocks":true}, "http":{"log_all":true,"log_blocks":false}, "l4": {"log_all": false, "log_blocks": true}},"redact_pii":true}
+		}`)
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/logging", handler)
+
+	_, err := client.TeamsAccountUpdateLoggingConfiguration(context.Background(), testAccountID, TeamsLoggingSettings{
+		RedactPii: BoolPtr(false),
+		LoggingSettingsByRuleType: map[TeamsRuleType]TeamsAccountLoggingConfiguration{
+			TeamsDnsRuleType: {
+				LogAll:    false,
+				LogBlocks: true,
+			},
+			TeamsHttpRuleType: {
+				LogAll: true,
+			},
+			TeamsL4RuleType: {
+				LogBlocks: true,
+			},
+		},
+	})
+	require.NoError(t, err)
+}
+
+func readJson(t *testing.T, r *http.Request) map[string]interface{} {
+	var result map[string]interface{}
+	decoder := json.NewDecoder(r.Body)
+	defer r.Body.Close()
+	err := decoder.Decode(&result)
+	require.NoError(t, err)
+	return result
 }
 
 func TestTeamsAccountGetDeviceConfiguration(t *testing.T) {
