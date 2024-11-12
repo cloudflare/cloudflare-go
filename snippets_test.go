@@ -116,18 +116,12 @@ func TestUpdateSnippets(t *testing.T) {
 		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
 		w.Header().Set("content-type", "application/json")
 		fmt.Fprint(w, `{
-      "result": [
+      "result":
 		{
 			"snippet_name": "some_id_1",
 			"created_on":"0001-01-01T00:00:00Z",
 			"modified_on":"0001-01-01T00:00:00Z"
 	  	},
-		{
-			"snippet_name": "some_id_2",
-			"created_on":"0001-01-01T00:00:00Z",
-			"modified_on":"0001-01-01T00:00:00Z"
-	  	}
-	  ],
       "success": true,
       "errors": [],
       "messages": []
@@ -149,17 +143,10 @@ func TestUpdateSnippets(t *testing.T) {
 			},
 		},
 	}
-	want := []Snippet{
-		{
-			SnippetName: "some_id_1",
-			CreatedOn:   &time.Time{},
-			ModifiedOn:  &time.Time{},
-		},
-		{
-			SnippetName: "some_id_2",
-			CreatedOn:   &time.Time{},
-			ModifiedOn:  &time.Time{},
-		},
+	want := &Snippet{
+		SnippetName: "some_id_1",
+		CreatedOn:   &time.Time{},
+		ModifiedOn:  &time.Time{},
 	}
 	zoneActual, err := client.UpdateZoneSnippet(context.Background(), ZoneIdentifier(testZoneID), toUpdate)
 	if assert.NoError(t, err) {
