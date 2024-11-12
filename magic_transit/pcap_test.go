@@ -34,7 +34,7 @@ func TestPCAPNewWithOptionalParams(t *testing.T) {
 			System:      cloudflare.F(magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleSystemMagicTransit),
 			TimeLimit:   cloudflare.F(300.000000),
 			Type:        cloudflare.F(magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleTypeSimple),
-			FilterV1: cloudflare.F(magic_transit.PCAPNewParamsBodyMagicVisibilityPCAPsPCAPsRequestSimpleFilterV1{
+			FilterV1: cloudflare.F(magic_transit.PCAPFilterParam{
 				DestinationAddress: cloudflare.F("1.2.3.4"),
 				DestinationPort:    cloudflare.F(80.000000),
 				Protocol:           cloudflare.F(6.000000),
