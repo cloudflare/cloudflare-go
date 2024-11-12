@@ -177,6 +177,9 @@ type AccountSettings struct {
 	// See
 	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
 	// for more information.
+	//
+	// Deprecated in favor of
+	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
 	DefaultNameservers AccountSettingsDefaultNameservers `json:"default_nameservers"`
 	// Indicates whether membership in this account requires that Two-Factor
 	// Authentication is enabled
@@ -184,7 +187,8 @@ type AccountSettings struct {
 	// Indicates whether new zones should use the account-level custom nameservers by
 	// default.
 	//
-	// Deprecated in favor of `default_nameservers`.
+	// Deprecated in favor of
+	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
 	UseAccountCustomNSByDefault bool                `json:"use_account_custom_ns_by_default"`
 	JSON                        accountSettingsJSON `json:"-"`
 }
@@ -217,6 +221,9 @@ func (r accountSettingsJSON) RawJSON() string {
 // See
 // [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
 // for more information.
+//
+// Deprecated in favor of
+// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
 type AccountSettingsDefaultNameservers string
 
 const (
@@ -258,6 +265,9 @@ type AccountSettingsParam struct {
 	// See
 	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
 	// for more information.
+	//
+	// Deprecated in favor of
+	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
 	DefaultNameservers param.Field[AccountSettingsDefaultNameservers] `json:"default_nameservers"`
 	// Indicates whether membership in this account requires that Two-Factor
 	// Authentication is enabled
@@ -265,7 +275,8 @@ type AccountSettingsParam struct {
 	// Indicates whether new zones should use the account-level custom nameservers by
 	// default.
 	//
-	// Deprecated in favor of `default_nameservers`.
+	// Deprecated in favor of
+	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
 	UseAccountCustomNSByDefault param.Field[bool] `json:"use_account_custom_ns_by_default"`
 }
 
