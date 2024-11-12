@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/accounts"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 func TestMemberNewWithOptionalParams(t *testing.T) {
@@ -65,8 +64,8 @@ func TestMemberUpdateWithOptionalParams(t *testing.T) {
 		"4536bcfad5faccb111b47003c79917fa",
 		accounts.MemberUpdateParams{
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-			Body: shared.MemberParam{
-				Roles: cloudflare.F([]shared.MemberRoleParam{{
+			Body: accounts.MemberUpdateParamsBodyIAMUpdateMemberWithRoles{
+				Roles: cloudflare.F([]accounts.MemberUpdateParamsBodyIAMUpdateMemberWithRolesRole{{
 					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
 				}, {
 					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
