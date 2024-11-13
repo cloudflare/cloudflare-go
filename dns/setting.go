@@ -23,6 +23,7 @@ import (
 // the [NewSettingService] method instead.
 type SettingService struct {
 	Options []option.RequestOption
+	Views   *SettingViewService
 }
 
 // NewSettingService generates a new service that applies the given options to each
@@ -31,6 +32,7 @@ type SettingService struct {
 func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r = &SettingService{}
 	r.Options = opts
+	r.Views = NewSettingViewService(opts...)
 	return
 }
 
