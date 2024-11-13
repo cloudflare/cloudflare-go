@@ -38,7 +38,7 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 	return
 }
 
-// Get Domain Details
+// Gets security details and statistics about a domain.
 func (r *DomainService) Get(ctx context.Context, params DomainGetParams, opts ...option.RequestOption) (res *Domain, err error) {
 	var env DomainGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
