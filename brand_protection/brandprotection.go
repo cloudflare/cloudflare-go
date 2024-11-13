@@ -53,7 +53,7 @@ func (r *BrandProtectionService) Submit(ctx context.Context, params BrandProtect
 	return
 }
 
-// Get results for a URL scan
+// Gets phishing details about a URL.
 func (r *BrandProtectionService) URLInfo(ctx context.Context, params BrandProtectionURLInfoParams, opts ...option.RequestOption) (res *Info, err error) {
 	var env BrandProtectionURLInfoResponseEnvelope
 	opts = append(r.Options[:], opts...)
