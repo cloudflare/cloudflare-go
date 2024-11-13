@@ -31,6 +31,7 @@ import (
 // the [NewScriptService] method instead.
 type ScriptService struct {
 	Options     []option.RequestOption
+	Assets      *ScriptAssetService
 	Subdomain   *ScriptSubdomainService
 	Schedules   *ScriptScheduleService
 	Tail        *ScriptTailService
@@ -46,6 +47,7 @@ type ScriptService struct {
 func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	r = &ScriptService{}
 	r.Options = opts
+	r.Assets = NewScriptAssetService(opts...)
 	r.Subdomain = NewScriptSubdomainService(opts...)
 	r.Schedules = NewScriptScheduleService(opts...)
 	r.Tail = NewScriptTailService(opts...)

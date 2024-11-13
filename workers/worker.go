@@ -20,6 +20,7 @@ import (
 type WorkerService struct {
 	Options         []option.RequestOption
 	AI              *AIService
+	Assets          *AssetService
 	Scripts         *ScriptService
 	AccountSettings *AccountSettingService
 	Domains         *DomainService
@@ -33,6 +34,7 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 	r = &WorkerService{}
 	r.Options = opts
 	r.AI = NewAIService(opts...)
+	r.Assets = NewAssetService(opts...)
 	r.Scripts = NewScriptService(opts...)
 	r.AccountSettings = NewAccountSettingService(opts...)
 	r.Domains = NewDomainService(opts...)
