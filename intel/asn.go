@@ -36,7 +36,8 @@ func NewASNService(opts ...option.RequestOption) (r *ASNService) {
 	return
 }
 
-// Get ASN Overview
+// Gets an overview of the Autonomous System Number (ASN) and a list of subnets for
+// it.
 func (r *ASNService) Get(ctx context.Context, asn shared.ASNParam, query ASNGetParams, opts ...option.RequestOption) (res *shared.ASN, err error) {
 	var env ASNGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

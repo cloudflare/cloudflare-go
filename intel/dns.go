@@ -38,7 +38,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	return
 }
 
-// Get Passive DNS by IP
+// Gets a list of all the domains that have resolved to a specific IP address.
 func (r *DNSService) List(ctx context.Context, params DNSListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DNSListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *DNSService) List(ctx context.Context, params DNSListParams, opts ...opt
 	return res, nil
 }
 
-// Get Passive DNS by IP
+// Gets a list of all the domains that have resolved to a specific IP address.
 func (r *DNSService) ListAutoPaging(ctx context.Context, params DNSListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[DNSListResponse] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }

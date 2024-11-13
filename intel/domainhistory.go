@@ -37,7 +37,8 @@ func NewDomainHistoryService(opts ...option.RequestOption) (r *DomainHistoryServ
 	return
 }
 
-// Get Domain History
+// Gets historical security threat and content categories currently and previously
+// assigned to a domain.
 func (r *DomainHistoryService) Get(ctx context.Context, params DomainHistoryGetParams, opts ...option.RequestOption) (res *[]DomainHistory, err error) {
 	var env DomainHistoryGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

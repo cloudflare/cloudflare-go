@@ -36,7 +36,8 @@ func NewIPService(opts ...option.RequestOption) (r *IPService) {
 	return
 }
 
-// Same as summary
+// Gets the geolocation, ASN, infrastructure type of the ASN, and any security
+// threat categories of an IP address.
 func (r *IPService) Get(ctx context.Context, params IPGetParams, opts ...option.RequestOption) (res *[]IP, err error) {
 	var env IPGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
