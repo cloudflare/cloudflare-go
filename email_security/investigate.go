@@ -38,8 +38,7 @@ func NewInvestigateService(opts ...option.RequestOption) (r *InvestigateService)
 	return
 }
 
-// This endpoint returns information for each email that matches the search
-// parameter(s).
+// Returns information for each email that matches the search parameter(s).
 func (r *InvestigateService) List(ctx context.Context, params InvestigateListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[InvestigateListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -61,14 +60,13 @@ func (r *InvestigateService) List(ctx context.Context, params InvestigateListPar
 	return res, nil
 }
 
-// This endpoint returns information for each email that matches the search
-// parameter(s).
+// Returns information for each email that matches the search parameter(s).
 func (r *InvestigateService) ListAutoPaging(ctx context.Context, params InvestigateListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[InvestigateListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-// For emails that have a detection, this endpoint returns detection details such
-// as threat categories, sender information, and links.
+// Returns detection details such as threat categories and sender information for
+// non-benign messages.
 func (r *InvestigateService) Detections(ctx context.Context, postfixID string, query InvestigateDetectionsParams, opts ...option.RequestOption) (res *InvestigateDetectionsResponse, err error) {
 	var env InvestigateDetectionsResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -110,8 +108,8 @@ func (r *InvestigateService) Get(ctx context.Context, postfixID string, query In
 	return
 }
 
-// For emails that have a detection, this endpoint returns a preview of the message
-// body as a base64 encoded PNG image.
+// Returns a preview of the message body as a base64 encoded PNG image for
+// non-benign messages.
 func (r *InvestigateService) Preview(ctx context.Context, postfixID string, query InvestigatePreviewParams, opts ...option.RequestOption) (res *InvestigatePreviewResponse, err error) {
 	var env InvestigatePreviewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -132,8 +130,7 @@ func (r *InvestigateService) Preview(ctx context.Context, postfixID string, quer
 	return
 }
 
-// For emails that have a detection, this endpoint returns the raw email as an EML
-// file.
+// Returns the raw eml of any non-benign message.
 func (r *InvestigateService) Raw(ctx context.Context, postfixID string, query InvestigateRawParams, opts ...option.RequestOption) (res *InvestigateRawResponse, err error) {
 	var env InvestigateRawResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -182,7 +179,7 @@ type InvestigateListResponse struct {
 	DetectionReasons  []string    `json:"detection_reasons,required"`
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
-	// Message identifier
+	// The identifier of the message.
 	PostfixID        string                                  `json:"postfix_id,required"`
 	Ts               string                                  `json:"ts,required"`
 	AlertID          string                                  `json:"alert_id,nullable"`
@@ -499,9 +496,9 @@ func (r investigateDetectionsResponseLinkJSON) RawJSON() string {
 }
 
 type InvestigateDetectionsResponseSenderInfo struct {
-	// Name of the autonomous system
+	// The name of the autonomous system.
 	AsName string `json:"as_name,nullable"`
-	// Number of the autonomous system
+	// The number of the autonomous system.
 	AsNumber int64                                       `json:"as_number,nullable"`
 	Geo      string                                      `json:"geo,nullable"`
 	IP       string                                      `json:"ip,nullable"`
@@ -665,7 +662,7 @@ type InvestigateGetResponse struct {
 	DetectionReasons  []string    `json:"detection_reasons,required"`
 	IsPhishSubmission bool        `json:"is_phish_submission,required"`
 	IsQuarantined     bool        `json:"is_quarantined,required"`
-	// Message identifier
+	// The identifier of the message.
 	PostfixID        string                                 `json:"postfix_id,required"`
 	Ts               string                                 `json:"ts,required"`
 	AlertID          string                                 `json:"alert_id,nullable"`
@@ -849,7 +846,7 @@ func (r InvestigateGetResponseValidationSPF) IsKnown() bool {
 }
 
 type InvestigatePreviewResponse struct {
-	// Base64 encoded PNG image
+	// A base64 encoded PNG image of the email.
 	Screenshot string                         `json:"screenshot,required"`
 	JSON       investigatePreviewResponseJSON `json:"-"`
 }
@@ -871,7 +868,7 @@ func (r investigatePreviewResponseJSON) RawJSON() string {
 }
 
 type InvestigateRawResponse struct {
-	// UTF-8 encoded eml file
+	// A UTF-8 encoded eml file of the email.
 	Raw  string                     `json:"raw,required"`
 	JSON investigateRawResponseJSON `json:"-"`
 }
@@ -1010,26 +1007,26 @@ func (r investigateTraceResponseOutboundLineJSON) RawJSON() string {
 type InvestigateListParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Controls whether the message action log in included in the response.
+	// Determines if the message action log is included in the response.
 	ActionLog param.Field[bool]   `query:"action_log"`
 	AlertID   param.Field[string] `query:"alert_id"`
-	// If `false`, the search includes non-detections.
+	// Determines if the search results will include detections or not.
 	DetectionsOnly param.Field[bool] `query:"detections_only"`
-	// Filter by the sender domain
+	// The sender domains the search filters by.
 	Domain param.Field[string] `query:"domain"`
 	// The end of the search date range. Defaults to `now`.
 	End param.Field[time.Time] `query:"end" format:"date-time"`
-	// Filter messages by the provided disposition.
+	// The dispositions the search filters by.
 	FinalDisposition param.Field[InvestigateListParamsFinalDisposition] `query:"final_disposition"`
-	// Filter messages by actions applied to them
+	// The message actions the search filters by.
 	MessageAction param.Field[InvestigateListParamsMessageAction] `query:"message_action"`
 	MessageID     param.Field[string]                             `query:"message_id"`
 	Metric        param.Field[string]                             `query:"metric"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page param.Field[int64] `query:"page"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
-	// Space delimited query term(s). The search is case-insensitive.
+	// The space-delimited term used in the query. The search is case-insensitive.
 	//
 	// The content of the following email metadata fields are searched:
 	//
@@ -1068,7 +1065,7 @@ func (r InvestigateListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// Filter messages by the provided disposition.
+// The dispositions the search filters by.
 type InvestigateListParamsFinalDisposition string
 
 const (
@@ -1087,7 +1084,7 @@ func (r InvestigateListParamsFinalDisposition) IsKnown() bool {
 	return false
 }
 
-// Filter messages by actions applied to them
+// The message actions the search filters by.
 type InvestigateListParamsMessageAction string
 
 const (
