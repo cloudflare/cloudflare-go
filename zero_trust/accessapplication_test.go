@@ -264,6 +264,10 @@ func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Applications.List(context.TODO(), zero_trust.AccessApplicationListParams{
 		AccountID: cloudflare.F("account_id"),
+		AUD:       cloudflare.F("aud"),
+		Domain:    cloudflare.F("domain"),
+		Name:      cloudflare.F("name"),
+		Search:    cloudflare.F("search"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
