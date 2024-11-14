@@ -34,6 +34,7 @@ func TestAccessApplications(t *testing.T) {
 					"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 					"name": "Admin Site",
 					"domain": "test.example.com/admin",
+					"domain_type": "public",
 					"type": "self_hosted",
 					"session_duration": "24h",
 					"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -93,6 +94,7 @@ func TestAccessApplications(t *testing.T) {
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 		Name:                     "Admin Site",
 		Domain:                   "test.example.com/admin",
+		DomainType:               AccessDestinationPublic,
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AllowedIdps:              []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
@@ -163,7 +165,11 @@ func TestAccessApplication(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
-				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
+				"domain_type": "public",
+				"destinations": [
+					{"type": "public", "uri": "test.example.com/admin"},
+					{"type": "public", "uri": "test.example.com/admin2"}
+				],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -207,13 +213,17 @@ func TestAccessApplication(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
 	want := AccessApplication{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		CreatedAt:                &createdAt,
-		UpdatedAt:                &updatedAt,
-		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		CreatedAt:  &createdAt,
+		UpdatedAt:  &updatedAt,
+		AUD:        "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AllowedIdps:              []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
@@ -281,7 +291,11 @@ func TestCreateAccessApplications(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
-				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
+				"domain_type": "public",
+				"destinations": [
+					{"type": "public", "uri": "test.example.com/admin"},
+					{"type": "public", "uri": "test.example.com/admin2"}
+				],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -323,10 +337,14 @@ func TestCreateAccessApplications(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	fullAccessApplication := AccessApplication{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -366,6 +384,7 @@ func TestCreateAccessApplications(t *testing.T) {
 	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
+		DomainType:      AccessDestinationPublic,
 		SessionDuration: "24h",
 		Policies:        []string{"699d98642c564d2e855e9661899b7252"},
 	})
@@ -379,6 +398,7 @@ func TestCreateAccessApplications(t *testing.T) {
 	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
+		DomainType:      AccessDestinationPublic,
 		SessionDuration: "24h",
 		Policies:        []string{"699d98642c564d2e855e9661899b7252"},
 	})
@@ -406,7 +426,11 @@ func TestUpdateAccessApplication(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
-				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
+				"domain_type": "public",
+				"destinations": [
+					{"type": "public", "uri": "test.example.com/admin"},
+					{"type": "public", "uri": "test.example.com/admin2"}
+				],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -446,10 +470,14 @@ func TestUpdateAccessApplication(t *testing.T) {
 	}
 
 	fullAccessApplication := AccessApplication{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -485,10 +513,14 @@ func TestUpdateAccessApplication(t *testing.T) {
 	}
 
 	params := UpdateAccessApplicationParams{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -519,10 +551,14 @@ func TestUpdateAccessApplication(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
 	actual, err = client.UpdateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), UpdateAccessApplicationParams{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -566,7 +602,11 @@ func TestUpdateAccessApplicationOmitPolicies(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
-				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
+				"domain_type": "public",
+				"destinations": [
+					{"type": "public", "uri": "test.example.com/admin"},
+					{"type": "public", "uri": "test.example.com/admin2"}
+				],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -606,10 +646,14 @@ func TestUpdateAccessApplicationOmitPolicies(t *testing.T) {
 	}
 
 	fullAccessApplication := AccessApplication{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -645,10 +689,14 @@ func TestUpdateAccessApplicationOmitPolicies(t *testing.T) {
 	}
 
 	params := UpdateAccessApplicationParams{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -678,10 +726,14 @@ func TestUpdateAccessApplicationOmitPolicies(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
 	actual, err = client.UpdateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), UpdateAccessApplicationParams{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -789,6 +841,7 @@ func TestAccessApplicationWithCORS(t *testing.T) {
         "aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
         "name": "Admin Site",
         "domain": "test.example.com/admin",
+				"domain_type": "public",
         "type": "self_hosted",
         "session_duration": "24h",
         "cors_headers": {
@@ -816,6 +869,7 @@ func TestAccessApplicationWithCORS(t *testing.T) {
 		AUD:             "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
+		DomainType:      AccessDestinationPublic,
 		Type:            "self_hosted",
 		SessionDuration: "24h",
 		CorsHeaders: &AccessApplicationCorsHeaders{
