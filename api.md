@@ -2173,6 +2173,14 @@ Methods:
 
 #### Upload
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#ScriptAssetUploadNewResponse">ScriptAssetUploadNewResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/workers/scripts/{script_name}/assets-upload-session">client.Workers.Scripts.Assets.Upload.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#ScriptAssetUploadService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#ScriptAssetUploadNewParams">ScriptAssetUploadNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#ScriptAssetUploadNewResponse">ScriptAssetUploadNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Subdomain
 
 Response Types:
