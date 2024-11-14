@@ -524,10 +524,10 @@ type SettingBlockSenderListParams struct {
 	Direction param.Field[SettingBlockSenderListParamsDirection] `query:"direction"`
 	// The field to sort by.
 	Order param.Field[SettingBlockSenderListParamsOrder] `query:"order"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page        param.Field[int64]                                   `query:"page"`
 	PatternType param.Field[SettingBlockSenderListParamsPatternType] `query:"pattern_type"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Allows searching in multiple properties of a record simultaneously. This
 	// parameter is intended for human users, not automation. Its exact behavior is

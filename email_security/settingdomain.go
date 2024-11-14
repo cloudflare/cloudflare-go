@@ -38,7 +38,7 @@ func NewSettingDomainService(opts ...option.RequestOption) (r *SettingDomainServ
 	return
 }
 
-// List, search, and sort an account's email domains.
+// Lists, searches, and sorts an account’s email domains.
 func (r *SettingDomainService) List(ctx context.Context, params SettingDomainListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingDomainListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *SettingDomainService) List(ctx context.Context, params SettingDomainLis
 	return res, nil
 }
 
-// List, search, and sort an account's email domains.
+// Lists, searches, and sorts an account’s email domains.
 func (r *SettingDomainService) ListAutoPaging(ctx context.Context, params SettingDomainListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingDomainListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -100,7 +100,7 @@ func (r *SettingDomainService) Edit(ctx context.Context, domainID int64, params 
 }
 
 type SettingDomainListResponse struct {
-	// Unique domain identifier
+	// The unique identifier for the domain.
 	ID                   int64                                          `json:"id,required"`
 	AllowedDeliveryModes []SettingDomainListResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
 	CreatedAt            time.Time                                      `json:"created_at,required" format:"date-time"`
@@ -171,7 +171,7 @@ func (r SettingDomainListResponseFolder) IsKnown() bool {
 }
 
 type SettingDomainDeleteResponse struct {
-	// Unique domain identifier
+	// The unique identifier for the domain.
 	ID   int64                           `json:"id,required"`
 	JSON settingDomainDeleteResponseJSON `json:"-"`
 }
@@ -193,7 +193,7 @@ func (r settingDomainDeleteResponseJSON) RawJSON() string {
 }
 
 type SettingDomainEditResponse struct {
-	// Unique domain identifier
+	// The unique identifier for the domain.
 	ID                   int64                                          `json:"id,required"`
 	AllowedDeliveryModes []SettingDomainEditResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
 	CreatedAt            time.Time                                      `json:"created_at,required" format:"date-time"`
@@ -266,18 +266,17 @@ func (r SettingDomainEditResponseFolder) IsKnown() bool {
 type SettingDomainListParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// If present, the response contains only domains with the provided delivery mode.
+	// Filters response to domains with the provided delivery mode.
 	AllowedDeliveryMode param.Field[SettingDomainListParamsAllowedDeliveryMode] `query:"allowed_delivery_mode"`
 	// The sorting direction.
 	Direction param.Field[SettingDomainListParamsDirection] `query:"direction"`
-	// Filter result by the provided domains. Allows for multiple occurrences, e.g.,
-	// `domain=example.com&domain=example.xyz`.
+	// Filters results by the provided domains, allowing for multiple occurrences.
 	Domain param.Field[[]string] `query:"domain"`
 	// The field to sort by.
 	Order param.Field[SettingDomainListParamsOrder] `query:"order"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page param.Field[int64] `query:"page"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Allows searching in multiple properties of a record simultaneously. This
 	// parameter is intended for human users, not automation. Its exact behavior is
@@ -294,7 +293,7 @@ func (r SettingDomainListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// If present, the response contains only domains with the provided delivery mode.
+// Filters response to domains with the provided delivery mode.
 type SettingDomainListParamsAllowedDeliveryMode string
 
 const (

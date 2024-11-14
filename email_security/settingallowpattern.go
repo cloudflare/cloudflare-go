@@ -57,7 +57,7 @@ func (r *SettingAllowPatternService) New(ctx context.Context, params SettingAllo
 	return
 }
 
-// List, search, and sort an accounts's email allow patterns.
+// Lists, searches, and sorts an account’s email allow patterns.
 func (r *SettingAllowPatternService) List(ctx context.Context, params SettingAllowPatternListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingAllowPatternListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -79,7 +79,7 @@ func (r *SettingAllowPatternService) List(ctx context.Context, params SettingAll
 	return res, nil
 }
 
-// List, search, and sort an accounts's email allow patterns.
+// Lists, searches, and sorts an account’s email allow patterns.
 func (r *SettingAllowPatternService) ListAutoPaging(ctx context.Context, params SettingAllowPatternListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingAllowPatternListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -571,10 +571,10 @@ type SettingAllowPatternListParams struct {
 	IsSpoof     param.Field[bool]                                   `query:"is_spoof"`
 	// The field to sort by.
 	Order param.Field[SettingAllowPatternListParamsOrder] `query:"order"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page        param.Field[int64]                                    `query:"page"`
 	PatternType param.Field[SettingAllowPatternListParamsPatternType] `query:"pattern_type"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Allows searching in multiple properties of a record simultaneously. This
 	// parameter is intended for human users, not automation. Its exact behavior is
