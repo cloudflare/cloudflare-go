@@ -57,7 +57,7 @@ func (r *SettingImpersonationRegistryService) New(ctx context.Context, params Se
 	return
 }
 
-// List, search, and sort entries in impersonation registry.
+// Lists, searches, and sorts entries in the impersonation registry.
 func (r *SettingImpersonationRegistryService) List(ctx context.Context, params SettingImpersonationRegistryListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingImpersonationRegistryListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -79,7 +79,7 @@ func (r *SettingImpersonationRegistryService) List(ctx context.Context, params S
 	return res, nil
 }
 
-// List, search, and sort entries in impersonation registry.
+// Lists, searches, and sorts entries in the impersonation registry.
 func (r *SettingImpersonationRegistryService) ListAutoPaging(ctx context.Context, params SettingImpersonationRegistryListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingImpersonationRegistryListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -461,9 +461,9 @@ type SettingImpersonationRegistryListParams struct {
 	Direction param.Field[SettingImpersonationRegistryListParamsDirection] `query:"direction"`
 	// The field to sort by.
 	Order param.Field[SettingImpersonationRegistryListParamsOrder] `query:"order"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page param.Field[int64] `query:"page"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage    param.Field[int64]                                            `query:"per_page"`
 	Provenance param.Field[SettingImpersonationRegistryListParamsProvenance] `query:"provenance"`
 	// Allows searching in multiple properties of a record simultaneously. This

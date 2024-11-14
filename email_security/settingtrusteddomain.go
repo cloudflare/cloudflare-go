@@ -57,7 +57,7 @@ func (r *SettingTrustedDomainService) New(ctx context.Context, params SettingTru
 	return
 }
 
-// List, search, and sort an account's trusted email domains.
+// Lists, searches, and sorts an account’s trusted email domains.
 func (r *SettingTrustedDomainService) List(ctx context.Context, params SettingTrustedDomainListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingTrustedDomainListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -79,7 +79,7 @@ func (r *SettingTrustedDomainService) List(ctx context.Context, params SettingTr
 	return res, nil
 }
 
-// List, search, and sort an account's trusted email domains.
+// Lists, searches, and sorts an account’s trusted email domains.
 func (r *SettingTrustedDomainService) ListAutoPaging(ctx context.Context, params SettingTrustedDomainListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingTrustedDomainListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -435,9 +435,9 @@ type SettingTrustedDomainListParams struct {
 	IsSimilarity param.Field[bool]                                    `query:"is_similarity"`
 	// The field to sort by.
 	Order param.Field[SettingTrustedDomainListParamsOrder] `query:"order"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page param.Field[int64] `query:"page"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Allows searching in multiple properties of a record simultaneously. This
 	// parameter is intended for human users, not automation. Its exact behavior is
