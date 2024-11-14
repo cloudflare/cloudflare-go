@@ -168,6 +168,8 @@ func TestAccessGroupListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Groups.List(context.TODO(), zero_trust.AccessGroupListParams{
 		AccountID: cloudflare.F("account_id"),
+		Name:      cloudflare.F("name"),
+		Search:    cloudflare.F("search"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
@@ -103,30 +105,30 @@ func (r *AccessGroupService) Update(ctx context.Context, groupID string, params 
 }
 
 // Lists all Access groups.
-func (r *AccessGroupService) List(ctx context.Context, query AccessGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGroup], err error) {
+func (r *AccessGroupService) List(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ZeroTrustGroup], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
 		err = errors.New("account ID and zone ID are mutually exclusive")
 		return
 	}
-	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
 		err = errors.New("either account ID or zone ID must be provided")
 		return
 	}
-	if query.AccountID.Value != "" {
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
-		accountOrZoneID = query.AccountID
+		accountOrZoneID = params.AccountID
 	}
-	if query.ZoneID.Value != "" {
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
-		accountOrZoneID = query.ZoneID
+		accountOrZoneID = params.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/groups", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -139,8 +141,8 @@ func (r *AccessGroupService) List(ctx context.Context, query AccessGroupListPara
 }
 
 // Lists all Access groups.
-func (r *AccessGroupService) ListAutoPaging(ctx context.Context, query AccessGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGroup] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessGroupService) ListAutoPaging(ctx context.Context, params AccessGroupListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ZeroTrustGroup] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an Access group.
@@ -418,6 +420,18 @@ type AccessGroupListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// The name of the group.
+	Name param.Field[string] `query:"name"`
+	// Search for groups by other listed query parameters.
+	Search param.Field[string] `query:"search"`
+}
+
+// URLQuery serializes [AccessGroupListParams]'s query parameters as `url.Values`.
+func (r AccessGroupListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type AccessGroupDeleteParams struct {

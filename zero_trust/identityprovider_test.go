@@ -44,7 +44,7 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 			Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
 			SCIMConfig: cloudflare.F(zero_trust.IdentityProviderSCIMConfigParam{
 				Enabled:                cloudflare.F(true),
-				GroupMemberDeprovision: cloudflare.F(true),
+				IdentityUpdateBehavior: cloudflare.F(zero_trust.IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic),
 				SeatDeprovision:        cloudflare.F(true),
 				UserDeprovision:        cloudflare.F(true),
 			}),
@@ -93,7 +93,7 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 				Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
 				SCIMConfig: cloudflare.F(zero_trust.IdentityProviderSCIMConfigParam{
 					Enabled:                cloudflare.F(true),
-					GroupMemberDeprovision: cloudflare.F(true),
+					IdentityUpdateBehavior: cloudflare.F(zero_trust.IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic),
 					SeatDeprovision:        cloudflare.F(true),
 					UserDeprovision:        cloudflare.F(true),
 				}),

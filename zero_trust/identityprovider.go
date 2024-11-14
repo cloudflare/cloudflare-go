@@ -1996,10 +1996,12 @@ func (r IdentityProviderAccessOnetimepinConfigParam) MarshalJSON() (data []byte,
 type IdentityProviderSCIMConfig struct {
 	// A flag to enable or disable SCIM for the identity provider.
 	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// Indicates how a SCIM event updates an Access identity. Use "automatic" to
+	// automatically update a user's Access identity and augment it with fields from
+	// the SCIM user resource. Use "reauth" to force re-authentication on group
+	// membership updates. With "reauth" Access identities will not contain fields from
+	// the SCIM user resource.
+	IdentityUpdateBehavior IdentityProviderSCIMConfigIdentityUpdateBehavior `json:"identity_update_behavior"`
 	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
 	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
 	// enabled.
@@ -2018,7 +2020,7 @@ type IdentityProviderSCIMConfig struct {
 // [IdentityProviderSCIMConfig]
 type identityProviderSCIMConfigJSON struct {
 	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
+	IdentityUpdateBehavior apijson.Field
 	SeatDeprovision        apijson.Field
 	Secret                 apijson.Field
 	UserDeprovision        apijson.Field
@@ -2034,15 +2036,37 @@ func (r identityProviderSCIMConfigJSON) RawJSON() string {
 	return r.raw
 }
 
+// Indicates how a SCIM event updates an Access identity. Use "automatic" to
+// automatically update a user's Access identity and augment it with fields from
+// the SCIM user resource. Use "reauth" to force re-authentication on group
+// membership updates. With "reauth" Access identities will not contain fields from
+// the SCIM user resource.
+type IdentityProviderSCIMConfigIdentityUpdateBehavior string
+
+const (
+	IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic IdentityProviderSCIMConfigIdentityUpdateBehavior = "automatic"
+	IdentityProviderSCIMConfigIdentityUpdateBehaviorReauth    IdentityProviderSCIMConfigIdentityUpdateBehavior = "reauth"
+)
+
+func (r IdentityProviderSCIMConfigIdentityUpdateBehavior) IsKnown() bool {
+	switch r {
+	case IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic, IdentityProviderSCIMConfigIdentityUpdateBehaviorReauth:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderSCIMConfigParam struct {
 	// A flag to enable or disable SCIM for the identity provider.
 	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// Indicates how a SCIM event updates an Access identity. Use "automatic" to
+	// automatically update a user's Access identity and augment it with fields from
+	// the SCIM user resource. Use "reauth" to force re-authentication on group
+	// membership updates. With "reauth" Access identities will not contain fields from
+	// the SCIM user resource.
+	IdentityUpdateBehavior param.Field[IdentityProviderSCIMConfigIdentityUpdateBehavior] `json:"identity_update_behavior"`
 	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
 	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
 	// enabled.

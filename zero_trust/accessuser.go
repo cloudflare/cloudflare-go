@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
@@ -42,16 +44,16 @@ func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) List(ctx context.Context, query AccessUserListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUser], err error) {
+func (r *AccessUserService) List(ctx context.Context, params AccessUserListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessUser], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/access/users", query.AccountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/access/users", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,8 +66,8 @@ func (r *AccessUserService) List(ctx context.Context, query AccessUserListParams
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) ListAutoPaging(ctx context.Context, query AccessUserListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUser] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessUserService) ListAutoPaging(ctx context.Context, params AccessUserListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessUser] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 type AccessUser struct {
@@ -120,4 +122,18 @@ func (r accessUserJSON) RawJSON() string {
 type AccessUserListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// The email of the user.
+	Email param.Field[string] `query:"email"`
+	// The name of the user.
+	Name param.Field[string] `query:"name"`
+	// Search for users by other listed query parameters.
+	Search param.Field[string] `query:"search"`
+}
+
+// URLQuery serializes [AccessUserListParams]'s query parameters as `url.Values`.
+func (r AccessUserListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
