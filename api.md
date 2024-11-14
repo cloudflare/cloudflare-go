@@ -4455,14 +4455,6 @@ Methods:
 
 ### FleetStatus
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DeviceFleetStatusGetResponse">DeviceFleetStatusGetResponse</a>
-
-Methods:
-
-- <code title="get /accounts/{accountTag}/devices/{deviceId}/fleet-status/live">client.ZeroTrust.Devices.FleetStatus.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DeviceFleetStatusService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountTag <a href="https://pkg.go.dev/builtin#string">string</a>, deviceID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DeviceFleetStatusGetParams">DeviceFleetStatusGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DeviceFleetStatusGetResponse">DeviceFleetStatusGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### Policies
 
 Params Types:
