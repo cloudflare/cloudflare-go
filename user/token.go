@@ -487,7 +487,7 @@ type TokenNewResponse struct {
 	// Status of the token.
 	Status TokenNewResponseStatus `json:"status"`
 	// The token value.
-	Value Value                `json:"value"`
+	Value shared.TokenValue    `json:"value"`
 	JSON  tokenNewResponseJSON `json:"-"`
 }
 

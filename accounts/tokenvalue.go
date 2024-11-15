@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/user"
 )
 
 // TokenValueService contains methods and other services that help with interacting
@@ -36,7 +35,7 @@ func NewTokenValueService(opts ...option.RequestOption) (r *TokenValueService) {
 }
 
 // Roll the Account Owned API token secret.
-func (r *TokenValueService) Update(ctx context.Context, tokenID string, params TokenValueUpdateParams, opts ...option.RequestOption) (res *user.Value, err error) {
+func (r *TokenValueService) Update(ctx context.Context, tokenID string, params TokenValueUpdateParams, opts ...option.RequestOption) (res *shared.TokenValue, err error) {
 	var env TokenValueUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -72,7 +71,7 @@ type TokenValueUpdateResponseEnvelope struct {
 	// Whether the API call was successful
 	Success TokenValueUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// The token value.
-	Result user.Value                           `json:"result"`
+	Result shared.TokenValue                    `json:"result"`
 	JSON   tokenValueUpdateResponseEnvelopeJSON `json:"-"`
 }
 

@@ -1019,3 +1019,5 @@ type SubscriptionParam struct {
 func (r SubscriptionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+type TokenValue = string

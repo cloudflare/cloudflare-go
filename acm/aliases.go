@@ -285,3 +285,8 @@ const SubscriptionStateExpired = shared.SubscriptionStateExpired
 
 // This is an alias to an internal type.
 type SubscriptionParam = shared.SubscriptionParam
+
+// The token value.
+//
+// This is an alias to an internal type.
+type TokenValue = shared.TokenValue
