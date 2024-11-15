@@ -29,7 +29,7 @@ func TestEvaluationNew(t *testing.T) {
 	)
 	_, err := client.AIGateway.Evaluations.New(
 		context.TODO(),
-		"gateway_id",
+		"my-gateway",
 		ai_gateway.EvaluationNewParams{
 			AccountID:         cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
 			DatasetIDs:        cloudflare.F([]string{"string", "string", "string"}),
@@ -61,18 +61,16 @@ func TestEvaluationListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AIGateway.Evaluations.List(
 		context.TODO(),
-		"gateway_id",
+		"my-gateway",
 		ai_gateway.EvaluationListParams{
 			AccountID:        cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
-			ID:               cloudflare.F("id"),
 			Name:             cloudflare.F("name"),
 			OrderBy:          cloudflare.F("order_by"),
 			OrderByDirection: cloudflare.F(ai_gateway.EvaluationListParamsOrderByDirectionAsc),
 			Page:             cloudflare.F(int64(1)),
-			PerPage:          cloudflare.F(int64(5)),
+			PerPage:          cloudflare.F(int64(1)),
 			Processed:        cloudflare.F(true),
 			Search:           cloudflare.F("search"),
-			TotalLogs:        cloudflare.F(0.000000),
 		},
 	)
 	if err != nil {
@@ -99,7 +97,7 @@ func TestEvaluationDelete(t *testing.T) {
 	)
 	_, err := client.AIGateway.Evaluations.Delete(
 		context.TODO(),
-		"gateway_id",
+		"my-gateway",
 		"id",
 		ai_gateway.EvaluationDeleteParams{
 			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
@@ -129,7 +127,7 @@ func TestEvaluationGet(t *testing.T) {
 	)
 	_, err := client.AIGateway.Evaluations.Get(
 		context.TODO(),
-		"gateway_id",
+		"my-gateway",
 		"id",
 		ai_gateway.EvaluationGetParams{
 			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
