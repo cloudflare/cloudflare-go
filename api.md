@@ -24,6 +24,7 @@
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared#ResponseInfo">ResponseInfo</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared#Role">Role</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared#Subscription">Subscription</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared#TokenValue">TokenValue</a>
 
 # Accounts
 
@@ -110,7 +111,7 @@ Methods:
 
 Methods:
 
-- <code title="put /accounts/{account_id}/tokens/{token_id}/value">client.Accounts.Tokens.Value.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/accounts#TokenValueService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tokenID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/accounts#TokenValueUpdateParams">TokenValueUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user#Value">Value</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /accounts/{account_id}/tokens/{token_id}/value">client.Accounts.Tokens.Value.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/accounts#TokenValueService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tokenID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/accounts">accounts</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/accounts#TokenValueUpdateParams">TokenValueUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared#TokenValue">TokenValue</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # OriginCACertificates
 
@@ -270,13 +271,9 @@ Methods:
 
 ### Value
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user#Value">Value</a>
-
 Methods:
 
-- <code title="put /user/tokens/{token_id}/value">client.User.Tokens.Value.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user#TokenValueService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tokenID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user#TokenValueUpdateParams">TokenValueUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user#Value">Value</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /user/tokens/{token_id}/value">client.User.Tokens.Value.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user#TokenValueService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, tokenID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user">user</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/user#TokenValueUpdateParams">TokenValueUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/shared#TokenValue">TokenValue</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Zones
 
