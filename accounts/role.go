@@ -36,7 +36,7 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[RoleListResponse], err error) {
+func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *pagination.SinglePage[shared.Role], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -58,12 +58,12 @@ func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...op
 }
 
 // Get all available roles for an account.
-func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[RoleListResponse] {
+func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[shared.Role] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Get information about a specific role for an account.
-func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponse, err error) {
+func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParams, opts ...option.RequestOption) (res *shared.Role, err error) {
 	var env RoleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -83,151 +83,6 @@ func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParam
 	return
 }
 
-type RoleListResponse struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role name.
-	Name        string                      `json:"name,required"`
-	Permissions RoleListResponsePermissions `json:"permissions,required"`
-	JSON        roleListResponseJSON        `json:"-"`
-}
-
-// roleListResponseJSON contains the JSON metadata for the struct
-// [RoleListResponse]
-type roleListResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RoleListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RoleListResponsePermissions struct {
-	Analytics    shared.PermissionGrant          `json:"analytics"`
-	Billing      shared.PermissionGrant          `json:"billing"`
-	CachePurge   shared.PermissionGrant          `json:"cache_purge"`
-	DNS          shared.PermissionGrant          `json:"dns"`
-	DNSRecords   shared.PermissionGrant          `json:"dns_records"`
-	LB           shared.PermissionGrant          `json:"lb"`
-	Logs         shared.PermissionGrant          `json:"logs"`
-	Organization shared.PermissionGrant          `json:"organization"`
-	SSL          shared.PermissionGrant          `json:"ssl"`
-	WAF          shared.PermissionGrant          `json:"waf"`
-	ZoneSettings shared.PermissionGrant          `json:"zone_settings"`
-	Zones        shared.PermissionGrant          `json:"zones"`
-	JSON         roleListResponsePermissionsJSON `json:"-"`
-}
-
-// roleListResponsePermissionsJSON contains the JSON metadata for the struct
-// [RoleListResponsePermissions]
-type roleListResponsePermissionsJSON struct {
-	Analytics    apijson.Field
-	Billing      apijson.Field
-	CachePurge   apijson.Field
-	DNS          apijson.Field
-	DNSRecords   apijson.Field
-	LB           apijson.Field
-	Logs         apijson.Field
-	Organization apijson.Field
-	SSL          apijson.Field
-	WAF          apijson.Field
-	ZoneSettings apijson.Field
-	Zones        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RoleListResponsePermissions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleListResponsePermissionsJSON) RawJSON() string {
-	return r.raw
-}
-
-type RoleGetResponse struct {
-	// Role identifier tag.
-	ID string `json:"id,required"`
-	// Description of role's permissions.
-	Description string `json:"description,required"`
-	// Role name.
-	Name        string                     `json:"name,required"`
-	Permissions RoleGetResponsePermissions `json:"permissions,required"`
-	JSON        roleGetResponseJSON        `json:"-"`
-}
-
-// roleGetResponseJSON contains the JSON metadata for the struct [RoleGetResponse]
-type roleGetResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RoleGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RoleGetResponsePermissions struct {
-	Analytics    shared.PermissionGrant         `json:"analytics"`
-	Billing      shared.PermissionGrant         `json:"billing"`
-	CachePurge   shared.PermissionGrant         `json:"cache_purge"`
-	DNS          shared.PermissionGrant         `json:"dns"`
-	DNSRecords   shared.PermissionGrant         `json:"dns_records"`
-	LB           shared.PermissionGrant         `json:"lb"`
-	Logs         shared.PermissionGrant         `json:"logs"`
-	Organization shared.PermissionGrant         `json:"organization"`
-	SSL          shared.PermissionGrant         `json:"ssl"`
-	WAF          shared.PermissionGrant         `json:"waf"`
-	ZoneSettings shared.PermissionGrant         `json:"zone_settings"`
-	Zones        shared.PermissionGrant         `json:"zones"`
-	JSON         roleGetResponsePermissionsJSON `json:"-"`
-}
-
-// roleGetResponsePermissionsJSON contains the JSON metadata for the struct
-// [RoleGetResponsePermissions]
-type roleGetResponsePermissionsJSON struct {
-	Analytics    apijson.Field
-	Billing      apijson.Field
-	CachePurge   apijson.Field
-	DNS          apijson.Field
-	DNSRecords   apijson.Field
-	LB           apijson.Field
-	Logs         apijson.Field
-	Organization apijson.Field
-	SSL          apijson.Field
-	WAF          apijson.Field
-	ZoneSettings apijson.Field
-	Zones        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *RoleGetResponsePermissions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r roleGetResponsePermissionsJSON) RawJSON() string {
-	return r.raw
-}
-
 type RoleListParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -243,7 +98,7 @@ type RoleGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RoleGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  RoleGetResponse                `json:"result"`
+	Result  shared.Role                    `json:"result"`
 	JSON    roleGetResponseEnvelopeJSON    `json:"-"`
 }
 

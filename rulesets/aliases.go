@@ -128,6 +128,71 @@ const CloudflareTunnelTunTypeCNI = shared.CloudflareTunnelTunTypeCNI
 type ErrorData = shared.ErrorData
 
 // This is an alias to an internal type.
+type Member = shared.Member
+
+// This is an alias to an internal type.
+type MemberPolicy = shared.MemberPolicy
+
+// Allow or deny operations against the resources.
+//
+// This is an alias to an internal type.
+type MemberPoliciesAccess = shared.MemberPoliciesAccess
+
+// This is an alias to an internal value.
+const MemberPoliciesAccessAllow = shared.MemberPoliciesAccessAllow
+
+// This is an alias to an internal value.
+const MemberPoliciesAccessDeny = shared.MemberPoliciesAccessDeny
+
+// A named group of permissions that map to a group of operations against
+// resources.
+//
+// This is an alias to an internal type.
+type MemberPoliciesPermissionGroup = shared.MemberPoliciesPermissionGroup
+
+// Attributes associated to the permission group.
+//
+// This is an alias to an internal type.
+type MemberPoliciesPermissionGroupsMeta = shared.MemberPoliciesPermissionGroupsMeta
+
+// A group of scoped resources.
+//
+// This is an alias to an internal type.
+type MemberPoliciesResourceGroup = shared.MemberPoliciesResourceGroup
+
+// A scope is a combination of scope objects which provides additional context.
+//
+// This is an alias to an internal type.
+type MemberPoliciesResourceGroupsScope = shared.MemberPoliciesResourceGroupsScope
+
+// A scope object represents any resource that can have actions applied against
+// invite.
+//
+// This is an alias to an internal type.
+type MemberPoliciesResourceGroupsScopeObject = shared.MemberPoliciesResourceGroupsScopeObject
+
+// Attributes associated to the resource group.
+//
+// This is an alias to an internal type.
+type MemberPoliciesResourceGroupsMeta = shared.MemberPoliciesResourceGroupsMeta
+
+// A member's status in the account.
+//
+// This is an alias to an internal type.
+type MemberStatus = shared.MemberStatus
+
+// This is an alias to an internal value.
+const MemberStatusAccepted = shared.MemberStatusAccepted
+
+// This is an alias to an internal value.
+const MemberStatusPending = shared.MemberStatusPending
+
+// Details of the user associated to the membership.
+//
+// This is an alias to an internal type.
+type MemberUser = shared.MemberUser
+
+// This is an alias to an internal type.
 type Permission = shared.Permission
 
 // This is an alias to an internal type.
@@ -148,6 +213,18 @@ type RatePlanParam = shared.RatePlanParam
 
 // This is an alias to an internal type.
 type ResponseInfo = shared.ResponseInfo
+
+// This is an alias to an internal type.
+type Role = shared.Role
+
+// This is an alias to an internal type.
+type RolePermissions = shared.RolePermissions
+
+// This is an alias to an internal type.
+type RoleParam = shared.RoleParam
+
+// This is an alias to an internal type.
+type RolePermissionsParam = shared.RolePermissionsParam
 
 // Direction to order DNS records in.
 //
