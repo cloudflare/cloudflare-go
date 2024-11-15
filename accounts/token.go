@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/user"
 )
 
 // TokenService contains methods and other services that help with interacting with
@@ -61,7 +60,7 @@ func (r *TokenService) New(ctx context.Context, params TokenNewParams, opts ...o
 }
 
 // Update an existing token.
-func (r *TokenService) Update(ctx context.Context, tokenID string, params TokenUpdateParams, opts ...option.RequestOption) (res *user.Token, err error) {
+func (r *TokenService) Update(ctx context.Context, tokenID string, params TokenUpdateParams, opts ...option.RequestOption) (res *shared.Token, err error) {
 	var env TokenUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -82,7 +81,7 @@ func (r *TokenService) Update(ctx context.Context, tokenID string, params TokenU
 }
 
 // List all Account Owned API tokens created for this account.
-func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[user.Token], err error) {
+func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[shared.Token], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -104,7 +103,7 @@ func (r *TokenService) List(ctx context.Context, params TokenListParams, opts ..
 }
 
 // List all Account Owned API tokens created for this account.
-func (r *TokenService) ListAutoPaging(ctx context.Context, params TokenListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[user.Token] {
+func (r *TokenService) ListAutoPaging(ctx context.Context, params TokenListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[shared.Token] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -130,7 +129,7 @@ func (r *TokenService) Delete(ctx context.Context, tokenID string, body TokenDel
 }
 
 // Get information about a specific Account Owned API token.
-func (r *TokenService) Get(ctx context.Context, tokenID string, query TokenGetParams, opts ...option.RequestOption) (res *user.Token, err error) {
+func (r *TokenService) Get(ctx context.Context, tokenID string, query TokenGetParams, opts ...option.RequestOption) (res *shared.Token, err error) {
 	var env TokenGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -185,7 +184,7 @@ type TokenNewResponse struct {
 	// The time before which the token MUST NOT be accepted for processing.
 	NotBefore time.Time `json:"not_before" format:"date-time"`
 	// List of access policies assigned to the token.
-	Policies []user.Policy `json:"policies"`
+	Policies []shared.TokenPolicy `json:"policies"`
 	// Status of the token.
 	Status TokenNewResponseStatus `json:"status"`
 	// The token value.
@@ -244,9 +243,9 @@ func (r tokenNewResponseConditionJSON) RawJSON() string {
 // Client IP restrictions.
 type TokenNewResponseConditionRequestIP struct {
 	// List of IPv4/IPv6 CIDR addresses.
-	In []user.CIDRList `json:"in"`
+	In []shared.TokenConditionCIDRList `json:"in"`
 	// List of IPv4/IPv6 CIDR addresses.
-	NotIn []user.CIDRList                        `json:"not_in"`
+	NotIn []shared.TokenConditionCIDRList        `json:"not_in"`
 	JSON  tokenNewResponseConditionRequestIPJSON `json:"-"`
 }
 
@@ -361,8 +360,8 @@ type TokenNewParams struct {
 	// Token name.
 	Name param.Field[string] `json:"name,required"`
 	// List of access policies assigned to the token.
-	Policies  param.Field[[]user.PolicyParam]      `json:"policies,required"`
-	Condition param.Field[TokenNewParamsCondition] `json:"condition"`
+	Policies  param.Field[[]shared.TokenPolicyParam] `json:"policies,required"`
+	Condition param.Field[TokenNewParamsCondition]   `json:"condition"`
 	// The expiration time on or after which the JWT MUST NOT be accepted for
 	// processing.
 	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
@@ -386,9 +385,9 @@ func (r TokenNewParamsCondition) MarshalJSON() (data []byte, err error) {
 // Client IP restrictions.
 type TokenNewParamsConditionRequestIP struct {
 	// List of IPv4/IPv6 CIDR addresses.
-	In param.Field[[]user.CIDRListParam] `json:"in"`
+	In param.Field[[]shared.TokenConditionCIDRListParam] `json:"in"`
 	// List of IPv4/IPv6 CIDR addresses.
-	NotIn param.Field[[]user.CIDRListParam] `json:"not_in"`
+	NotIn param.Field[[]shared.TokenConditionCIDRListParam] `json:"not_in"`
 }
 
 func (r TokenNewParamsConditionRequestIP) MarshalJSON() (data []byte, err error) {
@@ -441,7 +440,7 @@ func (r TokenNewResponseEnvelopeSuccess) IsKnown() bool {
 type TokenUpdateParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
-	Token     user.TokenParam     `json:"token,required"`
+	Token     shared.TokenParam   `json:"token,required"`
 }
 
 func (r TokenUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -453,7 +452,7 @@ type TokenUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  user.Token                         `json:"result"`
+	Result  shared.Token                       `json:"result"`
 	JSON    tokenUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -584,7 +583,7 @@ type TokenGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TokenGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  user.Token                      `json:"result"`
+	Result  shared.Token                    `json:"result"`
 	JSON    tokenGetResponseEnvelopeJSON    `json:"-"`
 }
 
