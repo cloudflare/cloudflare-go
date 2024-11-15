@@ -171,7 +171,9 @@ func (r WorkflowInstanceNewResponseStatus) IsKnown() bool {
 type WorkflowInstanceListResponse struct {
 	ID         string                             `json:"id,required"`
 	CreatedOn  time.Time                          `json:"created_on,required" format:"date-time"`
+	EndedOn    time.Time                          `json:"ended_on,required,nullable" format:"date-time"`
 	ModifiedOn time.Time                          `json:"modified_on,required" format:"date-time"`
+	StartedOn  time.Time                          `json:"started_on,required,nullable" format:"date-time"`
 	Status     WorkflowInstanceListResponseStatus `json:"status,required"`
 	VersionID  string                             `json:"version_id,required" format:"uuid"`
 	WorkflowID string                             `json:"workflow_id,required" format:"uuid"`
@@ -183,7 +185,9 @@ type WorkflowInstanceListResponse struct {
 type workflowInstanceListResponseJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
+	EndedOn     apijson.Field
 	ModifiedOn  apijson.Field
+	StartedOn   apijson.Field
 	Status      apijson.Field
 	VersionID   apijson.Field
 	WorkflowID  apijson.Field
