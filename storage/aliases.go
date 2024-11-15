@@ -286,6 +286,101 @@ const SubscriptionStateExpired = shared.SubscriptionStateExpired
 // This is an alias to an internal type.
 type SubscriptionParam = shared.SubscriptionParam
 
+// This is an alias to an internal type.
+type Token = shared.Token
+
+// This is an alias to an internal type.
+type TokenCondition = shared.TokenCondition
+
+// Client IP restrictions.
+//
+// This is an alias to an internal type.
+type TokenConditionRequestIP = shared.TokenConditionRequestIP
+
+// Status of the token.
+//
+// This is an alias to an internal type.
+type TokenStatus = shared.TokenStatus
+
+// This is an alias to an internal value.
+const TokenStatusActive = shared.TokenStatusActive
+
+// This is an alias to an internal value.
+const TokenStatusDisabled = shared.TokenStatusDisabled
+
+// This is an alias to an internal value.
+const TokenStatusExpired = shared.TokenStatusExpired
+
+// This is an alias to an internal type.
+type TokenParam = shared.TokenParam
+
+// This is an alias to an internal type.
+type TokenConditionParam = shared.TokenConditionParam
+
+// Client IP restrictions.
+//
+// This is an alias to an internal type.
+type TokenConditionRequestIPParam = shared.TokenConditionRequestIPParam
+
+// IPv4/IPv6 CIDR.
+//
+// This is an alias to an internal type.
+type TokenConditionCIDRList = shared.TokenConditionCIDRList
+
+// IPv4/IPv6 CIDR.
+//
+// This is an alias to an internal type.
+type TokenConditionCIDRListParam = shared.TokenConditionCIDRListParam
+
+// This is an alias to an internal type.
+type TokenPolicy = shared.TokenPolicy
+
+// Allow or deny operations against the resources.
+//
+// This is an alias to an internal type.
+type TokenPolicyEffect = shared.TokenPolicyEffect
+
+// This is an alias to an internal value.
+const TokenPolicyEffectAllow = shared.TokenPolicyEffectAllow
+
+// This is an alias to an internal value.
+const TokenPolicyEffectDeny = shared.TokenPolicyEffectDeny
+
+// A named group of permissions that map to a group of operations against
+// resources.
+//
+// This is an alias to an internal type.
+type TokenPolicyPermissionGroup = shared.TokenPolicyPermissionGroup
+
+// Attributes associated to the permission group.
+//
+// This is an alias to an internal type.
+type TokenPolicyPermissionGroupsMeta = shared.TokenPolicyPermissionGroupsMeta
+
+// A list of resource names that the policy applies to.
+//
+// This is an alias to an internal type.
+type TokenPolicyResources = shared.TokenPolicyResources
+
+// This is an alias to an internal type.
+type TokenPolicyParam = shared.TokenPolicyParam
+
+// A named group of permissions that map to a group of operations against
+// resources.
+//
+// This is an alias to an internal type.
+type TokenPolicyPermissionGroupParam = shared.TokenPolicyPermissionGroupParam
+
+// Attributes associated to the permission group.
+//
+// This is an alias to an internal type.
+type TokenPolicyPermissionGroupsMetaParam = shared.TokenPolicyPermissionGroupsMetaParam
+
+// A list of resource names that the policy applies to.
+//
+// This is an alias to an internal type.
+type TokenPolicyResourcesParam = shared.TokenPolicyResourcesParam
+
 // The token value.
 //
 // This is an alias to an internal type.

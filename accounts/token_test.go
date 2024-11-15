@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/accounts"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/user"
+	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 func TestTokenNewWithOptionalParams(t *testing.T) {
@@ -32,62 +32,62 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 	_, err := client.Accounts.Tokens.New(context.TODO(), accounts.TokenNewParams{
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		Name:      cloudflare.F("readonly token"),
-		Policies: cloudflare.F([]user.PolicyParam{{
-			Effect: cloudflare.F(user.PolicyEffectAllow),
-			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
-				Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+		Policies: cloudflare.F([]shared.TokenPolicyParam{{
+			Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
+			PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
+				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 					Key:   cloudflare.F("key"),
 					Value: cloudflare.F("value"),
 				}),
 			}, {
-				Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 					Key:   cloudflare.F("key"),
 					Value: cloudflare.F("value"),
 				}),
 			}}),
-			Resources: cloudflare.F(user.PolicyResourcesParam{
+			Resources: cloudflare.F(shared.TokenPolicyResourcesParam{
 				Resource: cloudflare.F("resource"),
 				Scope:    cloudflare.F("scope"),
 			}),
 		}, {
-			Effect: cloudflare.F(user.PolicyEffectAllow),
-			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
-				Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+			Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
+			PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
+				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 					Key:   cloudflare.F("key"),
 					Value: cloudflare.F("value"),
 				}),
 			}, {
-				Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 					Key:   cloudflare.F("key"),
 					Value: cloudflare.F("value"),
 				}),
 			}}),
-			Resources: cloudflare.F(user.PolicyResourcesParam{
+			Resources: cloudflare.F(shared.TokenPolicyResourcesParam{
 				Resource: cloudflare.F("resource"),
 				Scope:    cloudflare.F("scope"),
 			}),
 		}, {
-			Effect: cloudflare.F(user.PolicyEffectAllow),
-			PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
-				Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+			Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
+			PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
+				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 					Key:   cloudflare.F("key"),
 					Value: cloudflare.F("value"),
 				}),
 			}, {
-				Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+				Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 					Key:   cloudflare.F("key"),
 					Value: cloudflare.F("value"),
 				}),
 			}}),
-			Resources: cloudflare.F(user.PolicyResourcesParam{
+			Resources: cloudflare.F(shared.TokenPolicyResourcesParam{
 				Resource: cloudflare.F("resource"),
 				Scope:    cloudflare.F("scope"),
 			}),
 		}}),
 		Condition: cloudflare.F(accounts.TokenNewParamsCondition{
 			RequestIP: cloudflare.F(accounts.TokenNewParamsConditionRequestIP{
-				In:    cloudflare.F([]user.CIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
-				NotIn: cloudflare.F([]user.CIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
+				In:    cloudflare.F([]shared.TokenConditionCIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
+				NotIn: cloudflare.F([]shared.TokenConditionCIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
 			}),
 		}),
 		ExpiresOn: cloudflare.F(time.Now()),
@@ -120,65 +120,65 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 		"ed17574386854bf78a67040be0a770b0",
 		accounts.TokenUpdateParams{
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
-			Token: user.TokenParam{
+			Token: shared.TokenParam{
 				Name: cloudflare.F("readonly token"),
-				Policies: cloudflare.F([]user.PolicyParam{{
-					Effect: cloudflare.F(user.PolicyEffectAllow),
-					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
-						Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+				Policies: cloudflare.F([]shared.TokenPolicyParam{{
+					Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
+					PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
+						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 							Key:   cloudflare.F("key"),
 							Value: cloudflare.F("value"),
 						}),
 					}, {
-						Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 							Key:   cloudflare.F("key"),
 							Value: cloudflare.F("value"),
 						}),
 					}}),
-					Resources: cloudflare.F(user.PolicyResourcesParam{
+					Resources: cloudflare.F(shared.TokenPolicyResourcesParam{
 						Resource: cloudflare.F("resource"),
 						Scope:    cloudflare.F("scope"),
 					}),
 				}, {
-					Effect: cloudflare.F(user.PolicyEffectAllow),
-					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
-						Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+					Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
+					PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
+						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 							Key:   cloudflare.F("key"),
 							Value: cloudflare.F("value"),
 						}),
 					}, {
-						Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 							Key:   cloudflare.F("key"),
 							Value: cloudflare.F("value"),
 						}),
 					}}),
-					Resources: cloudflare.F(user.PolicyResourcesParam{
+					Resources: cloudflare.F(shared.TokenPolicyResourcesParam{
 						Resource: cloudflare.F("resource"),
 						Scope:    cloudflare.F("scope"),
 					}),
 				}, {
-					Effect: cloudflare.F(user.PolicyEffectAllow),
-					PermissionGroups: cloudflare.F([]user.PolicyPermissionGroupParam{{
-						Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+					Effect: cloudflare.F(shared.TokenPolicyEffectAllow),
+					PermissionGroups: cloudflare.F([]shared.TokenPolicyPermissionGroupParam{{
+						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 							Key:   cloudflare.F("key"),
 							Value: cloudflare.F("value"),
 						}),
 					}, {
-						Meta: cloudflare.F(user.PolicyPermissionGroupsMetaParam{
+						Meta: cloudflare.F(shared.TokenPolicyPermissionGroupsMetaParam{
 							Key:   cloudflare.F("key"),
 							Value: cloudflare.F("value"),
 						}),
 					}}),
-					Resources: cloudflare.F(user.PolicyResourcesParam{
+					Resources: cloudflare.F(shared.TokenPolicyResourcesParam{
 						Resource: cloudflare.F("resource"),
 						Scope:    cloudflare.F("scope"),
 					}),
 				}}),
-				Status: cloudflare.F(user.TokenStatusActive),
-				Condition: cloudflare.F(user.TokenConditionParam{
-					RequestIP: cloudflare.F(user.TokenConditionRequestIPParam{
-						In:    cloudflare.F([]user.CIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
-						NotIn: cloudflare.F([]user.CIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
+				Status: cloudflare.F(shared.TokenStatusActive),
+				Condition: cloudflare.F(shared.TokenConditionParam{
+					RequestIP: cloudflare.F(shared.TokenConditionRequestIPParam{
+						In:    cloudflare.F([]shared.TokenConditionCIDRListParam{"123.123.123.0/24", "2606:4700::/32"}),
+						NotIn: cloudflare.F([]shared.TokenConditionCIDRListParam{"123.123.123.100/24", "2606:4700:4700::/48"}),
 					}),
 				}),
 				ExpiresOn: cloudflare.F(time.Now()),
