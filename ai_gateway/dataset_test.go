@@ -30,7 +30,7 @@ func TestDatasetNew(t *testing.T) {
 	)
 	_, err := client.AIGateway.Datasets.New(
 		context.TODO(),
-		"gateway_id",
+		"my-gateway",
 		ai_gateway.DatasetNewParams{
 			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
 			Enable:    cloudflare.F(true),
@@ -74,7 +74,7 @@ func TestDatasetUpdate(t *testing.T) {
 	)
 	_, err := client.AIGateway.Datasets.Update(
 		context.TODO(),
-		"gateway_id",
+		"my-gateway",
 		"id",
 		ai_gateway.DatasetUpdateParams{
 			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
@@ -119,29 +119,15 @@ func TestDatasetListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AIGateway.Datasets.List(
 		context.TODO(),
-		"gateway_id",
+		"my-gateway",
 		ai_gateway.DatasetListParams{
-			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
-			ID:        cloudflare.F("id"),
-			Enable:    cloudflare.F(true),
-			Filters: cloudflare.F([]ai_gateway.DatasetListParamsFilter{{
-				Key:      cloudflare.F(ai_gateway.DatasetListParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.DatasetListParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.DatasetListParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}, {
-				Key:      cloudflare.F(ai_gateway.DatasetListParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.DatasetListParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.DatasetListParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}, {
-				Key:      cloudflare.F(ai_gateway.DatasetListParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.DatasetListParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.DatasetListParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}}),
+			AccountID:        cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
+			Enable:           cloudflare.F(true),
 			Name:             cloudflare.F("name"),
 			OrderBy:          cloudflare.F("order_by"),
 			OrderByDirection: cloudflare.F(ai_gateway.DatasetListParamsOrderByDirectionAsc),
 			Page:             cloudflare.F(int64(1)),
-			PerPage:          cloudflare.F(int64(5)),
+			PerPage:          cloudflare.F(int64(1)),
 			Search:           cloudflare.F("search"),
 		},
 	)
@@ -169,7 +155,7 @@ func TestDatasetDelete(t *testing.T) {
 	)
 	_, err := client.AIGateway.Datasets.Delete(
 		context.TODO(),
-		"gateway_id",
+		"my-gateway",
 		"id",
 		ai_gateway.DatasetDeleteParams{
 			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
@@ -199,7 +185,7 @@ func TestDatasetGet(t *testing.T) {
 	)
 	_, err := client.AIGateway.Datasets.Get(
 		context.TODO(),
-		"gateway_id",
+		"my-gateway",
 		"id",
 		ai_gateway.DatasetGetParams{
 			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),

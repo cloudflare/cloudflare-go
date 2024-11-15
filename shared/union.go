@@ -82,7 +82,6 @@ func (UnionString) ImplementsAIGatewayDatasetDeleteResponseFiltersValueUnion()  
 func (UnionString) ImplementsAIGatewayDatasetGetResponseFiltersValueUnion()                  {}
 func (UnionString) ImplementsAIGatewayDatasetNewParamsFiltersValueUnion()                    {}
 func (UnionString) ImplementsAIGatewayDatasetUpdateParamsFiltersValueUnion()                 {}
-func (UnionString) ImplementsAIGatewayDatasetListParamsFiltersValueUnion()                   {}
 func (UnionString) ImplementsAIGatewayEvaluationNewResponseDatasetsFiltersValueUnion()       {}
 func (UnionString) ImplementsAIGatewayEvaluationListResponseDatasetsFiltersValueUnion()      {}
 func (UnionString) ImplementsAIGatewayEvaluationDeleteResponseDatasetsFiltersValueUnion()    {}
@@ -103,7 +102,6 @@ func (UnionBool) ImplementsAIGatewayDatasetDeleteResponseFiltersValueUnion()    
 func (UnionBool) ImplementsAIGatewayDatasetGetResponseFiltersValueUnion()               {}
 func (UnionBool) ImplementsAIGatewayDatasetNewParamsFiltersValueUnion()                 {}
 func (UnionBool) ImplementsAIGatewayDatasetUpdateParamsFiltersValueUnion()              {}
-func (UnionBool) ImplementsAIGatewayDatasetListParamsFiltersValueUnion()                {}
 func (UnionBool) ImplementsAIGatewayEvaluationNewResponseDatasetsFiltersValueUnion()    {}
 func (UnionBool) ImplementsAIGatewayEvaluationListResponseDatasetsFiltersValueUnion()   {}
 func (UnionBool) ImplementsAIGatewayEvaluationDeleteResponseDatasetsFiltersValueUnion() {}
@@ -133,7 +131,6 @@ func (UnionFloat) ImplementsAIGatewayDatasetDeleteResponseFiltersValueUnion()   
 func (UnionFloat) ImplementsAIGatewayDatasetGetResponseFiltersValueUnion()                  {}
 func (UnionFloat) ImplementsAIGatewayDatasetNewParamsFiltersValueUnion()                    {}
 func (UnionFloat) ImplementsAIGatewayDatasetUpdateParamsFiltersValueUnion()                 {}
-func (UnionFloat) ImplementsAIGatewayDatasetListParamsFiltersValueUnion()                   {}
 func (UnionFloat) ImplementsAIGatewayEvaluationNewResponseDatasetsFiltersValueUnion()       {}
 func (UnionFloat) ImplementsAIGatewayEvaluationListResponseDatasetsFiltersValueUnion()      {}
 func (UnionFloat) ImplementsAIGatewayEvaluationDeleteResponseDatasetsFiltersValueUnion()    {}
