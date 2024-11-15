@@ -40,7 +40,7 @@ func NewEvaluationService(opts ...option.RequestOption) (r *EvaluationService) {
 	return
 }
 
-// Create a new Evaluations
+// Create a new Evaluation
 func (r *EvaluationService) New(ctx context.Context, gatewayID string, params EvaluationNewParams, opts ...option.RequestOption) (res *EvaluationNewResponse, err error) {
 	var env EvaluationNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -61,7 +61,7 @@ func (r *EvaluationService) New(ctx context.Context, gatewayID string, params Ev
 	return
 }
 
-// List Evaluationss
+// List Evaluations
 func (r *EvaluationService) List(ctx context.Context, gatewayID string, params EvaluationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[EvaluationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -87,12 +87,12 @@ func (r *EvaluationService) List(ctx context.Context, gatewayID string, params E
 	return res, nil
 }
 
-// List Evaluationss
+// List Evaluations
 func (r *EvaluationService) ListAutoPaging(ctx context.Context, gatewayID string, params EvaluationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[EvaluationListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, gatewayID, params, opts...))
 }
 
-// Delete a Evaluations
+// Delete a Evaluation
 func (r *EvaluationService) Delete(ctx context.Context, gatewayID string, id string, body EvaluationDeleteParams, opts ...option.RequestOption) (res *EvaluationDeleteResponse, err error) {
 	var env EvaluationDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -117,7 +117,7 @@ func (r *EvaluationService) Delete(ctx context.Context, gatewayID string, id str
 	return
 }
 
-// Fetch a Evaluations
+// Fetch a Evaluation
 func (r *EvaluationService) Get(ctx context.Context, gatewayID string, id string, query EvaluationGetParams, opts ...option.RequestOption) (res *EvaluationGetResponse, err error) {
 	var env EvaluationGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -143,16 +143,17 @@ func (r *EvaluationService) Get(ctx context.Context, gatewayID string, id string
 }
 
 type EvaluationNewResponse struct {
-	ID         string                         `json:"id,required"`
-	CreatedAt  time.Time                      `json:"created_at,required" format:"date-time"`
-	Datasets   []EvaluationNewResponseDataset `json:"datasets,required"`
-	GatewayID  string                         `json:"gateway_id,required"`
-	ModifiedAt time.Time                      `json:"modified_at,required" format:"date-time"`
-	Name       string                         `json:"name,required"`
-	Processed  bool                           `json:"processed,required"`
-	Results    []EvaluationNewResponseResult  `json:"results,required"`
-	TotalLogs  float64                        `json:"total_logs,required"`
-	JSON       evaluationNewResponseJSON      `json:"-"`
+	ID        string                         `json:"id,required"`
+	CreatedAt time.Time                      `json:"created_at,required" format:"date-time"`
+	Datasets  []EvaluationNewResponseDataset `json:"datasets,required"`
+	// gateway id
+	GatewayID  string                        `json:"gateway_id,required"`
+	ModifiedAt time.Time                     `json:"modified_at,required" format:"date-time"`
+	Name       string                        `json:"name,required"`
+	Processed  bool                          `json:"processed,required"`
+	Results    []EvaluationNewResponseResult `json:"results,required"`
+	TotalLogs  float64                       `json:"total_logs,required"`
+	JSON       evaluationNewResponseJSON     `json:"-"`
 }
 
 // evaluationNewResponseJSON contains the JSON metadata for the struct
@@ -180,14 +181,15 @@ func (r evaluationNewResponseJSON) RawJSON() string {
 }
 
 type EvaluationNewResponseDataset struct {
-	ID         string                                `json:"id,required"`
-	CreatedAt  time.Time                             `json:"created_at,required" format:"date-time"`
-	Enable     bool                                  `json:"enable,required"`
-	Filters    []EvaluationNewResponseDatasetsFilter `json:"filters,required"`
-	GatewayID  string                                `json:"gateway_id,required"`
-	ModifiedAt time.Time                             `json:"modified_at,required" format:"date-time"`
-	Name       string                                `json:"name,required"`
-	JSON       evaluationNewResponseDatasetJSON      `json:"-"`
+	ID        string                                `json:"id,required"`
+	CreatedAt time.Time                             `json:"created_at,required" format:"date-time"`
+	Enable    bool                                  `json:"enable,required"`
+	Filters   []EvaluationNewResponseDatasetsFilter `json:"filters,required"`
+	// gateway id
+	GatewayID  string                           `json:"gateway_id,required"`
+	ModifiedAt time.Time                        `json:"modified_at,required" format:"date-time"`
+	Name       string                           `json:"name,required"`
+	JSON       evaluationNewResponseDatasetJSON `json:"-"`
 }
 
 // evaluationNewResponseDatasetJSON contains the JSON metadata for the struct
@@ -347,16 +349,17 @@ func (r evaluationNewResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationListResponse struct {
-	ID         string                          `json:"id,required"`
-	CreatedAt  time.Time                       `json:"created_at,required" format:"date-time"`
-	Datasets   []EvaluationListResponseDataset `json:"datasets,required"`
-	GatewayID  string                          `json:"gateway_id,required"`
-	ModifiedAt time.Time                       `json:"modified_at,required" format:"date-time"`
-	Name       string                          `json:"name,required"`
-	Processed  bool                            `json:"processed,required"`
-	Results    []EvaluationListResponseResult  `json:"results,required"`
-	TotalLogs  float64                         `json:"total_logs,required"`
-	JSON       evaluationListResponseJSON      `json:"-"`
+	ID        string                          `json:"id,required"`
+	CreatedAt time.Time                       `json:"created_at,required" format:"date-time"`
+	Datasets  []EvaluationListResponseDataset `json:"datasets,required"`
+	// gateway id
+	GatewayID  string                         `json:"gateway_id,required"`
+	ModifiedAt time.Time                      `json:"modified_at,required" format:"date-time"`
+	Name       string                         `json:"name,required"`
+	Processed  bool                           `json:"processed,required"`
+	Results    []EvaluationListResponseResult `json:"results,required"`
+	TotalLogs  float64                        `json:"total_logs,required"`
+	JSON       evaluationListResponseJSON     `json:"-"`
 }
 
 // evaluationListResponseJSON contains the JSON metadata for the struct
@@ -384,14 +387,15 @@ func (r evaluationListResponseJSON) RawJSON() string {
 }
 
 type EvaluationListResponseDataset struct {
-	ID         string                                 `json:"id,required"`
-	CreatedAt  time.Time                              `json:"created_at,required" format:"date-time"`
-	Enable     bool                                   `json:"enable,required"`
-	Filters    []EvaluationListResponseDatasetsFilter `json:"filters,required"`
-	GatewayID  string                                 `json:"gateway_id,required"`
-	ModifiedAt time.Time                              `json:"modified_at,required" format:"date-time"`
-	Name       string                                 `json:"name,required"`
-	JSON       evaluationListResponseDatasetJSON      `json:"-"`
+	ID        string                                 `json:"id,required"`
+	CreatedAt time.Time                              `json:"created_at,required" format:"date-time"`
+	Enable    bool                                   `json:"enable,required"`
+	Filters   []EvaluationListResponseDatasetsFilter `json:"filters,required"`
+	// gateway id
+	GatewayID  string                            `json:"gateway_id,required"`
+	ModifiedAt time.Time                         `json:"modified_at,required" format:"date-time"`
+	Name       string                            `json:"name,required"`
+	JSON       evaluationListResponseDatasetJSON `json:"-"`
 }
 
 // evaluationListResponseDatasetJSON contains the JSON metadata for the struct
@@ -551,16 +555,17 @@ func (r evaluationListResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationDeleteResponse struct {
-	ID         string                            `json:"id,required"`
-	CreatedAt  time.Time                         `json:"created_at,required" format:"date-time"`
-	Datasets   []EvaluationDeleteResponseDataset `json:"datasets,required"`
-	GatewayID  string                            `json:"gateway_id,required"`
-	ModifiedAt time.Time                         `json:"modified_at,required" format:"date-time"`
-	Name       string                            `json:"name,required"`
-	Processed  bool                              `json:"processed,required"`
-	Results    []EvaluationDeleteResponseResult  `json:"results,required"`
-	TotalLogs  float64                           `json:"total_logs,required"`
-	JSON       evaluationDeleteResponseJSON      `json:"-"`
+	ID        string                            `json:"id,required"`
+	CreatedAt time.Time                         `json:"created_at,required" format:"date-time"`
+	Datasets  []EvaluationDeleteResponseDataset `json:"datasets,required"`
+	// gateway id
+	GatewayID  string                           `json:"gateway_id,required"`
+	ModifiedAt time.Time                        `json:"modified_at,required" format:"date-time"`
+	Name       string                           `json:"name,required"`
+	Processed  bool                             `json:"processed,required"`
+	Results    []EvaluationDeleteResponseResult `json:"results,required"`
+	TotalLogs  float64                          `json:"total_logs,required"`
+	JSON       evaluationDeleteResponseJSON     `json:"-"`
 }
 
 // evaluationDeleteResponseJSON contains the JSON metadata for the struct
@@ -588,14 +593,15 @@ func (r evaluationDeleteResponseJSON) RawJSON() string {
 }
 
 type EvaluationDeleteResponseDataset struct {
-	ID         string                                   `json:"id,required"`
-	CreatedAt  time.Time                                `json:"created_at,required" format:"date-time"`
-	Enable     bool                                     `json:"enable,required"`
-	Filters    []EvaluationDeleteResponseDatasetsFilter `json:"filters,required"`
-	GatewayID  string                                   `json:"gateway_id,required"`
-	ModifiedAt time.Time                                `json:"modified_at,required" format:"date-time"`
-	Name       string                                   `json:"name,required"`
-	JSON       evaluationDeleteResponseDatasetJSON      `json:"-"`
+	ID        string                                   `json:"id,required"`
+	CreatedAt time.Time                                `json:"created_at,required" format:"date-time"`
+	Enable    bool                                     `json:"enable,required"`
+	Filters   []EvaluationDeleteResponseDatasetsFilter `json:"filters,required"`
+	// gateway id
+	GatewayID  string                              `json:"gateway_id,required"`
+	ModifiedAt time.Time                           `json:"modified_at,required" format:"date-time"`
+	Name       string                              `json:"name,required"`
+	JSON       evaluationDeleteResponseDatasetJSON `json:"-"`
 }
 
 // evaluationDeleteResponseDatasetJSON contains the JSON metadata for the struct
@@ -755,16 +761,17 @@ func (r evaluationDeleteResponseResultJSON) RawJSON() string {
 }
 
 type EvaluationGetResponse struct {
-	ID         string                         `json:"id,required"`
-	CreatedAt  time.Time                      `json:"created_at,required" format:"date-time"`
-	Datasets   []EvaluationGetResponseDataset `json:"datasets,required"`
-	GatewayID  string                         `json:"gateway_id,required"`
-	ModifiedAt time.Time                      `json:"modified_at,required" format:"date-time"`
-	Name       string                         `json:"name,required"`
-	Processed  bool                           `json:"processed,required"`
-	Results    []EvaluationGetResponseResult  `json:"results,required"`
-	TotalLogs  float64                        `json:"total_logs,required"`
-	JSON       evaluationGetResponseJSON      `json:"-"`
+	ID        string                         `json:"id,required"`
+	CreatedAt time.Time                      `json:"created_at,required" format:"date-time"`
+	Datasets  []EvaluationGetResponseDataset `json:"datasets,required"`
+	// gateway id
+	GatewayID  string                        `json:"gateway_id,required"`
+	ModifiedAt time.Time                     `json:"modified_at,required" format:"date-time"`
+	Name       string                        `json:"name,required"`
+	Processed  bool                          `json:"processed,required"`
+	Results    []EvaluationGetResponseResult `json:"results,required"`
+	TotalLogs  float64                       `json:"total_logs,required"`
+	JSON       evaluationGetResponseJSON     `json:"-"`
 }
 
 // evaluationGetResponseJSON contains the JSON metadata for the struct
@@ -792,14 +799,15 @@ func (r evaluationGetResponseJSON) RawJSON() string {
 }
 
 type EvaluationGetResponseDataset struct {
-	ID         string                                `json:"id,required"`
-	CreatedAt  time.Time                             `json:"created_at,required" format:"date-time"`
-	Enable     bool                                  `json:"enable,required"`
-	Filters    []EvaluationGetResponseDatasetsFilter `json:"filters,required"`
-	GatewayID  string                                `json:"gateway_id,required"`
-	ModifiedAt time.Time                             `json:"modified_at,required" format:"date-time"`
-	Name       string                                `json:"name,required"`
-	JSON       evaluationGetResponseDatasetJSON      `json:"-"`
+	ID        string                                `json:"id,required"`
+	CreatedAt time.Time                             `json:"created_at,required" format:"date-time"`
+	Enable    bool                                  `json:"enable,required"`
+	Filters   []EvaluationGetResponseDatasetsFilter `json:"filters,required"`
+	// gateway id
+	GatewayID  string                           `json:"gateway_id,required"`
+	ModifiedAt time.Time                        `json:"modified_at,required" format:"date-time"`
+	Name       string                           `json:"name,required"`
+	JSON       evaluationGetResponseDatasetJSON `json:"-"`
 }
 
 // evaluationGetResponseDatasetJSON contains the JSON metadata for the struct
@@ -994,7 +1002,6 @@ func (r evaluationNewResponseEnvelopeJSON) RawJSON() string {
 
 type EvaluationListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	ID        param.Field[string] `query:"id"`
 	Name      param.Field[string] `query:"name"`
 	// Order By Column Name
 	OrderBy param.Field[string] `query:"order_by"`
@@ -1004,8 +1011,7 @@ type EvaluationListParams struct {
 	PerPage          param.Field[int64]                                `query:"per_page"`
 	Processed        param.Field[bool]                                 `query:"processed"`
 	// Search by id, name
-	Search    param.Field[string]  `query:"search"`
-	TotalLogs param.Field[float64] `query:"total_logs"`
+	Search param.Field[string] `query:"search"`
 }
 
 // URLQuery serializes [EvaluationListParams]'s query parameters as `url.Values`.

@@ -549,8 +549,6 @@ func (r aiGatewayUpdateResponseEnvelopeJSON) RawJSON() string {
 
 type AIGatewayListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// gateway id
-	ID param.Field[string] `query:"id"`
 	// Order By Column Name
 	OrderBy param.Field[string] `query:"order_by"`
 	// Order By Direction

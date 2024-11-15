@@ -419,6 +419,7 @@ const (
 	LogListParamsFiltersKeyCached              LogListParamsFiltersKey = "cached"
 	LogListParamsFiltersKeyProvider            LogListParamsFiltersKey = "provider"
 	LogListParamsFiltersKeyModel               LogListParamsFiltersKey = "model"
+	LogListParamsFiltersKeyModelType           LogListParamsFiltersKey = "model_type"
 	LogListParamsFiltersKeyCost                LogListParamsFiltersKey = "cost"
 	LogListParamsFiltersKeyTokens              LogListParamsFiltersKey = "tokens"
 	LogListParamsFiltersKeyTokensIn            LogListParamsFiltersKey = "tokens_in"
@@ -429,7 +430,7 @@ const (
 
 func (r LogListParamsFiltersKey) IsKnown() bool {
 	switch r {
-	case LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback:
+	case LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyModelType, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback:
 		return true
 	}
 	return false
@@ -532,6 +533,7 @@ const (
 	LogDeleteParamsFiltersKeyCached              LogDeleteParamsFiltersKey = "cached"
 	LogDeleteParamsFiltersKeyProvider            LogDeleteParamsFiltersKey = "provider"
 	LogDeleteParamsFiltersKeyModel               LogDeleteParamsFiltersKey = "model"
+	LogDeleteParamsFiltersKeyModelType           LogDeleteParamsFiltersKey = "model_type"
 	LogDeleteParamsFiltersKeyCost                LogDeleteParamsFiltersKey = "cost"
 	LogDeleteParamsFiltersKeyTokens              LogDeleteParamsFiltersKey = "tokens"
 	LogDeleteParamsFiltersKeyTokensIn            LogDeleteParamsFiltersKey = "tokens_in"
@@ -542,7 +544,7 @@ const (
 
 func (r LogDeleteParamsFiltersKey) IsKnown() bool {
 	switch r {
-	case LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback:
+	case LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyModelType, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback:
 		return true
 	}
 	return false
