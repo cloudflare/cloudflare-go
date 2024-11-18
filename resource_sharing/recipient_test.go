@@ -1,20 +1,20 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare_test
+package resource_sharing_test
 
 import (
 	"context"
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/resource_sharing"
 )
 
-func TestWorkflowInstanceNewWithOptionalParams(t *testing.T) {
+func TestRecipientNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,13 +27,13 @@ func TestWorkflowInstanceNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workflows.Instances.New(
+	_, err := client.ResourceSharing.Recipients.New(
 		context.TODO(),
-		"x",
-		cloudflare.WorkflowInstanceNewParams{
-			AccountID:  cloudflare.F("account_id"),
-			InstanceID: cloudflare.F("instance_id"),
-			Params:     cloudflare.F[any](map[string]interface{}{}),
+		"3fd85f74b32742f1bff64a85009dda07",
+		resource_sharing.RecipientNewParams{
+			PathAccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			BodyAccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			OrganizationID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
@@ -45,7 +45,7 @@ func TestWorkflowInstanceNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWorkflowInstanceListWithOptionalParams(t *testing.T) {
+func TestRecipientListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -58,16 +58,13 @@ func TestWorkflowInstanceListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workflows.Instances.List(
+	_, err := client.ResourceSharing.Recipients.List(
 		context.TODO(),
-		"x",
-		cloudflare.WorkflowInstanceListParams{
-			AccountID: cloudflare.F("account_id"),
-			DateEnd:   cloudflare.F(time.Now()),
-			DateStart: cloudflare.F(time.Now()),
-			Page:      cloudflare.F(1.000000),
-			PerPage:   cloudflare.F(1.000000),
-			Status:    cloudflare.F(cloudflare.WorkflowInstanceListParamsStatusQueued),
+		"3fd85f74b32742f1bff64a85009dda07",
+		resource_sharing.RecipientListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Page:      cloudflare.F(int64(2)),
+			PerPage:   cloudflare.F(int64(20)),
 		},
 	)
 	if err != nil {
@@ -79,7 +76,7 @@ func TestWorkflowInstanceListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWorkflowInstanceGet(t *testing.T) {
+func TestRecipientDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -92,12 +89,42 @@ func TestWorkflowInstanceGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workflows.Instances.Get(
+	_, err := client.ResourceSharing.Recipients.Delete(
 		context.TODO(),
-		"x",
-		"x",
-		cloudflare.WorkflowInstanceGetParams{
-			AccountID: cloudflare.F("account_id"),
+		"3fd85f74b32742f1bff64a85009dda07",
+		"3fd85f74b32742f1bff64a85009dda07",
+		resource_sharing.RecipientDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestRecipientGet(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.ResourceSharing.Recipients.Get(
+		context.TODO(),
+		"3fd85f74b32742f1bff64a85009dda07",
+		"3fd85f74b32742f1bff64a85009dda07",
+		resource_sharing.RecipientGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {

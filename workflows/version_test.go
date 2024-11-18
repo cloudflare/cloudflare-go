@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare_test
+package workflows_test
 
 import (
 	"context"
@@ -11,9 +11,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/workflows"
 )
 
-func TestWorkflowUpdate(t *testing.T) {
+func TestVersionListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,13 +27,13 @@ func TestWorkflowUpdate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workflows.Update(
+	_, err := client.Workflows.Versions.List(
 		context.TODO(),
 		"x",
-		cloudflare.WorkflowUpdateParams{
-			AccountID:  cloudflare.F("account_id"),
-			ClassName:  cloudflare.F("x"),
-			ScriptName: cloudflare.F("x"),
+		workflows.VersionListParams{
+			AccountID: cloudflare.F("account_id"),
+			Page:      cloudflare.F(1.000000),
+			PerPage:   cloudflare.F(1.000000),
 		},
 	)
 	if err != nil {
@@ -44,7 +45,7 @@ func TestWorkflowUpdate(t *testing.T) {
 	}
 }
 
-func TestWorkflowListWithOptionalParams(t *testing.T) {
+func TestVersionGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -57,37 +58,11 @@ func TestWorkflowListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workflows.List(context.TODO(), cloudflare.WorkflowListParams{
-		AccountID: cloudflare.F("account_id"),
-		Page:      cloudflare.F(1.000000),
-		PerPage:   cloudflare.F(1.000000),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestWorkflowGet(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Workflows.Get(
+	_, err := client.Workflows.Versions.Get(
 		context.TODO(),
 		"x",
-		cloudflare.WorkflowGetParams{
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		workflows.VersionGetParams{
 			AccountID: cloudflare.F("account_id"),
 		},
 	)

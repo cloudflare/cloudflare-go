@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare_test
+package workflows_test
 
 import (
 	"context"
@@ -11,9 +11,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/workflows"
 )
 
-func TestWorkflowInstanceStatusEdit(t *testing.T) {
+func TestInstanceStatusEdit(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -30,9 +31,9 @@ func TestWorkflowInstanceStatusEdit(t *testing.T) {
 		context.TODO(),
 		"x",
 		"x",
-		cloudflare.WorkflowInstanceStatusEditParams{
+		workflows.InstanceStatusEditParams{
 			AccountID: cloudflare.F("account_id"),
-			Status:    cloudflare.F(cloudflare.WorkflowInstanceStatusEditParamsStatusResume),
+			Status:    cloudflare.F(workflows.InstanceStatusEditParamsStatusResume),
 		},
 	)
 	if err != nil {
