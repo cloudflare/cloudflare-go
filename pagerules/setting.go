@@ -62,11 +62,11 @@ type SettingListParams struct {
 type SettingListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Settings available for the zone.
-	Result []SettingListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SettingListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    settingListResponseEnvelopeJSON    `json:"-"`
+	// Settings available for the zone.
+	Result []SettingListResponse           `json:"result"`
+	JSON   settingListResponseEnvelopeJSON `json:"-"`
 }
 
 // settingListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -74,8 +74,8 @@ type SettingListResponseEnvelope struct {
 type settingListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
