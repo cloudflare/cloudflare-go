@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare_test
+package security_txt_test
 
 import (
 	"context"
@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/security_txt"
 )
 
 func TestSecurityTXTUpdateWithOptionalParams(t *testing.T) {
@@ -27,7 +28,7 @@ func TestSecurityTXTUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.SecurityTXT.Update(context.TODO(), cloudflare.SecurityTXTUpdateParams{
+	_, err := client.SecurityTXT.Update(context.TODO(), security_txt.SecurityTXTUpdateParams{
 		ZoneID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Acknowledgments:    cloudflare.F([]string{"https://example.com/hall-of-fame.html"}),
 		Canonical:          cloudflare.F([]string{"https://www.example.com/.well-known/security.txt"}),
@@ -61,7 +62,7 @@ func TestSecurityTXTDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.SecurityTXT.Delete(context.TODO(), cloudflare.SecurityTXTDeleteParams{
+	_, err := client.SecurityTXT.Delete(context.TODO(), security_txt.SecurityTXTDeleteParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
@@ -86,7 +87,7 @@ func TestSecurityTXTGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.SecurityTXT.Get(context.TODO(), cloudflare.SecurityTXTGetParams{
+	_, err := client.SecurityTXT.Get(context.TODO(), security_txt.SecurityTXTGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
