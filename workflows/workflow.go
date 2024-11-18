@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare
+package workflows
 
 import (
 	"context"
@@ -26,8 +26,8 @@ import (
 // the [NewWorkflowService] method instead.
 type WorkflowService struct {
 	Options   []option.RequestOption
-	Instances *WorkflowInstanceService
-	Versions  *WorkflowVersionService
+	Instances *InstanceService
+	Versions  *VersionService
 }
 
 // NewWorkflowService generates a new service that applies the given options to
@@ -36,8 +36,8 @@ type WorkflowService struct {
 func NewWorkflowService(opts ...option.RequestOption) (r *WorkflowService) {
 	r = &WorkflowService{}
 	r.Options = opts
-	r.Instances = NewWorkflowInstanceService(opts...)
-	r.Versions = NewWorkflowVersionService(opts...)
+	r.Instances = NewInstanceService(opts...)
+	r.Versions = NewVersionService(opts...)
 	return
 }
 

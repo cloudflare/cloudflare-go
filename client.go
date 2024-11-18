@@ -69,10 +69,12 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/rate_limits"
 	"github.com/cloudflare/cloudflare-go/v3/registrar"
 	"github.com/cloudflare/cloudflare-go/v3/request_tracers"
+	"github.com/cloudflare/cloudflare-go/v3/resource_sharing"
 	"github.com/cloudflare/cloudflare-go/v3/rules"
 	"github.com/cloudflare/cloudflare-go/v3/rulesets"
 	"github.com/cloudflare/cloudflare-go/v3/rum"
 	"github.com/cloudflare/cloudflare-go/v3/secondary_dns"
+	"github.com/cloudflare/cloudflare-go/v3/security_txt"
 	"github.com/cloudflare/cloudflare-go/v3/snippets"
 	"github.com/cloudflare/cloudflare-go/v3/spectrum"
 	"github.com/cloudflare/cloudflare-go/v3/speed"
@@ -89,6 +91,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/web3"
 	"github.com/cloudflare/cloudflare-go/v3/workers"
 	"github.com/cloudflare/cloudflare-go/v3/workers_for_platforms"
+	"github.com/cloudflare/cloudflare-go/v3/workflows"
 	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
@@ -180,9 +183,9 @@ type Client struct {
 	IAM                         *iam.IAMService
 	CloudConnector              *cloud_connector.CloudConnectorService
 	BotnetFeed                  *botnet_feed.BotnetFeedService
-	SecurityTXT                 *SecurityTXTService
-	Workflows                   *WorkflowService
-	ResourceSharing             *ResourceSharingService
+	SecurityTXT                 *security_txt.SecurityTXTService
+	Workflows                   *workflows.WorkflowService
+	ResourceSharing             *resource_sharing.ResourceSharingService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -290,9 +293,9 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.IAM = iam.NewIAMService(opts...)
 	r.CloudConnector = cloud_connector.NewCloudConnectorService(opts...)
 	r.BotnetFeed = botnet_feed.NewBotnetFeedService(opts...)
-	r.SecurityTXT = NewSecurityTXTService(opts...)
-	r.Workflows = NewWorkflowService(opts...)
-	r.ResourceSharing = NewResourceSharingService(opts...)
+	r.SecurityTXT = security_txt.NewSecurityTXTService(opts...)
+	r.Workflows = workflows.NewWorkflowService(opts...)
+	r.ResourceSharing = resource_sharing.NewResourceSharingService(opts...)
 
 	return
 }

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare_test
+package resource_sharing_test
 
 import (
 	"context"
@@ -11,9 +11,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/resource_sharing"
 )
 
-func TestResourceSharingResourceNew(t *testing.T) {
+func TestResourceSharingNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,17 +27,36 @@ func TestResourceSharingResourceNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ResourceSharing.Resources.New(
-		context.TODO(),
-		"3fd85f74b32742f1bff64a85009dda07",
-		cloudflare.ResourceSharingResourceNewParams{
-			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	_, err := client.ResourceSharing.New(context.TODO(), resource_sharing.ResourceSharingNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("My Shared WAF Managed Rule"),
+		Recipients: cloudflare.F([]resource_sharing.ResourceSharingNewParamsRecipient{{
+			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			OrganizationID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}, {
+			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			OrganizationID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}, {
+			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			OrganizationID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}}),
+		Resources: cloudflare.F([]resource_sharing.ResourceSharingNewParamsResource{{
 			Meta:              cloudflare.F[any](map[string]interface{}{}),
 			ResourceAccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ResourceID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ResourceType:      cloudflare.F(cloudflare.ResourceSharingResourceNewParamsResourceTypeCustomRuleset),
-		},
-	)
+			ResourceType:      cloudflare.F(resource_sharing.ResourceSharingNewParamsResourcesResourceTypeCustomRuleset),
+		}, {
+			Meta:              cloudflare.F[any](map[string]interface{}{}),
+			ResourceAccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ResourceID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ResourceType:      cloudflare.F(resource_sharing.ResourceSharingNewParamsResourcesResourceTypeCustomRuleset),
+		}, {
+			Meta:              cloudflare.F[any](map[string]interface{}{}),
+			ResourceAccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ResourceID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ResourceType:      cloudflare.F(resource_sharing.ResourceSharingNewParamsResourcesResourceTypeCustomRuleset),
+		}}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -46,7 +66,7 @@ func TestResourceSharingResourceNew(t *testing.T) {
 	}
 }
 
-func TestResourceSharingResourceUpdate(t *testing.T) {
+func TestResourceSharingUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,13 +79,12 @@ func TestResourceSharingResourceUpdate(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ResourceSharing.Resources.Update(
+	_, err := client.ResourceSharing.Update(
 		context.TODO(),
 		"3fd85f74b32742f1bff64a85009dda07",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ResourceSharingResourceUpdateParams{
+		resource_sharing.ResourceSharingUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Meta:      cloudflare.F[any](map[string]interface{}{}),
+			Name:      cloudflare.F("My Shared WAF Managed Rule"),
 		},
 	)
 	if err != nil {
@@ -77,7 +96,7 @@ func TestResourceSharingResourceUpdate(t *testing.T) {
 	}
 }
 
-func TestResourceSharingResourceListWithOptionalParams(t *testing.T) {
+func TestResourceSharingListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -90,17 +109,16 @@ func TestResourceSharingResourceListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ResourceSharing.Resources.List(
-		context.TODO(),
-		"3fd85f74b32742f1bff64a85009dda07",
-		cloudflare.ResourceSharingResourceListParams{
-			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Page:         cloudflare.F(int64(2)),
-			PerPage:      cloudflare.F(int64(20)),
-			ResourceType: cloudflare.F(cloudflare.ResourceSharingResourceListParamsResourceTypeCustomRuleset),
-			Status:       cloudflare.F(cloudflare.ResourceSharingResourceListParamsStatusActive),
-		},
-	)
+	_, err := client.ResourceSharing.List(context.TODO(), resource_sharing.ResourceSharingListParams{
+		AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Direction:  cloudflare.F(resource_sharing.ResourceSharingListParamsDirectionAsc),
+		Kind:       cloudflare.F(resource_sharing.ResourceSharingListParamsKindSent),
+		Order:      cloudflare.F(resource_sharing.ResourceSharingListParamsOrderName),
+		Page:       cloudflare.F(int64(2)),
+		PerPage:    cloudflare.F(int64(20)),
+		Status:     cloudflare.F(resource_sharing.ResourceSharingListParamsStatusActive),
+		TargetType: cloudflare.F(resource_sharing.ResourceSharingListParamsTargetTypeAccount),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -110,7 +128,7 @@ func TestResourceSharingResourceListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestResourceSharingResourceDelete(t *testing.T) {
+func TestResourceSharingDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -123,11 +141,10 @@ func TestResourceSharingResourceDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ResourceSharing.Resources.Delete(
+	_, err := client.ResourceSharing.Delete(
 		context.TODO(),
 		"3fd85f74b32742f1bff64a85009dda07",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ResourceSharingResourceDeleteParams{
+		resource_sharing.ResourceSharingDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -140,7 +157,7 @@ func TestResourceSharingResourceDelete(t *testing.T) {
 	}
 }
 
-func TestResourceSharingResourceGet(t *testing.T) {
+func TestResourceSharingGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -153,11 +170,10 @@ func TestResourceSharingResourceGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ResourceSharing.Resources.Get(
+	_, err := client.ResourceSharing.Get(
 		context.TODO(),
 		"3fd85f74b32742f1bff64a85009dda07",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ResourceSharingResourceGetParams{
+		resource_sharing.ResourceSharingGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

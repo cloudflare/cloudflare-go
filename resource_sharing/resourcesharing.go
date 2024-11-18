@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare
+package resource_sharing
 
 import (
 	"context"
@@ -27,8 +27,8 @@ import (
 // the [NewResourceSharingService] method instead.
 type ResourceSharingService struct {
 	Options    []option.RequestOption
-	Recipients *ResourceSharingRecipientService
-	Resources  *ResourceSharingResourceService
+	Recipients *RecipientService
+	Resources  *ResourceService
 }
 
 // NewResourceSharingService generates a new service that applies the given options
@@ -37,8 +37,8 @@ type ResourceSharingService struct {
 func NewResourceSharingService(opts ...option.RequestOption) (r *ResourceSharingService) {
 	r = &ResourceSharingService{}
 	r.Options = opts
-	r.Recipients = NewResourceSharingRecipientService(opts...)
-	r.Resources = NewResourceSharingResourceService(opts...)
+	r.Recipients = NewRecipientService(opts...)
+	r.Resources = NewResourceService(opts...)
 	return
 }
 
