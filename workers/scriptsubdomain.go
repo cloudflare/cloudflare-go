@@ -67,20 +67,16 @@ func (r *ScriptSubdomainService) Get(ctx context.Context, scriptName string, que
 
 type ScriptSubdomainNewResponse struct {
 	// Whether the Worker is available on the workers.dev subdomain.
-	Enabled bool `json:"enabled"`
-	// Whether the Worker's Preview URLs should be available on the workers.dev
-	// subdomain.
-	PreviewsEnabled bool                           `json:"previews_enabled"`
-	JSON            scriptSubdomainNewResponseJSON `json:"-"`
+	Enabled bool                           `json:"enabled"`
+	JSON    scriptSubdomainNewResponseJSON `json:"-"`
 }
 
 // scriptSubdomainNewResponseJSON contains the JSON metadata for the struct
 // [ScriptSubdomainNewResponse]
 type scriptSubdomainNewResponseJSON struct {
-	Enabled         apijson.Field
-	PreviewsEnabled apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *ScriptSubdomainNewResponse) UnmarshalJSON(data []byte) (err error) {
@@ -93,20 +89,16 @@ func (r scriptSubdomainNewResponseJSON) RawJSON() string {
 
 type ScriptSubdomainGetResponse struct {
 	// Whether the Worker is available on the workers.dev subdomain.
-	Enabled bool `json:"enabled"`
-	// Whether the Worker's Preview URLs should be available on the workers.dev
-	// subdomain.
-	PreviewsEnabled bool                           `json:"previews_enabled"`
-	JSON            scriptSubdomainGetResponseJSON `json:"-"`
+	Enabled bool                           `json:"enabled"`
+	JSON    scriptSubdomainGetResponseJSON `json:"-"`
 }
 
 // scriptSubdomainGetResponseJSON contains the JSON metadata for the struct
 // [ScriptSubdomainGetResponse]
 type scriptSubdomainGetResponseJSON struct {
-	Enabled         apijson.Field
-	PreviewsEnabled apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *ScriptSubdomainGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -121,10 +113,7 @@ type ScriptSubdomainNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Whether the Worker should be available on the workers.dev subdomain.
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// Whether the Worker's Preview URLs should be available on the workers.dev
-	// subdomain.
-	PreviewsEnabled param.Field[bool] `json:"previews_enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
 }
 
 func (r ScriptSubdomainNewParams) MarshalJSON() (data []byte, err error) {
