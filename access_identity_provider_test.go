@@ -185,6 +185,91 @@ func TestCreateAccessIdentityProvider(t *testing.T) {
 		assert.Equal(t, want, actual)
 	}
 }
+
+func TestCreateAccessIdentityProviderScimConfig(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+				"name": "Widget Corps SCIM",
+				"type": "github",
+				"config": {
+					"client_id": "example_id",
+					"client_secret": "a-secret-key",
+					"conditional_access_enabled": true
+				},
+				"scim_config": {
+					"enabled": true,
+					"user_deprovision": true,
+					"seat_deprovision": true,
+					"identity_update_behavior": "automatic",
+					"secret": "123123123"
+				}
+			}
+		}
+		`)
+	}
+
+	newIdentityProvider := CreateAccessIdentityProviderParams{
+		Name: "Widget Corps SCIM",
+		Type: "github",
+		Config: AccessIdentityProviderConfiguration{
+			ClientID:                 "example_id",
+			ClientSecret:             "a-secret-key",
+			ConditionalAccessEnabled: true,
+		},
+		ScimConfig: AccessIdentityProviderScimConfiguration{
+			Enabled:                true,
+			UserDeprovision:        true,
+			SeatDeprovision:        true,
+			IdentityUpdateBehavior: "automatic",
+		},
+	}
+
+	want := AccessIdentityProvider{
+		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		Name: "Widget Corps SCIM",
+		Type: "github",
+		Config: AccessIdentityProviderConfiguration{
+			ClientID:                 "example_id",
+			ClientSecret:             "a-secret-key",
+			ConditionalAccessEnabled: true,
+		},
+		ScimConfig: AccessIdentityProviderScimConfiguration{
+			Enabled:                true,
+			UserDeprovision:        true,
+			SeatDeprovision:        true,
+			GroupMemberDeprovision: false,
+			IdentityUpdateBehavior: "automatic",
+			Secret:                 "123123123",
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers", handler)
+
+	actual, err := client.CreateAccessIdentityProvider(context.Background(), testAccountRC, newIdentityProvider)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers", handler)
+
+	actual, err = client.CreateAccessIdentityProvider(context.Background(), testZoneRC, newIdentityProvider)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
 func TestUpdateAccessIdentityProvider(t *testing.T) {
 	setup()
 	defer teardown()
@@ -226,6 +311,88 @@ func TestUpdateAccessIdentityProvider(t *testing.T) {
 		Config: AccessIdentityProviderConfiguration{
 			ClientID:     "example_id",
 			ClientSecret: "a-secret-key",
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+
+	actual, err := client.UpdateAccessIdentityProvider(context.Background(), testAccountRC, updatedIdentityProvider)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/identity_providers/f174e90a-fafe-4643-bbbc-4a0ed4fc8415", handler)
+
+	actual, err = client.UpdateAccessIdentityProvider(context.Background(), testZoneRC, updatedIdentityProvider)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want, actual)
+	}
+}
+
+func TestUpdateAccessIdentityProviderScimConfig(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPut, r.Method, "Expected method 'PUT', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+				"name": "Widget Corps Scim",
+				"type": "github",
+				"config": {
+					"client_id": "example_id",
+					"client_secret": "a-secret-key"
+				},
+				"scim_config": {
+					"enabled": true,
+					"user_deprovision": false,
+					"seat_deprovision": false,
+					"group_member_deprovision": true,
+					"identity_update_behavior": "reauth"
+				}
+			}
+		}
+		`)
+	}
+
+	updatedIdentityProvider := UpdateAccessIdentityProviderParams{
+		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		Name: "Widget Corps Scim",
+		Type: "github",
+		Config: AccessIdentityProviderConfiguration{
+			ClientID:     "example_id",
+			ClientSecret: "a-secret-key",
+		},
+		ScimConfig: AccessIdentityProviderScimConfiguration{
+			Enabled:                true,
+			UserDeprovision:        false,
+			SeatDeprovision:        false,
+			GroupMemberDeprovision: true,
+			IdentityUpdateBehavior: "reauth",
+		},
+	}
+
+	want := AccessIdentityProvider{
+		ID:   "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		Name: "Widget Corps Scim",
+		Type: "github",
+		Config: AccessIdentityProviderConfiguration{
+			ClientID:     "example_id",
+			ClientSecret: "a-secret-key",
+		},
+		ScimConfig: AccessIdentityProviderScimConfiguration{
+			Enabled:                true,
+			UserDeprovision:        false,
+			SeatDeprovision:        false,
+			GroupMemberDeprovision: true,
+			IdentityUpdateBehavior: "reauth",
 		},
 	}
 
