@@ -31,14 +31,21 @@ func TestHTTPTimeseriesWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.HTTP.Timeseries(context.TODO(), radar.HTTPTimeseriesParams{
 		AggInterval:   cloudflare.F(radar.HTTPTimeseriesParamsAggInterval15m),
 		ASN:           cloudflare.F([]string{"string"}),
+		BotClass:      cloudflare.F([]radar.HTTPTimeseriesParamsBotClass{radar.HTTPTimeseriesParamsBotClassLikelyAutomated}),
 		Continent:     cloudflare.F([]string{"string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
+		DeviceType:    cloudflare.F([]radar.HTTPTimeseriesParamsDeviceType{radar.HTTPTimeseriesParamsDeviceTypeDesktop}),
 		Format:        cloudflare.F(radar.HTTPTimeseriesParamsFormatJson),
+		HTTPProtocol:  cloudflare.F([]radar.HTTPTimeseriesParamsHTTPProtocol{radar.HTTPTimeseriesParamsHTTPProtocolHTTP}),
+		HTTPVersion:   cloudflare.F([]radar.HTTPTimeseriesParamsHTTPVersion{radar.HTTPTimeseriesParamsHTTPVersionHttPv1}),
+		IPVersion:     cloudflare.F([]radar.HTTPTimeseriesParamsIPVersion{radar.HTTPTimeseriesParamsIPVersionIPv4}),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"string"}),
 		Normalization: cloudflare.F(radar.HTTPTimeseriesParamsNormalizationPercentageChange),
+		OS:            cloudflare.F([]radar.HTTPTimeseriesParamsOS{radar.HTTPTimeseriesParamsOSWindows}),
+		TLSVersion:    cloudflare.F([]radar.HTTPTimeseriesParamsTLSVersion{radar.HTTPTimeseriesParamsTLSVersionTlSv1_0}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
