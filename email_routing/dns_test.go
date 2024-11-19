@@ -29,6 +29,7 @@ func TestDNSNew(t *testing.T) {
 	)
 	_, err := client.EmailRouting.DNS.New(context.TODO(), email_routing.DNSNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:   cloudflare.F("example.net"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -79,6 +80,7 @@ func TestDNSEdit(t *testing.T) {
 	)
 	_, err := client.EmailRouting.DNS.Edit(context.TODO(), email_routing.DNSEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:   cloudflare.F("example.net"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -89,7 +91,7 @@ func TestDNSEdit(t *testing.T) {
 	}
 }
 
-func TestDNSGet(t *testing.T) {
+func TestDNSGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -103,7 +105,8 @@ func TestDNSGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailRouting.DNS.Get(context.TODO(), email_routing.DNSGetParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Subdomain: cloudflare.F("example.net"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

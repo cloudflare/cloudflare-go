@@ -95,15 +95,15 @@ func (r *EmailRoutingService) Get(ctx context.Context, query EmailRoutingGetPara
 
 type Settings struct {
 	// Email Routing settings identifier.
-	ID string `json:"id"`
+	ID string `json:"id,required"`
+	// State of the zone settings for Email Routing.
+	Enabled SettingsEnabled `json:"enabled,required"`
+	// Domain of your zone.
+	Name string `json:"name,required"`
 	// The date and time the settings have been created.
 	Created time.Time `json:"created" format:"date-time"`
-	// State of the zone settings for Email Routing.
-	Enabled SettingsEnabled `json:"enabled"`
 	// The date and time the settings have been modified.
 	Modified time.Time `json:"modified" format:"date-time"`
-	// Domain of your zone.
-	Name string `json:"name"`
 	// Flag to check if the user skipped the configuration wizard.
 	SkipWizard SettingsSkipWizard `json:"skip_wizard"`
 	// Show the state of your account, and the type or configuration error.
@@ -117,10 +117,10 @@ type Settings struct {
 // settingsJSON contains the JSON metadata for the struct [Settings]
 type settingsJSON struct {
 	ID          apijson.Field
-	Created     apijson.Field
 	Enabled     apijson.Field
-	Modified    apijson.Field
 	Name        apijson.Field
+	Created     apijson.Field
+	Modified    apijson.Field
 	SkipWizard  apijson.Field
 	Status      apijson.Field
 	Tag         apijson.Field
