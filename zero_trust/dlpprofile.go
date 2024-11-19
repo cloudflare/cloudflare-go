@@ -137,8 +137,8 @@ func (r ContextAwarenessParam) MarshalJSON() (data []byte, err error) {
 type Profile struct {
 	// The id of the profile (uuid)
 	ID string `json:"id,required" format:"uuid"`
-	// This field can have the runtime type of [[]ProfileCustomEntry],
-	// [[]ProfilePredefinedEntry], [[]ProfileIntegrationEntry].
+	// This field can have the runtime type of [[]ProfileCustomProfileEntry],
+	// [[]ProfilePredefinedProfileEntry], [[]ProfileIntegrationProfileEntry].
 	Entries interface{} `json:"entries,required"`
 	// The name of the profile
 	Name string      `json:"name,required"`
@@ -196,14 +196,14 @@ func (r *Profile) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [ProfileUnion] interface which you can cast to the specific
 // types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.ProfileCustom],
-// [zero_trust.ProfilePredefined], [zero_trust.ProfileIntegration].
+// Possible runtime types of the union are [zero_trust.ProfileCustomProfile],
+// [zero_trust.ProfilePredefinedProfile], [zero_trust.ProfileIntegrationProfile].
 func (r Profile) AsUnion() ProfileUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.ProfileCustom], [zero_trust.ProfilePredefined] or
-// [zero_trust.ProfileIntegration].
+// Union satisfied by [zero_trust.ProfileCustomProfile],
+// [zero_trust.ProfilePredefinedProfile] or [zero_trust.ProfileIntegrationProfile].
 type ProfileUnion interface {
 	implementsZeroTrustProfile()
 }
@@ -211,26 +211,23 @@ type ProfileUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*ProfileUnion)(nil)).Elem(),
-		"type",
+		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileCustom{}),
-			DiscriminatorValue: "custom",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfile{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfilePredefined{}),
-			DiscriminatorValue: "predefined",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfile{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileIntegration{}),
-			DiscriminatorValue: "integration",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfile{}),
 		},
 	)
 }
 
-type ProfileCustom struct {
+type ProfileCustomProfile struct {
 	// The id of the profile (uuid)
 	ID string `json:"id,required" format:"uuid"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
@@ -239,22 +236,23 @@ type ProfileCustom struct {
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness,required"`
 	// When the profile was created
-	CreatedAt time.Time            `json:"created_at,required" format:"date-time"`
-	Entries   []ProfileCustomEntry `json:"entries,required"`
+	CreatedAt time.Time                   `json:"created_at,required" format:"date-time"`
+	Entries   []ProfileCustomProfileEntry `json:"entries,required"`
 	// The name of the profile
-	Name       string            `json:"name,required"`
-	OCREnabled bool              `json:"ocr_enabled,required"`
-	Type       ProfileCustomType `json:"type,required"`
+	Name       string                   `json:"name,required"`
+	OCREnabled bool                     `json:"ocr_enabled,required"`
+	Type       ProfileCustomProfileType `json:"type,required"`
 	// When the profile was lasted updated
-	UpdatedAt           time.Time                        `json:"updated_at,required" format:"date-time"`
-	ConfidenceThreshold ProfileCustomConfidenceThreshold `json:"confidence_threshold"`
+	UpdatedAt           time.Time                               `json:"updated_at,required" format:"date-time"`
+	ConfidenceThreshold ProfileCustomProfileConfidenceThreshold `json:"confidence_threshold"`
 	// The description of the profile
-	Description string            `json:"description,nullable"`
-	JSON        profileCustomJSON `json:"-"`
+	Description string                   `json:"description,nullable"`
+	JSON        profileCustomProfileJSON `json:"-"`
 }
 
-// profileCustomJSON contains the JSON metadata for the struct [ProfileCustom]
-type profileCustomJSON struct {
+// profileCustomProfileJSON contains the JSON metadata for the struct
+// [ProfileCustomProfile]
+type profileCustomProfileJSON struct {
 	ID                  apijson.Field
 	AllowedMatchCount   apijson.Field
 	ContextAwareness    apijson.Field
@@ -270,23 +268,23 @@ type profileCustomJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ProfileCustom) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileCustomProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileCustomJSON) RawJSON() string {
+func (r profileCustomProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustom) implementsZeroTrustProfile() {}
+func (r ProfileCustomProfile) implementsZeroTrustProfile() {}
 
-type ProfileCustomEntry struct {
-	ID      string                   `json:"id,required" format:"uuid"`
-	Enabled bool                     `json:"enabled,required"`
-	Name    string                   `json:"name,required"`
-	Type    ProfileCustomEntriesType `json:"type,required"`
+type ProfileCustomProfileEntry struct {
+	ID      string                          `json:"id,required" format:"uuid"`
+	Enabled bool                            `json:"enabled,required"`
+	Name    string                          `json:"name,required"`
+	Type    ProfileCustomProfileEntriesType `json:"type,required"`
 	// This field can have the runtime type of
-	// [ProfileCustomEntriesPredefinedConfidence].
+	// [ProfileCustomProfileEntriesPredefinedEntryConfidence].
 	Confidence interface{} `json:"confidence"`
 	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
 	Pattern    Pattern     `json:"pattern"`
@@ -294,14 +292,14 @@ type ProfileCustomEntry struct {
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of [interface{}].
-	WordList interface{}            `json:"word_list"`
-	JSON     profileCustomEntryJSON `json:"-"`
-	union    ProfileCustomEntriesUnion
+	WordList interface{}                   `json:"word_list"`
+	JSON     profileCustomProfileEntryJSON `json:"-"`
+	union    ProfileCustomProfileEntriesUnion
 }
 
-// profileCustomEntryJSON contains the JSON metadata for the struct
-// [ProfileCustomEntry]
-type profileCustomEntryJSON struct {
+// profileCustomProfileEntryJSON contains the JSON metadata for the struct
+// [ProfileCustomProfileEntry]
+type profileCustomProfileEntryJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
@@ -317,12 +315,12 @@ type profileCustomEntryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r profileCustomEntryJSON) RawJSON() string {
+func (r profileCustomProfileEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *ProfileCustomEntry) UnmarshalJSON(data []byte) (err error) {
-	*r = ProfileCustomEntry{}
+func (r *ProfileCustomProfileEntry) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfileCustomProfileEntry{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -330,74 +328,70 @@ func (r *ProfileCustomEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [ProfileCustomEntriesUnion] interface which you can cast to
-// the specific types for more type safety.
+// AsUnion returns a [ProfileCustomProfileEntriesUnion] interface which you can
+// cast to the specific types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.ProfileCustomEntriesCustom],
-// [zero_trust.ProfileCustomEntriesPredefined],
-// [zero_trust.ProfileCustomEntriesIntegration],
-// [zero_trust.ProfileCustomEntriesExactData],
-// [zero_trust.ProfileCustomEntriesWordList].
-func (r ProfileCustomEntry) AsUnion() ProfileCustomEntriesUnion {
+// Possible runtime types of the union are
+// [zero_trust.ProfileCustomProfileEntriesCustomEntry],
+// [zero_trust.ProfileCustomProfileEntriesPredefinedEntry],
+// [zero_trust.ProfileCustomProfileEntriesIntegrationEntry],
+// [zero_trust.ProfileCustomProfileEntriesExactDataEntry],
+// [zero_trust.ProfileCustomProfileEntriesWordListEntry].
+func (r ProfileCustomProfileEntry) AsUnion() ProfileCustomProfileEntriesUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.ProfileCustomEntriesCustom],
-// [zero_trust.ProfileCustomEntriesPredefined],
-// [zero_trust.ProfileCustomEntriesIntegration],
-// [zero_trust.ProfileCustomEntriesExactData] or
-// [zero_trust.ProfileCustomEntriesWordList].
-type ProfileCustomEntriesUnion interface {
-	implementsZeroTrustProfileCustomEntry()
+// Union satisfied by [zero_trust.ProfileCustomProfileEntriesCustomEntry],
+// [zero_trust.ProfileCustomProfileEntriesPredefinedEntry],
+// [zero_trust.ProfileCustomProfileEntriesIntegrationEntry],
+// [zero_trust.ProfileCustomProfileEntriesExactDataEntry] or
+// [zero_trust.ProfileCustomProfileEntriesWordListEntry].
+type ProfileCustomProfileEntriesUnion interface {
+	implementsZeroTrustProfileCustomProfileEntry()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProfileCustomEntriesUnion)(nil)).Elem(),
-		"type",
+		reflect.TypeOf((*ProfileCustomProfileEntriesUnion)(nil)).Elem(),
+		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileCustomEntriesCustom{}),
-			DiscriminatorValue: "custom",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileEntriesCustomEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileCustomEntriesPredefined{}),
-			DiscriminatorValue: "predefined",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileEntriesPredefinedEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileCustomEntriesIntegration{}),
-			DiscriminatorValue: "integration",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileEntriesIntegrationEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileCustomEntriesExactData{}),
-			DiscriminatorValue: "exact_data",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileEntriesExactDataEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileCustomEntriesWordList{}),
-			DiscriminatorValue: "word_list",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileCustomProfileEntriesWordListEntry{}),
 		},
 	)
 }
 
-type ProfileCustomEntriesCustom struct {
-	ID        string                         `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                      `json:"created_at,required" format:"date-time"`
-	Enabled   bool                           `json:"enabled,required"`
-	Name      string                         `json:"name,required"`
-	Pattern   Pattern                        `json:"pattern,required"`
-	Type      ProfileCustomEntriesCustomType `json:"type,required"`
-	UpdatedAt time.Time                      `json:"updated_at,required" format:"date-time"`
-	ProfileID string                         `json:"profile_id,nullable" format:"uuid"`
-	JSON      profileCustomEntriesCustomJSON `json:"-"`
+type ProfileCustomProfileEntriesCustomEntry struct {
+	ID        string                                     `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                  `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                       `json:"enabled,required"`
+	Name      string                                     `json:"name,required"`
+	Pattern   Pattern                                    `json:"pattern,required"`
+	Type      ProfileCustomProfileEntriesCustomEntryType `json:"type,required"`
+	UpdatedAt time.Time                                  `json:"updated_at,required" format:"date-time"`
+	ProfileID string                                     `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileCustomProfileEntriesCustomEntryJSON `json:"-"`
 }
 
-// profileCustomEntriesCustomJSON contains the JSON metadata for the struct
-// [ProfileCustomEntriesCustom]
-type profileCustomEntriesCustomJSON struct {
+// profileCustomProfileEntriesCustomEntryJSON contains the JSON metadata for the
+// struct [ProfileCustomProfileEntriesCustomEntry]
+type profileCustomProfileEntriesCustomEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -410,43 +404,43 @@ type profileCustomEntriesCustomJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileCustomEntriesCustom) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileCustomProfileEntriesCustomEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileCustomEntriesCustomJSON) RawJSON() string {
+func (r profileCustomProfileEntriesCustomEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomEntriesCustom) implementsZeroTrustProfileCustomEntry() {}
+func (r ProfileCustomProfileEntriesCustomEntry) implementsZeroTrustProfileCustomProfileEntry() {}
 
-type ProfileCustomEntriesCustomType string
+type ProfileCustomProfileEntriesCustomEntryType string
 
 const (
-	ProfileCustomEntriesCustomTypeCustom ProfileCustomEntriesCustomType = "custom"
+	ProfileCustomProfileEntriesCustomEntryTypeCustom ProfileCustomProfileEntriesCustomEntryType = "custom"
 )
 
-func (r ProfileCustomEntriesCustomType) IsKnown() bool {
+func (r ProfileCustomProfileEntriesCustomEntryType) IsKnown() bool {
 	switch r {
-	case ProfileCustomEntriesCustomTypeCustom:
+	case ProfileCustomProfileEntriesCustomEntryTypeCustom:
 		return true
 	}
 	return false
 }
 
-type ProfileCustomEntriesPredefined struct {
-	ID         string                                   `json:"id,required" format:"uuid"`
-	Confidence ProfileCustomEntriesPredefinedConfidence `json:"confidence,required"`
-	Enabled    bool                                     `json:"enabled,required"`
-	Name       string                                   `json:"name,required"`
-	Type       ProfileCustomEntriesPredefinedType       `json:"type,required"`
-	ProfileID  string                                   `json:"profile_id,nullable" format:"uuid"`
-	JSON       profileCustomEntriesPredefinedJSON       `json:"-"`
+type ProfileCustomProfileEntriesPredefinedEntry struct {
+	ID         string                                               `json:"id,required" format:"uuid"`
+	Confidence ProfileCustomProfileEntriesPredefinedEntryConfidence `json:"confidence,required"`
+	Enabled    bool                                                 `json:"enabled,required"`
+	Name       string                                               `json:"name,required"`
+	Type       ProfileCustomProfileEntriesPredefinedEntryType       `json:"type,required"`
+	ProfileID  string                                               `json:"profile_id,nullable" format:"uuid"`
+	JSON       profileCustomProfileEntriesPredefinedEntryJSON       `json:"-"`
 }
 
-// profileCustomEntriesPredefinedJSON contains the JSON metadata for the struct
-// [ProfileCustomEntriesPredefined]
-type profileCustomEntriesPredefinedJSON struct {
+// profileCustomProfileEntriesPredefinedEntryJSON contains the JSON metadata for
+// the struct [ProfileCustomProfileEntriesPredefinedEntry]
+type profileCustomProfileEntriesPredefinedEntryJSON struct {
 	ID          apijson.Field
 	Confidence  apijson.Field
 	Enabled     apijson.Field
@@ -457,68 +451,68 @@ type profileCustomEntriesPredefinedJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileCustomEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileCustomProfileEntriesPredefinedEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileCustomEntriesPredefinedJSON) RawJSON() string {
+func (r profileCustomProfileEntriesPredefinedEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomEntriesPredefined) implementsZeroTrustProfileCustomEntry() {}
+func (r ProfileCustomProfileEntriesPredefinedEntry) implementsZeroTrustProfileCustomProfileEntry() {}
 
-type ProfileCustomEntriesPredefinedConfidence struct {
+type ProfileCustomProfileEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry can be made more or less sensitive by setting a
 	// confidence threshold. Profiles that use an entry with `available` set to true
 	// can use confidence thresholds
-	Available bool                                         `json:"available,required"`
-	JSON      profileCustomEntriesPredefinedConfidenceJSON `json:"-"`
+	Available bool                                                     `json:"available,required"`
+	JSON      profileCustomProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
 
-// profileCustomEntriesPredefinedConfidenceJSON contains the JSON metadata for the
-// struct [ProfileCustomEntriesPredefinedConfidence]
-type profileCustomEntriesPredefinedConfidenceJSON struct {
+// profileCustomProfileEntriesPredefinedEntryConfidenceJSON contains the JSON
+// metadata for the struct [ProfileCustomProfileEntriesPredefinedEntryConfidence]
+type profileCustomProfileEntriesPredefinedEntryConfidenceJSON struct {
 	Available   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileCustomEntriesPredefinedConfidence) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileCustomProfileEntriesPredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileCustomEntriesPredefinedConfidenceJSON) RawJSON() string {
+func (r profileCustomProfileEntriesPredefinedEntryConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
-type ProfileCustomEntriesPredefinedType string
+type ProfileCustomProfileEntriesPredefinedEntryType string
 
 const (
-	ProfileCustomEntriesPredefinedTypePredefined ProfileCustomEntriesPredefinedType = "predefined"
+	ProfileCustomProfileEntriesPredefinedEntryTypePredefined ProfileCustomProfileEntriesPredefinedEntryType = "predefined"
 )
 
-func (r ProfileCustomEntriesPredefinedType) IsKnown() bool {
+func (r ProfileCustomProfileEntriesPredefinedEntryType) IsKnown() bool {
 	switch r {
-	case ProfileCustomEntriesPredefinedTypePredefined:
+	case ProfileCustomProfileEntriesPredefinedEntryTypePredefined:
 		return true
 	}
 	return false
 }
 
-type ProfileCustomEntriesIntegration struct {
-	ID        string                              `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                           `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                `json:"enabled,required"`
-	Name      string                              `json:"name,required"`
-	Type      ProfileCustomEntriesIntegrationType `json:"type,required"`
-	UpdatedAt time.Time                           `json:"updated_at,required" format:"date-time"`
-	ProfileID string                              `json:"profile_id,nullable" format:"uuid"`
-	JSON      profileCustomEntriesIntegrationJSON `json:"-"`
+type ProfileCustomProfileEntriesIntegrationEntry struct {
+	ID        string                                          `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                       `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                            `json:"enabled,required"`
+	Name      string                                          `json:"name,required"`
+	Type      ProfileCustomProfileEntriesIntegrationEntryType `json:"type,required"`
+	UpdatedAt time.Time                                       `json:"updated_at,required" format:"date-time"`
+	ProfileID string                                          `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileCustomProfileEntriesIntegrationEntryJSON `json:"-"`
 }
 
-// profileCustomEntriesIntegrationJSON contains the JSON metadata for the struct
-// [ProfileCustomEntriesIntegration]
-type profileCustomEntriesIntegrationJSON struct {
+// profileCustomProfileEntriesIntegrationEntryJSON contains the JSON metadata for
+// the struct [ProfileCustomProfileEntriesIntegrationEntry]
+type profileCustomProfileEntriesIntegrationEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -530,44 +524,44 @@ type profileCustomEntriesIntegrationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileCustomEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileCustomProfileEntriesIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileCustomEntriesIntegrationJSON) RawJSON() string {
+func (r profileCustomProfileEntriesIntegrationEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomEntriesIntegration) implementsZeroTrustProfileCustomEntry() {}
+func (r ProfileCustomProfileEntriesIntegrationEntry) implementsZeroTrustProfileCustomProfileEntry() {}
 
-type ProfileCustomEntriesIntegrationType string
+type ProfileCustomProfileEntriesIntegrationEntryType string
 
 const (
-	ProfileCustomEntriesIntegrationTypeIntegration ProfileCustomEntriesIntegrationType = "integration"
+	ProfileCustomProfileEntriesIntegrationEntryTypeIntegration ProfileCustomProfileEntriesIntegrationEntryType = "integration"
 )
 
-func (r ProfileCustomEntriesIntegrationType) IsKnown() bool {
+func (r ProfileCustomProfileEntriesIntegrationEntryType) IsKnown() bool {
 	switch r {
-	case ProfileCustomEntriesIntegrationTypeIntegration:
+	case ProfileCustomProfileEntriesIntegrationEntryTypeIntegration:
 		return true
 	}
 	return false
 }
 
-type ProfileCustomEntriesExactData struct {
-	ID        string                            `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                         `json:"created_at,required" format:"date-time"`
-	Enabled   bool                              `json:"enabled,required"`
-	Name      string                            `json:"name,required"`
-	Secret    bool                              `json:"secret,required"`
-	Type      ProfileCustomEntriesExactDataType `json:"type,required"`
-	UpdatedAt time.Time                         `json:"updated_at,required" format:"date-time"`
-	JSON      profileCustomEntriesExactDataJSON `json:"-"`
+type ProfileCustomProfileEntriesExactDataEntry struct {
+	ID        string                                        `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                     `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                          `json:"enabled,required"`
+	Name      string                                        `json:"name,required"`
+	Secret    bool                                          `json:"secret,required"`
+	Type      ProfileCustomProfileEntriesExactDataEntryType `json:"type,required"`
+	UpdatedAt time.Time                                     `json:"updated_at,required" format:"date-time"`
+	JSON      profileCustomProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
-// profileCustomEntriesExactDataJSON contains the JSON metadata for the struct
-// [ProfileCustomEntriesExactData]
-type profileCustomEntriesExactDataJSON struct {
+// profileCustomProfileEntriesExactDataEntryJSON contains the JSON metadata for the
+// struct [ProfileCustomProfileEntriesExactDataEntry]
+type profileCustomProfileEntriesExactDataEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -579,45 +573,45 @@ type profileCustomEntriesExactDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileCustomEntriesExactData) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileCustomProfileEntriesExactDataEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileCustomEntriesExactDataJSON) RawJSON() string {
+func (r profileCustomProfileEntriesExactDataEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomEntriesExactData) implementsZeroTrustProfileCustomEntry() {}
+func (r ProfileCustomProfileEntriesExactDataEntry) implementsZeroTrustProfileCustomProfileEntry() {}
 
-type ProfileCustomEntriesExactDataType string
+type ProfileCustomProfileEntriesExactDataEntryType string
 
 const (
-	ProfileCustomEntriesExactDataTypeExactData ProfileCustomEntriesExactDataType = "exact_data"
+	ProfileCustomProfileEntriesExactDataEntryTypeExactData ProfileCustomProfileEntriesExactDataEntryType = "exact_data"
 )
 
-func (r ProfileCustomEntriesExactDataType) IsKnown() bool {
+func (r ProfileCustomProfileEntriesExactDataEntryType) IsKnown() bool {
 	switch r {
-	case ProfileCustomEntriesExactDataTypeExactData:
+	case ProfileCustomProfileEntriesExactDataEntryTypeExactData:
 		return true
 	}
 	return false
 }
 
-type ProfileCustomEntriesWordList struct {
-	ID        string                           `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                        `json:"created_at,required" format:"date-time"`
-	Enabled   bool                             `json:"enabled,required"`
-	Name      string                           `json:"name,required"`
-	Type      ProfileCustomEntriesWordListType `json:"type,required"`
-	UpdatedAt time.Time                        `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                      `json:"word_list,required"`
-	ProfileID string                           `json:"profile_id,nullable" format:"uuid"`
-	JSON      profileCustomEntriesWordListJSON `json:"-"`
+type ProfileCustomProfileEntriesWordListEntry struct {
+	ID        string                                       `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                    `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                         `json:"enabled,required"`
+	Name      string                                       `json:"name,required"`
+	Type      ProfileCustomProfileEntriesWordListEntryType `json:"type,required"`
+	UpdatedAt time.Time                                    `json:"updated_at,required" format:"date-time"`
+	WordList  interface{}                                  `json:"word_list,required"`
+	ProfileID string                                       `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileCustomProfileEntriesWordListEntryJSON `json:"-"`
 }
 
-// profileCustomEntriesWordListJSON contains the JSON metadata for the struct
-// [ProfileCustomEntriesWordList]
-type profileCustomEntriesWordListJSON struct {
+// profileCustomProfileEntriesWordListEntryJSON contains the JSON metadata for the
+// struct [ProfileCustomProfileEntriesWordListEntry]
+type profileCustomProfileEntriesWordListEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -630,100 +624,100 @@ type profileCustomEntriesWordListJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileCustomEntriesWordList) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileCustomProfileEntriesWordListEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileCustomEntriesWordListJSON) RawJSON() string {
+func (r profileCustomProfileEntriesWordListEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileCustomEntriesWordList) implementsZeroTrustProfileCustomEntry() {}
+func (r ProfileCustomProfileEntriesWordListEntry) implementsZeroTrustProfileCustomProfileEntry() {}
 
-type ProfileCustomEntriesWordListType string
+type ProfileCustomProfileEntriesWordListEntryType string
 
 const (
-	ProfileCustomEntriesWordListTypeWordList ProfileCustomEntriesWordListType = "word_list"
+	ProfileCustomProfileEntriesWordListEntryTypeWordList ProfileCustomProfileEntriesWordListEntryType = "word_list"
 )
 
-func (r ProfileCustomEntriesWordListType) IsKnown() bool {
+func (r ProfileCustomProfileEntriesWordListEntryType) IsKnown() bool {
 	switch r {
-	case ProfileCustomEntriesWordListTypeWordList:
+	case ProfileCustomProfileEntriesWordListEntryTypeWordList:
 		return true
 	}
 	return false
 }
 
-type ProfileCustomEntriesType string
+type ProfileCustomProfileEntriesType string
 
 const (
-	ProfileCustomEntriesTypeCustom      ProfileCustomEntriesType = "custom"
-	ProfileCustomEntriesTypePredefined  ProfileCustomEntriesType = "predefined"
-	ProfileCustomEntriesTypeIntegration ProfileCustomEntriesType = "integration"
-	ProfileCustomEntriesTypeExactData   ProfileCustomEntriesType = "exact_data"
-	ProfileCustomEntriesTypeWordList    ProfileCustomEntriesType = "word_list"
+	ProfileCustomProfileEntriesTypeCustom      ProfileCustomProfileEntriesType = "custom"
+	ProfileCustomProfileEntriesTypePredefined  ProfileCustomProfileEntriesType = "predefined"
+	ProfileCustomProfileEntriesTypeIntegration ProfileCustomProfileEntriesType = "integration"
+	ProfileCustomProfileEntriesTypeExactData   ProfileCustomProfileEntriesType = "exact_data"
+	ProfileCustomProfileEntriesTypeWordList    ProfileCustomProfileEntriesType = "word_list"
 )
 
-func (r ProfileCustomEntriesType) IsKnown() bool {
+func (r ProfileCustomProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfileCustomEntriesTypeCustom, ProfileCustomEntriesTypePredefined, ProfileCustomEntriesTypeIntegration, ProfileCustomEntriesTypeExactData, ProfileCustomEntriesTypeWordList:
+	case ProfileCustomProfileEntriesTypeCustom, ProfileCustomProfileEntriesTypePredefined, ProfileCustomProfileEntriesTypeIntegration, ProfileCustomProfileEntriesTypeExactData, ProfileCustomProfileEntriesTypeWordList:
 		return true
 	}
 	return false
 }
 
-type ProfileCustomType string
+type ProfileCustomProfileType string
 
 const (
-	ProfileCustomTypeCustom ProfileCustomType = "custom"
+	ProfileCustomProfileTypeCustom ProfileCustomProfileType = "custom"
 )
 
-func (r ProfileCustomType) IsKnown() bool {
+func (r ProfileCustomProfileType) IsKnown() bool {
 	switch r {
-	case ProfileCustomTypeCustom:
+	case ProfileCustomProfileTypeCustom:
 		return true
 	}
 	return false
 }
 
-type ProfileCustomConfidenceThreshold string
+type ProfileCustomProfileConfidenceThreshold string
 
 const (
-	ProfileCustomConfidenceThresholdLow      ProfileCustomConfidenceThreshold = "low"
-	ProfileCustomConfidenceThresholdMedium   ProfileCustomConfidenceThreshold = "medium"
-	ProfileCustomConfidenceThresholdHigh     ProfileCustomConfidenceThreshold = "high"
-	ProfileCustomConfidenceThresholdVeryHigh ProfileCustomConfidenceThreshold = "very_high"
+	ProfileCustomProfileConfidenceThresholdLow      ProfileCustomProfileConfidenceThreshold = "low"
+	ProfileCustomProfileConfidenceThresholdMedium   ProfileCustomProfileConfidenceThreshold = "medium"
+	ProfileCustomProfileConfidenceThresholdHigh     ProfileCustomProfileConfidenceThreshold = "high"
+	ProfileCustomProfileConfidenceThresholdVeryHigh ProfileCustomProfileConfidenceThreshold = "very_high"
 )
 
-func (r ProfileCustomConfidenceThreshold) IsKnown() bool {
+func (r ProfileCustomProfileConfidenceThreshold) IsKnown() bool {
 	switch r {
-	case ProfileCustomConfidenceThresholdLow, ProfileCustomConfidenceThresholdMedium, ProfileCustomConfidenceThresholdHigh, ProfileCustomConfidenceThresholdVeryHigh:
+	case ProfileCustomProfileConfidenceThresholdLow, ProfileCustomProfileConfidenceThresholdMedium, ProfileCustomProfileConfidenceThresholdHigh, ProfileCustomProfileConfidenceThresholdVeryHigh:
 		return true
 	}
 	return false
 }
 
-type ProfilePredefined struct {
+type ProfilePredefinedProfile struct {
 	// The id of the predefined profile (uuid)
-	ID                string                   `json:"id,required" format:"uuid"`
-	AllowedMatchCount int64                    `json:"allowed_match_count,required"`
-	Entries           []ProfilePredefinedEntry `json:"entries,required"`
+	ID                string                          `json:"id,required" format:"uuid"`
+	AllowedMatchCount int64                           `json:"allowed_match_count,required"`
+	Entries           []ProfilePredefinedProfileEntry `json:"entries,required"`
 	// The name of the predefined profile
-	Name                string                               `json:"name,required"`
-	Type                ProfilePredefinedType                `json:"type,required"`
-	ConfidenceThreshold ProfilePredefinedConfidenceThreshold `json:"confidence_threshold"`
+	Name                string                                      `json:"name,required"`
+	Type                ProfilePredefinedProfileType                `json:"type,required"`
+	ConfidenceThreshold ProfilePredefinedProfileConfidenceThreshold `json:"confidence_threshold"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
 	ContextAwareness ContextAwareness `json:"context_awareness"`
 	OCREnabled       bool             `json:"ocr_enabled"`
 	// Whether this profile can be accessed by anyone
-	OpenAccess bool                  `json:"open_access"`
-	JSON       profilePredefinedJSON `json:"-"`
+	OpenAccess bool                         `json:"open_access"`
+	JSON       profilePredefinedProfileJSON `json:"-"`
 }
 
-// profilePredefinedJSON contains the JSON metadata for the struct
-// [ProfilePredefined]
-type profilePredefinedJSON struct {
+// profilePredefinedProfileJSON contains the JSON metadata for the struct
+// [ProfilePredefinedProfile]
+type profilePredefinedProfileJSON struct {
 	ID                  apijson.Field
 	AllowedMatchCount   apijson.Field
 	Entries             apijson.Field
@@ -737,23 +731,23 @@ type profilePredefinedJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ProfilePredefined) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfilePredefinedProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profilePredefinedJSON) RawJSON() string {
+func (r profilePredefinedProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefined) implementsZeroTrustProfile() {}
+func (r ProfilePredefinedProfile) implementsZeroTrustProfile() {}
 
-type ProfilePredefinedEntry struct {
-	ID      string                       `json:"id,required" format:"uuid"`
-	Enabled bool                         `json:"enabled,required"`
-	Name    string                       `json:"name,required"`
-	Type    ProfilePredefinedEntriesType `json:"type,required"`
+type ProfilePredefinedProfileEntry struct {
+	ID      string                              `json:"id,required" format:"uuid"`
+	Enabled bool                                `json:"enabled,required"`
+	Name    string                              `json:"name,required"`
+	Type    ProfilePredefinedProfileEntriesType `json:"type,required"`
 	// This field can have the runtime type of
-	// [ProfilePredefinedEntriesPredefinedConfidence].
+	// [ProfilePredefinedProfileEntriesPredefinedEntryConfidence].
 	Confidence interface{} `json:"confidence"`
 	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
 	Pattern    Pattern     `json:"pattern"`
@@ -761,14 +755,14 @@ type ProfilePredefinedEntry struct {
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of [interface{}].
-	WordList interface{}                `json:"word_list"`
-	JSON     profilePredefinedEntryJSON `json:"-"`
-	union    ProfilePredefinedEntriesUnion
+	WordList interface{}                       `json:"word_list"`
+	JSON     profilePredefinedProfileEntryJSON `json:"-"`
+	union    ProfilePredefinedProfileEntriesUnion
 }
 
-// profilePredefinedEntryJSON contains the JSON metadata for the struct
-// [ProfilePredefinedEntry]
-type profilePredefinedEntryJSON struct {
+// profilePredefinedProfileEntryJSON contains the JSON metadata for the struct
+// [ProfilePredefinedProfileEntry]
+type profilePredefinedProfileEntryJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
@@ -784,12 +778,12 @@ type profilePredefinedEntryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r profilePredefinedEntryJSON) RawJSON() string {
+func (r profilePredefinedProfileEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *ProfilePredefinedEntry) UnmarshalJSON(data []byte) (err error) {
-	*r = ProfilePredefinedEntry{}
+func (r *ProfilePredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfilePredefinedProfileEntry{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -797,75 +791,70 @@ func (r *ProfilePredefinedEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [ProfilePredefinedEntriesUnion] interface which you can cast
-// to the specific types for more type safety.
+// AsUnion returns a [ProfilePredefinedProfileEntriesUnion] interface which you can
+// cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.ProfilePredefinedEntriesCustom],
-// [zero_trust.ProfilePredefinedEntriesPredefined],
-// [zero_trust.ProfilePredefinedEntriesIntegration],
-// [zero_trust.ProfilePredefinedEntriesExactData],
-// [zero_trust.ProfilePredefinedEntriesWordList].
-func (r ProfilePredefinedEntry) AsUnion() ProfilePredefinedEntriesUnion {
+// [zero_trust.ProfilePredefinedProfileEntriesCustomEntry],
+// [zero_trust.ProfilePredefinedProfileEntriesPredefinedEntry],
+// [zero_trust.ProfilePredefinedProfileEntriesIntegrationEntry],
+// [zero_trust.ProfilePredefinedProfileEntriesExactDataEntry],
+// [zero_trust.ProfilePredefinedProfileEntriesWordListEntry].
+func (r ProfilePredefinedProfileEntry) AsUnion() ProfilePredefinedProfileEntriesUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.ProfilePredefinedEntriesCustom],
-// [zero_trust.ProfilePredefinedEntriesPredefined],
-// [zero_trust.ProfilePredefinedEntriesIntegration],
-// [zero_trust.ProfilePredefinedEntriesExactData] or
-// [zero_trust.ProfilePredefinedEntriesWordList].
-type ProfilePredefinedEntriesUnion interface {
-	implementsZeroTrustProfilePredefinedEntry()
+// Union satisfied by [zero_trust.ProfilePredefinedProfileEntriesCustomEntry],
+// [zero_trust.ProfilePredefinedProfileEntriesPredefinedEntry],
+// [zero_trust.ProfilePredefinedProfileEntriesIntegrationEntry],
+// [zero_trust.ProfilePredefinedProfileEntriesExactDataEntry] or
+// [zero_trust.ProfilePredefinedProfileEntriesWordListEntry].
+type ProfilePredefinedProfileEntriesUnion interface {
+	implementsZeroTrustProfilePredefinedProfileEntry()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProfilePredefinedEntriesUnion)(nil)).Elem(),
-		"type",
+		reflect.TypeOf((*ProfilePredefinedProfileEntriesUnion)(nil)).Elem(),
+		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfilePredefinedEntriesCustom{}),
-			DiscriminatorValue: "custom",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesCustomEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfilePredefinedEntriesPredefined{}),
-			DiscriminatorValue: "predefined",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesPredefinedEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfilePredefinedEntriesIntegration{}),
-			DiscriminatorValue: "integration",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesIntegrationEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfilePredefinedEntriesExactData{}),
-			DiscriminatorValue: "exact_data",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesExactDataEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfilePredefinedEntriesWordList{}),
-			DiscriminatorValue: "word_list",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfilePredefinedProfileEntriesWordListEntry{}),
 		},
 	)
 }
 
-type ProfilePredefinedEntriesCustom struct {
-	ID        string                             `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                          `json:"created_at,required" format:"date-time"`
-	Enabled   bool                               `json:"enabled,required"`
-	Name      string                             `json:"name,required"`
-	Pattern   Pattern                            `json:"pattern,required"`
-	Type      ProfilePredefinedEntriesCustomType `json:"type,required"`
-	UpdatedAt time.Time                          `json:"updated_at,required" format:"date-time"`
-	ProfileID string                             `json:"profile_id,nullable" format:"uuid"`
-	JSON      profilePredefinedEntriesCustomJSON `json:"-"`
+type ProfilePredefinedProfileEntriesCustomEntry struct {
+	ID        string                                         `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                      `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                           `json:"enabled,required"`
+	Name      string                                         `json:"name,required"`
+	Pattern   Pattern                                        `json:"pattern,required"`
+	Type      ProfilePredefinedProfileEntriesCustomEntryType `json:"type,required"`
+	UpdatedAt time.Time                                      `json:"updated_at,required" format:"date-time"`
+	ProfileID string                                         `json:"profile_id,nullable" format:"uuid"`
+	JSON      profilePredefinedProfileEntriesCustomEntryJSON `json:"-"`
 }
 
-// profilePredefinedEntriesCustomJSON contains the JSON metadata for the struct
-// [ProfilePredefinedEntriesCustom]
-type profilePredefinedEntriesCustomJSON struct {
+// profilePredefinedProfileEntriesCustomEntryJSON contains the JSON metadata for
+// the struct [ProfilePredefinedProfileEntriesCustomEntry]
+type profilePredefinedProfileEntriesCustomEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -878,43 +867,44 @@ type profilePredefinedEntriesCustomJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfilePredefinedEntriesCustom) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfilePredefinedProfileEntriesCustomEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profilePredefinedEntriesCustomJSON) RawJSON() string {
+func (r profilePredefinedProfileEntriesCustomEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedEntriesCustom) implementsZeroTrustProfilePredefinedEntry() {}
+func (r ProfilePredefinedProfileEntriesCustomEntry) implementsZeroTrustProfilePredefinedProfileEntry() {
+}
 
-type ProfilePredefinedEntriesCustomType string
+type ProfilePredefinedProfileEntriesCustomEntryType string
 
 const (
-	ProfilePredefinedEntriesCustomTypeCustom ProfilePredefinedEntriesCustomType = "custom"
+	ProfilePredefinedProfileEntriesCustomEntryTypeCustom ProfilePredefinedProfileEntriesCustomEntryType = "custom"
 )
 
-func (r ProfilePredefinedEntriesCustomType) IsKnown() bool {
+func (r ProfilePredefinedProfileEntriesCustomEntryType) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedEntriesCustomTypeCustom:
+	case ProfilePredefinedProfileEntriesCustomEntryTypeCustom:
 		return true
 	}
 	return false
 }
 
-type ProfilePredefinedEntriesPredefined struct {
-	ID         string                                       `json:"id,required" format:"uuid"`
-	Confidence ProfilePredefinedEntriesPredefinedConfidence `json:"confidence,required"`
-	Enabled    bool                                         `json:"enabled,required"`
-	Name       string                                       `json:"name,required"`
-	Type       ProfilePredefinedEntriesPredefinedType       `json:"type,required"`
-	ProfileID  string                                       `json:"profile_id,nullable" format:"uuid"`
-	JSON       profilePredefinedEntriesPredefinedJSON       `json:"-"`
+type ProfilePredefinedProfileEntriesPredefinedEntry struct {
+	ID         string                                                   `json:"id,required" format:"uuid"`
+	Confidence ProfilePredefinedProfileEntriesPredefinedEntryConfidence `json:"confidence,required"`
+	Enabled    bool                                                     `json:"enabled,required"`
+	Name       string                                                   `json:"name,required"`
+	Type       ProfilePredefinedProfileEntriesPredefinedEntryType       `json:"type,required"`
+	ProfileID  string                                                   `json:"profile_id,nullable" format:"uuid"`
+	JSON       profilePredefinedProfileEntriesPredefinedEntryJSON       `json:"-"`
 }
 
-// profilePredefinedEntriesPredefinedJSON contains the JSON metadata for the struct
-// [ProfilePredefinedEntriesPredefined]
-type profilePredefinedEntriesPredefinedJSON struct {
+// profilePredefinedProfileEntriesPredefinedEntryJSON contains the JSON metadata
+// for the struct [ProfilePredefinedProfileEntriesPredefinedEntry]
+type profilePredefinedProfileEntriesPredefinedEntryJSON struct {
 	ID          apijson.Field
 	Confidence  apijson.Field
 	Enabled     apijson.Field
@@ -925,68 +915,70 @@ type profilePredefinedEntriesPredefinedJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfilePredefinedEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfilePredefinedProfileEntriesPredefinedEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profilePredefinedEntriesPredefinedJSON) RawJSON() string {
+func (r profilePredefinedProfileEntriesPredefinedEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedEntriesPredefined) implementsZeroTrustProfilePredefinedEntry() {}
+func (r ProfilePredefinedProfileEntriesPredefinedEntry) implementsZeroTrustProfilePredefinedProfileEntry() {
+}
 
-type ProfilePredefinedEntriesPredefinedConfidence struct {
+type ProfilePredefinedProfileEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry can be made more or less sensitive by setting a
 	// confidence threshold. Profiles that use an entry with `available` set to true
 	// can use confidence thresholds
-	Available bool                                             `json:"available,required"`
-	JSON      profilePredefinedEntriesPredefinedConfidenceJSON `json:"-"`
+	Available bool                                                         `json:"available,required"`
+	JSON      profilePredefinedProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
 
-// profilePredefinedEntriesPredefinedConfidenceJSON contains the JSON metadata for
-// the struct [ProfilePredefinedEntriesPredefinedConfidence]
-type profilePredefinedEntriesPredefinedConfidenceJSON struct {
+// profilePredefinedProfileEntriesPredefinedEntryConfidenceJSON contains the JSON
+// metadata for the struct
+// [ProfilePredefinedProfileEntriesPredefinedEntryConfidence]
+type profilePredefinedProfileEntriesPredefinedEntryConfidenceJSON struct {
 	Available   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfilePredefinedEntriesPredefinedConfidence) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfilePredefinedProfileEntriesPredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profilePredefinedEntriesPredefinedConfidenceJSON) RawJSON() string {
+func (r profilePredefinedProfileEntriesPredefinedEntryConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
-type ProfilePredefinedEntriesPredefinedType string
+type ProfilePredefinedProfileEntriesPredefinedEntryType string
 
 const (
-	ProfilePredefinedEntriesPredefinedTypePredefined ProfilePredefinedEntriesPredefinedType = "predefined"
+	ProfilePredefinedProfileEntriesPredefinedEntryTypePredefined ProfilePredefinedProfileEntriesPredefinedEntryType = "predefined"
 )
 
-func (r ProfilePredefinedEntriesPredefinedType) IsKnown() bool {
+func (r ProfilePredefinedProfileEntriesPredefinedEntryType) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedEntriesPredefinedTypePredefined:
+	case ProfilePredefinedProfileEntriesPredefinedEntryTypePredefined:
 		return true
 	}
 	return false
 }
 
-type ProfilePredefinedEntriesIntegration struct {
-	ID        string                                  `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                               `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                    `json:"enabled,required"`
-	Name      string                                  `json:"name,required"`
-	Type      ProfilePredefinedEntriesIntegrationType `json:"type,required"`
-	UpdatedAt time.Time                               `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                  `json:"profile_id,nullable" format:"uuid"`
-	JSON      profilePredefinedEntriesIntegrationJSON `json:"-"`
+type ProfilePredefinedProfileEntriesIntegrationEntry struct {
+	ID        string                                              `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                           `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                                `json:"enabled,required"`
+	Name      string                                              `json:"name,required"`
+	Type      ProfilePredefinedProfileEntriesIntegrationEntryType `json:"type,required"`
+	UpdatedAt time.Time                                           `json:"updated_at,required" format:"date-time"`
+	ProfileID string                                              `json:"profile_id,nullable" format:"uuid"`
+	JSON      profilePredefinedProfileEntriesIntegrationEntryJSON `json:"-"`
 }
 
-// profilePredefinedEntriesIntegrationJSON contains the JSON metadata for the
-// struct [ProfilePredefinedEntriesIntegration]
-type profilePredefinedEntriesIntegrationJSON struct {
+// profilePredefinedProfileEntriesIntegrationEntryJSON contains the JSON metadata
+// for the struct [ProfilePredefinedProfileEntriesIntegrationEntry]
+type profilePredefinedProfileEntriesIntegrationEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -998,44 +990,45 @@ type profilePredefinedEntriesIntegrationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfilePredefinedEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfilePredefinedProfileEntriesIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profilePredefinedEntriesIntegrationJSON) RawJSON() string {
+func (r profilePredefinedProfileEntriesIntegrationEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedEntriesIntegration) implementsZeroTrustProfilePredefinedEntry() {}
+func (r ProfilePredefinedProfileEntriesIntegrationEntry) implementsZeroTrustProfilePredefinedProfileEntry() {
+}
 
-type ProfilePredefinedEntriesIntegrationType string
+type ProfilePredefinedProfileEntriesIntegrationEntryType string
 
 const (
-	ProfilePredefinedEntriesIntegrationTypeIntegration ProfilePredefinedEntriesIntegrationType = "integration"
+	ProfilePredefinedProfileEntriesIntegrationEntryTypeIntegration ProfilePredefinedProfileEntriesIntegrationEntryType = "integration"
 )
 
-func (r ProfilePredefinedEntriesIntegrationType) IsKnown() bool {
+func (r ProfilePredefinedProfileEntriesIntegrationEntryType) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedEntriesIntegrationTypeIntegration:
+	case ProfilePredefinedProfileEntriesIntegrationEntryTypeIntegration:
 		return true
 	}
 	return false
 }
 
-type ProfilePredefinedEntriesExactData struct {
-	ID        string                                `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                             `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                  `json:"enabled,required"`
-	Name      string                                `json:"name,required"`
-	Secret    bool                                  `json:"secret,required"`
-	Type      ProfilePredefinedEntriesExactDataType `json:"type,required"`
-	UpdatedAt time.Time                             `json:"updated_at,required" format:"date-time"`
-	JSON      profilePredefinedEntriesExactDataJSON `json:"-"`
+type ProfilePredefinedProfileEntriesExactDataEntry struct {
+	ID        string                                            `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                         `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                              `json:"enabled,required"`
+	Name      string                                            `json:"name,required"`
+	Secret    bool                                              `json:"secret,required"`
+	Type      ProfilePredefinedProfileEntriesExactDataEntryType `json:"type,required"`
+	UpdatedAt time.Time                                         `json:"updated_at,required" format:"date-time"`
+	JSON      profilePredefinedProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
-// profilePredefinedEntriesExactDataJSON contains the JSON metadata for the struct
-// [ProfilePredefinedEntriesExactData]
-type profilePredefinedEntriesExactDataJSON struct {
+// profilePredefinedProfileEntriesExactDataEntryJSON contains the JSON metadata for
+// the struct [ProfilePredefinedProfileEntriesExactDataEntry]
+type profilePredefinedProfileEntriesExactDataEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -1047,45 +1040,46 @@ type profilePredefinedEntriesExactDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfilePredefinedEntriesExactData) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfilePredefinedProfileEntriesExactDataEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profilePredefinedEntriesExactDataJSON) RawJSON() string {
+func (r profilePredefinedProfileEntriesExactDataEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedEntriesExactData) implementsZeroTrustProfilePredefinedEntry() {}
+func (r ProfilePredefinedProfileEntriesExactDataEntry) implementsZeroTrustProfilePredefinedProfileEntry() {
+}
 
-type ProfilePredefinedEntriesExactDataType string
+type ProfilePredefinedProfileEntriesExactDataEntryType string
 
 const (
-	ProfilePredefinedEntriesExactDataTypeExactData ProfilePredefinedEntriesExactDataType = "exact_data"
+	ProfilePredefinedProfileEntriesExactDataEntryTypeExactData ProfilePredefinedProfileEntriesExactDataEntryType = "exact_data"
 )
 
-func (r ProfilePredefinedEntriesExactDataType) IsKnown() bool {
+func (r ProfilePredefinedProfileEntriesExactDataEntryType) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedEntriesExactDataTypeExactData:
+	case ProfilePredefinedProfileEntriesExactDataEntryTypeExactData:
 		return true
 	}
 	return false
 }
 
-type ProfilePredefinedEntriesWordList struct {
-	ID        string                               `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                            `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                 `json:"enabled,required"`
-	Name      string                               `json:"name,required"`
-	Type      ProfilePredefinedEntriesWordListType `json:"type,required"`
-	UpdatedAt time.Time                            `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                          `json:"word_list,required"`
-	ProfileID string                               `json:"profile_id,nullable" format:"uuid"`
-	JSON      profilePredefinedEntriesWordListJSON `json:"-"`
+type ProfilePredefinedProfileEntriesWordListEntry struct {
+	ID        string                                           `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                        `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                             `json:"enabled,required"`
+	Name      string                                           `json:"name,required"`
+	Type      ProfilePredefinedProfileEntriesWordListEntryType `json:"type,required"`
+	UpdatedAt time.Time                                        `json:"updated_at,required" format:"date-time"`
+	WordList  interface{}                                      `json:"word_list,required"`
+	ProfileID string                                           `json:"profile_id,nullable" format:"uuid"`
+	JSON      profilePredefinedProfileEntriesWordListEntryJSON `json:"-"`
 }
 
-// profilePredefinedEntriesWordListJSON contains the JSON metadata for the struct
-// [ProfilePredefinedEntriesWordList]
-type profilePredefinedEntriesWordListJSON struct {
+// profilePredefinedProfileEntriesWordListEntryJSON contains the JSON metadata for
+// the struct [ProfilePredefinedProfileEntriesWordListEntry]
+type profilePredefinedProfileEntriesWordListEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -1098,94 +1092,95 @@ type profilePredefinedEntriesWordListJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfilePredefinedEntriesWordList) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfilePredefinedProfileEntriesWordListEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profilePredefinedEntriesWordListJSON) RawJSON() string {
+func (r profilePredefinedProfileEntriesWordListEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfilePredefinedEntriesWordList) implementsZeroTrustProfilePredefinedEntry() {}
+func (r ProfilePredefinedProfileEntriesWordListEntry) implementsZeroTrustProfilePredefinedProfileEntry() {
+}
 
-type ProfilePredefinedEntriesWordListType string
+type ProfilePredefinedProfileEntriesWordListEntryType string
 
 const (
-	ProfilePredefinedEntriesWordListTypeWordList ProfilePredefinedEntriesWordListType = "word_list"
+	ProfilePredefinedProfileEntriesWordListEntryTypeWordList ProfilePredefinedProfileEntriesWordListEntryType = "word_list"
 )
 
-func (r ProfilePredefinedEntriesWordListType) IsKnown() bool {
+func (r ProfilePredefinedProfileEntriesWordListEntryType) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedEntriesWordListTypeWordList:
+	case ProfilePredefinedProfileEntriesWordListEntryTypeWordList:
 		return true
 	}
 	return false
 }
 
-type ProfilePredefinedEntriesType string
+type ProfilePredefinedProfileEntriesType string
 
 const (
-	ProfilePredefinedEntriesTypeCustom      ProfilePredefinedEntriesType = "custom"
-	ProfilePredefinedEntriesTypePredefined  ProfilePredefinedEntriesType = "predefined"
-	ProfilePredefinedEntriesTypeIntegration ProfilePredefinedEntriesType = "integration"
-	ProfilePredefinedEntriesTypeExactData   ProfilePredefinedEntriesType = "exact_data"
-	ProfilePredefinedEntriesTypeWordList    ProfilePredefinedEntriesType = "word_list"
+	ProfilePredefinedProfileEntriesTypeCustom      ProfilePredefinedProfileEntriesType = "custom"
+	ProfilePredefinedProfileEntriesTypePredefined  ProfilePredefinedProfileEntriesType = "predefined"
+	ProfilePredefinedProfileEntriesTypeIntegration ProfilePredefinedProfileEntriesType = "integration"
+	ProfilePredefinedProfileEntriesTypeExactData   ProfilePredefinedProfileEntriesType = "exact_data"
+	ProfilePredefinedProfileEntriesTypeWordList    ProfilePredefinedProfileEntriesType = "word_list"
 )
 
-func (r ProfilePredefinedEntriesType) IsKnown() bool {
+func (r ProfilePredefinedProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedEntriesTypeCustom, ProfilePredefinedEntriesTypePredefined, ProfilePredefinedEntriesTypeIntegration, ProfilePredefinedEntriesTypeExactData, ProfilePredefinedEntriesTypeWordList:
+	case ProfilePredefinedProfileEntriesTypeCustom, ProfilePredefinedProfileEntriesTypePredefined, ProfilePredefinedProfileEntriesTypeIntegration, ProfilePredefinedProfileEntriesTypeExactData, ProfilePredefinedProfileEntriesTypeWordList:
 		return true
 	}
 	return false
 }
 
-type ProfilePredefinedType string
+type ProfilePredefinedProfileType string
 
 const (
-	ProfilePredefinedTypePredefined ProfilePredefinedType = "predefined"
+	ProfilePredefinedProfileTypePredefined ProfilePredefinedProfileType = "predefined"
 )
 
-func (r ProfilePredefinedType) IsKnown() bool {
+func (r ProfilePredefinedProfileType) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedTypePredefined:
+	case ProfilePredefinedProfileTypePredefined:
 		return true
 	}
 	return false
 }
 
-type ProfilePredefinedConfidenceThreshold string
+type ProfilePredefinedProfileConfidenceThreshold string
 
 const (
-	ProfilePredefinedConfidenceThresholdLow      ProfilePredefinedConfidenceThreshold = "low"
-	ProfilePredefinedConfidenceThresholdMedium   ProfilePredefinedConfidenceThreshold = "medium"
-	ProfilePredefinedConfidenceThresholdHigh     ProfilePredefinedConfidenceThreshold = "high"
-	ProfilePredefinedConfidenceThresholdVeryHigh ProfilePredefinedConfidenceThreshold = "very_high"
+	ProfilePredefinedProfileConfidenceThresholdLow      ProfilePredefinedProfileConfidenceThreshold = "low"
+	ProfilePredefinedProfileConfidenceThresholdMedium   ProfilePredefinedProfileConfidenceThreshold = "medium"
+	ProfilePredefinedProfileConfidenceThresholdHigh     ProfilePredefinedProfileConfidenceThreshold = "high"
+	ProfilePredefinedProfileConfidenceThresholdVeryHigh ProfilePredefinedProfileConfidenceThreshold = "very_high"
 )
 
-func (r ProfilePredefinedConfidenceThreshold) IsKnown() bool {
+func (r ProfilePredefinedProfileConfidenceThreshold) IsKnown() bool {
 	switch r {
-	case ProfilePredefinedConfidenceThresholdLow, ProfilePredefinedConfidenceThresholdMedium, ProfilePredefinedConfidenceThresholdHigh, ProfilePredefinedConfidenceThresholdVeryHigh:
+	case ProfilePredefinedProfileConfidenceThresholdLow, ProfilePredefinedProfileConfidenceThresholdMedium, ProfilePredefinedProfileConfidenceThresholdHigh, ProfilePredefinedProfileConfidenceThresholdVeryHigh:
 		return true
 	}
 	return false
 }
 
-type ProfileIntegration struct {
-	ID        string                    `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                 `json:"created_at,required" format:"date-time"`
-	Entries   []ProfileIntegrationEntry `json:"entries,required"`
-	Name      string                    `json:"name,required"`
-	Type      ProfileIntegrationType    `json:"type,required"`
-	UpdatedAt time.Time                 `json:"updated_at,required" format:"date-time"`
+type ProfileIntegrationProfile struct {
+	ID        string                           `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                        `json:"created_at,required" format:"date-time"`
+	Entries   []ProfileIntegrationProfileEntry `json:"entries,required"`
+	Name      string                           `json:"name,required"`
+	Type      ProfileIntegrationProfileType    `json:"type,required"`
+	UpdatedAt time.Time                        `json:"updated_at,required" format:"date-time"`
 	// The description of the profile
-	Description string                 `json:"description,nullable"`
-	JSON        profileIntegrationJSON `json:"-"`
+	Description string                        `json:"description,nullable"`
+	JSON        profileIntegrationProfileJSON `json:"-"`
 }
 
-// profileIntegrationJSON contains the JSON metadata for the struct
-// [ProfileIntegration]
-type profileIntegrationJSON struct {
+// profileIntegrationProfileJSON contains the JSON metadata for the struct
+// [ProfileIntegrationProfile]
+type profileIntegrationProfileJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Entries     apijson.Field
@@ -1197,23 +1192,23 @@ type profileIntegrationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileIntegration) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileIntegrationProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileIntegrationJSON) RawJSON() string {
+func (r profileIntegrationProfileJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegration) implementsZeroTrustProfile() {}
+func (r ProfileIntegrationProfile) implementsZeroTrustProfile() {}
 
-type ProfileIntegrationEntry struct {
-	ID      string                        `json:"id,required" format:"uuid"`
-	Enabled bool                          `json:"enabled,required"`
-	Name    string                        `json:"name,required"`
-	Type    ProfileIntegrationEntriesType `json:"type,required"`
+type ProfileIntegrationProfileEntry struct {
+	ID      string                               `json:"id,required" format:"uuid"`
+	Enabled bool                                 `json:"enabled,required"`
+	Name    string                               `json:"name,required"`
+	Type    ProfileIntegrationProfileEntriesType `json:"type,required"`
 	// This field can have the runtime type of
-	// [ProfileIntegrationEntriesPredefinedConfidence].
+	// [ProfileIntegrationProfileEntriesPredefinedEntryConfidence].
 	Confidence interface{} `json:"confidence"`
 	CreatedAt  time.Time   `json:"created_at" format:"date-time"`
 	Pattern    Pattern     `json:"pattern"`
@@ -1221,14 +1216,14 @@ type ProfileIntegrationEntry struct {
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// This field can have the runtime type of [interface{}].
-	WordList interface{}                 `json:"word_list"`
-	JSON     profileIntegrationEntryJSON `json:"-"`
-	union    ProfileIntegrationEntriesUnion
+	WordList interface{}                        `json:"word_list"`
+	JSON     profileIntegrationProfileEntryJSON `json:"-"`
+	union    ProfileIntegrationProfileEntriesUnion
 }
 
-// profileIntegrationEntryJSON contains the JSON metadata for the struct
-// [ProfileIntegrationEntry]
-type profileIntegrationEntryJSON struct {
+// profileIntegrationProfileEntryJSON contains the JSON metadata for the struct
+// [ProfileIntegrationProfileEntry]
+type profileIntegrationProfileEntryJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
@@ -1244,12 +1239,12 @@ type profileIntegrationEntryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r profileIntegrationEntryJSON) RawJSON() string {
+func (r profileIntegrationProfileEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *ProfileIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
-	*r = ProfileIntegrationEntry{}
+func (r *ProfileIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) {
+	*r = ProfileIntegrationProfileEntry{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -1257,75 +1252,70 @@ func (r *ProfileIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [ProfileIntegrationEntriesUnion] interface which you can cast
-// to the specific types for more type safety.
+// AsUnion returns a [ProfileIntegrationProfileEntriesUnion] interface which you
+// can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [zero_trust.ProfileIntegrationEntriesCustom],
-// [zero_trust.ProfileIntegrationEntriesPredefined],
-// [zero_trust.ProfileIntegrationEntriesIntegration],
-// [zero_trust.ProfileIntegrationEntriesExactData],
-// [zero_trust.ProfileIntegrationEntriesWordList].
-func (r ProfileIntegrationEntry) AsUnion() ProfileIntegrationEntriesUnion {
+// [zero_trust.ProfileIntegrationProfileEntriesCustomEntry],
+// [zero_trust.ProfileIntegrationProfileEntriesPredefinedEntry],
+// [zero_trust.ProfileIntegrationProfileEntriesIntegrationEntry],
+// [zero_trust.ProfileIntegrationProfileEntriesExactDataEntry],
+// [zero_trust.ProfileIntegrationProfileEntriesWordListEntry].
+func (r ProfileIntegrationProfileEntry) AsUnion() ProfileIntegrationProfileEntriesUnion {
 	return r.union
 }
 
-// Union satisfied by [zero_trust.ProfileIntegrationEntriesCustom],
-// [zero_trust.ProfileIntegrationEntriesPredefined],
-// [zero_trust.ProfileIntegrationEntriesIntegration],
-// [zero_trust.ProfileIntegrationEntriesExactData] or
-// [zero_trust.ProfileIntegrationEntriesWordList].
-type ProfileIntegrationEntriesUnion interface {
-	implementsZeroTrustProfileIntegrationEntry()
+// Union satisfied by [zero_trust.ProfileIntegrationProfileEntriesCustomEntry],
+// [zero_trust.ProfileIntegrationProfileEntriesPredefinedEntry],
+// [zero_trust.ProfileIntegrationProfileEntriesIntegrationEntry],
+// [zero_trust.ProfileIntegrationProfileEntriesExactDataEntry] or
+// [zero_trust.ProfileIntegrationProfileEntriesWordListEntry].
+type ProfileIntegrationProfileEntriesUnion interface {
+	implementsZeroTrustProfileIntegrationProfileEntry()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ProfileIntegrationEntriesUnion)(nil)).Elem(),
-		"type",
+		reflect.TypeOf((*ProfileIntegrationProfileEntriesUnion)(nil)).Elem(),
+		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileIntegrationEntriesCustom{}),
-			DiscriminatorValue: "custom",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesCustomEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileIntegrationEntriesPredefined{}),
-			DiscriminatorValue: "predefined",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesPredefinedEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileIntegrationEntriesIntegration{}),
-			DiscriminatorValue: "integration",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesIntegrationEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileIntegrationEntriesExactData{}),
-			DiscriminatorValue: "exact_data",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesExactDataEntry{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(ProfileIntegrationEntriesWordList{}),
-			DiscriminatorValue: "word_list",
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ProfileIntegrationProfileEntriesWordListEntry{}),
 		},
 	)
 }
 
-type ProfileIntegrationEntriesCustom struct {
-	ID        string                              `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                           `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                `json:"enabled,required"`
-	Name      string                              `json:"name,required"`
-	Pattern   Pattern                             `json:"pattern,required"`
-	Type      ProfileIntegrationEntriesCustomType `json:"type,required"`
-	UpdatedAt time.Time                           `json:"updated_at,required" format:"date-time"`
-	ProfileID string                              `json:"profile_id,nullable" format:"uuid"`
-	JSON      profileIntegrationEntriesCustomJSON `json:"-"`
+type ProfileIntegrationProfileEntriesCustomEntry struct {
+	ID        string                                          `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                       `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                            `json:"enabled,required"`
+	Name      string                                          `json:"name,required"`
+	Pattern   Pattern                                         `json:"pattern,required"`
+	Type      ProfileIntegrationProfileEntriesCustomEntryType `json:"type,required"`
+	UpdatedAt time.Time                                       `json:"updated_at,required" format:"date-time"`
+	ProfileID string                                          `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileIntegrationProfileEntriesCustomEntryJSON `json:"-"`
 }
 
-// profileIntegrationEntriesCustomJSON contains the JSON metadata for the struct
-// [ProfileIntegrationEntriesCustom]
-type profileIntegrationEntriesCustomJSON struct {
+// profileIntegrationProfileEntriesCustomEntryJSON contains the JSON metadata for
+// the struct [ProfileIntegrationProfileEntriesCustomEntry]
+type profileIntegrationProfileEntriesCustomEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -1338,43 +1328,44 @@ type profileIntegrationEntriesCustomJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileIntegrationEntriesCustom) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileIntegrationProfileEntriesCustomEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileIntegrationEntriesCustomJSON) RawJSON() string {
+func (r profileIntegrationProfileEntriesCustomEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationEntriesCustom) implementsZeroTrustProfileIntegrationEntry() {}
+func (r ProfileIntegrationProfileEntriesCustomEntry) implementsZeroTrustProfileIntegrationProfileEntry() {
+}
 
-type ProfileIntegrationEntriesCustomType string
+type ProfileIntegrationProfileEntriesCustomEntryType string
 
 const (
-	ProfileIntegrationEntriesCustomTypeCustom ProfileIntegrationEntriesCustomType = "custom"
+	ProfileIntegrationProfileEntriesCustomEntryTypeCustom ProfileIntegrationProfileEntriesCustomEntryType = "custom"
 )
 
-func (r ProfileIntegrationEntriesCustomType) IsKnown() bool {
+func (r ProfileIntegrationProfileEntriesCustomEntryType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationEntriesCustomTypeCustom:
+	case ProfileIntegrationProfileEntriesCustomEntryTypeCustom:
 		return true
 	}
 	return false
 }
 
-type ProfileIntegrationEntriesPredefined struct {
-	ID         string                                        `json:"id,required" format:"uuid"`
-	Confidence ProfileIntegrationEntriesPredefinedConfidence `json:"confidence,required"`
-	Enabled    bool                                          `json:"enabled,required"`
-	Name       string                                        `json:"name,required"`
-	Type       ProfileIntegrationEntriesPredefinedType       `json:"type,required"`
-	ProfileID  string                                        `json:"profile_id,nullable" format:"uuid"`
-	JSON       profileIntegrationEntriesPredefinedJSON       `json:"-"`
+type ProfileIntegrationProfileEntriesPredefinedEntry struct {
+	ID         string                                                    `json:"id,required" format:"uuid"`
+	Confidence ProfileIntegrationProfileEntriesPredefinedEntryConfidence `json:"confidence,required"`
+	Enabled    bool                                                      `json:"enabled,required"`
+	Name       string                                                    `json:"name,required"`
+	Type       ProfileIntegrationProfileEntriesPredefinedEntryType       `json:"type,required"`
+	ProfileID  string                                                    `json:"profile_id,nullable" format:"uuid"`
+	JSON       profileIntegrationProfileEntriesPredefinedEntryJSON       `json:"-"`
 }
 
-// profileIntegrationEntriesPredefinedJSON contains the JSON metadata for the
-// struct [ProfileIntegrationEntriesPredefined]
-type profileIntegrationEntriesPredefinedJSON struct {
+// profileIntegrationProfileEntriesPredefinedEntryJSON contains the JSON metadata
+// for the struct [ProfileIntegrationProfileEntriesPredefinedEntry]
+type profileIntegrationProfileEntriesPredefinedEntryJSON struct {
 	ID          apijson.Field
 	Confidence  apijson.Field
 	Enabled     apijson.Field
@@ -1385,68 +1376,70 @@ type profileIntegrationEntriesPredefinedJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileIntegrationEntriesPredefined) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileIntegrationProfileEntriesPredefinedEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileIntegrationEntriesPredefinedJSON) RawJSON() string {
+func (r profileIntegrationProfileEntriesPredefinedEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationEntriesPredefined) implementsZeroTrustProfileIntegrationEntry() {}
+func (r ProfileIntegrationProfileEntriesPredefinedEntry) implementsZeroTrustProfileIntegrationProfileEntry() {
+}
 
-type ProfileIntegrationEntriesPredefinedConfidence struct {
+type ProfileIntegrationProfileEntriesPredefinedEntryConfidence struct {
 	// Indicates whether this entry can be made more or less sensitive by setting a
 	// confidence threshold. Profiles that use an entry with `available` set to true
 	// can use confidence thresholds
-	Available bool                                              `json:"available,required"`
-	JSON      profileIntegrationEntriesPredefinedConfidenceJSON `json:"-"`
+	Available bool                                                          `json:"available,required"`
+	JSON      profileIntegrationProfileEntriesPredefinedEntryConfidenceJSON `json:"-"`
 }
 
-// profileIntegrationEntriesPredefinedConfidenceJSON contains the JSON metadata for
-// the struct [ProfileIntegrationEntriesPredefinedConfidence]
-type profileIntegrationEntriesPredefinedConfidenceJSON struct {
+// profileIntegrationProfileEntriesPredefinedEntryConfidenceJSON contains the JSON
+// metadata for the struct
+// [ProfileIntegrationProfileEntriesPredefinedEntryConfidence]
+type profileIntegrationProfileEntriesPredefinedEntryConfidenceJSON struct {
 	Available   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileIntegrationEntriesPredefinedConfidence) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileIntegrationProfileEntriesPredefinedEntryConfidence) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileIntegrationEntriesPredefinedConfidenceJSON) RawJSON() string {
+func (r profileIntegrationProfileEntriesPredefinedEntryConfidenceJSON) RawJSON() string {
 	return r.raw
 }
 
-type ProfileIntegrationEntriesPredefinedType string
+type ProfileIntegrationProfileEntriesPredefinedEntryType string
 
 const (
-	ProfileIntegrationEntriesPredefinedTypePredefined ProfileIntegrationEntriesPredefinedType = "predefined"
+	ProfileIntegrationProfileEntriesPredefinedEntryTypePredefined ProfileIntegrationProfileEntriesPredefinedEntryType = "predefined"
 )
 
-func (r ProfileIntegrationEntriesPredefinedType) IsKnown() bool {
+func (r ProfileIntegrationProfileEntriesPredefinedEntryType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationEntriesPredefinedTypePredefined:
+	case ProfileIntegrationProfileEntriesPredefinedEntryTypePredefined:
 		return true
 	}
 	return false
 }
 
-type ProfileIntegrationEntriesIntegration struct {
-	ID        string                                   `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                                `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                     `json:"enabled,required"`
-	Name      string                                   `json:"name,required"`
-	Type      ProfileIntegrationEntriesIntegrationType `json:"type,required"`
-	UpdatedAt time.Time                                `json:"updated_at,required" format:"date-time"`
-	ProfileID string                                   `json:"profile_id,nullable" format:"uuid"`
-	JSON      profileIntegrationEntriesIntegrationJSON `json:"-"`
+type ProfileIntegrationProfileEntriesIntegrationEntry struct {
+	ID        string                                               `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                            `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                                 `json:"enabled,required"`
+	Name      string                                               `json:"name,required"`
+	Type      ProfileIntegrationProfileEntriesIntegrationEntryType `json:"type,required"`
+	UpdatedAt time.Time                                            `json:"updated_at,required" format:"date-time"`
+	ProfileID string                                               `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileIntegrationProfileEntriesIntegrationEntryJSON `json:"-"`
 }
 
-// profileIntegrationEntriesIntegrationJSON contains the JSON metadata for the
-// struct [ProfileIntegrationEntriesIntegration]
-type profileIntegrationEntriesIntegrationJSON struct {
+// profileIntegrationProfileEntriesIntegrationEntryJSON contains the JSON metadata
+// for the struct [ProfileIntegrationProfileEntriesIntegrationEntry]
+type profileIntegrationProfileEntriesIntegrationEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -1458,44 +1451,45 @@ type profileIntegrationEntriesIntegrationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileIntegrationEntriesIntegration) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileIntegrationProfileEntriesIntegrationEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileIntegrationEntriesIntegrationJSON) RawJSON() string {
+func (r profileIntegrationProfileEntriesIntegrationEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationEntriesIntegration) implementsZeroTrustProfileIntegrationEntry() {}
+func (r ProfileIntegrationProfileEntriesIntegrationEntry) implementsZeroTrustProfileIntegrationProfileEntry() {
+}
 
-type ProfileIntegrationEntriesIntegrationType string
+type ProfileIntegrationProfileEntriesIntegrationEntryType string
 
 const (
-	ProfileIntegrationEntriesIntegrationTypeIntegration ProfileIntegrationEntriesIntegrationType = "integration"
+	ProfileIntegrationProfileEntriesIntegrationEntryTypeIntegration ProfileIntegrationProfileEntriesIntegrationEntryType = "integration"
 )
 
-func (r ProfileIntegrationEntriesIntegrationType) IsKnown() bool {
+func (r ProfileIntegrationProfileEntriesIntegrationEntryType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationEntriesIntegrationTypeIntegration:
+	case ProfileIntegrationProfileEntriesIntegrationEntryTypeIntegration:
 		return true
 	}
 	return false
 }
 
-type ProfileIntegrationEntriesExactData struct {
-	ID        string                                 `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                              `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                   `json:"enabled,required"`
-	Name      string                                 `json:"name,required"`
-	Secret    bool                                   `json:"secret,required"`
-	Type      ProfileIntegrationEntriesExactDataType `json:"type,required"`
-	UpdatedAt time.Time                              `json:"updated_at,required" format:"date-time"`
-	JSON      profileIntegrationEntriesExactDataJSON `json:"-"`
+type ProfileIntegrationProfileEntriesExactDataEntry struct {
+	ID        string                                             `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                          `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                               `json:"enabled,required"`
+	Name      string                                             `json:"name,required"`
+	Secret    bool                                               `json:"secret,required"`
+	Type      ProfileIntegrationProfileEntriesExactDataEntryType `json:"type,required"`
+	UpdatedAt time.Time                                          `json:"updated_at,required" format:"date-time"`
+	JSON      profileIntegrationProfileEntriesExactDataEntryJSON `json:"-"`
 }
 
-// profileIntegrationEntriesExactDataJSON contains the JSON metadata for the struct
-// [ProfileIntegrationEntriesExactData]
-type profileIntegrationEntriesExactDataJSON struct {
+// profileIntegrationProfileEntriesExactDataEntryJSON contains the JSON metadata
+// for the struct [ProfileIntegrationProfileEntriesExactDataEntry]
+type profileIntegrationProfileEntriesExactDataEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -1507,45 +1501,46 @@ type profileIntegrationEntriesExactDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileIntegrationEntriesExactData) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileIntegrationProfileEntriesExactDataEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileIntegrationEntriesExactDataJSON) RawJSON() string {
+func (r profileIntegrationProfileEntriesExactDataEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationEntriesExactData) implementsZeroTrustProfileIntegrationEntry() {}
+func (r ProfileIntegrationProfileEntriesExactDataEntry) implementsZeroTrustProfileIntegrationProfileEntry() {
+}
 
-type ProfileIntegrationEntriesExactDataType string
+type ProfileIntegrationProfileEntriesExactDataEntryType string
 
 const (
-	ProfileIntegrationEntriesExactDataTypeExactData ProfileIntegrationEntriesExactDataType = "exact_data"
+	ProfileIntegrationProfileEntriesExactDataEntryTypeExactData ProfileIntegrationProfileEntriesExactDataEntryType = "exact_data"
 )
 
-func (r ProfileIntegrationEntriesExactDataType) IsKnown() bool {
+func (r ProfileIntegrationProfileEntriesExactDataEntryType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationEntriesExactDataTypeExactData:
+	case ProfileIntegrationProfileEntriesExactDataEntryTypeExactData:
 		return true
 	}
 	return false
 }
 
-type ProfileIntegrationEntriesWordList struct {
-	ID        string                                `json:"id,required" format:"uuid"`
-	CreatedAt time.Time                             `json:"created_at,required" format:"date-time"`
-	Enabled   bool                                  `json:"enabled,required"`
-	Name      string                                `json:"name,required"`
-	Type      ProfileIntegrationEntriesWordListType `json:"type,required"`
-	UpdatedAt time.Time                             `json:"updated_at,required" format:"date-time"`
-	WordList  interface{}                           `json:"word_list,required"`
-	ProfileID string                                `json:"profile_id,nullable" format:"uuid"`
-	JSON      profileIntegrationEntriesWordListJSON `json:"-"`
+type ProfileIntegrationProfileEntriesWordListEntry struct {
+	ID        string                                            `json:"id,required" format:"uuid"`
+	CreatedAt time.Time                                         `json:"created_at,required" format:"date-time"`
+	Enabled   bool                                              `json:"enabled,required"`
+	Name      string                                            `json:"name,required"`
+	Type      ProfileIntegrationProfileEntriesWordListEntryType `json:"type,required"`
+	UpdatedAt time.Time                                         `json:"updated_at,required" format:"date-time"`
+	WordList  interface{}                                       `json:"word_list,required"`
+	ProfileID string                                            `json:"profile_id,nullable" format:"uuid"`
+	JSON      profileIntegrationProfileEntriesWordListEntryJSON `json:"-"`
 }
 
-// profileIntegrationEntriesWordListJSON contains the JSON metadata for the struct
-// [ProfileIntegrationEntriesWordList]
-type profileIntegrationEntriesWordListJSON struct {
+// profileIntegrationProfileEntriesWordListEntryJSON contains the JSON metadata for
+// the struct [ProfileIntegrationProfileEntriesWordListEntry]
+type profileIntegrationProfileEntriesWordListEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -1558,57 +1553,58 @@ type profileIntegrationEntriesWordListJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ProfileIntegrationEntriesWordList) UnmarshalJSON(data []byte) (err error) {
+func (r *ProfileIntegrationProfileEntriesWordListEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r profileIntegrationEntriesWordListJSON) RawJSON() string {
+func (r profileIntegrationProfileEntriesWordListEntryJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ProfileIntegrationEntriesWordList) implementsZeroTrustProfileIntegrationEntry() {}
+func (r ProfileIntegrationProfileEntriesWordListEntry) implementsZeroTrustProfileIntegrationProfileEntry() {
+}
 
-type ProfileIntegrationEntriesWordListType string
+type ProfileIntegrationProfileEntriesWordListEntryType string
 
 const (
-	ProfileIntegrationEntriesWordListTypeWordList ProfileIntegrationEntriesWordListType = "word_list"
+	ProfileIntegrationProfileEntriesWordListEntryTypeWordList ProfileIntegrationProfileEntriesWordListEntryType = "word_list"
 )
 
-func (r ProfileIntegrationEntriesWordListType) IsKnown() bool {
+func (r ProfileIntegrationProfileEntriesWordListEntryType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationEntriesWordListTypeWordList:
+	case ProfileIntegrationProfileEntriesWordListEntryTypeWordList:
 		return true
 	}
 	return false
 }
 
-type ProfileIntegrationEntriesType string
+type ProfileIntegrationProfileEntriesType string
 
 const (
-	ProfileIntegrationEntriesTypeCustom      ProfileIntegrationEntriesType = "custom"
-	ProfileIntegrationEntriesTypePredefined  ProfileIntegrationEntriesType = "predefined"
-	ProfileIntegrationEntriesTypeIntegration ProfileIntegrationEntriesType = "integration"
-	ProfileIntegrationEntriesTypeExactData   ProfileIntegrationEntriesType = "exact_data"
-	ProfileIntegrationEntriesTypeWordList    ProfileIntegrationEntriesType = "word_list"
+	ProfileIntegrationProfileEntriesTypeCustom      ProfileIntegrationProfileEntriesType = "custom"
+	ProfileIntegrationProfileEntriesTypePredefined  ProfileIntegrationProfileEntriesType = "predefined"
+	ProfileIntegrationProfileEntriesTypeIntegration ProfileIntegrationProfileEntriesType = "integration"
+	ProfileIntegrationProfileEntriesTypeExactData   ProfileIntegrationProfileEntriesType = "exact_data"
+	ProfileIntegrationProfileEntriesTypeWordList    ProfileIntegrationProfileEntriesType = "word_list"
 )
 
-func (r ProfileIntegrationEntriesType) IsKnown() bool {
+func (r ProfileIntegrationProfileEntriesType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationEntriesTypeCustom, ProfileIntegrationEntriesTypePredefined, ProfileIntegrationEntriesTypeIntegration, ProfileIntegrationEntriesTypeExactData, ProfileIntegrationEntriesTypeWordList:
+	case ProfileIntegrationProfileEntriesTypeCustom, ProfileIntegrationProfileEntriesTypePredefined, ProfileIntegrationProfileEntriesTypeIntegration, ProfileIntegrationProfileEntriesTypeExactData, ProfileIntegrationProfileEntriesTypeWordList:
 		return true
 	}
 	return false
 }
 
-type ProfileIntegrationType string
+type ProfileIntegrationProfileType string
 
 const (
-	ProfileIntegrationTypeIntegration ProfileIntegrationType = "integration"
+	ProfileIntegrationProfileTypeIntegration ProfileIntegrationProfileType = "integration"
 )
 
-func (r ProfileIntegrationType) IsKnown() bool {
+func (r ProfileIntegrationProfileType) IsKnown() bool {
 	switch r {
-	case ProfileIntegrationTypeIntegration:
+	case ProfileIntegrationProfileTypeIntegration:
 		return true
 	}
 	return false
