@@ -94,6 +94,7 @@ func TestSettingDomainEditWithOptionalParams(t *testing.T) {
 		email_security.SettingDomainEditParams{
 			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Domain:        cloudflare.F("domain"),
+			Folder:        cloudflare.F(email_security.SettingDomainEditParamsFolderAllItems),
 			IntegrationID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			LookbackHops:  cloudflare.F(int64(1)),
 		},
