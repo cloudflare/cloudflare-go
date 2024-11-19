@@ -32,20 +32,20 @@ func TestAccessApplicationPolicyTestNewWithOptionalParams(t *testing.T) {
 		ApplicationPolicy: zero_trust.ApplicationPolicyParam{
 			ID:       cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 			Decision: cloudflare.F(zero_trust.DecisionAllow),
-			Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
-				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-					Email: cloudflare.F("test@example.com"),
+			Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
+				Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
+					ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
 				}),
 			}}),
-			Include: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
-				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-					Email: cloudflare.F("test@example.com"),
+			Include: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
+				Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
+					ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
 				}),
 			}}),
 			Name: cloudflare.F("Allow devs"),
-			Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
-				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-					Email: cloudflare.F("test@example.com"),
+			Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.GroupRuleParam{
+				Group: cloudflare.F(zero_trust.GroupRuleGroupParam{
+					ID: cloudflare.F("aa0a4aab-672b-4bdb-bc33-a59f1130a11f"),
 				}),
 			}}),
 		},
