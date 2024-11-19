@@ -34,38 +34,14 @@ func TestAccessPolicyNewWithOptionalParams(t *testing.T) {
 			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
-		}, zero_trust.EmailRuleParam{
-			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-				Email: cloudflare.F("test@example.com"),
-			}),
-		}, zero_trust.EmailRuleParam{
-			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-				Email: cloudflare.F("test@example.com"),
-			}),
 		}}),
 		Name: cloudflare.F("Allow devs"),
 		Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
-		}, zero_trust.EmailRuleParam{
-			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-				Email: cloudflare.F("test@example.com"),
-			}),
-		}, zero_trust.EmailRuleParam{
-			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-				Email: cloudflare.F("test@example.com"),
-			}),
 		}}),
 		Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
-			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-				Email: cloudflare.F("test@example.com"),
-			}),
-		}, zero_trust.EmailRuleParam{
-			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-				Email: cloudflare.F("test@example.com"),
-			}),
-		}, zero_trust.EmailRuleParam{
 			Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 				Email: cloudflare.F("test@example.com"),
 			}),
@@ -103,38 +79,14 @@ func TestAccessPolicyUpdateWithOptionalParams(t *testing.T) {
 				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}, zero_trust.EmailRuleParam{
-				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			}, zero_trust.EmailRuleParam{
-				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-					Email: cloudflare.F("test@example.com"),
-				}),
 			}}),
 			Name: cloudflare.F("Allow devs"),
 			Exclude: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
 				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),
-			}, zero_trust.EmailRuleParam{
-				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			}, zero_trust.EmailRuleParam{
-				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-					Email: cloudflare.F("test@example.com"),
-				}),
 			}}),
 			Require: cloudflare.F([]zero_trust.AccessRuleUnionParam{zero_trust.EmailRuleParam{
-				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			}, zero_trust.EmailRuleParam{
-				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			}, zero_trust.EmailRuleParam{
 				Email: cloudflare.F(zero_trust.EmailRuleEmailParam{
 					Email: cloudflare.F("test@example.com"),
 				}),

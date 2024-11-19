@@ -38,16 +38,6 @@ func TestBucketEventNotificationConfigurationQueueUpdateWithOptionalParams(t *te
 				Description: cloudflare.F("Notifications from source bucket to queue"),
 				Prefix:      cloudflare.F("img/"),
 				Suffix:      cloudflare.F(".jpeg"),
-			}, {
-				Actions:     cloudflare.F([]r2.BucketEventNotificationConfigurationQueueUpdateParamsRulesAction{r2.BucketEventNotificationConfigurationQueueUpdateParamsRulesActionPutObject, r2.BucketEventNotificationConfigurationQueueUpdateParamsRulesActionCopyObject}),
-				Description: cloudflare.F("Notifications from source bucket to queue"),
-				Prefix:      cloudflare.F("img/"),
-				Suffix:      cloudflare.F(".jpeg"),
-			}, {
-				Actions:     cloudflare.F([]r2.BucketEventNotificationConfigurationQueueUpdateParamsRulesAction{r2.BucketEventNotificationConfigurationQueueUpdateParamsRulesActionPutObject, r2.BucketEventNotificationConfigurationQueueUpdateParamsRulesActionCopyObject}),
-				Description: cloudflare.F("Notifications from source bucket to queue"),
-				Prefix:      cloudflare.F("img/"),
-				Suffix:      cloudflare.F(".jpeg"),
 			}}),
 			CfR2Jurisdiction: cloudflare.F(r2.BucketEventNotificationConfigurationQueueUpdateParamsCfR2JurisdictionDefault),
 		},

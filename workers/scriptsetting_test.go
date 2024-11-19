@@ -42,14 +42,6 @@ func TestScriptSettingEditWithOptionalParams(t *testing.T) {
 					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
-				}, {
-					Service:     cloudflare.F("my-log-consumer"),
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-				}, {
-					Service:     cloudflare.F("my-log-consumer"),
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
 				}}),
 			},
 		},

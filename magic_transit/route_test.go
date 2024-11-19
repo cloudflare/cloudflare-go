@@ -64,8 +64,8 @@ func TestRouteUpdateWithOptionalParams(t *testing.T) {
 			Priority:    cloudflare.F(int64(0)),
 			Description: cloudflare.F("New route for new prefix 203.0.113.1"),
 			Scope: cloudflare.F(magic_transit.ScopeParam{
-				ColoNames:   cloudflare.F([]string{"den01", "den01", "den01"}),
-				ColoRegions: cloudflare.F([]string{"APAC", "APAC", "APAC"}),
+				ColoNames:   cloudflare.F([]string{"den01"}),
+				ColoRegions: cloudflare.F([]string{"APAC"}),
 			}),
 			Weight: cloudflare.F(int64(0)),
 		},

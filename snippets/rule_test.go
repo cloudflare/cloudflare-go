@@ -34,16 +34,6 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 			Enabled:     cloudflare.F(true),
 			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
 			SnippetName: cloudflare.F("snippet_name_01"),
-		}, {
-			Description: cloudflare.F("Rule description"),
-			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
-			SnippetName: cloudflare.F("snippet_name_01"),
-		}, {
-			Description: cloudflare.F("Rule description"),
-			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
-			SnippetName: cloudflare.F("snippet_name_01"),
 		}}),
 	})
 	if err != nil {

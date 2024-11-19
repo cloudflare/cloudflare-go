@@ -45,7 +45,7 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 				Connectivity: cloudflare.F(spectrum.EdgeIPsObjectConnectivityAll),
 				Type:         cloudflare.F(spectrum.EdgeIPsObjectTypeDynamic),
 			}),
-			OriginDirect: cloudflare.F([]string{"tcp://127.0.0.1:8080", "tcp://127.0.0.1:8080", "tcp://127.0.0.1:8080"}),
+			OriginDirect: cloudflare.F([]string{"tcp://127.0.0.1:8080"}),
 			OriginDNS: cloudflare.F(spectrum.OriginDNSParam{
 				Name: cloudflare.F("origin.example.com"),
 				TTL:  cloudflare.F(int64(600)),
@@ -96,7 +96,7 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 					Connectivity: cloudflare.F(spectrum.EdgeIPsObjectConnectivityAll),
 					Type:         cloudflare.F(spectrum.EdgeIPsObjectTypeDynamic),
 				}),
-				OriginDirect: cloudflare.F([]string{"tcp://127.0.0.1:8080", "tcp://127.0.0.1:8080", "tcp://127.0.0.1:8080"}),
+				OriginDirect: cloudflare.F([]string{"tcp://127.0.0.1:8080"}),
 				OriginDNS: cloudflare.F(spectrum.OriginDNSParam{
 					Name: cloudflare.F("origin.example.com"),
 					TTL:  cloudflare.F(int64(600)),

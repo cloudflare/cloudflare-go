@@ -30,7 +30,7 @@ func TestAssetUploadNewWithOptionalParams(t *testing.T) {
 	_, err := client.Workers.Assets.Upload.New(context.TODO(), workers.AssetUploadNewParams{
 		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Base64:      cloudflare.F(workers.AssetUploadNewParamsBase64True),
-		AnyFileHash: cloudflare.F([]string{"string", "string", "string"}),
+		AnyFileHash: cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

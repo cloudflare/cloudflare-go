@@ -70,28 +70,8 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
 					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				}, {
-					IP:                         cloudflare.F("2.2.2.2"),
-					Port:                       cloudflare.F(int64(5053)),
-					RouteThroughPrivateNetwork: cloudflare.F(true),
-					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				}, {
-					IP:                         cloudflare.F("2.2.2.2"),
-					Port:                       cloudflare.F(int64(5053)),
-					RouteThroughPrivateNetwork: cloudflare.F(true),
-					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				}}),
 				IPV6: cloudflare.F([]zero_trust.DNSResolverSettingsV6Param{{
-					IP:                         cloudflare.F("2001:DB8::"),
-					Port:                       cloudflare.F(int64(5053)),
-					RouteThroughPrivateNetwork: cloudflare.F(true),
-					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				}, {
-					IP:                         cloudflare.F("2001:DB8::"),
-					Port:                       cloudflare.F(int64(5053)),
-					RouteThroughPrivateNetwork: cloudflare.F(true),
-					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-				}, {
 					IP:                         cloudflare.F("2001:DB8::"),
 					Port:                       cloudflare.F(int64(5053)),
 					RouteThroughPrivateNetwork: cloudflare.F(true),
@@ -122,7 +102,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 			}),
 			Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
-				FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe, zero_trust.RuleSettingQuarantineFileTypePdf, zero_trust.RuleSettingQuarantineFileTypeDoc}),
+				FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe}),
 			}),
 			ResolveDNSThroughCloudflare: cloudflare.F(true),
 			UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{
@@ -208,28 +188,8 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
 						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
-						IP:                         cloudflare.F("2.2.2.2"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
-						IP:                         cloudflare.F("2.2.2.2"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					}}),
 					IPV6: cloudflare.F([]zero_trust.DNSResolverSettingsV6Param{{
-						IP:                         cloudflare.F("2001:DB8::"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
-						IP:                         cloudflare.F("2001:DB8::"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
 						IP:                         cloudflare.F("2001:DB8::"),
 						Port:                       cloudflare.F(int64(5053)),
 						RouteThroughPrivateNetwork: cloudflare.F(true),
@@ -260,7 +220,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 				}),
 				Quarantine: cloudflare.F(zero_trust.RuleSettingQuarantineParam{
-					FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe, zero_trust.RuleSettingQuarantineFileTypePdf, zero_trust.RuleSettingQuarantineFileTypeDoc}),
+					FileTypes: cloudflare.F([]zero_trust.RuleSettingQuarantineFileType{zero_trust.RuleSettingQuarantineFileTypeExe}),
 				}),
 				ResolveDNSThroughCloudflare: cloudflare.F(true),
 				UntrustedCERT: cloudflare.F(zero_trust.RuleSettingUntrustedCERTParam{

@@ -41,15 +41,7 @@ func TestLogListWithOptionalParams(t *testing.T) {
 			Filters: cloudflare.F([]ai_gateway.LogListParamsFilter{{
 				Key:      cloudflare.F(ai_gateway.LogListParamsFiltersKeyCreatedAt),
 				Operator: cloudflare.F(ai_gateway.LogListParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.LogListParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}, {
-				Key:      cloudflare.F(ai_gateway.LogListParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.LogListParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.LogListParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}, {
-				Key:      cloudflare.F(ai_gateway.LogListParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.LogListParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.LogListParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
+				Value:    cloudflare.F([]ai_gateway.LogListParamsFiltersValueUnion{shared.UnionString("string")}),
 			}}),
 			MaxCost:             cloudflare.F(0.000000),
 			MaxDuration:         cloudflare.F(0.000000),
@@ -106,15 +98,7 @@ func TestLogDeleteWithOptionalParams(t *testing.T) {
 			Filters: cloudflare.F([]ai_gateway.LogDeleteParamsFilter{{
 				Key:      cloudflare.F(ai_gateway.LogDeleteParamsFiltersKeyCreatedAt),
 				Operator: cloudflare.F(ai_gateway.LogDeleteParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.LogDeleteParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}, {
-				Key:      cloudflare.F(ai_gateway.LogDeleteParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.LogDeleteParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.LogDeleteParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}, {
-				Key:      cloudflare.F(ai_gateway.LogDeleteParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.LogDeleteParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.LogDeleteParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
+				Value:    cloudflare.F([]ai_gateway.LogDeleteParamsFiltersValueUnion{shared.UnionString("string")}),
 			}}),
 			Limit:            cloudflare.F(int64(1)),
 			OrderBy:          cloudflare.F(ai_gateway.LogDeleteParamsOrderByCreatedAt),

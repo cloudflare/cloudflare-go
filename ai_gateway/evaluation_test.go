@@ -32,8 +32,8 @@ func TestEvaluationNew(t *testing.T) {
 		"my-gateway",
 		ai_gateway.EvaluationNewParams{
 			AccountID:         cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
-			DatasetIDs:        cloudflare.F([]string{"string", "string", "string"}),
-			EvaluationTypeIDs: cloudflare.F([]string{"string", "string", "string"}),
+			DatasetIDs:        cloudflare.F([]string{"string"}),
+			EvaluationTypeIDs: cloudflare.F([]string{"string"}),
 			Name:              cloudflare.F("name"),
 		},
 	)

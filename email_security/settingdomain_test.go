@@ -31,7 +31,7 @@ func TestSettingDomainListWithOptionalParams(t *testing.T) {
 		AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		AllowedDeliveryMode: cloudflare.F(email_security.SettingDomainListParamsAllowedDeliveryModeDirect),
 		Direction:           cloudflare.F(email_security.SettingDomainListParamsDirectionAsc),
-		Domain:              cloudflare.F([]string{"string", "string", "string"}),
+		Domain:              cloudflare.F([]string{"string"}),
 		Order:               cloudflare.F(email_security.SettingDomainListParamsOrderDomain),
 		Page:                cloudflare.F(int64(1)),
 		PerPage:             cloudflare.F(int64(1)),
