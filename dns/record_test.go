@@ -187,38 +187,16 @@ func TestRecordBatchWithOptionalParams(t *testing.T) {
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Deletes: cloudflare.F([]dns.RecordBatchParamsDelete{{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		}, {
-			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		}, {
-			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}}),
 		Patches: cloudflare.F([]dns.RecordUnionParam{dns.ARecordParam{
-			Content: cloudflare.F("198.51.100.4"),
-			Type:    cloudflare.F(dns.ARecordTypeA),
-		}, dns.ARecordParam{
-			Content: cloudflare.F("198.51.100.4"),
-			Type:    cloudflare.F(dns.ARecordTypeA),
-		}, dns.ARecordParam{
 			Content: cloudflare.F("198.51.100.4"),
 			Type:    cloudflare.F(dns.ARecordTypeA),
 		}}),
 		Posts: cloudflare.F([]dns.RecordUnionParam{dns.ARecordParam{
 			Content: cloudflare.F("198.51.100.4"),
 			Type:    cloudflare.F(dns.ARecordTypeA),
-		}, dns.ARecordParam{
-			Content: cloudflare.F("198.51.100.4"),
-			Type:    cloudflare.F(dns.ARecordTypeA),
-		}, dns.ARecordParam{
-			Content: cloudflare.F("198.51.100.4"),
-			Type:    cloudflare.F(dns.ARecordTypeA),
 		}}),
 		Puts: cloudflare.F([]dns.RecordUnionParam{dns.ARecordParam{
-			Content: cloudflare.F("198.51.100.4"),
-			Type:    cloudflare.F(dns.ARecordTypeA),
-		}, dns.ARecordParam{
-			Content: cloudflare.F("198.51.100.4"),
-			Type:    cloudflare.F(dns.ARecordTypeA),
-		}, dns.ARecordParam{
 			Content: cloudflare.F("198.51.100.4"),
 			Type:    cloudflare.F(dns.ARecordTypeA),
 		}}),

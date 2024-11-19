@@ -34,7 +34,7 @@ func TestRuleNewWithOptionalParams(t *testing.T) {
 		AutomaticAdvertisement: cloudflare.F(true),
 		Bandwidth:              cloudflare.F(1000.000000),
 		PacketThreshold:        cloudflare.F(10000.000000),
-		Prefixes:               cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
+		Prefixes:               cloudflare.F([]string{"203.0.113.1/32"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -66,7 +66,7 @@ func TestRuleUpdateWithOptionalParams(t *testing.T) {
 		AutomaticAdvertisement: cloudflare.F(true),
 		Bandwidth:              cloudflare.F(1000.000000),
 		PacketThreshold:        cloudflare.F(10000.000000),
-		Prefixes:               cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
+		Prefixes:               cloudflare.F([]string{"203.0.113.1/32"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -154,7 +154,7 @@ func TestRuleEditWithOptionalParams(t *testing.T) {
 			Duration:               cloudflare.F("300s"),
 			Name:                   cloudflare.F("my_rule_1"),
 			PacketThreshold:        cloudflare.F(10000.000000),
-			Prefixes:               cloudflare.F([]string{"203.0.113.1/32", "203.0.113.1/32", "203.0.113.1/32"}),
+			Prefixes:               cloudflare.F([]string{"203.0.113.1/32"}),
 		},
 	)
 	if err != nil {

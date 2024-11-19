@@ -29,14 +29,14 @@ func TestBGPTopPrefixesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Top.Prefixes(context.TODO(), radar.BGPTopPrefixesParams{
-		ASN:        cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:  cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:        cloudflare.F([]string{"string"}),
+		DateEnd:    cloudflare.F([]time.Time{time.Now()}),
+		DateRange:  cloudflare.F([]string{"7d"}),
+		DateStart:  cloudflare.F([]time.Time{time.Now()}),
 		Format:     cloudflare.F(radar.BGPTopPrefixesParamsFormatJson),
 		Limit:      cloudflare.F(int64(5)),
-		Name:       cloudflare.F([]string{"string", "string", "string"}),
-		UpdateType: cloudflare.F([]radar.BGPTopPrefixesParamsUpdateType{radar.BGPTopPrefixesParamsUpdateTypeAnnouncement, radar.BGPTopPrefixesParamsUpdateTypeWithdrawal}),
+		Name:       cloudflare.F([]string{"string"}),
+		UpdateType: cloudflare.F([]radar.BGPTopPrefixesParamsUpdateType{radar.BGPTopPrefixesParamsUpdateTypeAnnouncement}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

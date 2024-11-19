@@ -38,20 +38,12 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 				Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
 					Network: cloudflare.F("2001:85a3::/64"),
-				}, {
-					Network: cloudflare.F("2001:85a3::/64"),
-				}, {
-					Network: cloudflare.F("2001:85a3::/64"),
 				}}),
 				RequireToken: cloudflare.F(true),
 			}),
 			DOT: cloudflare.F(zero_trust.DOTEndpointParam{
 				Enabled: cloudflare.F(true),
 				Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
-					Network: cloudflare.F("2001:85a3::/64"),
-				}, {
-					Network: cloudflare.F("2001:85a3::/64"),
-				}, {
 					Network: cloudflare.F("2001:85a3::/64"),
 				}}),
 			}),
@@ -62,18 +54,10 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 				Enabled: cloudflare.F(true),
 				Networks: cloudflare.F([]zero_trust.IPV6NetworkParam{{
 					Network: cloudflare.F("2001:85a3::/64"),
-				}, {
-					Network: cloudflare.F("2001:85a3::/64"),
-				}, {
-					Network: cloudflare.F("2001:85a3::/64"),
 				}}),
 			}),
 		}),
 		Networks: cloudflare.F([]zero_trust.GatewayLocationNewParamsNetwork{{
-			Network: cloudflare.F("192.0.2.1/32"),
-		}, {
-			Network: cloudflare.F("192.0.2.1/32"),
-		}, {
 			Network: cloudflare.F("192.0.2.1/32"),
 		}}),
 	})
@@ -113,20 +97,12 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 					Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
 						Network: cloudflare.F("2001:85a3::/64"),
-					}, {
-						Network: cloudflare.F("2001:85a3::/64"),
-					}, {
-						Network: cloudflare.F("2001:85a3::/64"),
 					}}),
 					RequireToken: cloudflare.F(true),
 				}),
 				DOT: cloudflare.F(zero_trust.DOTEndpointParam{
 					Enabled: cloudflare.F(true),
 					Networks: cloudflare.F([]zero_trust.IPNetworkParam{{
-						Network: cloudflare.F("2001:85a3::/64"),
-					}, {
-						Network: cloudflare.F("2001:85a3::/64"),
-					}, {
 						Network: cloudflare.F("2001:85a3::/64"),
 					}}),
 				}),
@@ -137,18 +113,10 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 					Enabled: cloudflare.F(true),
 					Networks: cloudflare.F([]zero_trust.IPV6NetworkParam{{
 						Network: cloudflare.F("2001:85a3::/64"),
-					}, {
-						Network: cloudflare.F("2001:85a3::/64"),
-					}, {
-						Network: cloudflare.F("2001:85a3::/64"),
 					}}),
 				}),
 			}),
 			Networks: cloudflare.F([]zero_trust.GatewayLocationUpdateParamsNetwork{{
-				Network: cloudflare.F("192.0.2.1/32"),
-			}, {
-				Network: cloudflare.F("192.0.2.1/32"),
-			}, {
 				Network: cloudflare.F("192.0.2.1/32"),
 			}}),
 		},

@@ -57,20 +57,8 @@ func TestManagedTransformEdit(t *testing.T) {
 		ManagedRequestHeaders: cloudflare.F([]managed_transforms.RequestModelParam{{
 			ID:      cloudflare.F("add_cf-bot-score_header"),
 			Enabled: cloudflare.F(true),
-		}, {
-			ID:      cloudflare.F("add_cf-bot-score_header"),
-			Enabled: cloudflare.F(true),
-		}, {
-			ID:      cloudflare.F("add_cf-bot-score_header"),
-			Enabled: cloudflare.F(true),
 		}}),
 		ManagedResponseHeaders: cloudflare.F([]managed_transforms.RequestModelParam{{
-			ID:      cloudflare.F("add_cf-bot-score_header"),
-			Enabled: cloudflare.F(true),
-		}, {
-			ID:      cloudflare.F("add_cf-bot-score_header"),
-			Enabled: cloudflare.F(true),
-		}, {
 			ID:      cloudflare.F("add_cf-bot-score_header"),
 			Enabled: cloudflare.F(true),
 		}}),

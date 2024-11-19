@@ -33,7 +33,7 @@ func TestDispatchNamespaceScriptTagUpdate(t *testing.T) {
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptTagUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      []string{"my-tag", "my-tag", "my-tag"},
+			Body:      []string{"my-tag"},
 		},
 	)
 	if err != nil {

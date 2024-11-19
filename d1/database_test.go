@@ -121,7 +121,7 @@ func TestDatabaseExportWithOptionalParams(t *testing.T) {
 			DumpOptions: cloudflare.F(d1.DatabaseExportParamsDumpOptions{
 				NoData:   cloudflare.F(true),
 				NoSchema: cloudflare.F(true),
-				Tables:   cloudflare.F([]string{"string", "string", "string"}),
+				Tables:   cloudflare.F([]string{"string"}),
 			}),
 		},
 	)

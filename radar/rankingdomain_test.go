@@ -31,10 +31,10 @@ func TestRankingDomainGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"google.com",
 		radar.RankingDomainGetParams{
-			Date:        cloudflare.F([]string{"string", "string", "string"}),
+			Date:        cloudflare.F([]string{"string"}),
 			Format:      cloudflare.F(radar.RankingDomainGetParamsFormatJson),
 			Limit:       cloudflare.F(int64(5)),
-			Name:        cloudflare.F([]string{"string", "string", "string"}),
+			Name:        cloudflare.F([]string{"string"}),
 			RankingType: cloudflare.F(radar.RankingDomainGetParamsRankingTypePopular),
 		},
 	)

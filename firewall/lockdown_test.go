@@ -34,14 +34,8 @@ func TestLockdownNew(t *testing.T) {
 		Configurations: cloudflare.F([]firewall.ConfigurationItemUnionParam{firewall.LockdownIPConfigurationParam{
 			Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
-		}, firewall.LockdownIPConfigurationParam{
-			Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
-			Value:  cloudflare.F("198.51.100.4"),
-		}, firewall.LockdownIPConfigurationParam{
-			Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
-			Value:  cloudflare.F("198.51.100.4"),
 		}}),
-		URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
+		URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -74,14 +68,8 @@ func TestLockdownUpdate(t *testing.T) {
 			Configurations: cloudflare.F([]firewall.ConfigurationItemUnionParam{firewall.LockdownIPConfigurationParam{
 				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
-			}, firewall.LockdownIPConfigurationParam{
-				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
-				Value:  cloudflare.F("198.51.100.4"),
-			}, firewall.LockdownIPConfigurationParam{
-				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
-				Value:  cloudflare.F("198.51.100.4"),
 			}}),
-			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
+			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
 		},
 	)
 	if err != nil {

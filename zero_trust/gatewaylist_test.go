@@ -35,12 +35,6 @@ func TestGatewayListNewWithOptionalParams(t *testing.T) {
 		Items: cloudflare.F([]zero_trust.GatewayItemParam{{
 			Description: cloudflare.F("Austin office IP"),
 			Value:       cloudflare.F("8GE8721REF"),
-		}, {
-			Description: cloudflare.F("Austin office IP"),
-			Value:       cloudflare.F("8GE8721REF"),
-		}, {
-			Description: cloudflare.F("Austin office IP"),
-			Value:       cloudflare.F("8GE8721REF"),
 		}}),
 	})
 	if err != nil {
@@ -159,14 +153,8 @@ func TestGatewayListEditWithOptionalParams(t *testing.T) {
 			Append: cloudflare.F([]zero_trust.GatewayItemParam{{
 				Description: cloudflare.F("Austin office IP"),
 				Value:       cloudflare.F("8GE8721REF"),
-			}, {
-				Description: cloudflare.F("Austin office IP"),
-				Value:       cloudflare.F("8GE8721REF"),
-			}, {
-				Description: cloudflare.F("Austin office IP"),
-				Value:       cloudflare.F("8GE8721REF"),
 			}}),
-			Remove: cloudflare.F([]string{"8GE8721REF", "8GE8721REF", "8GE8721REF"}),
+			Remove: cloudflare.F([]string{"8GE8721REF"}),
 		},
 	)
 	if err != nil {

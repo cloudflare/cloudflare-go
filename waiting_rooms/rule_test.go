@@ -72,16 +72,6 @@ func TestRuleUpdate(t *testing.T) {
 				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
 				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
 				Enabled:     cloudflare.F(true),
-			}, {
-				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsRulesActionBypassWaitingRoom),
-				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
-				Enabled:     cloudflare.F(true),
-			}, {
-				Action:      cloudflare.F(waiting_rooms.RuleUpdateParamsRulesActionBypassWaitingRoom),
-				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
-				Enabled:     cloudflare.F(true),
 			}},
 		},
 	)

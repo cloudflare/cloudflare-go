@@ -37,14 +37,6 @@ func TestHostnameIPFSUniversalPathContentListUpdate(t *testing.T) {
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 				Description: cloudflare.F("this is my content list entry"),
 				Type:        cloudflare.F(web3.HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid),
-			}, {
-				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
-				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(web3.HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid),
-			}, {
-				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
-				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(web3.HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid),
 			}}),
 		},
 	)

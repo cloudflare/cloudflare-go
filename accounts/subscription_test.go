@@ -39,7 +39,7 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 				IsContract:        cloudflare.F(false),
 				PublicName:        cloudflare.F("Business Plan"),
 				Scope:             cloudflare.F("zone"),
-				Sets:              cloudflare.F([]string{"string", "string", "string"}),
+				Sets:              cloudflare.F([]string{"string"}),
 			}),
 		},
 	})
@@ -79,7 +79,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 					IsContract:        cloudflare.F(false),
 					PublicName:        cloudflare.F("Business Plan"),
 					Scope:             cloudflare.F("zone"),
-					Sets:              cloudflare.F([]string{"string", "string", "string"}),
+					Sets:              cloudflare.F([]string{"string"}),
 				}),
 			},
 		},

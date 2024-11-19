@@ -35,7 +35,7 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptVersionNewParams{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Metadata: cloudflare.F(workers.ScriptVersionNewParamsMetadata{
 				Annotations: cloudflare.F(workers.ScriptVersionNewParamsMetadataAnnotations{
 					WorkersMessage: cloudflare.F("Fixed worker code."),
@@ -47,8 +47,8 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 					"type": "plain_text",
 				}}),
 				CompatibilityDate:  cloudflare.F("2023-07-25"),
-				CompatibilityFlags: cloudflare.F([]string{"string", "string", "string"}),
-				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
+				CompatibilityFlags: cloudflare.F([]string{"string"}),
+				KeepBindings:       cloudflare.F([]string{"string"}),
 				MainModule:         cloudflare.F("worker.js"),
 				UsageModel:         cloudflare.F(workers.ScriptVersionNewParamsMetadataUsageModelStandard),
 			}),

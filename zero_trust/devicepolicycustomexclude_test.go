@@ -36,14 +36,6 @@ func TestDevicePolicyCustomExcludeUpdate(t *testing.T) {
 				Address:     cloudflare.F("192.0.2.0/24"),
 				Description: cloudflare.F("Exclude testing domains from the tunnel"),
 				Host:        cloudflare.F("*.example.com"),
-			}, {
-				Address:     cloudflare.F("192.0.2.0/24"),
-				Description: cloudflare.F("Exclude testing domains from the tunnel"),
-				Host:        cloudflare.F("*.example.com"),
-			}, {
-				Address:     cloudflare.F("192.0.2.0/24"),
-				Description: cloudflare.F("Exclude testing domains from the tunnel"),
-				Host:        cloudflare.F("*.example.com"),
 			}},
 		},
 	)

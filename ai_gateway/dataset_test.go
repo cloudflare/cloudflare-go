@@ -37,15 +37,7 @@ func TestDatasetNew(t *testing.T) {
 			Filters: cloudflare.F([]ai_gateway.DatasetNewParamsFilter{{
 				Key:      cloudflare.F(ai_gateway.DatasetNewParamsFiltersKeyCreatedAt),
 				Operator: cloudflare.F(ai_gateway.DatasetNewParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.DatasetNewParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}, {
-				Key:      cloudflare.F(ai_gateway.DatasetNewParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.DatasetNewParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.DatasetNewParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}, {
-				Key:      cloudflare.F(ai_gateway.DatasetNewParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.DatasetNewParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.DatasetNewParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
+				Value:    cloudflare.F([]ai_gateway.DatasetNewParamsFiltersValueUnion{shared.UnionString("string")}),
 			}}),
 			Name: cloudflare.F("name"),
 		},
@@ -82,15 +74,7 @@ func TestDatasetUpdate(t *testing.T) {
 			Filters: cloudflare.F([]ai_gateway.DatasetUpdateParamsFilter{{
 				Key:      cloudflare.F(ai_gateway.DatasetUpdateParamsFiltersKeyCreatedAt),
 				Operator: cloudflare.F(ai_gateway.DatasetUpdateParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.DatasetUpdateParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}, {
-				Key:      cloudflare.F(ai_gateway.DatasetUpdateParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.DatasetUpdateParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.DatasetUpdateParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
-			}, {
-				Key:      cloudflare.F(ai_gateway.DatasetUpdateParamsFiltersKeyCreatedAt),
-				Operator: cloudflare.F(ai_gateway.DatasetUpdateParamsFiltersOperatorEq),
-				Value:    cloudflare.F([]ai_gateway.DatasetUpdateParamsFiltersValueUnion{shared.UnionString("string"), shared.UnionString("string"), shared.UnionString("string")}),
+				Value:    cloudflare.F([]ai_gateway.DatasetUpdateParamsFiltersValueUnion{shared.UnionString("string")}),
 			}}),
 			Name: cloudflare.F("name"),
 		},

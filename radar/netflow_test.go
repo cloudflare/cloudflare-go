@@ -29,14 +29,14 @@ func TestNetflowSummaryWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Netflows.Summary(context.TODO(), radar.NetflowSummaryParams{
-		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:       cloudflare.F([]string{"string"}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+		DateRange: cloudflare.F([]string{"7d"}),
+		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.NetflowSummaryParamsFormatJson),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,16 +62,16 @@ func TestNetflowTimeseriesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Netflows.Timeseries(context.TODO(), radar.NetflowTimeseriesParams{
 		AggInterval:   cloudflare.F(radar.NetflowTimeseriesParamsAggInterval15m),
-		ASN:           cloudflare.F([]string{"string", "string", "string"}),
-		Continent:     cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:     cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:           cloudflare.F([]string{"string"}),
+		Continent:     cloudflare.F([]string{"string"}),
+		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+		DateRange:     cloudflare.F([]string{"7d"}),
+		DateStart:     cloudflare.F([]time.Time{time.Now()}),
 		Format:        cloudflare.F(radar.NetflowTimeseriesParamsFormatJson),
-		Location:      cloudflare.F([]string{"string", "string", "string"}),
-		Name:          cloudflare.F([]string{"string", "string", "string"}),
+		Location:      cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"string"}),
 		Normalization: cloudflare.F(radar.NetflowTimeseriesParamsNormalizationPercentageChange),
-		Product:       cloudflare.F([]radar.NetflowTimeseriesParamsProduct{radar.NetflowTimeseriesParamsProductHTTP, radar.NetflowTimeseriesParamsProductAll}),
+		Product:       cloudflare.F([]radar.NetflowTimeseriesParamsProduct{radar.NetflowTimeseriesParamsProductHTTP}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

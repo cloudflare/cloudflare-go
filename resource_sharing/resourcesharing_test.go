@@ -33,24 +33,8 @@ func TestResourceSharingNew(t *testing.T) {
 		Recipients: cloudflare.F([]resource_sharing.ResourceSharingNewParamsRecipient{{
 			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			OrganizationID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		}, {
-			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			OrganizationID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		}, {
-			AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			OrganizationID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}}),
 		Resources: cloudflare.F([]resource_sharing.ResourceSharingNewParamsResource{{
-			Meta:              cloudflare.F[any](map[string]interface{}{}),
-			ResourceAccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ResourceID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ResourceType:      cloudflare.F(resource_sharing.ResourceSharingNewParamsResourcesResourceTypeCustomRuleset),
-		}, {
-			Meta:              cloudflare.F[any](map[string]interface{}{}),
-			ResourceAccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ResourceID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ResourceType:      cloudflare.F(resource_sharing.ResourceSharingNewParamsResourcesResourceTypeCustomRuleset),
-		}, {
 			Meta:              cloudflare.F[any](map[string]interface{}{}),
 			ResourceAccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ResourceID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

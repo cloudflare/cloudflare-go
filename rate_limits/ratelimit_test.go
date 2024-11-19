@@ -43,14 +43,6 @@ func TestRateLimitNewWithOptionalParams(t *testing.T) {
 				Name:  cloudflare.F("Cf-Cache-Status"),
 				Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
 				Value: cloudflare.F("HIT"),
-			}, {
-				Name:  cloudflare.F("Cf-Cache-Status"),
-				Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
-				Value: cloudflare.F("HIT"),
-			}, {
-				Name:  cloudflare.F("Cf-Cache-Status"),
-				Op:    cloudflare.F(rate_limits.RateLimitNewParamsMatchHeadersOpEq),
-				Value: cloudflare.F("HIT"),
 			}}),
 			Request: cloudflare.F(rate_limits.RateLimitNewParamsMatchRequest{
 				Methods: cloudflare.F([]rate_limits.Methods{rate_limits.MethodsGet, rate_limits.MethodsPost}),
@@ -158,14 +150,6 @@ func TestRateLimitEditWithOptionalParams(t *testing.T) {
 			}),
 			Match: cloudflare.F(rate_limits.RateLimitEditParamsMatch{
 				Headers: cloudflare.F([]rate_limits.RateLimitEditParamsMatchHeader{{
-					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpEq),
-					Value: cloudflare.F("HIT"),
-				}, {
-					Name:  cloudflare.F("Cf-Cache-Status"),
-					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpEq),
-					Value: cloudflare.F("HIT"),
-				}, {
 					Name:  cloudflare.F("Cf-Cache-Status"),
 					Op:    cloudflare.F(rate_limits.RateLimitEditParamsMatchHeadersOpEq),
 					Value: cloudflare.F("HIT"),

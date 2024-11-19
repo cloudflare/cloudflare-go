@@ -33,14 +33,6 @@ func TestAccessCertificateSettingUpdateWithOptionalParams(t *testing.T) {
 			ChinaNetwork:                cloudflare.F(false),
 			ClientCertificateForwarding: cloudflare.F(true),
 			Hostname:                    cloudflare.F("admin.example.com"),
-		}, {
-			ChinaNetwork:                cloudflare.F(false),
-			ClientCertificateForwarding: cloudflare.F(true),
-			Hostname:                    cloudflare.F("admin.example.com"),
-		}, {
-			ChinaNetwork:                cloudflare.F(false),
-			ClientCertificateForwarding: cloudflare.F(true),
-			Hostname:                    cloudflare.F("admin.example.com"),
 		}}),
 		AccountID: cloudflare.F("account_id"),
 	})

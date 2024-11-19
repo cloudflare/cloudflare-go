@@ -34,14 +34,6 @@ func TestSeatEdit(t *testing.T) {
 			AccessSeat:  cloudflare.F(false),
 			GatewaySeat: cloudflare.F(false),
 			SeatUID:     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-		}, {
-			AccessSeat:  cloudflare.F(false),
-			GatewaySeat: cloudflare.F(false),
-			SeatUID:     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-		}, {
-			AccessSeat:  cloudflare.F(false),
-			GatewaySeat: cloudflare.F(false),
-			SeatUID:     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 		}},
 	})
 	if err != nil {

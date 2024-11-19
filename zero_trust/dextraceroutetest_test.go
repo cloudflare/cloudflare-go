@@ -36,7 +36,7 @@ func TestDEXTracerouteTestGetWithOptionalParams(t *testing.T) {
 			Interval:  cloudflare.F(zero_trust.DEXTracerouteTestGetParamsIntervalMinute),
 			To:        cloudflare.F("1689606812000"),
 			Colo:      cloudflare.F("colo"),
-			DeviceID:  cloudflare.F([]string{"string", "string", "string"}),
+			DeviceID:  cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {
@@ -102,7 +102,7 @@ func TestDEXTracerouteTestPercentilesWithOptionalParams(t *testing.T) {
 			From:      cloudflare.F("2023-09-20T17:00:00Z"),
 			To:        cloudflare.F("2023-09-20T17:00:00Z"),
 			Colo:      cloudflare.F("colo"),
-			DeviceID:  cloudflare.F([]string{"string", "string", "string"}),
+			DeviceID:  cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {

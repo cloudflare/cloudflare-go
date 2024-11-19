@@ -30,7 +30,7 @@ func TestSettingViewNew(t *testing.T) {
 	_, err := client.DNS.Settings.Views.New(context.TODO(), dns.SettingViewNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("my view"),
-		Zones:     cloudflare.F([]string{"372e67954025e0ba6aaa6d586b9e0b59", "372e67954025e0ba6aaa6d586b9e0b59", "372e67954025e0ba6aaa6d586b9e0b59"}),
+		Zones:     cloudflare.F([]string{"372e67954025e0ba6aaa6d586b9e0b59"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -127,7 +127,7 @@ func TestSettingViewEditWithOptionalParams(t *testing.T) {
 		dns.SettingViewEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:      cloudflare.F("my view"),
-			Zones:     cloudflare.F([]string{"372e67954025e0ba6aaa6d586b9e0b59", "372e67954025e0ba6aaa6d586b9e0b59", "372e67954025e0ba6aaa6d586b9e0b59"}),
+			Zones:     cloudflare.F([]string{"372e67954025e0ba6aaa6d586b9e0b59"}),
 		},
 	)
 	if err != nil {

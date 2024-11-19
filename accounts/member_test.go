@@ -33,7 +33,7 @@ func TestMemberNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 		Body: accounts.MemberNewParamsBodyIAMCreateMemberWithRoles{
 			Email:  cloudflare.F("user@example.com"),
-			Roles:  cloudflare.F([]string{"3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb", "3536bcfad5faccb999b47003c79917fb"}),
+			Roles:  cloudflare.F([]string{"3536bcfad5faccb999b47003c79917fb"}),
 			Status: cloudflare.F(accounts.MemberNewParamsBodyIAMCreateMemberWithRolesStatusAccepted),
 		},
 	})
@@ -67,10 +67,6 @@ func TestMemberUpdateWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("eb78d65290b24279ba6f44721b3ea3c4"),
 			Body: accounts.MemberUpdateParamsBodyIAMUpdateMemberWithRoles{
 				Roles: cloudflare.F([]shared.RoleParam{{
-					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
-				}, {
-					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
-				}, {
 					ID: cloudflare.F("3536bcfad5faccb999b47003c79917fb"),
 				}}),
 			},
