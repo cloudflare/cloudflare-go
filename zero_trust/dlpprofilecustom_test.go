@@ -50,10 +50,10 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 				}),
 				Description: cloudflare.F("description"),
 				OCREnabled:  cloudflare.F(true),
-				SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion{zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustom{
+				SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion{zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesObject{
 					Enabled:   cloudflare.F(true),
 					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustomEntryTypeCustom),
+					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesObjectEntryTypeCustom),
 				}}),
 			}}),
 		},
@@ -105,10 +105,10 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 				}),
 			}}),
 			OCREnabled: cloudflare.F(true),
-			SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsSharedEntryUnion{zero_trust.DLPProfileCustomUpdateParamsSharedEntriesPredefined{
+			SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsSharedEntryUnion{zero_trust.DLPProfileCustomUpdateParamsSharedEntriesObject{
 				Enabled:   cloudflare.F(true),
 				EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-				EntryType: cloudflare.F(zero_trust.DLPProfileCustomUpdateParamsSharedEntriesPredefinedEntryTypePredefined),
+				EntryType: cloudflare.F(zero_trust.DLPProfileCustomUpdateParamsSharedEntriesObjectEntryTypePredefined),
 			}}),
 		},
 	)
