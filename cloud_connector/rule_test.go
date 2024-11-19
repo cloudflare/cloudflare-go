@@ -38,24 +38,6 @@ func TestRuleUpdate(t *testing.T) {
 				Host: cloudflare.F("examplebucket.s3.eu-north-1.amazonaws.com"),
 			}),
 			Provider: cloudflare.F(cloud_connector.RuleUpdateParamsBodyProviderAwsS3),
-		}, {
-			ID:          cloudflare.F("95c365e17e1b46599cd99e5b231fac4e"),
-			Description: cloudflare.F("Rule description"),
-			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
-			Parameters: cloudflare.F(cloud_connector.RuleUpdateParamsBodyParameters{
-				Host: cloudflare.F("examplebucket.s3.eu-north-1.amazonaws.com"),
-			}),
-			Provider: cloudflare.F(cloud_connector.RuleUpdateParamsBodyProviderAwsS3),
-		}, {
-			ID:          cloudflare.F("95c365e17e1b46599cd99e5b231fac4e"),
-			Description: cloudflare.F("Rule description"),
-			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
-			Parameters: cloudflare.F(cloud_connector.RuleUpdateParamsBodyParameters{
-				Host: cloudflare.F("examplebucket.s3.eu-north-1.amazonaws.com"),
-			}),
-			Provider: cloudflare.F(cloud_connector.RuleUpdateParamsBodyProviderAwsS3),
 		}},
 	})
 	if err != nil {

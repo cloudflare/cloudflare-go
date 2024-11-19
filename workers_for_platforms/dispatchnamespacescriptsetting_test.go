@@ -38,42 +38,24 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 			Settings: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettings{
 				Bindings: cloudflare.F([]workers.BindingUnionParam{workers.KVNamespaceBindingParam{
 					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
-				}, workers.KVNamespaceBindingParam{
-					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
-				}, workers.KVNamespaceBindingParam{
-					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
 				}}),
 				CompatibilityDate:  cloudflare.F("2022-04-05"),
-				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
+				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files"}),
 				Limits: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsLimits{
 					CPUMs: cloudflare.F(int64(50)),
 				}),
 				Logpush: cloudflare.F(false),
 				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion](workers.SingleStepMigrationParam{
-					DeletedClasses:   cloudflare.F([]string{"string", "string", "string"}),
-					NewClasses:       cloudflare.F([]string{"string", "string", "string"}),
-					NewSqliteClasses: cloudflare.F([]string{"string", "string", "string"}),
+					DeletedClasses:   cloudflare.F([]string{"string"}),
+					NewClasses:       cloudflare.F([]string{"string"}),
+					NewSqliteClasses: cloudflare.F([]string{"string"}),
 					NewTag:           cloudflare.F("v2"),
 					OldTag:           cloudflare.F("v1"),
 					RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
 						From: cloudflare.F("from"),
 						To:   cloudflare.F("to"),
-					}, {
-						From: cloudflare.F("from"),
-						To:   cloudflare.F("to"),
-					}, {
-						From: cloudflare.F("from"),
-						To:   cloudflare.F("to"),
 					}}),
 					TransferredClasses: cloudflare.F([]workers.SingleStepMigrationTransferredClassParam{{
-						From:       cloudflare.F("from"),
-						FromScript: cloudflare.F("from_script"),
-						To:         cloudflare.F("to"),
-					}, {
-						From:       cloudflare.F("from"),
-						FromScript: cloudflare.F("from_script"),
-						To:         cloudflare.F("to"),
-					}, {
 						From:       cloudflare.F("from"),
 						FromScript: cloudflare.F("from_script"),
 						To:         cloudflare.F("to"),
@@ -86,16 +68,8 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				Placement: cloudflare.F(workers.PlacementConfigurationParam{
 					Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
 				}),
-				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
+				Tags: cloudflare.F([]string{"my-tag"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
-					Service:     cloudflare.F("my-log-consumer"),
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-				}, {
-					Service:     cloudflare.F("my-log-consumer"),
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-				}, {
 					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),

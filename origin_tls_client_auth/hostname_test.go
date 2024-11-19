@@ -33,14 +33,6 @@ func TestHostnameUpdate(t *testing.T) {
 			CERTID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
 			Enabled:  cloudflare.F(true),
 			Hostname: cloudflare.F("app.example.com"),
-		}, {
-			CERTID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
-			Enabled:  cloudflare.F(true),
-			Hostname: cloudflare.F("app.example.com"),
-		}, {
-			CERTID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
-			Enabled:  cloudflare.F(true),
-			Hostname: cloudflare.F("app.example.com"),
 		}}),
 	})
 	if err != nil {

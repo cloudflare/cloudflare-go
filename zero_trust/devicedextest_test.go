@@ -43,14 +43,6 @@ func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 				ID:      cloudflare.F("id"),
 				Default: cloudflare.F(true),
 				Name:    cloudflare.F("name"),
-			}, {
-				ID:      cloudflare.F("id"),
-				Default: cloudflare.F(true),
-				Name:    cloudflare.F("name"),
-			}, {
-				ID:      cloudflare.F("id"),
-				Default: cloudflare.F(true),
-				Name:    cloudflare.F("name"),
 			}}),
 			Targeted: cloudflare.F(true),
 		},
@@ -93,14 +85,6 @@ func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 				Name:        cloudflare.F("HTTP dash health check"),
 				Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
 				TargetPolicies: cloudflare.F([]zero_trust.SchemaHTTPTargetPolicyParam{{
-					ID:      cloudflare.F("id"),
-					Default: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-				}, {
-					ID:      cloudflare.F("id"),
-					Default: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-				}, {
 					ID:      cloudflare.F("id"),
 					Default: cloudflare.F(true),
 					Name:    cloudflare.F("name"),

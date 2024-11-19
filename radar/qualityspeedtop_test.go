@@ -29,13 +29,13 @@ func TestQualitySpeedTopAsesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Quality.Speed.Top.Ases(context.TODO(), radar.QualitySpeedTopAsesParams{
-		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:       cloudflare.F([]string{"string"}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.QualitySpeedTopAsesParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
 		OrderBy:   cloudflare.F(radar.QualitySpeedTopAsesParamsOrderByBandwidthDownload),
 		Reverse:   cloudflare.F(true),
 	})
@@ -62,13 +62,13 @@ func TestQualitySpeedTopLocationsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Quality.Speed.Top.Locations(context.TODO(), radar.QualitySpeedTopLocationsParams{
-		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:       cloudflare.F([]string{"string"}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.QualitySpeedTopLocationsParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
 		OrderBy:   cloudflare.F(radar.QualitySpeedTopLocationsParamsOrderByBandwidthDownload),
 		Reverse:   cloudflare.F(true),
 	})

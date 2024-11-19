@@ -38,7 +38,7 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 					Service:  cloudflare.F("https://localhost:8001"),
 					OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequest{
 						Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess{
-							AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
+							AUDTag:   cloudflare.F([]string{"string"}),
 							TeamName: cloudflare.F("teamName"),
 							Required: cloudflare.F(true),
 						}),
@@ -60,7 +60,7 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 				}}),
 				OriginRequest: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigOriginRequest{
 					Access: cloudflare.F(zero_trust.TunnelConfigurationUpdateParamsConfigOriginRequestAccess{
-						AUDTag:   cloudflare.F([]string{"string", "string", "string"}),
+						AUDTag:   cloudflare.F([]string{"string"}),
 						TeamName: cloudflare.F("teamName"),
 						Required: cloudflare.F(true),
 					}),

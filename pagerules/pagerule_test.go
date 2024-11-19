@@ -35,18 +35,6 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 				StatusCode: cloudflare.F(pagerules.PageruleNewParamsActionsValueStatusCode301),
 				URL:        cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
 			}),
-		}, {
-			ID: cloudflare.F(pagerules.PageruleNewParamsActionsIDForwardingURL),
-			Value: cloudflare.F(pagerules.PageruleNewParamsActionsValue{
-				StatusCode: cloudflare.F(pagerules.PageruleNewParamsActionsValueStatusCode301),
-				URL:        cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-			}),
-		}, {
-			ID: cloudflare.F(pagerules.PageruleNewParamsActionsIDForwardingURL),
-			Value: cloudflare.F(pagerules.PageruleNewParamsActionsValue{
-				StatusCode: cloudflare.F(pagerules.PageruleNewParamsActionsValueStatusCode301),
-				URL:        cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-			}),
 		}}),
 		Targets: cloudflare.F([]pagerules.TargetParam{{
 			Constraint: cloudflare.F(pagerules.TargetConstraintParam{
@@ -86,18 +74,6 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 		pagerules.PageruleUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Actions: cloudflare.F([]pagerules.PageruleUpdateParamsAction{{
-				ID: cloudflare.F(pagerules.PageruleUpdateParamsActionsIDForwardingURL),
-				Value: cloudflare.F(pagerules.PageruleUpdateParamsActionsValue{
-					StatusCode: cloudflare.F(pagerules.PageruleUpdateParamsActionsValueStatusCode301),
-					URL:        cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
-			}, {
-				ID: cloudflare.F(pagerules.PageruleUpdateParamsActionsIDForwardingURL),
-				Value: cloudflare.F(pagerules.PageruleUpdateParamsActionsValue{
-					StatusCode: cloudflare.F(pagerules.PageruleUpdateParamsActionsValueStatusCode301),
-					URL:        cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
-			}, {
 				ID: cloudflare.F(pagerules.PageruleUpdateParamsActionsIDForwardingURL),
 				Value: cloudflare.F(pagerules.PageruleUpdateParamsActionsValue{
 					StatusCode: cloudflare.F(pagerules.PageruleUpdateParamsActionsValueStatusCode301),
@@ -201,18 +177,6 @@ func TestPageruleEditWithOptionalParams(t *testing.T) {
 		pagerules.PageruleEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Actions: cloudflare.F([]pagerules.PageruleEditParamsAction{{
-				ID: cloudflare.F(pagerules.PageruleEditParamsActionsIDForwardingURL),
-				Value: cloudflare.F(pagerules.PageruleEditParamsActionsValue{
-					StatusCode: cloudflare.F(pagerules.PageruleEditParamsActionsValueStatusCode301),
-					URL:        cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
-			}, {
-				ID: cloudflare.F(pagerules.PageruleEditParamsActionsIDForwardingURL),
-				Value: cloudflare.F(pagerules.PageruleEditParamsActionsValue{
-					StatusCode: cloudflare.F(pagerules.PageruleEditParamsActionsValueStatusCode301),
-					URL:        cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
-			}, {
 				ID: cloudflare.F(pagerules.PageruleEditParamsActionsIDForwardingURL),
 				Value: cloudflare.F(pagerules.PageruleEditParamsActionsValue{
 					StatusCode: cloudflare.F(pagerules.PageruleEditParamsActionsValueStatusCode301),

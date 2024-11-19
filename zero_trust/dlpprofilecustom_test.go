@@ -38,20 +38,6 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 						Regex:      cloudflare.F("regex"),
 						Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 					}),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry{
-					Enabled: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-					Pattern: cloudflare.F(zero_trust.PatternParam{
-						Regex:      cloudflare.F("regex"),
-						Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-					}),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry{
-					Enabled: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-					Pattern: cloudflare.F(zero_trust.PatternParam{
-						Regex:      cloudflare.F("regex"),
-						Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-					}),
 				}}),
 				Name:                cloudflare.F("name"),
 				AllowedMatchCount:   cloudflare.F(int64(5)),
@@ -65,108 +51,6 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 				Description: cloudflare.F("description"),
 				OCREnabled:  cloudflare.F(true),
 				SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion{zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustom{
-					Enabled:   cloudflare.F(true),
-					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustomEntryTypeCustom),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustom{
-					Enabled:   cloudflare.F(true),
-					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustomEntryTypeCustom),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustom{
-					Enabled:   cloudflare.F(true),
-					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustomEntryTypeCustom),
-				}}),
-			}, {
-				Entries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion{zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry{
-					Enabled: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-					Pattern: cloudflare.F(zero_trust.PatternParam{
-						Regex:      cloudflare.F("regex"),
-						Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-					}),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry{
-					Enabled: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-					Pattern: cloudflare.F(zero_trust.PatternParam{
-						Regex:      cloudflare.F("regex"),
-						Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-					}),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry{
-					Enabled: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-					Pattern: cloudflare.F(zero_trust.PatternParam{
-						Regex:      cloudflare.F("regex"),
-						Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-					}),
-				}}),
-				Name:                cloudflare.F("name"),
-				AllowedMatchCount:   cloudflare.F(int64(5)),
-				ConfidenceThreshold: cloudflare.F("confidence_threshold"),
-				ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
-					Enabled: cloudflare.F(true),
-					Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
-						Files: cloudflare.F(true),
-					}),
-				}),
-				Description: cloudflare.F("description"),
-				OCREnabled:  cloudflare.F(true),
-				SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion{zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustom{
-					Enabled:   cloudflare.F(true),
-					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustomEntryTypeCustom),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustom{
-					Enabled:   cloudflare.F(true),
-					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustomEntryTypeCustom),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustom{
-					Enabled:   cloudflare.F(true),
-					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustomEntryTypeCustom),
-				}}),
-			}, {
-				Entries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntryUnion{zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry{
-					Enabled: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-					Pattern: cloudflare.F(zero_trust.PatternParam{
-						Regex:      cloudflare.F("regex"),
-						Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-					}),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry{
-					Enabled: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-					Pattern: cloudflare.F(zero_trust.PatternParam{
-						Regex:      cloudflare.F("regex"),
-						Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-					}),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesEntriesDLPNewCustomEntry{
-					Enabled: cloudflare.F(true),
-					Name:    cloudflare.F("name"),
-					Pattern: cloudflare.F(zero_trust.PatternParam{
-						Regex:      cloudflare.F("regex"),
-						Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-					}),
-				}}),
-				Name:                cloudflare.F("name"),
-				AllowedMatchCount:   cloudflare.F(int64(5)),
-				ConfidenceThreshold: cloudflare.F("confidence_threshold"),
-				ContextAwareness: cloudflare.F(zero_trust.ContextAwarenessParam{
-					Enabled: cloudflare.F(true),
-					Skip: cloudflare.F(zero_trust.SkipConfigurationParam{
-						Files: cloudflare.F(true),
-					}),
-				}),
-				Description: cloudflare.F("description"),
-				OCREnabled:  cloudflare.F(true),
-				SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntryUnion{zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustom{
-					Enabled:   cloudflare.F(true),
-					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustomEntryTypeCustom),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustom{
-					Enabled:   cloudflare.F(true),
-					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustomEntryTypeCustom),
-				}, zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustom{
 					Enabled:   cloudflare.F(true),
 					EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 					EntryType: cloudflare.F(zero_trust.DLPProfileCustomNewParamsBodyProfilesProfilesSharedEntriesCustomEntryTypeCustom),
@@ -219,33 +103,9 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 					Regex:      cloudflare.F("regex"),
 					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
 				}),
-			}, zero_trust.DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID{
-				Enabled: cloudflare.F(true),
-				EntryID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-				Name:    cloudflare.F("name"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("regex"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
-			}, zero_trust.DLPProfileCustomUpdateParamsEntriesDLPNewCustomEntryWithID{
-				Enabled: cloudflare.F(true),
-				EntryID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-				Name:    cloudflare.F("name"),
-				Pattern: cloudflare.F(zero_trust.PatternParam{
-					Regex:      cloudflare.F("regex"),
-					Validation: cloudflare.F(zero_trust.PatternValidationLuhn),
-				}),
 			}}),
 			OCREnabled: cloudflare.F(true),
 			SharedEntries: cloudflare.F([]zero_trust.DLPProfileCustomUpdateParamsSharedEntryUnion{zero_trust.DLPProfileCustomUpdateParamsSharedEntriesPredefined{
-				Enabled:   cloudflare.F(true),
-				EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-				EntryType: cloudflare.F(zero_trust.DLPProfileCustomUpdateParamsSharedEntriesPredefinedEntryTypePredefined),
-			}, zero_trust.DLPProfileCustomUpdateParamsSharedEntriesPredefined{
-				Enabled:   cloudflare.F(true),
-				EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-				EntryType: cloudflare.F(zero_trust.DLPProfileCustomUpdateParamsSharedEntriesPredefinedEntryTypePredefined),
-			}, zero_trust.DLPProfileCustomUpdateParamsSharedEntriesPredefined{
 				Enabled:   cloudflare.F(true),
 				EntryID:   cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 				EntryType: cloudflare.F(zero_trust.DLPProfileCustomUpdateParamsSharedEntriesPredefinedEntryTypePredefined),

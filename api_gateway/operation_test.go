@@ -33,14 +33,6 @@ func TestOperationNew(t *testing.T) {
 			Endpoint: cloudflare.F("/api/v1/users/{var1}"),
 			Host:     cloudflare.F("www.example.com"),
 			Method:   cloudflare.F(api_gateway.OperationNewParamsBodyMethodGet),
-		}, {
-			Endpoint: cloudflare.F("/api/v1/users/{var1}"),
-			Host:     cloudflare.F("www.example.com"),
-			Method:   cloudflare.F(api_gateway.OperationNewParamsBodyMethodGet),
-		}, {
-			Endpoint: cloudflare.F("/api/v1/users/{var1}"),
-			Host:     cloudflare.F("www.example.com"),
-			Method:   cloudflare.F(api_gateway.OperationNewParamsBodyMethodGet),
 		}},
 	})
 	if err != nil {

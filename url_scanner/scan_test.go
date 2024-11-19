@@ -40,7 +40,7 @@ func TestScanNewWithOptionalParams(t *testing.T) {
 			CustomHeaders: cloudflare.F(map[string]string{
 				"foo": "string",
 			}),
-			ScreenshotsResolutions: cloudflare.F([]url_scanner.ScanNewParamsScreenshotsResolution{url_scanner.ScanNewParamsScreenshotsResolutionDesktop, url_scanner.ScanNewParamsScreenshotsResolutionMobile, url_scanner.ScanNewParamsScreenshotsResolutionTablet}),
+			ScreenshotsResolutions: cloudflare.F([]url_scanner.ScanNewParamsScreenshotsResolution{url_scanner.ScanNewParamsScreenshotsResolutionDesktop}),
 			Visibility:             cloudflare.F(url_scanner.ScanNewParamsVisibilityPublic),
 		},
 	)

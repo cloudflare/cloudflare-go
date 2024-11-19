@@ -31,10 +31,10 @@ func TestAnalyticsListWithOptionalParams(t *testing.T) {
 	_, err := client.Storage.Analytics.List(context.TODO(), storage.AnalyticsListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Query: cloudflare.F(storage.AnalyticsListParamsQuery{
-			Dimensions: cloudflare.F([]storage.AnalyticsListParamsQueryDimension{storage.AnalyticsListParamsQueryDimensionAccountID, storage.AnalyticsListParamsQueryDimensionResponseCode, storage.AnalyticsListParamsQueryDimensionRequestType}),
+			Dimensions: cloudflare.F([]storage.AnalyticsListParamsQueryDimension{storage.AnalyticsListParamsQueryDimensionAccountID}),
 			Filters:    cloudflare.F("requestType==read AND responseCode!=200"),
 			Limit:      cloudflare.F(int64(0)),
-			Metrics:    cloudflare.F([]storage.AnalyticsListParamsQueryMetric{storage.AnalyticsListParamsQueryMetricRequests, storage.AnalyticsListParamsQueryMetricWriteKiB, storage.AnalyticsListParamsQueryMetricReadKiB}),
+			Metrics:    cloudflare.F([]storage.AnalyticsListParamsQueryMetric{storage.AnalyticsListParamsQueryMetricRequests}),
 			Since:      cloudflare.F(time.Now()),
 			Sort:       cloudflare.F([]string{"+requests", "-responseCode"}),
 			Until:      cloudflare.F(time.Now()),
@@ -68,7 +68,7 @@ func TestAnalyticsStoredWithOptionalParams(t *testing.T) {
 			Dimensions: cloudflare.F([]storage.AnalyticsStoredParamsQueryDimension{storage.AnalyticsStoredParamsQueryDimensionNamespaceID}),
 			Filters:    cloudflare.F("namespaceId==a4e8cbb7-1b58-4990-925e-e026d40c4c64"),
 			Limit:      cloudflare.F(int64(0)),
-			Metrics:    cloudflare.F([]storage.AnalyticsStoredParamsQueryMetric{storage.AnalyticsStoredParamsQueryMetricStoredBytes, storage.AnalyticsStoredParamsQueryMetricStoredKeys}),
+			Metrics:    cloudflare.F([]storage.AnalyticsStoredParamsQueryMetric{storage.AnalyticsStoredParamsQueryMetricStoredBytes}),
 			Since:      cloudflare.F(time.Now()),
 			Sort:       cloudflare.F([]string{"+storedBytes", "-namespaceId"}),
 			Until:      cloudflare.F(time.Now()),

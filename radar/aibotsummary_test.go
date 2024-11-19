@@ -29,14 +29,14 @@ func TestAIBotSummaryUserAgentWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AI.Bots.Summary.UserAgent(context.TODO(), radar.AIBotSummaryUserAgentParams{
-		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:       cloudflare.F([]string{"string"}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+		DateRange: cloudflare.F([]string{"7d"}),
+		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.AIBotSummaryUserAgentParamsFormatJson),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -30,7 +30,7 @@ func TestWAFOverrideNew(t *testing.T) {
 	)
 	_, err := client.Firewall.WAF.Overrides.New(context.TODO(), firewall.WAFOverrideNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		URLs:   cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
+		URLs:   cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -71,7 +71,7 @@ func TestWAFOverrideUpdateWithOptionalParams(t *testing.T) {
 			Rules: cloudflare.F(firewall.WAFRuleParam{
 				"100015": firewall.WAFRuleItemChallenge,
 			}),
-			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
+			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
 		},
 	)
 	if err != nil {

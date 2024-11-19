@@ -33,10 +33,6 @@ func TestResourceGroupNewWithOptionalParams(t *testing.T) {
 			Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
 			Objects: cloudflare.F([]iam.ResourceGroupNewParamsScopeObject{{
 				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
-			}, {
-				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
-			}, {
-				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
 			}}),
 		}),
 		Meta: cloudflare.F[any](map[string]interface{}{
@@ -73,10 +69,6 @@ func TestResourceGroupUpdateWithOptionalParams(t *testing.T) {
 			Scope: cloudflare.F(iam.ResourceGroupUpdateParamsScope{
 				Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
 				Objects: cloudflare.F([]iam.ResourceGroupUpdateParamsScopeObject{{
-					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
-				}, {
-					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
-				}, {
 					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
 				}}),
 			}),

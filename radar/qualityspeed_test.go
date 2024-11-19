@@ -29,14 +29,14 @@ func TestQualitySpeedHistogramWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Quality.Speed.Histogram(context.TODO(), radar.QualitySpeedHistogramParams{
-		ASN:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string"}),
 		BucketSize:  cloudflare.F(int64(0)),
-		Continent:   cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		Continent:   cloudflare.F([]string{"string"}),
+		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		Format:      cloudflare.F(radar.QualitySpeedHistogramParamsFormatJson),
-		Location:    cloudflare.F([]string{"string", "string", "string"}),
+		Location:    cloudflare.F([]string{"string"}),
 		MetricGroup: cloudflare.F(radar.QualitySpeedHistogramParamsMetricGroupBandwidth),
-		Name:        cloudflare.F([]string{"string", "string", "string"}),
+		Name:        cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,12 +61,12 @@ func TestQualitySpeedSummaryWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Quality.Speed.Summary(context.TODO(), radar.QualitySpeedSummaryParams{
-		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:       cloudflare.F([]string{"string"}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.QualitySpeedSummaryParamsFormatJson),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
