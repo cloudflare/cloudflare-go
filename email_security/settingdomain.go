@@ -108,6 +108,7 @@ type SettingDomainListResponse struct {
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
 	Folder               SettingDomainListResponseFolder                `json:"folder,nullable"`
+	InboxProvider        SettingDomainListResponseInboxProvider         `json:"inbox_provider,nullable"`
 	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
 	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
 	JSON                 settingDomainListResponseJSON                  `json:"-"`
@@ -123,6 +124,7 @@ type settingDomainListResponseJSON struct {
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
 	Folder               apijson.Field
+	InboxProvider        apijson.Field
 	IntegrationID        apijson.Field
 	O365TenantID         apijson.Field
 	raw                  string
@@ -170,6 +172,21 @@ func (r SettingDomainListResponseFolder) IsKnown() bool {
 	return false
 }
 
+type SettingDomainListResponseInboxProvider string
+
+const (
+	SettingDomainListResponseInboxProviderMicrosoft SettingDomainListResponseInboxProvider = "Microsoft"
+	SettingDomainListResponseInboxProviderGoogle    SettingDomainListResponseInboxProvider = "Google"
+)
+
+func (r SettingDomainListResponseInboxProvider) IsKnown() bool {
+	switch r {
+	case SettingDomainListResponseInboxProviderMicrosoft, SettingDomainListResponseInboxProviderGoogle:
+		return true
+	}
+	return false
+}
+
 type SettingDomainDeleteResponse struct {
 	// The unique identifier for the domain.
 	ID   int64                           `json:"id,required"`
@@ -201,6 +218,7 @@ type SettingDomainEditResponse struct {
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
 	Folder               SettingDomainEditResponseFolder                `json:"folder,nullable"`
+	InboxProvider        SettingDomainEditResponseInboxProvider         `json:"inbox_provider,nullable"`
 	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
 	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
 	JSON                 settingDomainEditResponseJSON                  `json:"-"`
@@ -216,6 +234,7 @@ type settingDomainEditResponseJSON struct {
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
 	Folder               apijson.Field
+	InboxProvider        apijson.Field
 	IntegrationID        apijson.Field
 	O365TenantID         apijson.Field
 	raw                  string
@@ -258,6 +277,21 @@ const (
 func (r SettingDomainEditResponseFolder) IsKnown() bool {
 	switch r {
 	case SettingDomainEditResponseFolderAllItems, SettingDomainEditResponseFolderInbox:
+		return true
+	}
+	return false
+}
+
+type SettingDomainEditResponseInboxProvider string
+
+const (
+	SettingDomainEditResponseInboxProviderMicrosoft SettingDomainEditResponseInboxProvider = "Microsoft"
+	SettingDomainEditResponseInboxProviderGoogle    SettingDomainEditResponseInboxProvider = "Google"
+)
+
+func (r SettingDomainEditResponseInboxProvider) IsKnown() bool {
+	switch r {
+	case SettingDomainEditResponseInboxProviderMicrosoft, SettingDomainEditResponseInboxProviderGoogle:
 		return true
 	}
 	return false
@@ -378,14 +412,30 @@ func (r settingDomainDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SettingDomainEditParams struct {
 	// Account Identifier
-	AccountID     param.Field[string] `path:"account_id,required"`
-	Domain        param.Field[string] `json:"domain"`
-	IntegrationID param.Field[string] `json:"integration_id" format:"uuid"`
-	LookbackHops  param.Field[int64]  `json:"lookback_hops"`
+	AccountID     param.Field[string]                        `path:"account_id,required"`
+	Domain        param.Field[string]                        `json:"domain"`
+	Folder        param.Field[SettingDomainEditParamsFolder] `json:"folder"`
+	IntegrationID param.Field[string]                        `json:"integration_id" format:"uuid"`
+	LookbackHops  param.Field[int64]                         `json:"lookback_hops"`
 }
 
 func (r SettingDomainEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type SettingDomainEditParamsFolder string
+
+const (
+	SettingDomainEditParamsFolderAllItems SettingDomainEditParamsFolder = "AllItems"
+	SettingDomainEditParamsFolderInbox    SettingDomainEditParamsFolder = "Inbox"
+)
+
+func (r SettingDomainEditParamsFolder) IsKnown() bool {
+	switch r {
+	case SettingDomainEditParamsFolderAllItems, SettingDomainEditParamsFolderInbox:
+		return true
+	}
+	return false
 }
 
 type SettingDomainEditResponseEnvelope struct {
