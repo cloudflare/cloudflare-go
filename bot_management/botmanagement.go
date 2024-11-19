@@ -45,7 +45,66 @@ func NewBotManagementService(opts ...option.RequestOption) (r *BotManagementServ
 // - **Bot Management for Enterprise**
 //
 // See [Bot Plans](https://developers.cloudflare.com/bots/plans/) for more
-// information on the different plans
+// information on the different plans \
+// If you recently upgraded or downgraded your plan, refer to the following examples
+// to clean up old configurations. Copy and paste the example body to remove old zone
+// configurations based on your current plan.
+//
+// #### Clean up configuration for Bot Fight Mode plan
+//
+// ```json
+//
+//	{
+//	  "sbfm_likely_automated": "allow",
+//	  "sbfm_definitely_automated": "allow",
+//	  "sbfm_verified_bots": "allow",
+//	  "sbfm_static_resource_protection": false,
+//	  "optimize_wordpress": false,
+//	  "suppress_session_score": false
+//	}
+//
+// ```
+//
+// #### Clean up configuration for SBFM Pro plan
+//
+// ```json
+//
+//	{
+//	  "sbfm_likely_automated": "allow",
+//	  "fight_mode": false
+//	}
+//
+// ```
+//
+// #### Clean up configuration for SBFM Biz plan
+//
+// ```json
+//
+//	{
+//	  "fight_mode": false
+//	}
+//
+// ```
+//
+// #### Clean up configuration for BM Enterprise Subscription plan
+//
+// It is strongly recommended that you ensure you have
+// [custom rules](https://developers.cloudflare.com/waf/custom-rules/) in place to
+// protect your zone before disabling the SBFM rules. Without these protections,
+// your zone is vulnerable to attacks.
+//
+// ```json
+//
+//	{
+//	  "sbfm_likely_automated": "allow",
+//	  "sbfm_definitely_automated": "allow",
+//	  "sbfm_verified_bots": "allow",
+//	  "sbfm_static_resource_protection": false,
+//	  "optimize_wordpress": false,
+//	  "fight_mode": false
+//	}
+//
+// ```
 func (r *BotManagementService) Update(ctx context.Context, params BotManagementUpdateParams, opts ...option.RequestOption) (res *BotManagementUpdateResponse, err error) {
 	var env BotManagementUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -87,6 +146,9 @@ type BotFightModeConfiguration struct {
 	EnableJS bool `json:"enable_js"`
 	// Whether to enable Bot Fight Mode.
 	FightMode bool `json:"fight_mode"`
+	// A read-only field that shows which unauthorized settings are currently active on
+	// the zone. These settings typically result from upgrades or downgrades.
+	StaleZoneConfiguration BotFightModeConfigurationStaleZoneConfiguration `json:"stale_zone_configuration"`
 	// A read-only field that indicates whether the zone currently is running the
 	// latest ML model.
 	UsingLatestModel bool                          `json:"using_latest_model"`
@@ -96,12 +158,13 @@ type BotFightModeConfiguration struct {
 // botFightModeConfigurationJSON contains the JSON metadata for the struct
 // [BotFightModeConfiguration]
 type botFightModeConfigurationJSON struct {
-	AIBotsProtection apijson.Field
-	EnableJS         apijson.Field
-	FightMode        apijson.Field
-	UsingLatestModel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	AIBotsProtection       apijson.Field
+	EnableJS               apijson.Field
+	FightMode              apijson.Field
+	StaleZoneConfiguration apijson.Field
+	UsingLatestModel       apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *BotFightModeConfiguration) UnmarshalJSON(data []byte) (err error) {
@@ -132,6 +195,47 @@ func (r BotFightModeConfigurationAIBotsProtection) IsKnown() bool {
 	return false
 }
 
+// A read-only field that shows which unauthorized settings are currently active on
+// the zone. These settings typically result from upgrades or downgrades.
+type BotFightModeConfigurationStaleZoneConfiguration struct {
+	// Indicates that the zone's wordpress optimization for SBFM is turned on.
+	OptimizeWordpress bool `json:"optimize_wordpress"`
+	// Indicates that the zone's definitely automated requests are being blocked or
+	// challenged.
+	SBFMDefinitelyAutomated string `json:"sbfm_definitely_automated"`
+	// Indicates that the zone's likely automated requests are being blocked or
+	// challenged.
+	SBFMLikelyAutomated string `json:"sbfm_likely_automated"`
+	// Indicates that the zone's static resource protection is turned on.
+	SBFMStaticResourceProtection string `json:"sbfm_static_resource_protection"`
+	// Indicates that the zone's verified bot requests are being blocked.
+	SBFMVerifiedBots string `json:"sbfm_verified_bots"`
+	// Indicates that the zone's session score tracking is disabled.
+	SuppressSessionScore bool                                                `json:"suppress_session_score"`
+	JSON                 botFightModeConfigurationStaleZoneConfigurationJSON `json:"-"`
+}
+
+// botFightModeConfigurationStaleZoneConfigurationJSON contains the JSON metadata
+// for the struct [BotFightModeConfigurationStaleZoneConfiguration]
+type botFightModeConfigurationStaleZoneConfigurationJSON struct {
+	OptimizeWordpress            apijson.Field
+	SBFMDefinitelyAutomated      apijson.Field
+	SBFMLikelyAutomated          apijson.Field
+	SBFMStaticResourceProtection apijson.Field
+	SBFMVerifiedBots             apijson.Field
+	SuppressSessionScore         apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *BotFightModeConfigurationStaleZoneConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botFightModeConfigurationStaleZoneConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 type BotFightModeConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[BotFightModeConfigurationAIBotsProtection] `json:"ai_bots_protection"`
@@ -148,6 +252,29 @@ func (r BotFightModeConfigurationParam) MarshalJSON() (data []byte, err error) {
 
 func (r BotFightModeConfigurationParam) implementsBotManagementBotManagementUpdateParamsBodyUnion() {}
 
+// A read-only field that shows which unauthorized settings are currently active on
+// the zone. These settings typically result from upgrades or downgrades.
+type BotFightModeConfigurationStaleZoneConfigurationParam struct {
+	// Indicates that the zone's wordpress optimization for SBFM is turned on.
+	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
+	// Indicates that the zone's definitely automated requests are being blocked or
+	// challenged.
+	SBFMDefinitelyAutomated param.Field[string] `json:"sbfm_definitely_automated"`
+	// Indicates that the zone's likely automated requests are being blocked or
+	// challenged.
+	SBFMLikelyAutomated param.Field[string] `json:"sbfm_likely_automated"`
+	// Indicates that the zone's static resource protection is turned on.
+	SBFMStaticResourceProtection param.Field[string] `json:"sbfm_static_resource_protection"`
+	// Indicates that the zone's verified bot requests are being blocked.
+	SBFMVerifiedBots param.Field[string] `json:"sbfm_verified_bots"`
+	// Indicates that the zone's session score tracking is disabled.
+	SuppressSessionScore param.Field[bool] `json:"suppress_session_score"`
+}
+
+func (r BotFightModeConfigurationStaleZoneConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type SubscriptionConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection SubscriptionConfigurationAIBotsProtection `json:"ai_bots_protection"`
@@ -158,6 +285,9 @@ type SubscriptionConfiguration struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJS bool `json:"enable_js"`
+	// A read-only field that shows which unauthorized settings are currently active on
+	// the zone. These settings typically result from upgrades or downgrades.
+	StaleZoneConfiguration SubscriptionConfigurationStaleZoneConfiguration `json:"stale_zone_configuration"`
 	// Whether to disable tracking the highest bot score for a session in the Bot
 	// Management cookie.
 	SuppressSessionScore bool `json:"suppress_session_score"`
@@ -170,13 +300,14 @@ type SubscriptionConfiguration struct {
 // subscriptionConfigurationJSON contains the JSON metadata for the struct
 // [SubscriptionConfiguration]
 type subscriptionConfigurationJSON struct {
-	AIBotsProtection     apijson.Field
-	AutoUpdateModel      apijson.Field
-	EnableJS             apijson.Field
-	SuppressSessionScore apijson.Field
-	UsingLatestModel     apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	AIBotsProtection       apijson.Field
+	AutoUpdateModel        apijson.Field
+	EnableJS               apijson.Field
+	StaleZoneConfiguration apijson.Field
+	SuppressSessionScore   apijson.Field
+	UsingLatestModel       apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
 }
 
 func (r *SubscriptionConfiguration) UnmarshalJSON(data []byte) (err error) {
@@ -207,6 +338,47 @@ func (r SubscriptionConfigurationAIBotsProtection) IsKnown() bool {
 	return false
 }
 
+// A read-only field that shows which unauthorized settings are currently active on
+// the zone. These settings typically result from upgrades or downgrades.
+type SubscriptionConfigurationStaleZoneConfiguration struct {
+	// Indicates that the zone's Bot Fight Mode is turned on.
+	FightMode bool `json:"fight_mode"`
+	// Indicates that the zone's wordpress optimization for SBFM is turned on.
+	OptimizeWordpress bool `json:"optimize_wordpress"`
+	// Indicates that the zone's definitely automated requests are being blocked or
+	// challenged.
+	SBFMDefinitelyAutomated string `json:"sbfm_definitely_automated"`
+	// Indicates that the zone's likely automated requests are being blocked or
+	// challenged.
+	SBFMLikelyAutomated string `json:"sbfm_likely_automated"`
+	// Indicates that the zone's static resource protection is turned on.
+	SBFMStaticResourceProtection string `json:"sbfm_static_resource_protection"`
+	// Indicates that the zone's verified bot requests are being blocked.
+	SBFMVerifiedBots string                                              `json:"sbfm_verified_bots"`
+	JSON             subscriptionConfigurationStaleZoneConfigurationJSON `json:"-"`
+}
+
+// subscriptionConfigurationStaleZoneConfigurationJSON contains the JSON metadata
+// for the struct [SubscriptionConfigurationStaleZoneConfiguration]
+type subscriptionConfigurationStaleZoneConfigurationJSON struct {
+	FightMode                    apijson.Field
+	OptimizeWordpress            apijson.Field
+	SBFMDefinitelyAutomated      apijson.Field
+	SBFMLikelyAutomated          apijson.Field
+	SBFMStaticResourceProtection apijson.Field
+	SBFMVerifiedBots             apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
+}
+
+func (r *SubscriptionConfigurationStaleZoneConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r subscriptionConfigurationStaleZoneConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 type SubscriptionConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[SubscriptionConfigurationAIBotsProtection] `json:"ai_bots_protection"`
@@ -228,6 +400,29 @@ func (r SubscriptionConfigurationParam) MarshalJSON() (data []byte, err error) {
 
 func (r SubscriptionConfigurationParam) implementsBotManagementBotManagementUpdateParamsBodyUnion() {}
 
+// A read-only field that shows which unauthorized settings are currently active on
+// the zone. These settings typically result from upgrades or downgrades.
+type SubscriptionConfigurationStaleZoneConfigurationParam struct {
+	// Indicates that the zone's Bot Fight Mode is turned on.
+	FightMode param.Field[bool] `json:"fight_mode"`
+	// Indicates that the zone's wordpress optimization for SBFM is turned on.
+	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
+	// Indicates that the zone's definitely automated requests are being blocked or
+	// challenged.
+	SBFMDefinitelyAutomated param.Field[string] `json:"sbfm_definitely_automated"`
+	// Indicates that the zone's likely automated requests are being blocked or
+	// challenged.
+	SBFMLikelyAutomated param.Field[string] `json:"sbfm_likely_automated"`
+	// Indicates that the zone's static resource protection is turned on.
+	SBFMStaticResourceProtection param.Field[string] `json:"sbfm_static_resource_protection"`
+	// Indicates that the zone's verified bot requests are being blocked.
+	SBFMVerifiedBots param.Field[string] `json:"sbfm_verified_bots"`
+}
+
+func (r SubscriptionConfigurationStaleZoneConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type SuperBotFightModeDefinitelyConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection SuperBotFightModeDefinitelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
@@ -244,6 +439,9 @@ type SuperBotFightModeDefinitelyConfiguration struct {
 	SBFMStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
 	SBFMVerifiedBots SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBots `json:"sbfm_verified_bots"`
+	// A read-only field that shows which unauthorized settings are currently active on
+	// the zone. These settings typically result from upgrades or downgrades.
+	StaleZoneConfiguration SuperBotFightModeDefinitelyConfigurationStaleZoneConfiguration `json:"stale_zone_configuration"`
 	// A read-only field that indicates whether the zone currently is running the
 	// latest ML model.
 	UsingLatestModel bool                                         `json:"using_latest_model"`
@@ -259,6 +457,7 @@ type superBotFightModeDefinitelyConfigurationJSON struct {
 	SBFMDefinitelyAutomated      apijson.Field
 	SBFMStaticResourceProtection apijson.Field
 	SBFMVerifiedBots             apijson.Field
+	StaleZoneConfiguration       apijson.Field
 	UsingLatestModel             apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
@@ -326,6 +525,35 @@ func (r SuperBotFightModeDefinitelyConfigurationSBFMVerifiedBots) IsKnown() bool
 	return false
 }
 
+// A read-only field that shows which unauthorized settings are currently active on
+// the zone. These settings typically result from upgrades or downgrades.
+type SuperBotFightModeDefinitelyConfigurationStaleZoneConfiguration struct {
+	// Indicates that the zone's Bot Fight Mode is turned on.
+	FightMode bool `json:"fight_mode"`
+	// Indicates that the zone's likely automated requests are being blocked or
+	// challenged.
+	SBFMLikelyAutomated string                                                             `json:"sbfm_likely_automated"`
+	JSON                superBotFightModeDefinitelyConfigurationStaleZoneConfigurationJSON `json:"-"`
+}
+
+// superBotFightModeDefinitelyConfigurationStaleZoneConfigurationJSON contains the
+// JSON metadata for the struct
+// [SuperBotFightModeDefinitelyConfigurationStaleZoneConfiguration]
+type superBotFightModeDefinitelyConfigurationStaleZoneConfigurationJSON struct {
+	FightMode           apijson.Field
+	SBFMLikelyAutomated apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *SuperBotFightModeDefinitelyConfigurationStaleZoneConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r superBotFightModeDefinitelyConfigurationStaleZoneConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 type SuperBotFightModeDefinitelyConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[SuperBotFightModeDefinitelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
@@ -351,6 +579,20 @@ func (r SuperBotFightModeDefinitelyConfigurationParam) MarshalJSON() (data []byt
 func (r SuperBotFightModeDefinitelyConfigurationParam) implementsBotManagementBotManagementUpdateParamsBodyUnion() {
 }
 
+// A read-only field that shows which unauthorized settings are currently active on
+// the zone. These settings typically result from upgrades or downgrades.
+type SuperBotFightModeDefinitelyConfigurationStaleZoneConfigurationParam struct {
+	// Indicates that the zone's Bot Fight Mode is turned on.
+	FightMode param.Field[bool] `json:"fight_mode"`
+	// Indicates that the zone's likely automated requests are being blocked or
+	// challenged.
+	SBFMLikelyAutomated param.Field[string] `json:"sbfm_likely_automated"`
+}
+
+func (r SuperBotFightModeDefinitelyConfigurationStaleZoneConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type SuperBotFightModeLikelyConfiguration struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection SuperBotFightModeLikelyConfigurationAIBotsProtection `json:"ai_bots_protection"`
@@ -369,6 +611,9 @@ type SuperBotFightModeLikelyConfiguration struct {
 	SBFMStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
 	SBFMVerifiedBots SuperBotFightModeLikelyConfigurationSBFMVerifiedBots `json:"sbfm_verified_bots"`
+	// A read-only field that shows which unauthorized settings are currently active on
+	// the zone. These settings typically result from upgrades or downgrades.
+	StaleZoneConfiguration SuperBotFightModeLikelyConfigurationStaleZoneConfiguration `json:"stale_zone_configuration"`
 	// A read-only field that indicates whether the zone currently is running the
 	// latest ML model.
 	UsingLatestModel bool                                     `json:"using_latest_model"`
@@ -385,6 +630,7 @@ type superBotFightModeLikelyConfigurationJSON struct {
 	SBFMLikelyAutomated          apijson.Field
 	SBFMStaticResourceProtection apijson.Field
 	SBFMVerifiedBots             apijson.Field
+	StaleZoneConfiguration       apijson.Field
 	UsingLatestModel             apijson.Field
 	raw                          string
 	ExtraFields                  map[string]apijson.Field
@@ -468,6 +714,31 @@ func (r SuperBotFightModeLikelyConfigurationSBFMVerifiedBots) IsKnown() bool {
 	return false
 }
 
+// A read-only field that shows which unauthorized settings are currently active on
+// the zone. These settings typically result from upgrades or downgrades.
+type SuperBotFightModeLikelyConfigurationStaleZoneConfiguration struct {
+	// Indicates that the zone's Bot Fight Mode is turned on.
+	FightMode bool                                                           `json:"fight_mode"`
+	JSON      superBotFightModeLikelyConfigurationStaleZoneConfigurationJSON `json:"-"`
+}
+
+// superBotFightModeLikelyConfigurationStaleZoneConfigurationJSON contains the JSON
+// metadata for the struct
+// [SuperBotFightModeLikelyConfigurationStaleZoneConfiguration]
+type superBotFightModeLikelyConfigurationStaleZoneConfigurationJSON struct {
+	FightMode   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SuperBotFightModeLikelyConfigurationStaleZoneConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r superBotFightModeLikelyConfigurationStaleZoneConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 type SuperBotFightModeLikelyConfigurationParam struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection param.Field[SuperBotFightModeLikelyConfigurationAIBotsProtection] `json:"ai_bots_protection"`
@@ -495,6 +766,17 @@ func (r SuperBotFightModeLikelyConfigurationParam) MarshalJSON() (data []byte, e
 func (r SuperBotFightModeLikelyConfigurationParam) implementsBotManagementBotManagementUpdateParamsBodyUnion() {
 }
 
+// A read-only field that shows which unauthorized settings are currently active on
+// the zone. These settings typically result from upgrades or downgrades.
+type SuperBotFightModeLikelyConfigurationStaleZoneConfigurationParam struct {
+	// Indicates that the zone's Bot Fight Mode is turned on.
+	FightMode param.Field[bool] `json:"fight_mode"`
+}
+
+func (r SuperBotFightModeLikelyConfigurationStaleZoneConfigurationParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type BotManagementUpdateResponse struct {
 	// Enable rule to block AI Scrapers and Crawlers.
 	AIBotsProtection BotManagementUpdateResponseAIBotsProtection `json:"ai_bots_protection"`
@@ -519,6 +801,12 @@ type BotManagementUpdateResponse struct {
 	SBFMStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
 	SBFMVerifiedBots BotManagementUpdateResponseSBFMVerifiedBots `json:"sbfm_verified_bots"`
+	// This field can have the runtime type of
+	// [BotFightModeConfigurationStaleZoneConfiguration],
+	// [SuperBotFightModeDefinitelyConfigurationStaleZoneConfiguration],
+	// [SuperBotFightModeLikelyConfigurationStaleZoneConfiguration],
+	// [SubscriptionConfigurationStaleZoneConfiguration].
+	StaleZoneConfiguration interface{} `json:"stale_zone_configuration"`
 	// Whether to disable tracking the highest bot score for a session in the Bot
 	// Management cookie.
 	SuppressSessionScore bool `json:"suppress_session_score"`
@@ -541,6 +829,7 @@ type botManagementUpdateResponseJSON struct {
 	SBFMLikelyAutomated          apijson.Field
 	SBFMStaticResourceProtection apijson.Field
 	SBFMVerifiedBots             apijson.Field
+	StaleZoneConfiguration       apijson.Field
 	SuppressSessionScore         apijson.Field
 	UsingLatestModel             apijson.Field
 	raw                          string
@@ -693,6 +982,12 @@ type BotManagementGetResponse struct {
 	SBFMStaticResourceProtection bool `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
 	SBFMVerifiedBots BotManagementGetResponseSBFMVerifiedBots `json:"sbfm_verified_bots"`
+	// This field can have the runtime type of
+	// [BotFightModeConfigurationStaleZoneConfiguration],
+	// [SuperBotFightModeDefinitelyConfigurationStaleZoneConfiguration],
+	// [SuperBotFightModeLikelyConfigurationStaleZoneConfiguration],
+	// [SubscriptionConfigurationStaleZoneConfiguration].
+	StaleZoneConfiguration interface{} `json:"stale_zone_configuration"`
 	// Whether to disable tracking the highest bot score for a session in the Bot
 	// Management cookie.
 	SuppressSessionScore bool `json:"suppress_session_score"`
@@ -715,6 +1010,7 @@ type botManagementGetResponseJSON struct {
 	SBFMLikelyAutomated          apijson.Field
 	SBFMStaticResourceProtection apijson.Field
 	SBFMVerifiedBots             apijson.Field
+	StaleZoneConfiguration       apijson.Field
 	SuppressSessionScore         apijson.Field
 	UsingLatestModel             apijson.Field
 	raw                          string
@@ -876,7 +1172,8 @@ type BotManagementUpdateParamsBody struct {
 	// protection can also result in legitimate traffic being blocked.
 	SBFMStaticResourceProtection param.Field[bool] `json:"sbfm_static_resource_protection"`
 	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-	SBFMVerifiedBots param.Field[BotManagementUpdateParamsBodySBFMVerifiedBots] `json:"sbfm_verified_bots"`
+	SBFMVerifiedBots       param.Field[BotManagementUpdateParamsBodySBFMVerifiedBots] `json:"sbfm_verified_bots"`
+	StaleZoneConfiguration param.Field[interface{}]                                   `json:"stale_zone_configuration"`
 	// Whether to disable tracking the highest bot score for a session in the Bot
 	// Management cookie.
 	SuppressSessionScore param.Field[bool] `json:"suppress_session_score"`
