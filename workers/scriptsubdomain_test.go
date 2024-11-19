@@ -31,9 +31,8 @@ func TestScriptSubdomainNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"this-is_my_script-01",
 		workers.ScriptSubdomainNewParams{
-			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Enabled:         cloudflare.F(true),
-			PreviewsEnabled: cloudflare.F(true),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Enabled:   cloudflare.F(true),
 		},
 	)
 	if err != nil {
