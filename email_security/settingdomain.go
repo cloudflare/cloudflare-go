@@ -82,6 +82,23 @@ func (r *SettingDomainService) Delete(ctx context.Context, domainID int64, body 
 	return
 }
 
+// Unprotect multiple email domains
+func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) (res *[]SettingDomainBulkDeleteResponse, err error) {
+	var env SettingDomainBulkDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/settings/domains", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Update an email domain
 func (r *SettingDomainService) Edit(ctx context.Context, domainID int64, params SettingDomainEditParams, opts ...option.RequestOption) (res *SettingDomainEditResponse, err error) {
 	var env SettingDomainEditResponseEnvelope
@@ -223,6 +240,28 @@ func (r *SettingDomainDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r settingDomainDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingDomainBulkDeleteResponse struct {
+	// The unique identifier for the domain.
+	ID   int64                               `json:"id,required"`
+	JSON settingDomainBulkDeleteResponseJSON `json:"-"`
+}
+
+// settingDomainBulkDeleteResponseJSON contains the JSON metadata for the struct
+// [SettingDomainBulkDeleteResponse]
+type settingDomainBulkDeleteResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingDomainBulkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainBulkDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -512,6 +551,38 @@ func (r *SettingDomainDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 func (r settingDomainDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingDomainBulkDeleteParams struct {
+	// Account Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type SettingDomainBulkDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo                       `json:"errors,required"`
+	Messages []shared.ResponseInfo                       `json:"messages,required"`
+	Result   []SettingDomainBulkDeleteResponse           `json:"result,required"`
+	Success  bool                                        `json:"success,required"`
+	JSON     settingDomainBulkDeleteResponseEnvelopeJSON `json:"-"`
+}
+
+// settingDomainBulkDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingDomainBulkDeleteResponseEnvelope]
+type settingDomainBulkDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingDomainBulkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainBulkDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
