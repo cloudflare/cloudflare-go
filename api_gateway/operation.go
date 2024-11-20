@@ -46,7 +46,7 @@ func NewOperationService(opts ...option.RequestOption) (r *OperationService) {
 // operation and must be unique on the zone. Inserting an operation that matches an
 // existing one will return the record of the already existing operation and update
 // its last_updated date.
-func (r *OperationService) New(ctx context.Context, params OperationNewParams, opts ...option.RequestOption) (res *[]OperationNewResponse, err error) {
+func (r *OperationService) New(ctx context.Context, params OperationNewParams, opts ...option.RequestOption) (res *[]APIShield, err error) {
 	var env OperationNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
@@ -138,79 +138,7 @@ func (r *OperationService) Get(ctx context.Context, operationID string, params O
 	return
 }
 
-type APIShieldOperation struct {
-	// The endpoint which can contain path parameter templates in curly braces, each
-	// will be replaced from left to right with {varN}, starting with {var1}, during
-	// insertion. This will further be Cloudflare-normalized upon insertion. See:
-	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint string `json:"endpoint,required" format:"uri-template"`
-	// RFC3986-compliant host.
-	Host string `json:"host,required" format:"hostname"`
-	// The HTTP method used to access the endpoint.
-	Method APIShieldOperationMethod `json:"method,required"`
-	JSON   apiShieldOperationJSON   `json:"-"`
-}
-
-// apiShieldOperationJSON contains the JSON metadata for the struct
-// [APIShieldOperation]
-type apiShieldOperationJSON struct {
-	Endpoint    apijson.Field
-	Host        apijson.Field
-	Method      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *APIShieldOperation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r apiShieldOperationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r APIShieldOperation) implementsAPIGatewayUserSchemaOperationListResponse() {}
-
-// The HTTP method used to access the endpoint.
-type APIShieldOperationMethod string
-
-const (
-	APIShieldOperationMethodGet     APIShieldOperationMethod = "GET"
-	APIShieldOperationMethodPost    APIShieldOperationMethod = "POST"
-	APIShieldOperationMethodHead    APIShieldOperationMethod = "HEAD"
-	APIShieldOperationMethodOptions APIShieldOperationMethod = "OPTIONS"
-	APIShieldOperationMethodPut     APIShieldOperationMethod = "PUT"
-	APIShieldOperationMethodDelete  APIShieldOperationMethod = "DELETE"
-	APIShieldOperationMethodConnect APIShieldOperationMethod = "CONNECT"
-	APIShieldOperationMethodPatch   APIShieldOperationMethod = "PATCH"
-	APIShieldOperationMethodTrace   APIShieldOperationMethod = "TRACE"
-)
-
-func (r APIShieldOperationMethod) IsKnown() bool {
-	switch r {
-	case APIShieldOperationMethodGet, APIShieldOperationMethodPost, APIShieldOperationMethodHead, APIShieldOperationMethodOptions, APIShieldOperationMethodPut, APIShieldOperationMethodDelete, APIShieldOperationMethodConnect, APIShieldOperationMethodPatch, APIShieldOperationMethodTrace:
-		return true
-	}
-	return false
-}
-
-type APIShieldOperationParam struct {
-	// The endpoint which can contain path parameter templates in curly braces, each
-	// will be replaced from left to right with {varN}, starting with {var1}, during
-	// insertion. This will further be Cloudflare-normalized upon insertion. See:
-	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
-	Endpoint param.Field[string] `json:"endpoint,required" format:"uri-template"`
-	// RFC3986-compliant host.
-	Host param.Field[string] `json:"host,required" format:"hostname"`
-	// The HTTP method used to access the endpoint.
-	Method param.Field[APIShieldOperationMethod] `json:"method,required"`
-}
-
-func (r APIShieldOperationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type OperationNewResponse struct {
+type APIShield struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
@@ -220,16 +148,15 @@ type OperationNewResponse struct {
 	Host        string    `json:"host,required" format:"hostname"`
 	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
 	// The HTTP method used to access the endpoint.
-	Method OperationNewResponseMethod `json:"method,required"`
+	Method APIShieldMethod `json:"method,required"`
 	// UUID
-	OperationID string                       `json:"operation_id,required"`
-	Features    OperationNewResponseFeatures `json:"features"`
-	JSON        operationNewResponseJSON     `json:"-"`
+	OperationID string            `json:"operation_id,required"`
+	Features    APIShieldFeatures `json:"features"`
+	JSON        apiShieldJSON     `json:"-"`
 }
 
-// operationNewResponseJSON contains the JSON metadata for the struct
-// [OperationNewResponse]
-type operationNewResponseJSON struct {
+// apiShieldJSON contains the JSON metadata for the struct [APIShield]
+type apiShieldJSON struct {
 	Endpoint    apijson.Field
 	Host        apijson.Field
 	LastUpdated apijson.Field
@@ -240,60 +167,62 @@ type operationNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShield) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseJSON) RawJSON() string {
+func (r apiShieldJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r APIShield) implementsAPIGatewayUserSchemaOperationListResponse() {}
+
 // The HTTP method used to access the endpoint.
-type OperationNewResponseMethod string
+type APIShieldMethod string
 
 const (
-	OperationNewResponseMethodGet     OperationNewResponseMethod = "GET"
-	OperationNewResponseMethodPost    OperationNewResponseMethod = "POST"
-	OperationNewResponseMethodHead    OperationNewResponseMethod = "HEAD"
-	OperationNewResponseMethodOptions OperationNewResponseMethod = "OPTIONS"
-	OperationNewResponseMethodPut     OperationNewResponseMethod = "PUT"
-	OperationNewResponseMethodDelete  OperationNewResponseMethod = "DELETE"
-	OperationNewResponseMethodConnect OperationNewResponseMethod = "CONNECT"
-	OperationNewResponseMethodPatch   OperationNewResponseMethod = "PATCH"
-	OperationNewResponseMethodTrace   OperationNewResponseMethod = "TRACE"
+	APIShieldMethodGet     APIShieldMethod = "GET"
+	APIShieldMethodPost    APIShieldMethod = "POST"
+	APIShieldMethodHead    APIShieldMethod = "HEAD"
+	APIShieldMethodOptions APIShieldMethod = "OPTIONS"
+	APIShieldMethodPut     APIShieldMethod = "PUT"
+	APIShieldMethodDelete  APIShieldMethod = "DELETE"
+	APIShieldMethodConnect APIShieldMethod = "CONNECT"
+	APIShieldMethodPatch   APIShieldMethod = "PATCH"
+	APIShieldMethodTrace   APIShieldMethod = "TRACE"
 )
 
-func (r OperationNewResponseMethod) IsKnown() bool {
+func (r APIShieldMethod) IsKnown() bool {
 	switch r {
-	case OperationNewResponseMethodGet, OperationNewResponseMethodPost, OperationNewResponseMethodHead, OperationNewResponseMethodOptions, OperationNewResponseMethodPut, OperationNewResponseMethodDelete, OperationNewResponseMethodConnect, OperationNewResponseMethodPatch, OperationNewResponseMethodTrace:
+	case APIShieldMethodGet, APIShieldMethodPost, APIShieldMethodHead, APIShieldMethodOptions, APIShieldMethodPut, APIShieldMethodDelete, APIShieldMethodConnect, APIShieldMethodPatch, APIShieldMethodTrace:
 		return true
 	}
 	return false
 }
 
-type OperationNewResponseFeatures struct {
+type APIShieldFeatures struct {
 	// This field can have the runtime type of
-	// [OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
+	// [APIShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
 	APIRouting interface{} `json:"api_routing"`
 	// This field can have the runtime type of
-	// [OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
+	// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
 	ConfidenceIntervals interface{} `json:"confidence_intervals"`
 	// This field can have the runtime type of
-	// [OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
+	// [APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
 	ParameterSchemas interface{} `json:"parameter_schemas"`
 	// This field can have the runtime type of
-	// [OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
+	// [APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
 	SchemaInfo interface{} `json:"schema_info"`
 	// This field can have the runtime type of
-	// [OperationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
-	Thresholds interface{}                      `json:"thresholds"`
-	JSON       operationNewResponseFeaturesJSON `json:"-"`
-	union      OperationNewResponseFeaturesUnion
+	// [APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds].
+	Thresholds interface{}           `json:"thresholds"`
+	JSON       apiShieldFeaturesJSON `json:"-"`
+	union      APIShieldFeaturesUnion
 }
 
-// operationNewResponseFeaturesJSON contains the JSON metadata for the struct
-// [OperationNewResponseFeatures]
-type operationNewResponseFeaturesJSON struct {
+// apiShieldFeaturesJSON contains the JSON metadata for the struct
+// [APIShieldFeatures]
+type apiShieldFeaturesJSON struct {
 	APIRouting          apijson.Field
 	ConfidenceIntervals apijson.Field
 	ParameterSchemas    apijson.Field
@@ -303,12 +232,12 @@ type operationNewResponseFeaturesJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r operationNewResponseFeaturesJSON) RawJSON() string {
+func (r apiShieldFeaturesJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r *OperationNewResponseFeatures) UnmarshalJSON(data []byte) (err error) {
-	*r = OperationNewResponseFeatures{}
+func (r *APIShieldFeatures) UnmarshalJSON(data []byte) (err error) {
+	*r = APIShieldFeatures{}
 	err = apijson.UnmarshalRoot(data, &r.union)
 	if err != nil {
 		return err
@@ -316,83 +245,81 @@ func (r *OperationNewResponseFeatures) UnmarshalJSON(data []byte) (err error) {
 	return apijson.Port(r.union, &r)
 }
 
-// AsUnion returns a [OperationNewResponseFeaturesUnion] interface which you can
-// cast to the specific types for more type safety.
+// AsUnion returns a [APIShieldFeaturesUnion] interface which you can cast to the
+// specific types for more type safety.
 //
 // Possible runtime types of the union are
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
-func (r OperationNewResponseFeatures) AsUnion() OperationNewResponseFeaturesUnion {
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureThresholds],
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureAPIRouting],
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervals],
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureSchemaInfo].
+func (r APIShieldFeatures) AsUnion() APIShieldFeaturesUnion {
 	return r.union
 }
 
 // Union satisfied by
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting],
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals]
-// or
-// [api_gateway.OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo].
-type OperationNewResponseFeaturesUnion interface {
-	implementsAPIGatewayOperationNewResponseFeatures()
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureThresholds],
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureParameterSchemas],
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureAPIRouting],
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervals] or
+// [api_gateway.APIShieldFeaturesAPIShieldOperationFeatureSchemaInfo].
+type APIShieldFeaturesUnion interface {
+	implementsAPIGatewayAPIShieldFeatures()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*OperationNewResponseFeaturesUnion)(nil)).Elem(),
+		reflect.TypeOf((*APIShieldFeaturesUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds{}),
+			Type:       reflect.TypeOf(APIShieldFeaturesAPIShieldOperationFeatureThresholds{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas{}),
+			Type:       reflect.TypeOf(APIShieldFeaturesAPIShieldOperationFeatureParameterSchemas{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting{}),
+			Type:       reflect.TypeOf(APIShieldFeaturesAPIShieldOperationFeatureAPIRouting{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals{}),
+			Type:       reflect.TypeOf(APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervals{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo{}),
+			Type:       reflect.TypeOf(APIShieldFeaturesAPIShieldOperationFeatureSchemaInfo{}),
 		},
 	)
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds struct {
-	Thresholds OperationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds `json:"thresholds"`
-	JSON       operationNewResponseFeaturesAPIShieldOperationFeatureThresholdsJSON       `json:"-"`
+type APIShieldFeaturesAPIShieldOperationFeatureThresholds struct {
+	Thresholds APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds `json:"thresholds"`
+	JSON       apiShieldFeaturesAPIShieldOperationFeatureThresholdsJSON       `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureThresholdsJSON contains the
-// JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds]
-type operationNewResponseFeaturesAPIShieldOperationFeatureThresholdsJSON struct {
+// apiShieldFeaturesAPIShieldOperationFeatureThresholdsJSON contains the JSON
+// metadata for the struct [APIShieldFeaturesAPIShieldOperationFeatureThresholds]
+type apiShieldFeaturesAPIShieldOperationFeatureThresholdsJSON struct {
 	Thresholds  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureThresholds) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureThresholdsJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureThresholdsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds) implementsAPIGatewayOperationNewResponseFeatures() {
+func (r APIShieldFeaturesAPIShieldOperationFeatureThresholds) implementsAPIGatewayAPIShieldFeatures() {
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds struct {
+type APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds struct {
 	// The total number of auth-ids seen across this calculation.
 	AuthIDTokens int64 `json:"auth_id_tokens"`
 	// The number of data points used for the threshold suggestion calculation.
@@ -409,14 +336,14 @@ type OperationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds s
 	// The estimated number of requests covered by these calculations.
 	Requests int64 `json:"requests"`
 	// The suggested threshold in requests done by the same auth_id or period_seconds.
-	SuggestedThreshold int64                                                                         `json:"suggested_threshold"`
-	JSON               operationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholdsJSON `json:"-"`
+	SuggestedThreshold int64                                                              `json:"suggested_threshold"`
+	JSON               apiShieldFeaturesAPIShieldOperationFeatureThresholdsThresholdsJSON `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholdsJSON
-// contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds]
-type operationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholdsJSON struct {
+// apiShieldFeaturesAPIShieldOperationFeatureThresholdsThresholdsJSON contains the
+// JSON metadata for the struct
+// [APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds]
+type apiShieldFeaturesAPIShieldOperationFeatureThresholdsThresholdsJSON struct {
 	AuthIDTokens       apijson.Field
 	DataPoints         apijson.Field
 	LastUpdated        apijson.Field
@@ -430,232 +357,231 @@ type operationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholdsJS
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholdsJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureThresholdsThresholdsJSON) RawJSON() string {
 	return r.raw
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas struct {
-	ParameterSchemas OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas `json:"parameter_schemas,required"`
-	JSON             operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasJSON             `json:"-"`
+type APIShieldFeaturesAPIShieldOperationFeatureParameterSchemas struct {
+	ParameterSchemas APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas `json:"parameter_schemas,required"`
+	JSON             apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasJSON             `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasJSON
-// contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas]
-type operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasJSON struct {
+// apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasJSON contains the JSON
+// metadata for the struct
+// [APIShieldFeaturesAPIShieldOperationFeatureParameterSchemas]
+type apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasJSON struct {
 	ParameterSchemas apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureParameterSchemas) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemas) implementsAPIGatewayOperationNewResponseFeatures() {
+func (r APIShieldFeaturesAPIShieldOperationFeatureParameterSchemas) implementsAPIGatewayAPIShieldFeatures() {
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas struct {
+type APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas struct {
 	LastUpdated time.Time `json:"last_updated" format:"date-time"`
 	// An operation schema object containing a response.
-	ParameterSchemas OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemas `json:"parameter_schemas"`
-	JSON             operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasJSON             `json:"-"`
+	ParameterSchemas APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemas `json:"parameter_schemas"`
+	JSON             apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasJSON             `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasJSON
+// apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasJSON
 // contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas]
-type operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasJSON struct {
+// [APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas]
+type apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasJSON struct {
 	LastUpdated      apijson.Field
 	ParameterSchemas apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasJSON) RawJSON() string {
 	return r.raw
 }
 
 // An operation schema object containing a response.
-type OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemas struct {
+type APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemas struct {
 	// An array containing the learned parameter schemas.
 	Parameters []interface{} `json:"parameters"`
 	// An empty response object. This field is required to yield a valid operation
 	// schema.
-	Responses interface{}                                                                                               `json:"responses,nullable"`
-	JSON      operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemasJSON `json:"-"`
+	Responses interface{}                                                                                    `json:"responses,nullable"`
+	JSON      apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemasJSON `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemasJSON
+// apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemasJSON
 // contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemas]
-type operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemasJSON struct {
+// [APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemas]
+type apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemasJSON struct {
 	Parameters  apijson.Field
 	Responses   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemas) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemas) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemasJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemasParameterSchemasJSON) RawJSON() string {
 	return r.raw
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting struct {
+type APIShieldFeaturesAPIShieldOperationFeatureAPIRouting struct {
 	// API Routing settings on endpoint.
-	APIRouting OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting `json:"api_routing"`
-	JSON       operationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingJSON       `json:"-"`
+	APIRouting APIShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting `json:"api_routing"`
+	JSON       apiShieldFeaturesAPIShieldOperationFeatureAPIRoutingJSON       `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingJSON contains the
-// JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting]
-type operationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingJSON struct {
+// apiShieldFeaturesAPIShieldOperationFeatureAPIRoutingJSON contains the JSON
+// metadata for the struct [APIShieldFeaturesAPIShieldOperationFeatureAPIRouting]
+type apiShieldFeaturesAPIShieldOperationFeatureAPIRoutingJSON struct {
 	APIRouting  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureAPIRouting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureAPIRoutingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRouting) implementsAPIGatewayOperationNewResponseFeatures() {
+func (r APIShieldFeaturesAPIShieldOperationFeatureAPIRouting) implementsAPIGatewayAPIShieldFeatures() {
 }
 
 // API Routing settings on endpoint.
-type OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting struct {
+type APIShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting struct {
 	LastUpdated time.Time `json:"last_updated" format:"date-time"`
 	// Target route.
-	Route string                                                                        `json:"route"`
-	JSON  operationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRoutingJSON `json:"-"`
+	Route string                                                             `json:"route"`
+	JSON  apiShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRoutingJSON `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRoutingJSON
-// contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting]
-type operationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRoutingJSON struct {
+// apiShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRoutingJSON contains the
+// JSON metadata for the struct
+// [APIShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting]
+type apiShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRoutingJSON struct {
 	LastUpdated apijson.Field
 	Route       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRoutingJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRoutingJSON) RawJSON() string {
 	return r.raw
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals struct {
-	ConfidenceIntervals OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals `json:"confidence_intervals"`
-	JSON                operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsJSON                `json:"-"`
+type APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervals struct {
+	ConfidenceIntervals APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals `json:"confidence_intervals"`
+	JSON                apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsJSON                `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsJSON
-// contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals]
-type operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsJSON struct {
+// apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsJSON contains the
+// JSON metadata for the struct
+// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervals]
+type apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsJSON struct {
 	ConfidenceIntervals apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervals) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsAPIGatewayOperationNewResponseFeatures() {
+func (r APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervals) implementsAPIGatewayAPIShieldFeatures() {
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals struct {
-	LastUpdated        time.Time                                                                                                     `json:"last_updated" format:"date-time"`
-	SuggestedThreshold OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThreshold `json:"suggested_threshold"`
-	JSON               operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsJSON               `json:"-"`
+type APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals struct {
+	LastUpdated        time.Time                                                                                          `json:"last_updated" format:"date-time"`
+	SuggestedThreshold APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThreshold `json:"suggested_threshold"`
+	JSON               apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsJSON               `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsJSON
+// apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsJSON
 // contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals]
-type operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsJSON struct {
+// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals]
+type apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsJSON struct {
 	LastUpdated        apijson.Field
 	SuggestedThreshold apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsJSON) RawJSON() string {
 	return r.raw
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThreshold struct {
-	ConfidenceIntervals OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervals `json:"confidence_intervals"`
+type APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThreshold struct {
+	ConfidenceIntervals APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervals `json:"confidence_intervals"`
 	// Suggested threshold.
-	Mean float64                                                                                                           `json:"mean"`
-	JSON operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdJSON `json:"-"`
+	Mean float64                                                                                                `json:"mean"`
+	JSON apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdJSON `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdJSON
+// apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdJSON
 // contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThreshold]
-type operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdJSON struct {
+// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThreshold]
+type apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdJSON struct {
 	ConfidenceIntervals apijson.Field
 	Mean                apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThreshold) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThreshold) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdJSON) RawJSON() string {
 	return r.raw
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervals struct {
+type APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervals struct {
 	// Upper and lower bound for percentile estimate
-	P90 OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90 `json:"p90"`
+	P90 APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90 `json:"p90"`
 	// Upper and lower bound for percentile estimate
-	P95 OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95 `json:"p95"`
+	P95 APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95 `json:"p95"`
 	// Upper and lower bound for percentile estimate
-	P99  OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99  `json:"p99"`
-	JSON operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsJSON `json:"-"`
+	P99  APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99  `json:"p99"`
+	JSON apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsJSON `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsJSON
+// apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsJSON
 // contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervals]
-type operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsJSON struct {
+// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervals]
+type apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsJSON struct {
 	P90         apijson.Field
 	P95         apijson.Field
 	P99         apijson.Field
@@ -663,134 +589,133 @@ type operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsCon
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervals) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervals) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsJSON) RawJSON() string {
 	return r.raw
 }
 
 // Upper and lower bound for percentile estimate
-type OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90 struct {
+type APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90 struct {
 	// Lower bound for percentile estimate
 	Lower float64 `json:"lower"`
 	// Upper bound for percentile estimate
-	Upper float64                                                                                                                                 `json:"upper"`
-	JSON  operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90JSON `json:"-"`
+	Upper float64                                                                                                                      `json:"upper"`
+	JSON  apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90JSON `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90JSON
+// apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90JSON
 // contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90]
-type operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90JSON struct {
+// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90]
+type apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90JSON struct {
 	Lower       apijson.Field
 	Upper       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90JSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP90JSON) RawJSON() string {
 	return r.raw
 }
 
 // Upper and lower bound for percentile estimate
-type OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95 struct {
+type APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95 struct {
 	// Lower bound for percentile estimate
 	Lower float64 `json:"lower"`
 	// Upper bound for percentile estimate
-	Upper float64                                                                                                                                 `json:"upper"`
-	JSON  operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95JSON `json:"-"`
+	Upper float64                                                                                                                      `json:"upper"`
+	JSON  apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95JSON `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95JSON
+// apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95JSON
 // contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95]
-type operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95JSON struct {
+// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95]
+type apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95JSON struct {
 	Lower       apijson.Field
 	Upper       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95JSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP95JSON) RawJSON() string {
 	return r.raw
 }
 
 // Upper and lower bound for percentile estimate
-type OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99 struct {
+type APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99 struct {
 	// Lower bound for percentile estimate
 	Lower float64 `json:"lower"`
 	// Upper bound for percentile estimate
-	Upper float64                                                                                                                                 `json:"upper"`
-	JSON  operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99JSON `json:"-"`
+	Upper float64                                                                                                                      `json:"upper"`
+	JSON  apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99JSON `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99JSON
+// apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99JSON
 // contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99]
-type operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99JSON struct {
+// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99]
+type apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99JSON struct {
 	Lower       apijson.Field
 	Upper       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99JSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervalsSuggestedThresholdConfidenceIntervalsP99JSON) RawJSON() string {
 	return r.raw
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo struct {
-	SchemaInfo OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo `json:"schema_info"`
-	JSON       operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoJSON       `json:"-"`
+type APIShieldFeaturesAPIShieldOperationFeatureSchemaInfo struct {
+	SchemaInfo APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo `json:"schema_info"`
+	JSON       apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoJSON       `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoJSON contains the
-// JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo]
-type operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoJSON struct {
+// apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoJSON contains the JSON
+// metadata for the struct [APIShieldFeaturesAPIShieldOperationFeatureSchemaInfo]
+type apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoJSON struct {
 	SchemaInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureSchemaInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfo) implementsAPIGatewayOperationNewResponseFeatures() {
+func (r APIShieldFeaturesAPIShieldOperationFeatureSchemaInfo) implementsAPIGatewayAPIShieldFeatures() {
 }
 
-type OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
+type APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo struct {
 	// Schema active on endpoint.
-	ActiveSchema OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema `json:"active_schema"`
+	ActiveSchema APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema `json:"active_schema"`
 	// True if a Cloudflare-provided learned schema is available for this endpoint.
 	LearnedAvailable bool `json:"learned_available"`
 	// Action taken on requests failing validation.
-	MitigationAction OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction `json:"mitigation_action,nullable"`
-	JSON             operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON             `json:"-"`
+	MitigationAction APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction `json:"mitigation_action,nullable"`
+	JSON             apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON             `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON
-// contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo]
-type operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON struct {
+// apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON contains the
+// JSON metadata for the struct
+// [APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo]
+type apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON struct {
 	ActiveSchema     apijson.Field
 	LearnedAvailable apijson.Field
 	MitigationAction apijson.Field
@@ -798,30 +723,30 @@ type operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJS
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoJSON) RawJSON() string {
 	return r.raw
 }
 
 // Schema active on endpoint.
-type OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
+type APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema struct {
 	// UUID
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// True if schema is Cloudflare-provided.
 	IsLearned bool `json:"is_learned"`
 	// Schema file name.
-	Name string                                                                                    `json:"name"`
-	JSON operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchemaJSON `json:"-"`
+	Name string                                                                         `json:"name"`
+	JSON apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchemaJSON `json:"-"`
 }
 
-// operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchemaJSON
+// apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchemaJSON
 // contains the JSON metadata for the struct
-// [OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema]
-type operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchemaJSON struct {
+// [APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema]
+type apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchemaJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	IsLearned   apijson.Field
@@ -830,26 +755,26 @@ type operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoAc
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchema) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r operationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchemaJSON) RawJSON() string {
+func (r apiShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoActiveSchemaJSON) RawJSON() string {
 	return r.raw
 }
 
 // Action taken on requests failing validation.
-type OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction string
+type APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction string
 
 const (
-	OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionNone  OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction = "none"
-	OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionLog   OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction = "log"
-	OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionBlock OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction = "block"
+	APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionNone  APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction = "none"
+	APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionLog   APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction = "log"
+	APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionBlock APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction = "block"
 )
 
-func (r OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction) IsKnown() bool {
+func (r APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationAction) IsKnown() bool {
 	switch r {
-	case OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionNone, OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionLog, OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionBlock:
+	case APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionNone, APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionLog, APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfoMitigationActionBlock:
 		return true
 	}
 	return false
@@ -2229,18 +2154,57 @@ func (r OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 
 type OperationNewParams struct {
 	// Identifier
-	ZoneID param.Field[string]       `path:"zone_id,required"`
-	Body   []APIShieldOperationParam `json:"body,required"`
+	ZoneID param.Field[string]      `path:"zone_id,required"`
+	Body   []OperationNewParamsBody `json:"body,required"`
 }
 
 func (r OperationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
+type OperationNewParamsBody struct {
+	// The endpoint which can contain path parameter templates in curly braces, each
+	// will be replaced from left to right with {varN}, starting with {var1}, during
+	// insertion. This will further be Cloudflare-normalized upon insertion. See:
+	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
+	Endpoint param.Field[string] `json:"endpoint,required" format:"uri-template"`
+	// RFC3986-compliant host.
+	Host param.Field[string] `json:"host,required" format:"hostname"`
+	// The HTTP method used to access the endpoint.
+	Method param.Field[OperationNewParamsBodyMethod] `json:"method,required"`
+}
+
+func (r OperationNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The HTTP method used to access the endpoint.
+type OperationNewParamsBodyMethod string
+
+const (
+	OperationNewParamsBodyMethodGet     OperationNewParamsBodyMethod = "GET"
+	OperationNewParamsBodyMethodPost    OperationNewParamsBodyMethod = "POST"
+	OperationNewParamsBodyMethodHead    OperationNewParamsBodyMethod = "HEAD"
+	OperationNewParamsBodyMethodOptions OperationNewParamsBodyMethod = "OPTIONS"
+	OperationNewParamsBodyMethodPut     OperationNewParamsBodyMethod = "PUT"
+	OperationNewParamsBodyMethodDelete  OperationNewParamsBodyMethod = "DELETE"
+	OperationNewParamsBodyMethodConnect OperationNewParamsBodyMethod = "CONNECT"
+	OperationNewParamsBodyMethodPatch   OperationNewParamsBodyMethod = "PATCH"
+	OperationNewParamsBodyMethodTrace   OperationNewParamsBodyMethod = "TRACE"
+)
+
+func (r OperationNewParamsBodyMethod) IsKnown() bool {
+	switch r {
+	case OperationNewParamsBodyMethodGet, OperationNewParamsBodyMethodPost, OperationNewParamsBodyMethodHead, OperationNewParamsBodyMethodOptions, OperationNewParamsBodyMethodPut, OperationNewParamsBodyMethodDelete, OperationNewParamsBodyMethodConnect, OperationNewParamsBodyMethodPatch, OperationNewParamsBodyMethodTrace:
+		return true
+	}
+	return false
+}
+
 type OperationNewResponseEnvelope struct {
-	Errors   Message                `json:"errors,required"`
-	Messages Message                `json:"messages,required"`
-	Result   []OperationNewResponse `json:"result,required"`
+	Errors   Message     `json:"errors,required"`
+	Messages Message     `json:"messages,required"`
+	Result   []APIShield `json:"result,required"`
 	// Whether the API call was successful
 	Success OperationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    operationNewResponseEnvelopeJSON    `json:"-"`
