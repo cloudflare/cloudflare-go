@@ -138,6 +138,7 @@ func (r *OperationService) Get(ctx context.Context, operationID string, params O
 	return
 }
 
+// basic op.
 type APIShieldOperationModel struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -194,6 +195,7 @@ func (r APIShieldOperationModelMethod) IsKnown() bool {
 	return false
 }
 
+// basic op.
 type APIShieldOperationModelParam struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -210,6 +212,7 @@ func (r APIShieldOperationModelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// basic op.
 type OperationNewResponse struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -855,6 +858,7 @@ func (r OperationNewResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 	return false
 }
 
+// basic op.
 type OperationListResponse struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -1582,6 +1586,7 @@ func (r OperationBulkDeleteResponseSuccess) IsKnown() bool {
 	return false
 }
 
+// basic op.
 type OperationGetResponse struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -2407,9 +2412,10 @@ func (r OperationGetParamsFeature) IsKnown() bool {
 }
 
 type OperationGetResponseEnvelope struct {
-	Errors   Message              `json:"errors,required"`
-	Messages Message              `json:"messages,required"`
-	Result   OperationGetResponse `json:"result,required"`
+	Errors   Message `json:"errors,required"`
+	Messages Message `json:"messages,required"`
+	// basic op.
+	Result OperationGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OperationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    operationGetResponseEnvelopeJSON    `json:"-"`
