@@ -11,7 +11,7 @@ import (
 type LeakedCredentialCheckGetStatusParams struct{}
 
 type LeakedCredentialCheckStatus struct {
-	Enabled bool `json:"enabled"`
+	Enabled *bool `json:"enabled"`
 }
 
 type LeakCredentialCheckStatusResponse struct {
@@ -20,7 +20,7 @@ type LeakCredentialCheckStatusResponse struct {
 }
 
 type LeakCredentialCheckSetStatusParams struct {
-	Enabled bool `json:"enabled"`
+	Enabled *bool `json:"enabled"`
 }
 
 type LeakedCredentialCheckListDetectionsParams struct{}

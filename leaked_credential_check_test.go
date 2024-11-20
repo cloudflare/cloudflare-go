@@ -27,7 +27,7 @@ func TestLeakedCredentialCheckGetStatus(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/leaked-credential-checks", handler)
 
 	want := LeakedCredentialCheckStatus{
-		Enabled: true,
+		Enabled: BoolPtr(true),
 	}
 	actual, err := client.LeakedCredentialCheckGetStatus(context.Background(), ZoneIdentifier(testZoneID), LeakedCredentialCheckGetStatusParams{})
 	if assert.NoError(t, err) {
@@ -53,7 +53,7 @@ func TestLeakedCredentialCheckSetStatus(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/leaked-credential-checks", handler)
 
 	want := LeakedCredentialCheckStatus{
-		Enabled: false,
+		Enabled: BoolPtr(false),
 	}
 	actual, err := client.LeakedCredentialCheckSetStatus(context.Background(), ZoneIdentifier(testZoneID), LeakCredentialCheckSetStatusParams{false})
 	if assert.NoError(t, err) {
