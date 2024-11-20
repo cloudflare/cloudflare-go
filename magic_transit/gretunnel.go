@@ -116,6 +116,24 @@ func (r *GRETunnelService) Delete(ctx context.Context, greTunnelID string, param
 	return
 }
 
+// Updates multiple GRE tunnels. Use `?validate_only=true` as an optional query
+// parameter to only run validation without persisting changes.
+func (r *GRETunnelService) BulkUpdate(ctx context.Context, params GRETunnelBulkUpdateParams, opts ...option.RequestOption) (res *GRETunnelBulkUpdateResponse, err error) {
+	var env GRETunnelBulkUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists informtion for a specific GRE tunnel.
 func (r *GRETunnelService) Get(ctx context.Context, greTunnelID string, params GRETunnelGetParams, opts ...option.RequestOption) (res *GRETunnelGetResponse, err error) {
 	var env GRETunnelGetResponseEnvelope
@@ -961,6 +979,214 @@ func (r greTunnelDeleteResponseDeletedGRETunnelHealthCheckTargetMagicHealthCheck
 func (r GRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion() {
 }
 
+type GRETunnelBulkUpdateResponse struct {
+	Modified           bool                                           `json:"modified"`
+	ModifiedGRETunnels []GRETunnelBulkUpdateResponseModifiedGRETunnel `json:"modified_gre_tunnels"`
+	JSON               greTunnelBulkUpdateResponseJSON                `json:"-"`
+}
+
+// greTunnelBulkUpdateResponseJSON contains the JSON metadata for the struct
+// [GRETunnelBulkUpdateResponse]
+type greTunnelBulkUpdateResponseJSON struct {
+	Modified           apijson.Field
+	ModifiedGRETunnels apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *GRETunnelBulkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelBulkUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelBulkUpdateResponseModifiedGRETunnel struct {
+	// The IP address assigned to the Cloudflare side of the GRE tunnel.
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	// The IP address assigned to the customer side of the GRE tunnel.
+	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress string `json:"interface_address,required"`
+	// The name of the tunnel. The name cannot contain spaces or special characters,
+	// must be 15 characters or less, and cannot share a name with another GRE tunnel.
+	Name string `json:"name,required"`
+	// Tunnel identifier tag.
+	ID string `json:"id"`
+	// The date and time the tunnel was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the GRE tunnel.
+	Description string                                                   `json:"description"`
+	HealthCheck GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheck `json:"health_check"`
+	// The date and time the tunnel was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
+	// is 576.
+	Mtu int64 `json:"mtu"`
+	// Time To Live (TTL) in number of hops of the GRE tunnel.
+	TTL  int64                                            `json:"ttl"`
+	JSON greTunnelBulkUpdateResponseModifiedGRETunnelJSON `json:"-"`
+}
+
+// greTunnelBulkUpdateResponseModifiedGRETunnelJSON contains the JSON metadata for
+// the struct [GRETunnelBulkUpdateResponseModifiedGRETunnel]
+type greTunnelBulkUpdateResponseModifiedGRETunnelJSON struct {
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
+	InterfaceAddress      apijson.Field
+	Name                  apijson.Field
+	ID                    apijson.Field
+	CreatedOn             apijson.Field
+	Description           apijson.Field
+	HealthCheck           apijson.Field
+	ModifiedOn            apijson.Field
+	Mtu                   apijson.Field
+	TTL                   apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *GRETunnelBulkUpdateResponseModifiedGRETunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelBulkUpdateResponseModifiedGRETunnelJSON) RawJSON() string {
+	return r.raw
+}
+
+type GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheck struct {
+	// The direction of the flow of the healthcheck. Either unidirectional, where the
+	// probe comes to you via the tunnel and the result comes back to Cloudflare via
+	// the open Internet, or bidirectional where both the probe and result come and go
+	// via the tunnel.
+	Direction GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirection `json:"direction"`
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled bool `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate HealthCheckRate `json:"rate"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`. This
+	// field is ignored for bidirectional healthchecks as the interface_address (not
+	// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+	// object form if the x-magic-new-hc-target header is set to true and string form
+	// if x-magic-new-hc-target is absent or set to false.
+	Target GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type HealthCheckType                                              `json:"type"`
+	JSON greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckJSON `json:"-"`
+}
+
+// greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckJSON contains the JSON
+// metadata for the struct
+// [GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheck]
+type greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckJSON struct {
+	Direction   apijson.Field
+	Enabled     apijson.Field
+	Rate        apijson.Field
+	Target      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// The direction of the flow of the healthcheck. Either unidirectional, where the
+// probe comes to you via the tunnel and the result comes back to Cloudflare via
+// the open Internet, or bidirectional where both the probe and result come and go
+// via the tunnel.
+type GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirection string
+
+const (
+	GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirectionUnidirectional GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirection = "unidirectional"
+	GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirectionBidirectional  GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirection = "bidirectional"
+)
+
+func (r GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirectionUnidirectional, GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+// object form if the x-magic-new-hc-target header is set to true and string form
+// if x-magic-new-hc-target is absent or set to false.
+//
+// Union satisfied by
+// [magic_transit.GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget]
+// or [shared.UnionString].
+type GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion interface {
+	ImplementsMagicTransitGRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target.
+type GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget struct {
+	// The effective health check target. If 'saved' is empty, then this field will be
+	// populated with the calculated default value on GET requests. Ignored in POST,
+	// PUT, and PATCH requests.
+	Effective string `json:"effective"`
+	// The saved health check target. Setting the value to the empty string indicates
+	// that the calculated default value will be used.
+	Saved string                                                                                   `json:"saved"`
+	JSON  greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTargetJSON `json:"-"`
+}
+
+// greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTargetJSON
+// contains the JSON metadata for the struct
+// [GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget]
+type greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTargetJSON struct {
+	Effective   apijson.Field
+	Saved       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTargetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r GRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitGRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion() {
+}
+
 type GRETunnelGetResponse struct {
 	GRETunnel GRETunnelGetResponseGRETunnel `json:"gre_tunnel"`
 	JSON      greTunnelGetResponseJSON      `json:"-"`
@@ -1463,6 +1689,60 @@ const (
 func (r GRETunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case GRETunnelDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type GRETunnelBulkUpdateParams struct {
+	// Identifier
+	AccountID         param.Field[string] `path:"account_id,required"`
+	Body              interface{}         `json:"body,required"`
+	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
+}
+
+func (r GRETunnelBulkUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type GRETunnelBulkUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo       `json:"errors,required"`
+	Messages []shared.ResponseInfo       `json:"messages,required"`
+	Result   GRETunnelBulkUpdateResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success GRETunnelBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    greTunnelBulkUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// greTunnelBulkUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [GRETunnelBulkUpdateResponseEnvelope]
+type greTunnelBulkUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GRETunnelBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r greTunnelBulkUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type GRETunnelBulkUpdateResponseEnvelopeSuccess bool
+
+const (
+	GRETunnelBulkUpdateResponseEnvelopeSuccessTrue GRETunnelBulkUpdateResponseEnvelopeSuccess = true
+)
+
+func (r GRETunnelBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GRETunnelBulkUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -105,6 +105,18 @@ func (r *OperationService) Delete(ctx context.Context, operationID string, body 
 	return
 }
 
+// Delete multiple operations
+func (r *OperationService) BulkDelete(ctx context.Context, body OperationBulkDeleteParams, opts ...option.RequestOption) (res *OperationBulkDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/api_gateway/operations", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
+}
+
 // Retrieve information about an operation
 func (r *OperationService) Get(ctx context.Context, operationID string, params OperationGetParams, opts ...option.RequestOption) (res *OperationGetResponse, err error) {
 	var env OperationGetResponseEnvelope
@@ -1454,6 +1466,47 @@ func (r OperationDeleteResponseSuccess) IsKnown() bool {
 	return false
 }
 
+type OperationBulkDeleteResponse struct {
+	Errors   Message `json:"errors,required"`
+	Messages Message `json:"messages,required"`
+	// Whether the API call was successful
+	Success OperationBulkDeleteResponseSuccess `json:"success,required"`
+	JSON    operationBulkDeleteResponseJSON    `json:"-"`
+}
+
+// operationBulkDeleteResponseJSON contains the JSON metadata for the struct
+// [OperationBulkDeleteResponse]
+type operationBulkDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OperationBulkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r operationBulkDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type OperationBulkDeleteResponseSuccess bool
+
+const (
+	OperationBulkDeleteResponseSuccessTrue OperationBulkDeleteResponseSuccess = true
+)
+
+func (r OperationBulkDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case OperationBulkDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OperationGetResponse struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -2275,6 +2328,11 @@ func (r OperationListParamsOrder) IsKnown() bool {
 }
 
 type OperationDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type OperationBulkDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

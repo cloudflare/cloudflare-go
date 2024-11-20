@@ -29,6 +29,8 @@ func (UnionString) ImplementsMagicTransitGRETunnelUpdateResponseModifiedGRETunne
 func (UnionString) ImplementsMagicTransitGRETunnelListResponseGRETunnelsHealthCheckTargetUnion() {}
 func (UnionString) ImplementsMagicTransitGRETunnelDeleteResponseDeletedGRETunnelHealthCheckTargetUnion() {
 }
+func (UnionString) ImplementsMagicTransitGRETunnelBulkUpdateResponseModifiedGRETunnelsHealthCheckTargetUnion() {
+}
 func (UnionString) ImplementsMagicTransitGRETunnelGetResponseGRETunnelHealthCheckTargetUnion()      {}
 func (UnionString) ImplementsMagicTransitGRETunnelUpdateParamsHealthCheckTargetUnion()              {}
 func (UnionString) ImplementsMagicTransitIPSECTunnelNewResponseIPSECTunnelsHealthCheckTargetUnion() {}
@@ -37,6 +39,8 @@ func (UnionString) ImplementsMagicTransitIPSECTunnelUpdateResponseModifiedIPSECT
 func (UnionString) ImplementsMagicTransitIPSECTunnelListResponseIPSECTunnelsHealthCheckTargetUnion() {
 }
 func (UnionString) ImplementsMagicTransitIPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion() {
+}
+func (UnionString) ImplementsMagicTransitIPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion() {
 }
 func (UnionString) ImplementsMagicTransitIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion() {}
 func (UnionString) ImplementsMagicTransitIPSECTunnelNewParamsHealthCheckTargetUnion()              {}

@@ -128,6 +128,26 @@ func (r *PoolService) Delete(ctx context.Context, poolID string, body PoolDelete
 	return
 }
 
+// Apply changes to a number of existing pools, overwriting the supplied
+// properties. Pools are ordered by ascending `name`. Returns the list of affected
+// pools. Supports the standard pagination query parameters, either
+// `limit`/`offset` or `per_page`/`page`.
+func (r *PoolService) BulkEdit(ctx context.Context, params PoolBulkEditParams, opts ...option.RequestOption) (res *[]Pool, err error) {
+	var env PoolBulkEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Apply changes to an existing pool, overwriting the supplied properties.
 func (r *PoolService) Edit(ctx context.Context, poolID string, params PoolEditParams, opts ...option.RequestOption) (res *Pool, err error) {
 	var env PoolEditResponseEnvelope
@@ -524,6 +544,115 @@ func (r PoolDeleteResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type PoolBulkEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The email address to send health status notifications to. This field is now
+	// deprecated in favor of Cloudflare Notifications for Load Balancing, so only
+	// resetting this field with an empty string `""` is accepted.
+	NotificationEmail param.Field[PoolBulkEditParamsNotificationEmail] `json:"notification_email"`
+}
+
+func (r PoolBulkEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The email address to send health status notifications to. This field is now
+// deprecated in favor of Cloudflare Notifications for Load Balancing, so only
+// resetting this field with an empty string `""` is accepted.
+type PoolBulkEditParamsNotificationEmail string
+
+const (
+	PoolBulkEditParamsNotificationEmailEmpty PoolBulkEditParamsNotificationEmail = ""
+)
+
+func (r PoolBulkEditParamsNotificationEmail) IsKnown() bool {
+	switch r {
+	case PoolBulkEditParamsNotificationEmailEmpty:
+		return true
+	}
+	return false
+}
+
+type PoolBulkEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []Pool                `json:"result,required"`
+	// Whether the API call was successful
+	Success    PoolBulkEditResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo PoolBulkEditResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       poolBulkEditResponseEnvelopeJSON       `json:"-"`
+}
+
+// poolBulkEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PoolBulkEditResponseEnvelope]
+type poolBulkEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PoolBulkEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r poolBulkEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type PoolBulkEditResponseEnvelopeSuccess bool
+
+const (
+	PoolBulkEditResponseEnvelopeSuccessTrue PoolBulkEditResponseEnvelopeSuccess = true
+)
+
+func (r PoolBulkEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case PoolBulkEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type PoolBulkEditResponseEnvelopeResultInfo struct {
+	// Total number of results on the current page
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64 `json:"total_count"`
+	// Total number of pages available
+	TotalPages float64                                    `json:"total_pages"`
+	JSON       poolBulkEditResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// poolBulkEditResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [PoolBulkEditResponseEnvelopeResultInfo]
+type poolBulkEditResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	TotalPages  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PoolBulkEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r poolBulkEditResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type PoolEditParams struct {

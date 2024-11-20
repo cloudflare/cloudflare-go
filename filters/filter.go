@@ -150,6 +150,50 @@ func (r *FilterService) Delete(ctx context.Context, filterID string, body Filter
 	return
 }
 
+// Deletes one or more existing filters.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
+func (r *FilterService) BulkDelete(ctx context.Context, body FilterBulkDeleteParams, opts ...option.RequestOption) (res *[]FirewallFilter, err error) {
+	var env FilterBulkDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/filters", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Updates one or more existing filters.
+//
+// Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
+// See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
+func (r *FilterService) BulkUpdate(ctx context.Context, body FilterBulkUpdateParams, opts ...option.RequestOption) (res *[]FirewallFilter, err error) {
+	var env FilterBulkUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/filters", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches the details of a filter.
 //
 // Deprecated: The Filters API is deprecated in favour of using the Ruleset Engine.
@@ -442,6 +486,172 @@ func (r FilterDeleteResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type FilterBulkDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type FilterBulkDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []FirewallFilter      `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    FilterBulkDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo FilterBulkDeleteResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       filterBulkDeleteResponseEnvelopeJSON       `json:"-"`
+}
+
+// filterBulkDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [FilterBulkDeleteResponseEnvelope]
+type filterBulkDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterBulkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r filterBulkDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type FilterBulkDeleteResponseEnvelopeSuccess bool
+
+const (
+	FilterBulkDeleteResponseEnvelopeSuccessTrue FilterBulkDeleteResponseEnvelopeSuccess = true
+)
+
+func (r FilterBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FilterBulkDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type FilterBulkDeleteResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                        `json:"total_count"`
+	JSON       filterBulkDeleteResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// filterBulkDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [FilterBulkDeleteResponseEnvelopeResultInfo]
+type filterBulkDeleteResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterBulkDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r filterBulkDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type FilterBulkUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+func (r FilterBulkUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type FilterBulkUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []FirewallFilter      `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    FilterBulkUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo FilterBulkUpdateResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       filterBulkUpdateResponseEnvelopeJSON       `json:"-"`
+}
+
+// filterBulkUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [FilterBulkUpdateResponseEnvelope]
+type filterBulkUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r filterBulkUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type FilterBulkUpdateResponseEnvelopeSuccess bool
+
+const (
+	FilterBulkUpdateResponseEnvelopeSuccessTrue FilterBulkUpdateResponseEnvelopeSuccess = true
+)
+
+func (r FilterBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case FilterBulkUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type FilterBulkUpdateResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                        `json:"total_count"`
+	JSON       filterBulkUpdateResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// filterBulkUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [FilterBulkUpdateResponseEnvelopeResultInfo]
+type filterBulkUpdateResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterBulkUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r filterBulkUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type FilterGetParams struct {
