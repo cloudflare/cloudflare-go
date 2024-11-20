@@ -38,7 +38,7 @@ func NewVersionService(opts ...option.RequestOption) (r *VersionService) {
 }
 
 // List deployed Workflow versions
-func (r *VersionService) List(ctx context.Context, workflowName string, params VersionListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[VersionListResponse], err error) {
+func (r *VersionService) List(ctx context.Context, workflowName string, params VersionListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[VersionListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -64,8 +64,8 @@ func (r *VersionService) List(ctx context.Context, workflowName string, params V
 }
 
 // List deployed Workflow versions
-func (r *VersionService) ListAutoPaging(ctx context.Context, workflowName string, params VersionListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[VersionListResponse] {
-	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, workflowName, params, opts...))
+func (r *VersionService) ListAutoPaging(ctx context.Context, workflowName string, params VersionListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[VersionListResponse] {
+	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, workflowName, params, opts...))
 }
 
 // Get Workflow version details
@@ -94,92 +94,17 @@ func (r *VersionService) Get(ctx context.Context, workflowName string, versionID
 }
 
 type VersionListResponse struct {
-	Errors     []VersionListResponseError    `json:"errors,required"`
-	Messages   []VersionListResponseMessage  `json:"messages,required"`
-	Result     VersionListResponseResult     `json:"result,required"`
-	Success    VersionListResponseSuccess    `json:"success,required"`
-	ResultInfo VersionListResponseResultInfo `json:"result_info"`
-	JSON       versionListResponseJSON       `json:"-"`
+	ID         string                  `json:"id,required" format:"uuid"`
+	ClassName  string                  `json:"class_name,required"`
+	CreatedOn  time.Time               `json:"created_on,required" format:"date-time"`
+	ModifiedOn time.Time               `json:"modified_on,required" format:"date-time"`
+	WorkflowID string                  `json:"workflow_id,required" format:"uuid"`
+	JSON       versionListResponseJSON `json:"-"`
 }
 
 // versionListResponseJSON contains the JSON metadata for the struct
 // [VersionListResponse]
 type versionListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type VersionListResponseError struct {
-	Code    float64                      `json:"code,required"`
-	Message string                       `json:"message,required"`
-	JSON    versionListResponseErrorJSON `json:"-"`
-}
-
-// versionListResponseErrorJSON contains the JSON metadata for the struct
-// [VersionListResponseError]
-type versionListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionListResponseErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-type VersionListResponseMessage struct {
-	Code    float64                        `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    versionListResponseMessageJSON `json:"-"`
-}
-
-// versionListResponseMessageJSON contains the JSON metadata for the struct
-// [VersionListResponseMessage]
-type versionListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionListResponseMessageJSON) RawJSON() string {
-	return r.raw
-}
-
-type VersionListResponseResult struct {
-	ID         string                        `json:"id,required" format:"uuid"`
-	ClassName  string                        `json:"class_name,required"`
-	CreatedOn  time.Time                     `json:"created_on,required" format:"date-time"`
-	ModifiedOn time.Time                     `json:"modified_on,required" format:"date-time"`
-	WorkflowID string                        `json:"workflow_id,required" format:"uuid"`
-	JSON       versionListResponseResultJSON `json:"-"`
-}
-
-// versionListResponseResultJSON contains the JSON metadata for the struct
-// [VersionListResponseResult]
-type versionListResponseResultJSON struct {
 	ID          apijson.Field
 	ClassName   apijson.Field
 	CreatedOn   apijson.Field
@@ -189,52 +114,11 @@ type versionListResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VersionListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *VersionListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r versionListResponseResultJSON) RawJSON() string {
-	return r.raw
-}
-
-type VersionListResponseSuccess bool
-
-const (
-	VersionListResponseSuccessTrue VersionListResponseSuccess = true
-)
-
-func (r VersionListResponseSuccess) IsKnown() bool {
-	switch r {
-	case VersionListResponseSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type VersionListResponseResultInfo struct {
-	Count      float64                           `json:"count,required"`
-	Page       float64                           `json:"page,required"`
-	PerPage    float64                           `json:"per_page,required"`
-	TotalCount float64                           `json:"total_count,required"`
-	JSON       versionListResponseResultInfoJSON `json:"-"`
-}
-
-// versionListResponseResultInfoJSON contains the JSON metadata for the struct
-// [VersionListResponseResultInfo]
-type versionListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VersionListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r versionListResponseResultInfoJSON) RawJSON() string {
+func (r versionListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
