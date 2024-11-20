@@ -1949,8 +1949,7 @@ type AccessApplicationNewResponse struct {
 	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
 	SelfHostedDomains interface{} `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -2164,8 +2163,7 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	SCIMConfig AccessApplicationNewResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -2832,8 +2830,7 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	SCIMConfig AccessApplicationNewResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -3117,8 +3114,7 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	SCIMConfig AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -4850,8 +4846,7 @@ type AccessApplicationUpdateResponse struct {
 	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
 	SelfHostedDomains interface{} `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -5065,8 +5060,7 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	SCIMConfig AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -5734,8 +5728,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	SCIMConfig AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -6019,8 +6012,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	SCIMConfig AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -7753,8 +7745,7 @@ type AccessApplicationListResponse struct {
 	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
 	SelfHostedDomains interface{} `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -7968,8 +7959,7 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	SCIMConfig AccessApplicationListResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -8636,8 +8626,7 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	SCIMConfig AccessApplicationListResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -8921,8 +8910,7 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	SCIMConfig AccessApplicationListResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -10676,8 +10664,7 @@ type AccessApplicationGetResponse struct {
 	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
 	SelfHostedDomains interface{} `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -10891,8 +10878,7 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	SCIMConfig AccessApplicationGetResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -11559,8 +11545,7 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	SCIMConfig AccessApplicationGetResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -11844,8 +11829,7 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	SCIMConfig AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -13561,8 +13545,7 @@ type AccessApplicationNewParamsBody struct {
 	SameSiteCookieAttribute param.Field[string]      `json:"same_site_cookie_attribute"`
 	SCIMConfig              param.Field[interface{}] `json:"scim_config"`
 	SelfHostedDomains       param.Field[interface{}] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -13657,8 +13640,7 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	SCIMConfig param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -14212,8 +14194,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -14469,8 +14450,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -15699,8 +15679,7 @@ type AccessApplicationUpdateParamsBody struct {
 	SameSiteCookieAttribute param.Field[string]      `json:"same_site_cookie_attribute"`
 	SCIMConfig              param.Field[interface{}] `json:"scim_config"`
 	SelfHostedDomains       param.Field[interface{}] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -15797,8 +15776,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -16352,8 +16330,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
@@ -16609,8 +16586,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfig] `json:"scim_config"`
 	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy
-	// foo.
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
