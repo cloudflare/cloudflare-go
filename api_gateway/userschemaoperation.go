@@ -123,14 +123,14 @@ func (r *UserSchemaOperationListResponse) UnmarshalJSON(data []byte) (err error)
 //
 // Possible runtime types of the union are
 // [api_gateway.UserSchemaOperationListResponseAPIShieldOperation],
-// [api_gateway.APIShieldOperation].
+// [api_gateway.APIShieldOperationModel].
 func (r UserSchemaOperationListResponse) AsUnion() UserSchemaOperationListResponseUnion {
 	return r.union
 }
 
 // Union satisfied by
 // [api_gateway.UserSchemaOperationListResponseAPIShieldOperation] or
-// [api_gateway.APIShieldOperation].
+// [api_gateway.APIShieldOperationModel].
 type UserSchemaOperationListResponseUnion interface {
 	implementsAPIGatewayUserSchemaOperationListResponse()
 }
@@ -145,7 +145,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(APIShieldOperation{}),
+			Type:       reflect.TypeOf(APIShieldOperationModel{}),
 		},
 	)
 }

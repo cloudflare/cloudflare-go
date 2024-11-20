@@ -138,7 +138,7 @@ func (r *OperationService) Get(ctx context.Context, operationID string, params O
 	return
 }
 
-type APIShieldOperation struct {
+type APIShieldOperationModel struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
@@ -147,13 +147,13 @@ type APIShieldOperation struct {
 	// RFC3986-compliant host.
 	Host string `json:"host,required" format:"hostname"`
 	// The HTTP method used to access the endpoint.
-	Method APIShieldOperationMethod `json:"method,required"`
-	JSON   apiShieldOperationJSON   `json:"-"`
+	Method APIShieldOperationModelMethod `json:"method,required"`
+	JSON   apiShieldOperationModelJSON   `json:"-"`
 }
 
-// apiShieldOperationJSON contains the JSON metadata for the struct
-// [APIShieldOperation]
-type apiShieldOperationJSON struct {
+// apiShieldOperationModelJSON contains the JSON metadata for the struct
+// [APIShieldOperationModel]
+type apiShieldOperationModelJSON struct {
 	Endpoint    apijson.Field
 	Host        apijson.Field
 	Method      apijson.Field
@@ -161,40 +161,40 @@ type apiShieldOperationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *APIShieldOperation) UnmarshalJSON(data []byte) (err error) {
+func (r *APIShieldOperationModel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r apiShieldOperationJSON) RawJSON() string {
+func (r apiShieldOperationModelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r APIShieldOperation) implementsAPIGatewayUserSchemaOperationListResponse() {}
+func (r APIShieldOperationModel) implementsAPIGatewayUserSchemaOperationListResponse() {}
 
 // The HTTP method used to access the endpoint.
-type APIShieldOperationMethod string
+type APIShieldOperationModelMethod string
 
 const (
-	APIShieldOperationMethodGet     APIShieldOperationMethod = "GET"
-	APIShieldOperationMethodPost    APIShieldOperationMethod = "POST"
-	APIShieldOperationMethodHead    APIShieldOperationMethod = "HEAD"
-	APIShieldOperationMethodOptions APIShieldOperationMethod = "OPTIONS"
-	APIShieldOperationMethodPut     APIShieldOperationMethod = "PUT"
-	APIShieldOperationMethodDelete  APIShieldOperationMethod = "DELETE"
-	APIShieldOperationMethodConnect APIShieldOperationMethod = "CONNECT"
-	APIShieldOperationMethodPatch   APIShieldOperationMethod = "PATCH"
-	APIShieldOperationMethodTrace   APIShieldOperationMethod = "TRACE"
+	APIShieldOperationModelMethodGet     APIShieldOperationModelMethod = "GET"
+	APIShieldOperationModelMethodPost    APIShieldOperationModelMethod = "POST"
+	APIShieldOperationModelMethodHead    APIShieldOperationModelMethod = "HEAD"
+	APIShieldOperationModelMethodOptions APIShieldOperationModelMethod = "OPTIONS"
+	APIShieldOperationModelMethodPut     APIShieldOperationModelMethod = "PUT"
+	APIShieldOperationModelMethodDelete  APIShieldOperationModelMethod = "DELETE"
+	APIShieldOperationModelMethodConnect APIShieldOperationModelMethod = "CONNECT"
+	APIShieldOperationModelMethodPatch   APIShieldOperationModelMethod = "PATCH"
+	APIShieldOperationModelMethodTrace   APIShieldOperationModelMethod = "TRACE"
 )
 
-func (r APIShieldOperationMethod) IsKnown() bool {
+func (r APIShieldOperationModelMethod) IsKnown() bool {
 	switch r {
-	case APIShieldOperationMethodGet, APIShieldOperationMethodPost, APIShieldOperationMethodHead, APIShieldOperationMethodOptions, APIShieldOperationMethodPut, APIShieldOperationMethodDelete, APIShieldOperationMethodConnect, APIShieldOperationMethodPatch, APIShieldOperationMethodTrace:
+	case APIShieldOperationModelMethodGet, APIShieldOperationModelMethodPost, APIShieldOperationModelMethodHead, APIShieldOperationModelMethodOptions, APIShieldOperationModelMethodPut, APIShieldOperationModelMethodDelete, APIShieldOperationModelMethodConnect, APIShieldOperationModelMethodPatch, APIShieldOperationModelMethodTrace:
 		return true
 	}
 	return false
 }
 
-type APIShieldOperationParam struct {
+type APIShieldOperationModelParam struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
@@ -203,10 +203,10 @@ type APIShieldOperationParam struct {
 	// RFC3986-compliant host.
 	Host param.Field[string] `json:"host,required" format:"hostname"`
 	// The HTTP method used to access the endpoint.
-	Method param.Field[APIShieldOperationMethod] `json:"method,required"`
+	Method param.Field[APIShieldOperationModelMethod] `json:"method,required"`
 }
 
-func (r APIShieldOperationParam) MarshalJSON() (data []byte, err error) {
+func (r APIShieldOperationModelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2229,8 +2229,8 @@ func (r OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 
 type OperationNewParams struct {
 	// Identifier
-	ZoneID param.Field[string]       `path:"zone_id,required"`
-	Body   []APIShieldOperationParam `json:"body,required"`
+	ZoneID param.Field[string]            `path:"zone_id,required"`
+	Body   []APIShieldOperationModelParam `json:"body,required"`
 }
 
 func (r OperationNewParams) MarshalJSON() (data []byte, err error) {
