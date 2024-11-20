@@ -72,6 +72,7 @@ func (r *UserSchemaOperationService) ListAutoPaging(ctx context.Context, schemaI
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, schemaID, params, opts...))
 }
 
+// basic op.
 type UserSchemaOperationListResponse struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -128,6 +129,8 @@ func (r UserSchemaOperationListResponse) AsUnion() UserSchemaOperationListRespon
 	return r.union
 }
 
+// basic op.
+//
 // Union satisfied by
 // [api_gateway.UserSchemaOperationListResponseAPIShieldOperation] or
 // [api_gateway.APIShieldOperationModel].
@@ -150,6 +153,7 @@ func init() {
 	)
 }
 
+// basic op.
 type UserSchemaOperationListResponseAPIShieldOperation struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
