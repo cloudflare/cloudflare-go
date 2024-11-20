@@ -19,6 +19,7 @@ type DLPService struct {
 	PayloadLogs *DLPPayloadLogService
 	Profiles    *DLPProfileService
 	Limits      *DLPLimitService
+	Entries     *DLPEntryService
 }
 
 // NewDLPService generates a new service that applies the given options to each
@@ -32,5 +33,6 @@ func NewDLPService(opts ...option.RequestOption) (r *DLPService) {
 	r.PayloadLogs = NewDLPPayloadLogService(opts...)
 	r.Profiles = NewDLPProfileService(opts...)
 	r.Limits = NewDLPLimitService(opts...)
+	r.Entries = NewDLPEntryService(opts...)
 	return
 }
