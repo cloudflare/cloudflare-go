@@ -2521,11 +2521,11 @@ Methods:
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway#APIShieldOperationParam">APIShieldOperationParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway#APIShieldOperationModelParam">APIShieldOperationModelParam</a>
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway#APIShieldOperation">APIShieldOperation</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway#APIShieldOperationModel">APIShieldOperationModel</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway#OperationNewResponse">OperationNewResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway#OperationListResponse">OperationListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway">api_gateway</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/api_gateway#OperationDeleteResponse">OperationDeleteResponse</a>
