@@ -127,6 +127,27 @@ func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID strin
 	return
 }
 
+// Modifies one or more rules in a Web Analytics ruleset with a single request.
+func (r *RuleService) BulkNew(ctx context.Context, rulesetID string, params RuleBulkNewParams, opts ...option.RequestOption) (res *RuleBulkNewResponse, err error) {
+	var env RuleBulkNewResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if rulesetID == "" {
+		err = errors.New("missing required ruleset_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rules", params.AccountID, rulesetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type RUMRule struct {
 	// The Web Analytics rule identifier.
 	ID      string    `json:"id"`
@@ -237,6 +258,60 @@ func (r *RuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleBulkNewResponse struct {
+	// A list of rules.
+	Rules   []RUMRule                  `json:"rules"`
+	Ruleset RuleBulkNewResponseRuleset `json:"ruleset"`
+	JSON    ruleBulkNewResponseJSON    `json:"-"`
+}
+
+// ruleBulkNewResponseJSON contains the JSON metadata for the struct
+// [RuleBulkNewResponse]
+type ruleBulkNewResponseJSON struct {
+	Rules       apijson.Field
+	Ruleset     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleBulkNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleBulkNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleBulkNewResponseRuleset struct {
+	// The Web Analytics ruleset identifier.
+	ID string `json:"id"`
+	// Whether the ruleset is enabled.
+	Enabled  bool   `json:"enabled"`
+	ZoneName string `json:"zone_name"`
+	// The zone identifier.
+	ZoneTag string                         `json:"zone_tag"`
+	JSON    ruleBulkNewResponseRulesetJSON `json:"-"`
+}
+
+// ruleBulkNewResponseRulesetJSON contains the JSON metadata for the struct
+// [RuleBulkNewResponseRuleset]
+type ruleBulkNewResponseRulesetJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	ZoneName    apijson.Field
+	ZoneTag     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleBulkNewResponseRuleset) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleBulkNewResponseRulesetJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -389,5 +464,59 @@ func (r *RuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r ruleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleBulkNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// A list of rule identifiers to delete.
+	DeleteRules param.Field[[]string] `json:"delete_rules"`
+	// A list of rules to create or update.
+	Rules param.Field[[]RuleBulkNewParamsRule] `json:"rules"`
+}
+
+func (r RuleBulkNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RuleBulkNewParamsRule struct {
+	// The Web Analytics rule identifier.
+	ID        param.Field[string]   `json:"id"`
+	Host      param.Field[string]   `json:"host"`
+	Inclusive param.Field[bool]     `json:"inclusive"`
+	IsPaused  param.Field[bool]     `json:"is_paused"`
+	Paths     param.Field[[]string] `json:"paths"`
+}
+
+func (r RuleBulkNewParamsRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RuleBulkNewResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful.
+	Success bool                            `json:"success,required"`
+	Result  RuleBulkNewResponse             `json:"result"`
+	JSON    ruleBulkNewResponseEnvelopeJSON `json:"-"`
+}
+
+// ruleBulkNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RuleBulkNewResponseEnvelope]
+type ruleBulkNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleBulkNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleBulkNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

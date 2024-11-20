@@ -119,6 +119,25 @@ func (r *IPSECTunnelService) Delete(ctx context.Context, ipsecTunnelID string, p
 	return
 }
 
+// Update multiple IPsec tunnels associated with an account. Use
+// `?validate_only=true` as an optional query parameter to only run validation
+// without persisting changes.
+func (r *IPSECTunnelService) BulkUpdate(ctx context.Context, params IPSECTunnelBulkUpdateParams, opts ...option.RequestOption) (res *IPSECTunnelBulkUpdateResponse, err error) {
+	var env IPSECTunnelBulkUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists details for a specific IPsec tunnel.
 func (r *IPSECTunnelService) Get(ctx context.Context, ipsecTunnelID string, params IPSECTunnelGetParams, opts ...option.RequestOption) (res *IPSECTunnelGetResponse, err error) {
 	var env IPSECTunnelGetResponseEnvelope
@@ -1028,6 +1047,218 @@ func (r ipsecTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetMagicHealthC
 func (r IPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelDeleteResponseDeletedIPSECTunnelHealthCheckTargetUnion() {
 }
 
+type IPSECTunnelBulkUpdateResponse struct {
+	Modified             bool                                               `json:"modified"`
+	ModifiedIPSECTunnels []IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel `json:"modified_ipsec_tunnels"`
+	JSON                 ipsecTunnelBulkUpdateResponseJSON                  `json:"-"`
+}
+
+// ipsecTunnelBulkUpdateResponseJSON contains the JSON metadata for the struct
+// [IPSECTunnelBulkUpdateResponse]
+type ipsecTunnelBulkUpdateResponseJSON struct {
+	Modified             apijson.Field
+	ModifiedIPSECTunnels apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *IPSECTunnelBulkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelBulkUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel struct {
+	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
+	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress string `json:"interface_address,required"`
+	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
+	Name string `json:"name,required"`
+	// Tunnel identifier tag.
+	ID string `json:"id"`
+	// When `true`, the tunnel can use a null-cipher (`ENCR_NULL`) in the ESP tunnel
+	// (Phase 2).
+	AllowNullCipher bool `json:"allow_null_cipher"`
+	// The date and time the tunnel was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// The IP address assigned to the customer side of the IPsec tunnel. Not required,
+	// but must be set for proactive traceroutes to work.
+	CustomerEndpoint string `json:"customer_endpoint"`
+	// An optional description forthe IPsec tunnel.
+	Description string                                                       `json:"description"`
+	HealthCheck IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheck `json:"health_check"`
+	// The date and time the tunnel was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The PSK metadata that includes when the PSK was generated.
+	PSKMetadata PSKMetadata `json:"psk_metadata"`
+	// If `true`, then IPsec replay protection will be supported in the
+	// Cloudflare-to-customer direction.
+	ReplayProtection bool                                                 `json:"replay_protection"`
+	JSON             ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON `json:"-"`
+}
+
+// ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON contains the JSON metadata
+// for the struct [IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel]
+type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON struct {
+	CloudflareEndpoint apijson.Field
+	InterfaceAddress   apijson.Field
+	Name               apijson.Field
+	ID                 apijson.Field
+	AllowNullCipher    apijson.Field
+	CreatedOn          apijson.Field
+	CustomerEndpoint   apijson.Field
+	Description        apijson.Field
+	HealthCheck        apijson.Field
+	ModifiedOn         apijson.Field
+	PSKMetadata        apijson.Field
+	ReplayProtection   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *IPSECTunnelBulkUpdateResponseModifiedIPSECTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
+type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheck struct {
+	// The direction of the flow of the healthcheck. Either unidirectional, where the
+	// probe comes to you via the tunnel and the result comes back to Cloudflare via
+	// the open Internet, or bidirectional where both the probe and result come and go
+	// via the tunnel.
+	Direction IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirection `json:"direction"`
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled bool `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate HealthCheckRate `json:"rate"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`. This
+	// field is ignored for bidirectional healthchecks as the interface_address (not
+	// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+	// object form if the x-magic-new-hc-target header is set to true and string form
+	// if x-magic-new-hc-target is absent or set to false.
+	Target IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type HealthCheckType                                                  `json:"type"`
+	JSON ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckJSON `json:"-"`
+}
+
+// ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckJSON contains the
+// JSON metadata for the struct
+// [IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheck]
+type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckJSON struct {
+	Direction   apijson.Field
+	Enabled     apijson.Field
+	Rate        apijson.Field
+	Target      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckJSON) RawJSON() string {
+	return r.raw
+}
+
+// The direction of the flow of the healthcheck. Either unidirectional, where the
+// probe comes to you via the tunnel and the result comes back to Cloudflare via
+// the open Internet, or bidirectional where both the probe and result come and go
+// via the tunnel.
+type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirection string
+
+const (
+	IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirectionUnidirectional IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirection = "unidirectional"
+	IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirectionBidirectional  IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirection = "bidirectional"
+)
+
+func (r IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirection) IsKnown() bool {
+	switch r {
+	case IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirectionUnidirectional, IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckDirectionBidirectional:
+		return true
+	}
+	return false
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target. Must be in
+// object form if the x-magic-new-hc-target header is set to true and string form
+// if x-magic-new-hc-target is absent or set to false.
+//
+// Union satisfied by
+// [magic_transit.IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget]
+// or [shared.UnionString].
+type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion interface {
+	ImplementsMagicTransitIPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// The destination address in a request type health check. After the healthcheck is
+// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+// to this address. This field defaults to `customer_gre_endpoint address`. This
+// field is ignored for bidirectional healthchecks as the interface_address (not
+// assigned to the Cloudflare side of the tunnel) is used as the target.
+type IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget struct {
+	// The effective health check target. If 'saved' is empty, then this field will be
+	// populated with the calculated default value on GET requests. Ignored in POST,
+	// PUT, and PATCH requests.
+	Effective string `json:"effective"`
+	// The saved health check target. Setting the value to the empty string indicates
+	// that the calculated default value will be used.
+	Saved string                                                                                       `json:"saved"`
+	JSON  ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTargetJSON `json:"-"`
+}
+
+// ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTargetJSON
+// contains the JSON metadata for the struct
+// [IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget]
+type ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTargetJSON struct {
+	Effective   apijson.Field
+	Saved       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTargetJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r IPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetMagicHealthCheckTarget) ImplementsMagicTransitIPSECTunnelBulkUpdateResponseModifiedIPSECTunnelsHealthCheckTargetUnion() {
+}
+
 type IPSECTunnelGetResponse struct {
 	IPSECTunnel IPSECTunnelGetResponseIPSECTunnel `json:"ipsec_tunnel"`
 	JSON        ipsecTunnelGetResponseJSON        `json:"-"`
@@ -1658,6 +1889,60 @@ const (
 func (r IPSECTunnelDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case IPSECTunnelDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type IPSECTunnelBulkUpdateParams struct {
+	// Identifier
+	AccountID         param.Field[string] `path:"account_id,required"`
+	Body              interface{}         `json:"body,required"`
+	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
+}
+
+func (r IPSECTunnelBulkUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type IPSECTunnelBulkUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo         `json:"errors,required"`
+	Messages []shared.ResponseInfo         `json:"messages,required"`
+	Result   IPSECTunnelBulkUpdateResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success IPSECTunnelBulkUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    ipsecTunnelBulkUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// ipsecTunnelBulkUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [IPSECTunnelBulkUpdateResponseEnvelope]
+type ipsecTunnelBulkUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IPSECTunnelBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipsecTunnelBulkUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type IPSECTunnelBulkUpdateResponseEnvelopeSuccess bool
+
+const (
+	IPSECTunnelBulkUpdateResponseEnvelopeSuccessTrue IPSECTunnelBulkUpdateResponseEnvelopeSuccess = true
+)
+
+func (r IPSECTunnelBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case IPSECTunnelBulkUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

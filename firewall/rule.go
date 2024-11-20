@@ -154,6 +154,72 @@ func (r *RuleService) Delete(ctx context.Context, ruleID string, body RuleDelete
 	return
 }
 
+// Deletes existing firewall rules.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
+func (r *RuleService) BulkDelete(ctx context.Context, body RuleBulkDeleteParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
+	var env RuleBulkDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/firewall/rules", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Updates the priority of existing firewall rules.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
+func (r *RuleService) BulkEdit(ctx context.Context, params RuleBulkEditParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
+	var env RuleBulkEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/firewall/rules", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Updates one or more existing firewall rules.
+//
+// Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
+// Engine. See
+// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#firewall-rules-api-and-filters-api
+// for full details.
+func (r *RuleService) BulkUpdate(ctx context.Context, params RuleBulkUpdateParams, opts ...option.RequestOption) (res *[]FirewallRule, err error) {
+	var env RuleBulkUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/firewall/rules", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Updates the priority of an existing firewall rule.
 //
 // Deprecated: The Firewall Rules API is deprecated in favour of using the Ruleset
@@ -707,6 +773,259 @@ func (r RuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type RuleBulkDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type RuleBulkDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []FirewallRule        `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    RuleBulkDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo RuleBulkDeleteResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       ruleBulkDeleteResponseEnvelopeJSON       `json:"-"`
+}
+
+// ruleBulkDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RuleBulkDeleteResponseEnvelope]
+type ruleBulkDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleBulkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleBulkDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RuleBulkDeleteResponseEnvelopeSuccess bool
+
+const (
+	RuleBulkDeleteResponseEnvelopeSuccessTrue RuleBulkDeleteResponseEnvelopeSuccess = true
+)
+
+func (r RuleBulkDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleBulkDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RuleBulkDeleteResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                      `json:"total_count"`
+	JSON       ruleBulkDeleteResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// ruleBulkDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [RuleBulkDeleteResponseEnvelopeResultInfo]
+type ruleBulkDeleteResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleBulkDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleBulkDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleBulkEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
+}
+
+func (r RuleBulkEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type RuleBulkEditResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []FirewallRule        `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    RuleBulkEditResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo RuleBulkEditResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       ruleBulkEditResponseEnvelopeJSON       `json:"-"`
+}
+
+// ruleBulkEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RuleBulkEditResponseEnvelope]
+type ruleBulkEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleBulkEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleBulkEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RuleBulkEditResponseEnvelopeSuccess bool
+
+const (
+	RuleBulkEditResponseEnvelopeSuccessTrue RuleBulkEditResponseEnvelopeSuccess = true
+)
+
+func (r RuleBulkEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleBulkEditResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RuleBulkEditResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                    `json:"total_count"`
+	JSON       ruleBulkEditResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// ruleBulkEditResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [RuleBulkEditResponseEnvelopeResultInfo]
+type ruleBulkEditResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleBulkEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleBulkEditResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleBulkUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	Body   interface{}         `json:"body,required"`
+}
+
+func (r RuleBulkUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type RuleBulkUpdateResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   []FirewallRule        `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    RuleBulkUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo RuleBulkUpdateResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       ruleBulkUpdateResponseEnvelopeJSON       `json:"-"`
+}
+
+// ruleBulkUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RuleBulkUpdateResponseEnvelope]
+type ruleBulkUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleBulkUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type RuleBulkUpdateResponseEnvelopeSuccess bool
+
+const (
+	RuleBulkUpdateResponseEnvelopeSuccessTrue RuleBulkUpdateResponseEnvelopeSuccess = true
+)
+
+func (r RuleBulkUpdateResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case RuleBulkUpdateResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type RuleBulkUpdateResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                      `json:"total_count"`
+	JSON       ruleBulkUpdateResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// ruleBulkUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [RuleBulkUpdateResponseEnvelopeResultInfo]
+type ruleBulkUpdateResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleBulkUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleBulkUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RuleEditParams struct {

@@ -63,6 +63,23 @@ func (r *DiscoveryOperationService) ListAutoPaging(ctx context.Context, params D
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
+// Update the `state` on one or more discovered operations
+func (r *DiscoveryOperationService) BulkEdit(ctx context.Context, params DiscoveryOperationBulkEditParams, opts ...option.RequestOption) (res *DiscoveryOperationBulkEditResponse, err error) {
+	var env DiscoveryOperationBulkEditResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/api_gateway/discovery/operations", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Update the `state` on a discovered operation
 func (r *DiscoveryOperationService) Edit(ctx context.Context, operationID string, params DiscoveryOperationEditParams, opts ...option.RequestOption) (res *DiscoveryOperationEditResponse, err error) {
 	var env DiscoveryOperationEditResponseEnvelope
@@ -82,6 +99,53 @@ func (r *DiscoveryOperationService) Edit(ctx context.Context, operationID string
 	}
 	res = &env.Result
 	return
+}
+
+type DiscoveryOperationBulkEditResponse map[string]DiscoveryOperationBulkEditResponseItem
+
+// Mappings of discovered operations (keys) to objects describing their state
+type DiscoveryOperationBulkEditResponseItem struct {
+	// Mark state of operation in API Discovery
+	//
+	// - `review` - Mark operation as for review
+	// - `ignored` - Mark operation as ignored
+	State DiscoveryOperationBulkEditResponseItemState `json:"state"`
+	JSON  discoveryOperationBulkEditResponseItemJSON  `json:"-"`
+}
+
+// discoveryOperationBulkEditResponseItemJSON contains the JSON metadata for the
+// struct [DiscoveryOperationBulkEditResponseItem]
+type discoveryOperationBulkEditResponseItemJSON struct {
+	State       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DiscoveryOperationBulkEditResponseItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r discoveryOperationBulkEditResponseItemJSON) RawJSON() string {
+	return r.raw
+}
+
+// Mark state of operation in API Discovery
+//
+// - `review` - Mark operation as for review
+// - `ignored` - Mark operation as ignored
+type DiscoveryOperationBulkEditResponseItemState string
+
+const (
+	DiscoveryOperationBulkEditResponseItemStateReview  DiscoveryOperationBulkEditResponseItemState = "review"
+	DiscoveryOperationBulkEditResponseItemStateIgnored DiscoveryOperationBulkEditResponseItemState = "ignored"
+)
+
+func (r DiscoveryOperationBulkEditResponseItemState) IsKnown() bool {
+	switch r {
+	case DiscoveryOperationBulkEditResponseItemStateReview, DiscoveryOperationBulkEditResponseItemStateIgnored:
+		return true
+	}
+	return false
 }
 
 type DiscoveryOperationEditResponse struct {
@@ -253,6 +317,91 @@ const (
 func (r DiscoveryOperationListParamsState) IsKnown() bool {
 	switch r {
 	case DiscoveryOperationListParamsStateReview, DiscoveryOperationListParamsStateSaved, DiscoveryOperationListParamsStateIgnored:
+		return true
+	}
+	return false
+}
+
+type DiscoveryOperationBulkEditParams struct {
+	// Identifier
+	ZoneID param.Field[string]                             `path:"zone_id,required"`
+	Body   map[string]DiscoveryOperationBulkEditParamsBody `json:"body,required"`
+}
+
+func (r DiscoveryOperationBulkEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+// Mappings of discovered operations (keys) to objects describing their state
+type DiscoveryOperationBulkEditParamsBody struct {
+	// Mark state of operation in API Discovery
+	//
+	// - `review` - Mark operation as for review
+	// - `ignored` - Mark operation as ignored
+	State param.Field[DiscoveryOperationBulkEditParamsBodyState] `json:"state"`
+}
+
+func (r DiscoveryOperationBulkEditParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Mark state of operation in API Discovery
+//
+// - `review` - Mark operation as for review
+// - `ignored` - Mark operation as ignored
+type DiscoveryOperationBulkEditParamsBodyState string
+
+const (
+	DiscoveryOperationBulkEditParamsBodyStateReview  DiscoveryOperationBulkEditParamsBodyState = "review"
+	DiscoveryOperationBulkEditParamsBodyStateIgnored DiscoveryOperationBulkEditParamsBodyState = "ignored"
+)
+
+func (r DiscoveryOperationBulkEditParamsBodyState) IsKnown() bool {
+	switch r {
+	case DiscoveryOperationBulkEditParamsBodyStateReview, DiscoveryOperationBulkEditParamsBodyStateIgnored:
+		return true
+	}
+	return false
+}
+
+type DiscoveryOperationBulkEditResponseEnvelope struct {
+	Errors   Message                            `json:"errors,required"`
+	Messages Message                            `json:"messages,required"`
+	Result   DiscoveryOperationBulkEditResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success DiscoveryOperationBulkEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    discoveryOperationBulkEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// discoveryOperationBulkEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [DiscoveryOperationBulkEditResponseEnvelope]
+type discoveryOperationBulkEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DiscoveryOperationBulkEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r discoveryOperationBulkEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type DiscoveryOperationBulkEditResponseEnvelopeSuccess bool
+
+const (
+	DiscoveryOperationBulkEditResponseEnvelopeSuccessTrue DiscoveryOperationBulkEditResponseEnvelopeSuccess = true
+)
+
+func (r DiscoveryOperationBulkEditResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case DiscoveryOperationBulkEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
