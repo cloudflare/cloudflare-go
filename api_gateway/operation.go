@@ -396,7 +396,7 @@ func (r OperationNewResponseFeaturesAPIShieldOperationFeatureThresholds) impleme
 }
 
 type OperationNewResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds struct {
-	// The total number of auth-ids seen across this calculation.
+	// The total number of auth-ids seen across this calculation foo.
 	AuthIDTokens int64 `json:"auth_id_tokens"`
 	// The number of data points used for the threshold suggestion calculation.
 	DataPoints  int64     `json:"data_points"`
@@ -1042,7 +1042,7 @@ func (r OperationListResponseFeaturesAPIShieldOperationFeatureThresholds) implem
 }
 
 type OperationListResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds struct {
-	// The total number of auth-ids seen across this calculation.
+	// The total number of auth-ids seen across this calculation foo.
 	AuthIDTokens int64 `json:"auth_id_tokens"`
 	// The number of data points used for the threshold suggestion calculation.
 	DataPoints  int64     `json:"data_points"`
@@ -1770,7 +1770,7 @@ func (r OperationGetResponseFeaturesAPIShieldOperationFeatureThresholds) impleme
 }
 
 type OperationGetResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds struct {
-	// The total number of auth-ids seen across this calculation.
+	// The total number of auth-ids seen across this calculation foo.
 	AuthIDTokens int64 `json:"auth_id_tokens"`
 	// The number of data points used for the threshold suggestion calculation.
 	DataPoints  int64     `json:"data_points"`
