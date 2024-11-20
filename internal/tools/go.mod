@@ -1,6 +1,6 @@
 module github.com/cloudflare/cloudflare-go/internal/tools
 
-go 1.19
+go 1.23.3
 
 require (
 	github.com/breml/bidichk v0.2.3

@@ -1,6 +1,6 @@
 module github.com/cloudflare/cloudflare-go
 
-go 1.19
+go 1.23.3
 
 require (
 	github.com/goccy/go-json v0.10.3
