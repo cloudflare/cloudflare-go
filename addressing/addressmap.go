@@ -267,7 +267,7 @@ func (r addressMapNewResponseJSON) RawJSON() string {
 
 type AddressMapNewResponseIP struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// An IPv4 or IPv6 address.
+	// An IPv4 or IPv6 address. foo
 	IP   string                      `json:"ip"`
 	JSON addressMapNewResponseIPJSON `json:"-"`
 }
@@ -451,7 +451,7 @@ func (r addressMapGetResponseJSON) RawJSON() string {
 
 type AddressMapGetResponseIP struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// An IPv4 or IPv6 address.
+	// An IPv4 or IPv6 address. foo
 	IP   string                      `json:"ip"`
 	JSON addressMapGetResponseIPJSON `json:"-"`
 }
