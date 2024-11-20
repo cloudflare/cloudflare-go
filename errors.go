@@ -32,6 +32,7 @@ const (
 	errInvalidResourceContainerAccess        = "requested resource container (%q) is not supported for this endpoint"
 	errRequiredAccountLevelResourceContainer = "this endpoint requires using an account level resource container and identifiers"
 	errRequiredZoneLevelResourceContainer    = "this endpoint requires using a zone level resource container and identifiers"
+	errMissingDetectionID                    = "required missing detection ID"
 )
 
 var (
@@ -45,6 +46,7 @@ var (
 
 	ErrRequiredAccountLevelResourceContainer = errors.New(errRequiredAccountLevelResourceContainer)
 	ErrRequiredZoneLevelResourceContainer    = errors.New(errRequiredZoneLevelResourceContainer)
+	ErrMissingDetectionID                    = errors.New(errMissingDetectionID)
 )
 
 type ErrorType string
