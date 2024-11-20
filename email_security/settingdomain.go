@@ -99,6 +99,23 @@ func (r *SettingDomainService) Edit(ctx context.Context, domainID int64, params 
 	return
 }
 
+// Get an email domain
+func (r *SettingDomainService) Get(ctx context.Context, domainID int64, query SettingDomainGetParams, opts ...option.RequestOption) (res *SettingDomainGetResponse, err error) {
+	var env SettingDomainGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/settings/domains/%v", query.AccountID, domainID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type SettingDomainListResponse struct {
 	// The unique identifier for the domain.
 	ID                   int64                                          `json:"id,required"`
@@ -297,6 +314,94 @@ func (r SettingDomainEditResponseInboxProvider) IsKnown() bool {
 	return false
 }
 
+type SettingDomainGetResponse struct {
+	// The unique identifier for the domain.
+	ID                   int64                                         `json:"id,required"`
+	AllowedDeliveryModes []SettingDomainGetResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
+	CreatedAt            time.Time                                     `json:"created_at,required" format:"date-time"`
+	Domain               string                                        `json:"domain,required"`
+	LastModified         time.Time                                     `json:"last_modified,required" format:"date-time"`
+	LookbackHops         int64                                         `json:"lookback_hops,required"`
+	Folder               SettingDomainGetResponseFolder                `json:"folder,nullable"`
+	InboxProvider        SettingDomainGetResponseInboxProvider         `json:"inbox_provider,nullable"`
+	IntegrationID        string                                        `json:"integration_id,nullable" format:"uuid"`
+	O365TenantID         string                                        `json:"o365_tenant_id,nullable"`
+	JSON                 settingDomainGetResponseJSON                  `json:"-"`
+}
+
+// settingDomainGetResponseJSON contains the JSON metadata for the struct
+// [SettingDomainGetResponse]
+type settingDomainGetResponseJSON struct {
+	ID                   apijson.Field
+	AllowedDeliveryModes apijson.Field
+	CreatedAt            apijson.Field
+	Domain               apijson.Field
+	LastModified         apijson.Field
+	LookbackHops         apijson.Field
+	Folder               apijson.Field
+	InboxProvider        apijson.Field
+	IntegrationID        apijson.Field
+	O365TenantID         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *SettingDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingDomainGetResponseAllowedDeliveryMode string
+
+const (
+	SettingDomainGetResponseAllowedDeliveryModeDirect    SettingDomainGetResponseAllowedDeliveryMode = "DIRECT"
+	SettingDomainGetResponseAllowedDeliveryModeBcc       SettingDomainGetResponseAllowedDeliveryMode = "BCC"
+	SettingDomainGetResponseAllowedDeliveryModeJournal   SettingDomainGetResponseAllowedDeliveryMode = "JOURNAL"
+	SettingDomainGetResponseAllowedDeliveryModeAPI       SettingDomainGetResponseAllowedDeliveryMode = "API"
+	SettingDomainGetResponseAllowedDeliveryModeRetroScan SettingDomainGetResponseAllowedDeliveryMode = "RETRO_SCAN"
+)
+
+func (r SettingDomainGetResponseAllowedDeliveryMode) IsKnown() bool {
+	switch r {
+	case SettingDomainGetResponseAllowedDeliveryModeDirect, SettingDomainGetResponseAllowedDeliveryModeBcc, SettingDomainGetResponseAllowedDeliveryModeJournal, SettingDomainGetResponseAllowedDeliveryModeAPI, SettingDomainGetResponseAllowedDeliveryModeRetroScan:
+		return true
+	}
+	return false
+}
+
+type SettingDomainGetResponseFolder string
+
+const (
+	SettingDomainGetResponseFolderAllItems SettingDomainGetResponseFolder = "AllItems"
+	SettingDomainGetResponseFolderInbox    SettingDomainGetResponseFolder = "Inbox"
+)
+
+func (r SettingDomainGetResponseFolder) IsKnown() bool {
+	switch r {
+	case SettingDomainGetResponseFolderAllItems, SettingDomainGetResponseFolderInbox:
+		return true
+	}
+	return false
+}
+
+type SettingDomainGetResponseInboxProvider string
+
+const (
+	SettingDomainGetResponseInboxProviderMicrosoft SettingDomainGetResponseInboxProvider = "Microsoft"
+	SettingDomainGetResponseInboxProviderGoogle    SettingDomainGetResponseInboxProvider = "Google"
+)
+
+func (r SettingDomainGetResponseInboxProvider) IsKnown() bool {
+	switch r {
+	case SettingDomainGetResponseInboxProviderMicrosoft, SettingDomainGetResponseInboxProviderGoogle:
+		return true
+	}
+	return false
+}
+
 type SettingDomainListParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -462,5 +567,37 @@ func (r *SettingDomainEditResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r settingDomainEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingDomainGetParams struct {
+	// Account Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type SettingDomainGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo                `json:"errors,required"`
+	Messages []shared.ResponseInfo                `json:"messages,required"`
+	Result   SettingDomainGetResponse             `json:"result,required"`
+	Success  bool                                 `json:"success,required"`
+	JSON     settingDomainGetResponseEnvelopeJSON `json:"-"`
+}
+
+// settingDomainGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingDomainGetResponseEnvelope]
+type settingDomainGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingDomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
