@@ -29,10 +29,10 @@ func TestOperationNew(t *testing.T) {
 	)
 	_, err := client.APIGateway.Operations.New(context.TODO(), api_gateway.OperationNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body: []api_gateway.APIShieldOperationModelParam{{
+		Body: []api_gateway.OperationNewParamsBody{{
 			Endpoint: cloudflare.F("/api/v1/users/{var1}"),
 			Host:     cloudflare.F("www.example.com"),
-			Method:   cloudflare.F(api_gateway.APIShieldOperationModelMethodGet),
+			Method:   cloudflare.F(api_gateway.OperationNewParamsBodyMethodGet),
 		}},
 	})
 	if err != nil {
