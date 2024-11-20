@@ -1726,16 +1726,6 @@ Methods:
 - <code title="patch /zones/{zone_id}/pagerules/{pagerule_id}">client.Pagerules.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules#PageruleService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, pageruleID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules">pagerules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules#PageruleEditParams">PageruleEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules">pagerules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules#PageRule">PageRule</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/pagerules/{pagerule_id}">client.Pagerules.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules#PageruleService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, pageruleID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules">pagerules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules#PageruleGetParams">PageruleGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules">pagerules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules#PageRule">PageRule</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-## Settings
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules">pagerules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules#SettingListResponse">SettingListResponse</a>
-
-Methods:
-
-- <code title="get /zones/{zone_id}/pagerules/settings">client.Pagerules.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules#SettingService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules">pagerules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules#SettingListParams">SettingListParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules">pagerules</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/pagerules#SettingListResponse">SettingListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 # RateLimits
 
 # SecondaryDNS
