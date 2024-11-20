@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/pagerules"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 func TestPageruleNewWithOptionalParams(t *testing.T) {
@@ -29,12 +30,9 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Pagerules.New(context.TODO(), pagerules.PageruleNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Actions: cloudflare.F([]pagerules.PageruleNewParamsAction{{
-			ID: cloudflare.F(pagerules.PageruleNewParamsActionsIDForwardingURL),
-			Value: cloudflare.F(pagerules.PageruleNewParamsActionsValue{
-				StatusCode: cloudflare.F(pagerules.PageruleNewParamsActionsValueStatusCode301),
-				URL:        cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-			}),
+		Actions: cloudflare.F([]pagerules.PageruleNewParamsActionUnion{zones.BrowserCheckParam{
+			ID:    cloudflare.F(zones.BrowserCheckIDBrowserCheck),
+			Value: cloudflare.F(zones.BrowserCheckValueOn),
 		}}),
 		Targets: cloudflare.F([]pagerules.TargetParam{{
 			Constraint: cloudflare.F(pagerules.TargetConstraintParam{
@@ -73,12 +71,9 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		pagerules.PageruleUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Actions: cloudflare.F([]pagerules.PageruleUpdateParamsAction{{
-				ID: cloudflare.F(pagerules.PageruleUpdateParamsActionsIDForwardingURL),
-				Value: cloudflare.F(pagerules.PageruleUpdateParamsActionsValue{
-					StatusCode: cloudflare.F(pagerules.PageruleUpdateParamsActionsValueStatusCode301),
-					URL:        cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
+			Actions: cloudflare.F([]pagerules.PageruleUpdateParamsActionUnion{zones.BrowserCheckParam{
+				ID:    cloudflare.F(zones.BrowserCheckIDBrowserCheck),
+				Value: cloudflare.F(zones.BrowserCheckValueOn),
 			}}),
 			Targets: cloudflare.F([]pagerules.TargetParam{{
 				Constraint: cloudflare.F(pagerules.TargetConstraintParam{
@@ -176,12 +171,9 @@ func TestPageruleEditWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		pagerules.PageruleEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Actions: cloudflare.F([]pagerules.PageruleEditParamsAction{{
-				ID: cloudflare.F(pagerules.PageruleEditParamsActionsIDForwardingURL),
-				Value: cloudflare.F(pagerules.PageruleEditParamsActionsValue{
-					StatusCode: cloudflare.F(pagerules.PageruleEditParamsActionsValueStatusCode301),
-					URL:        cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
+			Actions: cloudflare.F([]pagerules.PageruleEditParamsActionUnion{zones.BrowserCheckParam{
+				ID:    cloudflare.F(zones.BrowserCheckIDBrowserCheck),
+				Value: cloudflare.F(zones.BrowserCheckValueOn),
 			}}),
 			Priority: cloudflare.F(int64(0)),
 			Status:   cloudflare.F(pagerules.PageruleEditParamsStatusActive),
