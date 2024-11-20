@@ -55,7 +55,7 @@ func TestLeakedCredentialCheckSetStatus(t *testing.T) {
 	want := LeakedCredentialCheckStatus{
 		Enabled: BoolPtr(false),
 	}
-	actual, err := client.LeakedCredentialCheckSetStatus(context.Background(), ZoneIdentifier(testZoneID), LeakCredentialCheckSetStatusParams{false})
+	actual, err := client.LeakedCredentialCheckSetStatus(context.Background(), ZoneIdentifier(testZoneID), LeakCredentialCheckSetStatusParams{BoolPtr(false)})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
 	}
