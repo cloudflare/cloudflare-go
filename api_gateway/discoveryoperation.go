@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
@@ -37,7 +38,7 @@ func NewDiscoveryOperationService(opts ...option.RequestOption) (r *DiscoveryOpe
 }
 
 // Retrieve the most up to date view of discovered operations
-func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DiscoveryOperation], err error) {
+func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DiscoveryOperationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -59,7 +60,7 @@ func (r *DiscoveryOperationService) List(ctx context.Context, params DiscoveryOp
 }
 
 // Retrieve the most up to date view of discovered operations
-func (r *DiscoveryOperationService) ListAutoPaging(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DiscoveryOperation] {
+func (r *DiscoveryOperationService) ListAutoPaging(ctx context.Context, params DiscoveryOperationListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DiscoveryOperationListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -99,6 +100,164 @@ func (r *DiscoveryOperationService) Edit(ctx context.Context, operationID string
 	}
 	res = &env.Result
 	return
+}
+
+type DiscoveryOperationListResponse struct {
+	// UUID
+	ID string `json:"id,required"`
+	// The endpoint which can contain path parameter templates in curly braces, each
+	// will be replaced from left to right with {varN}, starting with {var1}, during
+	// insertion. This will further be Cloudflare-normalized upon insertion. See:
+	// https://developers.cloudflare.com/rules/normalization/how-it-works/.
+	Endpoint string `json:"endpoint,required" format:"uri-template"`
+	// RFC3986-compliant host.
+	Host        string    `json:"host,required" format:"hostname"`
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The HTTP method used to access the endpoint.
+	Method DiscoveryOperationListResponseMethod `json:"method,required"`
+	// API discovery engine(s) that discovered this operation
+	Origin []DiscoveryOperationListResponseOrigin `json:"origin,required"`
+	// State of operation in API Discovery
+	//
+	// - `review` - Operation is not saved into API Shield Endpoint Management
+	// - `saved` - Operation is saved into API Shield Endpoint Management
+	// - `ignored` - Operation is marked as ignored
+	State    DiscoveryOperationListResponseState    `json:"state,required"`
+	Features DiscoveryOperationListResponseFeatures `json:"features"`
+	JSON     discoveryOperationListResponseJSON     `json:"-"`
+}
+
+// discoveryOperationListResponseJSON contains the JSON metadata for the struct
+// [DiscoveryOperationListResponse]
+type discoveryOperationListResponseJSON struct {
+	ID          apijson.Field
+	Endpoint    apijson.Field
+	Host        apijson.Field
+	LastUpdated apijson.Field
+	Method      apijson.Field
+	Origin      apijson.Field
+	State       apijson.Field
+	Features    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DiscoveryOperationListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r discoveryOperationListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The HTTP method used to access the endpoint.
+type DiscoveryOperationListResponseMethod string
+
+const (
+	DiscoveryOperationListResponseMethodGet     DiscoveryOperationListResponseMethod = "GET"
+	DiscoveryOperationListResponseMethodPost    DiscoveryOperationListResponseMethod = "POST"
+	DiscoveryOperationListResponseMethodHead    DiscoveryOperationListResponseMethod = "HEAD"
+	DiscoveryOperationListResponseMethodOptions DiscoveryOperationListResponseMethod = "OPTIONS"
+	DiscoveryOperationListResponseMethodPut     DiscoveryOperationListResponseMethod = "PUT"
+	DiscoveryOperationListResponseMethodDelete  DiscoveryOperationListResponseMethod = "DELETE"
+	DiscoveryOperationListResponseMethodConnect DiscoveryOperationListResponseMethod = "CONNECT"
+	DiscoveryOperationListResponseMethodPatch   DiscoveryOperationListResponseMethod = "PATCH"
+	DiscoveryOperationListResponseMethodTrace   DiscoveryOperationListResponseMethod = "TRACE"
+)
+
+func (r DiscoveryOperationListResponseMethod) IsKnown() bool {
+	switch r {
+	case DiscoveryOperationListResponseMethodGet, DiscoveryOperationListResponseMethodPost, DiscoveryOperationListResponseMethodHead, DiscoveryOperationListResponseMethodOptions, DiscoveryOperationListResponseMethodPut, DiscoveryOperationListResponseMethodDelete, DiscoveryOperationListResponseMethodConnect, DiscoveryOperationListResponseMethodPatch, DiscoveryOperationListResponseMethodTrace:
+		return true
+	}
+	return false
+}
+
+//   - `ML` - Discovered operation was sourced using ML API Discovery \*
+//     `SessionIdentifier` - Discovered operation was sourced using Session
+//     Identifier API Discovery
+type DiscoveryOperationListResponseOrigin string
+
+const (
+	DiscoveryOperationListResponseOriginMl                DiscoveryOperationListResponseOrigin = "ML"
+	DiscoveryOperationListResponseOriginSessionIdentifier DiscoveryOperationListResponseOrigin = "SessionIdentifier"
+)
+
+func (r DiscoveryOperationListResponseOrigin) IsKnown() bool {
+	switch r {
+	case DiscoveryOperationListResponseOriginMl, DiscoveryOperationListResponseOriginSessionIdentifier:
+		return true
+	}
+	return false
+}
+
+// State of operation in API Discovery
+//
+// - `review` - Operation is not saved into API Shield Endpoint Management
+// - `saved` - Operation is saved into API Shield Endpoint Management
+// - `ignored` - Operation is marked as ignored
+type DiscoveryOperationListResponseState string
+
+const (
+	DiscoveryOperationListResponseStateReview  DiscoveryOperationListResponseState = "review"
+	DiscoveryOperationListResponseStateSaved   DiscoveryOperationListResponseState = "saved"
+	DiscoveryOperationListResponseStateIgnored DiscoveryOperationListResponseState = "ignored"
+)
+
+func (r DiscoveryOperationListResponseState) IsKnown() bool {
+	switch r {
+	case DiscoveryOperationListResponseStateReview, DiscoveryOperationListResponseStateSaved, DiscoveryOperationListResponseStateIgnored:
+		return true
+	}
+	return false
+}
+
+type DiscoveryOperationListResponseFeatures struct {
+	TrafficStats DiscoveryOperationListResponseFeaturesTrafficStats `json:"traffic_stats"`
+	JSON         discoveryOperationListResponseFeaturesJSON         `json:"-"`
+}
+
+// discoveryOperationListResponseFeaturesJSON contains the JSON metadata for the
+// struct [DiscoveryOperationListResponseFeatures]
+type discoveryOperationListResponseFeaturesJSON struct {
+	TrafficStats apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *DiscoveryOperationListResponseFeatures) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r discoveryOperationListResponseFeaturesJSON) RawJSON() string {
+	return r.raw
+}
+
+type DiscoveryOperationListResponseFeaturesTrafficStats struct {
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The period in seconds these statistics were computed over
+	PeriodSeconds int64 `json:"period_seconds,required"`
+	// The average number of requests seen during this period
+	Requests float64                                                `json:"requests,required"`
+	JSON     discoveryOperationListResponseFeaturesTrafficStatsJSON `json:"-"`
+}
+
+// discoveryOperationListResponseFeaturesTrafficStatsJSON contains the JSON
+// metadata for the struct [DiscoveryOperationListResponseFeaturesTrafficStats]
+type discoveryOperationListResponseFeaturesTrafficStatsJSON struct {
+	LastUpdated   apijson.Field
+	PeriodSeconds apijson.Field
+	Requests      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DiscoveryOperationListResponseFeaturesTrafficStats) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r discoveryOperationListResponseFeaturesTrafficStatsJSON) RawJSON() string {
+	return r.raw
 }
 
 type DiscoveryOperationBulkEditResponse map[string]DiscoveryOperationBulkEditResponseItem
