@@ -28,8 +28,7 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewPageruleService] method instead.
 type PageruleService struct {
-	Options  []option.RequestOption
-	Settings *SettingService
+	Options []option.RequestOption
 }
 
 // NewPageruleService generates a new service that applies the given options to
@@ -38,16 +37,10 @@ type PageruleService struct {
 func NewPageruleService(opts ...option.RequestOption) (r *PageruleService) {
 	r = &PageruleService{}
 	r.Options = opts
-	r.Settings = NewSettingService(opts...)
 	return
 }
 
 // Creates a new Page Rule.
-//
-// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
-// See
-// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
-// for full details.
 func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opts ...option.RequestOption) (res *PageRule, err error) {
 	var env PageruleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -66,11 +59,6 @@ func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opt
 
 // Replaces the configuration of an existing Page Rule. The configuration of the
 // updated Page Rule will exactly match the data passed in the API request.
-//
-// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
-// See
-// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
-// for full details.
 func (r *PageruleService) Update(ctx context.Context, pageruleID string, params PageruleUpdateParams, opts ...option.RequestOption) (res *PageRule, err error) {
 	var env PageruleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -92,11 +80,6 @@ func (r *PageruleService) Update(ctx context.Context, pageruleID string, params 
 }
 
 // Fetches Page Rules in a zone.
-//
-// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
-// See
-// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
-// for full details.
 func (r *PageruleService) List(ctx context.Context, params PageruleListParams, opts ...option.RequestOption) (res *[]PageRule, err error) {
 	var env PageruleListResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -114,11 +97,6 @@ func (r *PageruleService) List(ctx context.Context, params PageruleListParams, o
 }
 
 // Deletes an existing Page Rule.
-//
-// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
-// See
-// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
-// for full details.
 func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body PageruleDeleteParams, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
 	var env PageruleDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -140,11 +118,6 @@ func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body Pa
 }
 
 // Updates one or more fields of an existing Page Rule.
-//
-// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
-// See
-// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
-// for full details.
 func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params PageruleEditParams, opts ...option.RequestOption) (res *PageRule, err error) {
 	var env PageruleEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -166,11 +139,6 @@ func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params Pa
 }
 
 // Fetches the details of a Page Rule.
-//
-// Deprecated: The Page Rules API is deprecated in favour of the Ruleset Engine.
-// See
-// https://developers.cloudflare.com/fundamentals/api/reference/deprecations/#page-rules
-// for full details.
 func (r *PageruleService) Get(ctx context.Context, pageruleID string, query PageruleGetParams, opts ...option.RequestOption) (res *PageRule, err error) {
 	var env PageruleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
