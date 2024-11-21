@@ -26,6 +26,7 @@ import (
 type BucketService struct {
 	Options            []option.RequestOption
 	Lifecycle          *BucketLifecycleService
+	CORS               *BucketCORSService
 	Domains            *BucketDomainService
 	EventNotifications *BucketEventNotificationService
 	Sippy              *BucketSippyService
@@ -38,6 +39,7 @@ func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 	r = &BucketService{}
 	r.Options = opts
 	r.Lifecycle = NewBucketLifecycleService(opts...)
+	r.CORS = NewBucketCORSService(opts...)
 	r.Domains = NewBucketDomainService(opts...)
 	r.EventNotifications = NewBucketEventNotificationService(opts...)
 	r.Sippy = NewBucketSippyService(opts...)
