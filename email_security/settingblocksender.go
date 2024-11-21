@@ -485,9 +485,37 @@ func (r SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTy
 	return false
 }
 
-type SettingBlockSenderNewParamsBodyArray []SettingBlockSenderNewParamsBodyArray
+type SettingBlockSenderNewParamsBodyArray []SettingBlockSenderNewParamsBodyArrayItem
 
 func (r SettingBlockSenderNewParamsBodyArray) implementsEmailSecuritySettingBlockSenderNewParamsBodyUnion() {
+}
+
+type SettingBlockSenderNewParamsBodyArrayItem struct {
+	IsRegex     param.Field[bool]                                            `json:"is_regex,required"`
+	Pattern     param.Field[string]                                          `json:"pattern,required"`
+	PatternType param.Field[SettingBlockSenderNewParamsBodyArrayPatternType] `json:"pattern_type,required"`
+	Comments    param.Field[string]                                          `json:"comments"`
+}
+
+func (r SettingBlockSenderNewParamsBodyArrayItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SettingBlockSenderNewParamsBodyArrayPatternType string
+
+const (
+	SettingBlockSenderNewParamsBodyArrayPatternTypeEmail   SettingBlockSenderNewParamsBodyArrayPatternType = "EMAIL"
+	SettingBlockSenderNewParamsBodyArrayPatternTypeDomain  SettingBlockSenderNewParamsBodyArrayPatternType = "DOMAIN"
+	SettingBlockSenderNewParamsBodyArrayPatternTypeIP      SettingBlockSenderNewParamsBodyArrayPatternType = "IP"
+	SettingBlockSenderNewParamsBodyArrayPatternTypeUnknown SettingBlockSenderNewParamsBodyArrayPatternType = "UNKNOWN"
+)
+
+func (r SettingBlockSenderNewParamsBodyArrayPatternType) IsKnown() bool {
+	switch r {
+	case SettingBlockSenderNewParamsBodyArrayPatternTypeEmail, SettingBlockSenderNewParamsBodyArrayPatternTypeDomain, SettingBlockSenderNewParamsBodyArrayPatternTypeIP, SettingBlockSenderNewParamsBodyArrayPatternTypeUnknown:
+		return true
+	}
+	return false
 }
 
 type SettingBlockSenderNewResponseEnvelope struct {
