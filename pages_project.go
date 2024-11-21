@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/goccy/go-json"
@@ -254,7 +255,7 @@ func (api *API) GetPagesProject(ctx context.Context, rc *ResourceContainer, proj
 		return PagesProject{}, ErrMissingAccountID
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, projectName)
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, url.PathEscape(projectName))
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return PagesProject{}, err
@@ -299,7 +300,7 @@ func (api *API) UpdatePagesProject(ctx context.Context, rc *ResourceContainer, p
 		return PagesProject{}, ErrMissingIdentifier
 	}
 
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, params.ID)
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, url.PathEscape(params.ID))
 	res, err := api.makeRequestContext(ctx, http.MethodPatch, uri, params)
 	if err != nil {
 		return PagesProject{}, err
@@ -319,7 +320,7 @@ func (api *API) DeletePagesProject(ctx context.Context, rc *ResourceContainer, p
 	if rc.Identifier == "" {
 		return ErrMissingAccountID
 	}
-	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, projectName)
+	uri := fmt.Sprintf("/accounts/%s/pages/projects/%s", rc.Identifier, url.PathEscape(projectName))
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return err

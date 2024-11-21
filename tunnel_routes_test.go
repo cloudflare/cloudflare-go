@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"testing"
 	"time"
 
@@ -82,7 +83,7 @@ func TestTunnelRouteForIP(t *testing.T) {
           }`)
 	}
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/ip/10.1.0.137", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/ip/"+url.PathEscape("10.1.0.137"), handler)
 
 	ts, _ := time.Parse(time.RFC3339Nano, "2021-01-25T18:22:34.317854Z")
 	want := TunnelRoute{
@@ -125,7 +126,7 @@ func TestCreateTunnelRoute(t *testing.T) {
           }`)
 	}
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/"+url.PathEscape("10.0.0.0/16"), handler)
 
 	ts, _ := time.Parse(time.RFC3339Nano, "2021-01-25T18:22:34.317854Z")
 	want := TunnelRoute{
@@ -184,7 +185,7 @@ func TestUpdateTunnelRoute(t *testing.T) {
 		VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86",
 	}
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/"+url.PathEscape("10.0.0.0/16"), handler)
 	tunnel, err := client.UpdateTunnelRoute(context.Background(), AccountIdentifier(testAccountID), TunnelRoutesUpdateParams{TunnelID: testTunnelID, Network: "10.0.0.0/16", Comment: "foo", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
 
 	if assert.NoError(t, err) {
@@ -216,7 +217,7 @@ func TestDeleteTunnelRoute(t *testing.T) {
           }`)
 	}
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/10.0.0.0/16", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/teamnet/routes/network/"+url.PathEscape("10.0.0.0/16"), handler)
 	err := client.DeleteTunnelRoute(context.Background(), AccountIdentifier(testAccountID), TunnelRoutesDeleteParams{Network: "10.0.0.0/16", VirtualNetworkID: "9f322de4-5988-4945-b770-f1d6ac200f86"})
 	assert.NoError(t, err)
 }

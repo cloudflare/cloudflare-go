@@ -224,7 +224,7 @@ func TestObservatoryPageTrend(t *testing.T) {
 			}
 		`)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+testURL+"/trend", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+escapedTestURL+"/trend", handler)
 	want := ObservatoryPageTrend{
 		PerformanceScore: []*int{nil, IntPtr(100)},
 		TTFB:             []*int{nil, IntPtr(10)},
@@ -268,7 +268,7 @@ func TestListObservatoryPageTests(t *testing.T) {
 			}
 		`, pageTestJSON)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+testURL+"/tests", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+escapedTestURL+"/tests", handler)
 	want := []ObservatoryPageTest{
 		pageTest,
 	}
@@ -304,7 +304,7 @@ func TestCreateObservatoryPageTest(t *testing.T) {
 			}
 		`, pageTestJSON)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+testURL+"/tests", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+escapedTestURL+"/tests", handler)
 	want := pageTest
 	test, err := client.CreateObservatoryPageTest(context.Background(), ZoneIdentifier(testZoneID), CreateObservatoryPageTestParams{
 		URL: testURL,
@@ -336,7 +336,7 @@ func TestDeleteObservatoryPageTests(t *testing.T) {
 			}
 		`)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+testURL+"/tests", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+escapedTestURL+"/tests", handler)
 	want := 2
 	count, err := client.DeleteObservatoryPageTests(context.Background(), ZoneIdentifier(testZoneID), DeleteObservatoryPageTestsParams{
 		URL:    testURL,
@@ -364,7 +364,7 @@ func TestGetObservatoryPageTest(t *testing.T) {
 			}
 		`, pageTestJSON)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+testURL+"/tests/"+observatoryTestID, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/pages/"+escapedTestURL+"/tests/"+observatoryTestID, handler)
 	want := pageTest
 	test, err := client.GetObservatoryPageTest(context.Background(), ZoneIdentifier(testZoneID), GetObservatoryPageTestParams{
 		TestID: observatoryTestID,
@@ -393,7 +393,7 @@ func TestCreateObservatoryScheduledPageTest(t *testing.T) {
 			}
 		`, scheduledPageTestJSON)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/schedule/"+testURL, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/schedule/"+escapedTestURL, handler)
 	want := scheduledPageTest
 	pages, err := client.CreateObservatoryScheduledPageTest(context.Background(), ZoneIdentifier(testZoneID), CreateObservatoryScheduledPageTestParams{
 		Frequency: frequency,
@@ -422,7 +422,7 @@ func TestObservatoryScheduledPageTest(t *testing.T) {
 			}
 		`, scheduleJSON)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/schedule/"+testURL, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/schedule/"+escapedTestURL, handler)
 	want := schedule
 	schedule, err := client.GetObservatoryScheduledPageTest(context.Background(), ZoneIdentifier(testZoneID), GetObservatoryScheduledPageTestParams{
 		URL:    testURL,
@@ -446,13 +446,13 @@ func TestDeleteObservatoryScheduledPageTest(t *testing.T) {
 			  "success": true,
 			  "errors": [],
 			  "messages": [],
-			  "result": { 
+			  "result": {
                 "count": 2
               }
 			}
 		`)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/schedule/"+testURL, handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/speed_api/schedule/"+escapedTestURL, handler)
 	want := 2
 	count, err := client.DeleteObservatoryScheduledPageTest(context.Background(), ZoneIdentifier(testZoneID), DeleteObservatoryScheduledPageTestParams{
 		URL:    testURL,
