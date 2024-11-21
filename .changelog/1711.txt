@@ -1,0 +1,3 @@
+```release-note:bug
+UpdateLogpushJobParams: Make it possible to remove logpull_options on update
+```
