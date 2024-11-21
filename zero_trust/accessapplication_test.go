@@ -50,28 +50,12 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 			CustomDenyURL:            cloudflare.F("custom_deny_url"),
 			CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
 			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252"}),
-			Destinations: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestination{{
-				Destination: cloudflare.F("test.example.com/admin"),
-				Type:        cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic),
-			}, {
-				Destination: cloudflare.F("test.anotherexample.com/staff"),
-				Type:        cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic),
-			}, {
-				Destination: cloudflare.F("10.5.0.2"),
-				Type:        cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic),
-			}, {
-				Destination: cloudflare.F("10.5.0.3/32:1234-4321"),
-				Type:        cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic),
-			}, {
-				Destination: cloudflare.F("private-sni.example.com"),
-				Type:        cloudflare.F(zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic),
-			}}),
-			EnableBindingCookie:     cloudflare.F(true),
-			HTTPOnlyCookieAttribute: cloudflare.F(true),
-			LogoURL:                 cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
-			Name:                    cloudflare.F("Admin Site"),
-			OptionsPreflightBypass:  cloudflare.F(true),
-			PathCookieAttribute:     cloudflare.F(true),
+			EnableBindingCookie:      cloudflare.F(true),
+			HTTPOnlyCookieAttribute:  cloudflare.F(true),
+			LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
+			Name:                     cloudflare.F("Admin Site"),
+			OptionsPreflightBypass:   cloudflare.F(true),
+			PathCookieAttribute:      cloudflare.F(true),
 			Policies: cloudflare.F([]zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
 				ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 				Precedence: cloudflare.F(int64(0)),
@@ -156,28 +140,12 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 				CustomDenyURL:            cloudflare.F("custom_deny_url"),
 				CustomNonIdentityDenyURL: cloudflare.F("custom_non_identity_deny_url"),
 				CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252"}),
-				Destinations: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestination{{
-					Destination: cloudflare.F("test.example.com/admin"),
-					Type:        cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic),
-				}, {
-					Destination: cloudflare.F("test.anotherexample.com/staff"),
-					Type:        cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic),
-				}, {
-					Destination: cloudflare.F("10.5.0.2"),
-					Type:        cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic),
-				}, {
-					Destination: cloudflare.F("10.5.0.3/32:1234-4321"),
-					Type:        cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic),
-				}, {
-					Destination: cloudflare.F("private-sni.example.com"),
-					Type:        cloudflare.F(zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic),
-				}}),
-				EnableBindingCookie:     cloudflare.F(true),
-				HTTPOnlyCookieAttribute: cloudflare.F(true),
-				LogoURL:                 cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
-				Name:                    cloudflare.F("Admin Site"),
-				OptionsPreflightBypass:  cloudflare.F(true),
-				PathCookieAttribute:     cloudflare.F(true),
+				EnableBindingCookie:      cloudflare.F(true),
+				HTTPOnlyCookieAttribute:  cloudflare.F(true),
+				LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
+				Name:                     cloudflare.F("Admin Site"),
+				OptionsPreflightBypass:   cloudflare.F(true),
+				PathCookieAttribute:      cloudflare.F(true),
 				Policies: cloudflare.F([]zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion{zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink{
 					ID:         cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 					Precedence: cloudflare.F(int64(0)),
