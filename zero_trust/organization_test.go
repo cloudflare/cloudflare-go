@@ -143,12 +143,8 @@ func TestOrganizationRevokeUsersWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.RevokeUsers(context.TODO(), zero_trust.OrganizationRevokeUsersParams{
-		Email:             cloudflare.F("test@example.com"),
-		AccountID:         cloudflare.F("account_id"),
-		QueryDevices:      cloudflare.F(true),
-		BodyDevices:       cloudflare.F(true),
-		UserUID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		WARPSessionReauth: cloudflare.F(true),
+		Email:     cloudflare.F("test@example.com"),
+		AccountID: cloudflare.F("account_id"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
