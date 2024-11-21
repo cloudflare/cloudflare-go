@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
@@ -551,10 +553,29 @@ type OrganizationRevokeUsersParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// When set to `true`, all devices associated with the user will be revoked.
+	QueryDevices param.Field[bool] `query:"devices"`
+	// When set to `true`, all devices associated with the user will be revoked.
+	BodyDevices param.Field[bool] `json:"devices"`
+	// The uuid of the user to revoke.
+	UserUID param.Field[string] `json:"user_uid"`
+	// When set to `true`, the user will be required to re-authenticate to WARP for all
+	// Gateway policies that enforce a WARP client session duration. When `false`, the
+	// user’s WARP session will remain active
+	WARPSessionReauth param.Field[bool] `json:"warp_session_reauth"`
 }
 
 func (r OrganizationRevokeUsersParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [OrganizationRevokeUsersParams]'s query parameters as
+// `url.Values`.
+func (r OrganizationRevokeUsersParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type OrganizationRevokeUsersResponseEnvelope struct {
