@@ -4531,7 +4531,6 @@ Methods:
 
 Params Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DevicePolicyCertificatesParam">DevicePolicyCertificatesParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#FallbackDomainParam">FallbackDomainParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#SplitTunnelExcludeParam">SplitTunnelExcludeParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#SplitTunnelIncludeParam">SplitTunnelIncludeParam</a>
@@ -4577,11 +4576,6 @@ Methods:
 - <code title="get /accounts/{account_id}/devices/policy/fallback_domains">client.ZeroTrust.Devices.Policies.Default.FallbackDomains.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DevicePolicyDefaultFallbackDomainService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DevicePolicyDefaultFallbackDomainGetParams">DevicePolicyDefaultFallbackDomainGetParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#FallbackDomain">FallbackDomain</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ##### Certificates
-
-Methods:
-
-- <code title="patch /zones/{zone_tag}/devices/policy/certificates">client.ZeroTrust.Devices.Policies.Default.Certificates.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DevicePolicyDefaultCertificateService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneTag <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DevicePolicyDefaultCertificateEditParams">DevicePolicyDefaultCertificateEditParams</a>) (interface{}, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_tag}/devices/policy/certificates">client.ZeroTrust.Devices.Policies.Default.Certificates.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DevicePolicyDefaultCertificateService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneTag <a href="https://pkg.go.dev/builtin#string">string</a>) (interface{}, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 #### Custom
 
