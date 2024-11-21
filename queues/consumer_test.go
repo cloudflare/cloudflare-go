@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/queues"
 )
 
-func TestConsumerNew(t *testing.T) {
+func TestConsumerNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -32,16 +32,17 @@ func TestConsumerNew(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: map[string]interface{}{
-				"dead_letter_queue": "example-dlq",
-				"environment":       "production",
-				"script_name":       "example-consumer",
-				"settings": map[string]interface{}{
-					"batch_size":       int64(10),
-					"max_retries":      int64(3),
-					"max_wait_time_ms": int64(5000),
-				},
-				"type": "worker",
+			Body: queues.ConsumerNewParamsBodyMqWorkerConsumer{
+				DeadLetterQueue: cloudflare.F("example-queue"),
+				ScriptName:      cloudflare.F("my-consumer-worker"),
+				Settings: cloudflare.F(queues.ConsumerNewParamsBodyMqWorkerConsumerSettings{
+					BatchSize:      cloudflare.F(50.000000),
+					MaxConcurrency: cloudflare.F(10.000000),
+					MaxRetries:     cloudflare.F(3.000000),
+					MaxWaitTimeMs:  cloudflare.F(5000.000000),
+					RetryDelay:     cloudflare.F(10.000000),
+				}),
+				Type: cloudflare.F(queues.ConsumerNewParamsBodyMqWorkerConsumerTypeWorker),
 			},
 		},
 	)
@@ -54,7 +55,7 @@ func TestConsumerNew(t *testing.T) {
 	}
 }
 
-func TestConsumerUpdate(t *testing.T) {
+func TestConsumerUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -73,13 +74,17 @@ func TestConsumerUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.ConsumerUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: map[string]interface{}{
-				"dead_letter_queue": "updated-example-dlq",
-				"environment":       "production",
-				"script_name":       "example-consumer",
-				"settings": map[string]interface{}{
-					"batch_size": int64(100),
-				},
+			Body: queues.ConsumerUpdateParamsBodyMqWorkerConsumer{
+				DeadLetterQueue: cloudflare.F("example-queue"),
+				ScriptName:      cloudflare.F("my-consumer-worker"),
+				Settings: cloudflare.F(queues.ConsumerUpdateParamsBodyMqWorkerConsumerSettings{
+					BatchSize:      cloudflare.F(50.000000),
+					MaxConcurrency: cloudflare.F(10.000000),
+					MaxRetries:     cloudflare.F(3.000000),
+					MaxWaitTimeMs:  cloudflare.F(5000.000000),
+					RetryDelay:     cloudflare.F(10.000000),
+				}),
+				Type: cloudflare.F(queues.ConsumerUpdateParamsBodyMqWorkerConsumerTypeWorker),
 			},
 		},
 	)
