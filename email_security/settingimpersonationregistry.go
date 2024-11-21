@@ -422,9 +422,19 @@ func (r SettingImpersonationRegistryNewParamsBodyEmailSecurityCreateDisplayName)
 func (r SettingImpersonationRegistryNewParamsBodyEmailSecurityCreateDisplayName) implementsEmailSecuritySettingImpersonationRegistryNewParamsBodyUnion() {
 }
 
-type SettingImpersonationRegistryNewParamsBodyArray []SettingImpersonationRegistryNewParamsBodyArray
+type SettingImpersonationRegistryNewParamsBodyArray []SettingImpersonationRegistryNewParamsBodyArrayItem
 
 func (r SettingImpersonationRegistryNewParamsBodyArray) implementsEmailSecuritySettingImpersonationRegistryNewParamsBodyUnion() {
+}
+
+type SettingImpersonationRegistryNewParamsBodyArrayItem struct {
+	Email        param.Field[string] `json:"email,required"`
+	IsEmailRegex param.Field[bool]   `json:"is_email_regex,required"`
+	Name         param.Field[string] `json:"name,required"`
+}
+
+func (r SettingImpersonationRegistryNewParamsBodyArrayItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type SettingImpersonationRegistryNewResponseEnvelope struct {

@@ -394,9 +394,21 @@ func (r SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain) Marsh
 func (r SettingTrustedDomainNewParamsBodyEmailSecurityCreateTrustedDomain) implementsEmailSecuritySettingTrustedDomainNewParamsBodyUnion() {
 }
 
-type SettingTrustedDomainNewParamsBodyArray []SettingTrustedDomainNewParamsBodyArray
+type SettingTrustedDomainNewParamsBodyArray []SettingTrustedDomainNewParamsBodyArrayItem
 
 func (r SettingTrustedDomainNewParamsBodyArray) implementsEmailSecuritySettingTrustedDomainNewParamsBodyUnion() {
+}
+
+type SettingTrustedDomainNewParamsBodyArrayItem struct {
+	IsRecent     param.Field[bool]   `json:"is_recent,required"`
+	IsRegex      param.Field[bool]   `json:"is_regex,required"`
+	IsSimilarity param.Field[bool]   `json:"is_similarity,required"`
+	Pattern      param.Field[string] `json:"pattern,required"`
+	Comments     param.Field[string] `json:"comments"`
+}
+
+func (r SettingTrustedDomainNewParamsBodyArrayItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type SettingTrustedDomainNewResponseEnvelope struct {
