@@ -1896,13 +1896,8 @@ type AccessApplicationNewResponse struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// This field can have the runtime type of [[]string].
 	CustomPages interface{} `json:"custom_pages"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationNewResponseSelfHostedApplicationDestination],
-	// [[]AccessApplicationNewResponseBrowserSSHApplicationDestination],
-	// [[]AccessApplicationNewResponseBrowserVNCApplicationDestination].
-	Destinations interface{} `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
@@ -1993,7 +1988,6 @@ type accessApplicationNewResponseJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
 	FooterLinks              apijson.Field
@@ -2109,8 +2103,8 @@ func init() {
 }
 
 type AccessApplicationNewResponseSelfHostedApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -2144,10 +2138,6 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationNewResponseSelfHostedApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -2171,9 +2161,7 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -2207,7 +2195,6 @@ type accessApplicationNewResponseSelfHostedApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -2236,51 +2223,6 @@ func (r accessApplicationNewResponseSelfHostedApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationNewResponseSelfHostedApplication) implementsZeroTrustAccessApplicationNewResponse() {
-}
-
-type AccessApplicationNewResponseSelfHostedApplicationDestination struct {
-	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationNewResponseSelfHostedApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationNewResponseSelfHostedApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationNewResponseSelfHostedApplicationDestination]
-type accessApplicationNewResponseSelfHostedApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationNewResponseSelfHostedApplicationDestinationsType string
-
-const (
-	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "public"
-	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -2828,8 +2770,8 @@ func (r AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationSchem
 }
 
 type AccessApplicationNewResponseBrowserSSHApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -2863,10 +2805,6 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationNewResponseBrowserSSHApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -2890,9 +2828,7 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -2926,7 +2862,6 @@ type accessApplicationNewResponseBrowserSSHApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -2955,51 +2890,6 @@ func (r accessApplicationNewResponseBrowserSSHApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationNewResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationNewResponse() {
-}
-
-type AccessApplicationNewResponseBrowserSSHApplicationDestination struct {
-	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationNewResponseBrowserSSHApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationNewResponseBrowserSSHApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserSSHApplicationDestination]
-type accessApplicationNewResponseBrowserSSHApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationNewResponseBrowserSSHApplicationDestinationsType string
-
-const (
-	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -3164,8 +3054,8 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 }
 
 type AccessApplicationNewResponseBrowserVNCApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -3199,10 +3089,6 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationNewResponseBrowserVNCApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -3226,9 +3112,7 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -3262,7 +3146,6 @@ type accessApplicationNewResponseBrowserVNCApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -3291,51 +3174,6 @@ func (r accessApplicationNewResponseBrowserVNCApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationNewResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationNewResponse() {
-}
-
-type AccessApplicationNewResponseBrowserVNCApplicationDestination struct {
-	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationNewResponseBrowserVNCApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationNewResponseBrowserVNCApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationNewResponseBrowserVNCApplicationDestination]
-type accessApplicationNewResponseBrowserVNCApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationNewResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationNewResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationNewResponseBrowserVNCApplicationDestinationsType string
-
-const (
-	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -3517,8 +3355,8 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationNewResponseAppLauncherApplicationFooterLink `json:"footer_links"`
@@ -3819,8 +3657,8 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
@@ -4122,8 +3960,8 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
@@ -4955,13 +4793,8 @@ type AccessApplicationUpdateResponse struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// This field can have the runtime type of [[]string].
 	CustomPages interface{} `json:"custom_pages"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationUpdateResponseSelfHostedApplicationDestination],
-	// [[]AccessApplicationUpdateResponseBrowserSSHApplicationDestination],
-	// [[]AccessApplicationUpdateResponseBrowserVNCApplicationDestination].
-	Destinations interface{} `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
@@ -5052,7 +4885,6 @@ type accessApplicationUpdateResponseJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
 	FooterLinks              apijson.Field
@@ -5168,8 +5000,8 @@ func init() {
 }
 
 type AccessApplicationUpdateResponseSelfHostedApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -5203,10 +5035,6 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationUpdateResponseSelfHostedApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -5230,9 +5058,7 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -5266,7 +5092,6 @@ type accessApplicationUpdateResponseSelfHostedApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -5295,51 +5120,6 @@ func (r accessApplicationUpdateResponseSelfHostedApplicationJSON) RawJSON() stri
 }
 
 func (r AccessApplicationUpdateResponseSelfHostedApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
-}
-
-type AccessApplicationUpdateResponseSelfHostedApplicationDestination struct {
-	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                              `json:"uri"`
-	JSON accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUpdateResponseSelfHostedApplicationDestination]
-type accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType string
-
-const (
-	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "public"
-	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -5888,8 +5668,8 @@ func (r AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationSc
 }
 
 type AccessApplicationUpdateResponseBrowserSSHApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -5923,10 +5703,6 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationUpdateResponseBrowserSSHApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -5950,9 +5726,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -5986,7 +5760,6 @@ type accessApplicationUpdateResponseBrowserSSHApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -6015,51 +5788,6 @@ func (r accessApplicationUpdateResponseBrowserSSHApplicationJSON) RawJSON() stri
 }
 
 func (r AccessApplicationUpdateResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
-}
-
-type AccessApplicationUpdateResponseBrowserSSHApplicationDestination struct {
-	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                              `json:"uri"`
-	JSON accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserSSHApplicationDestination]
-type accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType string
-
-const (
-	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -6224,8 +5952,8 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentica
 }
 
 type AccessApplicationUpdateResponseBrowserVNCApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -6259,10 +5987,6 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationUpdateResponseBrowserVNCApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -6286,9 +6010,7 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -6322,7 +6044,6 @@ type accessApplicationUpdateResponseBrowserVNCApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -6351,51 +6072,6 @@ func (r accessApplicationUpdateResponseBrowserVNCApplicationJSON) RawJSON() stri
 }
 
 func (r AccessApplicationUpdateResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
-}
-
-type AccessApplicationUpdateResponseBrowserVNCApplicationDestination struct {
-	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                              `json:"uri"`
-	JSON accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationUpdateResponseBrowserVNCApplicationDestination]
-type accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType string
-
-const (
-	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -6577,8 +6253,8 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationUpdateResponseAppLauncherApplicationFooterLink `json:"footer_links"`
@@ -6879,8 +6555,8 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struc
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
@@ -7182,8 +6858,8 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struc
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
@@ -8016,13 +7692,8 @@ type AccessApplicationListResponse struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// This field can have the runtime type of [[]string].
 	CustomPages interface{} `json:"custom_pages"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationListResponseSelfHostedApplicationDestination],
-	// [[]AccessApplicationListResponseBrowserSSHApplicationDestination],
-	// [[]AccessApplicationListResponseBrowserVNCApplicationDestination].
-	Destinations interface{} `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
@@ -8113,7 +7784,6 @@ type accessApplicationListResponseJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
 	FooterLinks              apijson.Field
@@ -8229,8 +7899,8 @@ func init() {
 }
 
 type AccessApplicationListResponseSelfHostedApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -8264,10 +7934,6 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationListResponseSelfHostedApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -8291,9 +7957,7 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -8327,7 +7991,6 @@ type accessApplicationListResponseSelfHostedApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -8356,51 +8019,6 @@ func (r accessApplicationListResponseSelfHostedApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationListResponseSelfHostedApplication) implementsZeroTrustAccessApplicationListResponse() {
-}
-
-type AccessApplicationListResponseSelfHostedApplicationDestination struct {
-	Type AccessApplicationListResponseSelfHostedApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                            `json:"uri"`
-	JSON accessApplicationListResponseSelfHostedApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationListResponseSelfHostedApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationListResponseSelfHostedApplicationDestination]
-type accessApplicationListResponseSelfHostedApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationListResponseSelfHostedApplicationDestinationsType string
-
-const (
-	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationListResponseSelfHostedApplicationDestinationsType = "public"
-	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationListResponseSelfHostedApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationListResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -8948,8 +8566,8 @@ func (r AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationSche
 }
 
 type AccessApplicationListResponseBrowserSSHApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -8983,10 +8601,6 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationListResponseBrowserSSHApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -9010,9 +8624,7 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -9046,7 +8658,6 @@ type accessApplicationListResponseBrowserSSHApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -9075,51 +8686,6 @@ func (r accessApplicationListResponseBrowserSSHApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationListResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationListResponse() {
-}
-
-type AccessApplicationListResponseBrowserSSHApplicationDestination struct {
-	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                            `json:"uri"`
-	JSON accessApplicationListResponseBrowserSSHApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationListResponseBrowserSSHApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationListResponseBrowserSSHApplicationDestination]
-type accessApplicationListResponseBrowserSSHApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationListResponseBrowserSSHApplicationDestinationsType string
-
-const (
-	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -9284,8 +8850,8 @@ func (r AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticati
 }
 
 type AccessApplicationListResponseBrowserVNCApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -9319,10 +8885,6 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationListResponseBrowserVNCApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -9346,9 +8908,7 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -9382,7 +8942,6 @@ type accessApplicationListResponseBrowserVNCApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -9411,51 +8970,6 @@ func (r accessApplicationListResponseBrowserVNCApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationListResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationListResponse() {
-}
-
-type AccessApplicationListResponseBrowserVNCApplicationDestination struct {
-	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                            `json:"uri"`
-	JSON accessApplicationListResponseBrowserVNCApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationListResponseBrowserVNCApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationListResponseBrowserVNCApplicationDestination]
-type accessApplicationListResponseBrowserVNCApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationListResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationListResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationListResponseBrowserVNCApplicationDestinationsType string
-
-const (
-	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -9637,8 +9151,8 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationListResponseAppLauncherApplicationFooterLink `json:"footer_links"`
@@ -9939,8 +9453,8 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct 
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
@@ -10242,8 +9756,8 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct 
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
@@ -11097,13 +10611,8 @@ type AccessApplicationGetResponse struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// This field can have the runtime type of [[]string].
 	CustomPages interface{} `json:"custom_pages"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationGetResponseSelfHostedApplicationDestination],
-	// [[]AccessApplicationGetResponseBrowserSSHApplicationDestination],
-	// [[]AccessApplicationGetResponseBrowserVNCApplicationDestination].
-	Destinations interface{} `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
@@ -11194,7 +10703,6 @@ type accessApplicationGetResponseJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
 	FooterLinks              apijson.Field
@@ -11310,8 +10818,8 @@ func init() {
 }
 
 type AccessApplicationGetResponseSelfHostedApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -11345,10 +10853,6 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationGetResponseSelfHostedApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -11372,9 +10876,7 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -11408,7 +10910,6 @@ type accessApplicationGetResponseSelfHostedApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -11437,51 +10938,6 @@ func (r accessApplicationGetResponseSelfHostedApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationGetResponseSelfHostedApplication) implementsZeroTrustAccessApplicationGetResponse() {
-}
-
-type AccessApplicationGetResponseSelfHostedApplicationDestination struct {
-	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationGetResponseSelfHostedApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationGetResponseSelfHostedApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationGetResponseSelfHostedApplicationDestination]
-type accessApplicationGetResponseSelfHostedApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationGetResponseSelfHostedApplicationDestinationsType string
-
-const (
-	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "public"
-	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -12029,8 +11485,8 @@ func (r AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationSchem
 }
 
 type AccessApplicationGetResponseBrowserSSHApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -12064,10 +11520,6 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationGetResponseBrowserSSHApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -12091,9 +11543,7 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -12127,7 +11577,6 @@ type accessApplicationGetResponseBrowserSSHApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -12156,51 +11605,6 @@ func (r accessApplicationGetResponseBrowserSSHApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationGetResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationGetResponse() {
-}
-
-type AccessApplicationGetResponseBrowserSSHApplicationDestination struct {
-	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationGetResponseBrowserSSHApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationGetResponseBrowserSSHApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserSSHApplicationDestination]
-type accessApplicationGetResponseBrowserSSHApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationGetResponseBrowserSSHApplicationDestinationsType string
-
-const (
-	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -12365,8 +11769,8 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 }
 
 type AccessApplicationGetResponseBrowserVNCApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -12400,10 +11804,6 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations []AccessApplicationGetResponseBrowserVNCApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -12427,9 +11827,7 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -12463,7 +11861,6 @@ type accessApplicationGetResponseBrowserVNCApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -12492,51 +11889,6 @@ func (r accessApplicationGetResponseBrowserVNCApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationGetResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationGetResponse() {
-}
-
-type AccessApplicationGetResponseBrowserVNCApplicationDestination struct {
-	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsType `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI  string                                                           `json:"uri"`
-	JSON accessApplicationGetResponseBrowserVNCApplicationDestinationJSON `json:"-"`
-}
-
-// accessApplicationGetResponseBrowserVNCApplicationDestinationJSON contains the
-// JSON metadata for the struct
-// [AccessApplicationGetResponseBrowserVNCApplicationDestination]
-type accessApplicationGetResponseBrowserVNCApplicationDestinationJSON struct {
-	Type        apijson.Field
-	URI         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationGetResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationGetResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessApplicationGetResponseBrowserVNCApplicationDestinationsType string
-
-const (
-	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -12718,8 +12070,8 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationGetResponseAppLauncherApplicationFooterLink `json:"footer_links"`
@@ -13020,8 +12372,8 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
@@ -13323,8 +12675,8 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
@@ -14163,9 +13515,8 @@ type AccessApplicationNewParamsBody struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL param.Field[string]      `json:"custom_non_identity_deny_url"`
 	CustomPages              param.Field[interface{}] `json:"custom_pages"`
-	Destinations             param.Field[interface{}] `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain param.Field[string] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
@@ -14231,8 +13582,8 @@ type AccessApplicationNewParamsBodyUnion interface {
 }
 
 type AccessApplicationNewParamsBodySelfHostedApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -14261,10 +13612,6 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -14291,9 +13638,7 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig] `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -14313,36 +13658,6 @@ func (r AccessApplicationNewParamsBodySelfHostedApplication) MarshalJSON() (data
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
-}
-
-type AccessApplicationNewParamsBodySelfHostedApplicationDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI param.Field[string] `json:"uri"`
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType string
-
-const (
-	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic  AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "public"
-	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // A JSON that links a reusable policy to an application.
@@ -14821,8 +14136,8 @@ func (r AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationSch
 }
 
 type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -14851,10 +14166,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -14881,9 +14192,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfig] `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -14903,36 +14212,6 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplication) MarshalJSON() (data
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
-}
-
-type AccessApplicationNewParamsBodyBrowserSSHApplicationDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI param.Field[string] `json:"uri"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType string
-
-const (
-	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic  AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // A JSON that links a reusable policy to an application.
@@ -15113,8 +14392,8 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticat
 }
 
 type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -15143,10 +14422,6 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -15173,9 +14448,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfig] `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -15195,36 +14468,6 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplication) MarshalJSON() (data
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
-}
-
-type AccessApplicationNewParamsBodyBrowserVNCApplicationDestination struct {
-	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI param.Field[string] `json:"uri"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType string
-
-const (
-	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic  AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // A JSON that links a reusable policy to an application.
@@ -16406,9 +15649,8 @@ type AccessApplicationUpdateParamsBody struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL param.Field[string]      `json:"custom_non_identity_deny_url"`
 	CustomPages              param.Field[interface{}] `json:"custom_pages"`
-	Destinations             param.Field[interface{}] `json:"destinations"`
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain param.Field[string] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
@@ -16476,8 +15718,8 @@ type AccessApplicationUpdateParamsBodyUnion interface {
 }
 
 type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -16506,10 +15748,6 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -16536,9 +15774,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig] `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -16558,36 +15794,6 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplication) MarshalJSON() (d
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodySelfHostedApplicationDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI param.Field[string] `json:"uri"`
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType string
-
-const (
-	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic  AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "public"
-	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // A JSON that links a reusable policy to an application.
@@ -17066,8 +16272,8 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthentication
 }
 
 type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -17096,10 +16302,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -17126,9 +16328,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfig] `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -17148,36 +16348,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) MarshalJSON() (d
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI param.Field[string] `json:"uri"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType string
-
-const (
-	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic  AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "public"
-	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // A JSON that links a reusable policy to an application.
@@ -17358,8 +16528,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenti
 }
 
 type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
-	// The primary hostname and path secured by Access. This domain will be displayed
-	// if the app is visible in the App Launcher.
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -17388,10 +16558,6 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
-	// allow for more flexibility in defining different types of domains. If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
-	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -17418,9 +16584,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfig] `json:"scim_config"`
-	// List of public domains that Access will secure. This field is deprecated in
-	// favor of `destinations` and will be supported until **November 21, 2025.** If
-	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	// List of domains that Access will secure.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -17440,36 +16604,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) MarshalJSON() (d
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination struct {
-	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType] `json:"type"`
-	// The URI of the destination. Public destinations can include a domain and path
-	// with
-	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
-	// Private destinations are an early access feature and gated behind a feature
-	// flag. Private destinations support private IPv4, IPv6, and Server Name
-	// Indications (SNI) with optional port ranges.
-	URI param.Field[string] `json:"uri"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType string
-
-const (
-	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic  AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "public"
-	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "private"
-)
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType) IsKnown() bool {
-	switch r {
-	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate:
-		return true
-	}
-	return false
 }
 
 // A JSON that links a reusable policy to an application.
