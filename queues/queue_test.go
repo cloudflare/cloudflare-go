@@ -40,7 +40,7 @@ func TestQueueNew(t *testing.T) {
 	}
 }
 
-func TestQueueUpdate(t *testing.T) {
+func TestQueueUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -58,8 +58,12 @@ func TestQueueUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.QueueUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: map[string]interface{}{
-				"queue_name": "renamed-example-queue",
+			Queue: queues.QueueParam{
+				QueueName: cloudflare.F("example-queue"),
+				Settings: cloudflare.F(queues.QueueSettingsParam{
+					DeliveryDelay:          cloudflare.F(5.000000),
+					MessageRetentionPeriod: cloudflare.F(345600.000000),
+				}),
 			},
 		},
 	)

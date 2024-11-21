@@ -7,12 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/tidwall/gjson"
 )
 
 // ConsumerService contains methods and other services that help with interacting
@@ -34,8 +36,8 @@ func NewConsumerService(opts ...option.RequestOption) (r *ConsumerService) {
 	return
 }
 
-// Creates a new consumer for a queue.
-func (r *ConsumerService) New(ctx context.Context, queueID string, params ConsumerNewParams, opts ...option.RequestOption) (res *ConsumerNewResponse, err error) {
+// Creates a new consumer for a Queue
+func (r *ConsumerService) New(ctx context.Context, queueID string, params ConsumerNewParams, opts ...option.RequestOption) (res *Consumer, err error) {
 	var env ConsumerNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -56,7 +58,7 @@ func (r *ConsumerService) New(ctx context.Context, queueID string, params Consum
 }
 
 // Updates the consumer for a queue, or creates one if it does not exist.
-func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID string, params ConsumerUpdateParams, opts ...option.RequestOption) (res *ConsumerUpdateResponse, err error) {
+func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID string, params ConsumerUpdateParams, opts ...option.RequestOption) (res *Consumer, err error) {
 	var env ConsumerUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -81,8 +83,7 @@ func (r *ConsumerService) Update(ctx context.Context, queueID string, consumerID
 }
 
 // Deletes the consumer for a queue.
-func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, body ConsumerDeleteParams, opts ...option.RequestOption) (res *[]ConsumerDeleteResponse, err error) {
-	var env ConsumerDeleteResponseEnvelope
+func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID string, body ConsumerDeleteParams, opts ...option.RequestOption) (res *ConsumerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -97,15 +98,11 @@ func (r *ConsumerService) Delete(ctx context.Context, queueID string, consumerID
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/queues/%s/consumers/%s", body.AccountID, queueID, consumerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
-// Returns the consumers for a queue.
+// Returns the consumers for a Queue
 func (r *ConsumerService) Get(ctx context.Context, queueID string, query ConsumerGetParams, opts ...option.RequestOption) (res *[]Consumer, err error) {
 	var env ConsumerGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -127,196 +124,522 @@ func (r *ConsumerService) Get(ctx context.Context, queueID string, query Consume
 }
 
 type Consumer struct {
-	CreatedOn   string           `json:"created_on"`
-	Environment string           `json:"environment"`
-	QueueName   string           `json:"queue_name"`
-	Service     string           `json:"service"`
-	Settings    ConsumerSettings `json:"settings"`
-	JSON        consumerJSON     `json:"-"`
+	// A Resource identifier.
+	ConsumerID string `json:"consumer_id"`
+	CreatedOn  string `json:"created_on"`
+	// A Resource identifier.
+	QueueID string `json:"queue_id"`
+	// Name of a Worker
+	Script string `json:"script"`
+	// This field can have the runtime type of [ConsumerMqWorkerConsumerSettings],
+	// [ConsumerMqHTTPConsumerSettings].
+	Settings interface{}  `json:"settings"`
+	Type     ConsumerType `json:"type"`
+	JSON     consumerJSON `json:"-"`
+	union    ConsumerUnion
 }
 
 // consumerJSON contains the JSON metadata for the struct [Consumer]
 type consumerJSON struct {
+	ConsumerID  apijson.Field
 	CreatedOn   apijson.Field
-	Environment apijson.Field
-	QueueName   apijson.Field
-	Service     apijson.Field
+	QueueID     apijson.Field
+	Script      apijson.Field
 	Settings    apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
-}
-
-func (r *Consumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 func (r consumerJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConsumerSettings struct {
+func (r *Consumer) UnmarshalJSON(data []byte) (err error) {
+	*r = Consumer{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ConsumerUnion] interface which you can cast to the specific
+// types for more type safety.
+//
+// Possible runtime types of the union are [queues.ConsumerMqWorkerConsumer],
+// [queues.ConsumerMqHTTPConsumer].
+func (r Consumer) AsUnion() ConsumerUnion {
+	return r.union
+}
+
+// Union satisfied by [queues.ConsumerMqWorkerConsumer] or
+// [queues.ConsumerMqHTTPConsumer].
+type ConsumerUnion interface {
+	implementsQueuesConsumer()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ConsumerUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ConsumerMqWorkerConsumer{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ConsumerMqHTTPConsumer{}),
+		},
+	)
+}
+
+type ConsumerMqWorkerConsumer struct {
+	// A Resource identifier.
+	ConsumerID string `json:"consumer_id"`
+	CreatedOn  string `json:"created_on"`
+	// A Resource identifier.
+	QueueID string `json:"queue_id"`
+	// Name of a Worker
+	Script   string                           `json:"script"`
+	Settings ConsumerMqWorkerConsumerSettings `json:"settings"`
+	Type     ConsumerMqWorkerConsumerType     `json:"type"`
+	JSON     consumerMqWorkerConsumerJSON     `json:"-"`
+}
+
+// consumerMqWorkerConsumerJSON contains the JSON metadata for the struct
+// [ConsumerMqWorkerConsumer]
+type consumerMqWorkerConsumerJSON struct {
+	ConsumerID  apijson.Field
+	CreatedOn   apijson.Field
+	QueueID     apijson.Field
+	Script      apijson.Field
+	Settings    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerMqWorkerConsumer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerMqWorkerConsumerJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConsumerMqWorkerConsumer) implementsQueuesConsumer() {}
+
+type ConsumerMqWorkerConsumerSettings struct {
+	// The maximum number of messages to include in a batch.
+	BatchSize float64 `json:"batch_size"`
+	// Maximum number of concurrent consumers that may consume from this Queue. Set to
+	// `null` to automatically opt in to the platform's maximum (recommended).
+	MaxConcurrency float64 `json:"max_concurrency"`
+	// The maximum number of retries
+	MaxRetries float64 `json:"max_retries"`
+	// The number of milliseconds to wait for a batch to fill up before attempting to
+	// deliver it
+	MaxWaitTimeMs float64 `json:"max_wait_time_ms"`
+	// The number of seconds to delay before making the message available for another
+	// attempt.
+	RetryDelay float64                              `json:"retry_delay"`
+	JSON       consumerMqWorkerConsumerSettingsJSON `json:"-"`
+}
+
+// consumerMqWorkerConsumerSettingsJSON contains the JSON metadata for the struct
+// [ConsumerMqWorkerConsumerSettings]
+type consumerMqWorkerConsumerSettingsJSON struct {
+	BatchSize      apijson.Field
+	MaxConcurrency apijson.Field
+	MaxRetries     apijson.Field
+	MaxWaitTimeMs  apijson.Field
+	RetryDelay     apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ConsumerMqWorkerConsumerSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerMqWorkerConsumerSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
+type ConsumerMqWorkerConsumerType string
+
+const (
+	ConsumerMqWorkerConsumerTypeWorker ConsumerMqWorkerConsumerType = "worker"
+)
+
+func (r ConsumerMqWorkerConsumerType) IsKnown() bool {
+	switch r {
+	case ConsumerMqWorkerConsumerTypeWorker:
+		return true
+	}
+	return false
+}
+
+type ConsumerMqHTTPConsumer struct {
+	// A Resource identifier.
+	ConsumerID string `json:"consumer_id"`
+	CreatedOn  string `json:"created_on"`
+	// A Resource identifier.
+	QueueID  string                         `json:"queue_id"`
+	Settings ConsumerMqHTTPConsumerSettings `json:"settings"`
+	Type     ConsumerMqHTTPConsumerType     `json:"type"`
+	JSON     consumerMqHTTPConsumerJSON     `json:"-"`
+}
+
+// consumerMqHTTPConsumerJSON contains the JSON metadata for the struct
+// [ConsumerMqHTTPConsumer]
+type consumerMqHTTPConsumerJSON struct {
+	ConsumerID  apijson.Field
+	CreatedOn   apijson.Field
+	QueueID     apijson.Field
+	Settings    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerMqHTTPConsumer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r consumerMqHTTPConsumerJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ConsumerMqHTTPConsumer) implementsQueuesConsumer() {}
+
+type ConsumerMqHTTPConsumerSettings struct {
 	// The maximum number of messages to include in a batch.
 	BatchSize float64 `json:"batch_size"`
 	// The maximum number of retries
-	MaxRetries    float64              `json:"max_retries"`
-	MaxWaitTimeMs float64              `json:"max_wait_time_ms"`
-	JSON          consumerSettingsJSON `json:"-"`
+	MaxRetries float64 `json:"max_retries"`
+	// The number of seconds to delay before making the message available for another
+	// attempt.
+	RetryDelay float64 `json:"retry_delay"`
+	// The number of milliseconds that a message is exclusively leased. After the
+	// timeout, the message becomes available for another attempt.
+	VisibilityTimeoutMs float64                            `json:"visibility_timeout_ms"`
+	JSON                consumerMqHTTPConsumerSettingsJSON `json:"-"`
 }
 
-// consumerSettingsJSON contains the JSON metadata for the struct
-// [ConsumerSettings]
-type consumerSettingsJSON struct {
-	BatchSize     apijson.Field
-	MaxRetries    apijson.Field
-	MaxWaitTimeMs apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+// consumerMqHTTPConsumerSettingsJSON contains the JSON metadata for the struct
+// [ConsumerMqHTTPConsumerSettings]
+type consumerMqHTTPConsumerSettingsJSON struct {
+	BatchSize           apijson.Field
+	MaxRetries          apijson.Field
+	RetryDelay          apijson.Field
+	VisibilityTimeoutMs apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ConsumerSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *ConsumerMqHTTPConsumerSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r consumerSettingsJSON) RawJSON() string {
+func (r consumerMqHTTPConsumerSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConsumerNewResponse struct {
-	CreatedOn string `json:"created_on"`
-	// The name of the dead letter queue.
-	DeadLetterQueue string                      `json:"dead_letter_queue"`
-	Environment     string                      `json:"environment"`
-	QueueName       string                      `json:"queue_name"`
-	ScriptName      string                      `json:"script_name"`
-	Settings        ConsumerNewResponseSettings `json:"settings"`
-	JSON            consumerNewResponseJSON     `json:"-"`
+type ConsumerMqHTTPConsumerType string
+
+const (
+	ConsumerMqHTTPConsumerTypeHTTPPull ConsumerMqHTTPConsumerType = "http_pull"
+)
+
+func (r ConsumerMqHTTPConsumerType) IsKnown() bool {
+	switch r {
+	case ConsumerMqHTTPConsumerTypeHTTPPull:
+		return true
+	}
+	return false
 }
 
-// consumerNewResponseJSON contains the JSON metadata for the struct
-// [ConsumerNewResponse]
-type consumerNewResponseJSON struct {
-	CreatedOn       apijson.Field
-	DeadLetterQueue apijson.Field
-	Environment     apijson.Field
-	QueueName       apijson.Field
-	ScriptName      apijson.Field
-	Settings        apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+type ConsumerType string
+
+const (
+	ConsumerTypeWorker   ConsumerType = "worker"
+	ConsumerTypeHTTPPull ConsumerType = "http_pull"
+)
+
+func (r ConsumerType) IsKnown() bool {
+	switch r {
+	case ConsumerTypeWorker, ConsumerTypeHTTPPull:
+		return true
+	}
+	return false
 }
 
-func (r *ConsumerNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+type ConsumerParam struct {
+	// Name of a Worker
+	ScriptName param.Field[string]       `json:"script_name"`
+	Settings   param.Field[interface{}]  `json:"settings"`
+	Type       param.Field[ConsumerType] `json:"type"`
 }
 
-func (r consumerNewResponseJSON) RawJSON() string {
-	return r.raw
+func (r ConsumerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-type ConsumerNewResponseSettings struct {
+func (r ConsumerParam) implementsQueuesConsumerUnionParam() {}
+
+// Satisfied by [queues.ConsumerMqWorkerConsumerParam],
+// [queues.ConsumerMqHTTPConsumerParam], [ConsumerParam].
+type ConsumerUnionParam interface {
+	implementsQueuesConsumerUnionParam()
+}
+
+type ConsumerMqWorkerConsumerParam struct {
+	// Name of a Worker
+	ScriptName param.Field[string]                                `json:"script_name"`
+	Settings   param.Field[ConsumerMqWorkerConsumerSettingsParam] `json:"settings"`
+	Type       param.Field[ConsumerMqWorkerConsumerType]          `json:"type"`
+}
+
+func (r ConsumerMqWorkerConsumerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerMqWorkerConsumerParam) implementsQueuesConsumerUnionParam() {}
+
+type ConsumerMqWorkerConsumerSettingsParam struct {
 	// The maximum number of messages to include in a batch.
-	BatchSize float64 `json:"batch_size"`
+	BatchSize param.Field[float64] `json:"batch_size"`
+	// Maximum number of concurrent consumers that may consume from this Queue. Set to
+	// `null` to automatically opt in to the platform's maximum (recommended).
+	MaxConcurrency param.Field[float64] `json:"max_concurrency"`
 	// The maximum number of retries
-	MaxRetries    float64                         `json:"max_retries"`
-	MaxWaitTimeMs float64                         `json:"max_wait_time_ms"`
-	JSON          consumerNewResponseSettingsJSON `json:"-"`
+	MaxRetries param.Field[float64] `json:"max_retries"`
+	// The number of milliseconds to wait for a batch to fill up before attempting to
+	// deliver it
+	MaxWaitTimeMs param.Field[float64] `json:"max_wait_time_ms"`
+	// The number of seconds to delay before making the message available for another
+	// attempt.
+	RetryDelay param.Field[float64] `json:"retry_delay"`
 }
 
-// consumerNewResponseSettingsJSON contains the JSON metadata for the struct
-// [ConsumerNewResponseSettings]
-type consumerNewResponseSettingsJSON struct {
-	BatchSize     apijson.Field
-	MaxRetries    apijson.Field
-	MaxWaitTimeMs apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+func (r ConsumerMqWorkerConsumerSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ConsumerNewResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+type ConsumerMqHTTPConsumerParam struct {
+	Settings param.Field[ConsumerMqHTTPConsumerSettingsParam] `json:"settings"`
+	Type     param.Field[ConsumerMqHTTPConsumerType]          `json:"type"`
 }
 
-func (r consumerNewResponseSettingsJSON) RawJSON() string {
-	return r.raw
+func (r ConsumerMqHTTPConsumerParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-type ConsumerUpdateResponse struct {
-	CreatedOn       string                         `json:"created_on"`
-	DeadLetterQueue string                         `json:"dead_letter_queue"`
-	Environment     string                         `json:"environment"`
-	QueueName       string                         `json:"queue_name"`
-	ScriptName      string                         `json:"script_name"`
-	Settings        ConsumerUpdateResponseSettings `json:"settings"`
-	JSON            consumerUpdateResponseJSON     `json:"-"`
-}
+func (r ConsumerMqHTTPConsumerParam) implementsQueuesConsumerUnionParam() {}
 
-// consumerUpdateResponseJSON contains the JSON metadata for the struct
-// [ConsumerUpdateResponse]
-type consumerUpdateResponseJSON struct {
-	CreatedOn       apijson.Field
-	DeadLetterQueue apijson.Field
-	Environment     apijson.Field
-	QueueName       apijson.Field
-	ScriptName      apijson.Field
-	Settings        apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ConsumerUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConsumerUpdateResponseSettings struct {
-	BatchSize float64 `json:"batch_size"`
+type ConsumerMqHTTPConsumerSettingsParam struct {
+	// The maximum number of messages to include in a batch.
+	BatchSize param.Field[float64] `json:"batch_size"`
 	// The maximum number of retries
-	MaxRetries    float64                            `json:"max_retries"`
-	MaxWaitTimeMs float64                            `json:"max_wait_time_ms"`
-	JSON          consumerUpdateResponseSettingsJSON `json:"-"`
+	MaxRetries param.Field[float64] `json:"max_retries"`
+	// The number of seconds to delay before making the message available for another
+	// attempt.
+	RetryDelay param.Field[float64] `json:"retry_delay"`
+	// The number of milliseconds that a message is exclusively leased. After the
+	// timeout, the message becomes available for another attempt.
+	VisibilityTimeoutMs param.Field[float64] `json:"visibility_timeout_ms"`
 }
 
-// consumerUpdateResponseSettingsJSON contains the JSON metadata for the struct
-// [ConsumerUpdateResponseSettings]
-type consumerUpdateResponseSettingsJSON struct {
-	BatchSize     apijson.Field
-	MaxRetries    apijson.Field
-	MaxWaitTimeMs apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+func (r ConsumerMqHTTPConsumerSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ConsumerUpdateResponseSettings) UnmarshalJSON(data []byte) (err error) {
+type ConsumerDeleteResponse struct {
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	// Indicates if the API call was successful or not.
+	Success ConsumerDeleteResponseSuccess `json:"success"`
+	JSON    consumerDeleteResponseJSON    `json:"-"`
+}
+
+// consumerDeleteResponseJSON contains the JSON metadata for the struct
+// [ConsumerDeleteResponse]
+type consumerDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ConsumerDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r consumerUpdateResponseSettingsJSON) RawJSON() string {
+func (r consumerDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ConsumerDeleteResponse = interface{}
+// Indicates if the API call was successful or not.
+type ConsumerDeleteResponseSuccess bool
+
+const (
+	ConsumerDeleteResponseSuccessTrue ConsumerDeleteResponseSuccess = true
+)
+
+func (r ConsumerDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case ConsumerDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
 
 type ConsumerNewParams struct {
-	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	// A Resource identifier.
+	AccountID param.Field[string]        `path:"account_id,required"`
+	Body      ConsumerNewParamsBodyUnion `json:"body,required"`
 }
 
 func (r ConsumerNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
+type ConsumerNewParamsBody struct {
+	DeadLetterQueue param.Field[string] `json:"dead_letter_queue"`
+	// Name of a Worker
+	ScriptName param.Field[string]                    `json:"script_name"`
+	Settings   param.Field[interface{}]               `json:"settings"`
+	Type       param.Field[ConsumerNewParamsBodyType] `json:"type"`
+}
+
+func (r ConsumerNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerNewParamsBody) implementsQueuesConsumerNewParamsBodyUnion() {}
+
+// Satisfied by [queues.ConsumerNewParamsBodyMqWorkerConsumer],
+// [queues.ConsumerNewParamsBodyMqHTTPConsumer], [ConsumerNewParamsBody].
+type ConsumerNewParamsBodyUnion interface {
+	implementsQueuesConsumerNewParamsBodyUnion()
+}
+
+type ConsumerNewParamsBodyMqWorkerConsumer struct {
+	DeadLetterQueue param.Field[string] `json:"dead_letter_queue"`
+	// Name of a Worker
+	ScriptName param.Field[string]                                        `json:"script_name"`
+	Settings   param.Field[ConsumerNewParamsBodyMqWorkerConsumerSettings] `json:"settings"`
+	Type       param.Field[ConsumerNewParamsBodyMqWorkerConsumerType]     `json:"type"`
+}
+
+func (r ConsumerNewParamsBodyMqWorkerConsumer) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerNewParamsBodyMqWorkerConsumer) implementsQueuesConsumerNewParamsBodyUnion() {}
+
+type ConsumerNewParamsBodyMqWorkerConsumerSettings struct {
+	// The maximum number of messages to include in a batch.
+	BatchSize param.Field[float64] `json:"batch_size"`
+	// Maximum number of concurrent consumers that may consume from this Queue. Set to
+	// `null` to automatically opt in to the platform's maximum (recommended).
+	MaxConcurrency param.Field[float64] `json:"max_concurrency"`
+	// The maximum number of retries
+	MaxRetries param.Field[float64] `json:"max_retries"`
+	// The number of milliseconds to wait for a batch to fill up before attempting to
+	// deliver it
+	MaxWaitTimeMs param.Field[float64] `json:"max_wait_time_ms"`
+	// The number of seconds to delay before making the message available for another
+	// attempt.
+	RetryDelay param.Field[float64] `json:"retry_delay"`
+}
+
+func (r ConsumerNewParamsBodyMqWorkerConsumerSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerNewParamsBodyMqWorkerConsumerType string
+
+const (
+	ConsumerNewParamsBodyMqWorkerConsumerTypeWorker ConsumerNewParamsBodyMqWorkerConsumerType = "worker"
+)
+
+func (r ConsumerNewParamsBodyMqWorkerConsumerType) IsKnown() bool {
+	switch r {
+	case ConsumerNewParamsBodyMqWorkerConsumerTypeWorker:
+		return true
+	}
+	return false
+}
+
+type ConsumerNewParamsBodyMqHTTPConsumer struct {
+	DeadLetterQueue param.Field[string]                                      `json:"dead_letter_queue"`
+	Settings        param.Field[ConsumerNewParamsBodyMqHTTPConsumerSettings] `json:"settings"`
+	Type            param.Field[ConsumerNewParamsBodyMqHTTPConsumerType]     `json:"type"`
+}
+
+func (r ConsumerNewParamsBodyMqHTTPConsumer) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerNewParamsBodyMqHTTPConsumer) implementsQueuesConsumerNewParamsBodyUnion() {}
+
+type ConsumerNewParamsBodyMqHTTPConsumerSettings struct {
+	// The maximum number of messages to include in a batch.
+	BatchSize param.Field[float64] `json:"batch_size"`
+	// The maximum number of retries
+	MaxRetries param.Field[float64] `json:"max_retries"`
+	// The number of seconds to delay before making the message available for another
+	// attempt.
+	RetryDelay param.Field[float64] `json:"retry_delay"`
+	// The number of milliseconds that a message is exclusively leased. After the
+	// timeout, the message becomes available for another attempt.
+	VisibilityTimeoutMs param.Field[float64] `json:"visibility_timeout_ms"`
+}
+
+func (r ConsumerNewParamsBodyMqHTTPConsumerSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerNewParamsBodyMqHTTPConsumerType string
+
+const (
+	ConsumerNewParamsBodyMqHTTPConsumerTypeHTTPPull ConsumerNewParamsBodyMqHTTPConsumerType = "http_pull"
+)
+
+func (r ConsumerNewParamsBodyMqHTTPConsumerType) IsKnown() bool {
+	switch r {
+	case ConsumerNewParamsBodyMqHTTPConsumerTypeHTTPPull:
+		return true
+	}
+	return false
+}
+
+type ConsumerNewParamsBodyType string
+
+const (
+	ConsumerNewParamsBodyTypeWorker   ConsumerNewParamsBodyType = "worker"
+	ConsumerNewParamsBodyTypeHTTPPull ConsumerNewParamsBodyType = "http_pull"
+)
+
+func (r ConsumerNewParamsBodyType) IsKnown() bool {
+	switch r {
+	case ConsumerNewParamsBodyTypeWorker, ConsumerNewParamsBodyTypeHTTPPull:
+		return true
+	}
+	return false
+}
+
 type ConsumerNewResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   ConsumerNewResponse   `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    ConsumerNewResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ConsumerNewResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       consumerNewResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   Consumer              `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success ConsumerNewResponseEnvelopeSuccess `json:"success"`
+	JSON    consumerNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // consumerNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -326,7 +649,6 @@ type consumerNewResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -339,7 +661,7 @@ func (r consumerNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicates if the API call was successful or not.
 type ConsumerNewResponseEnvelopeSuccess bool
 
 const (
@@ -354,55 +676,149 @@ func (r ConsumerNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type ConsumerNewResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64                                   `json:"total_count"`
-	JSON       consumerNewResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// consumerNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [ConsumerNewResponseEnvelopeResultInfo]
-type consumerNewResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerNewResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConsumerUpdateParams struct {
-	// Identifier.
-	AccountID param.Field[string] `path:"account_id,required"`
-	Body      interface{}         `json:"body,required"`
+	// A Resource identifier.
+	AccountID param.Field[string]           `path:"account_id,required"`
+	Body      ConsumerUpdateParamsBodyUnion `json:"body,required"`
 }
 
 func (r ConsumerUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
+type ConsumerUpdateParamsBody struct {
+	DeadLetterQueue param.Field[string] `json:"dead_letter_queue"`
+	// Name of a Worker
+	ScriptName param.Field[string]                       `json:"script_name"`
+	Settings   param.Field[interface{}]                  `json:"settings"`
+	Type       param.Field[ConsumerUpdateParamsBodyType] `json:"type"`
+}
+
+func (r ConsumerUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerUpdateParamsBody) implementsQueuesConsumerUpdateParamsBodyUnion() {}
+
+// Satisfied by [queues.ConsumerUpdateParamsBodyMqWorkerConsumer],
+// [queues.ConsumerUpdateParamsBodyMqHTTPConsumer], [ConsumerUpdateParamsBody].
+type ConsumerUpdateParamsBodyUnion interface {
+	implementsQueuesConsumerUpdateParamsBodyUnion()
+}
+
+type ConsumerUpdateParamsBodyMqWorkerConsumer struct {
+	DeadLetterQueue param.Field[string] `json:"dead_letter_queue"`
+	// Name of a Worker
+	ScriptName param.Field[string]                                           `json:"script_name"`
+	Settings   param.Field[ConsumerUpdateParamsBodyMqWorkerConsumerSettings] `json:"settings"`
+	Type       param.Field[ConsumerUpdateParamsBodyMqWorkerConsumerType]     `json:"type"`
+}
+
+func (r ConsumerUpdateParamsBodyMqWorkerConsumer) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerUpdateParamsBodyMqWorkerConsumer) implementsQueuesConsumerUpdateParamsBodyUnion() {}
+
+type ConsumerUpdateParamsBodyMqWorkerConsumerSettings struct {
+	// The maximum number of messages to include in a batch.
+	BatchSize param.Field[float64] `json:"batch_size"`
+	// Maximum number of concurrent consumers that may consume from this Queue. Set to
+	// `null` to automatically opt in to the platform's maximum (recommended).
+	MaxConcurrency param.Field[float64] `json:"max_concurrency"`
+	// The maximum number of retries
+	MaxRetries param.Field[float64] `json:"max_retries"`
+	// The number of milliseconds to wait for a batch to fill up before attempting to
+	// deliver it
+	MaxWaitTimeMs param.Field[float64] `json:"max_wait_time_ms"`
+	// The number of seconds to delay before making the message available for another
+	// attempt.
+	RetryDelay param.Field[float64] `json:"retry_delay"`
+}
+
+func (r ConsumerUpdateParamsBodyMqWorkerConsumerSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerUpdateParamsBodyMqWorkerConsumerType string
+
+const (
+	ConsumerUpdateParamsBodyMqWorkerConsumerTypeWorker ConsumerUpdateParamsBodyMqWorkerConsumerType = "worker"
+)
+
+func (r ConsumerUpdateParamsBodyMqWorkerConsumerType) IsKnown() bool {
+	switch r {
+	case ConsumerUpdateParamsBodyMqWorkerConsumerTypeWorker:
+		return true
+	}
+	return false
+}
+
+type ConsumerUpdateParamsBodyMqHTTPConsumer struct {
+	DeadLetterQueue param.Field[string]                                         `json:"dead_letter_queue"`
+	Settings        param.Field[ConsumerUpdateParamsBodyMqHTTPConsumerSettings] `json:"settings"`
+	Type            param.Field[ConsumerUpdateParamsBodyMqHTTPConsumerType]     `json:"type"`
+}
+
+func (r ConsumerUpdateParamsBodyMqHTTPConsumer) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConsumerUpdateParamsBodyMqHTTPConsumer) implementsQueuesConsumerUpdateParamsBodyUnion() {}
+
+type ConsumerUpdateParamsBodyMqHTTPConsumerSettings struct {
+	// The maximum number of messages to include in a batch.
+	BatchSize param.Field[float64] `json:"batch_size"`
+	// The maximum number of retries
+	MaxRetries param.Field[float64] `json:"max_retries"`
+	// The number of seconds to delay before making the message available for another
+	// attempt.
+	RetryDelay param.Field[float64] `json:"retry_delay"`
+	// The number of milliseconds that a message is exclusively leased. After the
+	// timeout, the message becomes available for another attempt.
+	VisibilityTimeoutMs param.Field[float64] `json:"visibility_timeout_ms"`
+}
+
+func (r ConsumerUpdateParamsBodyMqHTTPConsumerSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ConsumerUpdateParamsBodyMqHTTPConsumerType string
+
+const (
+	ConsumerUpdateParamsBodyMqHTTPConsumerTypeHTTPPull ConsumerUpdateParamsBodyMqHTTPConsumerType = "http_pull"
+)
+
+func (r ConsumerUpdateParamsBodyMqHTTPConsumerType) IsKnown() bool {
+	switch r {
+	case ConsumerUpdateParamsBodyMqHTTPConsumerTypeHTTPPull:
+		return true
+	}
+	return false
+}
+
+type ConsumerUpdateParamsBodyType string
+
+const (
+	ConsumerUpdateParamsBodyTypeWorker   ConsumerUpdateParamsBodyType = "worker"
+	ConsumerUpdateParamsBodyTypeHTTPPull ConsumerUpdateParamsBodyType = "http_pull"
+)
+
+func (r ConsumerUpdateParamsBodyType) IsKnown() bool {
+	switch r {
+	case ConsumerUpdateParamsBodyTypeWorker, ConsumerUpdateParamsBodyTypeHTTPPull:
+		return true
+	}
+	return false
+}
+
 type ConsumerUpdateResponseEnvelope struct {
-	Errors   []shared.ResponseInfo  `json:"errors,required"`
-	Messages []shared.ResponseInfo  `json:"messages,required"`
-	Result   ConsumerUpdateResponse `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    ConsumerUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ConsumerUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       consumerUpdateResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   Consumer              `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success ConsumerUpdateResponseEnvelopeSuccess `json:"success"`
+	JSON    consumerUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
 // consumerUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -412,7 +828,6 @@ type consumerUpdateResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -425,7 +840,7 @@ func (r consumerUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicates if the API call was successful or not.
 type ConsumerUpdateResponseEnvelopeSuccess bool
 
 const (
@@ -440,131 +855,23 @@ func (r ConsumerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type ConsumerUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64                                      `json:"total_count"`
-	JSON       consumerUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// consumerUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [ConsumerUpdateResponseEnvelopeResultInfo]
-type consumerUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConsumerDeleteParams struct {
-	// Identifier.
+	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type ConsumerDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   []ConsumerDeleteResponse `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    ConsumerDeleteResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ConsumerDeleteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       consumerDeleteResponseEnvelopeJSON       `json:"-"`
-}
-
-// consumerDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ConsumerDeleteResponseEnvelope]
-type consumerDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerDeleteResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful.
-type ConsumerDeleteResponseEnvelopeSuccess bool
-
-const (
-	ConsumerDeleteResponseEnvelopeSuccessTrue ConsumerDeleteResponseEnvelopeSuccess = true
-)
-
-func (r ConsumerDeleteResponseEnvelopeSuccess) IsKnown() bool {
-	switch r {
-	case ConsumerDeleteResponseEnvelopeSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type ConsumerDeleteResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64                                      `json:"total_count"`
-	JSON       consumerDeleteResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// consumerDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [ConsumerDeleteResponseEnvelopeResultInfo]
-type consumerDeleteResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConsumerGetParams struct {
-	// Identifier.
+	// A Resource identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ConsumerGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   []Consumer            `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    ConsumerGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ConsumerGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       consumerGetResponseEnvelopeJSON       `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors"`
+	Messages []string              `json:"messages"`
+	Result   []Consumer            `json:"result"`
+	// Indicates if the API call was successful or not.
+	Success ConsumerGetResponseEnvelopeSuccess `json:"success"`
+	JSON    consumerGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // consumerGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -574,7 +881,6 @@ type consumerGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -587,7 +893,7 @@ func (r consumerGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-// Whether the API call was successful.
+// Indicates if the API call was successful or not.
 type ConsumerGetResponseEnvelopeSuccess bool
 
 const (
@@ -600,37 +906,4 @@ func (r ConsumerGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type ConsumerGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service.
-	Count float64 `json:"count"`
-	// Current page within paginated list of results.
-	Page float64 `json:"page"`
-	// Number of results per page of results.
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters.
-	TotalCount float64                                   `json:"total_count"`
-	TotalPages float64                                   `json:"total_pages"`
-	JSON       consumerGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// consumerGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [ConsumerGetResponseEnvelopeResultInfo]
-type consumerGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ConsumerGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r consumerGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
