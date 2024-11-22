@@ -344,14 +344,18 @@ func (r AlwaysUseHTTPSParam) ImplementsPagerulesPageruleUpdateParamsActionUnion(
 func (r AlwaysUseHTTPSParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
 
 type AutomaticHTTPSRewrites struct {
-	ID   AutomaticHTTPSRewritesID   `json:"id"`
-	JSON automaticHTTPSRewritesJSON `json:"-"`
+	// Turn on or off Automatic HTTPS Rewrites.
+	ID AutomaticHTTPSRewritesID `json:"id"`
+	// The status of Automatic HTTPS Rewrites.
+	Value AutomaticHTTPSRewritesValue `json:"value"`
+	JSON  automaticHTTPSRewritesJSON  `json:"-"`
 }
 
 // automaticHTTPSRewritesJSON contains the JSON metadata for the struct
 // [AutomaticHTTPSRewrites]
 type automaticHTTPSRewritesJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -366,6 +370,7 @@ func (r automaticHTTPSRewritesJSON) RawJSON() string {
 
 func (r AutomaticHTTPSRewrites) ImplementsPagerulesPageRuleAction() {}
 
+// Turn on or off Automatic HTTPS Rewrites.
 type AutomaticHTTPSRewritesID string
 
 const (
@@ -380,8 +385,27 @@ func (r AutomaticHTTPSRewritesID) IsKnown() bool {
 	return false
 }
 
+// The status of Automatic HTTPS Rewrites.
+type AutomaticHTTPSRewritesValue string
+
+const (
+	AutomaticHTTPSRewritesValueOn  AutomaticHTTPSRewritesValue = "on"
+	AutomaticHTTPSRewritesValueOff AutomaticHTTPSRewritesValue = "off"
+)
+
+func (r AutomaticHTTPSRewritesValue) IsKnown() bool {
+	switch r {
+	case AutomaticHTTPSRewritesValueOn, AutomaticHTTPSRewritesValueOff:
+		return true
+	}
+	return false
+}
+
 type AutomaticHTTPSRewritesParam struct {
+	// Turn on or off Automatic HTTPS Rewrites.
 	ID param.Field[AutomaticHTTPSRewritesID] `json:"id"`
+	// The status of Automatic HTTPS Rewrites.
+	Value param.Field[AutomaticHTTPSRewritesValue] `json:"value"`
 }
 
 func (r AutomaticHTTPSRewritesParam) MarshalJSON() (data []byte, err error) {
@@ -1685,7 +1709,8 @@ func (r ImageResizingParam) implementsZonesSettingEditParamsBodyUnion() {}
 type IPGeolocation struct {
 	// Cloudflare adds a CF-IPCountry HTTP header containing the country code that
 	// corresponds to the visitor.
-	ID    IPGeolocationID    `json:"id"`
+	ID IPGeolocationID `json:"id"`
+	// The status of adding the IP Geolocation Header.
 	Value IPGeolocationValue `json:"value"`
 	JSON  ipGeolocationJSON  `json:"-"`
 }
@@ -1724,39 +1749,17 @@ func (r IPGeolocationID) IsKnown() bool {
 	return false
 }
 
-type IPGeolocationValue struct {
-	// The status of adding the IP Geolocation Header.
-	Value IPGeolocationValueValue `json:"value"`
-	JSON  ipGeolocationValueJSON  `json:"-"`
-}
-
-// ipGeolocationValueJSON contains the JSON metadata for the struct
-// [IPGeolocationValue]
-type ipGeolocationValueJSON struct {
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IPGeolocationValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ipGeolocationValueJSON) RawJSON() string {
-	return r.raw
-}
-
 // The status of adding the IP Geolocation Header.
-type IPGeolocationValueValue string
+type IPGeolocationValue string
 
 const (
-	IPGeolocationValueValueOn  IPGeolocationValueValue = "on"
-	IPGeolocationValueValueOff IPGeolocationValueValue = "off"
+	IPGeolocationValueOn  IPGeolocationValue = "on"
+	IPGeolocationValueOff IPGeolocationValue = "off"
 )
 
-func (r IPGeolocationValueValue) IsKnown() bool {
+func (r IPGeolocationValue) IsKnown() bool {
 	switch r {
-	case IPGeolocationValueValueOn, IPGeolocationValueValueOff:
+	case IPGeolocationValueOn, IPGeolocationValueOff:
 		return true
 	}
 	return false
@@ -1765,8 +1768,9 @@ func (r IPGeolocationValueValue) IsKnown() bool {
 type IPGeolocationParam struct {
 	// Cloudflare adds a CF-IPCountry HTTP header containing the country code that
 	// corresponds to the visitor.
-	ID    param.Field[IPGeolocationID]         `json:"id"`
-	Value param.Field[IPGeolocationValueParam] `json:"value"`
+	ID param.Field[IPGeolocationID] `json:"id"`
+	// The status of adding the IP Geolocation Header.
+	Value param.Field[IPGeolocationValue] `json:"value"`
 }
 
 func (r IPGeolocationParam) MarshalJSON() (data []byte, err error) {
@@ -1778,15 +1782,6 @@ func (r IPGeolocationParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
 func (r IPGeolocationParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
 
 func (r IPGeolocationParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
-
-type IPGeolocationValueParam struct {
-	// The status of adding the IP Geolocation Header.
-	Value param.Field[IPGeolocationValueValue] `json:"value"`
-}
-
-func (r IPGeolocationValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
@@ -1996,7 +1991,8 @@ type Mirage struct {
 	// Cloudflare Mirage reduces bandwidth used by images in mobile browsers. It can
 	// accelerate loading of image-heavy websites on very slow mobile connections and
 	// HTTP/1.
-	ID    MirageID    `json:"id"`
+	ID MirageID `json:"id"`
+	// The status of Mirage.
 	Value MirageValue `json:"value"`
 	JSON  mirageJSON  `json:"-"`
 }
@@ -2036,38 +2032,17 @@ func (r MirageID) IsKnown() bool {
 	return false
 }
 
-type MirageValue struct {
-	// The status of Mirage.
-	Value MirageValueValue `json:"value"`
-	JSON  mirageValueJSON  `json:"-"`
-}
-
-// mirageValueJSON contains the JSON metadata for the struct [MirageValue]
-type mirageValueJSON struct {
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MirageValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r mirageValueJSON) RawJSON() string {
-	return r.raw
-}
-
 // The status of Mirage.
-type MirageValueValue string
+type MirageValue string
 
 const (
-	MirageValueValueOn  MirageValueValue = "on"
-	MirageValueValueOff MirageValueValue = "off"
+	MirageValueOn  MirageValue = "on"
+	MirageValueOff MirageValue = "off"
 )
 
-func (r MirageValueValue) IsKnown() bool {
+func (r MirageValue) IsKnown() bool {
 	switch r {
-	case MirageValueValueOn, MirageValueValueOff:
+	case MirageValueOn, MirageValueOff:
 		return true
 	}
 	return false
@@ -2077,8 +2052,9 @@ type MirageParam struct {
 	// Cloudflare Mirage reduces bandwidth used by images in mobile browsers. It can
 	// accelerate loading of image-heavy websites on very slow mobile connections and
 	// HTTP/1.
-	ID    param.Field[MirageID]         `json:"id"`
-	Value param.Field[MirageValueParam] `json:"value"`
+	ID param.Field[MirageID] `json:"id"`
+	// The status of Mirage.
+	Value param.Field[MirageValue] `json:"value"`
 }
 
 func (r MirageParam) MarshalJSON() (data []byte, err error) {
@@ -2090,15 +2066,6 @@ func (r MirageParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
 func (r MirageParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
 
 func (r MirageParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
-
-type MirageValueParam struct {
-	// The status of Mirage.
-	Value param.Field[MirageValueValue] `json:"value"`
-}
-
-func (r MirageValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 // Enable Network Error Logging reporting on your zone. (Beta)
 type NEL struct {
@@ -2216,7 +2183,8 @@ type OpportunisticEncryption struct {
 	// Opportunistic Encryption allows browsers to access HTTP URIs over an encrypted
 	// TLS channel. It's not a substitute for HTTPS, but provides additional security
 	// for otherwise vulnerable requests.
-	ID    OpportunisticEncryptionID    `json:"id"`
+	ID OpportunisticEncryptionID `json:"id"`
+	// The status of Opportunistic Encryption.
 	Value OpportunisticEncryptionValue `json:"value"`
 	JSON  opportunisticEncryptionJSON  `json:"-"`
 }
@@ -2257,39 +2225,17 @@ func (r OpportunisticEncryptionID) IsKnown() bool {
 	return false
 }
 
-type OpportunisticEncryptionValue struct {
-	// The status of Opportunistic Encryption.
-	Value OpportunisticEncryptionValueValue `json:"value"`
-	JSON  opportunisticEncryptionValueJSON  `json:"-"`
-}
-
-// opportunisticEncryptionValueJSON contains the JSON metadata for the struct
-// [OpportunisticEncryptionValue]
-type opportunisticEncryptionValueJSON struct {
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OpportunisticEncryptionValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r opportunisticEncryptionValueJSON) RawJSON() string {
-	return r.raw
-}
-
 // The status of Opportunistic Encryption.
-type OpportunisticEncryptionValueValue string
+type OpportunisticEncryptionValue string
 
 const (
-	OpportunisticEncryptionValueValueOn  OpportunisticEncryptionValueValue = "on"
-	OpportunisticEncryptionValueValueOff OpportunisticEncryptionValueValue = "off"
+	OpportunisticEncryptionValueOn  OpportunisticEncryptionValue = "on"
+	OpportunisticEncryptionValueOff OpportunisticEncryptionValue = "off"
 )
 
-func (r OpportunisticEncryptionValueValue) IsKnown() bool {
+func (r OpportunisticEncryptionValue) IsKnown() bool {
 	switch r {
-	case OpportunisticEncryptionValueValueOn, OpportunisticEncryptionValueValueOff:
+	case OpportunisticEncryptionValueOn, OpportunisticEncryptionValueOff:
 		return true
 	}
 	return false
@@ -2299,8 +2245,9 @@ type OpportunisticEncryptionParam struct {
 	// Opportunistic Encryption allows browsers to access HTTP URIs over an encrypted
 	// TLS channel. It's not a substitute for HTTPS, but provides additional security
 	// for otherwise vulnerable requests.
-	ID    param.Field[OpportunisticEncryptionID]         `json:"id"`
-	Value param.Field[OpportunisticEncryptionValueParam] `json:"value"`
+	ID param.Field[OpportunisticEncryptionID] `json:"id"`
+	// The status of Opportunistic Encryption.
+	Value param.Field[OpportunisticEncryptionValue] `json:"value"`
 }
 
 func (r OpportunisticEncryptionParam) MarshalJSON() (data []byte, err error) {
@@ -2312,15 +2259,6 @@ func (r OpportunisticEncryptionParam) ImplementsPagerulesPageruleNewParamsAction
 func (r OpportunisticEncryptionParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
 
 func (r OpportunisticEncryptionParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
-
-type OpportunisticEncryptionValueParam struct {
-	// The status of Opportunistic Encryption.
-	Value param.Field[OpportunisticEncryptionValueValue] `json:"value"`
-}
-
-func (r OpportunisticEncryptionValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
@@ -2526,7 +2464,8 @@ func (r OrangeToOrangeParam) implementsZonesSettingEditParamsBodyUnion() {}
 type OriginErrorPagePassThru struct {
 	// Turn on or off Cloudflare error pages generated from issues sent from the origin
 	// server. If enabled, this setting triggers error pages issued by the origin.
-	ID    OriginErrorPagePassThruID    `json:"id"`
+	ID OriginErrorPagePassThruID `json:"id"`
+	// The status of Origin Error Page Passthru.
 	Value OriginErrorPagePassThruValue `json:"value"`
 	JSON  originErrorPagePassThruJSON  `json:"-"`
 }
@@ -2566,39 +2505,17 @@ func (r OriginErrorPagePassThruID) IsKnown() bool {
 	return false
 }
 
-type OriginErrorPagePassThruValue struct {
-	// The status of Origin Error Page Passthru.
-	Value OriginErrorPagePassThruValueValue `json:"value"`
-	JSON  originErrorPagePassThruValueJSON  `json:"-"`
-}
-
-// originErrorPagePassThruValueJSON contains the JSON metadata for the struct
-// [OriginErrorPagePassThruValue]
-type originErrorPagePassThruValueJSON struct {
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginErrorPagePassThruValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r originErrorPagePassThruValueJSON) RawJSON() string {
-	return r.raw
-}
-
 // The status of Origin Error Page Passthru.
-type OriginErrorPagePassThruValueValue string
+type OriginErrorPagePassThruValue string
 
 const (
-	OriginErrorPagePassThruValueValueOn  OriginErrorPagePassThruValueValue = "on"
-	OriginErrorPagePassThruValueValueOff OriginErrorPagePassThruValueValue = "off"
+	OriginErrorPagePassThruValueOn  OriginErrorPagePassThruValue = "on"
+	OriginErrorPagePassThruValueOff OriginErrorPagePassThruValue = "off"
 )
 
-func (r OriginErrorPagePassThruValueValue) IsKnown() bool {
+func (r OriginErrorPagePassThruValue) IsKnown() bool {
 	switch r {
-	case OriginErrorPagePassThruValueValueOn, OriginErrorPagePassThruValueValueOff:
+	case OriginErrorPagePassThruValueOn, OriginErrorPagePassThruValueOff:
 		return true
 	}
 	return false
@@ -2607,8 +2524,9 @@ func (r OriginErrorPagePassThruValueValue) IsKnown() bool {
 type OriginErrorPagePassThruParam struct {
 	// Turn on or off Cloudflare error pages generated from issues sent from the origin
 	// server. If enabled, this setting triggers error pages issued by the origin.
-	ID    param.Field[OriginErrorPagePassThruID]         `json:"id"`
-	Value param.Field[OriginErrorPagePassThruValueParam] `json:"value"`
+	ID param.Field[OriginErrorPagePassThruID] `json:"id"`
+	// The status of Origin Error Page Passthru.
+	Value param.Field[OriginErrorPagePassThruValue] `json:"value"`
 }
 
 func (r OriginErrorPagePassThruParam) MarshalJSON() (data []byte, err error) {
@@ -2621,18 +2539,10 @@ func (r OriginErrorPagePassThruParam) ImplementsPagerulesPageruleUpdateParamsAct
 
 func (r OriginErrorPagePassThruParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
 
-type OriginErrorPagePassThruValueParam struct {
-	// The status of Origin Error Page Passthru.
-	Value param.Field[OriginErrorPagePassThruValueValue] `json:"value"`
-}
-
-func (r OriginErrorPagePassThruValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type Polish struct {
 	// Apply options from the Polish feature of the Cloudflare Speed app.
-	ID    PolishID    `json:"id"`
+	ID PolishID `json:"id"`
+	// The level of Polish you want applied to your origin.
 	Value PolishValue `json:"value"`
 	JSON  polishJSON  `json:"-"`
 }
@@ -2670,39 +2580,18 @@ func (r PolishID) IsKnown() bool {
 	return false
 }
 
-type PolishValue struct {
-	// The level of Polish you want applied to your origin.
-	Value PolishValueValue `json:"value"`
-	JSON  polishValueJSON  `json:"-"`
-}
-
-// polishValueJSON contains the JSON metadata for the struct [PolishValue]
-type polishValueJSON struct {
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PolishValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r polishValueJSON) RawJSON() string {
-	return r.raw
-}
-
 // The level of Polish you want applied to your origin.
-type PolishValueValue string
+type PolishValue string
 
 const (
-	PolishValueValueOff      PolishValueValue = "off"
-	PolishValueValueLossless PolishValueValue = "lossless"
-	PolishValueValueLossy    PolishValueValue = "lossy"
+	PolishValueOff      PolishValue = "off"
+	PolishValueLossless PolishValue = "lossless"
+	PolishValueLossy    PolishValue = "lossy"
 )
 
-func (r PolishValueValue) IsKnown() bool {
+func (r PolishValue) IsKnown() bool {
 	switch r {
-	case PolishValueValueOff, PolishValueValueLossless, PolishValueValueLossy:
+	case PolishValueOff, PolishValueLossless, PolishValueLossy:
 		return true
 	}
 	return false
@@ -2710,8 +2599,9 @@ func (r PolishValueValue) IsKnown() bool {
 
 type PolishParam struct {
 	// Apply options from the Polish feature of the Cloudflare Speed app.
-	ID    param.Field[PolishID]         `json:"id"`
-	Value param.Field[PolishValueParam] `json:"value"`
+	ID param.Field[PolishID] `json:"id"`
+	// The level of Polish you want applied to your origin.
+	Value param.Field[PolishValue] `json:"value"`
 }
 
 func (r PolishParam) MarshalJSON() (data []byte, err error) {
@@ -2723,15 +2613,6 @@ func (r PolishParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
 func (r PolishParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
 
 func (r PolishParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
-
-type PolishValueParam struct {
-	// The level of Polish you want applied to your origin.
-	Value param.Field[PolishValueValue] `json:"value"`
-}
-
-func (r PolishValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
@@ -3467,7 +3348,8 @@ func (r ServerSideExcludesParam) ImplementsPagerulesPageruleEditParamsActionUnio
 type SortQueryStringForCache struct {
 	// Turn on or off the reordering of query strings. When query strings have the same
 	// structure, caching improves.
-	ID    SortQueryStringForCacheID    `json:"id"`
+	ID SortQueryStringForCacheID `json:"id"`
+	// The status of Query String Sort
 	Value SortQueryStringForCacheValue `json:"value"`
 	JSON  sortQueryStringForCacheJSON  `json:"-"`
 }
@@ -3507,39 +3389,17 @@ func (r SortQueryStringForCacheID) IsKnown() bool {
 	return false
 }
 
-type SortQueryStringForCacheValue struct {
-	// The status of Query String Sort
-	Value SortQueryStringForCacheValueValue `json:"value"`
-	JSON  sortQueryStringForCacheValueJSON  `json:"-"`
-}
-
-// sortQueryStringForCacheValueJSON contains the JSON metadata for the struct
-// [SortQueryStringForCacheValue]
-type sortQueryStringForCacheValueJSON struct {
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SortQueryStringForCacheValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sortQueryStringForCacheValueJSON) RawJSON() string {
-	return r.raw
-}
-
 // The status of Query String Sort
-type SortQueryStringForCacheValueValue string
+type SortQueryStringForCacheValue string
 
 const (
-	SortQueryStringForCacheValueValueOn  SortQueryStringForCacheValueValue = "on"
-	SortQueryStringForCacheValueValueOff SortQueryStringForCacheValueValue = "off"
+	SortQueryStringForCacheValueOn  SortQueryStringForCacheValue = "on"
+	SortQueryStringForCacheValueOff SortQueryStringForCacheValue = "off"
 )
 
-func (r SortQueryStringForCacheValueValue) IsKnown() bool {
+func (r SortQueryStringForCacheValue) IsKnown() bool {
 	switch r {
-	case SortQueryStringForCacheValueValueOn, SortQueryStringForCacheValueValueOff:
+	case SortQueryStringForCacheValueOn, SortQueryStringForCacheValueOff:
 		return true
 	}
 	return false
@@ -3548,8 +3408,9 @@ func (r SortQueryStringForCacheValueValue) IsKnown() bool {
 type SortQueryStringForCacheParam struct {
 	// Turn on or off the reordering of query strings. When query strings have the same
 	// structure, caching improves.
-	ID    param.Field[SortQueryStringForCacheID]         `json:"id"`
-	Value param.Field[SortQueryStringForCacheValueParam] `json:"value"`
+	ID param.Field[SortQueryStringForCacheID] `json:"id"`
+	// The status of Query String Sort
+	Value param.Field[SortQueryStringForCacheValue] `json:"value"`
 }
 
 func (r SortQueryStringForCacheParam) MarshalJSON() (data []byte, err error) {
@@ -3562,19 +3423,11 @@ func (r SortQueryStringForCacheParam) ImplementsPagerulesPageruleUpdateParamsAct
 
 func (r SortQueryStringForCacheParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
 
-type SortQueryStringForCacheValueParam struct {
-	// The status of Query String Sort
-	Value param.Field[SortQueryStringForCacheValueValue] `json:"value"`
-}
-
-func (r SortQueryStringForCacheValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type SSL struct {
 	// Control options for the SSL feature of the Edge Certificates tab in the
 	// Cloudflare SSL/TLS app.
-	ID    SSLID    `json:"id"`
+	ID SSLID `json:"id"`
+	// The encryption mode that Cloudflare uses to connect to your origin server.
 	Value SSLValue `json:"value"`
 	JSON  sslJSON  `json:"-"`
 }
@@ -3613,41 +3466,20 @@ func (r SSLID) IsKnown() bool {
 	return false
 }
 
-type SSLValue struct {
-	// The encryption mode that Cloudflare uses to connect to your origin server.
-	Value SSLValueValue `json:"value"`
-	JSON  sslValueJSON  `json:"-"`
-}
-
-// sslValueJSON contains the JSON metadata for the struct [SSLValue]
-type sslValueJSON struct {
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r sslValueJSON) RawJSON() string {
-	return r.raw
-}
-
 // The encryption mode that Cloudflare uses to connect to your origin server.
-type SSLValueValue string
+type SSLValue string
 
 const (
-	SSLValueValueOff        SSLValueValue = "off"
-	SSLValueValueFlexible   SSLValueValue = "flexible"
-	SSLValueValueFull       SSLValueValue = "full"
-	SSLValueValueStrict     SSLValueValue = "strict"
-	SSLValueValueOriginPull SSLValueValue = "origin_pull"
+	SSLValueOff        SSLValue = "off"
+	SSLValueFlexible   SSLValue = "flexible"
+	SSLValueFull       SSLValue = "full"
+	SSLValueStrict     SSLValue = "strict"
+	SSLValueOriginPull SSLValue = "origin_pull"
 )
 
-func (r SSLValueValue) IsKnown() bool {
+func (r SSLValue) IsKnown() bool {
 	switch r {
-	case SSLValueValueOff, SSLValueValueFlexible, SSLValueValueFull, SSLValueValueStrict, SSLValueValueOriginPull:
+	case SSLValueOff, SSLValueFlexible, SSLValueFull, SSLValueStrict, SSLValueOriginPull:
 		return true
 	}
 	return false
@@ -3656,8 +3488,9 @@ func (r SSLValueValue) IsKnown() bool {
 type SSLParam struct {
 	// Control options for the SSL feature of the Edge Certificates tab in the
 	// Cloudflare SSL/TLS app.
-	ID    param.Field[SSLID]         `json:"id"`
-	Value param.Field[SSLValueParam] `json:"value"`
+	ID param.Field[SSLID] `json:"id"`
+	// The encryption mode that Cloudflare uses to connect to your origin server.
+	Value param.Field[SSLValue] `json:"value"`
 }
 
 func (r SSLParam) MarshalJSON() (data []byte, err error) {
@@ -3669,15 +3502,6 @@ func (r SSLParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
 func (r SSLParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
 
 func (r SSLParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
-
-type SSLValueParam struct {
-	// The encryption mode that Cloudflare uses to connect to your origin server.
-	Value param.Field[SSLValueValue] `json:"value"`
-}
-
-func (r SSLValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
@@ -3942,7 +3766,8 @@ func (r TLSClientAuthParam) implementsZonesSettingEditParamsBodyUnion() {}
 
 type TrueClientIPHeader struct {
 	// Turn on or off the True-Client-IP Header feature of the Cloudflare Network app.
-	ID    TrueClientIPHeaderID    `json:"id"`
+	ID TrueClientIPHeaderID `json:"id"`
+	// The status of True Client IP Header.
 	Value TrueClientIPHeaderValue `json:"value"`
 	JSON  trueClientIPHeaderJSON  `json:"-"`
 }
@@ -3981,39 +3806,17 @@ func (r TrueClientIPHeaderID) IsKnown() bool {
 	return false
 }
 
-type TrueClientIPHeaderValue struct {
-	// The status of True Client IP Header.
-	Value TrueClientIPHeaderValueValue `json:"value"`
-	JSON  trueClientIPHeaderValueJSON  `json:"-"`
-}
-
-// trueClientIPHeaderValueJSON contains the JSON metadata for the struct
-// [TrueClientIPHeaderValue]
-type trueClientIPHeaderValueJSON struct {
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TrueClientIPHeaderValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r trueClientIPHeaderValueJSON) RawJSON() string {
-	return r.raw
-}
-
 // The status of True Client IP Header.
-type TrueClientIPHeaderValueValue string
+type TrueClientIPHeaderValue string
 
 const (
-	TrueClientIPHeaderValueValueOn  TrueClientIPHeaderValueValue = "on"
-	TrueClientIPHeaderValueValueOff TrueClientIPHeaderValueValue = "off"
+	TrueClientIPHeaderValueOn  TrueClientIPHeaderValue = "on"
+	TrueClientIPHeaderValueOff TrueClientIPHeaderValue = "off"
 )
 
-func (r TrueClientIPHeaderValueValue) IsKnown() bool {
+func (r TrueClientIPHeaderValue) IsKnown() bool {
 	switch r {
-	case TrueClientIPHeaderValueValueOn, TrueClientIPHeaderValueValueOff:
+	case TrueClientIPHeaderValueOn, TrueClientIPHeaderValueOff:
 		return true
 	}
 	return false
@@ -4021,8 +3824,9 @@ func (r TrueClientIPHeaderValueValue) IsKnown() bool {
 
 type TrueClientIPHeaderParam struct {
 	// Turn on or off the True-Client-IP Header feature of the Cloudflare Network app.
-	ID    param.Field[TrueClientIPHeaderID]         `json:"id"`
-	Value param.Field[TrueClientIPHeaderValueParam] `json:"value"`
+	ID param.Field[TrueClientIPHeaderID] `json:"id"`
+	// The status of True Client IP Header.
+	Value param.Field[TrueClientIPHeaderValue] `json:"value"`
 }
 
 func (r TrueClientIPHeaderParam) MarshalJSON() (data []byte, err error) {
@@ -4035,20 +3839,12 @@ func (r TrueClientIPHeaderParam) ImplementsPagerulesPageruleUpdateParamsActionUn
 
 func (r TrueClientIPHeaderParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
 
-type TrueClientIPHeaderValueParam struct {
-	// The status of True Client IP Header.
-	Value param.Field[TrueClientIPHeaderValueValue] `json:"value"`
-}
-
-func (r TrueClientIPHeaderValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type WAF struct {
 	// Turn on or off
 	// [WAF managed rules (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/).
 	// You cannot enable or disable individual WAF managed rules via Page Rules.
-	ID    WAFID    `json:"id"`
+	ID WAFID `json:"id"`
+	// The status of WAF managed rules (previous version).
 	Value WAFValue `json:"value"`
 	JSON  wafJSON  `json:"-"`
 }
@@ -4088,38 +3884,17 @@ func (r WAFID) IsKnown() bool {
 	return false
 }
 
-type WAFValue struct {
-	// The status of WAF managed rules (previous version).
-	Value WAFValueValue `json:"value"`
-	JSON  wafValueJSON  `json:"-"`
-}
-
-// wafValueJSON contains the JSON metadata for the struct [WAFValue]
-type wafValueJSON struct {
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WAFValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r wafValueJSON) RawJSON() string {
-	return r.raw
-}
-
 // The status of WAF managed rules (previous version).
-type WAFValueValue string
+type WAFValue string
 
 const (
-	WAFValueValueOn  WAFValueValue = "on"
-	WAFValueValueOff WAFValueValue = "off"
+	WAFValueOn  WAFValue = "on"
+	WAFValueOff WAFValue = "off"
 )
 
-func (r WAFValueValue) IsKnown() bool {
+func (r WAFValue) IsKnown() bool {
 	switch r {
-	case WAFValueValueOn, WAFValueValueOff:
+	case WAFValueOn, WAFValueOff:
 		return true
 	}
 	return false
@@ -4129,8 +3904,9 @@ type WAFParam struct {
 	// Turn on or off
 	// [WAF managed rules (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/).
 	// You cannot enable or disable individual WAF managed rules via Page Rules.
-	ID    param.Field[WAFID]         `json:"id"`
-	Value param.Field[WAFValueParam] `json:"value"`
+	ID param.Field[WAFID] `json:"id"`
+	// The status of WAF managed rules (previous version).
+	Value param.Field[WAFValue] `json:"value"`
 }
 
 func (r WAFParam) MarshalJSON() (data []byte, err error) {
@@ -4142,15 +3918,6 @@ func (r WAFParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
 func (r WAFParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
 
 func (r WAFParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
-
-type WAFValueParam struct {
-	// The status of WAF managed rules (previous version).
-	Value param.Field[WAFValueValue] `json:"value"`
-}
-
-func (r WAFValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
 
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
