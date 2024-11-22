@@ -253,7 +253,7 @@ func (r ScriptVersionNewParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptVersionNewParamsMetadataAnnotations struct {
-	// Human-readable message about the version.
+	// Human-readable message about the version. Truncated to 100 bytes.
 	WorkersMessage param.Field[string] `json:"workers/message"`
 	// User-provided identifier for the version.
 	WorkersTag param.Field[string] `json:"workers/tag"`
