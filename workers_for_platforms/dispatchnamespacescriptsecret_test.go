@@ -33,9 +33,11 @@ func TestDispatchNamespaceScriptSecretUpdateWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptSecretUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Name:      cloudflare.F("MY_SECRET"),
-			Text:      cloudflare.F("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"),
-			Type:      cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSecretUpdateParamsTypeSecretText),
+			WorkersSecretModel: workers_for_platforms.WorkersSecretModelParam{
+				Name: cloudflare.F("MY_SECRET"),
+				Text: cloudflare.F("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"),
+				Type: cloudflare.F(workers_for_platforms.WorkersSecretModelTypeSecretText),
+			},
 		},
 	)
 	if err != nil {
