@@ -83,7 +83,7 @@ func (r *ScriptDeploymentService) Get(ctx context.Context, scriptName string, qu
 }
 
 type Deployment struct {
-	// Human-readable message about the deployment.
+	// Human-readable message about the deployment. Truncated to 100 bytes.
 	WorkersMessage string         `json:"workers/message"`
 	JSON           deploymentJSON `json:"-"`
 }
@@ -104,7 +104,7 @@ func (r deploymentJSON) RawJSON() string {
 }
 
 type DeploymentParam struct {
-	// Human-readable message about the deployment.
+	// Human-readable message about the deployment. Truncated to 100 bytes.
 	WorkersMessage param.Field[string] `json:"workers/message"`
 }
 
