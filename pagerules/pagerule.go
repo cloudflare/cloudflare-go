@@ -207,14 +207,15 @@ type PageRuleAction struct {
 	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
 	// redirect.
 	ID PageRuleActionsID `json:"id"`
-	// This field can have the runtime type of [int64], [zones.BrowserCheckValue],
-	// [string], [PageRuleActionsCacheByDeviceTypeValue],
+	// This field can have the runtime type of [zones.AutomaticHTTPSRewritesValue],
+	// [int64], [zones.BrowserCheckValue], [string],
+	// [PageRuleActionsCacheByDeviceTypeValue],
 	// [PageRuleActionsCacheDeceptionArmorValue], [PageRuleActionsCacheKeyValue],
 	// [zones.CacheLevelValue], [zones.EmailObfuscationValue],
-	// [PageRuleActionsForwardingURLValue], [zones.IPGeolocationValue],
-	// [zones.MirageValue], [zones.OpportunisticEncryptionValue],
-	// [zones.OriginErrorPagePassThruValue], [zones.PolishValue],
-	// [PageRuleActionsResolveOverrideValue], [PageRuleActionsRespectStrongEtagValue],
+	// [PageRuleActionsExplicitCacheControlValue], [PageRuleActionsForwardingURLValue],
+	// [zones.IPGeolocationValue], [zones.MirageValue],
+	// [zones.OpportunisticEncryptionValue], [zones.OriginErrorPagePassThruValue],
+	// [zones.PolishValue], [PageRuleActionsRespectStrongEtagValue],
 	// [zones.ResponseBufferingValue], [zones.RocketLoaderValue],
 	// [zones.SecurityLevelValue], [zones.SortQueryStringForCacheValue],
 	// [zones.SSLValue], [zones.TrueClientIPHeaderValue], [zones.WAFValue].
@@ -1035,14 +1036,19 @@ func (r PageRuleActionsCacheKeyFieldsID) IsKnown() bool {
 }
 
 type PageRuleActionsCacheOnCookie struct {
-	ID   PageRuleActionsCacheOnCookieID   `json:"id"`
-	JSON pageRuleActionsCacheOnCookieJSON `json:"-"`
+	// Apply the Cache Everything option (Cache Level setting) based on a regular
+	// expression match against a cookie name.
+	ID PageRuleActionsCacheOnCookieID `json:"id"`
+	// The regular expression to use for matching cookie names in the request.
+	Value string                           `json:"value"`
+	JSON  pageRuleActionsCacheOnCookieJSON `json:"-"`
 }
 
 // pageRuleActionsCacheOnCookieJSON contains the JSON metadata for the struct
 // [PageRuleActionsCacheOnCookie]
 type pageRuleActionsCacheOnCookieJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1057,6 +1063,8 @@ func (r pageRuleActionsCacheOnCookieJSON) RawJSON() string {
 
 func (r PageRuleActionsCacheOnCookie) ImplementsPagerulesPageRuleAction() {}
 
+// Apply the Cache Everything option (Cache Level setting) based on a regular
+// expression match against a cookie name.
 type PageRuleActionsCacheOnCookieID string
 
 const (
@@ -1367,14 +1375,19 @@ func (r PageRuleActionsEdgeCacheTTLID) IsKnown() bool {
 }
 
 type PageRuleActionsExplicitCacheControl struct {
-	ID   PageRuleActionsExplicitCacheControlID   `json:"id"`
-	JSON pageRuleActionsExplicitCacheControlJSON `json:"-"`
+	// Origin Cache Control is enabled by default for Free, Pro, and Business domains
+	// and disabled by default for Enterprise domains.
+	ID PageRuleActionsExplicitCacheControlID `json:"id"`
+	// The status of Origin Cache Control.
+	Value PageRuleActionsExplicitCacheControlValue `json:"value"`
+	JSON  pageRuleActionsExplicitCacheControlJSON  `json:"-"`
 }
 
 // pageRuleActionsExplicitCacheControlJSON contains the JSON metadata for the
 // struct [PageRuleActionsExplicitCacheControl]
 type pageRuleActionsExplicitCacheControlJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1389,6 +1402,8 @@ func (r pageRuleActionsExplicitCacheControlJSON) RawJSON() string {
 
 func (r PageRuleActionsExplicitCacheControl) ImplementsPagerulesPageRuleAction() {}
 
+// Origin Cache Control is enabled by default for Free, Pro, and Business domains
+// and disabled by default for Enterprise domains.
 type PageRuleActionsExplicitCacheControlID string
 
 const (
@@ -1398,6 +1413,22 @@ const (
 func (r PageRuleActionsExplicitCacheControlID) IsKnown() bool {
 	switch r {
 	case PageRuleActionsExplicitCacheControlIDExplicitCacheControl:
+		return true
+	}
+	return false
+}
+
+// The status of Origin Cache Control.
+type PageRuleActionsExplicitCacheControlValue string
+
+const (
+	PageRuleActionsExplicitCacheControlValueOn  PageRuleActionsExplicitCacheControlValue = "on"
+	PageRuleActionsExplicitCacheControlValueOff PageRuleActionsExplicitCacheControlValue = "off"
+)
+
+func (r PageRuleActionsExplicitCacheControlValue) IsKnown() bool {
+	switch r {
+	case PageRuleActionsExplicitCacheControlValueOn, PageRuleActionsExplicitCacheControlValueOff:
 		return true
 	}
 	return false
@@ -1608,9 +1639,10 @@ func (r PageRuleActionsPurgeByPageRuleID) IsKnown() bool {
 
 type PageRuleActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
-	ID    PageRuleActionsResolveOverrideID    `json:"id"`
-	Value PageRuleActionsResolveOverrideValue `json:"value"`
-	JSON  pageRuleActionsResolveOverrideJSON  `json:"-"`
+	ID PageRuleActionsResolveOverrideID `json:"id"`
+	// The origin address you want to override with.
+	Value string                             `json:"value"`
+	JSON  pageRuleActionsResolveOverrideJSON `json:"-"`
 }
 
 // pageRuleActionsResolveOverrideJSON contains the JSON metadata for the struct
@@ -1645,28 +1677,6 @@ func (r PageRuleActionsResolveOverrideID) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type PageRuleActionsResolveOverrideValue struct {
-	// The origin address you want to override with.
-	Value string                                  `json:"value"`
-	JSON  pageRuleActionsResolveOverrideValueJSON `json:"-"`
-}
-
-// pageRuleActionsResolveOverrideValueJSON contains the JSON metadata for the
-// struct [PageRuleActionsResolveOverrideValue]
-type pageRuleActionsResolveOverrideValueJSON struct {
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageRuleActionsResolveOverrideValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageRuleActionsResolveOverrideValueJSON) RawJSON() string {
-	return r.raw
 }
 
 type PageRuleActionsRespectStrongEtag struct {
@@ -2335,7 +2345,11 @@ func (r PageruleNewParamsActionsCacheKeyFieldsID) IsKnown() bool {
 }
 
 type PageruleNewParamsActionsCacheOnCookie struct {
+	// Apply the Cache Everything option (Cache Level setting) based on a regular
+	// expression match against a cookie name.
 	ID param.Field[PageruleNewParamsActionsCacheOnCookieID] `json:"id"`
+	// The regular expression to use for matching cookie names in the request.
+	Value param.Field[string] `json:"value"`
 }
 
 func (r PageruleNewParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err error) {
@@ -2344,6 +2358,8 @@ func (r PageruleNewParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err e
 
 func (r PageruleNewParamsActionsCacheOnCookie) ImplementsPagerulesPageruleNewParamsActionUnion() {}
 
+// Apply the Cache Everything option (Cache Level setting) based on a regular
+// expression match against a cookie name.
 type PageruleNewParamsActionsCacheOnCookieID string
 
 const (
@@ -2563,7 +2579,11 @@ func (r PageruleNewParamsActionsEdgeCacheTTLID) IsKnown() bool {
 }
 
 type PageruleNewParamsActionsExplicitCacheControl struct {
+	// Origin Cache Control is enabled by default for Free, Pro, and Business domains
+	// and disabled by default for Enterprise domains.
 	ID param.Field[PageruleNewParamsActionsExplicitCacheControlID] `json:"id"`
+	// The status of Origin Cache Control.
+	Value param.Field[PageruleNewParamsActionsExplicitCacheControlValue] `json:"value"`
 }
 
 func (r PageruleNewParamsActionsExplicitCacheControl) MarshalJSON() (data []byte, err error) {
@@ -2573,6 +2593,8 @@ func (r PageruleNewParamsActionsExplicitCacheControl) MarshalJSON() (data []byte
 func (r PageruleNewParamsActionsExplicitCacheControl) ImplementsPagerulesPageruleNewParamsActionUnion() {
 }
 
+// Origin Cache Control is enabled by default for Free, Pro, and Business domains
+// and disabled by default for Enterprise domains.
 type PageruleNewParamsActionsExplicitCacheControlID string
 
 const (
@@ -2582,6 +2604,22 @@ const (
 func (r PageruleNewParamsActionsExplicitCacheControlID) IsKnown() bool {
 	switch r {
 	case PageruleNewParamsActionsExplicitCacheControlIDExplicitCacheControl:
+		return true
+	}
+	return false
+}
+
+// The status of Origin Cache Control.
+type PageruleNewParamsActionsExplicitCacheControlValue string
+
+const (
+	PageruleNewParamsActionsExplicitCacheControlValueOn  PageruleNewParamsActionsExplicitCacheControlValue = "on"
+	PageruleNewParamsActionsExplicitCacheControlValueOff PageruleNewParamsActionsExplicitCacheControlValue = "off"
+)
+
+func (r PageruleNewParamsActionsExplicitCacheControlValue) IsKnown() bool {
+	switch r {
+	case PageruleNewParamsActionsExplicitCacheControlValueOn, PageruleNewParamsActionsExplicitCacheControlValueOff:
 		return true
 	}
 	return false
@@ -2725,8 +2763,9 @@ func (r PageruleNewParamsActionsPurgeByPageRuleID) IsKnown() bool {
 
 type PageruleNewParamsActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
-	ID    param.Field[PageruleNewParamsActionsResolveOverrideID]    `json:"id"`
-	Value param.Field[PageruleNewParamsActionsResolveOverrideValue] `json:"value"`
+	ID param.Field[PageruleNewParamsActionsResolveOverrideID] `json:"id"`
+	// The origin address you want to override with.
+	Value param.Field[string] `json:"value"`
 }
 
 func (r PageruleNewParamsActionsResolveOverride) MarshalJSON() (data []byte, err error) {
@@ -2748,15 +2787,6 @@ func (r PageruleNewParamsActionsResolveOverrideID) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type PageruleNewParamsActionsResolveOverrideValue struct {
-	// The origin address you want to override with.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r PageruleNewParamsActionsResolveOverrideValue) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type PageruleNewParamsActionsRespectStrongEtag struct {
@@ -3325,7 +3355,11 @@ func (r PageruleUpdateParamsActionsCacheKeyFieldsID) IsKnown() bool {
 }
 
 type PageruleUpdateParamsActionsCacheOnCookie struct {
+	// Apply the Cache Everything option (Cache Level setting) based on a regular
+	// expression match against a cookie name.
 	ID param.Field[PageruleUpdateParamsActionsCacheOnCookieID] `json:"id"`
+	// The regular expression to use for matching cookie names in the request.
+	Value param.Field[string] `json:"value"`
 }
 
 func (r PageruleUpdateParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err error) {
@@ -3335,6 +3369,8 @@ func (r PageruleUpdateParamsActionsCacheOnCookie) MarshalJSON() (data []byte, er
 func (r PageruleUpdateParamsActionsCacheOnCookie) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
 }
 
+// Apply the Cache Everything option (Cache Level setting) based on a regular
+// expression match against a cookie name.
 type PageruleUpdateParamsActionsCacheOnCookieID string
 
 const (
@@ -3560,7 +3596,11 @@ func (r PageruleUpdateParamsActionsEdgeCacheTTLID) IsKnown() bool {
 }
 
 type PageruleUpdateParamsActionsExplicitCacheControl struct {
+	// Origin Cache Control is enabled by default for Free, Pro, and Business domains
+	// and disabled by default for Enterprise domains.
 	ID param.Field[PageruleUpdateParamsActionsExplicitCacheControlID] `json:"id"`
+	// The status of Origin Cache Control.
+	Value param.Field[PageruleUpdateParamsActionsExplicitCacheControlValue] `json:"value"`
 }
 
 func (r PageruleUpdateParamsActionsExplicitCacheControl) MarshalJSON() (data []byte, err error) {
@@ -3570,6 +3610,8 @@ func (r PageruleUpdateParamsActionsExplicitCacheControl) MarshalJSON() (data []b
 func (r PageruleUpdateParamsActionsExplicitCacheControl) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
 }
 
+// Origin Cache Control is enabled by default for Free, Pro, and Business domains
+// and disabled by default for Enterprise domains.
 type PageruleUpdateParamsActionsExplicitCacheControlID string
 
 const (
@@ -3579,6 +3621,22 @@ const (
 func (r PageruleUpdateParamsActionsExplicitCacheControlID) IsKnown() bool {
 	switch r {
 	case PageruleUpdateParamsActionsExplicitCacheControlIDExplicitCacheControl:
+		return true
+	}
+	return false
+}
+
+// The status of Origin Cache Control.
+type PageruleUpdateParamsActionsExplicitCacheControlValue string
+
+const (
+	PageruleUpdateParamsActionsExplicitCacheControlValueOn  PageruleUpdateParamsActionsExplicitCacheControlValue = "on"
+	PageruleUpdateParamsActionsExplicitCacheControlValueOff PageruleUpdateParamsActionsExplicitCacheControlValue = "off"
+)
+
+func (r PageruleUpdateParamsActionsExplicitCacheControlValue) IsKnown() bool {
+	switch r {
+	case PageruleUpdateParamsActionsExplicitCacheControlValueOn, PageruleUpdateParamsActionsExplicitCacheControlValueOff:
 		return true
 	}
 	return false
@@ -3724,8 +3782,9 @@ func (r PageruleUpdateParamsActionsPurgeByPageRuleID) IsKnown() bool {
 
 type PageruleUpdateParamsActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
-	ID    param.Field[PageruleUpdateParamsActionsResolveOverrideID]    `json:"id"`
-	Value param.Field[PageruleUpdateParamsActionsResolveOverrideValue] `json:"value"`
+	ID param.Field[PageruleUpdateParamsActionsResolveOverrideID] `json:"id"`
+	// The origin address you want to override with.
+	Value param.Field[string] `json:"value"`
 }
 
 func (r PageruleUpdateParamsActionsResolveOverride) MarshalJSON() (data []byte, err error) {
@@ -3748,15 +3807,6 @@ func (r PageruleUpdateParamsActionsResolveOverrideID) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type PageruleUpdateParamsActionsResolveOverrideValue struct {
-	// The origin address you want to override with.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r PageruleUpdateParamsActionsResolveOverrideValue) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type PageruleUpdateParamsActionsRespectStrongEtag struct {
@@ -4501,7 +4551,11 @@ func (r PageruleEditParamsActionsCacheKeyFieldsID) IsKnown() bool {
 }
 
 type PageruleEditParamsActionsCacheOnCookie struct {
+	// Apply the Cache Everything option (Cache Level setting) based on a regular
+	// expression match against a cookie name.
 	ID param.Field[PageruleEditParamsActionsCacheOnCookieID] `json:"id"`
+	// The regular expression to use for matching cookie names in the request.
+	Value param.Field[string] `json:"value"`
 }
 
 func (r PageruleEditParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err error) {
@@ -4510,6 +4564,8 @@ func (r PageruleEditParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err 
 
 func (r PageruleEditParamsActionsCacheOnCookie) ImplementsPagerulesPageruleEditParamsActionUnion() {}
 
+// Apply the Cache Everything option (Cache Level setting) based on a regular
+// expression match against a cookie name.
 type PageruleEditParamsActionsCacheOnCookieID string
 
 const (
@@ -4731,7 +4787,11 @@ func (r PageruleEditParamsActionsEdgeCacheTTLID) IsKnown() bool {
 }
 
 type PageruleEditParamsActionsExplicitCacheControl struct {
+	// Origin Cache Control is enabled by default for Free, Pro, and Business domains
+	// and disabled by default for Enterprise domains.
 	ID param.Field[PageruleEditParamsActionsExplicitCacheControlID] `json:"id"`
+	// The status of Origin Cache Control.
+	Value param.Field[PageruleEditParamsActionsExplicitCacheControlValue] `json:"value"`
 }
 
 func (r PageruleEditParamsActionsExplicitCacheControl) MarshalJSON() (data []byte, err error) {
@@ -4741,6 +4801,8 @@ func (r PageruleEditParamsActionsExplicitCacheControl) MarshalJSON() (data []byt
 func (r PageruleEditParamsActionsExplicitCacheControl) ImplementsPagerulesPageruleEditParamsActionUnion() {
 }
 
+// Origin Cache Control is enabled by default for Free, Pro, and Business domains
+// and disabled by default for Enterprise domains.
 type PageruleEditParamsActionsExplicitCacheControlID string
 
 const (
@@ -4750,6 +4812,22 @@ const (
 func (r PageruleEditParamsActionsExplicitCacheControlID) IsKnown() bool {
 	switch r {
 	case PageruleEditParamsActionsExplicitCacheControlIDExplicitCacheControl:
+		return true
+	}
+	return false
+}
+
+// The status of Origin Cache Control.
+type PageruleEditParamsActionsExplicitCacheControlValue string
+
+const (
+	PageruleEditParamsActionsExplicitCacheControlValueOn  PageruleEditParamsActionsExplicitCacheControlValue = "on"
+	PageruleEditParamsActionsExplicitCacheControlValueOff PageruleEditParamsActionsExplicitCacheControlValue = "off"
+)
+
+func (r PageruleEditParamsActionsExplicitCacheControlValue) IsKnown() bool {
+	switch r {
+	case PageruleEditParamsActionsExplicitCacheControlValueOn, PageruleEditParamsActionsExplicitCacheControlValueOff:
 		return true
 	}
 	return false
@@ -4894,8 +4972,9 @@ func (r PageruleEditParamsActionsPurgeByPageRuleID) IsKnown() bool {
 
 type PageruleEditParamsActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
-	ID    param.Field[PageruleEditParamsActionsResolveOverrideID]    `json:"id"`
-	Value param.Field[PageruleEditParamsActionsResolveOverrideValue] `json:"value"`
+	ID param.Field[PageruleEditParamsActionsResolveOverrideID] `json:"id"`
+	// The origin address you want to override with.
+	Value param.Field[string] `json:"value"`
 }
 
 func (r PageruleEditParamsActionsResolveOverride) MarshalJSON() (data []byte, err error) {
@@ -4918,15 +4997,6 @@ func (r PageruleEditParamsActionsResolveOverrideID) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type PageruleEditParamsActionsResolveOverrideValue struct {
-	// The origin address you want to override with.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r PageruleEditParamsActionsResolveOverrideValue) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type PageruleEditParamsActionsRespectStrongEtag struct {
