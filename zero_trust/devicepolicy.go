@@ -31,6 +31,16 @@ func NewDevicePolicyService(opts ...option.RequestOption) (r *DevicePolicyServic
 	return
 }
 
+type DevicePolicyCertificatesParam struct {
+	// The current status of the device policy certificate provisioning feature for
+	// WARP clients.
+	Enabled param.Field[bool] `json:"enabled,required"`
+}
+
+func (r DevicePolicyCertificatesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type FallbackDomain struct {
 	// The domain suffix to match when resolving locally.
 	Suffix string `json:"suffix,required"`
