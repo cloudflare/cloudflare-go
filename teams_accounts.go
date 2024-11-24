@@ -132,7 +132,7 @@ type TeamsAccountLoggingConfiguration struct {
 
 type TeamsLoggingSettings struct {
 	LoggingSettingsByRuleType map[TeamsRuleType]TeamsAccountLoggingConfiguration `json:"settings_by_rule_type"`
-	RedactPii                 bool                                               `json:"redact_pii,omitempty"`
+	RedactPii                 *bool                                              `json:"redact_pii,omitempty"`
 }
 
 type TeamsDeviceSettings struct {

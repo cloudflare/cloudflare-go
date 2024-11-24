@@ -36,12 +36,11 @@ type CreateTurnstileWidgetParams struct {
 
 type UpdateTurnstileWidgetParams struct {
 	SiteKey      string   `json:"-"`
-	Name         string   `json:"name,omitempty"`
-	Domains      []string `json:"domains,omitempty"`
-	Mode         string   `json:"mode,omitempty"`
-	BotFightMode bool     `json:"bot_fight_mode,omitempty"`
-	Region       string   `json:"region,omitempty"`
-	OffLabel     bool     `json:"offlabel,omitempty"`
+	Name         *string   `json:"name,omitempty"`
+	Domains      *[]string `json:"domains,omitempty"`
+	Mode         *string   `json:"mode,omitempty"`
+	BotFightMode *bool     `json:"bot_fight_mode,omitempty"`
+	OffLabel     *bool     `json:"offlabel,omitempty"`
 }
 
 type TurnstileWidgetResponse struct {

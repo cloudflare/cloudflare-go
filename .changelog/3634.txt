@@ -1,0 +1,3 @@
+```release-note:enhancement
+leaked_credential_check: add new methods to interact with leaked credential check cloudfare API
+```

@@ -58,6 +58,7 @@ type AccessIdentityProviderScimConfiguration struct {
 	UserDeprovision        bool   `json:"user_deprovision,omitempty"`
 	SeatDeprovision        bool   `json:"seat_deprovision,omitempty"`
 	GroupMemberDeprovision bool   `json:"group_member_deprovision,omitempty"`
+	IdentityUpdateBehavior string `json:"identity_update_behavior,omitempty"`
 }
 
 // AccessIdentityProvidersListResponse is the API response for multiple

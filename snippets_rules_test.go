@@ -38,7 +38,7 @@ func TestSnippetsRules(t *testing.T) {
       "messages": []
     }`)
 	}
-	mux.HandleFunc("/zones/"+testZoneID+"/snippets/rules", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/snippets/snippet_rules", handler)
 
 	want := []SnippetRule{
 		{
@@ -93,7 +93,7 @@ func TestUpdateSnippetsRules(t *testing.T) {
     }`)
 	}
 
-	mux.HandleFunc("/zones/"+testZoneID+"/snippets/rules", handler)
+	mux.HandleFunc("/zones/"+testZoneID+"/snippets/snippet_rules", handler)
 	toUpdate := []SnippetRule{
 		{
 			Expression:  "true",
