@@ -26,6 +26,18 @@ const (
 	Infrastructure AccessApplicationType = "infrastructure"
 )
 
+type AccessDestinationType string
+
+const (
+	AccessDestinationPublic  AccessDestinationType = "public"
+	AccessDestinationPrivate AccessDestinationType = "private"
+)
+
+type AccessDestination struct {
+	Type AccessDestinationType `json:"type"`
+	URI  string                `json:"uri"`
+}
+
 // AccessApplication represents an Access application.
 type AccessApplication struct {
 	GatewayRules             []AccessApplicationGatewayRule       `json:"gateway_rules,omitempty"`
@@ -34,7 +46,8 @@ type AccessApplication struct {
 	LogoURL                  string                               `json:"logo_url,omitempty"`
 	AUD                      string                               `json:"aud,omitempty"`
 	Domain                   string                               `json:"domain"`
-	SelfHostedDomains        []string                             `json:"self_hosted_domains"`
+	DomainType               AccessDestinationType                `json:"domain_type,omitempty"`
+	Destinations             []AccessDestination                  `json:"destinations"`
 	Type                     AccessApplicationType                `json:"type,omitempty"`
 	SessionDuration          string                               `json:"session_duration,omitempty"`
 	SameSiteCookieAttribute  string                               `json:"same_site_cookie_attribute,omitempty"`
@@ -288,6 +301,7 @@ type CreateAccessApplicationParams struct {
 	CustomDenyURL            string                               `json:"custom_deny_url,omitempty"`
 	CustomNonIdentityDenyURL string                               `json:"custom_non_identity_deny_url,omitempty"`
 	Domain                   string                               `json:"domain"`
+	DomainType               AccessDestinationType                `json:"domain_type,omitempty"`
 	EnableBindingCookie      *bool                                `json:"enable_binding_cookie,omitempty"`
 	GatewayRules             []AccessApplicationGatewayRule       `json:"gateway_rules,omitempty"`
 	HttpOnlyCookieAttribute  *bool                                `json:"http_only_cookie_attribute,omitempty"`
@@ -297,7 +311,7 @@ type CreateAccessApplicationParams struct {
 	PrivateAddress           string                               `json:"private_address"`
 	SaasApplication          *SaasApplication                     `json:"saas_app,omitempty"`
 	SameSiteCookieAttribute  string                               `json:"same_site_cookie_attribute,omitempty"`
-	SelfHostedDomains        []string                             `json:"self_hosted_domains"`
+	Destinations             []AccessDestination                  `json:"destinations"`
 	ServiceAuth401Redirect   *bool                                `json:"service_auth_401_redirect,omitempty"`
 	SessionDuration          string                               `json:"session_duration,omitempty"`
 	SkipInterstitial         *bool                                `json:"skip_interstitial,omitempty"`
@@ -324,6 +338,7 @@ type UpdateAccessApplicationParams struct {
 	CustomDenyURL            string                               `json:"custom_deny_url,omitempty"`
 	CustomNonIdentityDenyURL string                               `json:"custom_non_identity_deny_url,omitempty"`
 	Domain                   string                               `json:"domain"`
+	DomainType               AccessDestinationType                `json:"domain_type,omitempty"`
 	EnableBindingCookie      *bool                                `json:"enable_binding_cookie,omitempty"`
 	GatewayRules             []AccessApplicationGatewayRule       `json:"gateway_rules,omitempty"`
 	HttpOnlyCookieAttribute  *bool                                `json:"http_only_cookie_attribute,omitempty"`
@@ -333,7 +348,7 @@ type UpdateAccessApplicationParams struct {
 	PrivateAddress           string                               `json:"private_address"`
 	SaasApplication          *SaasApplication                     `json:"saas_app,omitempty"`
 	SameSiteCookieAttribute  string                               `json:"same_site_cookie_attribute,omitempty"`
-	SelfHostedDomains        []string                             `json:"self_hosted_domains"`
+	Destinations             []AccessDestination                  `json:"destinations"`
 	ServiceAuth401Redirect   *bool                                `json:"service_auth_401_redirect,omitempty"`
 	SessionDuration          string                               `json:"session_duration,omitempty"`
 	SkipInterstitial         *bool                                `json:"skip_interstitial,omitempty"`
