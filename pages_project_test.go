@@ -554,7 +554,7 @@ func TestPagesProject(t *testing.T) {
         }`, testPagesProjectResponse)
 	}
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test%20Pages%20Project", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test Pages Project", handler)
 
 	_, err := client.GetPagesProject(context.Background(), AccountIdentifier(""), "Test Pages Project")
 	if assert.Error(t, err) {
@@ -631,7 +631,7 @@ func TestUpdatePagesProject(t *testing.T) {
         }`, testPagesProjectResponse)
 	}
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test%20Pages%20Project", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test Pages Project", handler)
 
 	_, err := client.UpdatePagesProject(context.Background(), AccountIdentifier(""), *updateAttributes)
 	if assert.Error(t, err) {
@@ -659,7 +659,7 @@ func TestDeletePagesProject(t *testing.T) {
         }`)
 	}
 
-	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test%20Pages%20Project", handler)
+	mux.HandleFunc("/accounts/"+testAccountID+"/pages/projects/Test Pages Project", handler)
 
 	err := client.DeletePagesProject(context.Background(), AccountIdentifier(""), "Test Pages Project")
 	if assert.Error(t, err) {
