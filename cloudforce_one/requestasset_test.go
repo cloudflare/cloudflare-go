@@ -64,7 +64,7 @@ func TestRequestAssetUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudforce_one.RequestAssetUpdateParams{
-			Source: cloudflare.F("@/Users/me/test.doc"),
+			Source: cloudflare.F("@/Users/me/example.docx"),
 		},
 	)
 	if err != nil {
