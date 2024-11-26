@@ -275,16 +275,6 @@ func (r cloudflareTunnelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CloudflareTunnel) ImplementsWARPConnectorWARPConnectorNewResponse() {}
-
-func (r CloudflareTunnel) ImplementsWARPConnectorWARPConnectorListResponse() {}
-
-func (r CloudflareTunnel) ImplementsWARPConnectorWARPConnectorDeleteResponse() {}
-
-func (r CloudflareTunnel) ImplementsWARPConnectorWARPConnectorEditResponse() {}
-
-func (r CloudflareTunnel) ImplementsWARPConnectorWARPConnectorGetResponse() {}
-
 func (r CloudflareTunnel) ImplementsZeroTrustTunnelNewResponse() {}
 
 func (r CloudflareTunnel) ImplementsZeroTrustTunnelListResponse() {}
@@ -294,6 +284,16 @@ func (r CloudflareTunnel) ImplementsZeroTrustTunnelDeleteResponse() {}
 func (r CloudflareTunnel) ImplementsZeroTrustTunnelEditResponse() {}
 
 func (r CloudflareTunnel) ImplementsZeroTrustTunnelGetResponse() {}
+
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelWARPConnectorNewResponse() {}
+
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelWARPConnectorListResponse() {}
+
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelWARPConnectorDeleteResponse() {}
+
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelWARPConnectorEditResponse() {}
+
+func (r CloudflareTunnel) ImplementsZeroTrustTunnelWARPConnectorGetResponse() {}
 
 type CloudflareTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.

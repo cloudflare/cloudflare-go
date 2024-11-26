@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package warp_connector_test
+package zero_trust_test
 
 import (
 	"context"
@@ -12,10 +12,10 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/warp_connector"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
-func TestWARPConnectorNew(t *testing.T) {
+func TestTunnelWARPConnectorNew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,7 +28,7 @@ func TestWARPConnectorNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WARPConnector.New(context.TODO(), warp_connector.WARPConnectorNewParams{
+	_, err := client.ZeroTrust.Tunnels.WARPConnector.New(context.TODO(), zero_trust.TunnelWARPConnectorNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		Name:      cloudflare.F("blog"),
 	})
@@ -41,7 +41,7 @@ func TestWARPConnectorNew(t *testing.T) {
 	}
 }
 
-func TestWARPConnectorListWithOptionalParams(t *testing.T) {
+func TestTunnelWARPConnectorListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -54,7 +54,7 @@ func TestWARPConnectorListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WARPConnector.List(context.TODO(), warp_connector.WARPConnectorListParams{
+	_, err := client.ZeroTrust.Tunnels.WARPConnector.List(context.TODO(), zero_trust.TunnelWARPConnectorListParams{
 		AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		ExcludePrefix: cloudflare.F("vpc1-"),
 		ExistedAt:     cloudflare.F(time.Now()),
@@ -63,7 +63,7 @@ func TestWARPConnectorListWithOptionalParams(t *testing.T) {
 		Name:          cloudflare.F("blog"),
 		Page:          cloudflare.F(1.000000),
 		PerPage:       cloudflare.F(1.000000),
-		Status:        cloudflare.F(warp_connector.WARPConnectorListParamsStatusInactive),
+		Status:        cloudflare.F(zero_trust.TunnelWARPConnectorListParamsStatusInactive),
 		UUID:          cloudflare.F("f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"),
 		WasActiveAt:   cloudflare.F(time.Now()),
 		WasInactiveAt: cloudflare.F(time.Now()),
@@ -77,7 +77,7 @@ func TestWARPConnectorListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWARPConnectorDelete(t *testing.T) {
+func TestTunnelWARPConnectorDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -90,10 +90,10 @@ func TestWARPConnectorDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WARPConnector.Delete(
+	_, err := client.ZeroTrust.Tunnels.WARPConnector.Delete(
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		warp_connector.WARPConnectorDeleteParams{
+		zero_trust.TunnelWARPConnectorDeleteParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
@@ -106,7 +106,7 @@ func TestWARPConnectorDelete(t *testing.T) {
 	}
 }
 
-func TestWARPConnectorEditWithOptionalParams(t *testing.T) {
+func TestTunnelWARPConnectorEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -119,10 +119,10 @@ func TestWARPConnectorEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WARPConnector.Edit(
+	_, err := client.ZeroTrust.Tunnels.WARPConnector.Edit(
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		warp_connector.WARPConnectorEditParams{
+		zero_trust.TunnelWARPConnectorEditParams{
 			AccountID:    cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Name:         cloudflare.F("blog"),
 			TunnelSecret: cloudflare.F("AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="),
@@ -137,7 +137,7 @@ func TestWARPConnectorEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWARPConnectorGet(t *testing.T) {
+func TestTunnelWARPConnectorGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -150,10 +150,10 @@ func TestWARPConnectorGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WARPConnector.Get(
+	_, err := client.ZeroTrust.Tunnels.WARPConnector.Get(
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		warp_connector.WARPConnectorGetParams{
+		zero_trust.TunnelWARPConnectorGetParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
@@ -166,7 +166,7 @@ func TestWARPConnectorGet(t *testing.T) {
 	}
 }
 
-func TestWARPConnectorToken(t *testing.T) {
+func TestTunnelWARPConnectorToken(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -179,10 +179,10 @@ func TestWARPConnectorToken(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.WARPConnector.Token(
+	_, err := client.ZeroTrust.Tunnels.WARPConnector.Token(
 		context.TODO(),
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		warp_connector.WARPConnectorTokenParams{
+		zero_trust.TunnelWARPConnectorTokenParams{
 			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		},
 	)
