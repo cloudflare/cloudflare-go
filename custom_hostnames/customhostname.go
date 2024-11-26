@@ -2011,6 +2011,9 @@ type CustomHostnameNewParamsSSL struct {
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority param.Field[shared.CertificateCA] `json:"certificate_authority"`
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true
+	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
@@ -2274,6 +2277,9 @@ type CustomHostnameEditParamsSSL struct {
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority param.Field[shared.CertificateCA] `json:"certificate_authority"`
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true
+	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.

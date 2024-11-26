@@ -104,9 +104,9 @@ func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID s
 	return
 }
 
-// For a given zone, restart validation for an advanced certificate pack. This is
-// only a validation operation for a Certificate Pack in a validation_timed_out
-// status.
+// For a given zone, restart validation or add cloudflare branding for an advanced
+// certificate pack. The former is only a validation operation for a Certificate
+// Pack in a validation_timed_out status.
 func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID string, params CertificatePackEditParams, opts ...option.RequestOption) (res *CertificatePackEditResponse, err error) {
 	var env CertificatePackEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -232,8 +232,8 @@ type CertificatePackNewResponse struct {
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
 	CertificateAuthority CertificatePackNewResponseCertificateAuthority `json:"certificate_authority"`
-	// Whether or not to add Cloudflare Branding for the order. This will add
-	// sni.cloudflaressl.com as the Common Name if set true.
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
@@ -372,8 +372,8 @@ type CertificatePackEditResponse struct {
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
 	CertificateAuthority CertificatePackEditResponseCertificateAuthority `json:"certificate_authority"`
-	// Whether or not to add Cloudflare Branding for the order. This will add
-	// sni.cloudflaressl.com as the Common Name if set true.
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
@@ -499,8 +499,8 @@ type CertificatePackNewParams struct {
 	ValidationMethod param.Field[CertificatePackNewParamsValidationMethod] `json:"validation_method,required"`
 	// Validity Days selected for the order.
 	ValidityDays param.Field[CertificatePackNewParamsValidityDays] `json:"validity_days,required"`
-	// Whether or not to add Cloudflare Branding for the order. This will add
-	// sni.cloudflaressl.com as the Common Name if set true.
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
 	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
 }
 
@@ -702,11 +702,13 @@ func (r CertificatePackDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type CertificatePackEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
-	Body   interface{}         `json:"body,required"`
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true.
+	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
 }
 
 func (r CertificatePackEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type CertificatePackEditResponseEnvelope struct {
