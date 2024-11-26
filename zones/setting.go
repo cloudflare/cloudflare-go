@@ -1021,16 +1021,38 @@ func (r CiphersParam) MarshalJSON() (data []byte, err error) {
 
 func (r CiphersParam) implementsZonesSettingEditParamsBodyUnion() {}
 
+// Development Mode temporarily allows you to enter development mode for your
+// websites if you need to make changes to your site. This will bypass Cloudflare's
+// accelerated cache and slow down your site, but is useful if you are making
+// changes to cacheable content (like images, css, or JavaScript) and would like to
+// see those changes right away. Once entered, development mode will last for 3
+// hours and then automatically toggle off.
 type DevelopmentMode struct {
-	ID   DevelopmentModeID   `json:"id"`
-	JSON developmentModeJSON `json:"-"`
+	// ID of the zone setting.
+	ID DevelopmentModeID `json:"id,required"`
+	// Current value of the zone setting.
+	Value DevelopmentModeValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable DevelopmentModeEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting. Notes: The interval (in seconds) from when
+	// development mode expires (positive integer) or last expired (negative integer)
+	// for the domain. If development mode has never been enabled, this value is false.
+	TimeRemaining float64             `json:"time_remaining"`
+	JSON          developmentModeJSON `json:"-"`
 }
 
 // developmentModeJSON contains the JSON metadata for the struct [DevelopmentMode]
 type developmentModeJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID            apijson.Field
+	Value         apijson.Field
+	Editable      apijson.Field
+	ModifiedOn    apijson.Field
+	TimeRemaining apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *DevelopmentMode) UnmarshalJSON(data []byte) (err error) {
@@ -1041,8 +1063,11 @@ func (r developmentModeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DevelopmentMode) ImplementsPagerulesPageRuleAction() {}
+func (r DevelopmentMode) implementsZonesSettingEditResponse() {}
 
+func (r DevelopmentMode) implementsZonesSettingGetResponse() {}
+
+// ID of the zone setting.
 type DevelopmentModeID string
 
 const (
@@ -1057,19 +1082,57 @@ func (r DevelopmentModeID) IsKnown() bool {
 	return false
 }
 
+// Current value of the zone setting.
+type DevelopmentModeValue string
+
+const (
+	DevelopmentModeValueOn  DevelopmentModeValue = "on"
+	DevelopmentModeValueOff DevelopmentModeValue = "off"
+)
+
+func (r DevelopmentModeValue) IsKnown() bool {
+	switch r {
+	case DevelopmentModeValueOn, DevelopmentModeValueOff:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type DevelopmentModeEditable bool
+
+const (
+	DevelopmentModeEditableTrue  DevelopmentModeEditable = true
+	DevelopmentModeEditableFalse DevelopmentModeEditable = false
+)
+
+func (r DevelopmentModeEditable) IsKnown() bool {
+	switch r {
+	case DevelopmentModeEditableTrue, DevelopmentModeEditableFalse:
+		return true
+	}
+	return false
+}
+
+// Development Mode temporarily allows you to enter development mode for your
+// websites if you need to make changes to your site. This will bypass Cloudflare's
+// accelerated cache and slow down your site, but is useful if you are making
+// changes to cacheable content (like images, css, or JavaScript) and would like to
+// see those changes right away. Once entered, development mode will last for 3
+// hours and then automatically toggle off.
 type DevelopmentModeParam struct {
-	ID param.Field[DevelopmentModeID] `json:"id"`
+	// ID of the zone setting.
+	ID param.Field[DevelopmentModeID] `json:"id,required"`
+	// Current value of the zone setting.
+	Value param.Field[DevelopmentModeValue] `json:"value,required"`
 }
 
 func (r DevelopmentModeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevelopmentModeParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
-
-func (r DevelopmentModeParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
-
-func (r DevelopmentModeParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r DevelopmentModeParam) implementsZonesSettingEditParamsBodyUnion() {}
 
 // When enabled, Cloudflare will attempt to speed up overall page loads by serving
 // `103` responses with `Link` headers from the final response. Refer to
@@ -1354,15 +1417,33 @@ func (r H2PrioritizationParam) MarshalJSON() (data []byte, err error) {
 
 func (r H2PrioritizationParam) implementsZonesSettingEditParamsBodyUnion() {}
 
+// When enabled, the Hotlink Protection option ensures that other sites cannot suck
+// up your bandwidth by building pages that use images hosted on your site. Anytime
+// a request for an image on your site hits Cloudflare, we check to ensure that
+// it's not another site requesting them. People will still be able to download and
+// view images from your page, but other sites won't be able to steal them for use
+// on their own pages.
+// (https://support.cloudflare.com/hc/en-us/articles/200170026).
 type HotlinkProtection struct {
-	ID   HotlinkProtectionID   `json:"id"`
-	JSON hotlinkProtectionJSON `json:"-"`
+	// ID of the zone setting.
+	ID HotlinkProtectionID `json:"id,required"`
+	// Current value of the zone setting.
+	Value HotlinkProtectionValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable HotlinkProtectionEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
+	JSON       hotlinkProtectionJSON `json:"-"`
 }
 
 // hotlinkProtectionJSON contains the JSON metadata for the struct
 // [HotlinkProtection]
 type hotlinkProtectionJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1375,8 +1456,11 @@ func (r hotlinkProtectionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r HotlinkProtection) ImplementsPagerulesPageRuleAction() {}
+func (r HotlinkProtection) implementsZonesSettingEditResponse() {}
 
+func (r HotlinkProtection) implementsZonesSettingGetResponse() {}
+
+// ID of the zone setting.
 type HotlinkProtectionID string
 
 const (
@@ -1391,19 +1475,58 @@ func (r HotlinkProtectionID) IsKnown() bool {
 	return false
 }
 
+// Current value of the zone setting.
+type HotlinkProtectionValue string
+
+const (
+	HotlinkProtectionValueOn  HotlinkProtectionValue = "on"
+	HotlinkProtectionValueOff HotlinkProtectionValue = "off"
+)
+
+func (r HotlinkProtectionValue) IsKnown() bool {
+	switch r {
+	case HotlinkProtectionValueOn, HotlinkProtectionValueOff:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type HotlinkProtectionEditable bool
+
+const (
+	HotlinkProtectionEditableTrue  HotlinkProtectionEditable = true
+	HotlinkProtectionEditableFalse HotlinkProtectionEditable = false
+)
+
+func (r HotlinkProtectionEditable) IsKnown() bool {
+	switch r {
+	case HotlinkProtectionEditableTrue, HotlinkProtectionEditableFalse:
+		return true
+	}
+	return false
+}
+
+// When enabled, the Hotlink Protection option ensures that other sites cannot suck
+// up your bandwidth by building pages that use images hosted on your site. Anytime
+// a request for an image on your site hits Cloudflare, we check to ensure that
+// it's not another site requesting them. People will still be able to download and
+// view images from your page, but other sites won't be able to steal them for use
+// on their own pages.
+// (https://support.cloudflare.com/hc/en-us/articles/200170026).
 type HotlinkProtectionParam struct {
-	ID param.Field[HotlinkProtectionID] `json:"id"`
+	// ID of the zone setting.
+	ID param.Field[HotlinkProtectionID] `json:"id,required"`
+	// Current value of the zone setting.
+	Value param.Field[HotlinkProtectionValue] `json:"value,required"`
 }
 
 func (r HotlinkProtectionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r HotlinkProtectionParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
-
-func (r HotlinkProtectionParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
-
-func (r HotlinkProtectionParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r HotlinkProtectionParam) implementsZonesSettingEditParamsBodyUnion() {}
 
 // HTTP2 enabled for this zone.
 type HTTP2 struct {
@@ -3294,15 +3417,37 @@ func (r SecurityLevelParam) ImplementsPagerulesPageruleUpdateParamsActionUnion()
 
 func (r SecurityLevelParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
 
+// If there is sensitive content on your website that you want visible to real
+// visitors, but that you want to hide from suspicious visitors, all you have to do
+// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
+// be excluded from suspicious visitors in the following SSE tags:
+// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
+// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
+// have HTML minification enabled, you won't see the SSE tags in your HTML source
+// when it's served through Cloudflare. SSE will still function in this case, as
+// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
+// resource moves through our network to the visitor's computer.
+// (https://support.cloudflare.com/hc/en-us/articles/200170036).
 type ServerSideExcludes struct {
-	ID   ServerSideExcludesID   `json:"id"`
-	JSON serverSideExcludesJSON `json:"-"`
+	// ID of the zone setting.
+	ID ServerSideExcludesID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ServerSideExcludesValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ServerSideExcludesEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time              `json:"modified_on,nullable" format:"date-time"`
+	JSON       serverSideExcludesJSON `json:"-"`
 }
 
 // serverSideExcludesJSON contains the JSON metadata for the struct
 // [ServerSideExcludes]
 type serverSideExcludesJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3315,8 +3460,11 @@ func (r serverSideExcludesJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ServerSideExcludes) ImplementsPagerulesPageRuleAction() {}
+func (r ServerSideExcludes) implementsZonesSettingEditResponse() {}
 
+func (r ServerSideExcludes) implementsZonesSettingGetResponse() {}
+
+// ID of the zone setting.
 type ServerSideExcludesID string
 
 const (
@@ -3331,19 +3479,62 @@ func (r ServerSideExcludesID) IsKnown() bool {
 	return false
 }
 
+// Current value of the zone setting.
+type ServerSideExcludesValue string
+
+const (
+	ServerSideExcludesValueOn  ServerSideExcludesValue = "on"
+	ServerSideExcludesValueOff ServerSideExcludesValue = "off"
+)
+
+func (r ServerSideExcludesValue) IsKnown() bool {
+	switch r {
+	case ServerSideExcludesValueOn, ServerSideExcludesValueOff:
+		return true
+	}
+	return false
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ServerSideExcludesEditable bool
+
+const (
+	ServerSideExcludesEditableTrue  ServerSideExcludesEditable = true
+	ServerSideExcludesEditableFalse ServerSideExcludesEditable = false
+)
+
+func (r ServerSideExcludesEditable) IsKnown() bool {
+	switch r {
+	case ServerSideExcludesEditableTrue, ServerSideExcludesEditableFalse:
+		return true
+	}
+	return false
+}
+
+// If there is sensitive content on your website that you want visible to real
+// visitors, but that you want to hide from suspicious visitors, all you have to do
+// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
+// be excluded from suspicious visitors in the following SSE tags:
+// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
+// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
+// have HTML minification enabled, you won't see the SSE tags in your HTML source
+// when it's served through Cloudflare. SSE will still function in this case, as
+// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
+// resource moves through our network to the visitor's computer.
+// (https://support.cloudflare.com/hc/en-us/articles/200170036).
 type ServerSideExcludesParam struct {
-	ID param.Field[ServerSideExcludesID] `json:"id"`
+	// ID of the zone setting.
+	ID param.Field[ServerSideExcludesID] `json:"id,required"`
+	// Current value of the zone setting.
+	Value param.Field[ServerSideExcludesValue] `json:"value,required"`
 }
 
 func (r ServerSideExcludesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ServerSideExcludesParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
-
-func (r ServerSideExcludesParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
-
-func (r ServerSideExcludesParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r ServerSideExcludesParam) implementsZonesSettingEditParamsBodyUnion() {}
 
 type SortQueryStringForCache struct {
 	// Turn on or off the reordering of query strings. When query strings have the same
@@ -4251,11 +4442,10 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesSchemasBrowserCheckValue],
 	// [SettingEditResponseZonesSchemasCacheLevelValue], [ChallengeTTLValue],
 	// [[]string], [SettingEditResponseZonesCNAMEFlatteningValue],
-	// [SettingEditResponseZonesSchemasDevelopmentModeValue], [EarlyHintsValue],
+	// [DevelopmentModeValue], [EarlyHintsValue],
 	// [SettingEditResponseZonesSchemasEdgeCacheTTLValue],
 	// [SettingEditResponseZonesSchemasEmailObfuscationValue], [H2PrioritizationValue],
-	// [SettingEditResponseZonesSchemasHotlinkProtectionValue], [HTTP2Value],
-	// [HTTP3Value], [ImageResizingValue],
+	// [HotlinkProtectionValue], [HTTP2Value], [HTTP3Value], [ImageResizingValue],
 	// [SettingEditResponseZonesSchemasIPGeolocationValue], [IPV6Value],
 	// [SettingEditResponseZonesMaxUploadValue], [MinTLSVersionValue],
 	// [SettingEditResponseZonesSchemasMirageValue], [NELValue],
@@ -4267,8 +4457,7 @@ type SettingEditResponse struct {
 	// [SettingEditResponseZonesSchemasResponseBufferingValue],
 	// [SettingEditResponseZonesSchemasRocketLoaderValue],
 	// [AutomaticPlatformOptimization], [SecurityHeadersValue],
-	// [SettingEditResponseZonesSchemasSecurityLevelValue],
-	// [SettingEditResponseZonesSchemasServerSideExcludeValue],
+	// [SettingEditResponseZonesSchemasSecurityLevelValue], [ServerSideExcludesValue],
 	// [SettingEditResponseZonesSha1SupportValue],
 	// [SettingEditResponseZonesSchemasSortQueryStringForCacheValue],
 	// [SettingEditResponseZonesSchemasSSLValue],
@@ -4316,11 +4505,10 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.SettingEditResponseZonesSchemasBrowserCheck],
 // [zones.SettingEditResponseZonesSchemasCacheLevel], [zones.ChallengeTTL],
 // [zones.Ciphers], [zones.SettingEditResponseZonesCNAMEFlattening],
-// [zones.SettingEditResponseZonesSchemasDevelopmentMode], [zones.EarlyHints],
+// [zones.DevelopmentMode], [zones.EarlyHints],
 // [zones.SettingEditResponseZonesSchemasEdgeCacheTTL],
 // [zones.SettingEditResponseZonesSchemasEmailObfuscation],
-// [zones.H2Prioritization],
-// [zones.SettingEditResponseZonesSchemasHotlinkProtection], [zones.HTTP2],
+// [zones.H2Prioritization], [zones.HotlinkProtection], [zones.HTTP2],
 // [zones.HTTP3], [zones.ImageResizing],
 // [zones.SettingEditResponseZonesSchemasIPGeolocation], [zones.IPV6],
 // [zones.SettingEditResponseZonesMaxUpload], [zones.MinTLSVersion],
@@ -4335,8 +4523,7 @@ func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.SettingEditResponseZonesSchemasRocketLoader],
 // [zones.SettingEditResponseZonesSchemasAutomaticPlatformOptimization],
 // [zones.SecurityHeaders], [zones.SettingEditResponseZonesSchemasSecurityLevel],
-// [zones.SettingEditResponseZonesSchemasServerSideExclude],
-// [zones.SettingEditResponseZonesSha1Support],
+// [zones.ServerSideExcludes], [zones.SettingEditResponseZonesSha1Support],
 // [zones.SettingEditResponseZonesSchemasSortQueryStringForCache],
 // [zones.SettingEditResponseZonesSchemasSSL], [zones.SSLRecommender],
 // [zones.SettingEditResponseZonesTLS1_2Only], [zones.TLS1_3],
@@ -4356,11 +4543,10 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [zones.SettingEditResponseZonesSchemasBrowserCheck],
 // [zones.SettingEditResponseZonesSchemasCacheLevel], [zones.ChallengeTTL],
 // [zones.Ciphers], [zones.SettingEditResponseZonesCNAMEFlattening],
-// [zones.SettingEditResponseZonesSchemasDevelopmentMode], [zones.EarlyHints],
+// [zones.DevelopmentMode], [zones.EarlyHints],
 // [zones.SettingEditResponseZonesSchemasEdgeCacheTTL],
 // [zones.SettingEditResponseZonesSchemasEmailObfuscation],
-// [zones.H2Prioritization],
-// [zones.SettingEditResponseZonesSchemasHotlinkProtection], [zones.HTTP2],
+// [zones.H2Prioritization], [zones.HotlinkProtection], [zones.HTTP2],
 // [zones.HTTP3], [zones.ImageResizing],
 // [zones.SettingEditResponseZonesSchemasIPGeolocation], [zones.IPV6],
 // [zones.SettingEditResponseZonesMaxUpload], [zones.MinTLSVersion],
@@ -4375,8 +4561,7 @@ func (r SettingEditResponse) AsUnion() SettingEditResponseUnion {
 // [zones.SettingEditResponseZonesSchemasRocketLoader],
 // [zones.SettingEditResponseZonesSchemasAutomaticPlatformOptimization],
 // [zones.SecurityHeaders], [zones.SettingEditResponseZonesSchemasSecurityLevel],
-// [zones.SettingEditResponseZonesSchemasServerSideExclude],
-// [zones.SettingEditResponseZonesSha1Support],
+// [zones.ServerSideExcludes], [zones.SettingEditResponseZonesSha1Support],
 // [zones.SettingEditResponseZonesSchemasSortQueryStringForCache],
 // [zones.SettingEditResponseZonesSchemasSSL], [zones.SSLRecommender],
 // [zones.SettingEditResponseZonesTLS1_2Only], [zones.TLS1_3],
@@ -4441,7 +4626,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasDevelopmentMode{}),
+			Type:       reflect.TypeOf(DevelopmentMode{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -4461,7 +4646,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasHotlinkProtection{}),
+			Type:       reflect.TypeOf(HotlinkProtection{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -4557,7 +4742,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SettingEditResponseZonesSchemasServerSideExclude{}),
+			Type:       reflect.TypeOf(ServerSideExcludes{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -5144,99 +5329,6 @@ func (r SettingEditResponseZonesCNAMEFlatteningEditable) IsKnown() bool {
 	return false
 }
 
-// Development Mode temporarily allows you to enter development mode for your
-// websites if you need to make changes to your site. This will bypass Cloudflare's
-// accelerated cache and slow down your site, but is useful if you are making
-// changes to cacheable content (like images, css, or JavaScript) and would like to
-// see those changes right away. Once entered, development mode will last for 3
-// hours and then automatically toggle off.
-type SettingEditResponseZonesSchemasDevelopmentMode struct {
-	// ID of the zone setting.
-	ID SettingEditResponseZonesSchemasDevelopmentModeID `json:"id,required"`
-	// Current value of the zone setting.
-	Value SettingEditResponseZonesSchemasDevelopmentModeValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingEditResponseZonesSchemasDevelopmentModeEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: The interval (in seconds) from when
-	// development mode expires (positive integer) or last expired (negative integer)
-	// for the domain. If development mode has never been enabled, this value is false.
-	TimeRemaining float64                                            `json:"time_remaining"`
-	JSON          settingEditResponseZonesSchemasDevelopmentModeJSON `json:"-"`
-}
-
-// settingEditResponseZonesSchemasDevelopmentModeJSON contains the JSON metadata
-// for the struct [SettingEditResponseZonesSchemasDevelopmentMode]
-type settingEditResponseZonesSchemasDevelopmentModeJSON struct {
-	ID            apijson.Field
-	Value         apijson.Field
-	Editable      apijson.Field
-	ModifiedOn    apijson.Field
-	TimeRemaining apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *SettingEditResponseZonesSchemasDevelopmentMode) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEditResponseZonesSchemasDevelopmentModeJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SettingEditResponseZonesSchemasDevelopmentMode) implementsZonesSettingEditResponse() {}
-
-// ID of the zone setting.
-type SettingEditResponseZonesSchemasDevelopmentModeID string
-
-const (
-	SettingEditResponseZonesSchemasDevelopmentModeIDDevelopmentMode SettingEditResponseZonesSchemasDevelopmentModeID = "development_mode"
-)
-
-func (r SettingEditResponseZonesSchemasDevelopmentModeID) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSchemasDevelopmentModeIDDevelopmentMode:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingEditResponseZonesSchemasDevelopmentModeValue string
-
-const (
-	SettingEditResponseZonesSchemasDevelopmentModeValueOn  SettingEditResponseZonesSchemasDevelopmentModeValue = "on"
-	SettingEditResponseZonesSchemasDevelopmentModeValueOff SettingEditResponseZonesSchemasDevelopmentModeValue = "off"
-)
-
-func (r SettingEditResponseZonesSchemasDevelopmentModeValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSchemasDevelopmentModeValueOn, SettingEditResponseZonesSchemasDevelopmentModeValueOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingEditResponseZonesSchemasDevelopmentModeEditable bool
-
-const (
-	SettingEditResponseZonesSchemasDevelopmentModeEditableTrue  SettingEditResponseZonesSchemasDevelopmentModeEditable = true
-	SettingEditResponseZonesSchemasDevelopmentModeEditableFalse SettingEditResponseZonesSchemasDevelopmentModeEditable = false
-)
-
-func (r SettingEditResponseZonesSchemasDevelopmentModeEditable) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSchemasDevelopmentModeEditableTrue, SettingEditResponseZonesSchemasDevelopmentModeEditableFalse:
-		return true
-	}
-	return false
-}
-
 // Time (in seconds) that a resource will be ensured to remain on Cloudflare's
 // cache servers.
 type SettingEditResponseZonesSchemasEdgeCacheTTL struct {
@@ -5419,95 +5511,6 @@ const (
 func (r SettingEditResponseZonesSchemasEmailObfuscationEditable) IsKnown() bool {
 	switch r {
 	case SettingEditResponseZonesSchemasEmailObfuscationEditableTrue, SettingEditResponseZonesSchemasEmailObfuscationEditableFalse:
-		return true
-	}
-	return false
-}
-
-// When enabled, the Hotlink Protection option ensures that other sites cannot suck
-// up your bandwidth by building pages that use images hosted on your site. Anytime
-// a request for an image on your site hits Cloudflare, we check to ensure that
-// it's not another site requesting them. People will still be able to download and
-// view images from your page, but other sites won't be able to steal them for use
-// on their own pages.
-// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-type SettingEditResponseZonesSchemasHotlinkProtection struct {
-	// ID of the zone setting.
-	ID SettingEditResponseZonesSchemasHotlinkProtectionID `json:"id,required"`
-	// Current value of the zone setting.
-	Value SettingEditResponseZonesSchemasHotlinkProtectionValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingEditResponseZonesSchemasHotlinkProtectionEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingEditResponseZonesSchemasHotlinkProtectionJSON `json:"-"`
-}
-
-// settingEditResponseZonesSchemasHotlinkProtectionJSON contains the JSON metadata
-// for the struct [SettingEditResponseZonesSchemasHotlinkProtection]
-type settingEditResponseZonesSchemasHotlinkProtectionJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEditResponseZonesSchemasHotlinkProtection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEditResponseZonesSchemasHotlinkProtectionJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SettingEditResponseZonesSchemasHotlinkProtection) implementsZonesSettingEditResponse() {}
-
-// ID of the zone setting.
-type SettingEditResponseZonesSchemasHotlinkProtectionID string
-
-const (
-	SettingEditResponseZonesSchemasHotlinkProtectionIDHotlinkProtection SettingEditResponseZonesSchemasHotlinkProtectionID = "hotlink_protection"
-)
-
-func (r SettingEditResponseZonesSchemasHotlinkProtectionID) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSchemasHotlinkProtectionIDHotlinkProtection:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingEditResponseZonesSchemasHotlinkProtectionValue string
-
-const (
-	SettingEditResponseZonesSchemasHotlinkProtectionValueOn  SettingEditResponseZonesSchemasHotlinkProtectionValue = "on"
-	SettingEditResponseZonesSchemasHotlinkProtectionValueOff SettingEditResponseZonesSchemasHotlinkProtectionValue = "off"
-)
-
-func (r SettingEditResponseZonesSchemasHotlinkProtectionValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSchemasHotlinkProtectionValueOn, SettingEditResponseZonesSchemasHotlinkProtectionValueOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingEditResponseZonesSchemasHotlinkProtectionEditable bool
-
-const (
-	SettingEditResponseZonesSchemasHotlinkProtectionEditableTrue  SettingEditResponseZonesSchemasHotlinkProtectionEditable = true
-	SettingEditResponseZonesSchemasHotlinkProtectionEditableFalse SettingEditResponseZonesSchemasHotlinkProtectionEditable = false
-)
-
-func (r SettingEditResponseZonesSchemasHotlinkProtectionEditable) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSchemasHotlinkProtectionEditableTrue, SettingEditResponseZonesSchemasHotlinkProtectionEditableFalse:
 		return true
 	}
 	return false
@@ -6451,99 +6454,6 @@ func (r SettingEditResponseZonesSchemasSecurityLevelEditable) IsKnown() bool {
 	return false
 }
 
-// If there is sensitive content on your website that you want visible to real
-// visitors, but that you want to hide from suspicious visitors, all you have to do
-// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
-// be excluded from suspicious visitors in the following SSE tags:
-// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
-// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
-// have HTML minification enabled, you won't see the SSE tags in your HTML source
-// when it's served through Cloudflare. SSE will still function in this case, as
-// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
-// resource moves through our network to the visitor's computer.
-// (https://support.cloudflare.com/hc/en-us/articles/200170036).
-type SettingEditResponseZonesSchemasServerSideExclude struct {
-	// ID of the zone setting.
-	ID SettingEditResponseZonesSchemasServerSideExcludeID `json:"id,required"`
-	// Current value of the zone setting.
-	Value SettingEditResponseZonesSchemasServerSideExcludeValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingEditResponseZonesSchemasServerSideExcludeEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingEditResponseZonesSchemasServerSideExcludeJSON `json:"-"`
-}
-
-// settingEditResponseZonesSchemasServerSideExcludeJSON contains the JSON metadata
-// for the struct [SettingEditResponseZonesSchemasServerSideExclude]
-type settingEditResponseZonesSchemasServerSideExcludeJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEditResponseZonesSchemasServerSideExclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEditResponseZonesSchemasServerSideExcludeJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SettingEditResponseZonesSchemasServerSideExclude) implementsZonesSettingEditResponse() {}
-
-// ID of the zone setting.
-type SettingEditResponseZonesSchemasServerSideExcludeID string
-
-const (
-	SettingEditResponseZonesSchemasServerSideExcludeIDServerSideExclude SettingEditResponseZonesSchemasServerSideExcludeID = "server_side_exclude"
-)
-
-func (r SettingEditResponseZonesSchemasServerSideExcludeID) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSchemasServerSideExcludeIDServerSideExclude:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingEditResponseZonesSchemasServerSideExcludeValue string
-
-const (
-	SettingEditResponseZonesSchemasServerSideExcludeValueOn  SettingEditResponseZonesSchemasServerSideExcludeValue = "on"
-	SettingEditResponseZonesSchemasServerSideExcludeValueOff SettingEditResponseZonesSchemasServerSideExcludeValue = "off"
-)
-
-func (r SettingEditResponseZonesSchemasServerSideExcludeValue) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSchemasServerSideExcludeValueOn, SettingEditResponseZonesSchemasServerSideExcludeValueOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingEditResponseZonesSchemasServerSideExcludeEditable bool
-
-const (
-	SettingEditResponseZonesSchemasServerSideExcludeEditableTrue  SettingEditResponseZonesSchemasServerSideExcludeEditable = true
-	SettingEditResponseZonesSchemasServerSideExcludeEditableFalse SettingEditResponseZonesSchemasServerSideExcludeEditable = false
-)
-
-func (r SettingEditResponseZonesSchemasServerSideExcludeEditable) IsKnown() bool {
-	switch r {
-	case SettingEditResponseZonesSchemasServerSideExcludeEditableTrue, SettingEditResponseZonesSchemasServerSideExcludeEditableFalse:
-		return true
-	}
-	return false
-}
-
 // Allow SHA1 support.
 type SettingEditResponseZonesSha1Support struct {
 	// Zone setting identifier.
@@ -7178,11 +7088,10 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesSchemasBrowserCheckValue],
 	// [SettingGetResponseZonesSchemasCacheLevelValue], [ChallengeTTLValue],
 	// [[]string], [SettingGetResponseZonesCNAMEFlatteningValue],
-	// [SettingGetResponseZonesSchemasDevelopmentModeValue], [EarlyHintsValue],
+	// [DevelopmentModeValue], [EarlyHintsValue],
 	// [SettingGetResponseZonesSchemasEdgeCacheTTLValue],
 	// [SettingGetResponseZonesSchemasEmailObfuscationValue], [H2PrioritizationValue],
-	// [SettingGetResponseZonesSchemasHotlinkProtectionValue], [HTTP2Value],
-	// [HTTP3Value], [ImageResizingValue],
+	// [HotlinkProtectionValue], [HTTP2Value], [HTTP3Value], [ImageResizingValue],
 	// [SettingGetResponseZonesSchemasIPGeolocationValue], [IPV6Value],
 	// [SettingGetResponseZonesMaxUploadValue], [MinTLSVersionValue],
 	// [SettingGetResponseZonesSchemasMirageValue], [NELValue],
@@ -7194,8 +7103,7 @@ type SettingGetResponse struct {
 	// [SettingGetResponseZonesSchemasResponseBufferingValue],
 	// [SettingGetResponseZonesSchemasRocketLoaderValue],
 	// [AutomaticPlatformOptimization], [SecurityHeadersValue],
-	// [SettingGetResponseZonesSchemasSecurityLevelValue],
-	// [SettingGetResponseZonesSchemasServerSideExcludeValue],
+	// [SettingGetResponseZonesSchemasSecurityLevelValue], [ServerSideExcludesValue],
 	// [SettingGetResponseZonesSha1SupportValue],
 	// [SettingGetResponseZonesSchemasSortQueryStringForCacheValue],
 	// [SettingGetResponseZonesSchemasSSLValue],
@@ -7243,11 +7151,10 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.SettingGetResponseZonesSchemasBrowserCheck],
 // [zones.SettingGetResponseZonesSchemasCacheLevel], [zones.ChallengeTTL],
 // [zones.Ciphers], [zones.SettingGetResponseZonesCNAMEFlattening],
-// [zones.SettingGetResponseZonesSchemasDevelopmentMode], [zones.EarlyHints],
+// [zones.DevelopmentMode], [zones.EarlyHints],
 // [zones.SettingGetResponseZonesSchemasEdgeCacheTTL],
 // [zones.SettingGetResponseZonesSchemasEmailObfuscation],
-// [zones.H2Prioritization],
-// [zones.SettingGetResponseZonesSchemasHotlinkProtection], [zones.HTTP2],
+// [zones.H2Prioritization], [zones.HotlinkProtection], [zones.HTTP2],
 // [zones.HTTP3], [zones.ImageResizing],
 // [zones.SettingGetResponseZonesSchemasIPGeolocation], [zones.IPV6],
 // [zones.SettingGetResponseZonesMaxUpload], [zones.MinTLSVersion],
@@ -7262,8 +7169,7 @@ func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [zones.SettingGetResponseZonesSchemasRocketLoader],
 // [zones.SettingGetResponseZonesSchemasAutomaticPlatformOptimization],
 // [zones.SecurityHeaders], [zones.SettingGetResponseZonesSchemasSecurityLevel],
-// [zones.SettingGetResponseZonesSchemasServerSideExclude],
-// [zones.SettingGetResponseZonesSha1Support],
+// [zones.ServerSideExcludes], [zones.SettingGetResponseZonesSha1Support],
 // [zones.SettingGetResponseZonesSchemasSortQueryStringForCache],
 // [zones.SettingGetResponseZonesSchemasSSL], [zones.SSLRecommender],
 // [zones.SettingGetResponseZonesTLS1_2Only], [zones.TLS1_3],
@@ -7282,11 +7188,10 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [zones.SettingGetResponseZonesSchemasBrowserCheck],
 // [zones.SettingGetResponseZonesSchemasCacheLevel], [zones.ChallengeTTL],
 // [zones.Ciphers], [zones.SettingGetResponseZonesCNAMEFlattening],
-// [zones.SettingGetResponseZonesSchemasDevelopmentMode], [zones.EarlyHints],
+// [zones.DevelopmentMode], [zones.EarlyHints],
 // [zones.SettingGetResponseZonesSchemasEdgeCacheTTL],
 // [zones.SettingGetResponseZonesSchemasEmailObfuscation],
-// [zones.H2Prioritization],
-// [zones.SettingGetResponseZonesSchemasHotlinkProtection], [zones.HTTP2],
+// [zones.H2Prioritization], [zones.HotlinkProtection], [zones.HTTP2],
 // [zones.HTTP3], [zones.ImageResizing],
 // [zones.SettingGetResponseZonesSchemasIPGeolocation], [zones.IPV6],
 // [zones.SettingGetResponseZonesMaxUpload], [zones.MinTLSVersion],
@@ -7301,8 +7206,7 @@ func (r SettingGetResponse) AsUnion() SettingGetResponseUnion {
 // [zones.SettingGetResponseZonesSchemasRocketLoader],
 // [zones.SettingGetResponseZonesSchemasAutomaticPlatformOptimization],
 // [zones.SecurityHeaders], [zones.SettingGetResponseZonesSchemasSecurityLevel],
-// [zones.SettingGetResponseZonesSchemasServerSideExclude],
-// [zones.SettingGetResponseZonesSha1Support],
+// [zones.ServerSideExcludes], [zones.SettingGetResponseZonesSha1Support],
 // [zones.SettingGetResponseZonesSchemasSortQueryStringForCache],
 // [zones.SettingGetResponseZonesSchemasSSL], [zones.SSLRecommender],
 // [zones.SettingGetResponseZonesTLS1_2Only], [zones.TLS1_3],
@@ -7366,7 +7270,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasDevelopmentMode{}),
+			Type:       reflect.TypeOf(DevelopmentMode{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -7386,7 +7290,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasHotlinkProtection{}),
+			Type:       reflect.TypeOf(HotlinkProtection{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -7482,7 +7386,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SettingGetResponseZonesSchemasServerSideExclude{}),
+			Type:       reflect.TypeOf(ServerSideExcludes{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -8069,99 +7973,6 @@ func (r SettingGetResponseZonesCNAMEFlatteningEditable) IsKnown() bool {
 	return false
 }
 
-// Development Mode temporarily allows you to enter development mode for your
-// websites if you need to make changes to your site. This will bypass Cloudflare's
-// accelerated cache and slow down your site, but is useful if you are making
-// changes to cacheable content (like images, css, or JavaScript) and would like to
-// see those changes right away. Once entered, development mode will last for 3
-// hours and then automatically toggle off.
-type SettingGetResponseZonesSchemasDevelopmentMode struct {
-	// ID of the zone setting.
-	ID SettingGetResponseZonesSchemasDevelopmentModeID `json:"id,required"`
-	// Current value of the zone setting.
-	Value SettingGetResponseZonesSchemasDevelopmentModeValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingGetResponseZonesSchemasDevelopmentModeEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: The interval (in seconds) from when
-	// development mode expires (positive integer) or last expired (negative integer)
-	// for the domain. If development mode has never been enabled, this value is false.
-	TimeRemaining float64                                           `json:"time_remaining"`
-	JSON          settingGetResponseZonesSchemasDevelopmentModeJSON `json:"-"`
-}
-
-// settingGetResponseZonesSchemasDevelopmentModeJSON contains the JSON metadata for
-// the struct [SettingGetResponseZonesSchemasDevelopmentMode]
-type settingGetResponseZonesSchemasDevelopmentModeJSON struct {
-	ID            apijson.Field
-	Value         apijson.Field
-	Editable      apijson.Field
-	ModifiedOn    apijson.Field
-	TimeRemaining apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *SettingGetResponseZonesSchemasDevelopmentMode) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingGetResponseZonesSchemasDevelopmentModeJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SettingGetResponseZonesSchemasDevelopmentMode) implementsZonesSettingGetResponse() {}
-
-// ID of the zone setting.
-type SettingGetResponseZonesSchemasDevelopmentModeID string
-
-const (
-	SettingGetResponseZonesSchemasDevelopmentModeIDDevelopmentMode SettingGetResponseZonesSchemasDevelopmentModeID = "development_mode"
-)
-
-func (r SettingGetResponseZonesSchemasDevelopmentModeID) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSchemasDevelopmentModeIDDevelopmentMode:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingGetResponseZonesSchemasDevelopmentModeValue string
-
-const (
-	SettingGetResponseZonesSchemasDevelopmentModeValueOn  SettingGetResponseZonesSchemasDevelopmentModeValue = "on"
-	SettingGetResponseZonesSchemasDevelopmentModeValueOff SettingGetResponseZonesSchemasDevelopmentModeValue = "off"
-)
-
-func (r SettingGetResponseZonesSchemasDevelopmentModeValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSchemasDevelopmentModeValueOn, SettingGetResponseZonesSchemasDevelopmentModeValueOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingGetResponseZonesSchemasDevelopmentModeEditable bool
-
-const (
-	SettingGetResponseZonesSchemasDevelopmentModeEditableTrue  SettingGetResponseZonesSchemasDevelopmentModeEditable = true
-	SettingGetResponseZonesSchemasDevelopmentModeEditableFalse SettingGetResponseZonesSchemasDevelopmentModeEditable = false
-)
-
-func (r SettingGetResponseZonesSchemasDevelopmentModeEditable) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSchemasDevelopmentModeEditableTrue, SettingGetResponseZonesSchemasDevelopmentModeEditableFalse:
-		return true
-	}
-	return false
-}
-
 // Time (in seconds) that a resource will be ensured to remain on Cloudflare's
 // cache servers.
 type SettingGetResponseZonesSchemasEdgeCacheTTL struct {
@@ -8344,95 +8155,6 @@ const (
 func (r SettingGetResponseZonesSchemasEmailObfuscationEditable) IsKnown() bool {
 	switch r {
 	case SettingGetResponseZonesSchemasEmailObfuscationEditableTrue, SettingGetResponseZonesSchemasEmailObfuscationEditableFalse:
-		return true
-	}
-	return false
-}
-
-// When enabled, the Hotlink Protection option ensures that other sites cannot suck
-// up your bandwidth by building pages that use images hosted on your site. Anytime
-// a request for an image on your site hits Cloudflare, we check to ensure that
-// it's not another site requesting them. People will still be able to download and
-// view images from your page, but other sites won't be able to steal them for use
-// on their own pages.
-// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-type SettingGetResponseZonesSchemasHotlinkProtection struct {
-	// ID of the zone setting.
-	ID SettingGetResponseZonesSchemasHotlinkProtectionID `json:"id,required"`
-	// Current value of the zone setting.
-	Value SettingGetResponseZonesSchemasHotlinkProtectionValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingGetResponseZonesSchemasHotlinkProtectionEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingGetResponseZonesSchemasHotlinkProtectionJSON `json:"-"`
-}
-
-// settingGetResponseZonesSchemasHotlinkProtectionJSON contains the JSON metadata
-// for the struct [SettingGetResponseZonesSchemasHotlinkProtection]
-type settingGetResponseZonesSchemasHotlinkProtectionJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingGetResponseZonesSchemasHotlinkProtection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingGetResponseZonesSchemasHotlinkProtectionJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SettingGetResponseZonesSchemasHotlinkProtection) implementsZonesSettingGetResponse() {}
-
-// ID of the zone setting.
-type SettingGetResponseZonesSchemasHotlinkProtectionID string
-
-const (
-	SettingGetResponseZonesSchemasHotlinkProtectionIDHotlinkProtection SettingGetResponseZonesSchemasHotlinkProtectionID = "hotlink_protection"
-)
-
-func (r SettingGetResponseZonesSchemasHotlinkProtectionID) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSchemasHotlinkProtectionIDHotlinkProtection:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingGetResponseZonesSchemasHotlinkProtectionValue string
-
-const (
-	SettingGetResponseZonesSchemasHotlinkProtectionValueOn  SettingGetResponseZonesSchemasHotlinkProtectionValue = "on"
-	SettingGetResponseZonesSchemasHotlinkProtectionValueOff SettingGetResponseZonesSchemasHotlinkProtectionValue = "off"
-)
-
-func (r SettingGetResponseZonesSchemasHotlinkProtectionValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSchemasHotlinkProtectionValueOn, SettingGetResponseZonesSchemasHotlinkProtectionValueOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingGetResponseZonesSchemasHotlinkProtectionEditable bool
-
-const (
-	SettingGetResponseZonesSchemasHotlinkProtectionEditableTrue  SettingGetResponseZonesSchemasHotlinkProtectionEditable = true
-	SettingGetResponseZonesSchemasHotlinkProtectionEditableFalse SettingGetResponseZonesSchemasHotlinkProtectionEditable = false
-)
-
-func (r SettingGetResponseZonesSchemasHotlinkProtectionEditable) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSchemasHotlinkProtectionEditableTrue, SettingGetResponseZonesSchemasHotlinkProtectionEditableFalse:
 		return true
 	}
 	return false
@@ -9374,99 +9096,6 @@ func (r SettingGetResponseZonesSchemasSecurityLevelEditable) IsKnown() bool {
 	return false
 }
 
-// If there is sensitive content on your website that you want visible to real
-// visitors, but that you want to hide from suspicious visitors, all you have to do
-// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
-// be excluded from suspicious visitors in the following SSE tags:
-// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
-// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
-// have HTML minification enabled, you won't see the SSE tags in your HTML source
-// when it's served through Cloudflare. SSE will still function in this case, as
-// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
-// resource moves through our network to the visitor's computer.
-// (https://support.cloudflare.com/hc/en-us/articles/200170036).
-type SettingGetResponseZonesSchemasServerSideExclude struct {
-	// ID of the zone setting.
-	ID SettingGetResponseZonesSchemasServerSideExcludeID `json:"id,required"`
-	// Current value of the zone setting.
-	Value SettingGetResponseZonesSchemasServerSideExcludeValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingGetResponseZonesSchemasServerSideExcludeEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingGetResponseZonesSchemasServerSideExcludeJSON `json:"-"`
-}
-
-// settingGetResponseZonesSchemasServerSideExcludeJSON contains the JSON metadata
-// for the struct [SettingGetResponseZonesSchemasServerSideExclude]
-type settingGetResponseZonesSchemasServerSideExcludeJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingGetResponseZonesSchemasServerSideExclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingGetResponseZonesSchemasServerSideExcludeJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SettingGetResponseZonesSchemasServerSideExclude) implementsZonesSettingGetResponse() {}
-
-// ID of the zone setting.
-type SettingGetResponseZonesSchemasServerSideExcludeID string
-
-const (
-	SettingGetResponseZonesSchemasServerSideExcludeIDServerSideExclude SettingGetResponseZonesSchemasServerSideExcludeID = "server_side_exclude"
-)
-
-func (r SettingGetResponseZonesSchemasServerSideExcludeID) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSchemasServerSideExcludeIDServerSideExclude:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingGetResponseZonesSchemasServerSideExcludeValue string
-
-const (
-	SettingGetResponseZonesSchemasServerSideExcludeValueOn  SettingGetResponseZonesSchemasServerSideExcludeValue = "on"
-	SettingGetResponseZonesSchemasServerSideExcludeValueOff SettingGetResponseZonesSchemasServerSideExcludeValue = "off"
-)
-
-func (r SettingGetResponseZonesSchemasServerSideExcludeValue) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSchemasServerSideExcludeValueOn, SettingGetResponseZonesSchemasServerSideExcludeValueOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingGetResponseZonesSchemasServerSideExcludeEditable bool
-
-const (
-	SettingGetResponseZonesSchemasServerSideExcludeEditableTrue  SettingGetResponseZonesSchemasServerSideExcludeEditable = true
-	SettingGetResponseZonesSchemasServerSideExcludeEditableFalse SettingGetResponseZonesSchemasServerSideExcludeEditable = false
-)
-
-func (r SettingGetResponseZonesSchemasServerSideExcludeEditable) IsKnown() bool {
-	switch r {
-	case SettingGetResponseZonesSchemasServerSideExcludeEditableTrue, SettingGetResponseZonesSchemasServerSideExcludeEditableFalse:
-		return true
-	}
-	return false
-}
-
 // Allow SHA1 support.
 type SettingGetResponseZonesSha1Support struct {
 	// Zone setting identifier.
@@ -10114,12 +9743,11 @@ func (r SettingEditParamsBody) implementsZonesSettingEditParamsBodyUnion() {}
 // [zones.SettingEditParamsBodyZonesSchemasBrowserCheck],
 // [zones.SettingEditParamsBodyZonesSchemasCacheLevel], [zones.ChallengeTTLParam],
 // [zones.CiphersParam], [zones.SettingEditParamsBodyZonesCNAMEFlattening],
-// [zones.SettingEditParamsBodyZonesSchemasDevelopmentMode],
-// [zones.EarlyHintsParam], [zones.SettingEditParamsBodyZonesSchemasEdgeCacheTTL],
+// [zones.DevelopmentModeParam], [zones.EarlyHintsParam],
+// [zones.SettingEditParamsBodyZonesSchemasEdgeCacheTTL],
 // [zones.SettingEditParamsBodyZonesSchemasEmailObfuscation],
-// [zones.H2PrioritizationParam],
-// [zones.SettingEditParamsBodyZonesSchemasHotlinkProtection], [zones.HTTP2Param],
-// [zones.HTTP3Param], [zones.ImageResizingParam],
+// [zones.H2PrioritizationParam], [zones.HotlinkProtectionParam],
+// [zones.HTTP2Param], [zones.HTTP3Param], [zones.ImageResizingParam],
 // [zones.SettingEditParamsBodyZonesSchemasIPGeolocation], [zones.IPV6Param],
 // [zones.SettingEditParamsBodyZonesMaxUpload], [zones.MinTLSVersionParam],
 // [zones.SettingEditParamsBodyZonesSchemasMirage], [zones.NELParam],
@@ -10134,8 +9762,7 @@ func (r SettingEditParamsBody) implementsZonesSettingEditParamsBodyUnion() {}
 // [zones.SettingEditParamsBodyZonesSchemasAutomaticPlatformOptimization],
 // [zones.SecurityHeadersParam],
 // [zones.SettingEditParamsBodyZonesSchemasSecurityLevel],
-// [zones.SettingEditParamsBodyZonesSchemasServerSideExclude],
-// [zones.SettingEditParamsBodyZonesSha1Support],
+// [zones.ServerSideExcludesParam], [zones.SettingEditParamsBodyZonesSha1Support],
 // [zones.SettingEditParamsBodyZonesSchemasSortQueryStringForCache],
 // [zones.SettingEditParamsBodyZonesSchemasSSL], [zones.SSLRecommenderParam],
 // [zones.SettingEditParamsBodyZonesTLS1_2Only], [zones.TLS1_3Param],
@@ -10562,74 +10189,6 @@ func (r SettingEditParamsBodyZonesCNAMEFlatteningEditable) IsKnown() bool {
 	return false
 }
 
-// Development Mode temporarily allows you to enter development mode for your
-// websites if you need to make changes to your site. This will bypass Cloudflare's
-// accelerated cache and slow down your site, but is useful if you are making
-// changes to cacheable content (like images, css, or JavaScript) and would like to
-// see those changes right away. Once entered, development mode will last for 3
-// hours and then automatically toggle off.
-type SettingEditParamsBodyZonesSchemasDevelopmentMode struct {
-	// ID of the zone setting.
-	ID param.Field[SettingEditParamsBodyZonesSchemasDevelopmentModeID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[SettingEditParamsBodyZonesSchemasDevelopmentModeValue] `json:"value,required"`
-}
-
-func (r SettingEditParamsBodyZonesSchemasDevelopmentMode) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SettingEditParamsBodyZonesSchemasDevelopmentMode) implementsZonesSettingEditParamsBodyUnion() {
-}
-
-// ID of the zone setting.
-type SettingEditParamsBodyZonesSchemasDevelopmentModeID string
-
-const (
-	SettingEditParamsBodyZonesSchemasDevelopmentModeIDDevelopmentMode SettingEditParamsBodyZonesSchemasDevelopmentModeID = "development_mode"
-)
-
-func (r SettingEditParamsBodyZonesSchemasDevelopmentModeID) IsKnown() bool {
-	switch r {
-	case SettingEditParamsBodyZonesSchemasDevelopmentModeIDDevelopmentMode:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingEditParamsBodyZonesSchemasDevelopmentModeValue string
-
-const (
-	SettingEditParamsBodyZonesSchemasDevelopmentModeValueOn  SettingEditParamsBodyZonesSchemasDevelopmentModeValue = "on"
-	SettingEditParamsBodyZonesSchemasDevelopmentModeValueOff SettingEditParamsBodyZonesSchemasDevelopmentModeValue = "off"
-)
-
-func (r SettingEditParamsBodyZonesSchemasDevelopmentModeValue) IsKnown() bool {
-	switch r {
-	case SettingEditParamsBodyZonesSchemasDevelopmentModeValueOn, SettingEditParamsBodyZonesSchemasDevelopmentModeValueOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingEditParamsBodyZonesSchemasDevelopmentModeEditable bool
-
-const (
-	SettingEditParamsBodyZonesSchemasDevelopmentModeEditableTrue  SettingEditParamsBodyZonesSchemasDevelopmentModeEditable = true
-	SettingEditParamsBodyZonesSchemasDevelopmentModeEditableFalse SettingEditParamsBodyZonesSchemasDevelopmentModeEditable = false
-)
-
-func (r SettingEditParamsBodyZonesSchemasDevelopmentModeEditable) IsKnown() bool {
-	switch r {
-	case SettingEditParamsBodyZonesSchemasDevelopmentModeEditableTrue, SettingEditParamsBodyZonesSchemasDevelopmentModeEditableFalse:
-		return true
-	}
-	return false
-}
-
 // Time (in seconds) that a resource will be ensured to remain on Cloudflare's
 // cache servers.
 type SettingEditParamsBodyZonesSchemasEdgeCacheTTL struct {
@@ -10771,75 +10330,6 @@ const (
 func (r SettingEditParamsBodyZonesSchemasEmailObfuscationEditable) IsKnown() bool {
 	switch r {
 	case SettingEditParamsBodyZonesSchemasEmailObfuscationEditableTrue, SettingEditParamsBodyZonesSchemasEmailObfuscationEditableFalse:
-		return true
-	}
-	return false
-}
-
-// When enabled, the Hotlink Protection option ensures that other sites cannot suck
-// up your bandwidth by building pages that use images hosted on your site. Anytime
-// a request for an image on your site hits Cloudflare, we check to ensure that
-// it's not another site requesting them. People will still be able to download and
-// view images from your page, but other sites won't be able to steal them for use
-// on their own pages.
-// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-type SettingEditParamsBodyZonesSchemasHotlinkProtection struct {
-	// ID of the zone setting.
-	ID param.Field[SettingEditParamsBodyZonesSchemasHotlinkProtectionID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[SettingEditParamsBodyZonesSchemasHotlinkProtectionValue] `json:"value,required"`
-}
-
-func (r SettingEditParamsBodyZonesSchemasHotlinkProtection) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SettingEditParamsBodyZonesSchemasHotlinkProtection) implementsZonesSettingEditParamsBodyUnion() {
-}
-
-// ID of the zone setting.
-type SettingEditParamsBodyZonesSchemasHotlinkProtectionID string
-
-const (
-	SettingEditParamsBodyZonesSchemasHotlinkProtectionIDHotlinkProtection SettingEditParamsBodyZonesSchemasHotlinkProtectionID = "hotlink_protection"
-)
-
-func (r SettingEditParamsBodyZonesSchemasHotlinkProtectionID) IsKnown() bool {
-	switch r {
-	case SettingEditParamsBodyZonesSchemasHotlinkProtectionIDHotlinkProtection:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingEditParamsBodyZonesSchemasHotlinkProtectionValue string
-
-const (
-	SettingEditParamsBodyZonesSchemasHotlinkProtectionValueOn  SettingEditParamsBodyZonesSchemasHotlinkProtectionValue = "on"
-	SettingEditParamsBodyZonesSchemasHotlinkProtectionValueOff SettingEditParamsBodyZonesSchemasHotlinkProtectionValue = "off"
-)
-
-func (r SettingEditParamsBodyZonesSchemasHotlinkProtectionValue) IsKnown() bool {
-	switch r {
-	case SettingEditParamsBodyZonesSchemasHotlinkProtectionValueOn, SettingEditParamsBodyZonesSchemasHotlinkProtectionValueOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingEditParamsBodyZonesSchemasHotlinkProtectionEditable bool
-
-const (
-	SettingEditParamsBodyZonesSchemasHotlinkProtectionEditableTrue  SettingEditParamsBodyZonesSchemasHotlinkProtectionEditable = true
-	SettingEditParamsBodyZonesSchemasHotlinkProtectionEditableFalse SettingEditParamsBodyZonesSchemasHotlinkProtectionEditable = false
-)
-
-func (r SettingEditParamsBodyZonesSchemasHotlinkProtectionEditable) IsKnown() bool {
-	switch r {
-	case SettingEditParamsBodyZonesSchemasHotlinkProtectionEditableTrue, SettingEditParamsBodyZonesSchemasHotlinkProtectionEditableFalse:
 		return true
 	}
 	return false
@@ -11547,79 +11037,6 @@ const (
 func (r SettingEditParamsBodyZonesSchemasSecurityLevelEditable) IsKnown() bool {
 	switch r {
 	case SettingEditParamsBodyZonesSchemasSecurityLevelEditableTrue, SettingEditParamsBodyZonesSchemasSecurityLevelEditableFalse:
-		return true
-	}
-	return false
-}
-
-// If there is sensitive content on your website that you want visible to real
-// visitors, but that you want to hide from suspicious visitors, all you have to do
-// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
-// be excluded from suspicious visitors in the following SSE tags:
-// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
-// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
-// have HTML minification enabled, you won't see the SSE tags in your HTML source
-// when it's served through Cloudflare. SSE will still function in this case, as
-// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
-// resource moves through our network to the visitor's computer.
-// (https://support.cloudflare.com/hc/en-us/articles/200170036).
-type SettingEditParamsBodyZonesSchemasServerSideExclude struct {
-	// ID of the zone setting.
-	ID param.Field[SettingEditParamsBodyZonesSchemasServerSideExcludeID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[SettingEditParamsBodyZonesSchemasServerSideExcludeValue] `json:"value,required"`
-}
-
-func (r SettingEditParamsBodyZonesSchemasServerSideExclude) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SettingEditParamsBodyZonesSchemasServerSideExclude) implementsZonesSettingEditParamsBodyUnion() {
-}
-
-// ID of the zone setting.
-type SettingEditParamsBodyZonesSchemasServerSideExcludeID string
-
-const (
-	SettingEditParamsBodyZonesSchemasServerSideExcludeIDServerSideExclude SettingEditParamsBodyZonesSchemasServerSideExcludeID = "server_side_exclude"
-)
-
-func (r SettingEditParamsBodyZonesSchemasServerSideExcludeID) IsKnown() bool {
-	switch r {
-	case SettingEditParamsBodyZonesSchemasServerSideExcludeIDServerSideExclude:
-		return true
-	}
-	return false
-}
-
-// Current value of the zone setting.
-type SettingEditParamsBodyZonesSchemasServerSideExcludeValue string
-
-const (
-	SettingEditParamsBodyZonesSchemasServerSideExcludeValueOn  SettingEditParamsBodyZonesSchemasServerSideExcludeValue = "on"
-	SettingEditParamsBodyZonesSchemasServerSideExcludeValueOff SettingEditParamsBodyZonesSchemasServerSideExcludeValue = "off"
-)
-
-func (r SettingEditParamsBodyZonesSchemasServerSideExcludeValue) IsKnown() bool {
-	switch r {
-	case SettingEditParamsBodyZonesSchemasServerSideExcludeValueOn, SettingEditParamsBodyZonesSchemasServerSideExcludeValueOff:
-		return true
-	}
-	return false
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingEditParamsBodyZonesSchemasServerSideExcludeEditable bool
-
-const (
-	SettingEditParamsBodyZonesSchemasServerSideExcludeEditableTrue  SettingEditParamsBodyZonesSchemasServerSideExcludeEditable = true
-	SettingEditParamsBodyZonesSchemasServerSideExcludeEditableFalse SettingEditParamsBodyZonesSchemasServerSideExcludeEditable = false
-)
-
-func (r SettingEditParamsBodyZonesSchemasServerSideExcludeEditable) IsKnown() bool {
-	switch r {
-	case SettingEditParamsBodyZonesSchemasServerSideExcludeEditableTrue, SettingEditParamsBodyZonesSchemasServerSideExcludeEditableFalse:
 		return true
 	}
 	return false
