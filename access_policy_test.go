@@ -57,7 +57,8 @@ var (
 		},
 		InfrastructureConnectionRules: &AccessInfrastructureConnectionRules{
 			SSH: &AccessInfrastructureConnectionRulesSSH{
-				Usernames: []string{"root", "ec2-user"},
+				Usernames:       []string{"root", "ec2-user"},
+				AllowEmailAlias: BoolPtr(true),
 			},
 		},
 	}
@@ -123,7 +124,8 @@ func TestAccessPolicies(t *testing.T) {
 				],
 				"connection_rules": {
 					"ssh": {
-						"usernames": ["root", "ec2-user"]
+						"usernames": ["root", "ec2-user"],
+						"allow_email_alias": true
 					}
 				}
 			  }
@@ -227,7 +229,8 @@ func TestAccessPolicy(t *testing.T) {
 				],
 				"connection_rules": {
 					"ssh": {
-						"usernames": ["root", "ec2-user"]
+						"usernames": ["root", "ec2-user"],
+						"allow_email_alias": true
 					}
 				}
 			}
@@ -325,7 +328,8 @@ func TestCreateAccessPolicy(t *testing.T) {
 				],
 				"connection_rules": {
 					"ssh": {
-						"usernames": ["root", "ec2-user"]
+						"usernames": ["root", "ec2-user"],
+						"allow_email_alias": true
 					}
 				}
 			}
@@ -367,7 +371,8 @@ func TestCreateAccessPolicy(t *testing.T) {
 		},
 		InfrastructureConnectionRules: &AccessInfrastructureConnectionRules{
 			SSH: &AccessInfrastructureConnectionRulesSSH{
-				Usernames: []string{"root", "ec2-user"},
+				Usernames:       []string{"root", "ec2-user"},
+				AllowEmailAlias: BoolPtr(true),
 			},
 		},
 	}
@@ -442,7 +447,8 @@ func TestCreateAccessPolicyAuthContextRule(t *testing.T) {
 		},
 		InfrastructureConnectionRules: &AccessInfrastructureConnectionRules{
 			SSH: &AccessInfrastructureConnectionRulesSSH{
-				Usernames: []string{"root", "ec2-user"},
+				Usernames:       []string{"root", "ec2-user"},
+				AllowEmailAlias: BoolPtr(true),
 			},
 		},
 	}
@@ -495,7 +501,8 @@ func TestCreateAccessPolicyAuthContextRule(t *testing.T) {
 				],
 				"connection_rules": {
 					"ssh": {
-						"usernames": ["root", "ec2-user"]
+						"usernames": ["root", "ec2-user"],
+						"allow_email_alias": true
 					}
 				}
 			}
@@ -591,7 +598,8 @@ func TestUpdateAccessPolicy(t *testing.T) {
 		},
 		InfrastructureConnectionRules: &AccessInfrastructureConnectionRules{
 			SSH: &AccessInfrastructureConnectionRulesSSH{
-				Usernames: []string{"root", "ec2-user"},
+				Usernames:       []string{"root", "ec2-user"},
+				AllowEmailAlias: BoolPtr(true),
 			},
 		},
 	}
@@ -647,7 +655,8 @@ func TestUpdateAccessPolicy(t *testing.T) {
 				],
 				"connection_rules": {
 					"ssh": {
-						"usernames": ["root", "ec2-user"]
+						"usernames": ["root", "ec2-user"],
+						"allow_email_alias": true
 					}
 				}
 			}

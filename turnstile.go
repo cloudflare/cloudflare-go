@@ -35,7 +35,7 @@ type CreateTurnstileWidgetParams struct {
 }
 
 type UpdateTurnstileWidgetParams struct {
-	SiteKey      string   `json:"-"`
+	SiteKey      string    `json:"-"`
 	Name         *string   `json:"name,omitempty"`
 	Domains      *[]string `json:"domains,omitempty"`
 	Mode         *string   `json:"mode,omitempty"`
