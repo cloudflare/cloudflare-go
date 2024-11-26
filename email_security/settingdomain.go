@@ -139,12 +139,17 @@ type SettingDomainListResponse struct {
 	AllowedDeliveryModes []SettingDomainListResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
 	CreatedAt            time.Time                                      `json:"created_at,required" format:"date-time"`
 	Domain               string                                         `json:"domain,required"`
+	DropDispositions     []SettingDomainListResponseDropDisposition     `json:"drop_dispositions,required"`
+	IPRestrictions       []string                                       `json:"ip_restrictions,required"`
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
+	Transport            string                                         `json:"transport,required"`
 	Folder               SettingDomainListResponseFolder                `json:"folder,nullable"`
 	InboxProvider        SettingDomainListResponseInboxProvider         `json:"inbox_provider,nullable"`
 	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
 	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
+	RequireTLSInbound    bool                                           `json:"require_tls_inbound,nullable"`
+	RequireTLSOutbound   bool                                           `json:"require_tls_outbound,nullable"`
 	JSON                 settingDomainListResponseJSON                  `json:"-"`
 }
 
@@ -155,12 +160,17 @@ type settingDomainListResponseJSON struct {
 	AllowedDeliveryModes apijson.Field
 	CreatedAt            apijson.Field
 	Domain               apijson.Field
+	DropDispositions     apijson.Field
+	IPRestrictions       apijson.Field
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
+	Transport            apijson.Field
 	Folder               apijson.Field
 	InboxProvider        apijson.Field
 	IntegrationID        apijson.Field
 	O365TenantID         apijson.Field
+	RequireTLSInbound    apijson.Field
+	RequireTLSOutbound   apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -186,6 +196,29 @@ const (
 func (r SettingDomainListResponseAllowedDeliveryMode) IsKnown() bool {
 	switch r {
 	case SettingDomainListResponseAllowedDeliveryModeDirect, SettingDomainListResponseAllowedDeliveryModeBcc, SettingDomainListResponseAllowedDeliveryModeJournal, SettingDomainListResponseAllowedDeliveryModeAPI, SettingDomainListResponseAllowedDeliveryModeRetroScan:
+		return true
+	}
+	return false
+}
+
+type SettingDomainListResponseDropDisposition string
+
+const (
+	SettingDomainListResponseDropDispositionMalicious    SettingDomainListResponseDropDisposition = "MALICIOUS"
+	SettingDomainListResponseDropDispositionMaliciousBec SettingDomainListResponseDropDisposition = "MALICIOUS-BEC"
+	SettingDomainListResponseDropDispositionSuspicious   SettingDomainListResponseDropDisposition = "SUSPICIOUS"
+	SettingDomainListResponseDropDispositionSpoof        SettingDomainListResponseDropDisposition = "SPOOF"
+	SettingDomainListResponseDropDispositionSpam         SettingDomainListResponseDropDisposition = "SPAM"
+	SettingDomainListResponseDropDispositionBulk         SettingDomainListResponseDropDisposition = "BULK"
+	SettingDomainListResponseDropDispositionEncrypted    SettingDomainListResponseDropDisposition = "ENCRYPTED"
+	SettingDomainListResponseDropDispositionExternal     SettingDomainListResponseDropDisposition = "EXTERNAL"
+	SettingDomainListResponseDropDispositionUnknown      SettingDomainListResponseDropDisposition = "UNKNOWN"
+	SettingDomainListResponseDropDispositionNone         SettingDomainListResponseDropDisposition = "NONE"
+)
+
+func (r SettingDomainListResponseDropDisposition) IsKnown() bool {
+	switch r {
+	case SettingDomainListResponseDropDispositionMalicious, SettingDomainListResponseDropDispositionMaliciousBec, SettingDomainListResponseDropDispositionSuspicious, SettingDomainListResponseDropDispositionSpoof, SettingDomainListResponseDropDispositionSpam, SettingDomainListResponseDropDispositionBulk, SettingDomainListResponseDropDispositionEncrypted, SettingDomainListResponseDropDispositionExternal, SettingDomainListResponseDropDispositionUnknown, SettingDomainListResponseDropDispositionNone:
 		return true
 	}
 	return false
@@ -271,12 +304,17 @@ type SettingDomainEditResponse struct {
 	AllowedDeliveryModes []SettingDomainEditResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
 	CreatedAt            time.Time                                      `json:"created_at,required" format:"date-time"`
 	Domain               string                                         `json:"domain,required"`
+	DropDispositions     []SettingDomainEditResponseDropDisposition     `json:"drop_dispositions,required"`
+	IPRestrictions       []string                                       `json:"ip_restrictions,required"`
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
+	Transport            string                                         `json:"transport,required"`
 	Folder               SettingDomainEditResponseFolder                `json:"folder,nullable"`
 	InboxProvider        SettingDomainEditResponseInboxProvider         `json:"inbox_provider,nullable"`
 	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
 	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
+	RequireTLSInbound    bool                                           `json:"require_tls_inbound,nullable"`
+	RequireTLSOutbound   bool                                           `json:"require_tls_outbound,nullable"`
 	JSON                 settingDomainEditResponseJSON                  `json:"-"`
 }
 
@@ -287,12 +325,17 @@ type settingDomainEditResponseJSON struct {
 	AllowedDeliveryModes apijson.Field
 	CreatedAt            apijson.Field
 	Domain               apijson.Field
+	DropDispositions     apijson.Field
+	IPRestrictions       apijson.Field
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
+	Transport            apijson.Field
 	Folder               apijson.Field
 	InboxProvider        apijson.Field
 	IntegrationID        apijson.Field
 	O365TenantID         apijson.Field
+	RequireTLSInbound    apijson.Field
+	RequireTLSOutbound   apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -318,6 +361,29 @@ const (
 func (r SettingDomainEditResponseAllowedDeliveryMode) IsKnown() bool {
 	switch r {
 	case SettingDomainEditResponseAllowedDeliveryModeDirect, SettingDomainEditResponseAllowedDeliveryModeBcc, SettingDomainEditResponseAllowedDeliveryModeJournal, SettingDomainEditResponseAllowedDeliveryModeAPI, SettingDomainEditResponseAllowedDeliveryModeRetroScan:
+		return true
+	}
+	return false
+}
+
+type SettingDomainEditResponseDropDisposition string
+
+const (
+	SettingDomainEditResponseDropDispositionMalicious    SettingDomainEditResponseDropDisposition = "MALICIOUS"
+	SettingDomainEditResponseDropDispositionMaliciousBec SettingDomainEditResponseDropDisposition = "MALICIOUS-BEC"
+	SettingDomainEditResponseDropDispositionSuspicious   SettingDomainEditResponseDropDisposition = "SUSPICIOUS"
+	SettingDomainEditResponseDropDispositionSpoof        SettingDomainEditResponseDropDisposition = "SPOOF"
+	SettingDomainEditResponseDropDispositionSpam         SettingDomainEditResponseDropDisposition = "SPAM"
+	SettingDomainEditResponseDropDispositionBulk         SettingDomainEditResponseDropDisposition = "BULK"
+	SettingDomainEditResponseDropDispositionEncrypted    SettingDomainEditResponseDropDisposition = "ENCRYPTED"
+	SettingDomainEditResponseDropDispositionExternal     SettingDomainEditResponseDropDisposition = "EXTERNAL"
+	SettingDomainEditResponseDropDispositionUnknown      SettingDomainEditResponseDropDisposition = "UNKNOWN"
+	SettingDomainEditResponseDropDispositionNone         SettingDomainEditResponseDropDisposition = "NONE"
+)
+
+func (r SettingDomainEditResponseDropDisposition) IsKnown() bool {
+	switch r {
+	case SettingDomainEditResponseDropDispositionMalicious, SettingDomainEditResponseDropDispositionMaliciousBec, SettingDomainEditResponseDropDispositionSuspicious, SettingDomainEditResponseDropDispositionSpoof, SettingDomainEditResponseDropDispositionSpam, SettingDomainEditResponseDropDispositionBulk, SettingDomainEditResponseDropDispositionEncrypted, SettingDomainEditResponseDropDispositionExternal, SettingDomainEditResponseDropDispositionUnknown, SettingDomainEditResponseDropDispositionNone:
 		return true
 	}
 	return false
@@ -359,12 +425,17 @@ type SettingDomainGetResponse struct {
 	AllowedDeliveryModes []SettingDomainGetResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
 	CreatedAt            time.Time                                     `json:"created_at,required" format:"date-time"`
 	Domain               string                                        `json:"domain,required"`
+	DropDispositions     []SettingDomainGetResponseDropDisposition     `json:"drop_dispositions,required"`
+	IPRestrictions       []string                                      `json:"ip_restrictions,required"`
 	LastModified         time.Time                                     `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                         `json:"lookback_hops,required"`
+	Transport            string                                        `json:"transport,required"`
 	Folder               SettingDomainGetResponseFolder                `json:"folder,nullable"`
 	InboxProvider        SettingDomainGetResponseInboxProvider         `json:"inbox_provider,nullable"`
 	IntegrationID        string                                        `json:"integration_id,nullable" format:"uuid"`
 	O365TenantID         string                                        `json:"o365_tenant_id,nullable"`
+	RequireTLSInbound    bool                                          `json:"require_tls_inbound,nullable"`
+	RequireTLSOutbound   bool                                          `json:"require_tls_outbound,nullable"`
 	JSON                 settingDomainGetResponseJSON                  `json:"-"`
 }
 
@@ -375,12 +446,17 @@ type settingDomainGetResponseJSON struct {
 	AllowedDeliveryModes apijson.Field
 	CreatedAt            apijson.Field
 	Domain               apijson.Field
+	DropDispositions     apijson.Field
+	IPRestrictions       apijson.Field
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
+	Transport            apijson.Field
 	Folder               apijson.Field
 	InboxProvider        apijson.Field
 	IntegrationID        apijson.Field
 	O365TenantID         apijson.Field
+	RequireTLSInbound    apijson.Field
+	RequireTLSOutbound   apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -406,6 +482,29 @@ const (
 func (r SettingDomainGetResponseAllowedDeliveryMode) IsKnown() bool {
 	switch r {
 	case SettingDomainGetResponseAllowedDeliveryModeDirect, SettingDomainGetResponseAllowedDeliveryModeBcc, SettingDomainGetResponseAllowedDeliveryModeJournal, SettingDomainGetResponseAllowedDeliveryModeAPI, SettingDomainGetResponseAllowedDeliveryModeRetroScan:
+		return true
+	}
+	return false
+}
+
+type SettingDomainGetResponseDropDisposition string
+
+const (
+	SettingDomainGetResponseDropDispositionMalicious    SettingDomainGetResponseDropDisposition = "MALICIOUS"
+	SettingDomainGetResponseDropDispositionMaliciousBec SettingDomainGetResponseDropDisposition = "MALICIOUS-BEC"
+	SettingDomainGetResponseDropDispositionSuspicious   SettingDomainGetResponseDropDisposition = "SUSPICIOUS"
+	SettingDomainGetResponseDropDispositionSpoof        SettingDomainGetResponseDropDisposition = "SPOOF"
+	SettingDomainGetResponseDropDispositionSpam         SettingDomainGetResponseDropDisposition = "SPAM"
+	SettingDomainGetResponseDropDispositionBulk         SettingDomainGetResponseDropDisposition = "BULK"
+	SettingDomainGetResponseDropDispositionEncrypted    SettingDomainGetResponseDropDisposition = "ENCRYPTED"
+	SettingDomainGetResponseDropDispositionExternal     SettingDomainGetResponseDropDisposition = "EXTERNAL"
+	SettingDomainGetResponseDropDispositionUnknown      SettingDomainGetResponseDropDisposition = "UNKNOWN"
+	SettingDomainGetResponseDropDispositionNone         SettingDomainGetResponseDropDisposition = "NONE"
+)
+
+func (r SettingDomainGetResponseDropDisposition) IsKnown() bool {
+	switch r {
+	case SettingDomainGetResponseDropDispositionMalicious, SettingDomainGetResponseDropDispositionMaliciousBec, SettingDomainGetResponseDropDispositionSuspicious, SettingDomainGetResponseDropDispositionSpoof, SettingDomainGetResponseDropDispositionSpam, SettingDomainGetResponseDropDispositionBulk, SettingDomainGetResponseDropDispositionEncrypted, SettingDomainGetResponseDropDispositionExternal, SettingDomainGetResponseDropDispositionUnknown, SettingDomainGetResponseDropDispositionNone:
 		return true
 	}
 	return false
@@ -588,15 +687,43 @@ func (r settingDomainBulkDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type SettingDomainEditParams struct {
 	// Account Identifier
-	AccountID     param.Field[string]                        `path:"account_id,required"`
-	Domain        param.Field[string]                        `json:"domain"`
-	Folder        param.Field[SettingDomainEditParamsFolder] `json:"folder"`
-	IntegrationID param.Field[string]                        `json:"integration_id" format:"uuid"`
-	LookbackHops  param.Field[int64]                         `json:"lookback_hops"`
+	AccountID          param.Field[string]                                   `path:"account_id,required"`
+	IPRestrictions     param.Field[[]string]                                 `json:"ip_restrictions,required"`
+	Domain             param.Field[string]                                   `json:"domain"`
+	DropDispositions   param.Field[[]SettingDomainEditParamsDropDisposition] `json:"drop_dispositions"`
+	Folder             param.Field[SettingDomainEditParamsFolder]            `json:"folder"`
+	IntegrationID      param.Field[string]                                   `json:"integration_id" format:"uuid"`
+	LookbackHops       param.Field[int64]                                    `json:"lookback_hops"`
+	RequireTLSInbound  param.Field[bool]                                     `json:"require_tls_inbound"`
+	RequireTLSOutbound param.Field[bool]                                     `json:"require_tls_outbound"`
+	Transport          param.Field[string]                                   `json:"transport"`
 }
 
 func (r SettingDomainEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type SettingDomainEditParamsDropDisposition string
+
+const (
+	SettingDomainEditParamsDropDispositionMalicious    SettingDomainEditParamsDropDisposition = "MALICIOUS"
+	SettingDomainEditParamsDropDispositionMaliciousBec SettingDomainEditParamsDropDisposition = "MALICIOUS-BEC"
+	SettingDomainEditParamsDropDispositionSuspicious   SettingDomainEditParamsDropDisposition = "SUSPICIOUS"
+	SettingDomainEditParamsDropDispositionSpoof        SettingDomainEditParamsDropDisposition = "SPOOF"
+	SettingDomainEditParamsDropDispositionSpam         SettingDomainEditParamsDropDisposition = "SPAM"
+	SettingDomainEditParamsDropDispositionBulk         SettingDomainEditParamsDropDisposition = "BULK"
+	SettingDomainEditParamsDropDispositionEncrypted    SettingDomainEditParamsDropDisposition = "ENCRYPTED"
+	SettingDomainEditParamsDropDispositionExternal     SettingDomainEditParamsDropDisposition = "EXTERNAL"
+	SettingDomainEditParamsDropDispositionUnknown      SettingDomainEditParamsDropDisposition = "UNKNOWN"
+	SettingDomainEditParamsDropDispositionNone         SettingDomainEditParamsDropDisposition = "NONE"
+)
+
+func (r SettingDomainEditParamsDropDisposition) IsKnown() bool {
+	switch r {
+	case SettingDomainEditParamsDropDispositionMalicious, SettingDomainEditParamsDropDispositionMaliciousBec, SettingDomainEditParamsDropDispositionSuspicious, SettingDomainEditParamsDropDispositionSpoof, SettingDomainEditParamsDropDispositionSpam, SettingDomainEditParamsDropDispositionBulk, SettingDomainEditParamsDropDispositionEncrypted, SettingDomainEditParamsDropDispositionExternal, SettingDomainEditParamsDropDispositionUnknown, SettingDomainEditParamsDropDispositionNone:
+		return true
+	}
+	return false
 }
 
 type SettingDomainEditParamsFolder string

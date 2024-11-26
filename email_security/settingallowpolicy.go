@@ -134,6 +134,7 @@ func (r *SettingAllowPolicyService) Get(ctx context.Context, policyID int64, que
 }
 
 type SettingAllowPolicyNewResponse struct {
+	// The unique identifier for the allow policy.
 	ID        int64     `json:"id,required"`
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// Messages from this sender will be exempted from Spam, Spoof and Bulk
@@ -205,6 +206,7 @@ func (r SettingAllowPolicyNewResponsePatternType) IsKnown() bool {
 }
 
 type SettingAllowPolicyListResponse struct {
+	// The unique identifier for the allow policy.
 	ID        int64     `json:"id,required"`
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// Messages from this sender will be exempted from Spam, Spoof and Bulk
@@ -276,6 +278,7 @@ func (r SettingAllowPolicyListResponsePatternType) IsKnown() bool {
 }
 
 type SettingAllowPolicyDeleteResponse struct {
+	// The unique identifier for the allow policy.
 	ID   int64                                `json:"id,required"`
 	JSON settingAllowPolicyDeleteResponseJSON `json:"-"`
 }
@@ -297,6 +300,7 @@ func (r settingAllowPolicyDeleteResponseJSON) RawJSON() string {
 }
 
 type SettingAllowPolicyEditResponse struct {
+	// The unique identifier for the allow policy.
 	ID        int64     `json:"id,required"`
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// Messages from this sender will be exempted from Spam, Spoof and Bulk
@@ -368,6 +372,7 @@ func (r SettingAllowPolicyEditResponsePatternType) IsKnown() bool {
 }
 
 type SettingAllowPolicyGetResponse struct {
+	// The unique identifier for the allow policy.
 	ID        int64     `json:"id,required"`
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// Messages from this sender will be exempted from Spam, Spoof and Bulk
@@ -513,10 +518,13 @@ type SettingAllowPolicyListParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The sorting direction.
-	Direction   param.Field[SettingAllowPolicyListParamsDirection] `query:"direction"`
-	IsRecipient param.Field[bool]                                  `query:"is_recipient"`
-	IsSender    param.Field[bool]                                  `query:"is_sender"`
-	IsSpoof     param.Field[bool]                                  `query:"is_spoof"`
+	Direction          param.Field[SettingAllowPolicyListParamsDirection] `query:"direction"`
+	IsAcceptableSender param.Field[bool]                                  `query:"is_acceptable_sender"`
+	IsExemptRecipient  param.Field[bool]                                  `query:"is_exempt_recipient"`
+	IsRecipient        param.Field[bool]                                  `query:"is_recipient"`
+	IsSender           param.Field[bool]                                  `query:"is_sender"`
+	IsSpoof            param.Field[bool]                                  `query:"is_spoof"`
+	IsTrustedSender    param.Field[bool]                                  `query:"is_trusted_sender"`
 	// The field to sort by.
 	Order param.Field[SettingAllowPolicyListParamsOrder] `query:"order"`
 	// The page number of paginated results.
