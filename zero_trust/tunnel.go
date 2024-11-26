@@ -29,6 +29,7 @@ import (
 // the [NewTunnelService] method instead.
 type TunnelService struct {
 	Options        []option.RequestOption
+	WARPConnector  *TunnelWARPConnectorService
 	Configurations *TunnelConfigurationService
 	Connections    *TunnelConnectionService
 	Token          *TunnelTokenService
@@ -42,6 +43,7 @@ type TunnelService struct {
 func NewTunnelService(opts ...option.RequestOption) (r *TunnelService) {
 	r = &TunnelService{}
 	r.Options = opts
+	r.WARPConnector = NewTunnelWARPConnectorService(opts...)
 	r.Configurations = NewTunnelConfigurationService(opts...)
 	r.Connections = NewTunnelConnectionService(opts...)
 	r.Token = NewTunnelTokenService(opts...)

@@ -87,7 +87,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/user"
 	"github.com/cloudflare/cloudflare-go/v3/vectorize"
 	"github.com/cloudflare/cloudflare-go/v3/waiting_rooms"
-	"github.com/cloudflare/cloudflare-go/v3/warp_connector"
 	"github.com/cloudflare/cloudflare-go/v3/web3"
 	"github.com/cloudflare/cloudflare-go/v3/workers"
 	"github.com/cloudflare/cloudflare-go/v3/workers_for_platforms"
@@ -162,7 +161,6 @@ type Client struct {
 	Alerting                    *alerting.AlertingService
 	D1                          *d1.D1Service
 	R2                          *r2.R2Service
-	WARPConnector               *warp_connector.WARPConnectorService
 	WorkersForPlatforms         *workers_for_platforms.WorkersForPlatformService
 	ZeroTrust                   *zero_trust.ZeroTrustService
 	Turnstile                   *turnstile.TurnstileService
@@ -273,7 +271,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Alerting = alerting.NewAlertingService(opts...)
 	r.D1 = d1.NewD1Service(opts...)
 	r.R2 = r2.NewR2Service(opts...)
-	r.WARPConnector = warp_connector.NewWARPConnectorService(opts...)
 	r.WorkersForPlatforms = workers_for_platforms.NewWorkersForPlatformService(opts...)
 	r.ZeroTrust = zero_trust.NewZeroTrustService(opts...)
 	r.Turnstile = turnstile.NewTurnstileService(opts...)
