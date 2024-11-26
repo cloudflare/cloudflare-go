@@ -121,12 +121,12 @@ func (r investigatePreviewGetResponseJSON) RawJSON() string {
 type InvestigatePreviewNewParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A list of messages identfied by their `postfix_id`s that should be released.
-	Body []string `json:"body,required"`
+	// The identifier of the message.
+	PostfixID param.Field[string] `json:"postfix_id,required"`
 }
 
 func (r InvestigatePreviewNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+	return apijson.MarshalRoot(r)
 }
 
 type InvestigatePreviewNewResponseEnvelope struct {

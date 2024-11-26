@@ -29,7 +29,7 @@ func TestInvestigatePreviewNew(t *testing.T) {
 	)
 	_, err := client.EmailSecurity.Investigate.Preview.New(context.TODO(), email_security.InvestigatePreviewNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body:      []string{"4Njp3P0STMz2c02Q"},
+		PostfixID: cloudflare.F("4Njp3P0STMz2c02Q"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

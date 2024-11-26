@@ -117,11 +117,16 @@ func TestSettingDomainEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		int64(2400),
 		email_security.SettingDomainEditParams{
-			AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Domain:        cloudflare.F("domain"),
-			Folder:        cloudflare.F(email_security.SettingDomainEditParamsFolderAllItems),
-			IntegrationID: cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-			LookbackHops:  cloudflare.F(int64(1)),
+			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			IPRestrictions:     cloudflare.F([]string{"192.0.2.0/24", "2001:db8::/32"}),
+			Domain:             cloudflare.F("domain"),
+			DropDispositions:   cloudflare.F([]email_security.SettingDomainEditParamsDropDisposition{email_security.SettingDomainEditParamsDropDispositionMalicious}),
+			Folder:             cloudflare.F(email_security.SettingDomainEditParamsFolderAllItems),
+			IntegrationID:      cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			LookbackHops:       cloudflare.F(int64(1)),
+			RequireTLSInbound:  cloudflare.F(true),
+			RequireTLSOutbound: cloudflare.F(true),
+			Transport:          cloudflare.F("transport"),
 		},
 	)
 	if err != nil {

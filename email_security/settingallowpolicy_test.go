@@ -64,17 +64,20 @@ func TestSettingAllowPolicyListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailSecurity.Settings.AllowPolicies.List(context.TODO(), email_security.SettingAllowPolicyListParams{
-		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction:    cloudflare.F(email_security.SettingAllowPolicyListParamsDirectionAsc),
-		IsRecipient:  cloudflare.F(true),
-		IsSender:     cloudflare.F(true),
-		IsSpoof:      cloudflare.F(true),
-		Order:        cloudflare.F(email_security.SettingAllowPolicyListParamsOrderPattern),
-		Page:         cloudflare.F(int64(1)),
-		PatternType:  cloudflare.F(email_security.SettingAllowPolicyListParamsPatternTypeEmail),
-		PerPage:      cloudflare.F(int64(1)),
-		Search:       cloudflare.F("search"),
-		VerifySender: cloudflare.F(true),
+		AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Direction:          cloudflare.F(email_security.SettingAllowPolicyListParamsDirectionAsc),
+		IsAcceptableSender: cloudflare.F(true),
+		IsExemptRecipient:  cloudflare.F(true),
+		IsRecipient:        cloudflare.F(true),
+		IsSender:           cloudflare.F(true),
+		IsSpoof:            cloudflare.F(true),
+		IsTrustedSender:    cloudflare.F(true),
+		Order:              cloudflare.F(email_security.SettingAllowPolicyListParamsOrderPattern),
+		Page:               cloudflare.F(int64(1)),
+		PatternType:        cloudflare.F(email_security.SettingAllowPolicyListParamsPatternTypeEmail),
+		PerPage:            cloudflare.F(int64(1)),
+		Search:             cloudflare.F("search"),
+		VerifySender:       cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
