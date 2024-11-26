@@ -253,10 +253,8 @@ func (r *PageRuleAction) UnmarshalJSON(data []byte) (err error) {
 // [pagerules.PageRuleActionsBypassCacheOnCookie],
 // [pagerules.PageRuleActionsCacheByDeviceType],
 // [pagerules.PageRuleActionsCacheDeceptionArmor],
-// [pagerules.PageRuleActionsCacheKey], [pagerules.PageRuleActionsCacheKeyFields],
-// [zones.CacheLevel], [pagerules.PageRuleActionsCacheOnCookie],
-// [pagerules.PageRuleActionsCacheTTLByStatus],
-// [pagerules.PageRuleActionsDDoSProtection], [zones.DevelopmentMode],
+// [pagerules.PageRuleActionsCacheKey], [zones.CacheLevel],
+// [pagerules.PageRuleActionsCacheOnCookie],
 // [pagerules.PageRuleActionsDisableApps],
 // [pagerules.PageRuleActionsDisablePerformance],
 // [pagerules.PageRuleActionsDisableSecurity],
@@ -264,15 +262,13 @@ func (r *PageRuleAction) UnmarshalJSON(data []byte) (err error) {
 // [pagerules.PageRuleActionsEdgeCacheTTL], [zones.EmailObfuscation],
 // [pagerules.PageRuleActionsExplicitCacheControl],
 // [pagerules.PageRuleActionsForwardingURL],
-// [pagerules.PageRuleActionsHostHeaderOverride], [zones.HotlinkProtection],
-// [zones.IPGeolocation], [pagerules.PageRuleActionsMinify], [zones.Mirage],
-// [zones.OpportunisticEncryption], [zones.OriginErrorPagePassThru],
-// [zones.Polish], [pagerules.PageRuleActionsPurgeByPageRule],
+// [pagerules.PageRuleActionsHostHeaderOverride], [zones.IPGeolocation],
+// [zones.Mirage], [zones.OpportunisticEncryption],
+// [zones.OriginErrorPagePassThru], [zones.Polish],
 // [pagerules.PageRuleActionsResolveOverride],
 // [pagerules.PageRuleActionsRespectStrongEtag], [zones.ResponseBuffering],
-// [zones.RocketLoader], [zones.SecurityLevel], [zones.ServerSideExcludes],
-// [zones.SortQueryStringForCache], [zones.SSL], [zones.TrueClientIPHeader],
-// [zones.WAF].
+// [zones.RocketLoader], [zones.SecurityLevel], [zones.SortQueryStringForCache],
+// [zones.SSL], [zones.TrueClientIPHeader], [zones.WAF].
 func (r PageRuleAction) AsUnion() PageRuleActionsUnion {
 	return r.union
 }
@@ -282,10 +278,8 @@ func (r PageRuleAction) AsUnion() PageRuleActionsUnion {
 // [pagerules.PageRuleActionsBypassCacheOnCookie],
 // [pagerules.PageRuleActionsCacheByDeviceType],
 // [pagerules.PageRuleActionsCacheDeceptionArmor],
-// [pagerules.PageRuleActionsCacheKey], [pagerules.PageRuleActionsCacheKeyFields],
-// [zones.CacheLevel], [pagerules.PageRuleActionsCacheOnCookie],
-// [pagerules.PageRuleActionsCacheTTLByStatus],
-// [pagerules.PageRuleActionsDDoSProtection], [zones.DevelopmentMode],
+// [pagerules.PageRuleActionsCacheKey], [zones.CacheLevel],
+// [pagerules.PageRuleActionsCacheOnCookie],
 // [pagerules.PageRuleActionsDisableApps],
 // [pagerules.PageRuleActionsDisablePerformance],
 // [pagerules.PageRuleActionsDisableSecurity],
@@ -293,15 +287,13 @@ func (r PageRuleAction) AsUnion() PageRuleActionsUnion {
 // [pagerules.PageRuleActionsEdgeCacheTTL], [zones.EmailObfuscation],
 // [pagerules.PageRuleActionsExplicitCacheControl],
 // [pagerules.PageRuleActionsForwardingURL],
-// [pagerules.PageRuleActionsHostHeaderOverride], [zones.HotlinkProtection],
-// [zones.IPGeolocation], [pagerules.PageRuleActionsMinify], [zones.Mirage],
-// [zones.OpportunisticEncryption], [zones.OriginErrorPagePassThru],
-// [zones.Polish], [pagerules.PageRuleActionsPurgeByPageRule],
+// [pagerules.PageRuleActionsHostHeaderOverride], [zones.IPGeolocation],
+// [zones.Mirage], [zones.OpportunisticEncryption],
+// [zones.OriginErrorPagePassThru], [zones.Polish],
 // [pagerules.PageRuleActionsResolveOverride],
 // [pagerules.PageRuleActionsRespectStrongEtag], [zones.ResponseBuffering],
-// [zones.RocketLoader], [zones.SecurityLevel], [zones.ServerSideExcludes],
-// [zones.SortQueryStringForCache], [zones.SSL], [zones.TrueClientIPHeader] or
-// [zones.WAF].
+// [zones.RocketLoader], [zones.SecurityLevel], [zones.SortQueryStringForCache],
+// [zones.SSL], [zones.TrueClientIPHeader] or [zones.WAF].
 type PageRuleActionsUnion interface {
 	ImplementsPagerulesPageRuleAction()
 }
@@ -352,11 +344,6 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PageRuleActionsCacheKeyFields{}),
-			DiscriminatorValue: "cache_key_fields",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(zones.CacheLevel{}),
 			DiscriminatorValue: "cache_level",
 		},
@@ -364,21 +351,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(PageRuleActionsCacheOnCookie{}),
 			DiscriminatorValue: "cache_on_cookie",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PageRuleActionsCacheTTLByStatus{}),
-			DiscriminatorValue: "cache_ttl_by_status",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PageRuleActionsDDoSProtection{}),
-			DiscriminatorValue: "ddos_protection",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(zones.DevelopmentMode{}),
-			DiscriminatorValue: "development_mode",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -427,18 +399,8 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(zones.HotlinkProtection{}),
-			DiscriminatorValue: "hotlink_protection",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(zones.IPGeolocation{}),
 			DiscriminatorValue: "ip_geolocation",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PageRuleActionsMinify{}),
-			DiscriminatorValue: "minify",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -459,11 +421,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(zones.Polish{}),
 			DiscriminatorValue: "polish",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PageRuleActionsPurgeByPageRule{}),
-			DiscriminatorValue: "purge_by_page_rule",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -489,11 +446,6 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(zones.SecurityLevel{}),
 			DiscriminatorValue: "security_level",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(zones.ServerSideExcludes{}),
-			DiscriminatorValue: "server_side_exclude",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -998,43 +950,6 @@ func (r pageRuleActionsCacheKeyValueUserJSON) RawJSON() string {
 	return r.raw
 }
 
-type PageRuleActionsCacheKeyFields struct {
-	ID   PageRuleActionsCacheKeyFieldsID   `json:"id"`
-	JSON pageRuleActionsCacheKeyFieldsJSON `json:"-"`
-}
-
-// pageRuleActionsCacheKeyFieldsJSON contains the JSON metadata for the struct
-// [PageRuleActionsCacheKeyFields]
-type pageRuleActionsCacheKeyFieldsJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageRuleActionsCacheKeyFields) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageRuleActionsCacheKeyFieldsJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PageRuleActionsCacheKeyFields) ImplementsPagerulesPageRuleAction() {}
-
-type PageRuleActionsCacheKeyFieldsID string
-
-const (
-	PageRuleActionsCacheKeyFieldsIDCacheKeyFields PageRuleActionsCacheKeyFieldsID = "cache_key_fields"
-)
-
-func (r PageRuleActionsCacheKeyFieldsID) IsKnown() bool {
-	switch r {
-	case PageRuleActionsCacheKeyFieldsIDCacheKeyFields:
-		return true
-	}
-	return false
-}
-
 type PageRuleActionsCacheOnCookie struct {
 	// Apply the Cache Everything option (Cache Level setting) based on a regular
 	// expression match against a cookie name.
@@ -1074,80 +989,6 @@ const (
 func (r PageRuleActionsCacheOnCookieID) IsKnown() bool {
 	switch r {
 	case PageRuleActionsCacheOnCookieIDCacheOnCookie:
-		return true
-	}
-	return false
-}
-
-type PageRuleActionsCacheTTLByStatus struct {
-	ID   PageRuleActionsCacheTTLByStatusID   `json:"id"`
-	JSON pageRuleActionsCacheTTLByStatusJSON `json:"-"`
-}
-
-// pageRuleActionsCacheTTLByStatusJSON contains the JSON metadata for the struct
-// [PageRuleActionsCacheTTLByStatus]
-type pageRuleActionsCacheTTLByStatusJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageRuleActionsCacheTTLByStatus) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageRuleActionsCacheTTLByStatusJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PageRuleActionsCacheTTLByStatus) ImplementsPagerulesPageRuleAction() {}
-
-type PageRuleActionsCacheTTLByStatusID string
-
-const (
-	PageRuleActionsCacheTTLByStatusIDCacheTTLByStatus PageRuleActionsCacheTTLByStatusID = "cache_ttl_by_status"
-)
-
-func (r PageRuleActionsCacheTTLByStatusID) IsKnown() bool {
-	switch r {
-	case PageRuleActionsCacheTTLByStatusIDCacheTTLByStatus:
-		return true
-	}
-	return false
-}
-
-type PageRuleActionsDDoSProtection struct {
-	ID   PageRuleActionsDDoSProtectionID   `json:"id"`
-	JSON pageRuleActionsDDoSProtectionJSON `json:"-"`
-}
-
-// pageRuleActionsDDoSProtectionJSON contains the JSON metadata for the struct
-// [PageRuleActionsDDoSProtection]
-type pageRuleActionsDDoSProtectionJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageRuleActionsDDoSProtection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageRuleActionsDDoSProtectionJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PageRuleActionsDDoSProtection) ImplementsPagerulesPageRuleAction() {}
-
-type PageRuleActionsDDoSProtectionID string
-
-const (
-	PageRuleActionsDDoSProtectionIDDDoSProtection PageRuleActionsDDoSProtectionID = "ddos_protection"
-)
-
-func (r PageRuleActionsDDoSProtectionID) IsKnown() bool {
-	switch r {
-	case PageRuleActionsDDoSProtectionIDDDoSProtection:
 		return true
 	}
 	return false
@@ -1563,80 +1404,6 @@ func (r PageRuleActionsHostHeaderOverrideID) IsKnown() bool {
 	return false
 }
 
-type PageRuleActionsMinify struct {
-	ID   PageRuleActionsMinifyID   `json:"id"`
-	JSON pageRuleActionsMinifyJSON `json:"-"`
-}
-
-// pageRuleActionsMinifyJSON contains the JSON metadata for the struct
-// [PageRuleActionsMinify]
-type pageRuleActionsMinifyJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageRuleActionsMinify) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageRuleActionsMinifyJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PageRuleActionsMinify) ImplementsPagerulesPageRuleAction() {}
-
-type PageRuleActionsMinifyID string
-
-const (
-	PageRuleActionsMinifyIDMinify PageRuleActionsMinifyID = "minify"
-)
-
-func (r PageRuleActionsMinifyID) IsKnown() bool {
-	switch r {
-	case PageRuleActionsMinifyIDMinify:
-		return true
-	}
-	return false
-}
-
-type PageRuleActionsPurgeByPageRule struct {
-	ID   PageRuleActionsPurgeByPageRuleID   `json:"id"`
-	JSON pageRuleActionsPurgeByPageRuleJSON `json:"-"`
-}
-
-// pageRuleActionsPurgeByPageRuleJSON contains the JSON metadata for the struct
-// [PageRuleActionsPurgeByPageRule]
-type pageRuleActionsPurgeByPageRuleJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageRuleActionsPurgeByPageRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageRuleActionsPurgeByPageRuleJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r PageRuleActionsPurgeByPageRule) ImplementsPagerulesPageRuleAction() {}
-
-type PageRuleActionsPurgeByPageRuleID string
-
-const (
-	PageRuleActionsPurgeByPageRuleIDPurgeByPageRule PageRuleActionsPurgeByPageRuleID = "purge_by_page_rule"
-)
-
-func (r PageRuleActionsPurgeByPageRuleID) IsKnown() bool {
-	switch r {
-	case PageRuleActionsPurgeByPageRuleIDPurgeByPageRule:
-		return true
-	}
-	return false
-}
-
 type PageRuleActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
 	ID PageRuleActionsResolveOverrideID `json:"id"`
@@ -1752,12 +1519,8 @@ const (
 	PageRuleActionsIDCacheByDeviceType       PageRuleActionsID = "cache_by_device_type"
 	PageRuleActionsIDCacheDeceptionArmor     PageRuleActionsID = "cache_deception_armor"
 	PageRuleActionsIDCacheKey                PageRuleActionsID = "cache_key"
-	PageRuleActionsIDCacheKeyFields          PageRuleActionsID = "cache_key_fields"
 	PageRuleActionsIDCacheLevel              PageRuleActionsID = "cache_level"
 	PageRuleActionsIDCacheOnCookie           PageRuleActionsID = "cache_on_cookie"
-	PageRuleActionsIDCacheTTLByStatus        PageRuleActionsID = "cache_ttl_by_status"
-	PageRuleActionsIDDDoSProtection          PageRuleActionsID = "ddos_protection"
-	PageRuleActionsIDDevelopmentMode         PageRuleActionsID = "development_mode"
 	PageRuleActionsIDDisableApps             PageRuleActionsID = "disable_apps"
 	PageRuleActionsIDDisablePerformance      PageRuleActionsID = "disable_performance"
 	PageRuleActionsIDDisableSecurity         PageRuleActionsID = "disable_security"
@@ -1767,20 +1530,16 @@ const (
 	PageRuleActionsIDExplicitCacheControl    PageRuleActionsID = "explicit_cache_control"
 	PageRuleActionsIDForwardingURL           PageRuleActionsID = "forwarding_url"
 	PageRuleActionsIDHostHeaderOverride      PageRuleActionsID = "host_header_override"
-	PageRuleActionsIDHotlinkProtection       PageRuleActionsID = "hotlink_protection"
 	PageRuleActionsIDIPGeolocation           PageRuleActionsID = "ip_geolocation"
-	PageRuleActionsIDMinify                  PageRuleActionsID = "minify"
 	PageRuleActionsIDMirage                  PageRuleActionsID = "mirage"
 	PageRuleActionsIDOpportunisticEncryption PageRuleActionsID = "opportunistic_encryption"
 	PageRuleActionsIDOriginErrorPagePassThru PageRuleActionsID = "origin_error_page_pass_thru"
 	PageRuleActionsIDPolish                  PageRuleActionsID = "polish"
-	PageRuleActionsIDPurgeByPageRule         PageRuleActionsID = "purge_by_page_rule"
 	PageRuleActionsIDResolveOverride         PageRuleActionsID = "resolve_override"
 	PageRuleActionsIDRespectStrongEtag       PageRuleActionsID = "respect_strong_etag"
 	PageRuleActionsIDResponseBuffering       PageRuleActionsID = "response_buffering"
 	PageRuleActionsIDRocketLoader            PageRuleActionsID = "rocket_loader"
 	PageRuleActionsIDSecurityLevel           PageRuleActionsID = "security_level"
-	PageRuleActionsIDServerSideExclude       PageRuleActionsID = "server_side_exclude"
 	PageRuleActionsIDSortQueryStringForCache PageRuleActionsID = "sort_query_string_for_cache"
 	PageRuleActionsIDSSL                     PageRuleActionsID = "ssl"
 	PageRuleActionsIDTrueClientIPHeader      PageRuleActionsID = "true_client_ip_header"
@@ -1789,7 +1548,7 @@ const (
 
 func (r PageRuleActionsID) IsKnown() bool {
 	switch r {
-	case PageRuleActionsIDAlwaysUseHTTPS, PageRuleActionsIDAutomaticHTTPSRewrites, PageRuleActionsIDBrowserCacheTTL, PageRuleActionsIDBrowserCheck, PageRuleActionsIDBypassCacheOnCookie, PageRuleActionsIDCacheByDeviceType, PageRuleActionsIDCacheDeceptionArmor, PageRuleActionsIDCacheKey, PageRuleActionsIDCacheKeyFields, PageRuleActionsIDCacheLevel, PageRuleActionsIDCacheOnCookie, PageRuleActionsIDCacheTTLByStatus, PageRuleActionsIDDDoSProtection, PageRuleActionsIDDevelopmentMode, PageRuleActionsIDDisableApps, PageRuleActionsIDDisablePerformance, PageRuleActionsIDDisableSecurity, PageRuleActionsIDDisableZaraz, PageRuleActionsIDEdgeCacheTTL, PageRuleActionsIDEmailObfuscation, PageRuleActionsIDExplicitCacheControl, PageRuleActionsIDForwardingURL, PageRuleActionsIDHostHeaderOverride, PageRuleActionsIDHotlinkProtection, PageRuleActionsIDIPGeolocation, PageRuleActionsIDMinify, PageRuleActionsIDMirage, PageRuleActionsIDOpportunisticEncryption, PageRuleActionsIDOriginErrorPagePassThru, PageRuleActionsIDPolish, PageRuleActionsIDPurgeByPageRule, PageRuleActionsIDResolveOverride, PageRuleActionsIDRespectStrongEtag, PageRuleActionsIDResponseBuffering, PageRuleActionsIDRocketLoader, PageRuleActionsIDSecurityLevel, PageRuleActionsIDServerSideExclude, PageRuleActionsIDSortQueryStringForCache, PageRuleActionsIDSSL, PageRuleActionsIDTrueClientIPHeader, PageRuleActionsIDWAF:
+	case PageRuleActionsIDAlwaysUseHTTPS, PageRuleActionsIDAutomaticHTTPSRewrites, PageRuleActionsIDBrowserCacheTTL, PageRuleActionsIDBrowserCheck, PageRuleActionsIDBypassCacheOnCookie, PageRuleActionsIDCacheByDeviceType, PageRuleActionsIDCacheDeceptionArmor, PageRuleActionsIDCacheKey, PageRuleActionsIDCacheLevel, PageRuleActionsIDCacheOnCookie, PageRuleActionsIDDisableApps, PageRuleActionsIDDisablePerformance, PageRuleActionsIDDisableSecurity, PageRuleActionsIDDisableZaraz, PageRuleActionsIDEdgeCacheTTL, PageRuleActionsIDEmailObfuscation, PageRuleActionsIDExplicitCacheControl, PageRuleActionsIDForwardingURL, PageRuleActionsIDHostHeaderOverride, PageRuleActionsIDIPGeolocation, PageRuleActionsIDMirage, PageRuleActionsIDOpportunisticEncryption, PageRuleActionsIDOriginErrorPagePassThru, PageRuleActionsIDPolish, PageRuleActionsIDResolveOverride, PageRuleActionsIDRespectStrongEtag, PageRuleActionsIDResponseBuffering, PageRuleActionsIDRocketLoader, PageRuleActionsIDSecurityLevel, PageRuleActionsIDSortQueryStringForCache, PageRuleActionsIDSSL, PageRuleActionsIDTrueClientIPHeader, PageRuleActionsIDWAF:
 		return true
 	}
 	return false
@@ -1984,12 +1743,9 @@ func (r PageruleNewParamsAction) ImplementsPagerulesPageruleNewParamsActionUnion
 // [pagerules.PageruleNewParamsActionsBypassCacheOnCookie],
 // [pagerules.PageruleNewParamsActionsCacheByDeviceType],
 // [pagerules.PageruleNewParamsActionsCacheDeceptionArmor],
-// [pagerules.PageruleNewParamsActionsCacheKey],
-// [pagerules.PageruleNewParamsActionsCacheKeyFields], [zones.CacheLevelParam],
+// [pagerules.PageruleNewParamsActionsCacheKey], [zones.CacheLevelParam],
 // [pagerules.PageruleNewParamsActionsCacheOnCookie],
-// [pagerules.PageruleNewParamsActionsCacheTTLByStatus],
-// [pagerules.PageruleNewParamsActionsDDoSProtection],
-// [zones.DevelopmentModeParam], [pagerules.PageruleNewParamsActionsDisableApps],
+// [pagerules.PageruleNewParamsActionsDisableApps],
 // [pagerules.PageruleNewParamsActionsDisablePerformance],
 // [pagerules.PageruleNewParamsActionsDisableSecurity],
 // [pagerules.PageruleNewParamsActionsDisableZaraz],
@@ -1997,16 +1753,14 @@ func (r PageruleNewParamsAction) ImplementsPagerulesPageruleNewParamsActionUnion
 // [pagerules.PageruleNewParamsActionsExplicitCacheControl],
 // [pagerules.PageruleNewParamsActionsForwardingURL],
 // [pagerules.PageruleNewParamsActionsHostHeaderOverride],
-// [zones.HotlinkProtectionParam], [zones.IPGeolocationParam],
-// [pagerules.PageruleNewParamsActionsMinify], [zones.MirageParam],
+// [zones.IPGeolocationParam], [zones.MirageParam],
 // [zones.OpportunisticEncryptionParam], [zones.OriginErrorPagePassThruParam],
-// [zones.PolishParam], [pagerules.PageruleNewParamsActionsPurgeByPageRule],
-// [pagerules.PageruleNewParamsActionsResolveOverride],
+// [zones.PolishParam], [pagerules.PageruleNewParamsActionsResolveOverride],
 // [pagerules.PageruleNewParamsActionsRespectStrongEtag],
 // [zones.ResponseBufferingParam], [zones.RocketLoaderParam],
-// [zones.SecurityLevelParam], [zones.ServerSideExcludesParam],
-// [zones.SortQueryStringForCacheParam], [zones.SSLParam],
-// [zones.TrueClientIPHeaderParam], [zones.WAFParam], [PageruleNewParamsAction].
+// [zones.SecurityLevelParam], [zones.SortQueryStringForCacheParam],
+// [zones.SSLParam], [zones.TrueClientIPHeaderParam], [zones.WAFParam],
+// [PageruleNewParamsAction].
 type PageruleNewParamsActionUnion interface {
 	ImplementsPagerulesPageruleNewParamsActionUnion()
 }
@@ -2320,30 +2074,6 @@ func (r PageruleNewParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-type PageruleNewParamsActionsCacheKeyFields struct {
-	ID param.Field[PageruleNewParamsActionsCacheKeyFieldsID] `json:"id"`
-}
-
-func (r PageruleNewParamsActionsCacheKeyFields) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleNewParamsActionsCacheKeyFields) ImplementsPagerulesPageruleNewParamsActionUnion() {}
-
-type PageruleNewParamsActionsCacheKeyFieldsID string
-
-const (
-	PageruleNewParamsActionsCacheKeyFieldsIDCacheKeyFields PageruleNewParamsActionsCacheKeyFieldsID = "cache_key_fields"
-)
-
-func (r PageruleNewParamsActionsCacheKeyFieldsID) IsKnown() bool {
-	switch r {
-	case PageruleNewParamsActionsCacheKeyFieldsIDCacheKeyFields:
-		return true
-	}
-	return false
-}
-
 type PageruleNewParamsActionsCacheOnCookie struct {
 	// Apply the Cache Everything option (Cache Level setting) based on a regular
 	// expression match against a cookie name.
@@ -2369,54 +2099,6 @@ const (
 func (r PageruleNewParamsActionsCacheOnCookieID) IsKnown() bool {
 	switch r {
 	case PageruleNewParamsActionsCacheOnCookieIDCacheOnCookie:
-		return true
-	}
-	return false
-}
-
-type PageruleNewParamsActionsCacheTTLByStatus struct {
-	ID param.Field[PageruleNewParamsActionsCacheTTLByStatusID] `json:"id"`
-}
-
-func (r PageruleNewParamsActionsCacheTTLByStatus) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleNewParamsActionsCacheTTLByStatus) ImplementsPagerulesPageruleNewParamsActionUnion() {}
-
-type PageruleNewParamsActionsCacheTTLByStatusID string
-
-const (
-	PageruleNewParamsActionsCacheTTLByStatusIDCacheTTLByStatus PageruleNewParamsActionsCacheTTLByStatusID = "cache_ttl_by_status"
-)
-
-func (r PageruleNewParamsActionsCacheTTLByStatusID) IsKnown() bool {
-	switch r {
-	case PageruleNewParamsActionsCacheTTLByStatusIDCacheTTLByStatus:
-		return true
-	}
-	return false
-}
-
-type PageruleNewParamsActionsDDoSProtection struct {
-	ID param.Field[PageruleNewParamsActionsDDoSProtectionID] `json:"id"`
-}
-
-func (r PageruleNewParamsActionsDDoSProtection) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleNewParamsActionsDDoSProtection) ImplementsPagerulesPageruleNewParamsActionUnion() {}
-
-type PageruleNewParamsActionsDDoSProtectionID string
-
-const (
-	PageruleNewParamsActionsDDoSProtectionIDDDoSProtection PageruleNewParamsActionsDDoSProtectionID = "ddos_protection"
-)
-
-func (r PageruleNewParamsActionsDDoSProtectionID) IsKnown() bool {
-	switch r {
-	case PageruleNewParamsActionsDDoSProtectionIDDDoSProtection:
 		return true
 	}
 	return false
@@ -2713,54 +2395,6 @@ func (r PageruleNewParamsActionsHostHeaderOverrideID) IsKnown() bool {
 	return false
 }
 
-type PageruleNewParamsActionsMinify struct {
-	ID param.Field[PageruleNewParamsActionsMinifyID] `json:"id"`
-}
-
-func (r PageruleNewParamsActionsMinify) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleNewParamsActionsMinify) ImplementsPagerulesPageruleNewParamsActionUnion() {}
-
-type PageruleNewParamsActionsMinifyID string
-
-const (
-	PageruleNewParamsActionsMinifyIDMinify PageruleNewParamsActionsMinifyID = "minify"
-)
-
-func (r PageruleNewParamsActionsMinifyID) IsKnown() bool {
-	switch r {
-	case PageruleNewParamsActionsMinifyIDMinify:
-		return true
-	}
-	return false
-}
-
-type PageruleNewParamsActionsPurgeByPageRule struct {
-	ID param.Field[PageruleNewParamsActionsPurgeByPageRuleID] `json:"id"`
-}
-
-func (r PageruleNewParamsActionsPurgeByPageRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleNewParamsActionsPurgeByPageRule) ImplementsPagerulesPageruleNewParamsActionUnion() {}
-
-type PageruleNewParamsActionsPurgeByPageRuleID string
-
-const (
-	PageruleNewParamsActionsPurgeByPageRuleIDPurgeByPageRule PageruleNewParamsActionsPurgeByPageRuleID = "purge_by_page_rule"
-)
-
-func (r PageruleNewParamsActionsPurgeByPageRuleID) IsKnown() bool {
-	switch r {
-	case PageruleNewParamsActionsPurgeByPageRuleIDPurgeByPageRule:
-		return true
-	}
-	return false
-}
-
 type PageruleNewParamsActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
 	ID param.Field[PageruleNewParamsActionsResolveOverrideID] `json:"id"`
@@ -2849,12 +2483,8 @@ const (
 	PageruleNewParamsActionsIDCacheByDeviceType       PageruleNewParamsActionsID = "cache_by_device_type"
 	PageruleNewParamsActionsIDCacheDeceptionArmor     PageruleNewParamsActionsID = "cache_deception_armor"
 	PageruleNewParamsActionsIDCacheKey                PageruleNewParamsActionsID = "cache_key"
-	PageruleNewParamsActionsIDCacheKeyFields          PageruleNewParamsActionsID = "cache_key_fields"
 	PageruleNewParamsActionsIDCacheLevel              PageruleNewParamsActionsID = "cache_level"
 	PageruleNewParamsActionsIDCacheOnCookie           PageruleNewParamsActionsID = "cache_on_cookie"
-	PageruleNewParamsActionsIDCacheTTLByStatus        PageruleNewParamsActionsID = "cache_ttl_by_status"
-	PageruleNewParamsActionsIDDDoSProtection          PageruleNewParamsActionsID = "ddos_protection"
-	PageruleNewParamsActionsIDDevelopmentMode         PageruleNewParamsActionsID = "development_mode"
 	PageruleNewParamsActionsIDDisableApps             PageruleNewParamsActionsID = "disable_apps"
 	PageruleNewParamsActionsIDDisablePerformance      PageruleNewParamsActionsID = "disable_performance"
 	PageruleNewParamsActionsIDDisableSecurity         PageruleNewParamsActionsID = "disable_security"
@@ -2864,20 +2494,16 @@ const (
 	PageruleNewParamsActionsIDExplicitCacheControl    PageruleNewParamsActionsID = "explicit_cache_control"
 	PageruleNewParamsActionsIDForwardingURL           PageruleNewParamsActionsID = "forwarding_url"
 	PageruleNewParamsActionsIDHostHeaderOverride      PageruleNewParamsActionsID = "host_header_override"
-	PageruleNewParamsActionsIDHotlinkProtection       PageruleNewParamsActionsID = "hotlink_protection"
 	PageruleNewParamsActionsIDIPGeolocation           PageruleNewParamsActionsID = "ip_geolocation"
-	PageruleNewParamsActionsIDMinify                  PageruleNewParamsActionsID = "minify"
 	PageruleNewParamsActionsIDMirage                  PageruleNewParamsActionsID = "mirage"
 	PageruleNewParamsActionsIDOpportunisticEncryption PageruleNewParamsActionsID = "opportunistic_encryption"
 	PageruleNewParamsActionsIDOriginErrorPagePassThru PageruleNewParamsActionsID = "origin_error_page_pass_thru"
 	PageruleNewParamsActionsIDPolish                  PageruleNewParamsActionsID = "polish"
-	PageruleNewParamsActionsIDPurgeByPageRule         PageruleNewParamsActionsID = "purge_by_page_rule"
 	PageruleNewParamsActionsIDResolveOverride         PageruleNewParamsActionsID = "resolve_override"
 	PageruleNewParamsActionsIDRespectStrongEtag       PageruleNewParamsActionsID = "respect_strong_etag"
 	PageruleNewParamsActionsIDResponseBuffering       PageruleNewParamsActionsID = "response_buffering"
 	PageruleNewParamsActionsIDRocketLoader            PageruleNewParamsActionsID = "rocket_loader"
 	PageruleNewParamsActionsIDSecurityLevel           PageruleNewParamsActionsID = "security_level"
-	PageruleNewParamsActionsIDServerSideExclude       PageruleNewParamsActionsID = "server_side_exclude"
 	PageruleNewParamsActionsIDSortQueryStringForCache PageruleNewParamsActionsID = "sort_query_string_for_cache"
 	PageruleNewParamsActionsIDSSL                     PageruleNewParamsActionsID = "ssl"
 	PageruleNewParamsActionsIDTrueClientIPHeader      PageruleNewParamsActionsID = "true_client_ip_header"
@@ -2886,7 +2512,7 @@ const (
 
 func (r PageruleNewParamsActionsID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsIDAlwaysUseHTTPS, PageruleNewParamsActionsIDAutomaticHTTPSRewrites, PageruleNewParamsActionsIDBrowserCacheTTL, PageruleNewParamsActionsIDBrowserCheck, PageruleNewParamsActionsIDBypassCacheOnCookie, PageruleNewParamsActionsIDCacheByDeviceType, PageruleNewParamsActionsIDCacheDeceptionArmor, PageruleNewParamsActionsIDCacheKey, PageruleNewParamsActionsIDCacheKeyFields, PageruleNewParamsActionsIDCacheLevel, PageruleNewParamsActionsIDCacheOnCookie, PageruleNewParamsActionsIDCacheTTLByStatus, PageruleNewParamsActionsIDDDoSProtection, PageruleNewParamsActionsIDDevelopmentMode, PageruleNewParamsActionsIDDisableApps, PageruleNewParamsActionsIDDisablePerformance, PageruleNewParamsActionsIDDisableSecurity, PageruleNewParamsActionsIDDisableZaraz, PageruleNewParamsActionsIDEdgeCacheTTL, PageruleNewParamsActionsIDEmailObfuscation, PageruleNewParamsActionsIDExplicitCacheControl, PageruleNewParamsActionsIDForwardingURL, PageruleNewParamsActionsIDHostHeaderOverride, PageruleNewParamsActionsIDHotlinkProtection, PageruleNewParamsActionsIDIPGeolocation, PageruleNewParamsActionsIDMinify, PageruleNewParamsActionsIDMirage, PageruleNewParamsActionsIDOpportunisticEncryption, PageruleNewParamsActionsIDOriginErrorPagePassThru, PageruleNewParamsActionsIDPolish, PageruleNewParamsActionsIDPurgeByPageRule, PageruleNewParamsActionsIDResolveOverride, PageruleNewParamsActionsIDRespectStrongEtag, PageruleNewParamsActionsIDResponseBuffering, PageruleNewParamsActionsIDRocketLoader, PageruleNewParamsActionsIDSecurityLevel, PageruleNewParamsActionsIDServerSideExclude, PageruleNewParamsActionsIDSortQueryStringForCache, PageruleNewParamsActionsIDSSL, PageruleNewParamsActionsIDTrueClientIPHeader, PageruleNewParamsActionsIDWAF:
+	case PageruleNewParamsActionsIDAlwaysUseHTTPS, PageruleNewParamsActionsIDAutomaticHTTPSRewrites, PageruleNewParamsActionsIDBrowserCacheTTL, PageruleNewParamsActionsIDBrowserCheck, PageruleNewParamsActionsIDBypassCacheOnCookie, PageruleNewParamsActionsIDCacheByDeviceType, PageruleNewParamsActionsIDCacheDeceptionArmor, PageruleNewParamsActionsIDCacheKey, PageruleNewParamsActionsIDCacheLevel, PageruleNewParamsActionsIDCacheOnCookie, PageruleNewParamsActionsIDDisableApps, PageruleNewParamsActionsIDDisablePerformance, PageruleNewParamsActionsIDDisableSecurity, PageruleNewParamsActionsIDDisableZaraz, PageruleNewParamsActionsIDEdgeCacheTTL, PageruleNewParamsActionsIDEmailObfuscation, PageruleNewParamsActionsIDExplicitCacheControl, PageruleNewParamsActionsIDForwardingURL, PageruleNewParamsActionsIDHostHeaderOverride, PageruleNewParamsActionsIDIPGeolocation, PageruleNewParamsActionsIDMirage, PageruleNewParamsActionsIDOpportunisticEncryption, PageruleNewParamsActionsIDOriginErrorPagePassThru, PageruleNewParamsActionsIDPolish, PageruleNewParamsActionsIDResolveOverride, PageruleNewParamsActionsIDRespectStrongEtag, PageruleNewParamsActionsIDResponseBuffering, PageruleNewParamsActionsIDRocketLoader, PageruleNewParamsActionsIDSecurityLevel, PageruleNewParamsActionsIDSortQueryStringForCache, PageruleNewParamsActionsIDSSL, PageruleNewParamsActionsIDTrueClientIPHeader, PageruleNewParamsActionsIDWAF:
 		return true
 	}
 	return false
@@ -2991,12 +2617,8 @@ func (r PageruleUpdateParamsAction) ImplementsPagerulesPageruleUpdateParamsActio
 // [pagerules.PageruleUpdateParamsActionsBypassCacheOnCookie],
 // [pagerules.PageruleUpdateParamsActionsCacheByDeviceType],
 // [pagerules.PageruleUpdateParamsActionsCacheDeceptionArmor],
-// [pagerules.PageruleUpdateParamsActionsCacheKey],
-// [pagerules.PageruleUpdateParamsActionsCacheKeyFields], [zones.CacheLevelParam],
+// [pagerules.PageruleUpdateParamsActionsCacheKey], [zones.CacheLevelParam],
 // [pagerules.PageruleUpdateParamsActionsCacheOnCookie],
-// [pagerules.PageruleUpdateParamsActionsCacheTTLByStatus],
-// [pagerules.PageruleUpdateParamsActionsDDoSProtection],
-// [zones.DevelopmentModeParam],
 // [pagerules.PageruleUpdateParamsActionsDisableApps],
 // [pagerules.PageruleUpdateParamsActionsDisablePerformance],
 // [pagerules.PageruleUpdateParamsActionsDisableSecurity],
@@ -3006,16 +2628,14 @@ func (r PageruleUpdateParamsAction) ImplementsPagerulesPageruleUpdateParamsActio
 // [pagerules.PageruleUpdateParamsActionsExplicitCacheControl],
 // [pagerules.PageruleUpdateParamsActionsForwardingURL],
 // [pagerules.PageruleUpdateParamsActionsHostHeaderOverride],
-// [zones.HotlinkProtectionParam], [zones.IPGeolocationParam],
-// [pagerules.PageruleUpdateParamsActionsMinify], [zones.MirageParam],
+// [zones.IPGeolocationParam], [zones.MirageParam],
 // [zones.OpportunisticEncryptionParam], [zones.OriginErrorPagePassThruParam],
-// [zones.PolishParam], [pagerules.PageruleUpdateParamsActionsPurgeByPageRule],
-// [pagerules.PageruleUpdateParamsActionsResolveOverride],
+// [zones.PolishParam], [pagerules.PageruleUpdateParamsActionsResolveOverride],
 // [pagerules.PageruleUpdateParamsActionsRespectStrongEtag],
 // [zones.ResponseBufferingParam], [zones.RocketLoaderParam],
-// [zones.SecurityLevelParam], [zones.ServerSideExcludesParam],
-// [zones.SortQueryStringForCacheParam], [zones.SSLParam],
-// [zones.TrueClientIPHeaderParam], [zones.WAFParam], [PageruleUpdateParamsAction].
+// [zones.SecurityLevelParam], [zones.SortQueryStringForCacheParam],
+// [zones.SSLParam], [zones.TrueClientIPHeaderParam], [zones.WAFParam],
+// [PageruleUpdateParamsAction].
 type PageruleUpdateParamsActionUnion interface {
 	ImplementsPagerulesPageruleUpdateParamsActionUnion()
 }
@@ -3329,31 +2949,6 @@ func (r PageruleUpdateParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte
 	return apijson.MarshalRoot(r)
 }
 
-type PageruleUpdateParamsActionsCacheKeyFields struct {
-	ID param.Field[PageruleUpdateParamsActionsCacheKeyFieldsID] `json:"id"`
-}
-
-func (r PageruleUpdateParamsActionsCacheKeyFields) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleUpdateParamsActionsCacheKeyFields) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
-}
-
-type PageruleUpdateParamsActionsCacheKeyFieldsID string
-
-const (
-	PageruleUpdateParamsActionsCacheKeyFieldsIDCacheKeyFields PageruleUpdateParamsActionsCacheKeyFieldsID = "cache_key_fields"
-)
-
-func (r PageruleUpdateParamsActionsCacheKeyFieldsID) IsKnown() bool {
-	switch r {
-	case PageruleUpdateParamsActionsCacheKeyFieldsIDCacheKeyFields:
-		return true
-	}
-	return false
-}
-
 type PageruleUpdateParamsActionsCacheOnCookie struct {
 	// Apply the Cache Everything option (Cache Level setting) based on a regular
 	// expression match against a cookie name.
@@ -3380,56 +2975,6 @@ const (
 func (r PageruleUpdateParamsActionsCacheOnCookieID) IsKnown() bool {
 	switch r {
 	case PageruleUpdateParamsActionsCacheOnCookieIDCacheOnCookie:
-		return true
-	}
-	return false
-}
-
-type PageruleUpdateParamsActionsCacheTTLByStatus struct {
-	ID param.Field[PageruleUpdateParamsActionsCacheTTLByStatusID] `json:"id"`
-}
-
-func (r PageruleUpdateParamsActionsCacheTTLByStatus) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleUpdateParamsActionsCacheTTLByStatus) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
-}
-
-type PageruleUpdateParamsActionsCacheTTLByStatusID string
-
-const (
-	PageruleUpdateParamsActionsCacheTTLByStatusIDCacheTTLByStatus PageruleUpdateParamsActionsCacheTTLByStatusID = "cache_ttl_by_status"
-)
-
-func (r PageruleUpdateParamsActionsCacheTTLByStatusID) IsKnown() bool {
-	switch r {
-	case PageruleUpdateParamsActionsCacheTTLByStatusIDCacheTTLByStatus:
-		return true
-	}
-	return false
-}
-
-type PageruleUpdateParamsActionsDDoSProtection struct {
-	ID param.Field[PageruleUpdateParamsActionsDDoSProtectionID] `json:"id"`
-}
-
-func (r PageruleUpdateParamsActionsDDoSProtection) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleUpdateParamsActionsDDoSProtection) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
-}
-
-type PageruleUpdateParamsActionsDDoSProtectionID string
-
-const (
-	PageruleUpdateParamsActionsDDoSProtectionIDDDoSProtection PageruleUpdateParamsActionsDDoSProtectionID = "ddos_protection"
-)
-
-func (r PageruleUpdateParamsActionsDDoSProtectionID) IsKnown() bool {
-	switch r {
-	case PageruleUpdateParamsActionsDDoSProtectionIDDDoSProtection:
 		return true
 	}
 	return false
@@ -3731,55 +3276,6 @@ func (r PageruleUpdateParamsActionsHostHeaderOverrideID) IsKnown() bool {
 	return false
 }
 
-type PageruleUpdateParamsActionsMinify struct {
-	ID param.Field[PageruleUpdateParamsActionsMinifyID] `json:"id"`
-}
-
-func (r PageruleUpdateParamsActionsMinify) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleUpdateParamsActionsMinify) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
-
-type PageruleUpdateParamsActionsMinifyID string
-
-const (
-	PageruleUpdateParamsActionsMinifyIDMinify PageruleUpdateParamsActionsMinifyID = "minify"
-)
-
-func (r PageruleUpdateParamsActionsMinifyID) IsKnown() bool {
-	switch r {
-	case PageruleUpdateParamsActionsMinifyIDMinify:
-		return true
-	}
-	return false
-}
-
-type PageruleUpdateParamsActionsPurgeByPageRule struct {
-	ID param.Field[PageruleUpdateParamsActionsPurgeByPageRuleID] `json:"id"`
-}
-
-func (r PageruleUpdateParamsActionsPurgeByPageRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleUpdateParamsActionsPurgeByPageRule) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
-}
-
-type PageruleUpdateParamsActionsPurgeByPageRuleID string
-
-const (
-	PageruleUpdateParamsActionsPurgeByPageRuleIDPurgeByPageRule PageruleUpdateParamsActionsPurgeByPageRuleID = "purge_by_page_rule"
-)
-
-func (r PageruleUpdateParamsActionsPurgeByPageRuleID) IsKnown() bool {
-	switch r {
-	case PageruleUpdateParamsActionsPurgeByPageRuleIDPurgeByPageRule:
-		return true
-	}
-	return false
-}
-
 type PageruleUpdateParamsActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
 	ID param.Field[PageruleUpdateParamsActionsResolveOverrideID] `json:"id"`
@@ -3869,12 +3365,8 @@ const (
 	PageruleUpdateParamsActionsIDCacheByDeviceType       PageruleUpdateParamsActionsID = "cache_by_device_type"
 	PageruleUpdateParamsActionsIDCacheDeceptionArmor     PageruleUpdateParamsActionsID = "cache_deception_armor"
 	PageruleUpdateParamsActionsIDCacheKey                PageruleUpdateParamsActionsID = "cache_key"
-	PageruleUpdateParamsActionsIDCacheKeyFields          PageruleUpdateParamsActionsID = "cache_key_fields"
 	PageruleUpdateParamsActionsIDCacheLevel              PageruleUpdateParamsActionsID = "cache_level"
 	PageruleUpdateParamsActionsIDCacheOnCookie           PageruleUpdateParamsActionsID = "cache_on_cookie"
-	PageruleUpdateParamsActionsIDCacheTTLByStatus        PageruleUpdateParamsActionsID = "cache_ttl_by_status"
-	PageruleUpdateParamsActionsIDDDoSProtection          PageruleUpdateParamsActionsID = "ddos_protection"
-	PageruleUpdateParamsActionsIDDevelopmentMode         PageruleUpdateParamsActionsID = "development_mode"
 	PageruleUpdateParamsActionsIDDisableApps             PageruleUpdateParamsActionsID = "disable_apps"
 	PageruleUpdateParamsActionsIDDisablePerformance      PageruleUpdateParamsActionsID = "disable_performance"
 	PageruleUpdateParamsActionsIDDisableSecurity         PageruleUpdateParamsActionsID = "disable_security"
@@ -3884,20 +3376,16 @@ const (
 	PageruleUpdateParamsActionsIDExplicitCacheControl    PageruleUpdateParamsActionsID = "explicit_cache_control"
 	PageruleUpdateParamsActionsIDForwardingURL           PageruleUpdateParamsActionsID = "forwarding_url"
 	PageruleUpdateParamsActionsIDHostHeaderOverride      PageruleUpdateParamsActionsID = "host_header_override"
-	PageruleUpdateParamsActionsIDHotlinkProtection       PageruleUpdateParamsActionsID = "hotlink_protection"
 	PageruleUpdateParamsActionsIDIPGeolocation           PageruleUpdateParamsActionsID = "ip_geolocation"
-	PageruleUpdateParamsActionsIDMinify                  PageruleUpdateParamsActionsID = "minify"
 	PageruleUpdateParamsActionsIDMirage                  PageruleUpdateParamsActionsID = "mirage"
 	PageruleUpdateParamsActionsIDOpportunisticEncryption PageruleUpdateParamsActionsID = "opportunistic_encryption"
 	PageruleUpdateParamsActionsIDOriginErrorPagePassThru PageruleUpdateParamsActionsID = "origin_error_page_pass_thru"
 	PageruleUpdateParamsActionsIDPolish                  PageruleUpdateParamsActionsID = "polish"
-	PageruleUpdateParamsActionsIDPurgeByPageRule         PageruleUpdateParamsActionsID = "purge_by_page_rule"
 	PageruleUpdateParamsActionsIDResolveOverride         PageruleUpdateParamsActionsID = "resolve_override"
 	PageruleUpdateParamsActionsIDRespectStrongEtag       PageruleUpdateParamsActionsID = "respect_strong_etag"
 	PageruleUpdateParamsActionsIDResponseBuffering       PageruleUpdateParamsActionsID = "response_buffering"
 	PageruleUpdateParamsActionsIDRocketLoader            PageruleUpdateParamsActionsID = "rocket_loader"
 	PageruleUpdateParamsActionsIDSecurityLevel           PageruleUpdateParamsActionsID = "security_level"
-	PageruleUpdateParamsActionsIDServerSideExclude       PageruleUpdateParamsActionsID = "server_side_exclude"
 	PageruleUpdateParamsActionsIDSortQueryStringForCache PageruleUpdateParamsActionsID = "sort_query_string_for_cache"
 	PageruleUpdateParamsActionsIDSSL                     PageruleUpdateParamsActionsID = "ssl"
 	PageruleUpdateParamsActionsIDTrueClientIPHeader      PageruleUpdateParamsActionsID = "true_client_ip_header"
@@ -3906,7 +3394,7 @@ const (
 
 func (r PageruleUpdateParamsActionsID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsIDAlwaysUseHTTPS, PageruleUpdateParamsActionsIDAutomaticHTTPSRewrites, PageruleUpdateParamsActionsIDBrowserCacheTTL, PageruleUpdateParamsActionsIDBrowserCheck, PageruleUpdateParamsActionsIDBypassCacheOnCookie, PageruleUpdateParamsActionsIDCacheByDeviceType, PageruleUpdateParamsActionsIDCacheDeceptionArmor, PageruleUpdateParamsActionsIDCacheKey, PageruleUpdateParamsActionsIDCacheKeyFields, PageruleUpdateParamsActionsIDCacheLevel, PageruleUpdateParamsActionsIDCacheOnCookie, PageruleUpdateParamsActionsIDCacheTTLByStatus, PageruleUpdateParamsActionsIDDDoSProtection, PageruleUpdateParamsActionsIDDevelopmentMode, PageruleUpdateParamsActionsIDDisableApps, PageruleUpdateParamsActionsIDDisablePerformance, PageruleUpdateParamsActionsIDDisableSecurity, PageruleUpdateParamsActionsIDDisableZaraz, PageruleUpdateParamsActionsIDEdgeCacheTTL, PageruleUpdateParamsActionsIDEmailObfuscation, PageruleUpdateParamsActionsIDExplicitCacheControl, PageruleUpdateParamsActionsIDForwardingURL, PageruleUpdateParamsActionsIDHostHeaderOverride, PageruleUpdateParamsActionsIDHotlinkProtection, PageruleUpdateParamsActionsIDIPGeolocation, PageruleUpdateParamsActionsIDMinify, PageruleUpdateParamsActionsIDMirage, PageruleUpdateParamsActionsIDOpportunisticEncryption, PageruleUpdateParamsActionsIDOriginErrorPagePassThru, PageruleUpdateParamsActionsIDPolish, PageruleUpdateParamsActionsIDPurgeByPageRule, PageruleUpdateParamsActionsIDResolveOverride, PageruleUpdateParamsActionsIDRespectStrongEtag, PageruleUpdateParamsActionsIDResponseBuffering, PageruleUpdateParamsActionsIDRocketLoader, PageruleUpdateParamsActionsIDSecurityLevel, PageruleUpdateParamsActionsIDServerSideExclude, PageruleUpdateParamsActionsIDSortQueryStringForCache, PageruleUpdateParamsActionsIDSSL, PageruleUpdateParamsActionsIDTrueClientIPHeader, PageruleUpdateParamsActionsIDWAF:
+	case PageruleUpdateParamsActionsIDAlwaysUseHTTPS, PageruleUpdateParamsActionsIDAutomaticHTTPSRewrites, PageruleUpdateParamsActionsIDBrowserCacheTTL, PageruleUpdateParamsActionsIDBrowserCheck, PageruleUpdateParamsActionsIDBypassCacheOnCookie, PageruleUpdateParamsActionsIDCacheByDeviceType, PageruleUpdateParamsActionsIDCacheDeceptionArmor, PageruleUpdateParamsActionsIDCacheKey, PageruleUpdateParamsActionsIDCacheLevel, PageruleUpdateParamsActionsIDCacheOnCookie, PageruleUpdateParamsActionsIDDisableApps, PageruleUpdateParamsActionsIDDisablePerformance, PageruleUpdateParamsActionsIDDisableSecurity, PageruleUpdateParamsActionsIDDisableZaraz, PageruleUpdateParamsActionsIDEdgeCacheTTL, PageruleUpdateParamsActionsIDEmailObfuscation, PageruleUpdateParamsActionsIDExplicitCacheControl, PageruleUpdateParamsActionsIDForwardingURL, PageruleUpdateParamsActionsIDHostHeaderOverride, PageruleUpdateParamsActionsIDIPGeolocation, PageruleUpdateParamsActionsIDMirage, PageruleUpdateParamsActionsIDOpportunisticEncryption, PageruleUpdateParamsActionsIDOriginErrorPagePassThru, PageruleUpdateParamsActionsIDPolish, PageruleUpdateParamsActionsIDResolveOverride, PageruleUpdateParamsActionsIDRespectStrongEtag, PageruleUpdateParamsActionsIDResponseBuffering, PageruleUpdateParamsActionsIDRocketLoader, PageruleUpdateParamsActionsIDSecurityLevel, PageruleUpdateParamsActionsIDSortQueryStringForCache, PageruleUpdateParamsActionsIDSSL, PageruleUpdateParamsActionsIDTrueClientIPHeader, PageruleUpdateParamsActionsIDWAF:
 		return true
 	}
 	return false
@@ -4189,12 +3677,9 @@ func (r PageruleEditParamsAction) ImplementsPagerulesPageruleEditParamsActionUni
 // [pagerules.PageruleEditParamsActionsBypassCacheOnCookie],
 // [pagerules.PageruleEditParamsActionsCacheByDeviceType],
 // [pagerules.PageruleEditParamsActionsCacheDeceptionArmor],
-// [pagerules.PageruleEditParamsActionsCacheKey],
-// [pagerules.PageruleEditParamsActionsCacheKeyFields], [zones.CacheLevelParam],
+// [pagerules.PageruleEditParamsActionsCacheKey], [zones.CacheLevelParam],
 // [pagerules.PageruleEditParamsActionsCacheOnCookie],
-// [pagerules.PageruleEditParamsActionsCacheTTLByStatus],
-// [pagerules.PageruleEditParamsActionsDDoSProtection],
-// [zones.DevelopmentModeParam], [pagerules.PageruleEditParamsActionsDisableApps],
+// [pagerules.PageruleEditParamsActionsDisableApps],
 // [pagerules.PageruleEditParamsActionsDisablePerformance],
 // [pagerules.PageruleEditParamsActionsDisableSecurity],
 // [pagerules.PageruleEditParamsActionsDisableZaraz],
@@ -4203,16 +3688,14 @@ func (r PageruleEditParamsAction) ImplementsPagerulesPageruleEditParamsActionUni
 // [pagerules.PageruleEditParamsActionsExplicitCacheControl],
 // [pagerules.PageruleEditParamsActionsForwardingURL],
 // [pagerules.PageruleEditParamsActionsHostHeaderOverride],
-// [zones.HotlinkProtectionParam], [zones.IPGeolocationParam],
-// [pagerules.PageruleEditParamsActionsMinify], [zones.MirageParam],
+// [zones.IPGeolocationParam], [zones.MirageParam],
 // [zones.OpportunisticEncryptionParam], [zones.OriginErrorPagePassThruParam],
-// [zones.PolishParam], [pagerules.PageruleEditParamsActionsPurgeByPageRule],
-// [pagerules.PageruleEditParamsActionsResolveOverride],
+// [zones.PolishParam], [pagerules.PageruleEditParamsActionsResolveOverride],
 // [pagerules.PageruleEditParamsActionsRespectStrongEtag],
 // [zones.ResponseBufferingParam], [zones.RocketLoaderParam],
-// [zones.SecurityLevelParam], [zones.ServerSideExcludesParam],
-// [zones.SortQueryStringForCacheParam], [zones.SSLParam],
-// [zones.TrueClientIPHeaderParam], [zones.WAFParam], [PageruleEditParamsAction].
+// [zones.SecurityLevelParam], [zones.SortQueryStringForCacheParam],
+// [zones.SSLParam], [zones.TrueClientIPHeaderParam], [zones.WAFParam],
+// [PageruleEditParamsAction].
 type PageruleEditParamsActionUnion interface {
 	ImplementsPagerulesPageruleEditParamsActionUnion()
 }
@@ -4526,30 +4009,6 @@ func (r PageruleEditParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, 
 	return apijson.MarshalRoot(r)
 }
 
-type PageruleEditParamsActionsCacheKeyFields struct {
-	ID param.Field[PageruleEditParamsActionsCacheKeyFieldsID] `json:"id"`
-}
-
-func (r PageruleEditParamsActionsCacheKeyFields) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleEditParamsActionsCacheKeyFields) ImplementsPagerulesPageruleEditParamsActionUnion() {}
-
-type PageruleEditParamsActionsCacheKeyFieldsID string
-
-const (
-	PageruleEditParamsActionsCacheKeyFieldsIDCacheKeyFields PageruleEditParamsActionsCacheKeyFieldsID = "cache_key_fields"
-)
-
-func (r PageruleEditParamsActionsCacheKeyFieldsID) IsKnown() bool {
-	switch r {
-	case PageruleEditParamsActionsCacheKeyFieldsIDCacheKeyFields:
-		return true
-	}
-	return false
-}
-
 type PageruleEditParamsActionsCacheOnCookie struct {
 	// Apply the Cache Everything option (Cache Level setting) based on a regular
 	// expression match against a cookie name.
@@ -4575,55 +4034,6 @@ const (
 func (r PageruleEditParamsActionsCacheOnCookieID) IsKnown() bool {
 	switch r {
 	case PageruleEditParamsActionsCacheOnCookieIDCacheOnCookie:
-		return true
-	}
-	return false
-}
-
-type PageruleEditParamsActionsCacheTTLByStatus struct {
-	ID param.Field[PageruleEditParamsActionsCacheTTLByStatusID] `json:"id"`
-}
-
-func (r PageruleEditParamsActionsCacheTTLByStatus) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleEditParamsActionsCacheTTLByStatus) ImplementsPagerulesPageruleEditParamsActionUnion() {
-}
-
-type PageruleEditParamsActionsCacheTTLByStatusID string
-
-const (
-	PageruleEditParamsActionsCacheTTLByStatusIDCacheTTLByStatus PageruleEditParamsActionsCacheTTLByStatusID = "cache_ttl_by_status"
-)
-
-func (r PageruleEditParamsActionsCacheTTLByStatusID) IsKnown() bool {
-	switch r {
-	case PageruleEditParamsActionsCacheTTLByStatusIDCacheTTLByStatus:
-		return true
-	}
-	return false
-}
-
-type PageruleEditParamsActionsDDoSProtection struct {
-	ID param.Field[PageruleEditParamsActionsDDoSProtectionID] `json:"id"`
-}
-
-func (r PageruleEditParamsActionsDDoSProtection) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleEditParamsActionsDDoSProtection) ImplementsPagerulesPageruleEditParamsActionUnion() {}
-
-type PageruleEditParamsActionsDDoSProtectionID string
-
-const (
-	PageruleEditParamsActionsDDoSProtectionIDDDoSProtection PageruleEditParamsActionsDDoSProtectionID = "ddos_protection"
-)
-
-func (r PageruleEditParamsActionsDDoSProtectionID) IsKnown() bool {
-	switch r {
-	case PageruleEditParamsActionsDDoSProtectionIDDDoSProtection:
 		return true
 	}
 	return false
@@ -4921,55 +4331,6 @@ func (r PageruleEditParamsActionsHostHeaderOverrideID) IsKnown() bool {
 	return false
 }
 
-type PageruleEditParamsActionsMinify struct {
-	ID param.Field[PageruleEditParamsActionsMinifyID] `json:"id"`
-}
-
-func (r PageruleEditParamsActionsMinify) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleEditParamsActionsMinify) ImplementsPagerulesPageruleEditParamsActionUnion() {}
-
-type PageruleEditParamsActionsMinifyID string
-
-const (
-	PageruleEditParamsActionsMinifyIDMinify PageruleEditParamsActionsMinifyID = "minify"
-)
-
-func (r PageruleEditParamsActionsMinifyID) IsKnown() bool {
-	switch r {
-	case PageruleEditParamsActionsMinifyIDMinify:
-		return true
-	}
-	return false
-}
-
-type PageruleEditParamsActionsPurgeByPageRule struct {
-	ID param.Field[PageruleEditParamsActionsPurgeByPageRuleID] `json:"id"`
-}
-
-func (r PageruleEditParamsActionsPurgeByPageRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r PageruleEditParamsActionsPurgeByPageRule) ImplementsPagerulesPageruleEditParamsActionUnion() {
-}
-
-type PageruleEditParamsActionsPurgeByPageRuleID string
-
-const (
-	PageruleEditParamsActionsPurgeByPageRuleIDPurgeByPageRule PageruleEditParamsActionsPurgeByPageRuleID = "purge_by_page_rule"
-)
-
-func (r PageruleEditParamsActionsPurgeByPageRuleID) IsKnown() bool {
-	switch r {
-	case PageruleEditParamsActionsPurgeByPageRuleIDPurgeByPageRule:
-		return true
-	}
-	return false
-}
-
 type PageruleEditParamsActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
 	ID param.Field[PageruleEditParamsActionsResolveOverrideID] `json:"id"`
@@ -5059,12 +4420,8 @@ const (
 	PageruleEditParamsActionsIDCacheByDeviceType       PageruleEditParamsActionsID = "cache_by_device_type"
 	PageruleEditParamsActionsIDCacheDeceptionArmor     PageruleEditParamsActionsID = "cache_deception_armor"
 	PageruleEditParamsActionsIDCacheKey                PageruleEditParamsActionsID = "cache_key"
-	PageruleEditParamsActionsIDCacheKeyFields          PageruleEditParamsActionsID = "cache_key_fields"
 	PageruleEditParamsActionsIDCacheLevel              PageruleEditParamsActionsID = "cache_level"
 	PageruleEditParamsActionsIDCacheOnCookie           PageruleEditParamsActionsID = "cache_on_cookie"
-	PageruleEditParamsActionsIDCacheTTLByStatus        PageruleEditParamsActionsID = "cache_ttl_by_status"
-	PageruleEditParamsActionsIDDDoSProtection          PageruleEditParamsActionsID = "ddos_protection"
-	PageruleEditParamsActionsIDDevelopmentMode         PageruleEditParamsActionsID = "development_mode"
 	PageruleEditParamsActionsIDDisableApps             PageruleEditParamsActionsID = "disable_apps"
 	PageruleEditParamsActionsIDDisablePerformance      PageruleEditParamsActionsID = "disable_performance"
 	PageruleEditParamsActionsIDDisableSecurity         PageruleEditParamsActionsID = "disable_security"
@@ -5074,20 +4431,16 @@ const (
 	PageruleEditParamsActionsIDExplicitCacheControl    PageruleEditParamsActionsID = "explicit_cache_control"
 	PageruleEditParamsActionsIDForwardingURL           PageruleEditParamsActionsID = "forwarding_url"
 	PageruleEditParamsActionsIDHostHeaderOverride      PageruleEditParamsActionsID = "host_header_override"
-	PageruleEditParamsActionsIDHotlinkProtection       PageruleEditParamsActionsID = "hotlink_protection"
 	PageruleEditParamsActionsIDIPGeolocation           PageruleEditParamsActionsID = "ip_geolocation"
-	PageruleEditParamsActionsIDMinify                  PageruleEditParamsActionsID = "minify"
 	PageruleEditParamsActionsIDMirage                  PageruleEditParamsActionsID = "mirage"
 	PageruleEditParamsActionsIDOpportunisticEncryption PageruleEditParamsActionsID = "opportunistic_encryption"
 	PageruleEditParamsActionsIDOriginErrorPagePassThru PageruleEditParamsActionsID = "origin_error_page_pass_thru"
 	PageruleEditParamsActionsIDPolish                  PageruleEditParamsActionsID = "polish"
-	PageruleEditParamsActionsIDPurgeByPageRule         PageruleEditParamsActionsID = "purge_by_page_rule"
 	PageruleEditParamsActionsIDResolveOverride         PageruleEditParamsActionsID = "resolve_override"
 	PageruleEditParamsActionsIDRespectStrongEtag       PageruleEditParamsActionsID = "respect_strong_etag"
 	PageruleEditParamsActionsIDResponseBuffering       PageruleEditParamsActionsID = "response_buffering"
 	PageruleEditParamsActionsIDRocketLoader            PageruleEditParamsActionsID = "rocket_loader"
 	PageruleEditParamsActionsIDSecurityLevel           PageruleEditParamsActionsID = "security_level"
-	PageruleEditParamsActionsIDServerSideExclude       PageruleEditParamsActionsID = "server_side_exclude"
 	PageruleEditParamsActionsIDSortQueryStringForCache PageruleEditParamsActionsID = "sort_query_string_for_cache"
 	PageruleEditParamsActionsIDSSL                     PageruleEditParamsActionsID = "ssl"
 	PageruleEditParamsActionsIDTrueClientIPHeader      PageruleEditParamsActionsID = "true_client_ip_header"
@@ -5096,7 +4449,7 @@ const (
 
 func (r PageruleEditParamsActionsID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsIDAlwaysUseHTTPS, PageruleEditParamsActionsIDAutomaticHTTPSRewrites, PageruleEditParamsActionsIDBrowserCacheTTL, PageruleEditParamsActionsIDBrowserCheck, PageruleEditParamsActionsIDBypassCacheOnCookie, PageruleEditParamsActionsIDCacheByDeviceType, PageruleEditParamsActionsIDCacheDeceptionArmor, PageruleEditParamsActionsIDCacheKey, PageruleEditParamsActionsIDCacheKeyFields, PageruleEditParamsActionsIDCacheLevel, PageruleEditParamsActionsIDCacheOnCookie, PageruleEditParamsActionsIDCacheTTLByStatus, PageruleEditParamsActionsIDDDoSProtection, PageruleEditParamsActionsIDDevelopmentMode, PageruleEditParamsActionsIDDisableApps, PageruleEditParamsActionsIDDisablePerformance, PageruleEditParamsActionsIDDisableSecurity, PageruleEditParamsActionsIDDisableZaraz, PageruleEditParamsActionsIDEdgeCacheTTL, PageruleEditParamsActionsIDEmailObfuscation, PageruleEditParamsActionsIDExplicitCacheControl, PageruleEditParamsActionsIDForwardingURL, PageruleEditParamsActionsIDHostHeaderOverride, PageruleEditParamsActionsIDHotlinkProtection, PageruleEditParamsActionsIDIPGeolocation, PageruleEditParamsActionsIDMinify, PageruleEditParamsActionsIDMirage, PageruleEditParamsActionsIDOpportunisticEncryption, PageruleEditParamsActionsIDOriginErrorPagePassThru, PageruleEditParamsActionsIDPolish, PageruleEditParamsActionsIDPurgeByPageRule, PageruleEditParamsActionsIDResolveOverride, PageruleEditParamsActionsIDRespectStrongEtag, PageruleEditParamsActionsIDResponseBuffering, PageruleEditParamsActionsIDRocketLoader, PageruleEditParamsActionsIDSecurityLevel, PageruleEditParamsActionsIDServerSideExclude, PageruleEditParamsActionsIDSortQueryStringForCache, PageruleEditParamsActionsIDSSL, PageruleEditParamsActionsIDTrueClientIPHeader, PageruleEditParamsActionsIDWAF:
+	case PageruleEditParamsActionsIDAlwaysUseHTTPS, PageruleEditParamsActionsIDAutomaticHTTPSRewrites, PageruleEditParamsActionsIDBrowserCacheTTL, PageruleEditParamsActionsIDBrowserCheck, PageruleEditParamsActionsIDBypassCacheOnCookie, PageruleEditParamsActionsIDCacheByDeviceType, PageruleEditParamsActionsIDCacheDeceptionArmor, PageruleEditParamsActionsIDCacheKey, PageruleEditParamsActionsIDCacheLevel, PageruleEditParamsActionsIDCacheOnCookie, PageruleEditParamsActionsIDDisableApps, PageruleEditParamsActionsIDDisablePerformance, PageruleEditParamsActionsIDDisableSecurity, PageruleEditParamsActionsIDDisableZaraz, PageruleEditParamsActionsIDEdgeCacheTTL, PageruleEditParamsActionsIDEmailObfuscation, PageruleEditParamsActionsIDExplicitCacheControl, PageruleEditParamsActionsIDForwardingURL, PageruleEditParamsActionsIDHostHeaderOverride, PageruleEditParamsActionsIDIPGeolocation, PageruleEditParamsActionsIDMirage, PageruleEditParamsActionsIDOpportunisticEncryption, PageruleEditParamsActionsIDOriginErrorPagePassThru, PageruleEditParamsActionsIDPolish, PageruleEditParamsActionsIDResolveOverride, PageruleEditParamsActionsIDRespectStrongEtag, PageruleEditParamsActionsIDResponseBuffering, PageruleEditParamsActionsIDRocketLoader, PageruleEditParamsActionsIDSecurityLevel, PageruleEditParamsActionsIDSortQueryStringForCache, PageruleEditParamsActionsIDSSL, PageruleEditParamsActionsIDTrueClientIPHeader, PageruleEditParamsActionsIDWAF:
 		return true
 	}
 	return false
