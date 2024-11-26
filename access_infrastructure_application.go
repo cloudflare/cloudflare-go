@@ -14,7 +14,8 @@ type AccessInfrastructureTargetContext struct {
 }
 
 type AccessInfrastructureConnectionRulesSSH struct {
-	Usernames []string `json:"usernames"`
+	Usernames       []string `json:"usernames"`
+	AllowEmailAlias *bool    `json:"allow_email_alias"`
 }
 
 type AccessInfrastructureConnectionRules struct {

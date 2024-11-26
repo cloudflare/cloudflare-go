@@ -32,7 +32,8 @@ var (
 		Require: []any{},
 		InfrastructureConnectionRules: &AccessInfrastructureConnectionRules{
 			SSH: &AccessInfrastructureConnectionRulesSSH{
-				Usernames: []string{"devuser"},
+				Usernames:       []string{"devuser"},
+				AllowEmailAlias: BoolPtr(true),
 			},
 		},
 	}
@@ -161,7 +162,8 @@ func TestInfrastructureApplication_Create(t *testing.T) {
 						"require": [],
 						"connection_rules": {
 							"ssh": {
-								"usernames": [ "devuser" ]
+								"usernames": [ "devuser" ],
+								"allow_email_alias": true
 							}
 						},
 						"uid": "8dd6af47-a80b-48cb-89c1-f39299ebf096",
@@ -239,7 +241,8 @@ func TestInfrastructureApplication_Update(t *testing.T) {
 						"require": [],
 						"connection_rules": {
 							"ssh": {
-								"usernames": [ "devuser" ]
+								"usernames": [ "devuser" ],
+								"allow_email_alias": true
 							}
 						},
 						"uid": "8dd6af47-a80b-48cb-89c1-f39299ebf096",
@@ -317,7 +320,8 @@ func TestInfrastructureApplication_Get(t *testing.T) {
 						"require": [],
 						"connection_rules": {
 							"ssh": {
-								"usernames": [ "devuser" ]
+								"usernames": [ "devuser" ],
+								"allow_email_alias": true
 							}
 						},
 						"uid": "8dd6af47-a80b-48cb-89c1-f39299ebf096",
