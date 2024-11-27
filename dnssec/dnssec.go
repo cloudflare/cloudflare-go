@@ -36,7 +36,7 @@ func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 }
 
 // Delete DNSSEC.
-func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opts ...option.RequestOption) (res *string, err error) {
 	var env DNSSECDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
@@ -185,7 +185,7 @@ type DNSSECDeleteResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success DNSSECDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  interface{}                         `json:"result"`
+	Result  string                              `json:"result"`
 	JSON    dnssecDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
