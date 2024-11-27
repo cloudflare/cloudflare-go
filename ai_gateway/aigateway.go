@@ -555,6 +555,8 @@ type AIGatewayListParams struct {
 	OrderByDirection param.Field[AIGatewayListParamsOrderByDirection] `query:"order_by_direction"`
 	Page             param.Field[int64]                               `query:"page"`
 	PerPage          param.Field[int64]                               `query:"per_page"`
+	// Search by id
+	Search param.Field[string] `query:"search"`
 }
 
 // URLQuery serializes [AIGatewayListParams]'s query parameters as `url.Values`.
