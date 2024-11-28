@@ -36,17 +36,16 @@ func NewScanService(opts ...option.RequestOption) (r *ScanService) {
 	return
 }
 
-// Submit a URL to scan. You can also set some options, like the visibility level
-// and custom headers. Check limits at
+// Submit a URL to scan. Check limits at
 // https://developers.cloudflare.com/security-center/investigate/scan-limits/.
-func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewParams, opts ...option.RequestOption) (res *ScanNewResponse, err error) {
+func (r *ScanService) New(ctx context.Context, accountID string, body ScanNewParams, opts ...option.RequestOption) (res *string, err error) {
 	var env ScanNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required accountId parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/urlscanner/scan", accountID)
+	path := fmt.Sprintf("accounts/%s/urlscanner/v2/scan", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -135,36 +134,6 @@ func (r *ScanService) Screenshot(ctx context.Context, accountID string, scanID s
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan/%s/screenshot", accountID, scanID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
-}
-
-type ScanNewResponse struct {
-	// Time when url was submitted for scanning.
-	Time time.Time `json:"time,required" format:"date-time"`
-	// Canonical form of submitted URL. Use this if you want to later search by URL.
-	URL string `json:"url,required"`
-	// Scan ID.
-	UUID string `json:"uuid,required" format:"uuid"`
-	// Submitted visibility status.
-	Visibility string              `json:"visibility,required"`
-	JSON       scanNewResponseJSON `json:"-"`
-}
-
-// scanNewResponseJSON contains the JSON metadata for the struct [ScanNewResponse]
-type scanNewResponseJSON struct {
-	Time        apijson.Field
-	URL         apijson.Field
-	UUID        apijson.Field
-	Visibility  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanNewResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type ScanListResponse struct {
@@ -1747,9 +1716,11 @@ func (r scanHARResponseHARLogPagesPageTimingsJSON) RawJSON() string {
 }
 
 type ScanNewParams struct {
-	URL param.Field[string] `json:"url,required"`
+	URL         param.Field[string] `json:"url,required"`
+	Customagent param.Field[string] `json:"customagent"`
 	// Set custom headers.
 	CustomHeaders param.Field[map[string]string] `json:"customHeaders"`
+	Referer       param.Field[string]            `json:"referer"`
 	// Take multiple screenshots targeting different device types.
 	ScreenshotsResolutions param.Field[[]ScanNewParamsScreenshotsResolution] `json:"screenshotsResolutions"`
 	// The option `Public` means it will be included in listings like recent scans and
@@ -1802,20 +1773,31 @@ func (r ScanNewParamsVisibility) IsKnown() bool {
 }
 
 type ScanNewResponseEnvelope struct {
-	Errors   []ScanNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ScanNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScanNewResponse                   `json:"result,required"`
-	Success  bool                              `json:"success,required"`
-	JSON     scanNewResponseEnvelopeJSON       `json:"-"`
+	// URL to api report.
+	API     string `json:"api,required"`
+	Message string `json:"message,required"`
+	// URL to report.
+	Result string `json:"result,required"`
+	// Canonical form of submitted URL. Use this if you want to later search by URL.
+	URL string `json:"url,required"`
+	// Scan ID.
+	UUID string `json:"uuid,required" format:"uuid"`
+	// Submitted visibility status.
+	Visibility string                         `json:"visibility,required"`
+	Options    ScanNewResponseEnvelopeOptions `json:"options"`
+	JSON       scanNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // scanNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [ScanNewResponseEnvelope]
 type scanNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
+	API         apijson.Field
+	Message     apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
+	URL         apijson.Field
+	UUID        apijson.Field
+	Visibility  apijson.Field
+	Options     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1828,45 +1810,24 @@ func (r scanNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ScanNewResponseEnvelopeErrors struct {
-	Message string                            `json:"message,required"`
-	JSON    scanNewResponseEnvelopeErrorsJSON `json:"-"`
+type ScanNewResponseEnvelopeOptions struct {
+	Useragent string                             `json:"useragent"`
+	JSON      scanNewResponseEnvelopeOptionsJSON `json:"-"`
 }
 
-// scanNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ScanNewResponseEnvelopeErrors]
-type scanNewResponseEnvelopeErrorsJSON struct {
-	Message     apijson.Field
+// scanNewResponseEnvelopeOptionsJSON contains the JSON metadata for the struct
+// [ScanNewResponseEnvelopeOptions]
+type scanNewResponseEnvelopeOptionsJSON struct {
+	Useragent   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScanNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ScanNewResponseEnvelopeOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scanNewResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScanNewResponseEnvelopeMessages struct {
-	Message string                              `json:"message,required"`
-	JSON    scanNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// scanNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ScanNewResponseEnvelopeMessages]
-type scanNewResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScanNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scanNewResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r scanNewResponseEnvelopeOptionsJSON) RawJSON() string {
 	return r.raw
 }
 
