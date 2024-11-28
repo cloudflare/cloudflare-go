@@ -1,3 +1,3 @@
 ```release-note:bug
-authenticated_origin_pulls_per_hostname: fixes the struct to allow null (nil) values on the Enabled property - this is required in order to delete these resources
+authenticated_origin_pulls_per_hostname: fixes the struct to allow null (nil) values on the `Enabled` property
 ```
