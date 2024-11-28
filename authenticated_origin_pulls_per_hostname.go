@@ -67,7 +67,7 @@ type PerHostnameAuthenticatedOriginPullsCertificateParams struct {
 type PerHostnameAuthenticatedOriginPullsConfig struct {
 	Hostname string `json:"hostname"`
 	CertID   string `json:"cert_id"`
-	Enabled  bool   `json:"enabled"`
+	Enabled  *bool  `json:"enabled"`
 }
 
 // PerHostnameAuthenticatedOriginPullsConfigParams represents the expected config param format for Per Hostname AuthenticatedOriginPulls applied on a hostname.
