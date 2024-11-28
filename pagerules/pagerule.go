@@ -1570,12 +1570,12 @@ func (r PageRuleStatus) IsKnown() bool {
 	return false
 }
 
-// A request condition target.
+// URL target.
 type Target struct {
 	// String constraint.
-	Constraint TargetConstraint `json:"constraint,required"`
+	Constraint TargetConstraint `json:"constraint"`
 	// A target based on the URL of the request.
-	Target TargetTarget `json:"target,required"`
+	Target TargetTarget `json:"target"`
 	JSON   targetJSON   `json:"-"`
 }
 
@@ -1656,12 +1656,12 @@ func (r TargetTarget) IsKnown() bool {
 	return false
 }
 
-// A request condition target.
+// URL target.
 type TargetParam struct {
 	// String constraint.
-	Constraint param.Field[TargetConstraintParam] `json:"constraint,required"`
+	Constraint param.Field[TargetConstraintParam] `json:"constraint"`
 	// A target based on the URL of the request.
-	Target param.Field[TargetTarget] `json:"target,required"`
+	Target param.Field[TargetTarget] `json:"target"`
 }
 
 func (r TargetParam) MarshalJSON() (data []byte, err error) {
