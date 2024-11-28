@@ -36,10 +36,12 @@ func TestScanNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"accountId",
 		url_scanner.ScanNewParams{
-			URL: cloudflare.F("https://www.example.com"),
+			URL:         cloudflare.F("https://www.example.com"),
+			Customagent: cloudflare.F("customagent"),
 			CustomHeaders: cloudflare.F(map[string]string{
 				"foo": "string",
 			}),
+			Referer:                cloudflare.F("referer"),
 			ScreenshotsResolutions: cloudflare.F([]url_scanner.ScanNewParamsScreenshotsResolution{url_scanner.ScanNewParamsScreenshotsResolutionDesktop}),
 			Visibility:             cloudflare.F(url_scanner.ScanNewParamsVisibilityPublic),
 		},
