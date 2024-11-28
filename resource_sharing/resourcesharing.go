@@ -59,6 +59,28 @@ func (r *ResourceSharingService) New(ctx context.Context, params ResourceSharing
 	return
 }
 
+// Updating is not immediate, an updated share object with a new status will be
+// returned.
+func (r *ResourceSharingService) Update(ctx context.Context, shareID string, params ResourceSharingUpdateParams, opts ...option.RequestOption) (res *ResourceSharingUpdateResponse, err error) {
+	var env ResourceSharingUpdateResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if shareID == "" {
+		err = errors.New("missing required share_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/shares/%s", params.AccountID, shareID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists all account shares.
 func (r *ResourceSharingService) List(ctx context.Context, params ResourceSharingListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ResourceSharingListResponse], err error) {
 	var raw *http.Response
@@ -84,6 +106,49 @@ func (r *ResourceSharingService) List(ctx context.Context, params ResourceSharin
 // Lists all account shares.
 func (r *ResourceSharingService) ListAutoPaging(ctx context.Context, params ResourceSharingListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ResourceSharingListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
+}
+
+// Deletion is not immediate, an updated share object with a new status will be
+// returned.
+func (r *ResourceSharingService) Delete(ctx context.Context, shareID string, body ResourceSharingDeleteParams, opts ...option.RequestOption) (res *ResourceSharingDeleteResponse, err error) {
+	var env ResourceSharingDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if shareID == "" {
+		err = errors.New("missing required share_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/shares/%s", body.AccountID, shareID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches share by ID.
+func (r *ResourceSharingService) Get(ctx context.Context, shareID string, query ResourceSharingGetParams, opts ...option.RequestOption) (res *ResourceSharingGetResponse, err error) {
+	var env ResourceSharingGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if shareID == "" {
+		err = errors.New("missing required share_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/shares/%s", query.AccountID, shareID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 type ResourceSharingNewResponse struct {
@@ -173,6 +238,98 @@ const (
 func (r ResourceSharingNewResponseKind) IsKnown() bool {
 	switch r {
 	case ResourceSharingNewResponseKindSent, ResourceSharingNewResponseKindReceived:
+		return true
+	}
+	return false
+}
+
+type ResourceSharingUpdateResponse struct {
+	// Share identifier tag.
+	ID string `json:"id,required"`
+	// Account identifier.
+	AccountID string `json:"account_id,required"`
+	// The display name of an account.
+	AccountName string `json:"account_name,required"`
+	// When the share was created.
+	Created time.Time `json:"created,required" format:"date-time"`
+	// When the share was modified.
+	Modified time.Time `json:"modified,required" format:"date-time"`
+	// The name of the share.
+	Name string `json:"name,required"`
+	// Organization identifier.
+	OrganizationID string                                  `json:"organization_id,required"`
+	Status         ResourceSharingUpdateResponseStatus     `json:"status,required"`
+	TargetType     ResourceSharingUpdateResponseTargetType `json:"target_type,required"`
+	Kind           ResourceSharingUpdateResponseKind       `json:"kind"`
+	JSON           resourceSharingUpdateResponseJSON       `json:"-"`
+}
+
+// resourceSharingUpdateResponseJSON contains the JSON metadata for the struct
+// [ResourceSharingUpdateResponse]
+type resourceSharingUpdateResponseJSON struct {
+	ID             apijson.Field
+	AccountID      apijson.Field
+	AccountName    apijson.Field
+	Created        apijson.Field
+	Modified       apijson.Field
+	Name           apijson.Field
+	OrganizationID apijson.Field
+	Status         apijson.Field
+	TargetType     apijson.Field
+	Kind           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ResourceSharingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceSharingUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceSharingUpdateResponseStatus string
+
+const (
+	ResourceSharingUpdateResponseStatusActive   ResourceSharingUpdateResponseStatus = "active"
+	ResourceSharingUpdateResponseStatusDeleting ResourceSharingUpdateResponseStatus = "deleting"
+	ResourceSharingUpdateResponseStatusDeleted  ResourceSharingUpdateResponseStatus = "deleted"
+)
+
+func (r ResourceSharingUpdateResponseStatus) IsKnown() bool {
+	switch r {
+	case ResourceSharingUpdateResponseStatusActive, ResourceSharingUpdateResponseStatusDeleting, ResourceSharingUpdateResponseStatusDeleted:
+		return true
+	}
+	return false
+}
+
+type ResourceSharingUpdateResponseTargetType string
+
+const (
+	ResourceSharingUpdateResponseTargetTypeAccount      ResourceSharingUpdateResponseTargetType = "account"
+	ResourceSharingUpdateResponseTargetTypeOrganization ResourceSharingUpdateResponseTargetType = "organization"
+)
+
+func (r ResourceSharingUpdateResponseTargetType) IsKnown() bool {
+	switch r {
+	case ResourceSharingUpdateResponseTargetTypeAccount, ResourceSharingUpdateResponseTargetTypeOrganization:
+		return true
+	}
+	return false
+}
+
+type ResourceSharingUpdateResponseKind string
+
+const (
+	ResourceSharingUpdateResponseKindSent     ResourceSharingUpdateResponseKind = "sent"
+	ResourceSharingUpdateResponseKindReceived ResourceSharingUpdateResponseKind = "received"
+)
+
+func (r ResourceSharingUpdateResponseKind) IsKnown() bool {
+	switch r {
+	case ResourceSharingUpdateResponseKindSent, ResourceSharingUpdateResponseKindReceived:
 		return true
 	}
 	return false
@@ -270,6 +427,190 @@ func (r ResourceSharingListResponseKind) IsKnown() bool {
 	return false
 }
 
+type ResourceSharingDeleteResponse struct {
+	// Share identifier tag.
+	ID string `json:"id,required"`
+	// Account identifier.
+	AccountID string `json:"account_id,required"`
+	// The display name of an account.
+	AccountName string `json:"account_name,required"`
+	// When the share was created.
+	Created time.Time `json:"created,required" format:"date-time"`
+	// When the share was modified.
+	Modified time.Time `json:"modified,required" format:"date-time"`
+	// The name of the share.
+	Name string `json:"name,required"`
+	// Organization identifier.
+	OrganizationID string                                  `json:"organization_id,required"`
+	Status         ResourceSharingDeleteResponseStatus     `json:"status,required"`
+	TargetType     ResourceSharingDeleteResponseTargetType `json:"target_type,required"`
+	Kind           ResourceSharingDeleteResponseKind       `json:"kind"`
+	JSON           resourceSharingDeleteResponseJSON       `json:"-"`
+}
+
+// resourceSharingDeleteResponseJSON contains the JSON metadata for the struct
+// [ResourceSharingDeleteResponse]
+type resourceSharingDeleteResponseJSON struct {
+	ID             apijson.Field
+	AccountID      apijson.Field
+	AccountName    apijson.Field
+	Created        apijson.Field
+	Modified       apijson.Field
+	Name           apijson.Field
+	OrganizationID apijson.Field
+	Status         apijson.Field
+	TargetType     apijson.Field
+	Kind           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ResourceSharingDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceSharingDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceSharingDeleteResponseStatus string
+
+const (
+	ResourceSharingDeleteResponseStatusActive   ResourceSharingDeleteResponseStatus = "active"
+	ResourceSharingDeleteResponseStatusDeleting ResourceSharingDeleteResponseStatus = "deleting"
+	ResourceSharingDeleteResponseStatusDeleted  ResourceSharingDeleteResponseStatus = "deleted"
+)
+
+func (r ResourceSharingDeleteResponseStatus) IsKnown() bool {
+	switch r {
+	case ResourceSharingDeleteResponseStatusActive, ResourceSharingDeleteResponseStatusDeleting, ResourceSharingDeleteResponseStatusDeleted:
+		return true
+	}
+	return false
+}
+
+type ResourceSharingDeleteResponseTargetType string
+
+const (
+	ResourceSharingDeleteResponseTargetTypeAccount      ResourceSharingDeleteResponseTargetType = "account"
+	ResourceSharingDeleteResponseTargetTypeOrganization ResourceSharingDeleteResponseTargetType = "organization"
+)
+
+func (r ResourceSharingDeleteResponseTargetType) IsKnown() bool {
+	switch r {
+	case ResourceSharingDeleteResponseTargetTypeAccount, ResourceSharingDeleteResponseTargetTypeOrganization:
+		return true
+	}
+	return false
+}
+
+type ResourceSharingDeleteResponseKind string
+
+const (
+	ResourceSharingDeleteResponseKindSent     ResourceSharingDeleteResponseKind = "sent"
+	ResourceSharingDeleteResponseKindReceived ResourceSharingDeleteResponseKind = "received"
+)
+
+func (r ResourceSharingDeleteResponseKind) IsKnown() bool {
+	switch r {
+	case ResourceSharingDeleteResponseKindSent, ResourceSharingDeleteResponseKindReceived:
+		return true
+	}
+	return false
+}
+
+type ResourceSharingGetResponse struct {
+	// Share identifier tag.
+	ID string `json:"id,required"`
+	// Account identifier.
+	AccountID string `json:"account_id,required"`
+	// The display name of an account.
+	AccountName string `json:"account_name,required"`
+	// When the share was created.
+	Created time.Time `json:"created,required" format:"date-time"`
+	// When the share was modified.
+	Modified time.Time `json:"modified,required" format:"date-time"`
+	// The name of the share.
+	Name string `json:"name,required"`
+	// Organization identifier.
+	OrganizationID string                               `json:"organization_id,required"`
+	Status         ResourceSharingGetResponseStatus     `json:"status,required"`
+	TargetType     ResourceSharingGetResponseTargetType `json:"target_type,required"`
+	Kind           ResourceSharingGetResponseKind       `json:"kind"`
+	JSON           resourceSharingGetResponseJSON       `json:"-"`
+}
+
+// resourceSharingGetResponseJSON contains the JSON metadata for the struct
+// [ResourceSharingGetResponse]
+type resourceSharingGetResponseJSON struct {
+	ID             apijson.Field
+	AccountID      apijson.Field
+	AccountName    apijson.Field
+	Created        apijson.Field
+	Modified       apijson.Field
+	Name           apijson.Field
+	OrganizationID apijson.Field
+	Status         apijson.Field
+	TargetType     apijson.Field
+	Kind           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ResourceSharingGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceSharingGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceSharingGetResponseStatus string
+
+const (
+	ResourceSharingGetResponseStatusActive   ResourceSharingGetResponseStatus = "active"
+	ResourceSharingGetResponseStatusDeleting ResourceSharingGetResponseStatus = "deleting"
+	ResourceSharingGetResponseStatusDeleted  ResourceSharingGetResponseStatus = "deleted"
+)
+
+func (r ResourceSharingGetResponseStatus) IsKnown() bool {
+	switch r {
+	case ResourceSharingGetResponseStatusActive, ResourceSharingGetResponseStatusDeleting, ResourceSharingGetResponseStatusDeleted:
+		return true
+	}
+	return false
+}
+
+type ResourceSharingGetResponseTargetType string
+
+const (
+	ResourceSharingGetResponseTargetTypeAccount      ResourceSharingGetResponseTargetType = "account"
+	ResourceSharingGetResponseTargetTypeOrganization ResourceSharingGetResponseTargetType = "organization"
+)
+
+func (r ResourceSharingGetResponseTargetType) IsKnown() bool {
+	switch r {
+	case ResourceSharingGetResponseTargetTypeAccount, ResourceSharingGetResponseTargetTypeOrganization:
+		return true
+	}
+	return false
+}
+
+type ResourceSharingGetResponseKind string
+
+const (
+	ResourceSharingGetResponseKindSent     ResourceSharingGetResponseKind = "sent"
+	ResourceSharingGetResponseKindReceived ResourceSharingGetResponseKind = "received"
+)
+
+func (r ResourceSharingGetResponseKind) IsKnown() bool {
+	switch r {
+	case ResourceSharingGetResponseKindSent, ResourceSharingGetResponseKindReceived:
+		return true
+	}
+	return false
+}
+
 type ResourceSharingNewParams struct {
 	// Account identifier.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -349,6 +690,43 @@ func (r *ResourceSharingNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 }
 
 func (r resourceSharingNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceSharingUpdateParams struct {
+	// Account identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The name of the share.
+	Name param.Field[string] `json:"name,required"`
+}
+
+func (r ResourceSharingUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ResourceSharingUpdateResponseEnvelope struct {
+	Errors []shared.ResponseInfo `json:"errors,required"`
+	// Whether the API call was successful.
+	Success bool                                      `json:"success,required"`
+	Result  ResourceSharingUpdateResponse             `json:"result"`
+	JSON    resourceSharingUpdateResponseEnvelopeJSON `json:"-"`
+}
+
+// resourceSharingUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ResourceSharingUpdateResponseEnvelope]
+type resourceSharingUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceSharingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceSharingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -459,4 +837,66 @@ func (r ResourceSharingListParamsTargetType) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type ResourceSharingDeleteParams struct {
+	// Account identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ResourceSharingDeleteResponseEnvelope struct {
+	Errors []shared.ResponseInfo `json:"errors,required"`
+	// Whether the API call was successful.
+	Success bool                                      `json:"success,required"`
+	Result  ResourceSharingDeleteResponse             `json:"result"`
+	JSON    resourceSharingDeleteResponseEnvelopeJSON `json:"-"`
+}
+
+// resourceSharingDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ResourceSharingDeleteResponseEnvelope]
+type resourceSharingDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceSharingDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceSharingDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type ResourceSharingGetParams struct {
+	// Account identifier.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type ResourceSharingGetResponseEnvelope struct {
+	Errors []shared.ResponseInfo `json:"errors,required"`
+	// Whether the API call was successful.
+	Success bool                                   `json:"success,required"`
+	Result  ResourceSharingGetResponse             `json:"result"`
+	JSON    resourceSharingGetResponseEnvelopeJSON `json:"-"`
+}
+
+// resourceSharingGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ResourceSharingGetResponseEnvelope]
+type resourceSharingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ResourceSharingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r resourceSharingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

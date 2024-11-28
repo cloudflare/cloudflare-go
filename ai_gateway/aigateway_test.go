@@ -104,7 +104,6 @@ func TestAIGatewayListWithOptionalParams(t *testing.T) {
 		OrderByDirection: cloudflare.F(ai_gateway.AIGatewayListParamsOrderByDirectionAsc),
 		Page:             cloudflare.F(int64(1)),
 		PerPage:          cloudflare.F(int64(1)),
-		Search:           cloudflare.F("search"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
