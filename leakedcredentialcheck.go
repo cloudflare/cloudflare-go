@@ -54,8 +54,8 @@ func (r *LeakedCredentialCheckService) New(ctx context.Context, params LeakedCre
 }
 
 // Retrieves the current status of Leaked Credential Checks
-func (r *LeakedCredentialCheckService) List(ctx context.Context, query LeakedCredentialCheckListParams, opts ...option.RequestOption) (res *LeakedCredentialCheckListResponse, err error) {
-	var env LeakedCredentialCheckListResponseEnvelope
+func (r *LeakedCredentialCheckService) Get(ctx context.Context, query LeakedCredentialCheckGetParams, opts ...option.RequestOption) (res *LeakedCredentialCheckGetResponse, err error) {
+	var env LeakedCredentialCheckGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -94,25 +94,25 @@ func (r leakedCredentialCheckNewResponseJSON) RawJSON() string {
 }
 
 // The overall status for Leaked Credential Checks
-type LeakedCredentialCheckListResponse struct {
+type LeakedCredentialCheckGetResponse struct {
 	// Whether or not Leaked Credential Checks are enabled
-	Enabled bool                                  `json:"enabled"`
-	JSON    leakedCredentialCheckListResponseJSON `json:"-"`
+	Enabled bool                                 `json:"enabled"`
+	JSON    leakedCredentialCheckGetResponseJSON `json:"-"`
 }
 
-// leakedCredentialCheckListResponseJSON contains the JSON metadata for the struct
-// [LeakedCredentialCheckListResponse]
-type leakedCredentialCheckListResponseJSON struct {
+// leakedCredentialCheckGetResponseJSON contains the JSON metadata for the struct
+// [LeakedCredentialCheckGetResponse]
+type leakedCredentialCheckGetResponseJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LeakedCredentialCheckListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LeakedCredentialCheckGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r leakedCredentialCheckListResponseJSON) RawJSON() string {
+func (r leakedCredentialCheckGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -171,24 +171,24 @@ func (r LeakedCredentialCheckNewResponseEnvelopeSuccess) IsKnown() bool {
 	return false
 }
 
-type LeakedCredentialCheckListParams struct {
+type LeakedCredentialCheckGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type LeakedCredentialCheckListResponseEnvelope struct {
+type LeakedCredentialCheckGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// The overall status for Leaked Credential Checks
-	Result LeakedCredentialCheckListResponse `json:"result,required"`
+	Result LeakedCredentialCheckGetResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success LeakedCredentialCheckListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    leakedCredentialCheckListResponseEnvelopeJSON    `json:"-"`
+	Success LeakedCredentialCheckGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    leakedCredentialCheckGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// leakedCredentialCheckListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LeakedCredentialCheckListResponseEnvelope]
-type leakedCredentialCheckListResponseEnvelopeJSON struct {
+// leakedCredentialCheckGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LeakedCredentialCheckGetResponseEnvelope]
+type leakedCredentialCheckGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -197,24 +197,24 @@ type leakedCredentialCheckListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LeakedCredentialCheckListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LeakedCredentialCheckGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r leakedCredentialCheckListResponseEnvelopeJSON) RawJSON() string {
+func (r leakedCredentialCheckGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type LeakedCredentialCheckListResponseEnvelopeSuccess bool
+type LeakedCredentialCheckGetResponseEnvelopeSuccess bool
 
 const (
-	LeakedCredentialCheckListResponseEnvelopeSuccessTrue LeakedCredentialCheckListResponseEnvelopeSuccess = true
+	LeakedCredentialCheckGetResponseEnvelopeSuccessTrue LeakedCredentialCheckGetResponseEnvelopeSuccess = true
 )
 
-func (r LeakedCredentialCheckListResponseEnvelopeSuccess) IsKnown() bool {
+func (r LeakedCredentialCheckGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case LeakedCredentialCheckListResponseEnvelopeSuccessTrue:
+	case LeakedCredentialCheckGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
