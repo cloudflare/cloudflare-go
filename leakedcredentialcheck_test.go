@@ -39,7 +39,7 @@ func TestLeakedCredentialCheckNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLeakedCredentialCheckList(t *testing.T) {
+func TestLeakedCredentialCheckGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -52,7 +52,7 @@ func TestLeakedCredentialCheckList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.LeakedCredentialChecks.List(context.TODO(), cloudflare.LeakedCredentialCheckListParams{
+	_, err := client.LeakedCredentialChecks.Get(context.TODO(), cloudflare.LeakedCredentialCheckGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
