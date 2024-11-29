@@ -201,20 +201,13 @@ func (r imageJSON) RawJSON() string {
 }
 
 type V1ListResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   V1ListResponseResult  `json:"result,required"`
-	// Whether the API call was successful
-	Success V1ListResponseSuccess `json:"success,required"`
-	JSON    v1ListResponseJSON    `json:"-"`
+	Images []Image            `json:"images"`
+	JSON   v1ListResponseJSON `json:"-"`
 }
 
 // v1ListResponseJSON contains the JSON metadata for the struct [V1ListResponse]
 type v1ListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	Images      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -225,42 +218,6 @@ func (r *V1ListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r v1ListResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type V1ListResponseResult struct {
-	Images []Image                  `json:"images"`
-	JSON   v1ListResponseResultJSON `json:"-"`
-}
-
-// v1ListResponseResultJSON contains the JSON metadata for the struct
-// [V1ListResponseResult]
-type v1ListResponseResultJSON struct {
-	Images      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V1ListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v1ListResponseResultJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type V1ListResponseSuccess bool
-
-const (
-	V1ListResponseSuccessTrue V1ListResponseSuccess = true
-)
-
-func (r V1ListResponseSuccess) IsKnown() bool {
-	switch r {
-	case V1ListResponseSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type V1NewParams struct {

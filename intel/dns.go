@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 // DNSService contains methods and other services that help with interacting with
@@ -39,7 +38,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 }
 
 // Gets a list of all the domains that have resolved to a specific IP address.
-func (r *DNSService) List(ctx context.Context, params DNSListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DNSListResponse], err error) {
+func (r *DNSService) List(ctx context.Context, params DNSListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DNS], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -61,7 +60,7 @@ func (r *DNSService) List(ctx context.Context, params DNSListParams, opts ...opt
 }
 
 // Gets a list of all the domains that have resolved to a specific IP address.
-func (r *DNSService) ListAutoPaging(ctx context.Context, params DNSListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[DNSListResponse] {
+func (r *DNSService) ListAutoPaging(ctx context.Context, params DNSListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[DNS] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -120,81 +119,6 @@ func (r *DNSReverseRecord) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r dnsReverseRecordJSON) RawJSON() string {
-	return r.raw
-}
-
-type DNSListResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success    DNSListResponseSuccess    `json:"success,required"`
-	Result     DNS                       `json:"result"`
-	ResultInfo DNSListResponseResultInfo `json:"result_info"`
-	JSON       dnsListResponseJSON       `json:"-"`
-}
-
-// dnsListResponseJSON contains the JSON metadata for the struct [DNSListResponse]
-type dnsListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DNSListResponseSuccess bool
-
-const (
-	DNSListResponseSuccessTrue DNSListResponseSuccess = true
-)
-
-func (r DNSListResponseSuccess) IsKnown() bool {
-	switch r {
-	case DNSListResponseSuccessTrue:
-		return true
-	}
-	return false
-}
-
-type DNSListResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                       `json:"total_count"`
-	JSON       dnsListResponseResultInfoJSON `json:"-"`
-}
-
-// dnsListResponseResultInfoJSON contains the JSON metadata for the struct
-// [DNSListResponseResultInfo]
-type dnsListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsListResponseResultInfoJSON) RawJSON() string {
 	return r.raw
 }
 
