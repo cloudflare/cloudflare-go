@@ -11,7 +11,6 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
@@ -72,24 +71,8 @@ func TestScanListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"accountId",
 		url_scanner.ScanListParams{
-			AccountScans: cloudflare.F(true),
-			ASN:          cloudflare.F("13335"),
-			DateEnd:      cloudflare.F(time.Now()),
-			DateStart:    cloudflare.F(time.Now()),
-			Hash:         cloudflare.F("hash"),
-			Hostname:     cloudflare.F("example.com"),
-			IP:           cloudflare.F("1.1.1.1"),
-			IsMalicious:  cloudflare.F(true),
-			Limit:        cloudflare.F(int64(100)),
-			NextCursor:   cloudflare.F("next_cursor"),
-			PageASN:      cloudflare.F("page_asn"),
-			PageHostname: cloudflare.F("page_hostname"),
-			PageIP:       cloudflare.F("page_ip"),
-			PagePath:     cloudflare.F("page_path"),
-			PageURL:      cloudflare.F("page_url"),
-			Path:         cloudflare.F("/samples/subresource-integrity/"),
-			ScanID:       cloudflare.F("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-			URL:          cloudflare.F("https://example.com/?hello"),
+			Q:    cloudflare.F("q"),
+			Size: cloudflare.F(int64(100)),
 		},
 	)
 	if err != nil {
@@ -101,7 +84,72 @@ func TestScanListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestScanGetWithOptionalParams(t *testing.T) {
+func TestScanBulkNew(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.URLScanner.Scans.BulkNew(
+		context.TODO(),
+		"accountId",
+		url_scanner.ScanBulkNewParams{
+			Body: []url_scanner.ScanBulkNewParamsBody{{
+				URL:         cloudflare.F("https://www.example.com"),
+				Customagent: cloudflare.F("customagent"),
+				CustomHeaders: cloudflare.F(map[string]string{
+					"foo": "string",
+				}),
+				Referer:                cloudflare.F("referer"),
+				ScreenshotsResolutions: cloudflare.F([]url_scanner.ScanBulkNewParamsBodyScreenshotsResolution{url_scanner.ScanBulkNewParamsBodyScreenshotsResolutionDesktop}),
+				Visibility:             cloudflare.F(url_scanner.ScanBulkNewParamsBodyVisibilityPublic),
+			}},
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestScanDOM(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.URLScanner.Scans.DOM(
+		context.TODO(),
+		"accountId",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestScanGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -118,9 +166,6 @@ func TestScanGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"accountId",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		url_scanner.ScanGetParams{
-			Full: cloudflare.F(true),
-		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
