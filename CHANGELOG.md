@@ -1,4 +1,6 @@
-## 0.111.0 (Unreleased)
+## 0.112.0 (Unreleased)
+
+## 0.111.0 (December 4th, 2024)
 
 BREAKING CHANGES:
 
