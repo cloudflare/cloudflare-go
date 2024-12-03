@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dns
+package dns_firewall
 
 import (
 	"context"
@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v3/dns"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
@@ -18,32 +19,34 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
-// FirewallAnalyticsReportBytimeService contains methods and other services that
-// help with interacting with the cloudflare API.
+// AnalyticsReportService contains methods and other services that help with
+// interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewFirewallAnalyticsReportBytimeService] method instead.
-type FirewallAnalyticsReportBytimeService struct {
+// the [NewAnalyticsReportService] method instead.
+type AnalyticsReportService struct {
 	Options []option.RequestOption
+	Bytimes *AnalyticsReportBytimeService
 }
 
-// NewFirewallAnalyticsReportBytimeService generates a new service that applies the
-// given options to each request. These options are applied after the parent
-// client's options (if there is one), and before any request-specific options.
-func NewFirewallAnalyticsReportBytimeService(opts ...option.RequestOption) (r *FirewallAnalyticsReportBytimeService) {
-	r = &FirewallAnalyticsReportBytimeService{}
+// NewAnalyticsReportService generates a new service that applies the given options
+// to each request. These options are applied after the parent client's options (if
+// there is one), and before any request-specific options.
+func NewAnalyticsReportService(opts ...option.RequestOption) (r *AnalyticsReportService) {
+	r = &AnalyticsReportService{}
 	r.Options = opts
+	r.Bytimes = NewAnalyticsReportBytimeService(opts...)
 	return
 }
 
-// Retrieves a list of aggregate metrics grouped by time interval.
+// Retrieves a list of summarised aggregate metrics over a given time period.
 //
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, dnsFirewallID string, params FirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *ByTime, err error) {
-	var env FirewallAnalyticsReportBytimeGetResponseEnvelope
+func (r *AnalyticsReportService) Get(ctx context.Context, dnsFirewallID string, params AnalyticsReportGetParams, opts ...option.RequestOption) (res *dns.Report, err error) {
+	var env AnalyticsReportGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -53,7 +56,7 @@ func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, dnsFirew
 		err = errors.New("missing required dns_firewall_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report/bytime", params.AccountID, dnsFirewallID)
+	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report", params.AccountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -62,7 +65,7 @@ func (r *FirewallAnalyticsReportBytimeService) Get(ctx context.Context, dnsFirew
 	return
 }
 
-type FirewallAnalyticsReportBytimeGetParams struct {
+type AnalyticsReportGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// A comma-separated list of dimensions to group results by.
@@ -78,33 +81,31 @@ type FirewallAnalyticsReportBytimeGetParams struct {
 	// A comma-separated list of dimensions to sort by, where each dimension may be
 	// prefixed by - (descending) or + (ascending).
 	Sort param.Field[string] `query:"sort"`
-	// Unit of time to group data by.
-	TimeDelta param.Field[Delta] `query:"time_delta"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 
-// URLQuery serializes [FirewallAnalyticsReportBytimeGetParams]'s query parameters
-// as `url.Values`.
-func (r FirewallAnalyticsReportBytimeGetParams) URLQuery() (v url.Values) {
+// URLQuery serializes [AnalyticsReportGetParams]'s query parameters as
+// `url.Values`.
+func (r AnalyticsReportGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
-type FirewallAnalyticsReportBytimeGetResponseEnvelope struct {
+type AnalyticsReportGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ByTime                                                  `json:"result"`
-	JSON    firewallAnalyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`
+	Success AnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  dns.Report                                `json:"result"`
+	JSON    analyticsReportGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// firewallAnalyticsReportBytimeGetResponseEnvelopeJSON contains the JSON metadata
-// for the struct [FirewallAnalyticsReportBytimeGetResponseEnvelope]
-type firewallAnalyticsReportBytimeGetResponseEnvelopeJSON struct {
+// analyticsReportGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AnalyticsReportGetResponseEnvelope]
+type analyticsReportGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -113,24 +114,24 @@ type firewallAnalyticsReportBytimeGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallAnalyticsReportBytimeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AnalyticsReportGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallAnalyticsReportBytimeGetResponseEnvelopeJSON) RawJSON() string {
+func (r analyticsReportGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess bool
+type AnalyticsReportGetResponseEnvelopeSuccess bool
 
 const (
-	FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccessTrue FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess = true
+	AnalyticsReportGetResponseEnvelopeSuccessTrue AnalyticsReportGetResponseEnvelopeSuccess = true
 )
 
-func (r FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r AnalyticsReportGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case FirewallAnalyticsReportBytimeGetResponseEnvelopeSuccessTrue:
+	case AnalyticsReportGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

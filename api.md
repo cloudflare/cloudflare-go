@@ -929,6 +929,66 @@ Methods:
 - <code title="get /accounts/{account_id}/custom_ns/availability">client.CustomNameservers.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/custom_nameservers#CustomNameserverService.Availabilty">Availabilty</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/custom_nameservers">custom_nameservers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/custom_nameservers#CustomNameserverAvailabiltyParams">CustomNameserverAvailabiltyParams</a>) ([]<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/custom_ns">client.CustomNameservers.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/custom_nameservers#CustomNameserverService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/custom_nameservers">custom_nameservers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/custom_nameservers#CustomNameserverGetParams">CustomNameserverGetParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/custom_nameservers">custom_nameservers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/custom_nameservers#CustomNameserver">CustomNameserver</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+# DNSFirewall
+
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#AttackMitigationParam">AttackMitigationParam</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#UpstreamIPsParam">UpstreamIPsParam</a>
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#AttackMitigation">AttackMitigation</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#FirewallIPs">FirewallIPs</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#UpstreamIPs">UpstreamIPs</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallNewResponse">DNSFirewallNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallListResponse">DNSFirewallListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallDeleteResponse">DNSFirewallDeleteResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallEditResponse">DNSFirewallEditResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallGetResponse">DNSFirewallGetResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/dns_firewall">client.DNSFirewall.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallNewParams">DNSFirewallNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallNewResponse">DNSFirewallNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/dns_firewall">client.DNSFirewall.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallListParams">DNSFirewallListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/packages/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallListResponse">DNSFirewallListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /accounts/{account_id}/dns_firewall/{dns_firewall_id}">client.DNSFirewall.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallDeleteParams">DNSFirewallDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallDeleteResponse">DNSFirewallDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /accounts/{account_id}/dns_firewall/{dns_firewall_id}">client.DNSFirewall.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallEditParams">DNSFirewallEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallEditResponse">DNSFirewallEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/dns_firewall/{dns_firewall_id}">client.DNSFirewall.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallGetParams">DNSFirewallGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#DNSFirewallGetResponse">DNSFirewallGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Analytics
+
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#Delta">Delta</a>
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#Delta">Delta</a>
+
+### Reports
+
+Methods:
+
+- <code title="get /accounts/{account_id}/dns_firewall/{dns_firewall_id}/dns_analytics/report">client.DNSFirewall.Analytics.Reports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#AnalyticsReportService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#AnalyticsReportGetParams">AnalyticsReportGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#Report">Report</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+#### Bytimes
+
+Methods:
+
+- <code title="get /accounts/{account_id}/dns_firewall/{dns_firewall_id}/dns_analytics/report/bytime">client.DNSFirewall.Analytics.Reports.Bytimes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#AnalyticsReportBytimeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#AnalyticsReportBytimeGetParams">AnalyticsReportBytimeGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#ByTime">ByTime</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## ReverseDNS
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#ReverseDNSEditResponse">ReverseDNSEditResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#ReverseDNSGetResponse">ReverseDNSGetResponse</a>
+
+Methods:
+
+- <code title="patch /accounts/{account_id}/dns_firewall/{dns_firewall_id}/reverse_dns">client.DNSFirewall.ReverseDNS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#ReverseDNSService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#ReverseDNSEditParams">ReverseDNSEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#ReverseDNSEditResponse">ReverseDNSEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/dns_firewall/{dns_firewall_id}/reverse_dns">client.DNSFirewall.ReverseDNS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#ReverseDNSService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#ReverseDNSGetParams">ReverseDNSGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#ReverseDNSGetResponse">ReverseDNSGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # DNS
 
 Response Types:
@@ -1071,66 +1131,6 @@ Response Types:
 Methods:
 
 - <code title="get /zones/{zone_id}/dns_analytics/report/bytime">client.DNS.Analytics.Reports.Bytimes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#AnalyticsReportBytimeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#AnalyticsReportBytimeGetParams">AnalyticsReportBytimeGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#ByTime">ByTime</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-## Firewall
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#AttackMitigationParam">AttackMitigationParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#UpstreamIPsParam">UpstreamIPsParam</a>
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#AttackMitigation">AttackMitigation</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallIPs">FirewallIPs</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#UpstreamIPs">UpstreamIPs</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallNewResponse">FirewallNewResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallListResponse">FirewallListResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallDeleteResponse">FirewallDeleteResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallEditResponse">FirewallEditResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallGetResponse">FirewallGetResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{account_id}/dns_firewall">client.DNS.Firewall.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallNewParams">FirewallNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallNewResponse">FirewallNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_id}/dns_firewall">client.DNS.Firewall.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallListParams">FirewallListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/packages/pagination#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallListResponse">FirewallListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="delete /accounts/{account_id}/dns_firewall/{dns_firewall_id}">client.DNS.Firewall.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallDeleteParams">FirewallDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallDeleteResponse">FirewallDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="patch /accounts/{account_id}/dns_firewall/{dns_firewall_id}">client.DNS.Firewall.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallEditParams">FirewallEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallEditResponse">FirewallEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_id}/dns_firewall/{dns_firewall_id}">client.DNS.Firewall.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallGetParams">FirewallGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallGetResponse">FirewallGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-### Analytics
-
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#Delta">Delta</a>
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#Delta">Delta</a>
-
-#### Reports
-
-Methods:
-
-- <code title="get /accounts/{account_id}/dns_firewall/{dns_firewall_id}/dns_analytics/report">client.DNS.Firewall.Analytics.Reports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallAnalyticsReportService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallAnalyticsReportGetParams">FirewallAnalyticsReportGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#Report">Report</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-##### Bytimes
-
-Methods:
-
-- <code title="get /accounts/{account_id}/dns_firewall/{dns_firewall_id}/dns_analytics/report/bytime">client.DNS.Firewall.Analytics.Reports.Bytimes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallAnalyticsReportBytimeService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallAnalyticsReportBytimeGetParams">FirewallAnalyticsReportBytimeGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#ByTime">ByTime</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-### ReverseDNS
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSEditResponse">FirewallReverseDNSEditResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSGetResponse">FirewallReverseDNSGetResponse</a>
-
-Methods:
-
-- <code title="patch /accounts/{account_id}/dns_firewall/{dns_firewall_id}/reverse_dns">client.DNS.Firewall.ReverseDNS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSEditParams">FirewallReverseDNSEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSEditResponse">FirewallReverseDNSEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_id}/dns_firewall/{dns_firewall_id}/reverse_dns">client.DNS.Firewall.ReverseDNS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSGetParams">FirewallReverseDNSGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSGetResponse">FirewallReverseDNSGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## ZoneTransfers
 

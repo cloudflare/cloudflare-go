@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dns_test
+package dns_firewall_test
 
 import (
 	"context"
@@ -10,12 +10,12 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/dns"
+	"github.com/cloudflare/cloudflare-go/v3/dns_firewall"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestFirewallAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
+func TestAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,10 +28,10 @@ func TestFirewallAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNS.Firewall.Analytics.Reports.Bytimes.Get(
+	_, err := client.DNSFirewall.Analytics.Reports.Bytimes.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		dns.FirewallAnalyticsReportBytimeGetParams{
+		dns_firewall.AnalyticsReportBytimeGetParams{
 			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Dimensions: cloudflare.F("queryType"),
 			Filters:    cloudflare.F("responseCode==NOERROR,queryType==A"),
@@ -39,7 +39,7 @@ func TestFirewallAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
 			Metrics:    cloudflare.F("queryCount,uncachedCount"),
 			Since:      cloudflare.F(time.Now()),
 			Sort:       cloudflare.F("+responseCode,-queryName"),
-			TimeDelta:  cloudflare.F(dns.DeltaAll),
+			TimeDelta:  cloudflare.F(dns_firewall.DeltaAll),
 			Until:      cloudflare.F(time.Now()),
 		},
 	)

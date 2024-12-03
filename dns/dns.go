@@ -5,6 +5,7 @@ package dns
 import (
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v3/dns_firewall"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
@@ -21,7 +22,6 @@ type DNSService struct {
 	Records       *RecordService
 	Settings      *SettingService
 	Analytics     *AnalyticsService
-	Firewall      *FirewallService
 	ZoneTransfers *ZoneTransferService
 }
 
@@ -35,7 +35,6 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	r.Records = NewRecordService(opts...)
 	r.Settings = NewSettingService(opts...)
 	r.Analytics = NewAnalyticsService(opts...)
-	r.Firewall = NewFirewallService(opts...)
 	r.ZoneTransfers = NewZoneTransferService(opts...)
 	return
 }
@@ -52,7 +51,7 @@ type DNSAnalyticsQuery struct {
 	// Start date and time of requesting data period in ISO 8601 format.
 	Since time.Time `json:"since,required" format:"date-time"`
 	// Unit of time to group data by.
-	TimeDelta Delta `json:"time_delta,required"`
+	TimeDelta dns_firewall.Delta `json:"time_delta,required"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until time.Time `json:"until,required" format:"date-time"`
 	// Segmentation filter in 'attribute operator value' format.
