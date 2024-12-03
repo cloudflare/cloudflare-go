@@ -936,6 +936,18 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSAnalyticsNominalMetric">DNSAnalyticsNominalMetric</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSAnalyticsQuery">DNSAnalyticsQuery</a>
 
+## DNSSEC
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSSEC">DNSSEC</a>
+
+Methods:
+
+- <code title="delete /zones/{zone_id}/dnssec">client.DNS.DNSSEC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSSECService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSSECDeleteParams">DNSSECDeleteParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /zones/{zone_id}/dnssec">client.DNS.DNSSEC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSSECService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSSECEditParams">DNSSECEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSSEC">DNSSEC</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/dnssec">client.DNS.DNSSEC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSSECService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSSECGetParams">DNSSECGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#DNSSEC">DNSSEC</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Records
 
 Params Types:
@@ -1119,18 +1131,6 @@ Methods:
 
 - <code title="patch /accounts/{account_id}/dns_firewall/{dns_firewall_id}/reverse_dns">client.DNS.Firewall.ReverseDNS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSEditParams">FirewallReverseDNSEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSEditResponse">FirewallReverseDNSEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/dns_firewall/{dns_firewall_id}/reverse_dns">client.DNS.Firewall.ReverseDNS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dnsFirewallID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSGetParams">FirewallReverseDNSGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#FirewallReverseDNSGetResponse">FirewallReverseDNSGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-# DNSSEC
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec">dnssec</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec#DNSSEC">DNSSEC</a>
-
-Methods:
-
-- <code title="delete /zones/{zone_id}/dnssec">client.DNSSEC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec#DNSSECService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec">dnssec</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec#DNSSECDeleteParams">DNSSECDeleteParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="patch /zones/{zone_id}/dnssec">client.DNSSEC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec#DNSSECService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec">dnssec</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec#DNSSECEditParams">DNSSECEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec">dnssec</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec#DNSSEC">DNSSEC</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_id}/dnssec">client.DNSSEC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec#DNSSECService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec">dnssec</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec#DNSSECGetParams">DNSSECGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec">dnssec</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dnssec#DNSSEC">DNSSEC</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # EmailSecurity
 

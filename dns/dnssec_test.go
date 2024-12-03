@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dnssec_test
+package dns_test
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/dnssec"
+	"github.com/cloudflare/cloudflare-go/v3/dns"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
@@ -27,7 +27,7 @@ func TestDNSSECDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNSSEC.Delete(context.TODO(), dnssec.DNSSECDeleteParams{
+	_, err := client.DNS.DNSSEC.Delete(context.TODO(), dns.DNSSECDeleteParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
@@ -52,11 +52,11 @@ func TestDNSSECEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNSSEC.Edit(context.TODO(), dnssec.DNSSECEditParams{
+	_, err := client.DNS.DNSSEC.Edit(context.TODO(), dns.DNSSECEditParams{
 		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		DNSSECMultiSigner: cloudflare.F(false),
 		DNSSECPresigned:   cloudflare.F(true),
-		Status:            cloudflare.F(dnssec.DNSSECEditParamsStatusActive),
+		Status:            cloudflare.F(dns.DNSSECEditParamsStatusActive),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -80,7 +80,7 @@ func TestDNSSECGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNSSEC.Get(context.TODO(), dnssec.DNSSECGetParams{
+	_, err := client.DNS.DNSSEC.Get(context.TODO(), dns.DNSSECGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
