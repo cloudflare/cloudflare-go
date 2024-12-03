@@ -1,5 +1,24 @@
 ## 0.111.0 (Unreleased)
 
+BREAKING CHANGES:
+
+* access: Remove the deprecated `SelfHostedDomains` field from Access applications. Use `Destinations` instead. ([#3667](https://github.com/cloudflare/cloudflare-go/issues/3667))
+
+ENHANCEMENTS:
+
+* Adds allow_email_alias connection rule boolean to access infra policy payload ([#3675](https://github.com/cloudflare/cloudflare-go/issues/3675))
+* access: Add `DomainType` field to Access applications. ([#3667](https://github.com/cloudflare/cloudflare-go/issues/3667))
+* leaked_credential_check: add new methods to interact with leaked credential check cloudfare API ([#3634](https://github.com/cloudflare/cloudflare-go/issues/3634))
+
+BUG FIXES:
+
+* authenticated_origin_pulls_per_hostname: fixes the struct to allow null (nil) values on the `Enabled` property ([#3680](https://github.com/cloudflare/cloudflare-go/issues/3680))
+* snippets_rules: fix upsert request type ([#3669](https://github.com/cloudflare/cloudflare-go/issues/3669))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/stretchr/testify from 1.9.0 to 1.10.0 ([#3672](https://github.com/cloudflare/cloudflare-go/issues/3672))
+
 ## 0.110.0 (November 20th, 2024)
 
 ENHANCEMENTS:
