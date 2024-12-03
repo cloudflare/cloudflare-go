@@ -72,7 +72,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/rules"
 	"github.com/cloudflare/cloudflare-go/v3/rulesets"
 	"github.com/cloudflare/cloudflare-go/v3/rum"
-	"github.com/cloudflare/cloudflare-go/v3/secondary_dns"
 	"github.com/cloudflare/cloudflare-go/v3/security_txt"
 	"github.com/cloudflare/cloudflare-go/v3/snippets"
 	"github.com/cloudflare/cloudflare-go/v3/spectrum"
@@ -127,7 +126,6 @@ type Client struct {
 	OriginTLSClientAuth         *origin_tls_client_auth.OriginTLSClientAuthService
 	Pagerules                   *pagerules.PageruleService
 	RateLimits                  *rate_limits.RateLimitService
-	SecondaryDNS                *secondary_dns.SecondaryDNSService
 	WaitingRooms                *waiting_rooms.WaitingRoomService
 	Web3                        *web3.Web3Service
 	Workers                     *workers.WorkerService
@@ -236,7 +234,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.OriginTLSClientAuth = origin_tls_client_auth.NewOriginTLSClientAuthService(opts...)
 	r.Pagerules = pagerules.NewPageruleService(opts...)
 	r.RateLimits = rate_limits.NewRateLimitService(opts...)
-	r.SecondaryDNS = secondary_dns.NewSecondaryDNSService(opts...)
 	r.WaitingRooms = waiting_rooms.NewWaitingRoomService(opts...)
 	r.Web3 = web3.NewWeb3Service(opts...)
 	r.Workers = workers.NewWorkerService(opts...)

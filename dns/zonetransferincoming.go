@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package secondary_dns
+package dns
 
 import (
 	"context"
@@ -15,28 +15,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
-// IncomingService contains methods and other services that help with interacting
-// with the cloudflare API.
+// ZoneTransferIncomingService contains methods and other services that help with
+// interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewIncomingService] method instead.
-type IncomingService struct {
+// the [NewZoneTransferIncomingService] method instead.
+type ZoneTransferIncomingService struct {
 	Options []option.RequestOption
 }
 
-// NewIncomingService generates a new service that applies the given options to
-// each request. These options are applied after the parent client's options (if
-// there is one), and before any request-specific options.
-func NewIncomingService(opts ...option.RequestOption) (r *IncomingService) {
-	r = &IncomingService{}
+// NewZoneTransferIncomingService generates a new service that applies the given
+// options to each request. These options are applied after the parent client's
+// options (if there is one), and before any request-specific options.
+func NewZoneTransferIncomingService(opts ...option.RequestOption) (r *ZoneTransferIncomingService) {
+	r = &ZoneTransferIncomingService{}
 	r.Options = opts
 	return
 }
 
 // Create secondary zone configuration for incoming zone transfers.
-func (r *IncomingService) New(ctx context.Context, params IncomingNewParams, opts ...option.RequestOption) (res *IncomingNewResponse, err error) {
-	var env IncomingNewResponseEnvelope
+func (r *ZoneTransferIncomingService) New(ctx context.Context, params ZoneTransferIncomingNewParams, opts ...option.RequestOption) (res *ZoneTransferIncomingNewResponse, err error) {
+	var env ZoneTransferIncomingNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -52,8 +52,8 @@ func (r *IncomingService) New(ctx context.Context, params IncomingNewParams, opt
 }
 
 // Update secondary zone configuration for incoming zone transfers.
-func (r *IncomingService) Update(ctx context.Context, params IncomingUpdateParams, opts ...option.RequestOption) (res *IncomingUpdateResponse, err error) {
-	var env IncomingUpdateResponseEnvelope
+func (r *ZoneTransferIncomingService) Update(ctx context.Context, params ZoneTransferIncomingUpdateParams, opts ...option.RequestOption) (res *ZoneTransferIncomingUpdateResponse, err error) {
+	var env ZoneTransferIncomingUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -69,8 +69,8 @@ func (r *IncomingService) Update(ctx context.Context, params IncomingUpdateParam
 }
 
 // Delete secondary zone configuration for incoming zone transfers.
-func (r *IncomingService) Delete(ctx context.Context, body IncomingDeleteParams, opts ...option.RequestOption) (res *IncomingDeleteResponse, err error) {
-	var env IncomingDeleteResponseEnvelope
+func (r *ZoneTransferIncomingService) Delete(ctx context.Context, body ZoneTransferIncomingDeleteParams, opts ...option.RequestOption) (res *ZoneTransferIncomingDeleteResponse, err error) {
+	var env ZoneTransferIncomingDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -86,8 +86,8 @@ func (r *IncomingService) Delete(ctx context.Context, body IncomingDeleteParams,
 }
 
 // Get secondary zone configuration for incoming zone transfers.
-func (r *IncomingService) Get(ctx context.Context, query IncomingGetParams, opts ...option.RequestOption) (res *IncomingGetResponse, err error) {
-	var env IncomingGetResponseEnvelope
+func (r *ZoneTransferIncomingService) Get(ctx context.Context, query ZoneTransferIncomingGetParams, opts ...option.RequestOption) (res *ZoneTransferIncomingGetResponse, err error) {
+	var env ZoneTransferIncomingGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -102,7 +102,7 @@ func (r *IncomingService) Get(ctx context.Context, query IncomingGetParams, opts
 	return
 }
 
-type IncomingNewResponse struct {
+type ZoneTransferIncomingNewResponse struct {
 	ID string `json:"id"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
@@ -118,13 +118,13 @@ type IncomingNewResponse struct {
 	// A list of peer tags.
 	Peers []string `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SOASerial float64                 `json:"soa_serial"`
-	JSON      incomingNewResponseJSON `json:"-"`
+	SOASerial float64                             `json:"soa_serial"`
+	JSON      zoneTransferIncomingNewResponseJSON `json:"-"`
 }
 
-// incomingNewResponseJSON contains the JSON metadata for the struct
-// [IncomingNewResponse]
-type incomingNewResponseJSON struct {
+// zoneTransferIncomingNewResponseJSON contains the JSON metadata for the struct
+// [ZoneTransferIncomingNewResponse]
+type zoneTransferIncomingNewResponseJSON struct {
 	ID                 apijson.Field
 	AutoRefreshSeconds apijson.Field
 	CheckedTime        apijson.Field
@@ -137,15 +137,15 @@ type incomingNewResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *IncomingNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferIncomingNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r incomingNewResponseJSON) RawJSON() string {
+func (r zoneTransferIncomingNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type IncomingUpdateResponse struct {
+type ZoneTransferIncomingUpdateResponse struct {
 	ID string `json:"id"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
@@ -161,13 +161,13 @@ type IncomingUpdateResponse struct {
 	// A list of peer tags.
 	Peers []string `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SOASerial float64                    `json:"soa_serial"`
-	JSON      incomingUpdateResponseJSON `json:"-"`
+	SOASerial float64                                `json:"soa_serial"`
+	JSON      zoneTransferIncomingUpdateResponseJSON `json:"-"`
 }
 
-// incomingUpdateResponseJSON contains the JSON metadata for the struct
-// [IncomingUpdateResponse]
-type incomingUpdateResponseJSON struct {
+// zoneTransferIncomingUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneTransferIncomingUpdateResponse]
+type zoneTransferIncomingUpdateResponseJSON struct {
 	ID                 apijson.Field
 	AutoRefreshSeconds apijson.Field
 	CheckedTime        apijson.Field
@@ -180,36 +180,36 @@ type incomingUpdateResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *IncomingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferIncomingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r incomingUpdateResponseJSON) RawJSON() string {
+func (r zoneTransferIncomingUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type IncomingDeleteResponse struct {
-	ID   string                     `json:"id"`
-	JSON incomingDeleteResponseJSON `json:"-"`
+type ZoneTransferIncomingDeleteResponse struct {
+	ID   string                                 `json:"id"`
+	JSON zoneTransferIncomingDeleteResponseJSON `json:"-"`
 }
 
-// incomingDeleteResponseJSON contains the JSON metadata for the struct
-// [IncomingDeleteResponse]
-type incomingDeleteResponseJSON struct {
+// zoneTransferIncomingDeleteResponseJSON contains the JSON metadata for the struct
+// [ZoneTransferIncomingDeleteResponse]
+type zoneTransferIncomingDeleteResponseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IncomingDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferIncomingDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r incomingDeleteResponseJSON) RawJSON() string {
+func (r zoneTransferIncomingDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type IncomingGetResponse struct {
+type ZoneTransferIncomingGetResponse struct {
 	ID string `json:"id"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
@@ -225,13 +225,13 @@ type IncomingGetResponse struct {
 	// A list of peer tags.
 	Peers []string `json:"peers"`
 	// The serial number of the SOA for the given zone.
-	SOASerial float64                 `json:"soa_serial"`
-	JSON      incomingGetResponseJSON `json:"-"`
+	SOASerial float64                             `json:"soa_serial"`
+	JSON      zoneTransferIncomingGetResponseJSON `json:"-"`
 }
 
-// incomingGetResponseJSON contains the JSON metadata for the struct
-// [IncomingGetResponse]
-type incomingGetResponseJSON struct {
+// zoneTransferIncomingGetResponseJSON contains the JSON metadata for the struct
+// [ZoneTransferIncomingGetResponse]
+type zoneTransferIncomingGetResponseJSON struct {
 	ID                 apijson.Field
 	AutoRefreshSeconds apijson.Field
 	CheckedTime        apijson.Field
@@ -244,15 +244,15 @@ type incomingGetResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *IncomingGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferIncomingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r incomingGetResponseJSON) RawJSON() string {
+func (r zoneTransferIncomingGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type IncomingNewParams struct {
+type ZoneTransferIncomingNewParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
@@ -263,22 +263,22 @@ type IncomingNewParams struct {
 	Peers param.Field[[]string] `json:"peers,required"`
 }
 
-func (r IncomingNewParams) MarshalJSON() (data []byte, err error) {
+func (r ZoneTransferIncomingNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type IncomingNewResponseEnvelope struct {
+type ZoneTransferIncomingNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success IncomingNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  IncomingNewResponse                `json:"result"`
-	JSON    incomingNewResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferIncomingNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ZoneTransferIncomingNewResponse                `json:"result"`
+	JSON    zoneTransferIncomingNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// incomingNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [IncomingNewResponseEnvelope]
-type incomingNewResponseEnvelopeJSON struct {
+// zoneTransferIncomingNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ZoneTransferIncomingNewResponseEnvelope]
+type zoneTransferIncomingNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -287,30 +287,30 @@ type incomingNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IncomingNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferIncomingNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r incomingNewResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferIncomingNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type IncomingNewResponseEnvelopeSuccess bool
+type ZoneTransferIncomingNewResponseEnvelopeSuccess bool
 
 const (
-	IncomingNewResponseEnvelopeSuccessTrue IncomingNewResponseEnvelopeSuccess = true
+	ZoneTransferIncomingNewResponseEnvelopeSuccessTrue ZoneTransferIncomingNewResponseEnvelopeSuccess = true
 )
 
-func (r IncomingNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferIncomingNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case IncomingNewResponseEnvelopeSuccessTrue:
+	case ZoneTransferIncomingNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type IncomingUpdateParams struct {
+type ZoneTransferIncomingUpdateParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
@@ -321,22 +321,22 @@ type IncomingUpdateParams struct {
 	Peers param.Field[[]string] `json:"peers,required"`
 }
 
-func (r IncomingUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r ZoneTransferIncomingUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type IncomingUpdateResponseEnvelope struct {
+type ZoneTransferIncomingUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success IncomingUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  IncomingUpdateResponse                `json:"result"`
-	JSON    incomingUpdateResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferIncomingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  ZoneTransferIncomingUpdateResponse                `json:"result"`
+	JSON    zoneTransferIncomingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// incomingUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [IncomingUpdateResponseEnvelope]
-type incomingUpdateResponseEnvelopeJSON struct {
+// zoneTransferIncomingUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [ZoneTransferIncomingUpdateResponseEnvelope]
+type zoneTransferIncomingUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -345,45 +345,45 @@ type incomingUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IncomingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferIncomingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r incomingUpdateResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferIncomingUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type IncomingUpdateResponseEnvelopeSuccess bool
+type ZoneTransferIncomingUpdateResponseEnvelopeSuccess bool
 
 const (
-	IncomingUpdateResponseEnvelopeSuccessTrue IncomingUpdateResponseEnvelopeSuccess = true
+	ZoneTransferIncomingUpdateResponseEnvelopeSuccessTrue ZoneTransferIncomingUpdateResponseEnvelopeSuccess = true
 )
 
-func (r IncomingUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferIncomingUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case IncomingUpdateResponseEnvelopeSuccessTrue:
+	case ZoneTransferIncomingUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type IncomingDeleteParams struct {
+type ZoneTransferIncomingDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type IncomingDeleteResponseEnvelope struct {
+type ZoneTransferIncomingDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success IncomingDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  IncomingDeleteResponse                `json:"result"`
-	JSON    incomingDeleteResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferIncomingDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  ZoneTransferIncomingDeleteResponse                `json:"result"`
+	JSON    zoneTransferIncomingDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// incomingDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [IncomingDeleteResponseEnvelope]
-type incomingDeleteResponseEnvelopeJSON struct {
+// zoneTransferIncomingDeleteResponseEnvelopeJSON contains the JSON metadata for
+// the struct [ZoneTransferIncomingDeleteResponseEnvelope]
+type zoneTransferIncomingDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -392,45 +392,45 @@ type incomingDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IncomingDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferIncomingDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r incomingDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferIncomingDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type IncomingDeleteResponseEnvelopeSuccess bool
+type ZoneTransferIncomingDeleteResponseEnvelopeSuccess bool
 
 const (
-	IncomingDeleteResponseEnvelopeSuccessTrue IncomingDeleteResponseEnvelopeSuccess = true
+	ZoneTransferIncomingDeleteResponseEnvelopeSuccessTrue ZoneTransferIncomingDeleteResponseEnvelopeSuccess = true
 )
 
-func (r IncomingDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferIncomingDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case IncomingDeleteResponseEnvelopeSuccessTrue:
+	case ZoneTransferIncomingDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type IncomingGetParams struct {
+type ZoneTransferIncomingGetParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type IncomingGetResponseEnvelope struct {
+type ZoneTransferIncomingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success IncomingGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  IncomingGetResponse                `json:"result"`
-	JSON    incomingGetResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferIncomingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ZoneTransferIncomingGetResponse                `json:"result"`
+	JSON    zoneTransferIncomingGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// incomingGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [IncomingGetResponseEnvelope]
-type incomingGetResponseEnvelopeJSON struct {
+// zoneTransferIncomingGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ZoneTransferIncomingGetResponseEnvelope]
+type zoneTransferIncomingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -439,24 +439,24 @@ type incomingGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IncomingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferIncomingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r incomingGetResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferIncomingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type IncomingGetResponseEnvelopeSuccess bool
+type ZoneTransferIncomingGetResponseEnvelopeSuccess bool
 
 const (
-	IncomingGetResponseEnvelopeSuccessTrue IncomingGetResponseEnvelopeSuccess = true
+	ZoneTransferIncomingGetResponseEnvelopeSuccessTrue ZoneTransferIncomingGetResponseEnvelopeSuccess = true
 )
 
-func (r IncomingGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferIncomingGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case IncomingGetResponseEnvelopeSuccessTrue:
+	case ZoneTransferIncomingGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

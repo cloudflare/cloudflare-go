@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package secondary_dns
+package dns
 
 import (
 	"context"
@@ -16,28 +16,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
-// ACLService contains methods and other services that help with interacting with
-// the cloudflare API.
+// ZoneTransferACLService contains methods and other services that help with
+// interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewACLService] method instead.
-type ACLService struct {
+// the [NewZoneTransferACLService] method instead.
+type ZoneTransferACLService struct {
 	Options []option.RequestOption
 }
 
-// NewACLService generates a new service that applies the given options to each
-// request. These options are applied after the parent client's options (if there
-// is one), and before any request-specific options.
-func NewACLService(opts ...option.RequestOption) (r *ACLService) {
-	r = &ACLService{}
+// NewZoneTransferACLService generates a new service that applies the given options
+// to each request. These options are applied after the parent client's options (if
+// there is one), and before any request-specific options.
+func NewZoneTransferACLService(opts ...option.RequestOption) (r *ZoneTransferACLService) {
+	r = &ZoneTransferACLService{}
 	r.Options = opts
 	return
 }
 
 // Create ACL.
-func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
-	var env ACLNewResponseEnvelope
+func (r *ZoneTransferACLService) New(ctx context.Context, params ZoneTransferACLNewParams, opts ...option.RequestOption) (res *ACL, err error) {
+	var env ZoneTransferACLNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -53,8 +53,8 @@ func (r *ACLService) New(ctx context.Context, params ACLNewParams, opts ...optio
 }
 
 // Modify ACL.
-func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
-	var env ACLUpdateResponseEnvelope
+func (r *ZoneTransferACLService) Update(ctx context.Context, aclID string, params ZoneTransferACLUpdateParams, opts ...option.RequestOption) (res *ACL, err error) {
+	var env ZoneTransferACLUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -74,7 +74,7 @@ func (r *ACLService) Update(ctx context.Context, aclID string, params ACLUpdateP
 }
 
 // List ACLs.
-func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ACL], err error) {
+func (r *ZoneTransferACLService) List(ctx context.Context, query ZoneTransferACLListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ACL], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -96,13 +96,13 @@ func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...opti
 }
 
 // List ACLs.
-func (r *ACLService) ListAutoPaging(ctx context.Context, query ACLListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ACL] {
+func (r *ZoneTransferACLService) ListAutoPaging(ctx context.Context, query ZoneTransferACLListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ACL] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete ACL.
-func (r *ACLService) Delete(ctx context.Context, aclID string, body ACLDeleteParams, opts ...option.RequestOption) (res *ACLDeleteResponse, err error) {
-	var env ACLDeleteResponseEnvelope
+func (r *ZoneTransferACLService) Delete(ctx context.Context, aclID string, body ZoneTransferACLDeleteParams, opts ...option.RequestOption) (res *ZoneTransferACLDeleteResponse, err error) {
+	var env ZoneTransferACLDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -122,8 +122,8 @@ func (r *ACLService) Delete(ctx context.Context, aclID string, body ACLDeletePar
 }
 
 // Get ACL.
-func (r *ACLService) Get(ctx context.Context, aclID string, query ACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
-	var env ACLGetResponseEnvelope
+func (r *ZoneTransferACLService) Get(ctx context.Context, aclID string, query ZoneTransferACLGetParams, opts ...option.RequestOption) (res *ACL, err error) {
+	var env ZoneTransferACLGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -187,28 +187,28 @@ func (r ACLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ACLDeleteResponse struct {
-	ID   string                `json:"id"`
-	JSON aclDeleteResponseJSON `json:"-"`
+type ZoneTransferACLDeleteResponse struct {
+	ID   string                            `json:"id"`
+	JSON zoneTransferACLDeleteResponseJSON `json:"-"`
 }
 
-// aclDeleteResponseJSON contains the JSON metadata for the struct
-// [ACLDeleteResponse]
-type aclDeleteResponseJSON struct {
+// zoneTransferACLDeleteResponseJSON contains the JSON metadata for the struct
+// [ZoneTransferACLDeleteResponse]
+type zoneTransferACLDeleteResponseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ACLDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferACLDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aclDeleteResponseJSON) RawJSON() string {
+func (r zoneTransferACLDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type ACLNewParams struct {
+type ZoneTransferACLNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
@@ -220,22 +220,22 @@ type ACLNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 }
 
-func (r ACLNewParams) MarshalJSON() (data []byte, err error) {
+func (r ZoneTransferACLNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ACLNewResponseEnvelope struct {
+type ZoneTransferACLNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success ACLNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  ACL                           `json:"result"`
-	JSON    aclNewResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferACLNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ACL                                       `json:"result"`
+	JSON    zoneTransferACLNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// aclNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ACLNewResponseEnvelope]
-type aclNewResponseEnvelopeJSON struct {
+// zoneTransferACLNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ZoneTransferACLNewResponseEnvelope]
+type zoneTransferACLNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -244,50 +244,50 @@ type aclNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ACLNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferACLNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aclNewResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferACLNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type ACLNewResponseEnvelopeSuccess bool
+type ZoneTransferACLNewResponseEnvelopeSuccess bool
 
 const (
-	ACLNewResponseEnvelopeSuccessTrue ACLNewResponseEnvelopeSuccess = true
+	ZoneTransferACLNewResponseEnvelopeSuccessTrue ZoneTransferACLNewResponseEnvelopeSuccess = true
 )
 
-func (r ACLNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferACLNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ACLNewResponseEnvelopeSuccessTrue:
+	case ZoneTransferACLNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type ACLUpdateParams struct {
+type ZoneTransferACLUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	ACL       ACLParam            `json:"acl,required"`
 }
 
-func (r ACLUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r ZoneTransferACLUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.ACL)
 }
 
-type ACLUpdateResponseEnvelope struct {
+type ZoneTransferACLUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success ACLUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  ACL                              `json:"result"`
-	JSON    aclUpdateResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferACLUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  ACL                                          `json:"result"`
+	JSON    zoneTransferACLUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// aclUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ACLUpdateResponseEnvelope]
-type aclUpdateResponseEnvelopeJSON struct {
+// zoneTransferACLUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ZoneTransferACLUpdateResponseEnvelope]
+type zoneTransferACLUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -296,49 +296,49 @@ type aclUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ACLUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferACLUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aclUpdateResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferACLUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type ACLUpdateResponseEnvelopeSuccess bool
+type ZoneTransferACLUpdateResponseEnvelopeSuccess bool
 
 const (
-	ACLUpdateResponseEnvelopeSuccessTrue ACLUpdateResponseEnvelopeSuccess = true
+	ZoneTransferACLUpdateResponseEnvelopeSuccessTrue ZoneTransferACLUpdateResponseEnvelopeSuccess = true
 )
 
-func (r ACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferACLUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ACLUpdateResponseEnvelopeSuccessTrue:
+	case ZoneTransferACLUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type ACLListParams struct {
+type ZoneTransferACLListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type ACLDeleteParams struct {
+type ZoneTransferACLDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type ACLDeleteResponseEnvelope struct {
+type ZoneTransferACLDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success ACLDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  ACLDeleteResponse                `json:"result"`
-	JSON    aclDeleteResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferACLDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  ZoneTransferACLDeleteResponse                `json:"result"`
+	JSON    zoneTransferACLDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// aclDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ACLDeleteResponseEnvelope]
-type aclDeleteResponseEnvelopeJSON struct {
+// zoneTransferACLDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ZoneTransferACLDeleteResponseEnvelope]
+type zoneTransferACLDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -347,45 +347,45 @@ type aclDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ACLDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferACLDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aclDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferACLDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type ACLDeleteResponseEnvelopeSuccess bool
+type ZoneTransferACLDeleteResponseEnvelopeSuccess bool
 
 const (
-	ACLDeleteResponseEnvelopeSuccessTrue ACLDeleteResponseEnvelopeSuccess = true
+	ZoneTransferACLDeleteResponseEnvelopeSuccessTrue ZoneTransferACLDeleteResponseEnvelopeSuccess = true
 )
 
-func (r ACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferACLDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ACLDeleteResponseEnvelopeSuccessTrue:
+	case ZoneTransferACLDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type ACLGetParams struct {
+type ZoneTransferACLGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type ACLGetResponseEnvelope struct {
+type ZoneTransferACLGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success ACLGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ACL                           `json:"result"`
-	JSON    aclGetResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferACLGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ACL                                       `json:"result"`
+	JSON    zoneTransferACLGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// aclGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ACLGetResponseEnvelope]
-type aclGetResponseEnvelopeJSON struct {
+// zoneTransferACLGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ZoneTransferACLGetResponseEnvelope]
+type zoneTransferACLGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -394,24 +394,24 @@ type aclGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ACLGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferACLGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aclGetResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferACLGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type ACLGetResponseEnvelopeSuccess bool
+type ZoneTransferACLGetResponseEnvelopeSuccess bool
 
 const (
-	ACLGetResponseEnvelopeSuccessTrue ACLGetResponseEnvelopeSuccess = true
+	ZoneTransferACLGetResponseEnvelopeSuccessTrue ZoneTransferACLGetResponseEnvelopeSuccess = true
 )
 
-func (r ACLGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferACLGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case ACLGetResponseEnvelopeSuccessTrue:
+	case ZoneTransferACLGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

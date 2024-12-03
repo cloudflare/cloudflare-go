@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package secondary_dns
+package dns
 
 import (
 	"context"
@@ -16,28 +16,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
-// PeerService contains methods and other services that help with interacting with
-// the cloudflare API.
+// ZoneTransferPeerService contains methods and other services that help with
+// interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewPeerService] method instead.
-type PeerService struct {
+// the [NewZoneTransferPeerService] method instead.
+type ZoneTransferPeerService struct {
 	Options []option.RequestOption
 }
 
-// NewPeerService generates a new service that applies the given options to each
-// request. These options are applied after the parent client's options (if there
-// is one), and before any request-specific options.
-func NewPeerService(opts ...option.RequestOption) (r *PeerService) {
-	r = &PeerService{}
+// NewZoneTransferPeerService generates a new service that applies the given
+// options to each request. These options are applied after the parent client's
+// options (if there is one), and before any request-specific options.
+func NewZoneTransferPeerService(opts ...option.RequestOption) (r *ZoneTransferPeerService) {
+	r = &ZoneTransferPeerService{}
 	r.Options = opts
 	return
 }
 
 // Create Peer.
-func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...option.RequestOption) (res *Peer, err error) {
-	var env PeerNewResponseEnvelope
+func (r *ZoneTransferPeerService) New(ctx context.Context, params ZoneTransferPeerNewParams, opts ...option.RequestOption) (res *Peer, err error) {
+	var env ZoneTransferPeerNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -53,8 +53,8 @@ func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...opt
 }
 
 // Modify Peer.
-func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpdateParams, opts ...option.RequestOption) (res *Peer, err error) {
-	var env PeerUpdateResponseEnvelope
+func (r *ZoneTransferPeerService) Update(ctx context.Context, peerID string, params ZoneTransferPeerUpdateParams, opts ...option.RequestOption) (res *Peer, err error) {
+	var env ZoneTransferPeerUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -74,7 +74,7 @@ func (r *PeerService) Update(ctx context.Context, peerID string, params PeerUpda
 }
 
 // List Peers.
-func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Peer], err error) {
+func (r *ZoneTransferPeerService) List(ctx context.Context, query ZoneTransferPeerListParams, opts ...option.RequestOption) (res *pagination.SinglePage[Peer], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -96,13 +96,13 @@ func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...op
 }
 
 // List Peers.
-func (r *PeerService) ListAutoPaging(ctx context.Context, query PeerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Peer] {
+func (r *ZoneTransferPeerService) ListAutoPaging(ctx context.Context, query ZoneTransferPeerListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[Peer] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
 }
 
 // Delete Peer.
-func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDeleteParams, opts ...option.RequestOption) (res *PeerDeleteResponse, err error) {
-	var env PeerDeleteResponseEnvelope
+func (r *ZoneTransferPeerService) Delete(ctx context.Context, peerID string, body ZoneTransferPeerDeleteParams, opts ...option.RequestOption) (res *ZoneTransferPeerDeleteResponse, err error) {
+	var env ZoneTransferPeerDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -122,8 +122,8 @@ func (r *PeerService) Delete(ctx context.Context, peerID string, body PeerDelete
 }
 
 // Get Peer.
-func (r *PeerService) Get(ctx context.Context, peerID string, query PeerGetParams, opts ...option.RequestOption) (res *Peer, err error) {
-	var env PeerGetResponseEnvelope
+func (r *ZoneTransferPeerService) Get(ctx context.Context, peerID string, query ZoneTransferPeerGetParams, opts ...option.RequestOption) (res *Peer, err error) {
+	var env ZoneTransferPeerGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -206,49 +206,49 @@ func (r PeerParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PeerDeleteResponse struct {
-	ID   string                 `json:"id"`
-	JSON peerDeleteResponseJSON `json:"-"`
+type ZoneTransferPeerDeleteResponse struct {
+	ID   string                             `json:"id"`
+	JSON zoneTransferPeerDeleteResponseJSON `json:"-"`
 }
 
-// peerDeleteResponseJSON contains the JSON metadata for the struct
-// [PeerDeleteResponse]
-type peerDeleteResponseJSON struct {
+// zoneTransferPeerDeleteResponseJSON contains the JSON metadata for the struct
+// [ZoneTransferPeerDeleteResponse]
+type zoneTransferPeerDeleteResponseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PeerDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferPeerDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r peerDeleteResponseJSON) RawJSON() string {
+func (r zoneTransferPeerDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type PeerNewParams struct {
+type ZoneTransferPeerNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the peer.
 	Name param.Field[string] `json:"name,required"`
 }
 
-func (r PeerNewParams) MarshalJSON() (data []byte, err error) {
+func (r ZoneTransferPeerNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PeerNewResponseEnvelope struct {
+type ZoneTransferPeerNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PeerNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  Peer                           `json:"result"`
-	JSON    peerNewResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferPeerNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  Peer                                       `json:"result"`
+	JSON    zoneTransferPeerNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// peerNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PeerNewResponseEnvelope]
-type peerNewResponseEnvelopeJSON struct {
+// zoneTransferPeerNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ZoneTransferPeerNewResponseEnvelope]
+type zoneTransferPeerNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -257,50 +257,50 @@ type peerNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PeerNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferPeerNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r peerNewResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferPeerNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PeerNewResponseEnvelopeSuccess bool
+type ZoneTransferPeerNewResponseEnvelopeSuccess bool
 
 const (
-	PeerNewResponseEnvelopeSuccessTrue PeerNewResponseEnvelopeSuccess = true
+	ZoneTransferPeerNewResponseEnvelopeSuccessTrue ZoneTransferPeerNewResponseEnvelopeSuccess = true
 )
 
-func (r PeerNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferPeerNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PeerNewResponseEnvelopeSuccessTrue:
+	case ZoneTransferPeerNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type PeerUpdateParams struct {
+type ZoneTransferPeerUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	Peer      PeerParam           `json:"peer,required"`
 }
 
-func (r PeerUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r ZoneTransferPeerUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Peer)
 }
 
-type PeerUpdateResponseEnvelope struct {
+type ZoneTransferPeerUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PeerUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  Peer                              `json:"result"`
-	JSON    peerUpdateResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferPeerUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Result  Peer                                          `json:"result"`
+	JSON    zoneTransferPeerUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// peerUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PeerUpdateResponseEnvelope]
-type peerUpdateResponseEnvelopeJSON struct {
+// zoneTransferPeerUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ZoneTransferPeerUpdateResponseEnvelope]
+type zoneTransferPeerUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -309,49 +309,49 @@ type peerUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PeerUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferPeerUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r peerUpdateResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferPeerUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PeerUpdateResponseEnvelopeSuccess bool
+type ZoneTransferPeerUpdateResponseEnvelopeSuccess bool
 
 const (
-	PeerUpdateResponseEnvelopeSuccessTrue PeerUpdateResponseEnvelopeSuccess = true
+	ZoneTransferPeerUpdateResponseEnvelopeSuccessTrue ZoneTransferPeerUpdateResponseEnvelopeSuccess = true
 )
 
-func (r PeerUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferPeerUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PeerUpdateResponseEnvelopeSuccessTrue:
+	case ZoneTransferPeerUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type PeerListParams struct {
+type ZoneTransferPeerListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type PeerDeleteParams struct {
+type ZoneTransferPeerDeleteParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type PeerDeleteResponseEnvelope struct {
+type ZoneTransferPeerDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PeerDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  PeerDeleteResponse                `json:"result"`
-	JSON    peerDeleteResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferPeerDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  ZoneTransferPeerDeleteResponse                `json:"result"`
+	JSON    zoneTransferPeerDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// peerDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PeerDeleteResponseEnvelope]
-type peerDeleteResponseEnvelopeJSON struct {
+// zoneTransferPeerDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ZoneTransferPeerDeleteResponseEnvelope]
+type zoneTransferPeerDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -360,45 +360,45 @@ type peerDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PeerDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferPeerDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r peerDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferPeerDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PeerDeleteResponseEnvelopeSuccess bool
+type ZoneTransferPeerDeleteResponseEnvelopeSuccess bool
 
 const (
-	PeerDeleteResponseEnvelopeSuccessTrue PeerDeleteResponseEnvelopeSuccess = true
+	ZoneTransferPeerDeleteResponseEnvelopeSuccessTrue ZoneTransferPeerDeleteResponseEnvelopeSuccess = true
 )
 
-func (r PeerDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferPeerDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PeerDeleteResponseEnvelopeSuccessTrue:
+	case ZoneTransferPeerDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type PeerGetParams struct {
+type ZoneTransferPeerGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type PeerGetResponseEnvelope struct {
+type ZoneTransferPeerGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PeerGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  Peer                           `json:"result"`
-	JSON    peerGetResponseEnvelopeJSON    `json:"-"`
+	Success ZoneTransferPeerGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  Peer                                       `json:"result"`
+	JSON    zoneTransferPeerGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// peerGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PeerGetResponseEnvelope]
-type peerGetResponseEnvelopeJSON struct {
+// zoneTransferPeerGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ZoneTransferPeerGetResponseEnvelope]
+type zoneTransferPeerGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -407,24 +407,24 @@ type peerGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PeerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneTransferPeerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r peerGetResponseEnvelopeJSON) RawJSON() string {
+func (r zoneTransferPeerGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PeerGetResponseEnvelopeSuccess bool
+type ZoneTransferPeerGetResponseEnvelopeSuccess bool
 
 const (
-	PeerGetResponseEnvelopeSuccessTrue PeerGetResponseEnvelopeSuccess = true
+	ZoneTransferPeerGetResponseEnvelopeSuccessTrue ZoneTransferPeerGetResponseEnvelopeSuccess = true
 )
 
-func (r PeerGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r ZoneTransferPeerGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PeerGetResponseEnvelopeSuccessTrue:
+	case ZoneTransferPeerGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
