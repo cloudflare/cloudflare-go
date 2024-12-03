@@ -377,7 +377,7 @@ type DeviceInput struct {
 	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
 	OSDistroRevision string `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
 	OSVersionExtra string `json:"os_version_extra"`
 	// overall
@@ -1092,7 +1092,7 @@ type DeviceInputParam struct {
 	OSDistroName param.Field[string] `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
 	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
 	OSVersionExtra param.Field[string] `json:"os_version_extra"`
 	// overall
@@ -1716,7 +1716,7 @@ type OSVersionInput struct {
 	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
 	OSDistroRevision string `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
 	OSVersionExtra string             `json:"os_version_extra"`
 	JSON           osVersionInputJSON `json:"-"`
@@ -1789,7 +1789,7 @@ type OSVersionInputParam struct {
 	OSDistroName param.Field[string] `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
 	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// Additional version data. For Mac or iOS, the Product Version Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
 	OSVersionExtra param.Field[string] `json:"os_version_extra"`
 }
