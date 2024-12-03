@@ -17,6 +17,7 @@ import (
 // the [NewDNSService] method instead.
 type DNSService struct {
 	Options   []option.RequestOption
+	DNSSEC    *DNSSECService
 	Records   *RecordService
 	Settings  *SettingService
 	Analytics *AnalyticsService
@@ -29,6 +30,7 @@ type DNSService struct {
 func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	r = &DNSService{}
 	r.Options = opts
+	r.DNSSEC = NewDNSSECService(opts...)
 	r.Records = NewRecordService(opts...)
 	r.Settings = NewSettingService(opts...)
 	r.Analytics = NewAnalyticsService(opts...)
