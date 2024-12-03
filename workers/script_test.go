@@ -44,6 +44,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						Config: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssetsConfig{
 							HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
 							NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingNone),
+							ServeDirectly:    cloudflare.F(true),
 						}),
 						JWT: cloudflare.F("jwt"),
 					}),

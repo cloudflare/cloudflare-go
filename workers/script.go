@@ -457,6 +457,10 @@ type ScriptUpdateParamsBodyObjectMetadataAssetsConfig struct {
 	// Determines the response when a request does not match a static asset, and there
 	// is no Worker script.
 	NotFoundHandling param.Field[ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
+	// When true and the incoming request matches an asset, that will be served instead
+	// of invoking the Worker script. When false, requests will always invoke the
+	// Worker script.
+	ServeDirectly param.Field[bool] `json:"serve_directly"`
 }
 
 func (r ScriptUpdateParamsBodyObjectMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
