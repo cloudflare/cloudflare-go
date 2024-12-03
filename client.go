@@ -32,6 +32,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/dcv_delegation"
 	"github.com/cloudflare/cloudflare-go/v3/diagnostics"
 	"github.com/cloudflare/cloudflare-go/v3/dns"
+	"github.com/cloudflare/cloudflare-go/v3/dns_firewall"
 	"github.com/cloudflare/cloudflare-go/v3/durable_objects"
 	"github.com/cloudflare/cloudflare-go/v3/email_routing"
 	"github.com/cloudflare/cloudflare-go/v3/email_security"
@@ -114,6 +115,7 @@ type Client struct {
 	CustomCertificates          *custom_certificates.CustomCertificateService
 	CustomHostnames             *custom_hostnames.CustomHostnameService
 	CustomNameservers           *custom_nameservers.CustomNameserverService
+	DNSFirewall                 *dns_firewall.DNSFirewallService
 	DNS                         *dns.DNSService
 	EmailSecurity               *email_security.EmailSecurityService
 	EmailRouting                *email_routing.EmailRoutingService
@@ -222,6 +224,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CustomCertificates = custom_certificates.NewCustomCertificateService(opts...)
 	r.CustomHostnames = custom_hostnames.NewCustomHostnameService(opts...)
 	r.CustomNameservers = custom_nameservers.NewCustomNameserverService(opts...)
+	r.DNSFirewall = dns_firewall.NewDNSFirewallService(opts...)
 	r.DNS = dns.NewDNSService(opts...)
 	r.EmailSecurity = email_security.NewEmailSecurityService(opts...)
 	r.EmailRouting = email_routing.NewEmailRoutingService(opts...)

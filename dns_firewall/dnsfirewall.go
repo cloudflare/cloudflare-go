@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dns
+package dns_firewall
 
 import (
 	"context"
@@ -19,32 +19,32 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
-// FirewallService contains methods and other services that help with interacting
-// with the cloudflare API.
+// DNSFirewallService contains methods and other services that help with
+// interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewFirewallService] method instead.
-type FirewallService struct {
+// the [NewDNSFirewallService] method instead.
+type DNSFirewallService struct {
 	Options    []option.RequestOption
-	Analytics  *FirewallAnalyticsService
-	ReverseDNS *FirewallReverseDNSService
+	Analytics  *AnalyticsService
+	ReverseDNS *ReverseDNSService
 }
 
-// NewFirewallService generates a new service that applies the given options to
+// NewDNSFirewallService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewFirewallService(opts ...option.RequestOption) (r *FirewallService) {
-	r = &FirewallService{}
+func NewDNSFirewallService(opts ...option.RequestOption) (r *DNSFirewallService) {
+	r = &DNSFirewallService{}
 	r.Options = opts
-	r.Analytics = NewFirewallAnalyticsService(opts...)
-	r.ReverseDNS = NewFirewallReverseDNSService(opts...)
+	r.Analytics = NewAnalyticsService(opts...)
+	r.ReverseDNS = NewReverseDNSService(opts...)
 	return
 }
 
 // Create a DNS Firewall cluster
-func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opts ...option.RequestOption) (res *FirewallNewResponse, err error) {
-	var env FirewallNewResponseEnvelope
+func (r *DNSFirewallService) New(ctx context.Context, params DNSFirewallNewParams, opts ...option.RequestOption) (res *DNSFirewallNewResponse, err error) {
+	var env DNSFirewallNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -60,7 +60,7 @@ func (r *FirewallService) New(ctx context.Context, params FirewallNewParams, opt
 }
 
 // List DNS Firewall clusters for an account
-func (r *FirewallService) List(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[FirewallListResponse], err error) {
+func (r *DNSFirewallService) List(ctx context.Context, params DNSFirewallListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[DNSFirewallListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -82,13 +82,13 @@ func (r *FirewallService) List(ctx context.Context, params FirewallListParams, o
 }
 
 // List DNS Firewall clusters for an account
-func (r *FirewallService) ListAutoPaging(ctx context.Context, params FirewallListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[FirewallListResponse] {
+func (r *DNSFirewallService) ListAutoPaging(ctx context.Context, params DNSFirewallListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[DNSFirewallListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a DNS Firewall cluster
-func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body FirewallDeleteParams, opts ...option.RequestOption) (res *FirewallDeleteResponse, err error) {
-	var env FirewallDeleteResponseEnvelope
+func (r *DNSFirewallService) Delete(ctx context.Context, dnsFirewallID string, body DNSFirewallDeleteParams, opts ...option.RequestOption) (res *DNSFirewallDeleteResponse, err error) {
+	var env DNSFirewallDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -108,8 +108,8 @@ func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body
 }
 
 // Modify the configuration of a DNS Firewall cluster
-func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params FirewallEditParams, opts ...option.RequestOption) (res *FirewallEditResponse, err error) {
-	var env FirewallEditResponseEnvelope
+func (r *DNSFirewallService) Edit(ctx context.Context, dnsFirewallID string, params DNSFirewallEditParams, opts ...option.RequestOption) (res *DNSFirewallEditResponse, err error) {
+	var env DNSFirewallEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -129,8 +129,8 @@ func (r *FirewallService) Edit(ctx context.Context, dnsFirewallID string, params
 }
 
 // Show a single DNS Firewall cluster for an account
-func (r *FirewallService) Get(ctx context.Context, dnsFirewallID string, query FirewallGetParams, opts ...option.RequestOption) (res *FirewallGetResponse, err error) {
-	var env FirewallGetResponseEnvelope
+func (r *DNSFirewallService) Get(ctx context.Context, dnsFirewallID string, query DNSFirewallGetParams, opts ...option.RequestOption) (res *DNSFirewallGetResponse, err error) {
+	var env DNSFirewallGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -195,7 +195,7 @@ type UpstreamIPs = string
 
 type UpstreamIPsParam = string
 
-type FirewallNewResponse struct {
+type DNSFirewallNewResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Whether to refuse to answer queries for the ANY type
@@ -226,13 +226,13 @@ type FirewallNewResponse struct {
 	Retries     float64       `json:"retries,required"`
 	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings
-	AttackMitigation AttackMitigation        `json:"attack_mitigation,nullable"`
-	JSON             firewallNewResponseJSON `json:"-"`
+	AttackMitigation AttackMitigation           `json:"attack_mitigation,nullable"`
+	JSON             dnsFirewallNewResponseJSON `json:"-"`
 }
 
-// firewallNewResponseJSON contains the JSON metadata for the struct
-// [FirewallNewResponse]
-type firewallNewResponseJSON struct {
+// dnsFirewallNewResponseJSON contains the JSON metadata for the struct
+// [DNSFirewallNewResponse]
+type dnsFirewallNewResponseJSON struct {
 	ID                   apijson.Field
 	DeprecateAnyRequests apijson.Field
 	DNSFirewallIPs       apijson.Field
@@ -250,15 +250,15 @@ type firewallNewResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *FirewallNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallNewResponseJSON) RawJSON() string {
+func (r dnsFirewallNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type FirewallListResponse struct {
+type DNSFirewallListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Whether to refuse to answer queries for the ANY type
@@ -289,13 +289,13 @@ type FirewallListResponse struct {
 	Retries     float64       `json:"retries,required"`
 	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings
-	AttackMitigation AttackMitigation         `json:"attack_mitigation,nullable"`
-	JSON             firewallListResponseJSON `json:"-"`
+	AttackMitigation AttackMitigation            `json:"attack_mitigation,nullable"`
+	JSON             dnsFirewallListResponseJSON `json:"-"`
 }
 
-// firewallListResponseJSON contains the JSON metadata for the struct
-// [FirewallListResponse]
-type firewallListResponseJSON struct {
+// dnsFirewallListResponseJSON contains the JSON metadata for the struct
+// [DNSFirewallListResponse]
+type dnsFirewallListResponseJSON struct {
 	ID                   apijson.Field
 	DeprecateAnyRequests apijson.Field
 	DNSFirewallIPs       apijson.Field
@@ -313,37 +313,37 @@ type firewallListResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *FirewallListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallListResponseJSON) RawJSON() string {
+func (r dnsFirewallListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type FirewallDeleteResponse struct {
+type DNSFirewallDeleteResponse struct {
 	// Identifier
-	ID   string                     `json:"id"`
-	JSON firewallDeleteResponseJSON `json:"-"`
+	ID   string                        `json:"id"`
+	JSON dnsFirewallDeleteResponseJSON `json:"-"`
 }
 
-// firewallDeleteResponseJSON contains the JSON metadata for the struct
-// [FirewallDeleteResponse]
-type firewallDeleteResponseJSON struct {
+// dnsFirewallDeleteResponseJSON contains the JSON metadata for the struct
+// [DNSFirewallDeleteResponse]
+type dnsFirewallDeleteResponseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallDeleteResponseJSON) RawJSON() string {
+func (r dnsFirewallDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type FirewallEditResponse struct {
+type DNSFirewallEditResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Whether to refuse to answer queries for the ANY type
@@ -374,13 +374,13 @@ type FirewallEditResponse struct {
 	Retries     float64       `json:"retries,required"`
 	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings
-	AttackMitigation AttackMitigation         `json:"attack_mitigation,nullable"`
-	JSON             firewallEditResponseJSON `json:"-"`
+	AttackMitigation AttackMitigation            `json:"attack_mitigation,nullable"`
+	JSON             dnsFirewallEditResponseJSON `json:"-"`
 }
 
-// firewallEditResponseJSON contains the JSON metadata for the struct
-// [FirewallEditResponse]
-type firewallEditResponseJSON struct {
+// dnsFirewallEditResponseJSON contains the JSON metadata for the struct
+// [DNSFirewallEditResponse]
+type dnsFirewallEditResponseJSON struct {
 	ID                   apijson.Field
 	DeprecateAnyRequests apijson.Field
 	DNSFirewallIPs       apijson.Field
@@ -398,15 +398,15 @@ type firewallEditResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *FirewallEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallEditResponseJSON) RawJSON() string {
+func (r dnsFirewallEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type FirewallGetResponse struct {
+type DNSFirewallGetResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// Whether to refuse to answer queries for the ANY type
@@ -437,13 +437,13 @@ type FirewallGetResponse struct {
 	Retries     float64       `json:"retries,required"`
 	UpstreamIPs []UpstreamIPs `json:"upstream_ips,required" format:"ipv4"`
 	// Attack mitigation settings
-	AttackMitigation AttackMitigation        `json:"attack_mitigation,nullable"`
-	JSON             firewallGetResponseJSON `json:"-"`
+	AttackMitigation AttackMitigation           `json:"attack_mitigation,nullable"`
+	JSON             dnsFirewallGetResponseJSON `json:"-"`
 }
 
-// firewallGetResponseJSON contains the JSON metadata for the struct
-// [FirewallGetResponse]
-type firewallGetResponseJSON struct {
+// dnsFirewallGetResponseJSON contains the JSON metadata for the struct
+// [DNSFirewallGetResponse]
+type dnsFirewallGetResponseJSON struct {
 	ID                   apijson.Field
 	DeprecateAnyRequests apijson.Field
 	DNSFirewallIPs       apijson.Field
@@ -461,15 +461,15 @@ type firewallGetResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *FirewallGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallGetResponseJSON) RawJSON() string {
+func (r dnsFirewallGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type FirewallNewParams struct {
+type DNSFirewallNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// DNS Firewall cluster name
@@ -500,22 +500,22 @@ type FirewallNewParams struct {
 	Retries param.Field[float64] `json:"retries"`
 }
 
-func (r FirewallNewParams) MarshalJSON() (data []byte, err error) {
+func (r DNSFirewallNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type FirewallNewResponseEnvelope struct {
+type DNSFirewallNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success FirewallNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  FirewallNewResponse                `json:"result"`
-	JSON    firewallNewResponseEnvelopeJSON    `json:"-"`
+	Success DNSFirewallNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  DNSFirewallNewResponse                `json:"result"`
+	JSON    dnsFirewallNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// firewallNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [FirewallNewResponseEnvelope]
-type firewallNewResponseEnvelopeJSON struct {
+// dnsFirewallNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSFirewallNewResponseEnvelope]
+type dnsFirewallNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -524,30 +524,30 @@ type firewallNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallNewResponseEnvelopeJSON) RawJSON() string {
+func (r dnsFirewallNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type FirewallNewResponseEnvelopeSuccess bool
+type DNSFirewallNewResponseEnvelopeSuccess bool
 
 const (
-	FirewallNewResponseEnvelopeSuccessTrue FirewallNewResponseEnvelopeSuccess = true
+	DNSFirewallNewResponseEnvelopeSuccessTrue DNSFirewallNewResponseEnvelopeSuccess = true
 )
 
-func (r FirewallNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r DNSFirewallNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case FirewallNewResponseEnvelopeSuccessTrue:
+	case DNSFirewallNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type FirewallListParams struct {
+type DNSFirewallListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Page number of paginated results
@@ -556,31 +556,31 @@ type FirewallListParams struct {
 	PerPage param.Field[float64] `query:"per_page"`
 }
 
-// URLQuery serializes [FirewallListParams]'s query parameters as `url.Values`.
-func (r FirewallListParams) URLQuery() (v url.Values) {
+// URLQuery serializes [DNSFirewallListParams]'s query parameters as `url.Values`.
+func (r DNSFirewallListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
-type FirewallDeleteParams struct {
+type DNSFirewallDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type FirewallDeleteResponseEnvelope struct {
+type DNSFirewallDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success FirewallDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  FirewallDeleteResponse                `json:"result"`
-	JSON    firewallDeleteResponseEnvelopeJSON    `json:"-"`
+	Success DNSFirewallDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  DNSFirewallDeleteResponse                `json:"result"`
+	JSON    dnsFirewallDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// firewallDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [FirewallDeleteResponseEnvelope]
-type firewallDeleteResponseEnvelopeJSON struct {
+// dnsFirewallDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSFirewallDeleteResponseEnvelope]
+type dnsFirewallDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -589,30 +589,30 @@ type firewallDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r dnsFirewallDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type FirewallDeleteResponseEnvelopeSuccess bool
+type DNSFirewallDeleteResponseEnvelopeSuccess bool
 
 const (
-	FirewallDeleteResponseEnvelopeSuccessTrue FirewallDeleteResponseEnvelopeSuccess = true
+	DNSFirewallDeleteResponseEnvelopeSuccessTrue DNSFirewallDeleteResponseEnvelopeSuccess = true
 )
 
-func (r FirewallDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r DNSFirewallDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case FirewallDeleteResponseEnvelopeSuccessTrue:
+	case DNSFirewallDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type FirewallEditParams struct {
+type DNSFirewallEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Attack mitigation settings
@@ -643,22 +643,22 @@ type FirewallEditParams struct {
 	UpstreamIPs param.Field[[]UpstreamIPsParam] `json:"upstream_ips" format:"ipv4"`
 }
 
-func (r FirewallEditParams) MarshalJSON() (data []byte, err error) {
+func (r DNSFirewallEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type FirewallEditResponseEnvelope struct {
+type DNSFirewallEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success FirewallEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  FirewallEditResponse                `json:"result"`
-	JSON    firewallEditResponseEnvelopeJSON    `json:"-"`
+	Success DNSFirewallEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  DNSFirewallEditResponse                `json:"result"`
+	JSON    dnsFirewallEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// firewallEditResponseEnvelopeJSON contains the JSON metadata for the struct
-// [FirewallEditResponseEnvelope]
-type firewallEditResponseEnvelopeJSON struct {
+// dnsFirewallEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSFirewallEditResponseEnvelope]
+type dnsFirewallEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -667,46 +667,46 @@ type firewallEditResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallEditResponseEnvelopeJSON) RawJSON() string {
+func (r dnsFirewallEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type FirewallEditResponseEnvelopeSuccess bool
+type DNSFirewallEditResponseEnvelopeSuccess bool
 
 const (
-	FirewallEditResponseEnvelopeSuccessTrue FirewallEditResponseEnvelopeSuccess = true
+	DNSFirewallEditResponseEnvelopeSuccessTrue DNSFirewallEditResponseEnvelopeSuccess = true
 )
 
-func (r FirewallEditResponseEnvelopeSuccess) IsKnown() bool {
+func (r DNSFirewallEditResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case FirewallEditResponseEnvelopeSuccessTrue:
+	case DNSFirewallEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type FirewallGetParams struct {
+type DNSFirewallGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type FirewallGetResponseEnvelope struct {
+type DNSFirewallGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success FirewallGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  FirewallGetResponse                `json:"result"`
-	JSON    firewallGetResponseEnvelopeJSON    `json:"-"`
+	Success DNSFirewallGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  DNSFirewallGetResponse                `json:"result"`
+	JSON    dnsFirewallGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// firewallGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [FirewallGetResponseEnvelope]
-type firewallGetResponseEnvelopeJSON struct {
+// dnsFirewallGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSFirewallGetResponseEnvelope]
+type dnsFirewallGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -715,24 +715,24 @@ type firewallGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r firewallGetResponseEnvelopeJSON) RawJSON() string {
+func (r dnsFirewallGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type FirewallGetResponseEnvelopeSuccess bool
+type DNSFirewallGetResponseEnvelopeSuccess bool
 
 const (
-	FirewallGetResponseEnvelopeSuccessTrue FirewallGetResponseEnvelopeSuccess = true
+	DNSFirewallGetResponseEnvelopeSuccessTrue DNSFirewallGetResponseEnvelopeSuccess = true
 )
 
-func (r FirewallGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r DNSFirewallGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case FirewallGetResponseEnvelopeSuccessTrue:
+	case DNSFirewallGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
