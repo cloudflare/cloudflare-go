@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package secondary_dns_test
+package dns_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v3"
+	"github.com/cloudflare/cloudflare-go/v3/dns"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/secondary_dns"
 )
 
-func TestPeerNew(t *testing.T) {
+func TestZoneTransferACLNew(t *testing.T) {
 	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,9 +28,10 @@ func TestPeerNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.SecondaryDNS.Peers.New(context.TODO(), secondary_dns.PeerNewParams{
+	_, err := client.DNS.ZoneTransfers.ACLs.New(context.TODO(), dns.ZoneTransferACLNewParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-		Name:      cloudflare.F("my-peer-1"),
+		IPRange:   cloudflare.F("192.0.2.53/28"),
+		Name:      cloudflare.F("my-acl-1"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -41,7 +42,7 @@ func TestPeerNew(t *testing.T) {
 	}
 }
 
-func TestPeerUpdateWithOptionalParams(t *testing.T) {
+func TestZoneTransferACLUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -54,17 +55,14 @@ func TestPeerUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.SecondaryDNS.Peers.Update(
+	_, err := client.DNS.ZoneTransfers.ACLs.Update(
 		context.TODO(),
 		"23ff594956f20c2a721606e94745a8aa",
-		secondary_dns.PeerUpdateParams{
+		dns.ZoneTransferACLUpdateParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
-			Peer: secondary_dns.PeerParam{
-				Name:       cloudflare.F("my-peer-1"),
-				IP:         cloudflare.F("192.0.2.53"),
-				IxfrEnable: cloudflare.F(false),
-				Port:       cloudflare.F(53.000000),
-				TSIGID:     cloudflare.F("69cd1e104af3e6ed3cb344f263fd0d5a"),
+			ACL: dns.ACLParam{
+				IPRange: cloudflare.F("192.0.2.53/28"),
+				Name:    cloudflare.F("my-acl-1"),
 			},
 		},
 	)
@@ -77,7 +75,7 @@ func TestPeerUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPeerList(t *testing.T) {
+func TestZoneTransferACLList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -90,7 +88,7 @@ func TestPeerList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.SecondaryDNS.Peers.List(context.TODO(), secondary_dns.PeerListParams{
+	_, err := client.DNS.ZoneTransfers.ACLs.List(context.TODO(), dns.ZoneTransferACLListParams{
 		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 	})
 	if err != nil {
@@ -102,7 +100,7 @@ func TestPeerList(t *testing.T) {
 	}
 }
 
-func TestPeerDelete(t *testing.T) {
+func TestZoneTransferACLDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -115,10 +113,10 @@ func TestPeerDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.SecondaryDNS.Peers.Delete(
+	_, err := client.DNS.ZoneTransfers.ACLs.Delete(
 		context.TODO(),
 		"23ff594956f20c2a721606e94745a8aa",
-		secondary_dns.PeerDeleteParams{
+		dns.ZoneTransferACLDeleteParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		},
 	)
@@ -131,7 +129,7 @@ func TestPeerDelete(t *testing.T) {
 	}
 }
 
-func TestPeerGet(t *testing.T) {
+func TestZoneTransferACLGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -144,10 +142,10 @@ func TestPeerGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.SecondaryDNS.Peers.Get(
+	_, err := client.DNS.ZoneTransfers.ACLs.Get(
 		context.TODO(),
 		"23ff594956f20c2a721606e94745a8aa",
-		secondary_dns.PeerGetParams{
+		dns.ZoneTransferACLGetParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		},
 	)

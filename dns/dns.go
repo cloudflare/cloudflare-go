@@ -16,12 +16,13 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDNSService] method instead.
 type DNSService struct {
-	Options   []option.RequestOption
-	DNSSEC    *DNSSECService
-	Records   *RecordService
-	Settings  *SettingService
-	Analytics *AnalyticsService
-	Firewall  *FirewallService
+	Options       []option.RequestOption
+	DNSSEC        *DNSSECService
+	Records       *RecordService
+	Settings      *SettingService
+	Analytics     *AnalyticsService
+	Firewall      *FirewallService
+	ZoneTransfers *ZoneTransferService
 }
 
 // NewDNSService generates a new service that applies the given options to each
@@ -35,6 +36,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	r.Settings = NewSettingService(opts...)
 	r.Analytics = NewAnalyticsService(opts...)
 	r.Firewall = NewFirewallService(opts...)
+	r.ZoneTransfers = NewZoneTransferService(opts...)
 	return
 }
 
