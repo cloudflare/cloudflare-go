@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dns_test
+package dns_firewall_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/dns"
+	"github.com/cloudflare/cloudflare-go/v3/dns_firewall"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestFirewallNewWithOptionalParams(t *testing.T) {
+func TestDNSFirewallNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,11 +27,11 @@ func TestFirewallNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNS.Firewall.New(context.TODO(), dns.FirewallNewParams{
+	_, err := client.DNSFirewall.New(context.TODO(), dns_firewall.DNSFirewallNewParams{
 		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:        cloudflare.F("My Awesome DNS Firewall cluster"),
-		UpstreamIPs: cloudflare.F([]dns.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
-		AttackMitigation: cloudflare.F(dns.AttackMitigationParam{
+		UpstreamIPs: cloudflare.F([]dns_firewall.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
+		AttackMitigation: cloudflare.F(dns_firewall.AttackMitigationParam{
 			Enabled:                   cloudflare.F(true),
 			OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
 		}),
@@ -52,7 +52,7 @@ func TestFirewallNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestFirewallListWithOptionalParams(t *testing.T) {
+func TestDNSFirewallListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -65,7 +65,7 @@ func TestFirewallListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNS.Firewall.List(context.TODO(), dns.FirewallListParams{
+	_, err := client.DNSFirewall.List(context.TODO(), dns_firewall.DNSFirewallListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(1.000000),
@@ -79,7 +79,7 @@ func TestFirewallListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestFirewallDelete(t *testing.T) {
+func TestDNSFirewallDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -92,10 +92,10 @@ func TestFirewallDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNS.Firewall.Delete(
+	_, err := client.DNSFirewall.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		dns.FirewallDeleteParams{
+		dns_firewall.DNSFirewallDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -108,7 +108,7 @@ func TestFirewallDelete(t *testing.T) {
 	}
 }
 
-func TestFirewallEditWithOptionalParams(t *testing.T) {
+func TestDNSFirewallEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -121,12 +121,12 @@ func TestFirewallEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNS.Firewall.Edit(
+	_, err := client.DNSFirewall.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		dns.FirewallEditParams{
+		dns_firewall.DNSFirewallEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AttackMitigation: cloudflare.F(dns.AttackMitigationParam{
+			AttackMitigation: cloudflare.F(dns_firewall.AttackMitigationParam{
 				Enabled:                   cloudflare.F(true),
 				OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
 			}),
@@ -138,7 +138,7 @@ func TestFirewallEditWithOptionalParams(t *testing.T) {
 			NegativeCacheTTL:     cloudflare.F(900.000000),
 			Ratelimit:            cloudflare.F(600.000000),
 			Retries:              cloudflare.F(2.000000),
-			UpstreamIPs:          cloudflare.F([]dns.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
+			UpstreamIPs:          cloudflare.F([]dns_firewall.UpstreamIPsParam{"192.0.2.1", "198.51.100.1", "string"}),
 		},
 	)
 	if err != nil {
@@ -150,7 +150,7 @@ func TestFirewallEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestFirewallGet(t *testing.T) {
+func TestDNSFirewallGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -163,10 +163,10 @@ func TestFirewallGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNS.Firewall.Get(
+	_, err := client.DNSFirewall.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		dns.FirewallGetParams{
+		dns_firewall.DNSFirewallGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

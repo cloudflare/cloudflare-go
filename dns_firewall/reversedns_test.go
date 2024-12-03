@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dns_test
+package dns_firewall_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/dns"
+	"github.com/cloudflare/cloudflare-go/v3/dns_firewall"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestFirewallReverseDNSEditWithOptionalParams(t *testing.T) {
+func TestReverseDNSEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,10 @@ func TestFirewallReverseDNSEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNS.Firewall.ReverseDNS.Edit(
+	_, err := client.DNSFirewall.ReverseDNS.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		dns.FirewallReverseDNSEditParams{
+		dns_firewall.ReverseDNSEditParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			PTR: cloudflare.F(map[string]string{
 				"foo": "string",
@@ -46,7 +46,7 @@ func TestFirewallReverseDNSEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestFirewallReverseDNSGet(t *testing.T) {
+func TestReverseDNSGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -59,10 +59,10 @@ func TestFirewallReverseDNSGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNS.Firewall.ReverseDNS.Get(
+	_, err := client.DNSFirewall.ReverseDNS.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		dns.FirewallReverseDNSGetParams{
+		dns_firewall.ReverseDNSGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

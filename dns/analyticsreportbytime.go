@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/cloudflare/cloudflare-go/v3/dns_firewall"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
@@ -147,7 +148,7 @@ type AnalyticsReportBytimeGetParams struct {
 	// prefixed by - (descending) or + (ascending).
 	Sort param.Field[string] `query:"sort"`
 	// Unit of time to group data by.
-	TimeDelta param.Field[Delta] `query:"time_delta"`
+	TimeDelta param.Field[dns_firewall.Delta] `query:"time_delta"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
