@@ -5,7 +5,6 @@ package dns
 import (
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/dns_firewall"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
@@ -51,7 +50,7 @@ type DNSAnalyticsQuery struct {
 	// Start date and time of requesting data period in ISO 8601 format.
 	Since time.Time `json:"since,required" format:"date-time"`
 	// Unit of time to group data by.
-	TimeDelta dns_firewall.Delta `json:"time_delta,required"`
+	TimeDelta DNSAnalyticsQueryTimeDelta `json:"time_delta,required"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until time.Time `json:"until,required" format:"date-time"`
 	// Segmentation filter in 'attribute operator value' format.
@@ -83,4 +82,28 @@ func (r *DNSAnalyticsQuery) UnmarshalJSON(data []byte) (err error) {
 
 func (r dnsAnalyticsQueryJSON) RawJSON() string {
 	return r.raw
+}
+
+// Unit of time to group data by.
+type DNSAnalyticsQueryTimeDelta string
+
+const (
+	DNSAnalyticsQueryTimeDeltaAll        DNSAnalyticsQueryTimeDelta = "all"
+	DNSAnalyticsQueryTimeDeltaAuto       DNSAnalyticsQueryTimeDelta = "auto"
+	DNSAnalyticsQueryTimeDeltaYear       DNSAnalyticsQueryTimeDelta = "year"
+	DNSAnalyticsQueryTimeDeltaQuarter    DNSAnalyticsQueryTimeDelta = "quarter"
+	DNSAnalyticsQueryTimeDeltaMonth      DNSAnalyticsQueryTimeDelta = "month"
+	DNSAnalyticsQueryTimeDeltaWeek       DNSAnalyticsQueryTimeDelta = "week"
+	DNSAnalyticsQueryTimeDeltaDay        DNSAnalyticsQueryTimeDelta = "day"
+	DNSAnalyticsQueryTimeDeltaHour       DNSAnalyticsQueryTimeDelta = "hour"
+	DNSAnalyticsQueryTimeDeltaDekaminute DNSAnalyticsQueryTimeDelta = "dekaminute"
+	DNSAnalyticsQueryTimeDeltaMinute     DNSAnalyticsQueryTimeDelta = "minute"
+)
+
+func (r DNSAnalyticsQueryTimeDelta) IsKnown() bool {
+	switch r {
+	case DNSAnalyticsQueryTimeDeltaAll, DNSAnalyticsQueryTimeDeltaAuto, DNSAnalyticsQueryTimeDeltaYear, DNSAnalyticsQueryTimeDeltaQuarter, DNSAnalyticsQueryTimeDeltaMonth, DNSAnalyticsQueryTimeDeltaWeek, DNSAnalyticsQueryTimeDeltaDay, DNSAnalyticsQueryTimeDeltaHour, DNSAnalyticsQueryTimeDeltaDekaminute, DNSAnalyticsQueryTimeDeltaMinute:
+		return true
+	}
+	return false
 }
