@@ -957,14 +957,6 @@ Methods:
 
 ## Analytics
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#Delta">Delta</a>
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall">dns_firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns_firewall#Delta">Delta</a>
-
 ### Reports
 
 Methods:
