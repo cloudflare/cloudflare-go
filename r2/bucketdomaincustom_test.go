@@ -33,8 +33,8 @@ func TestBucketDomainCustomNewWithOptionalParams(t *testing.T) {
 		r2.BucketDomainCustomNewParams{
 			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Domain:           cloudflare.F("prefix.example-domain.com"),
-			ZoneID:           cloudflare.F("36ca64a6d92827b8a6b90be344bb1bfd"),
 			Enabled:          cloudflare.F(true),
+			ZoneID:           cloudflare.F("36ca64a6d92827b8a6b90be344bb1bfd"),
 			MinTLS:           cloudflare.F(r2.BucketDomainCustomNewParamsMinTLS1_0),
 			CfR2Jurisdiction: cloudflare.F(r2.BucketDomainCustomNewParamsCfR2JurisdictionDefault),
 		},
