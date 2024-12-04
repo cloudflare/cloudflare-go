@@ -25,10 +25,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewNamespaceService] method instead.
 type NamespaceService struct {
-	Options  []option.RequestOption
-	Keys     *NamespaceKeyService
-	Metadata *NamespaceMetadataService
-	Values   *NamespaceValueService
+	Options   []option.RequestOption
+	Analytics *NamespaceAnalyticsService
+	Keys      *NamespaceKeyService
+	Metadata  *NamespaceMetadataService
+	Values    *NamespaceValueService
 }
 
 // NewNamespaceService generates a new service that applies the given options to
@@ -37,6 +38,7 @@ type NamespaceService struct {
 func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 	r = &NamespaceService{}
 	r.Options = opts
+	r.Analytics = NewNamespaceAnalyticsService(opts...)
 	r.Keys = NewNamespaceKeyService(opts...)
 	r.Metadata = NewNamespaceMetadataService(opts...)
 	r.Values = NewNamespaceValueService(opts...)

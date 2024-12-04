@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package storage
+package kv
 
 import (
 	"context"
@@ -18,28 +18,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
-// AnalyticsService contains methods and other services that help with interacting
-// with the cloudflare API.
+// NamespaceAnalyticsService contains methods and other services that help with
+// interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAnalyticsService] method instead.
-type AnalyticsService struct {
+// the [NewNamespaceAnalyticsService] method instead.
+type NamespaceAnalyticsService struct {
 	Options []option.RequestOption
 }
 
-// NewAnalyticsService generates a new service that applies the given options to
-// each request. These options are applied after the parent client's options (if
-// there is one), and before any request-specific options.
-func NewAnalyticsService(opts ...option.RequestOption) (r *AnalyticsService) {
-	r = &AnalyticsService{}
+// NewNamespaceAnalyticsService generates a new service that applies the given
+// options to each request. These options are applied after the parent client's
+// options (if there is one), and before any request-specific options.
+func NewNamespaceAnalyticsService(opts ...option.RequestOption) (r *NamespaceAnalyticsService) {
+	r = &NamespaceAnalyticsService{}
 	r.Options = opts
 	return
 }
 
 // Retrieves Workers KV request metrics for the given account.
-func (r *AnalyticsService) List(ctx context.Context, params AnalyticsListParams, opts ...option.RequestOption) (res *Schema, err error) {
-	var env AnalyticsListResponseEnvelope
+func (r *NamespaceAnalyticsService) List(ctx context.Context, params NamespaceAnalyticsListParams, opts ...option.RequestOption) (res *Schema, err error) {
+	var env NamespaceAnalyticsListResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -55,8 +55,8 @@ func (r *AnalyticsService) List(ctx context.Context, params AnalyticsListParams,
 }
 
 // Retrieves Workers KV stored data metrics for the given account.
-func (r *AnalyticsService) Stored(ctx context.Context, params AnalyticsStoredParams, opts ...option.RequestOption) (res *Components, err error) {
-	var env AnalyticsStoredResponseEnvelope
+func (r *NamespaceAnalyticsService) Stored(ctx context.Context, params NamespaceAnalyticsStoredParams, opts ...option.RequestOption) (res *Components, err error) {
+	var env NamespaceAnalyticsStoredResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -313,15 +313,16 @@ func (r schemaQueryJSON) RawJSON() string {
 	return r.raw
 }
 
-type AnalyticsListParams struct {
+type NamespaceAnalyticsListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// For specifying result metrics.
-	Query param.Field[AnalyticsListParamsQuery] `query:"query"`
+	Query param.Field[NamespaceAnalyticsListParamsQuery] `query:"query"`
 }
 
-// URLQuery serializes [AnalyticsListParams]'s query parameters as `url.Values`.
-func (r AnalyticsListParams) URLQuery() (v url.Values) {
+// URLQuery serializes [NamespaceAnalyticsListParams]'s query parameters as
+// `url.Values`.
+func (r NamespaceAnalyticsListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -329,9 +330,9 @@ func (r AnalyticsListParams) URLQuery() (v url.Values) {
 }
 
 // For specifying result metrics.
-type AnalyticsListParamsQuery struct {
+type NamespaceAnalyticsListParamsQuery struct {
 	// Can be used to break down the data by given attributes.
-	Dimensions param.Field[[]AnalyticsListParamsQueryDimension] `query:"dimensions"`
+	Dimensions param.Field[[]NamespaceAnalyticsListParamsQueryDimension] `query:"dimensions"`
 	// Used to filter rows by one or more dimensions. Filters can be combined using OR
 	// and AND boolean logic. AND takes precedence over OR in all the expressions. The
 	// OR operator is defined using a comma (,) or OR keyword surrounded by whitespace.
@@ -351,7 +352,7 @@ type AnalyticsListParamsQuery struct {
 	// Limit number of returned metrics.
 	Limit param.Field[int64] `query:"limit"`
 	// One or more metrics to compute.
-	Metrics param.Field[[]AnalyticsListParamsQueryMetric] `query:"metrics"`
+	Metrics param.Field[[]NamespaceAnalyticsListParamsQueryMetric] `query:"metrics"`
 	// Start of time interval to query, defaults to 6 hours before request received.
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
 	// Array of dimensions or metrics to sort by, each dimension/metric may be prefixed
@@ -361,9 +362,9 @@ type AnalyticsListParamsQuery struct {
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 
-// URLQuery serializes [AnalyticsListParamsQuery]'s query parameters as
+// URLQuery serializes [NamespaceAnalyticsListParamsQuery]'s query parameters as
 // `url.Values`.
-func (r AnalyticsListParamsQuery) URLQuery() (v url.Values) {
+func (r NamespaceAnalyticsListParamsQuery) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -371,52 +372,52 @@ func (r AnalyticsListParamsQuery) URLQuery() (v url.Values) {
 }
 
 // For drilling down on metrics.
-type AnalyticsListParamsQueryDimension string
+type NamespaceAnalyticsListParamsQueryDimension string
 
 const (
-	AnalyticsListParamsQueryDimensionAccountID    AnalyticsListParamsQueryDimension = "accountId"
-	AnalyticsListParamsQueryDimensionResponseCode AnalyticsListParamsQueryDimension = "responseCode"
-	AnalyticsListParamsQueryDimensionRequestType  AnalyticsListParamsQueryDimension = "requestType"
+	NamespaceAnalyticsListParamsQueryDimensionAccountID    NamespaceAnalyticsListParamsQueryDimension = "accountId"
+	NamespaceAnalyticsListParamsQueryDimensionResponseCode NamespaceAnalyticsListParamsQueryDimension = "responseCode"
+	NamespaceAnalyticsListParamsQueryDimensionRequestType  NamespaceAnalyticsListParamsQueryDimension = "requestType"
 )
 
-func (r AnalyticsListParamsQueryDimension) IsKnown() bool {
+func (r NamespaceAnalyticsListParamsQueryDimension) IsKnown() bool {
 	switch r {
-	case AnalyticsListParamsQueryDimensionAccountID, AnalyticsListParamsQueryDimensionResponseCode, AnalyticsListParamsQueryDimensionRequestType:
+	case NamespaceAnalyticsListParamsQueryDimensionAccountID, NamespaceAnalyticsListParamsQueryDimensionResponseCode, NamespaceAnalyticsListParamsQueryDimensionRequestType:
 		return true
 	}
 	return false
 }
 
 // A quantitative measurement of KV usage.
-type AnalyticsListParamsQueryMetric string
+type NamespaceAnalyticsListParamsQueryMetric string
 
 const (
-	AnalyticsListParamsQueryMetricRequests AnalyticsListParamsQueryMetric = "requests"
-	AnalyticsListParamsQueryMetricWriteKiB AnalyticsListParamsQueryMetric = "writeKiB"
-	AnalyticsListParamsQueryMetricReadKiB  AnalyticsListParamsQueryMetric = "readKiB"
+	NamespaceAnalyticsListParamsQueryMetricRequests NamespaceAnalyticsListParamsQueryMetric = "requests"
+	NamespaceAnalyticsListParamsQueryMetricWriteKiB NamespaceAnalyticsListParamsQueryMetric = "writeKiB"
+	NamespaceAnalyticsListParamsQueryMetricReadKiB  NamespaceAnalyticsListParamsQueryMetric = "readKiB"
 )
 
-func (r AnalyticsListParamsQueryMetric) IsKnown() bool {
+func (r NamespaceAnalyticsListParamsQueryMetric) IsKnown() bool {
 	switch r {
-	case AnalyticsListParamsQueryMetricRequests, AnalyticsListParamsQueryMetricWriteKiB, AnalyticsListParamsQueryMetricReadKiB:
+	case NamespaceAnalyticsListParamsQueryMetricRequests, NamespaceAnalyticsListParamsQueryMetricWriteKiB, NamespaceAnalyticsListParamsQueryMetricReadKiB:
 		return true
 	}
 	return false
 }
 
-type AnalyticsListResponseEnvelope struct {
+type NamespaceAnalyticsListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success AnalyticsListResponseEnvelopeSuccess `json:"success,required"`
+	Success NamespaceAnalyticsListResponseEnvelopeSuccess `json:"success,required"`
 	// Metrics on Workers KV requests.
-	Result Schema                            `json:"result"`
-	JSON   analyticsListResponseEnvelopeJSON `json:"-"`
+	Result Schema                                     `json:"result"`
+	JSON   namespaceAnalyticsListResponseEnvelopeJSON `json:"-"`
 }
 
-// analyticsListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AnalyticsListResponseEnvelope]
-type analyticsListResponseEnvelopeJSON struct {
+// namespaceAnalyticsListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [NamespaceAnalyticsListResponseEnvelope]
+type namespaceAnalyticsListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -425,38 +426,39 @@ type analyticsListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *NamespaceAnalyticsListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r analyticsListResponseEnvelopeJSON) RawJSON() string {
+func (r namespaceAnalyticsListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type AnalyticsListResponseEnvelopeSuccess bool
+type NamespaceAnalyticsListResponseEnvelopeSuccess bool
 
 const (
-	AnalyticsListResponseEnvelopeSuccessTrue AnalyticsListResponseEnvelopeSuccess = true
+	NamespaceAnalyticsListResponseEnvelopeSuccessTrue NamespaceAnalyticsListResponseEnvelopeSuccess = true
 )
 
-func (r AnalyticsListResponseEnvelopeSuccess) IsKnown() bool {
+func (r NamespaceAnalyticsListResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case AnalyticsListResponseEnvelopeSuccessTrue:
+	case NamespaceAnalyticsListResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type AnalyticsStoredParams struct {
+type NamespaceAnalyticsStoredParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// For specifying result metrics.
-	Query param.Field[AnalyticsStoredParamsQuery] `query:"query"`
+	Query param.Field[NamespaceAnalyticsStoredParamsQuery] `query:"query"`
 }
 
-// URLQuery serializes [AnalyticsStoredParams]'s query parameters as `url.Values`.
-func (r AnalyticsStoredParams) URLQuery() (v url.Values) {
+// URLQuery serializes [NamespaceAnalyticsStoredParams]'s query parameters as
+// `url.Values`.
+func (r NamespaceAnalyticsStoredParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -464,9 +466,9 @@ func (r AnalyticsStoredParams) URLQuery() (v url.Values) {
 }
 
 // For specifying result metrics.
-type AnalyticsStoredParamsQuery struct {
+type NamespaceAnalyticsStoredParamsQuery struct {
 	// Can be used to break down the data by given attributes.
-	Dimensions param.Field[[]AnalyticsStoredParamsQueryDimension] `query:"dimensions"`
+	Dimensions param.Field[[]NamespaceAnalyticsStoredParamsQueryDimension] `query:"dimensions"`
 	// Used to filter rows by one or more dimensions. Filters can be combined using OR
 	// and AND boolean logic. AND takes precedence over OR in all the expressions. The
 	// OR operator is defined using a comma (,) or OR keyword surrounded by whitespace.
@@ -486,7 +488,7 @@ type AnalyticsStoredParamsQuery struct {
 	// Limit number of returned metrics.
 	Limit param.Field[int64] `query:"limit"`
 	// One or more metrics to compute.
-	Metrics param.Field[[]AnalyticsStoredParamsQueryMetric] `query:"metrics"`
+	Metrics param.Field[[]NamespaceAnalyticsStoredParamsQueryMetric] `query:"metrics"`
 	// Start of time interval to query, defaults to 6 hours before request received.
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
 	// Array of dimensions or metrics to sort by, each dimension/metric may be prefixed
@@ -496,9 +498,9 @@ type AnalyticsStoredParamsQuery struct {
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 
-// URLQuery serializes [AnalyticsStoredParamsQuery]'s query parameters as
+// URLQuery serializes [NamespaceAnalyticsStoredParamsQuery]'s query parameters as
 // `url.Values`.
-func (r AnalyticsStoredParamsQuery) URLQuery() (v url.Values) {
+func (r NamespaceAnalyticsStoredParamsQuery) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -506,49 +508,49 @@ func (r AnalyticsStoredParamsQuery) URLQuery() (v url.Values) {
 }
 
 // For drilling down on metrics.
-type AnalyticsStoredParamsQueryDimension string
+type NamespaceAnalyticsStoredParamsQueryDimension string
 
 const (
-	AnalyticsStoredParamsQueryDimensionNamespaceID AnalyticsStoredParamsQueryDimension = "namespaceId"
+	NamespaceAnalyticsStoredParamsQueryDimensionNamespaceID NamespaceAnalyticsStoredParamsQueryDimension = "namespaceId"
 )
 
-func (r AnalyticsStoredParamsQueryDimension) IsKnown() bool {
+func (r NamespaceAnalyticsStoredParamsQueryDimension) IsKnown() bool {
 	switch r {
-	case AnalyticsStoredParamsQueryDimensionNamespaceID:
+	case NamespaceAnalyticsStoredParamsQueryDimensionNamespaceID:
 		return true
 	}
 	return false
 }
 
 // A quantitative measurement of KV usage.
-type AnalyticsStoredParamsQueryMetric string
+type NamespaceAnalyticsStoredParamsQueryMetric string
 
 const (
-	AnalyticsStoredParamsQueryMetricStoredBytes AnalyticsStoredParamsQueryMetric = "storedBytes"
-	AnalyticsStoredParamsQueryMetricStoredKeys  AnalyticsStoredParamsQueryMetric = "storedKeys"
+	NamespaceAnalyticsStoredParamsQueryMetricStoredBytes NamespaceAnalyticsStoredParamsQueryMetric = "storedBytes"
+	NamespaceAnalyticsStoredParamsQueryMetricStoredKeys  NamespaceAnalyticsStoredParamsQueryMetric = "storedKeys"
 )
 
-func (r AnalyticsStoredParamsQueryMetric) IsKnown() bool {
+func (r NamespaceAnalyticsStoredParamsQueryMetric) IsKnown() bool {
 	switch r {
-	case AnalyticsStoredParamsQueryMetricStoredBytes, AnalyticsStoredParamsQueryMetricStoredKeys:
+	case NamespaceAnalyticsStoredParamsQueryMetricStoredBytes, NamespaceAnalyticsStoredParamsQueryMetricStoredKeys:
 		return true
 	}
 	return false
 }
 
-type AnalyticsStoredResponseEnvelope struct {
+type NamespaceAnalyticsStoredResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success AnalyticsStoredResponseEnvelopeSuccess `json:"success,required"`
+	Success NamespaceAnalyticsStoredResponseEnvelopeSuccess `json:"success,required"`
 	// Metrics on Workers KV requests.
-	Result Components                          `json:"result"`
-	JSON   analyticsStoredResponseEnvelopeJSON `json:"-"`
+	Result Components                                   `json:"result"`
+	JSON   namespaceAnalyticsStoredResponseEnvelopeJSON `json:"-"`
 }
 
-// analyticsStoredResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AnalyticsStoredResponseEnvelope]
-type analyticsStoredResponseEnvelopeJSON struct {
+// namespaceAnalyticsStoredResponseEnvelopeJSON contains the JSON metadata for the
+// struct [NamespaceAnalyticsStoredResponseEnvelope]
+type namespaceAnalyticsStoredResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -557,24 +559,24 @@ type analyticsStoredResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsStoredResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *NamespaceAnalyticsStoredResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r analyticsStoredResponseEnvelopeJSON) RawJSON() string {
+func (r namespaceAnalyticsStoredResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type AnalyticsStoredResponseEnvelopeSuccess bool
+type NamespaceAnalyticsStoredResponseEnvelopeSuccess bool
 
 const (
-	AnalyticsStoredResponseEnvelopeSuccessTrue AnalyticsStoredResponseEnvelopeSuccess = true
+	NamespaceAnalyticsStoredResponseEnvelopeSuccessTrue NamespaceAnalyticsStoredResponseEnvelopeSuccess = true
 )
 
-func (r AnalyticsStoredResponseEnvelopeSuccess) IsKnown() bool {
+func (r NamespaceAnalyticsStoredResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case AnalyticsStoredResponseEnvelopeSuccessTrue:
+	case NamespaceAnalyticsStoredResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
