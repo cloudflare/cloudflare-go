@@ -78,7 +78,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/spectrum"
 	"github.com/cloudflare/cloudflare-go/v3/speed"
 	"github.com/cloudflare/cloudflare-go/v3/ssl"
-	"github.com/cloudflare/cloudflare-go/v3/storage"
 	"github.com/cloudflare/cloudflare-go/v3/stream"
 	"github.com/cloudflare/cloudflare-go/v3/turnstile"
 	"github.com/cloudflare/cloudflare-go/v3/url_normalization"
@@ -154,7 +153,6 @@ type Client struct {
 	Registrar                   *registrar.RegistrarService
 	RequestTracers              *request_tracers.RequestTracerService
 	Rules                       *rules.RuleService
-	Storage                     *storage.StorageService
 	Stream                      *stream.StreamService
 	Alerting                    *alerting.AlertingService
 	D1                          *d1.D1Service
@@ -263,7 +261,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Registrar = registrar.NewRegistrarService(opts...)
 	r.RequestTracers = request_tracers.NewRequestTracerService(opts...)
 	r.Rules = rules.NewRuleService(opts...)
-	r.Storage = storage.NewStorageService(opts...)
 	r.Stream = stream.NewStreamService(opts...)
 	r.Alerting = alerting.NewAlertingService(opts...)
 	r.D1 = d1.NewD1Service(opts...)
