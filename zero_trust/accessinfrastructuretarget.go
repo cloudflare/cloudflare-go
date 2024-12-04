@@ -205,7 +205,8 @@ func (r accessInfrastructureTargetNewResponseIPJSON) RawJSON() string {
 type AccessInfrastructureTargetNewResponseIPIPV4 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID string                                          `json:"virtual_network_id" format:"uuid"`
 	JSON             accessInfrastructureTargetNewResponseIpipv4JSON `json:"-"`
 }
@@ -231,7 +232,8 @@ func (r accessInfrastructureTargetNewResponseIpipv4JSON) RawJSON() string {
 type AccessInfrastructureTargetNewResponseIPIPV6 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID string                                          `json:"virtual_network_id" format:"uuid"`
 	JSON             accessInfrastructureTargetNewResponseIpipv6JSON `json:"-"`
 }
@@ -317,7 +319,8 @@ func (r accessInfrastructureTargetUpdateResponseIPJSON) RawJSON() string {
 type AccessInfrastructureTargetUpdateResponseIPIPV4 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID string                                             `json:"virtual_network_id" format:"uuid"`
 	JSON             accessInfrastructureTargetUpdateResponseIpipv4JSON `json:"-"`
 }
@@ -343,7 +346,8 @@ func (r accessInfrastructureTargetUpdateResponseIpipv4JSON) RawJSON() string {
 type AccessInfrastructureTargetUpdateResponseIPIPV6 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID string                                             `json:"virtual_network_id" format:"uuid"`
 	JSON             accessInfrastructureTargetUpdateResponseIpipv6JSON `json:"-"`
 }
@@ -429,7 +433,8 @@ func (r accessInfrastructureTargetListResponseIPJSON) RawJSON() string {
 type AccessInfrastructureTargetListResponseIPIPV4 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID string                                           `json:"virtual_network_id" format:"uuid"`
 	JSON             accessInfrastructureTargetListResponseIpipv4JSON `json:"-"`
 }
@@ -455,7 +460,8 @@ func (r accessInfrastructureTargetListResponseIpipv4JSON) RawJSON() string {
 type AccessInfrastructureTargetListResponseIPIPV6 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID string                                           `json:"virtual_network_id" format:"uuid"`
 	JSON             accessInfrastructureTargetListResponseIpipv6JSON `json:"-"`
 }
@@ -541,7 +547,8 @@ func (r accessInfrastructureTargetGetResponseIPJSON) RawJSON() string {
 type AccessInfrastructureTargetGetResponseIPIPV4 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID string                                          `json:"virtual_network_id" format:"uuid"`
 	JSON             accessInfrastructureTargetGetResponseIpipv4JSON `json:"-"`
 }
@@ -567,7 +574,8 @@ func (r accessInfrastructureTargetGetResponseIpipv4JSON) RawJSON() string {
 type AccessInfrastructureTargetGetResponseIPIPV6 struct {
 	// IP address of the target
 	IPAddr string `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID string                                          `json:"virtual_network_id" format:"uuid"`
 	JSON             accessInfrastructureTargetGetResponseIpipv6JSON `json:"-"`
 }
@@ -620,7 +628,8 @@ func (r AccessInfrastructureTargetNewParamsIP) MarshalJSON() (data []byte, err e
 type AccessInfrastructureTargetNewParamsIPIPV4 struct {
 	// IP address of the target
 	IPAddr param.Field[string] `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
@@ -632,7 +641,8 @@ func (r AccessInfrastructureTargetNewParamsIPIPV4) MarshalJSON() (data []byte, e
 type AccessInfrastructureTargetNewParamsIPIPV6 struct {
 	// IP address of the target
 	IPAddr param.Field[string] `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
@@ -714,7 +724,8 @@ func (r AccessInfrastructureTargetUpdateParamsIP) MarshalJSON() (data []byte, er
 type AccessInfrastructureTargetUpdateParamsIPIPV4 struct {
 	// IP address of the target
 	IPAddr param.Field[string] `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
@@ -726,7 +737,8 @@ func (r AccessInfrastructureTargetUpdateParamsIPIPV4) MarshalJSON() (data []byte
 type AccessInfrastructureTargetUpdateParamsIPIPV6 struct {
 	// IP address of the target
 	IPAddr param.Field[string] `json:"ip_addr"`
-	// Private virtual network identifier for the target
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
 	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
 }
 
