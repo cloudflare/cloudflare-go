@@ -10,7 +10,6 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/dns_firewall"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
@@ -148,7 +147,7 @@ type AnalyticsReportBytimeGetParams struct {
 	// prefixed by - (descending) or + (ascending).
 	Sort param.Field[string] `query:"sort"`
 	// Unit of time to group data by.
-	TimeDelta param.Field[dns_firewall.Delta] `query:"time_delta"`
+	TimeDelta param.Field[AnalyticsReportBytimeGetParamsTimeDelta] `query:"time_delta"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
@@ -160,6 +159,30 @@ func (r AnalyticsReportBytimeGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// Unit of time to group data by.
+type AnalyticsReportBytimeGetParamsTimeDelta string
+
+const (
+	AnalyticsReportBytimeGetParamsTimeDeltaAll        AnalyticsReportBytimeGetParamsTimeDelta = "all"
+	AnalyticsReportBytimeGetParamsTimeDeltaAuto       AnalyticsReportBytimeGetParamsTimeDelta = "auto"
+	AnalyticsReportBytimeGetParamsTimeDeltaYear       AnalyticsReportBytimeGetParamsTimeDelta = "year"
+	AnalyticsReportBytimeGetParamsTimeDeltaQuarter    AnalyticsReportBytimeGetParamsTimeDelta = "quarter"
+	AnalyticsReportBytimeGetParamsTimeDeltaMonth      AnalyticsReportBytimeGetParamsTimeDelta = "month"
+	AnalyticsReportBytimeGetParamsTimeDeltaWeek       AnalyticsReportBytimeGetParamsTimeDelta = "week"
+	AnalyticsReportBytimeGetParamsTimeDeltaDay        AnalyticsReportBytimeGetParamsTimeDelta = "day"
+	AnalyticsReportBytimeGetParamsTimeDeltaHour       AnalyticsReportBytimeGetParamsTimeDelta = "hour"
+	AnalyticsReportBytimeGetParamsTimeDeltaDekaminute AnalyticsReportBytimeGetParamsTimeDelta = "dekaminute"
+	AnalyticsReportBytimeGetParamsTimeDeltaMinute     AnalyticsReportBytimeGetParamsTimeDelta = "minute"
+)
+
+func (r AnalyticsReportBytimeGetParamsTimeDelta) IsKnown() bool {
+	switch r {
+	case AnalyticsReportBytimeGetParamsTimeDeltaAll, AnalyticsReportBytimeGetParamsTimeDeltaAuto, AnalyticsReportBytimeGetParamsTimeDeltaYear, AnalyticsReportBytimeGetParamsTimeDeltaQuarter, AnalyticsReportBytimeGetParamsTimeDeltaMonth, AnalyticsReportBytimeGetParamsTimeDeltaWeek, AnalyticsReportBytimeGetParamsTimeDeltaDay, AnalyticsReportBytimeGetParamsTimeDeltaHour, AnalyticsReportBytimeGetParamsTimeDeltaDekaminute, AnalyticsReportBytimeGetParamsTimeDeltaMinute:
+		return true
+	}
+	return false
 }
 
 type AnalyticsReportBytimeGetResponseEnvelope struct {
