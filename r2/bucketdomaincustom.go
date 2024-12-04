@@ -537,11 +537,11 @@ type BucketDomainCustomNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Name of the custom domain to be added
 	Domain param.Field[string] `json:"domain,required"`
-	// Zone ID of the custom domain
-	ZoneID param.Field[string] `json:"zoneId,required"`
 	// Whether to enable public bucket access at the custom domain. If undefined, the
 	// domain will be enabled.
-	Enabled param.Field[bool] `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Zone ID of the custom domain
+	ZoneID param.Field[string] `json:"zoneId,required"`
 	// Minimum TLS Version the custom domain will accept for incoming connections. If
 	// not set, defaults to 1.0.
 	MinTLS param.Field[BucketDomainCustomNewParamsMinTLS] `json:"minTLS"`
