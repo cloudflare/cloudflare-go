@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package storage_test
+package kv_test
 
 import (
 	"context"
@@ -11,11 +11,11 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/kv"
 	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/storage"
 )
 
-func TestAnalyticsListWithOptionalParams(t *testing.T) {
+func TestNamespaceAnalyticsListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,13 +28,13 @@ func TestAnalyticsListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Storage.Analytics.List(context.TODO(), storage.AnalyticsListParams{
+	_, err := client.KV.Namespaces.Analytics.List(context.TODO(), kv.NamespaceAnalyticsListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Query: cloudflare.F(storage.AnalyticsListParamsQuery{
-			Dimensions: cloudflare.F([]storage.AnalyticsListParamsQueryDimension{storage.AnalyticsListParamsQueryDimensionAccountID}),
+		Query: cloudflare.F(kv.NamespaceAnalyticsListParamsQuery{
+			Dimensions: cloudflare.F([]kv.NamespaceAnalyticsListParamsQueryDimension{kv.NamespaceAnalyticsListParamsQueryDimensionAccountID}),
 			Filters:    cloudflare.F("requestType==read AND responseCode!=200"),
 			Limit:      cloudflare.F(int64(0)),
-			Metrics:    cloudflare.F([]storage.AnalyticsListParamsQueryMetric{storage.AnalyticsListParamsQueryMetricRequests}),
+			Metrics:    cloudflare.F([]kv.NamespaceAnalyticsListParamsQueryMetric{kv.NamespaceAnalyticsListParamsQueryMetricRequests}),
 			Since:      cloudflare.F(time.Now()),
 			Sort:       cloudflare.F([]string{"+requests", "-responseCode"}),
 			Until:      cloudflare.F(time.Now()),
@@ -49,7 +49,7 @@ func TestAnalyticsListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAnalyticsStoredWithOptionalParams(t *testing.T) {
+func TestNamespaceAnalyticsStoredWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -62,13 +62,13 @@ func TestAnalyticsStoredWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Storage.Analytics.Stored(context.TODO(), storage.AnalyticsStoredParams{
+	_, err := client.KV.Namespaces.Analytics.Stored(context.TODO(), kv.NamespaceAnalyticsStoredParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Query: cloudflare.F(storage.AnalyticsStoredParamsQuery{
-			Dimensions: cloudflare.F([]storage.AnalyticsStoredParamsQueryDimension{storage.AnalyticsStoredParamsQueryDimensionNamespaceID}),
+		Query: cloudflare.F(kv.NamespaceAnalyticsStoredParamsQuery{
+			Dimensions: cloudflare.F([]kv.NamespaceAnalyticsStoredParamsQueryDimension{kv.NamespaceAnalyticsStoredParamsQueryDimensionNamespaceID}),
 			Filters:    cloudflare.F("namespaceId==a4e8cbb7-1b58-4990-925e-e026d40c4c64"),
 			Limit:      cloudflare.F(int64(0)),
-			Metrics:    cloudflare.F([]storage.AnalyticsStoredParamsQueryMetric{storage.AnalyticsStoredParamsQueryMetricStoredBytes}),
+			Metrics:    cloudflare.F([]kv.NamespaceAnalyticsStoredParamsQueryMetric{kv.NamespaceAnalyticsStoredParamsQueryMetricStoredBytes}),
 			Since:      cloudflare.F(time.Now()),
 			Sort:       cloudflare.F([]string{"+storedBytes", "-namespaceId"}),
 			Until:      cloudflare.F(time.Now()),
