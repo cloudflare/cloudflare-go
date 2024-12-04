@@ -617,9 +617,9 @@ func (r DEXTracerouteTestNetworkPathResponseEnvelopeSuccess) IsKnown() bool {
 
 type DEXTracerouteTestPercentilesParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Start time for aggregate metrics in ISO format
+	// Start time for the query in ISO (RFC3339 - ISO 8601) format
 	From param.Field[string] `query:"from,required"`
-	// End time for aggregate metrics in ISO format
+	// End time for the query in ISO (RFC3339 - ISO 8601) format
 	To param.Field[string] `query:"to,required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
