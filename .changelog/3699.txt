@@ -1,0 +1,3 @@
+```release-note:enhancement
+teams_locations: Add dns_destination_ips_id and ipv4_destination_backup
+```

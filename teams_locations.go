@@ -34,6 +34,8 @@ type TeamsLocation struct {
 	Subdomain             string                 `json:"doh_subdomain"`
 	AnonymizedLogsEnabled bool                   `json:"anonymized_logs_enabled"`
 	IPv4Destination       string                 `json:"ipv4_destination"`
+	IPv4DestinationBackup string                 `json:"ipv4_destination_backup"`
+	DnsDestinationIPsID   string                 `json:"dns_destination_ips_id"`
 	ClientDefault         bool                   `json:"client_default"`
 	ECSSupport            *bool                  `json:"ecs_support,omitempty"`
 
