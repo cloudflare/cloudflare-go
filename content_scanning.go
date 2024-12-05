@@ -146,7 +146,6 @@ func (api *API) ContentScanningListCustomExpressions(ctx context.Context, rc *Re
 		return []ContentScanningCustomExpression{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return result.Result, nil
-
 }
 
 // ContentScanningAddCustomExpressions add new custom scan expressions for Content Scanning
@@ -167,7 +166,6 @@ func (api *API) ContentScanningAddCustomExpressions(ctx context.Context, rc *Res
 		return []ContentScanningCustomExpression{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return result.Result, nil
-
 }
 
 // ContentScanningDeleteCustomExpressions delete custom scan expressions for Content Scanning
@@ -188,5 +186,4 @@ func (api *API) ContentScanningDeleteCustomExpression(ctx context.Context, rc *R
 		return []ContentScanningCustomExpression{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 	return result.Result, nil
-
 }
