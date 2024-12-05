@@ -125,7 +125,8 @@ func TestIdentityProviderListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.IdentityProviders.List(context.TODO(), zero_trust.IdentityProviderListParams{
-		AccountID: cloudflare.F("account_id"),
+		AccountID:   cloudflare.F("account_id"),
+		SCIMEnabled: cloudflare.F("scim_enabled"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

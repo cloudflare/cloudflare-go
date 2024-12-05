@@ -7,9 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
@@ -104,30 +106,30 @@ func (r *IdentityProviderService) Update(ctx context.Context, identityProviderID
 }
 
 // Lists all configured identity providers.
-func (r *IdentityProviderService) List(ctx context.Context, query IdentityProviderListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IdentityProviderListResponse], err error) {
+func (r *IdentityProviderService) List(ctx context.Context, params IdentityProviderListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IdentityProviderListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
 		err = errors.New("account ID and zone ID are mutually exclusive")
 		return
 	}
-	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
 		err = errors.New("either account ID or zone ID must be provided")
 		return
 	}
-	if query.AccountID.Value != "" {
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
-		accountOrZoneID = query.AccountID
+		accountOrZoneID = params.AccountID
 	}
-	if query.ZoneID.Value != "" {
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
-		accountOrZoneID = query.ZoneID
+		accountOrZoneID = params.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/identity_providers", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -140,8 +142,8 @@ func (r *IdentityProviderService) List(ctx context.Context, query IdentityProvid
 }
 
 // Lists all configured identity providers.
-func (r *IdentityProviderService) ListAutoPaging(ctx context.Context, query IdentityProviderListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IdentityProviderListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *IdentityProviderService) ListAutoPaging(ctx context.Context, params IdentityProviderListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IdentityProviderListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an identity provider from Access.
@@ -987,6 +989,8 @@ type IdentityProviderAccessOIDCConfig struct {
 	ClientSecret string `json:"client_secret"`
 	// The claim name for email in the id_token response.
 	EmailClaimName string `json:"email_claim_name"`
+	// Enable Proof Key for Code Exchange (PKCE)
+	PKCEEnabled bool `json:"pkce_enabled"`
 	// OAuth scopes
 	Scopes []string `json:"scopes"`
 	// The token_endpoint URL of your IdP
@@ -1003,6 +1007,7 @@ type identityProviderAccessOIDCConfigJSON struct {
 	ClientID       apijson.Field
 	ClientSecret   apijson.Field
 	EmailClaimName apijson.Field
+	PKCEEnabled    apijson.Field
 	Scopes         apijson.Field
 	TokenURL       apijson.Field
 	raw            string
@@ -1739,6 +1744,8 @@ type IdentityProviderAccessOIDCConfigParam struct {
 	ClientSecret param.Field[string] `json:"client_secret"`
 	// The claim name for email in the id_token response.
 	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Enable Proof Key for Code Exchange (PKCE)
+	PKCEEnabled param.Field[bool] `json:"pkce_enabled"`
 	// OAuth scopes
 	Scopes param.Field[[]string] `json:"scopes"`
 	// The token_endpoint URL of your IdP
@@ -1996,11 +2003,13 @@ func (r IdentityProviderAccessOnetimepinConfigParam) MarshalJSON() (data []byte,
 type IdentityProviderSCIMConfig struct {
 	// A flag to enable or disable SCIM for the identity provider.
 	Enabled bool `json:"enabled"`
-	// Indicates how a SCIM event updates an Access identity. Use "automatic" to
-	// automatically update a user's Access identity and augment it with fields from
-	// the SCIM user resource. Use "reauth" to force re-authentication on group
-	// membership updates. With "reauth" Access identities will not contain fields from
-	// the SCIM user resource.
+	// Indicates how a SCIM event updates a user identity used for policy evaluation.
+	// Use "automatic" to automatically update a user's identity and augment it with
+	// fields from the SCIM user resource. Use "reauth" to force re-authentication on
+	// group membership updates, user identity update will only occur after successful
+	// re-authentication. With "reauth" identities will not contain fields from the
+	// SCIM user resource. With "no_action" identities will not be changed by SCIM
+	// updates in any way and users will not be prompted to reauthenticate.
 	IdentityUpdateBehavior IdentityProviderSCIMConfigIdentityUpdateBehavior `json:"identity_update_behavior"`
 	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
 	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
@@ -2036,21 +2045,24 @@ func (r identityProviderSCIMConfigJSON) RawJSON() string {
 	return r.raw
 }
 
-// Indicates how a SCIM event updates an Access identity. Use "automatic" to
-// automatically update a user's Access identity and augment it with fields from
-// the SCIM user resource. Use "reauth" to force re-authentication on group
-// membership updates. With "reauth" Access identities will not contain fields from
-// the SCIM user resource.
+// Indicates how a SCIM event updates a user identity used for policy evaluation.
+// Use "automatic" to automatically update a user's identity and augment it with
+// fields from the SCIM user resource. Use "reauth" to force re-authentication on
+// group membership updates, user identity update will only occur after successful
+// re-authentication. With "reauth" identities will not contain fields from the
+// SCIM user resource. With "no_action" identities will not be changed by SCIM
+// updates in any way and users will not be prompted to reauthenticate.
 type IdentityProviderSCIMConfigIdentityUpdateBehavior string
 
 const (
 	IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic IdentityProviderSCIMConfigIdentityUpdateBehavior = "automatic"
 	IdentityProviderSCIMConfigIdentityUpdateBehaviorReauth    IdentityProviderSCIMConfigIdentityUpdateBehavior = "reauth"
+	IdentityProviderSCIMConfigIdentityUpdateBehaviorNoAction  IdentityProviderSCIMConfigIdentityUpdateBehavior = "no_action"
 )
 
 func (r IdentityProviderSCIMConfigIdentityUpdateBehavior) IsKnown() bool {
 	switch r {
-	case IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic, IdentityProviderSCIMConfigIdentityUpdateBehaviorReauth:
+	case IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic, IdentityProviderSCIMConfigIdentityUpdateBehaviorReauth, IdentityProviderSCIMConfigIdentityUpdateBehaviorNoAction:
 		return true
 	}
 	return false
@@ -2061,11 +2073,13 @@ func (r IdentityProviderSCIMConfigIdentityUpdateBehavior) IsKnown() bool {
 type IdentityProviderSCIMConfigParam struct {
 	// A flag to enable or disable SCIM for the identity provider.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Indicates how a SCIM event updates an Access identity. Use "automatic" to
-	// automatically update a user's Access identity and augment it with fields from
-	// the SCIM user resource. Use "reauth" to force re-authentication on group
-	// membership updates. With "reauth" Access identities will not contain fields from
-	// the SCIM user resource.
+	// Indicates how a SCIM event updates a user identity used for policy evaluation.
+	// Use "automatic" to automatically update a user's identity and augment it with
+	// fields from the SCIM user resource. Use "reauth" to force re-authentication on
+	// group membership updates, user identity update will only occur after successful
+	// re-authentication. With "reauth" identities will not contain fields from the
+	// SCIM user resource. With "no_action" identities will not be changed by SCIM
+	// updates in any way and users will not be prompted to reauthenticate.
 	IdentityUpdateBehavior param.Field[IdentityProviderSCIMConfigIdentityUpdateBehavior] `json:"identity_update_behavior"`
 	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
 	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
@@ -2675,6 +2689,8 @@ type IdentityProviderListResponseAccessOIDCConfig struct {
 	ClientSecret string `json:"client_secret"`
 	// The claim name for email in the id_token response.
 	EmailClaimName string `json:"email_claim_name"`
+	// Enable Proof Key for Code Exchange (PKCE)
+	PKCEEnabled bool `json:"pkce_enabled"`
 	// OAuth scopes
 	Scopes []string `json:"scopes"`
 	// The token_endpoint URL of your IdP
@@ -2691,6 +2707,7 @@ type identityProviderListResponseAccessOIDCConfigJSON struct {
 	ClientID       apijson.Field
 	ClientSecret   apijson.Field
 	EmailClaimName apijson.Field
+	PKCEEnabled    apijson.Field
 	Scopes         apijson.Field
 	TokenURL       apijson.Field
 	raw            string
@@ -3235,6 +3252,18 @@ type IdentityProviderListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// Indicates to Access to only retrieve identity providers that have the System for
+	// Cross-Domain Identity Management (SCIM) enabled.
+	SCIMEnabled param.Field[string] `query:"scim_enabled"`
+}
+
+// URLQuery serializes [IdentityProviderListParams]'s query parameters as
+// `url.Values`.
+func (r IdentityProviderListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type IdentityProviderDeleteParams struct {
