@@ -110,13 +110,42 @@ const (
 	AccessApplicationScimAuthenticationSchemeHttpBasic        AccessApplicationScimAuthenticationScheme = "httpbasic"
 	AccessApplicationScimAuthenticationSchemeOauthBearerToken AccessApplicationScimAuthenticationScheme = "oauthbearertoken"
 	AccessApplicationScimAuthenticationSchemeOauth2           AccessApplicationScimAuthenticationScheme = "oauth2"
+	AccessApplicationScimAuthenticationAccessServiceToken     AccessApplicationScimAuthenticationScheme = "access_service_token"
 )
+
+type ScimAuthentication interface {
+	isScimAuthentication()
+	isMultipleScimAuthentication() bool
+}
+
+type SingleScimAuthentication interface {
+	isSingleScimAuthentication()
+	isScimAuthentication()
+	isMultipleScimAuthentication() bool
+}
+
+type AccessApplicationMultipleScimAuthentication []*AccessApplicationScimAuthenticationSingleJSON
+
+func (m *AccessApplicationMultipleScimAuthentication) isScimAuthentication() {}
+
+func (m *AccessApplicationMultipleScimAuthentication) isMultipleScimAuthentication() bool {
+	return true
+}
+
+type AccessApplicationScimAuthenticationSingleJSON struct {
+	Value SingleScimAuthentication
+}
 
 type AccessApplicationScimAuthenticationJson struct {
 	Value AccessApplicationScimAuthentication
 }
 
 func (a *AccessApplicationScimAuthenticationJson) UnmarshalJSON(buf []byte) error {
+	if len(buf) > 0 && rune(buf[0]) == '[' {
+		a.Value = new(AccessApplicationMultipleScimAuthentication)
+		return json.Unmarshal(buf, a.Value)
+	}
+
 	var scheme baseScimAuthentication
 	if err := json.Unmarshal(buf, &scheme); err != nil {
 		return err
@@ -129,6 +158,8 @@ func (a *AccessApplicationScimAuthenticationJson) UnmarshalJSON(buf []byte) erro
 		a.Value = new(AccessApplicationScimAuthenticationOauthBearerToken)
 	case AccessApplicationScimAuthenticationSchemeOauth2:
 		a.Value = new(AccessApplicationScimAuthenticationOauth2)
+	case AccessApplicationScimAuthenticationAccessServiceToken:
+		a.Value = new(AccessApplicationScimAuthenticationServiceToken)
 	default:
 		return errors.New("invalid authentication scheme")
 	}
@@ -140,15 +171,43 @@ func (a *AccessApplicationScimAuthenticationJson) MarshalJSON() ([]byte, error) 
 	return json.Marshal(a.Value)
 }
 
+func (a *AccessApplicationScimAuthenticationSingleJSON) UnmarshalJSON(buf []byte) error {
+	var scheme baseScimAuthentication
+	if err := json.Unmarshal(buf, &scheme); err != nil {
+		return err
+	}
+	switch scheme.Scheme {
+	case AccessApplicationScimAuthenticationSchemeHttpBasic:
+		a.Value = new(AccessApplicationScimAuthenticationHttpBasic)
+	case AccessApplicationScimAuthenticationSchemeOauthBearerToken:
+		a.Value = new(AccessApplicationScimAuthenticationOauthBearerToken)
+	case AccessApplicationScimAuthenticationSchemeOauth2:
+		a.Value = new(AccessApplicationScimAuthenticationOauth2)
+	case AccessApplicationScimAuthenticationAccessServiceToken:
+		a.Value = new(AccessApplicationScimAuthenticationServiceToken)
+	default:
+		return errors.New("invalid authentication scheme")
+	}
+
+	return json.Unmarshal(buf, a.Value)
+}
+
+func (a AccessApplicationScimAuthenticationSingleJSON) MarshalJSON() ([]byte, error) {
+	return json.Marshal(a.Value)
+}
+
 type AccessApplicationScimAuthentication interface {
 	isScimAuthentication()
+	isMultipleScimAuthentication() bool
 }
 
 type baseScimAuthentication struct {
 	Scheme AccessApplicationScimAuthenticationScheme `json:"scheme"`
 }
 
-func (baseScimAuthentication) isScimAuthentication() {}
+func (baseScimAuthentication) isScimAuthentication()              {}
+func (baseScimAuthentication) isSingleScimAuthentication()        {}
+func (baseScimAuthentication) isMultipleScimAuthentication() bool { return false }
 
 type AccessApplicationScimAuthenticationHttpBasic struct {
 	baseScimAuthentication
@@ -168,6 +227,12 @@ type AccessApplicationScimAuthenticationOauth2 struct {
 	AuthorizationURL string   `json:"authorization_url"`
 	TokenURL         string   `json:"token_url"`
 	Scopes           []string `json:"scopes,omitempty"`
+}
+
+type AccessApplicationScimAuthenticationServiceToken struct {
+	baseScimAuthentication
+	ClientID     string `json:"client_id,omitempty" validate:"required_with=ClientSecret,excluded_with=ServiceTokenID"`
+	ClientSecret string `json:"client_secret,omitempty" validate:"required_with=ClientID,excluded_with=ServiceTokenID"`
 }
 
 type AccessApplicationScimMapping struct {
