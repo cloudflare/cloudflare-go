@@ -63,7 +63,7 @@ func TestTeamsLocations(t *testing.T) {
 		AnonymizedLogsEnabled: false,
 		IPv4Destination:       "1.2.3.4",
 		IPv4DestinationBackup: "1.2.3.5",
-		DnsDestinationIPsID:   "9da8e0c9-e9cc-4bbd-85c5-b351fc373354",
+		DNSDestinationIPsID:   "9da8e0c9-e9cc-4bbd-85c5-b351fc373354",
 		ClientDefault:         false,
 		ECSSupport:            BoolPtr(false),
 		CreatedAt:             &createdAt,

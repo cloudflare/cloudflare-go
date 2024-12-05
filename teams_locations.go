@@ -35,7 +35,7 @@ type TeamsLocation struct {
 	AnonymizedLogsEnabled bool                   `json:"anonymized_logs_enabled"`
 	IPv4Destination       string                 `json:"ipv4_destination"`
 	IPv4DestinationBackup string                 `json:"ipv4_destination_backup"`
-	DnsDestinationIPsID   string                 `json:"dns_destination_ips_id"`
+	DNSDestinationIPsID   string                 `json:"dns_destination_ips_id"`
 	ClientDefault         bool                   `json:"client_default"`
 	ECSSupport            *bool                  `json:"ecs_support,omitempty"`
 
