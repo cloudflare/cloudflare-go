@@ -376,14 +376,13 @@ const (
 	GatewayRuleActionOverride     GatewayRuleAction = "override"
 	GatewayRuleActionL4Override   GatewayRuleAction = "l4_override"
 	GatewayRuleActionEgress       GatewayRuleAction = "egress"
-	GatewayRuleActionAuditSSH     GatewayRuleAction = "audit_ssh"
 	GatewayRuleActionResolve      GatewayRuleAction = "resolve"
 	GatewayRuleActionQuarantine   GatewayRuleAction = "quarantine"
 )
 
 func (r GatewayRuleAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionAuditSSH, GatewayRuleActionResolve, GatewayRuleActionQuarantine:
+	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionResolve, GatewayRuleActionQuarantine:
 		return true
 	}
 	return false
@@ -406,8 +405,10 @@ type GatewayRuleExpiration struct {
 	ExpiresAt time.Time `json:"expires_at,required" format:"date-time"`
 	// The default duration a policy will be active in minutes. Must be set in order to
 	// use the `reset_expiration` endpoint on this rule.
-	Duration int64                     `json:"duration"`
-	JSON     gatewayRuleExpirationJSON `json:"-"`
+	Duration int64 `json:"duration"`
+	// Whether the policy has expired.
+	Expired bool                      `json:"expired"`
+	JSON    gatewayRuleExpirationJSON `json:"-"`
 }
 
 // gatewayRuleExpirationJSON contains the JSON metadata for the struct
@@ -415,6 +416,7 @@ type GatewayRuleExpiration struct {
 type gatewayRuleExpirationJSON struct {
 	ExpiresAt   apijson.Field
 	Duration    apijson.Field
+	Expired     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1206,14 +1208,13 @@ const (
 	GatewayRuleNewParamsActionOverride     GatewayRuleNewParamsAction = "override"
 	GatewayRuleNewParamsActionL4Override   GatewayRuleNewParamsAction = "l4_override"
 	GatewayRuleNewParamsActionEgress       GatewayRuleNewParamsAction = "egress"
-	GatewayRuleNewParamsActionAuditSSH     GatewayRuleNewParamsAction = "audit_ssh"
 	GatewayRuleNewParamsActionResolve      GatewayRuleNewParamsAction = "resolve"
 	GatewayRuleNewParamsActionQuarantine   GatewayRuleNewParamsAction = "quarantine"
 )
 
 func (r GatewayRuleNewParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionAuditSSH, GatewayRuleNewParamsActionResolve, GatewayRuleNewParamsActionQuarantine:
+	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionResolve, GatewayRuleNewParamsActionQuarantine:
 		return true
 	}
 	return false
@@ -1237,6 +1238,8 @@ type GatewayRuleNewParamsExpiration struct {
 	// The default duration a policy will be active in minutes. Must be set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration param.Field[int64] `json:"duration"`
+	// Whether the policy has expired.
+	Expired param.Field[bool] `json:"expired"`
 }
 
 func (r GatewayRuleNewParamsExpiration) MarshalJSON() (data []byte, err error) {
@@ -1344,14 +1347,13 @@ const (
 	GatewayRuleUpdateParamsActionOverride     GatewayRuleUpdateParamsAction = "override"
 	GatewayRuleUpdateParamsActionL4Override   GatewayRuleUpdateParamsAction = "l4_override"
 	GatewayRuleUpdateParamsActionEgress       GatewayRuleUpdateParamsAction = "egress"
-	GatewayRuleUpdateParamsActionAuditSSH     GatewayRuleUpdateParamsAction = "audit_ssh"
 	GatewayRuleUpdateParamsActionResolve      GatewayRuleUpdateParamsAction = "resolve"
 	GatewayRuleUpdateParamsActionQuarantine   GatewayRuleUpdateParamsAction = "quarantine"
 )
 
 func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionAuditSSH, GatewayRuleUpdateParamsActionResolve, GatewayRuleUpdateParamsActionQuarantine:
+	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionResolve, GatewayRuleUpdateParamsActionQuarantine:
 		return true
 	}
 	return false
@@ -1375,6 +1377,8 @@ type GatewayRuleUpdateParamsExpiration struct {
 	// The default duration a policy will be active in minutes. Must be set in order to
 	// use the `reset_expiration` endpoint on this rule.
 	Duration param.Field[int64] `json:"duration"`
+	// Whether the policy has expired.
+	Expired param.Field[bool] `json:"expired"`
 }
 
 func (r GatewayRuleUpdateParamsExpiration) MarshalJSON() (data []byte, err error) {
