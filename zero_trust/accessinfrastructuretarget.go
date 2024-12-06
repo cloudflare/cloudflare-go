@@ -120,6 +120,31 @@ func (r *AccessInfrastructureTargetService) Delete(ctx context.Context, targetID
 	return
 }
 
+// Removes one or more targets.
+func (r *AccessInfrastructureTargetService) BulkDelete(ctx context.Context, body AccessInfrastructureTargetBulkDeleteParams, opts ...option.RequestOption) (err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/infrastructure/targets/batch", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	return
+}
+
+// Adds one or more targets.
+func (r *AccessInfrastructureTargetService) BulkUpdate(ctx context.Context, params AccessInfrastructureTargetBulkUpdateParams, opts ...option.RequestOption) (res *[]AccessInfrastructureTargetBulkUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if params.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/infrastructure/targets/batch", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
+	return
+}
+
 // Get target
 func (r *AccessInfrastructureTargetService) Get(ctx context.Context, targetID string, query AccessInfrastructureTargetGetParams, opts ...option.RequestOption) (res *AccessInfrastructureTargetGetResponse, err error) {
 	var env AccessInfrastructureTargetGetResponseEnvelope
@@ -483,6 +508,120 @@ func (r accessInfrastructureTargetListResponseIpipv6JSON) RawJSON() string {
 	return r.raw
 }
 
+type AccessInfrastructureTargetBulkUpdateResponse struct {
+	// Target identifier
+	ID string `json:"id,required" format:"uuid"`
+	// Date and time at which the target was created
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// A non-unique field that refers to a target
+	Hostname string `json:"hostname,required"`
+	// The IPv4/IPv6 address that identifies where to reach a target
+	IP AccessInfrastructureTargetBulkUpdateResponseIP `json:"ip,required"`
+	// Date and time at which the target was modified
+	ModifiedAt time.Time                                        `json:"modified_at,required" format:"date-time"`
+	JSON       accessInfrastructureTargetBulkUpdateResponseJSON `json:"-"`
+}
+
+// accessInfrastructureTargetBulkUpdateResponseJSON contains the JSON metadata for
+// the struct [AccessInfrastructureTargetBulkUpdateResponse]
+type accessInfrastructureTargetBulkUpdateResponseJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedAt  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessInfrastructureTargetBulkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessInfrastructureTargetBulkUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// The IPv4/IPv6 address that identifies where to reach a target
+type AccessInfrastructureTargetBulkUpdateResponseIP struct {
+	// The target's IPv4 address
+	IPV4 AccessInfrastructureTargetBulkUpdateResponseIPIPV4 `json:"ipv4"`
+	// The target's IPv6 address
+	IPV6 AccessInfrastructureTargetBulkUpdateResponseIPIPV6 `json:"ipv6"`
+	JSON accessInfrastructureTargetBulkUpdateResponseIPJSON `json:"-"`
+}
+
+// accessInfrastructureTargetBulkUpdateResponseIPJSON contains the JSON metadata
+// for the struct [AccessInfrastructureTargetBulkUpdateResponseIP]
+type accessInfrastructureTargetBulkUpdateResponseIPJSON struct {
+	IPV4        apijson.Field
+	IPV6        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessInfrastructureTargetBulkUpdateResponseIP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessInfrastructureTargetBulkUpdateResponseIPJSON) RawJSON() string {
+	return r.raw
+}
+
+// The target's IPv4 address
+type AccessInfrastructureTargetBulkUpdateResponseIPIPV4 struct {
+	// IP address of the target
+	IPAddr string `json:"ip_addr"`
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
+	VirtualNetworkID string                                                 `json:"virtual_network_id" format:"uuid"`
+	JSON             accessInfrastructureTargetBulkUpdateResponseIpipv4JSON `json:"-"`
+}
+
+// accessInfrastructureTargetBulkUpdateResponseIpipv4JSON contains the JSON
+// metadata for the struct [AccessInfrastructureTargetBulkUpdateResponseIPIPV4]
+type accessInfrastructureTargetBulkUpdateResponseIpipv4JSON struct {
+	IPAddr           apijson.Field
+	VirtualNetworkID apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessInfrastructureTargetBulkUpdateResponseIPIPV4) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessInfrastructureTargetBulkUpdateResponseIpipv4JSON) RawJSON() string {
+	return r.raw
+}
+
+// The target's IPv6 address
+type AccessInfrastructureTargetBulkUpdateResponseIPIPV6 struct {
+	// IP address of the target
+	IPAddr string `json:"ip_addr"`
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
+	VirtualNetworkID string                                                 `json:"virtual_network_id" format:"uuid"`
+	JSON             accessInfrastructureTargetBulkUpdateResponseIpipv6JSON `json:"-"`
+}
+
+// accessInfrastructureTargetBulkUpdateResponseIpipv6JSON contains the JSON
+// metadata for the struct [AccessInfrastructureTargetBulkUpdateResponseIPIPV6]
+type accessInfrastructureTargetBulkUpdateResponseIpipv6JSON struct {
+	IPAddr           apijson.Field
+	VirtualNetworkID apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessInfrastructureTargetBulkUpdateResponseIPIPV6) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessInfrastructureTargetBulkUpdateResponseIpipv6JSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessInfrastructureTargetGetResponse struct {
 	// Target identifier
 	ID string `json:"id,required" format:"uuid"`
@@ -824,6 +963,72 @@ func (r AccessInfrastructureTargetListParams) URLQuery() (v url.Values) {
 type AccessInfrastructureTargetDeleteParams struct {
 	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type AccessInfrastructureTargetBulkDeleteParams struct {
+	// Account identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type AccessInfrastructureTargetBulkUpdateParams struct {
+	// Account identifier
+	AccountID param.Field[string]                              `path:"account_id,required"`
+	Body      []AccessInfrastructureTargetBulkUpdateParamsBody `json:"body,required"`
+}
+
+func (r AccessInfrastructureTargetBulkUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type AccessInfrastructureTargetBulkUpdateParamsBody struct {
+	// A non-unique field that refers to a target. Case insensitive, maximum length of
+	// 255 characters, supports the use of special characters dash and period, does not
+	// support spaces, and must start and end with an alphanumeric character.
+	Hostname param.Field[string] `json:"hostname,required"`
+	// The IPv4/IPv6 address that identifies where to reach a target
+	IP param.Field[AccessInfrastructureTargetBulkUpdateParamsBodyIP] `json:"ip,required"`
+}
+
+func (r AccessInfrastructureTargetBulkUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The IPv4/IPv6 address that identifies where to reach a target
+type AccessInfrastructureTargetBulkUpdateParamsBodyIP struct {
+	// The target's IPv4 address
+	IPV4 param.Field[AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV4] `json:"ipv4"`
+	// The target's IPv6 address
+	IPV6 param.Field[AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV6] `json:"ipv6"`
+}
+
+func (r AccessInfrastructureTargetBulkUpdateParamsBodyIP) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The target's IPv4 address
+type AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV4 struct {
+	// IP address of the target
+	IPAddr param.Field[string] `json:"ip_addr"`
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
+}
+
+func (r AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV4) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The target's IPv6 address
+type AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV6 struct {
+	// IP address of the target
+	IPAddr param.Field[string] `json:"ip_addr"`
+	// (optional) Private virtual network identifier for the target. If omitted, the
+	// default virtual network ID will be used.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id" format:"uuid"`
+}
+
+func (r AccessInfrastructureTargetBulkUpdateParamsBodyIPIPV6) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessInfrastructureTargetGetParams struct {
