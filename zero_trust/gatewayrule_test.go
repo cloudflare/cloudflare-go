@@ -38,6 +38,7 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		Expiration: cloudflare.F(zero_trust.GatewayRuleNewParamsExpiration{
 			ExpiresAt: cloudflare.F(time.Now()),
 			Duration:  cloudflare.F(int64(10)),
+			Expired:   cloudflare.F(false),
 		}),
 		Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
 		Identity:   cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
@@ -156,6 +157,7 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 			Expiration: cloudflare.F(zero_trust.GatewayRuleUpdateParamsExpiration{
 				ExpiresAt: cloudflare.F(time.Now()),
 				Duration:  cloudflare.F(int64(10)),
+				Expired:   cloudflare.F(false),
 			}),
 			Filters:    cloudflare.F([]zero_trust.GatewayFilter{zero_trust.GatewayFilterHTTP}),
 			Identity:   cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
