@@ -492,8 +492,9 @@ func (r gatewayConfigurationSettingsJSON) RawJSON() string {
 // Certificate settings for Gateway TLS interception. If not specified, the
 // Cloudflare Root CA will be used.
 type GatewayConfigurationSettingsCertificate struct {
-	// UUID of certificate to be used for interception. Certificate must be active on
-	// the edge. A nil UUID will indicate the Cloudflare Root CA should be used.
+	// UUID of certificate to be used for interception. Certificate must be available
+	// (previously called 'active') on the edge. A nil UUID will indicate the
+	// Cloudflare Root CA should be used.
 	ID   string                                      `json:"id,required"`
 	JSON gatewayConfigurationSettingsCertificateJSON `json:"-"`
 }
@@ -593,8 +594,9 @@ func (r GatewayConfigurationSettingsParam) MarshalJSON() (data []byte, err error
 // Certificate settings for Gateway TLS interception. If not specified, the
 // Cloudflare Root CA will be used.
 type GatewayConfigurationSettingsCertificateParam struct {
-	// UUID of certificate to be used for interception. Certificate must be active on
-	// the edge. A nil UUID will indicate the Cloudflare Root CA should be used.
+	// UUID of certificate to be used for interception. Certificate must be available
+	// (previously called 'active') on the edge. A nil UUID will indicate the
+	// Cloudflare Root CA should be used.
 	ID param.Field[string] `json:"id,required"`
 }
 
