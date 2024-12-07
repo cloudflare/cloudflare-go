@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/pagerules"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/pagerules"
+	"github.com/cloudflare/cloudflare-go/v4/zones"
 )
 
 func TestPageruleNewWithOptionalParams(t *testing.T) {
