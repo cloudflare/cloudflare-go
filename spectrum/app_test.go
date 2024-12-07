@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/spectrum"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/spectrum"
 )
 
 func TestAppNewWithOptionalParams(t *testing.T) {
@@ -45,7 +45,7 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 				Connectivity: cloudflare.F(spectrum.EdgeIPsObjectConnectivityAll),
 				Type:         cloudflare.F(spectrum.EdgeIPsObjectTypeDynamic),
 			}),
-			OriginDirect: cloudflare.F([]string{"tcp://127.0.0.1:8080", "tcp://127.0.0.1:8080", "tcp://127.0.0.1:8080"}),
+			OriginDirect: cloudflare.F([]string{"tcp://127.0.0.1:8080"}),
 			OriginDNS: cloudflare.F(spectrum.OriginDNSParam{
 				Name: cloudflare.F("origin.example.com"),
 				TTL:  cloudflare.F(int64(600)),
@@ -96,7 +96,7 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 					Connectivity: cloudflare.F(spectrum.EdgeIPsObjectConnectivityAll),
 					Type:         cloudflare.F(spectrum.EdgeIPsObjectTypeDynamic),
 				}),
-				OriginDirect: cloudflare.F([]string{"tcp://127.0.0.1:8080", "tcp://127.0.0.1:8080", "tcp://127.0.0.1:8080"}),
+				OriginDirect: cloudflare.F([]string{"tcp://127.0.0.1:8080"}),
 				OriginDNS: cloudflare.F(spectrum.OriginDNSParam{
 					Name: cloudflare.F("origin.example.com"),
 					TTL:  cloudflare.F(int64(600)),

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestDeviceRevokeNew(t *testing.T) {
@@ -29,7 +29,7 @@ func TestDeviceRevokeNew(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.Revoke.New(context.TODO(), zero_trust.DeviceRevokeNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
-		Body:      []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415", "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
+		Body:      []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

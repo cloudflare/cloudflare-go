@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/origin_tls_client_auth"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/origin_tls_client_auth"
 )
 
 func TestHostnameUpdate(t *testing.T) {
@@ -30,14 +30,6 @@ func TestHostnameUpdate(t *testing.T) {
 	_, err := client.OriginTLSClientAuth.Hostnames.Update(context.TODO(), origin_tls_client_auth.HostnameUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Config: cloudflare.F([]origin_tls_client_auth.HostnameUpdateParamsConfig{{
-			CERTID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
-			Enabled:  cloudflare.F(true),
-			Hostname: cloudflare.F("app.example.com"),
-		}, {
-			CERTID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
-			Enabled:  cloudflare.F(true),
-			Hostname: cloudflare.F("app.example.com"),
-		}, {
 			CERTID:   cloudflare.F("2458ce5a-0c35-4c7f-82c7-8e9487d3ff60"),
 			Enabled:  cloudflare.F(true),
 			Hostname: cloudflare.F("app.example.com"),

@@ -7,14 +7,16 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -104,30 +106,30 @@ func (r *IdentityProviderService) Update(ctx context.Context, identityProviderID
 }
 
 // Lists all configured identity providers.
-func (r *IdentityProviderService) List(ctx context.Context, query IdentityProviderListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IdentityProviderListResponse], err error) {
+func (r *IdentityProviderService) List(ctx context.Context, params IdentityProviderListParams, opts ...option.RequestOption) (res *pagination.SinglePage[IdentityProviderListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
 		err = errors.New("account ID and zone ID are mutually exclusive")
 		return
 	}
-	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
 		err = errors.New("either account ID or zone ID must be provided")
 		return
 	}
-	if query.AccountID.Value != "" {
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
-		accountOrZoneID = query.AccountID
+		accountOrZoneID = params.AccountID
 	}
-	if query.ZoneID.Value != "" {
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
-		accountOrZoneID = query.ZoneID
+		accountOrZoneID = params.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/identity_providers", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -140,8 +142,8 @@ func (r *IdentityProviderService) List(ctx context.Context, query IdentityProvid
 }
 
 // Lists all configured identity providers.
-func (r *IdentityProviderService) ListAutoPaging(ctx context.Context, query IdentityProviderListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IdentityProviderListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *IdentityProviderService) ListAutoPaging(ctx context.Context, params IdentityProviderListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[IdentityProviderListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an identity provider from Access.
@@ -429,31 +431,31 @@ type IdentityProvider struct {
 	// [IdentityProviderAccessGoogleConfig], [IdentityProviderAccessGoogleAppsConfig],
 	// [IdentityProviderAccessOIDCConfig], [IdentityProviderAccessOktaConfig],
 	// [IdentityProviderAccessOneloginConfig], [IdentityProviderAccessPingoneConfig],
-	// [IdentityProviderAccessSAMLConfig], [interface{}].
-	Config interface{} `json:"config"`
-	// UUID
-	ID string `json:"id"`
+	// [IdentityProviderAccessSAMLConfig], [IdentityProviderAccessOnetimepinConfig].
+	Config interface{} `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type  IdentityProviderType `json:"type,required"`
-	JSON  identityProviderJSON `json:"-"`
-	union IdentityProviderUnion
+	Type IdentityProviderType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	SCIMConfig IdentityProviderSCIMConfig `json:"scim_config"`
+	JSON       identityProviderJSON       `json:"-"`
+	union      IdentityProviderUnion
 }
 
 // identityProviderJSON contains the JSON metadata for the struct
 // [IdentityProvider]
 type identityProviderJSON struct {
 	Config      apijson.Field
-	ID          apijson.Field
 	Name        apijson.Field
-	SCIMConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -987,6 +989,8 @@ type IdentityProviderAccessOIDCConfig struct {
 	ClientSecret string `json:"client_secret"`
 	// The claim name for email in the id_token response.
 	EmailClaimName string `json:"email_claim_name"`
+	// Enable Proof Key for Code Exchange (PKCE)
+	PKCEEnabled bool `json:"pkce_enabled"`
 	// OAuth scopes
 	Scopes []string `json:"scopes"`
 	// The token_endpoint URL of your IdP
@@ -1003,6 +1007,7 @@ type identityProviderAccessOIDCConfigJSON struct {
 	ClientID       apijson.Field
 	ClientSecret   apijson.Field
 	EmailClaimName apijson.Field
+	PKCEEnabled    apijson.Field
 	Scopes         apijson.Field
 	TokenURL       apijson.Field
 	raw            string
@@ -1411,7 +1416,7 @@ type IdentityProviderAccessOnetimepin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config interface{} `json:"config,required"`
+	Config IdentityProviderAccessOnetimepinConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -1448,17 +1453,41 @@ func (r identityProviderAccessOnetimepinJSON) RawJSON() string {
 
 func (r IdentityProviderAccessOnetimepin) implementsZeroTrustIdentityProvider() {}
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessOnetimepinConfig struct {
+	RedirectURL string                                     `json:"redirect_url"`
+	JSON        identityProviderAccessOnetimepinConfigJSON `json:"-"`
+}
+
+// identityProviderAccessOnetimepinConfigJSON contains the JSON metadata for the
+// struct [IdentityProviderAccessOnetimepinConfig]
+type identityProviderAccessOnetimepinConfigJSON struct {
+	RedirectURL apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityProviderAccessOnetimepinConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityProviderAccessOnetimepinConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type IdentityProviderParam struct {
-	Config param.Field[interface{}] `json:"config"`
+	Config param.Field[interface{}] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 	Type param.Field[IdentityProviderType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	SCIMConfig param.Field[IdentityProviderSCIMConfigParam] `json:"scim_config"`
 }
 
 func (r IdentityProviderParam) MarshalJSON() (data []byte, err error) {
@@ -1715,6 +1744,8 @@ type IdentityProviderAccessOIDCConfigParam struct {
 	ClientSecret param.Field[string] `json:"client_secret"`
 	// The claim name for email in the id_token response.
 	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Enable Proof Key for Code Exchange (PKCE)
+	PKCEEnabled param.Field[bool] `json:"pkce_enabled"`
 	// OAuth scopes
 	Scopes param.Field[[]string] `json:"scopes"`
 	// The token_endpoint URL of your IdP
@@ -1939,7 +1970,7 @@ type IdentityProviderAccessOnetimepinParam struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[interface{}] `json:"config,required"`
+	Config param.Field[IdentityProviderAccessOnetimepinConfigParam] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
@@ -1957,15 +1988,29 @@ func (r IdentityProviderAccessOnetimepinParam) MarshalJSON() (data []byte, err e
 
 func (r IdentityProviderAccessOnetimepinParam) implementsZeroTrustIdentityProviderUnionParam() {}
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type IdentityProviderAccessOnetimepinConfigParam struct {
+}
+
+func (r IdentityProviderAccessOnetimepinConfigParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderSCIMConfig struct {
 	// A flag to enable or disable SCIM for the identity provider.
 	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// Indicates how a SCIM event updates a user identity used for policy evaluation.
+	// Use "automatic" to automatically update a user's identity and augment it with
+	// fields from the SCIM user resource. Use "reauth" to force re-authentication on
+	// group membership updates, user identity update will only occur after successful
+	// re-authentication. With "reauth" identities will not contain fields from the
+	// SCIM user resource. With "no_action" identities will not be changed by SCIM
+	// updates in any way and users will not be prompted to reauthenticate.
+	IdentityUpdateBehavior IdentityProviderSCIMConfigIdentityUpdateBehavior `json:"identity_update_behavior"`
 	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
 	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
 	// enabled.
@@ -1984,7 +2029,7 @@ type IdentityProviderSCIMConfig struct {
 // [IdentityProviderSCIMConfig]
 type identityProviderSCIMConfigJSON struct {
 	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
+	IdentityUpdateBehavior apijson.Field
 	SeatDeprovision        apijson.Field
 	Secret                 apijson.Field
 	UserDeprovision        apijson.Field
@@ -2000,23 +2045,46 @@ func (r identityProviderSCIMConfigJSON) RawJSON() string {
 	return r.raw
 }
 
+// Indicates how a SCIM event updates a user identity used for policy evaluation.
+// Use "automatic" to automatically update a user's identity and augment it with
+// fields from the SCIM user resource. Use "reauth" to force re-authentication on
+// group membership updates, user identity update will only occur after successful
+// re-authentication. With "reauth" identities will not contain fields from the
+// SCIM user resource. With "no_action" identities will not be changed by SCIM
+// updates in any way and users will not be prompted to reauthenticate.
+type IdentityProviderSCIMConfigIdentityUpdateBehavior string
+
+const (
+	IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic IdentityProviderSCIMConfigIdentityUpdateBehavior = "automatic"
+	IdentityProviderSCIMConfigIdentityUpdateBehaviorReauth    IdentityProviderSCIMConfigIdentityUpdateBehavior = "reauth"
+	IdentityProviderSCIMConfigIdentityUpdateBehaviorNoAction  IdentityProviderSCIMConfigIdentityUpdateBehavior = "no_action"
+)
+
+func (r IdentityProviderSCIMConfigIdentityUpdateBehavior) IsKnown() bool {
+	switch r {
+	case IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic, IdentityProviderSCIMConfigIdentityUpdateBehaviorReauth, IdentityProviderSCIMConfigIdentityUpdateBehaviorNoAction:
+		return true
+	}
+	return false
+}
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type IdentityProviderSCIMConfigParam struct {
 	// A flag to enable or disable SCIM for the identity provider.
 	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// Indicates how a SCIM event updates a user identity used for policy evaluation.
+	// Use "automatic" to automatically update a user's identity and augment it with
+	// fields from the SCIM user resource. Use "reauth" to force re-authentication on
+	// group membership updates, user identity update will only occur after successful
+	// re-authentication. With "reauth" identities will not contain fields from the
+	// SCIM user resource. With "no_action" identities will not be changed by SCIM
+	// updates in any way and users will not be prompted to reauthenticate.
+	IdentityUpdateBehavior param.Field[IdentityProviderSCIMConfigIdentityUpdateBehavior] `json:"identity_update_behavior"`
 	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
 	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
 	// enabled.
 	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
 	// A flag to enable revoking a user's session in Access and Gateway when they have
 	// been deprovisioned in the Identity Provider.
 	UserDeprovision param.Field[bool] `json:"user_deprovision"`
@@ -2066,30 +2134,30 @@ type IdentityProviderListResponse struct {
 	// [IdentityProviderListResponseAccessOneloginConfig],
 	// [IdentityProviderListResponseAccessPingoneConfig],
 	// [IdentityProviderListResponseAccessSAMLConfig].
-	Config interface{} `json:"config"`
-	// UUID
-	ID string `json:"id"`
+	Config interface{} `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name string `json:"name,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	SCIMConfig IdentityProviderSCIMConfig `json:"scim_config"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type  IdentityProviderType             `json:"type,required"`
-	JSON  identityProviderListResponseJSON `json:"-"`
-	union IdentityProviderListResponseUnion
+	Type IdentityProviderType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	SCIMConfig IdentityProviderSCIMConfig       `json:"scim_config"`
+	JSON       identityProviderListResponseJSON `json:"-"`
+	union      IdentityProviderListResponseUnion
 }
 
 // identityProviderListResponseJSON contains the JSON metadata for the struct
 // [IdentityProviderListResponse]
 type identityProviderListResponseJSON struct {
 	Config      apijson.Field
-	ID          apijson.Field
 	Name        apijson.Field
-	SCIMConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	SCIMConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2621,6 +2689,8 @@ type IdentityProviderListResponseAccessOIDCConfig struct {
 	ClientSecret string `json:"client_secret"`
 	// The claim name for email in the id_token response.
 	EmailClaimName string `json:"email_claim_name"`
+	// Enable Proof Key for Code Exchange (PKCE)
+	PKCEEnabled bool `json:"pkce_enabled"`
 	// OAuth scopes
 	Scopes []string `json:"scopes"`
 	// The token_endpoint URL of your IdP
@@ -2637,6 +2707,7 @@ type identityProviderListResponseAccessOIDCConfigJSON struct {
 	ClientID       apijson.Field
 	ClientSecret   apijson.Field
 	EmailClaimName apijson.Field
+	PKCEEnabled    apijson.Field
 	Scopes         apijson.Field
 	TokenURL       apijson.Field
 	raw            string
@@ -3181,6 +3252,18 @@ type IdentityProviderListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// Indicates to Access to only retrieve identity providers that have the System for
+	// Cross-Domain Identity Management (SCIM) enabled.
+	SCIMEnabled param.Field[string] `query:"scim_enabled"`
+}
+
+// URLQuery serializes [IdentityProviderListParams]'s query parameters as
+// `url.Values`.
+func (r IdentityProviderListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type IdentityProviderDeleteParams struct {

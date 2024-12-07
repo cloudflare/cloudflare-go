@@ -12,14 +12,14 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptVersionService contains methods and other services that help with
@@ -253,7 +253,7 @@ func (r ScriptVersionNewParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type ScriptVersionNewParamsMetadataAnnotations struct {
-	// Human-readable message about the version.
+	// Human-readable message about the version. Truncated to 100 bytes.
 	WorkersMessage param.Field[string] `json:"workers/message"`
 	// User-provided identifier for the version.
 	WorkersTag param.Field[string] `json:"workers/tag"`

@@ -3,7 +3,7 @@
 package zero_trust
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // DLPService contains methods and other services that help with interacting with
@@ -19,6 +19,7 @@ type DLPService struct {
 	PayloadLogs *DLPPayloadLogService
 	Profiles    *DLPProfileService
 	Limits      *DLPLimitService
+	Entries     *DLPEntryService
 }
 
 // NewDLPService generates a new service that applies the given options to each
@@ -32,5 +33,6 @@ func NewDLPService(opts ...option.RequestOption) (r *DLPService) {
 	r.PayloadLogs = NewDLPPayloadLogService(opts...)
 	r.Profiles = NewDLPProfileService(opts...)
 	r.Limits = NewDLPLimitService(opts...)
+	r.Entries = NewDLPEntryService(opts...)
 	return
 }

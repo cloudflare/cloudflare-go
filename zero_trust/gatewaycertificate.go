@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // GatewayCertificateService contains methods and other services that help with
@@ -169,7 +169,8 @@ type GatewayCertificateNewResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'active' state may be used for Gateway TLS interception.
+	// the 'available' (previously called 'active') state may be used for Gateway TLS
+	// interception.
 	BindingStatus GatewayCertificateNewResponseBindingStatus `json:"binding_status"`
 	// The CA certificate
 	Certificate string    `json:"certificate"`
@@ -218,19 +219,20 @@ func (r gatewayCertificateNewResponseJSON) RawJSON() string {
 }
 
 // The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'active' state may be used for Gateway TLS interception.
+// the 'available' (previously called 'active') state may be used for Gateway TLS
+// interception.
 type GatewayCertificateNewResponseBindingStatus string
 
 const (
 	GatewayCertificateNewResponseBindingStatusPendingDeployment GatewayCertificateNewResponseBindingStatus = "pending_deployment"
-	GatewayCertificateNewResponseBindingStatusActive            GatewayCertificateNewResponseBindingStatus = "active"
+	GatewayCertificateNewResponseBindingStatusAvailable         GatewayCertificateNewResponseBindingStatus = "available"
 	GatewayCertificateNewResponseBindingStatusPendingDeletion   GatewayCertificateNewResponseBindingStatus = "pending_deletion"
 	GatewayCertificateNewResponseBindingStatusInactive          GatewayCertificateNewResponseBindingStatus = "inactive"
 )
 
 func (r GatewayCertificateNewResponseBindingStatus) IsKnown() bool {
 	switch r {
-	case GatewayCertificateNewResponseBindingStatusPendingDeployment, GatewayCertificateNewResponseBindingStatusActive, GatewayCertificateNewResponseBindingStatusPendingDeletion, GatewayCertificateNewResponseBindingStatusInactive:
+	case GatewayCertificateNewResponseBindingStatusPendingDeployment, GatewayCertificateNewResponseBindingStatusAvailable, GatewayCertificateNewResponseBindingStatusPendingDeletion, GatewayCertificateNewResponseBindingStatusInactive:
 		return true
 	}
 	return false
@@ -256,7 +258,8 @@ type GatewayCertificateListResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'active' state may be used for Gateway TLS interception.
+	// the 'available' (previously called 'active') state may be used for Gateway TLS
+	// interception.
 	BindingStatus GatewayCertificateListResponseBindingStatus `json:"binding_status"`
 	// The CA certificate
 	Certificate string    `json:"certificate"`
@@ -305,19 +308,20 @@ func (r gatewayCertificateListResponseJSON) RawJSON() string {
 }
 
 // The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'active' state may be used for Gateway TLS interception.
+// the 'available' (previously called 'active') state may be used for Gateway TLS
+// interception.
 type GatewayCertificateListResponseBindingStatus string
 
 const (
 	GatewayCertificateListResponseBindingStatusPendingDeployment GatewayCertificateListResponseBindingStatus = "pending_deployment"
-	GatewayCertificateListResponseBindingStatusActive            GatewayCertificateListResponseBindingStatus = "active"
+	GatewayCertificateListResponseBindingStatusAvailable         GatewayCertificateListResponseBindingStatus = "available"
 	GatewayCertificateListResponseBindingStatusPendingDeletion   GatewayCertificateListResponseBindingStatus = "pending_deletion"
 	GatewayCertificateListResponseBindingStatusInactive          GatewayCertificateListResponseBindingStatus = "inactive"
 )
 
 func (r GatewayCertificateListResponseBindingStatus) IsKnown() bool {
 	switch r {
-	case GatewayCertificateListResponseBindingStatusPendingDeployment, GatewayCertificateListResponseBindingStatusActive, GatewayCertificateListResponseBindingStatusPendingDeletion, GatewayCertificateListResponseBindingStatusInactive:
+	case GatewayCertificateListResponseBindingStatusPendingDeployment, GatewayCertificateListResponseBindingStatusAvailable, GatewayCertificateListResponseBindingStatusPendingDeletion, GatewayCertificateListResponseBindingStatusInactive:
 		return true
 	}
 	return false
@@ -343,7 +347,8 @@ type GatewayCertificateDeleteResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'active' state may be used for Gateway TLS interception.
+	// the 'available' (previously called 'active') state may be used for Gateway TLS
+	// interception.
 	BindingStatus GatewayCertificateDeleteResponseBindingStatus `json:"binding_status"`
 	// The CA certificate
 	Certificate string    `json:"certificate"`
@@ -392,19 +397,20 @@ func (r gatewayCertificateDeleteResponseJSON) RawJSON() string {
 }
 
 // The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'active' state may be used for Gateway TLS interception.
+// the 'available' (previously called 'active') state may be used for Gateway TLS
+// interception.
 type GatewayCertificateDeleteResponseBindingStatus string
 
 const (
 	GatewayCertificateDeleteResponseBindingStatusPendingDeployment GatewayCertificateDeleteResponseBindingStatus = "pending_deployment"
-	GatewayCertificateDeleteResponseBindingStatusActive            GatewayCertificateDeleteResponseBindingStatus = "active"
+	GatewayCertificateDeleteResponseBindingStatusAvailable         GatewayCertificateDeleteResponseBindingStatus = "available"
 	GatewayCertificateDeleteResponseBindingStatusPendingDeletion   GatewayCertificateDeleteResponseBindingStatus = "pending_deletion"
 	GatewayCertificateDeleteResponseBindingStatusInactive          GatewayCertificateDeleteResponseBindingStatus = "inactive"
 )
 
 func (r GatewayCertificateDeleteResponseBindingStatus) IsKnown() bool {
 	switch r {
-	case GatewayCertificateDeleteResponseBindingStatusPendingDeployment, GatewayCertificateDeleteResponseBindingStatusActive, GatewayCertificateDeleteResponseBindingStatusPendingDeletion, GatewayCertificateDeleteResponseBindingStatusInactive:
+	case GatewayCertificateDeleteResponseBindingStatusPendingDeployment, GatewayCertificateDeleteResponseBindingStatusAvailable, GatewayCertificateDeleteResponseBindingStatusPendingDeletion, GatewayCertificateDeleteResponseBindingStatusInactive:
 		return true
 	}
 	return false
@@ -430,7 +436,8 @@ type GatewayCertificateActivateResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'active' state may be used for Gateway TLS interception.
+	// the 'available' (previously called 'active') state may be used for Gateway TLS
+	// interception.
 	BindingStatus GatewayCertificateActivateResponseBindingStatus `json:"binding_status"`
 	// The CA certificate
 	Certificate string    `json:"certificate"`
@@ -479,19 +486,20 @@ func (r gatewayCertificateActivateResponseJSON) RawJSON() string {
 }
 
 // The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'active' state may be used for Gateway TLS interception.
+// the 'available' (previously called 'active') state may be used for Gateway TLS
+// interception.
 type GatewayCertificateActivateResponseBindingStatus string
 
 const (
 	GatewayCertificateActivateResponseBindingStatusPendingDeployment GatewayCertificateActivateResponseBindingStatus = "pending_deployment"
-	GatewayCertificateActivateResponseBindingStatusActive            GatewayCertificateActivateResponseBindingStatus = "active"
+	GatewayCertificateActivateResponseBindingStatusAvailable         GatewayCertificateActivateResponseBindingStatus = "available"
 	GatewayCertificateActivateResponseBindingStatusPendingDeletion   GatewayCertificateActivateResponseBindingStatus = "pending_deletion"
 	GatewayCertificateActivateResponseBindingStatusInactive          GatewayCertificateActivateResponseBindingStatus = "inactive"
 )
 
 func (r GatewayCertificateActivateResponseBindingStatus) IsKnown() bool {
 	switch r {
-	case GatewayCertificateActivateResponseBindingStatusPendingDeployment, GatewayCertificateActivateResponseBindingStatusActive, GatewayCertificateActivateResponseBindingStatusPendingDeletion, GatewayCertificateActivateResponseBindingStatusInactive:
+	case GatewayCertificateActivateResponseBindingStatusPendingDeployment, GatewayCertificateActivateResponseBindingStatusAvailable, GatewayCertificateActivateResponseBindingStatusPendingDeletion, GatewayCertificateActivateResponseBindingStatusInactive:
 		return true
 	}
 	return false
@@ -517,7 +525,8 @@ type GatewayCertificateDeactivateResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'active' state may be used for Gateway TLS interception.
+	// the 'available' (previously called 'active') state may be used for Gateway TLS
+	// interception.
 	BindingStatus GatewayCertificateDeactivateResponseBindingStatus `json:"binding_status"`
 	// The CA certificate
 	Certificate string    `json:"certificate"`
@@ -566,19 +575,20 @@ func (r gatewayCertificateDeactivateResponseJSON) RawJSON() string {
 }
 
 // The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'active' state may be used for Gateway TLS interception.
+// the 'available' (previously called 'active') state may be used for Gateway TLS
+// interception.
 type GatewayCertificateDeactivateResponseBindingStatus string
 
 const (
 	GatewayCertificateDeactivateResponseBindingStatusPendingDeployment GatewayCertificateDeactivateResponseBindingStatus = "pending_deployment"
-	GatewayCertificateDeactivateResponseBindingStatusActive            GatewayCertificateDeactivateResponseBindingStatus = "active"
+	GatewayCertificateDeactivateResponseBindingStatusAvailable         GatewayCertificateDeactivateResponseBindingStatus = "available"
 	GatewayCertificateDeactivateResponseBindingStatusPendingDeletion   GatewayCertificateDeactivateResponseBindingStatus = "pending_deletion"
 	GatewayCertificateDeactivateResponseBindingStatusInactive          GatewayCertificateDeactivateResponseBindingStatus = "inactive"
 )
 
 func (r GatewayCertificateDeactivateResponseBindingStatus) IsKnown() bool {
 	switch r {
-	case GatewayCertificateDeactivateResponseBindingStatusPendingDeployment, GatewayCertificateDeactivateResponseBindingStatusActive, GatewayCertificateDeactivateResponseBindingStatusPendingDeletion, GatewayCertificateDeactivateResponseBindingStatusInactive:
+	case GatewayCertificateDeactivateResponseBindingStatusPendingDeployment, GatewayCertificateDeactivateResponseBindingStatusAvailable, GatewayCertificateDeactivateResponseBindingStatusPendingDeletion, GatewayCertificateDeactivateResponseBindingStatusInactive:
 		return true
 	}
 	return false
@@ -604,7 +614,8 @@ type GatewayCertificateGetResponse struct {
 	// Certificate UUID tag.
 	ID string `json:"id"`
 	// The deployment status of the certificate on Cloudflare's edge. Certificates in
-	// the 'active' state may be used for Gateway TLS interception.
+	// the 'available' (previously called 'active') state may be used for Gateway TLS
+	// interception.
 	BindingStatus GatewayCertificateGetResponseBindingStatus `json:"binding_status"`
 	// The CA certificate
 	Certificate string    `json:"certificate"`
@@ -653,19 +664,20 @@ func (r gatewayCertificateGetResponseJSON) RawJSON() string {
 }
 
 // The deployment status of the certificate on Cloudflare's edge. Certificates in
-// the 'active' state may be used for Gateway TLS interception.
+// the 'available' (previously called 'active') state may be used for Gateway TLS
+// interception.
 type GatewayCertificateGetResponseBindingStatus string
 
 const (
 	GatewayCertificateGetResponseBindingStatusPendingDeployment GatewayCertificateGetResponseBindingStatus = "pending_deployment"
-	GatewayCertificateGetResponseBindingStatusActive            GatewayCertificateGetResponseBindingStatus = "active"
+	GatewayCertificateGetResponseBindingStatusAvailable         GatewayCertificateGetResponseBindingStatus = "available"
 	GatewayCertificateGetResponseBindingStatusPendingDeletion   GatewayCertificateGetResponseBindingStatus = "pending_deletion"
 	GatewayCertificateGetResponseBindingStatusInactive          GatewayCertificateGetResponseBindingStatus = "inactive"
 )
 
 func (r GatewayCertificateGetResponseBindingStatus) IsKnown() bool {
 	switch r {
-	case GatewayCertificateGetResponseBindingStatusPendingDeployment, GatewayCertificateGetResponseBindingStatusActive, GatewayCertificateGetResponseBindingStatusPendingDeletion, GatewayCertificateGetResponseBindingStatusInactive:
+	case GatewayCertificateGetResponseBindingStatusPendingDeployment, GatewayCertificateGetResponseBindingStatusAvailable, GatewayCertificateGetResponseBindingStatusPendingDeletion, GatewayCertificateGetResponseBindingStatusInactive:
 		return true
 	}
 	return false

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/certificate_authorities"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/certificate_authorities"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestHostnameAssociationUpdateWithOptionalParams(t *testing.T) {
@@ -30,7 +30,7 @@ func TestHostnameAssociationUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.CertificateAuthorities.HostnameAssociations.Update(context.TODO(), certificate_authorities.HostnameAssociationUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		TLSHostnameAssociation: certificate_authorities.TLSHostnameAssociationParam{
-			Hostnames:         cloudflare.F([]certificate_authorities.HostnameAssociationParam{"api.example.com", "api.example.com", "api.example.com"}),
+			Hostnames:         cloudflare.F([]certificate_authorities.HostnameAssociationParam{"api.example.com"}),
 			MTLSCertificateID: cloudflare.F("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
 		},
 	})

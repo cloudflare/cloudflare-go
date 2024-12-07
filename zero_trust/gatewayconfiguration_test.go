@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
@@ -76,6 +76,10 @@ func TestGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
+			}),
+			Sandbox: cloudflare.F(zero_trust.GatewayConfigurationSettingsSandboxParam{
+				Enabled:        cloudflare.F(true),
+				FallbackAction: cloudflare.F(zero_trust.GatewayConfigurationSettingsSandboxFallbackActionAllow),
 			}),
 			TLSDecrypt: cloudflare.F(zero_trust.TLSSettingsParam{
 				Enabled: cloudflare.F(true),
@@ -153,6 +157,10 @@ func TestGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 			}),
 			ProtocolDetection: cloudflare.F(zero_trust.ProtocolDetectionParam{
 				Enabled: cloudflare.F(true),
+			}),
+			Sandbox: cloudflare.F(zero_trust.GatewayConfigurationSettingsSandboxParam{
+				Enabled:        cloudflare.F(true),
+				FallbackAction: cloudflare.F(zero_trust.GatewayConfigurationSettingsSandboxFallbackActionAllow),
 			}),
 			TLSDecrypt: cloudflare.F(zero_trust.TLSSettingsParam{
 				Enabled: cloudflare.F(true),

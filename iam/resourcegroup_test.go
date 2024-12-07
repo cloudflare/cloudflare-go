@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/iam"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/iam"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestResourceGroupNewWithOptionalParams(t *testing.T) {
@@ -32,10 +32,6 @@ func TestResourceGroupNewWithOptionalParams(t *testing.T) {
 		Scope: cloudflare.F(iam.ResourceGroupNewParamsScope{
 			Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
 			Objects: cloudflare.F([]iam.ResourceGroupNewParamsScopeObject{{
-				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
-			}, {
-				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
-			}, {
 				Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
 			}}),
 		}),
@@ -73,10 +69,6 @@ func TestResourceGroupUpdateWithOptionalParams(t *testing.T) {
 			Scope: cloudflare.F(iam.ResourceGroupUpdateParamsScope{
 				Key: cloudflare.F("com.cloudflare.api.account.eb78d65290b24279ba6f44721b3ea3c4"),
 				Objects: cloudflare.F([]iam.ResourceGroupUpdateParamsScopeObject{{
-					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
-				}, {
-					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
-				}, {
 					Key: cloudflare.F("com.cloudflare.api.account.zone.23f8d65290b24279ba6f44721b3eaad5"),
 				}}),
 			}),

@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestAttackLayer3TopLocationOriginWithOptionalParams(t *testing.T) {
@@ -29,16 +29,16 @@ func TestAttackLayer3TopLocationOriginWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Top.Locations.Origin(context.TODO(), radar.AttackLayer3TopLocationOriginParams{
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+		DateRange: cloudflare.F([]string{"7d"}),
+		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.AttackLayer3TopLocationOriginParamsFormatJson),
-		IPVersion: cloudflare.F([]radar.AttackLayer3TopLocationOriginParamsIPVersion{radar.AttackLayer3TopLocationOriginParamsIPVersionIPv4, radar.AttackLayer3TopLocationOriginParamsIPVersionIPv6}),
+		IPVersion: cloudflare.F([]radar.AttackLayer3TopLocationOriginParamsIPVersion{radar.AttackLayer3TopLocationOriginParamsIPVersionIPv4}),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3TopLocationOriginParamsProtocol{radar.AttackLayer3TopLocationOriginParamsProtocolUdp, radar.AttackLayer3TopLocationOriginParamsProtocolTCP, radar.AttackLayer3TopLocationOriginParamsProtocolIcmp}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3TopLocationOriginParamsProtocol{radar.AttackLayer3TopLocationOriginParamsProtocolUdp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -63,16 +63,16 @@ func TestAttackLayer3TopLocationTargetWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Top.Locations.Target(context.TODO(), radar.AttackLayer3TopLocationTargetParams{
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+		DateRange: cloudflare.F([]string{"7d"}),
+		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.AttackLayer3TopLocationTargetParamsFormatJson),
-		IPVersion: cloudflare.F([]radar.AttackLayer3TopLocationTargetParamsIPVersion{radar.AttackLayer3TopLocationTargetParamsIPVersionIPv4, radar.AttackLayer3TopLocationTargetParamsIPVersionIPv6}),
+		IPVersion: cloudflare.F([]radar.AttackLayer3TopLocationTargetParamsIPVersion{radar.AttackLayer3TopLocationTargetParamsIPVersionIPv4}),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]radar.AttackLayer3TopLocationTargetParamsProtocol{radar.AttackLayer3TopLocationTargetParamsProtocolUdp, radar.AttackLayer3TopLocationTargetParamsProtocolTCP, radar.AttackLayer3TopLocationTargetParamsProtocolIcmp}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
+		Protocol:  cloudflare.F([]radar.AttackLayer3TopLocationTargetParamsProtocol{radar.AttackLayer3TopLocationTargetParamsProtocolUdp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

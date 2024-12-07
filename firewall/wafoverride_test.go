@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/firewall"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/firewall"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestWAFOverrideNew(t *testing.T) {
@@ -28,13 +28,10 @@ func TestWAFOverrideNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.WAF.Overrides.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		firewall.WAFOverrideNewParams{
-			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
-		},
-	)
+	_, err := client.Firewall.WAF.Overrides.New(context.TODO(), firewall.WAFOverrideNewParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		URLs:   cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -60,10 +57,10 @@ func TestWAFOverrideUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewall.WAF.Overrides.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"de677e5818985db1285d0e80225f06e5",
 		firewall.WAFOverrideUpdateParams{
-			PathID: cloudflare.F("de677e5818985db1285d0e80225f06e5"),
-			BodyID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			RewriteAction: cloudflare.F(firewall.RewriteActionParam{
 				Block:     cloudflare.F(firewall.RewriteActionBlockChallenge),
 				Challenge: cloudflare.F(firewall.RewriteActionChallengeChallenge),
@@ -74,7 +71,7 @@ func TestWAFOverrideUpdateWithOptionalParams(t *testing.T) {
 			Rules: cloudflare.F(firewall.WAFRuleParam{
 				"100015": firewall.WAFRuleItemChallenge,
 			}),
-			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*", "shop.example.com/*", "shop.example.com/*"}),
+			URLs: cloudflare.F([]firewall.OverrideURLParam{"shop.example.com/*"}),
 		},
 	)
 	if err != nil {
@@ -99,14 +96,11 @@ func TestWAFOverrideListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Firewall.WAF.Overrides.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		firewall.WAFOverrideListParams{
-			Page:    cloudflare.F(1.000000),
-			PerPage: cloudflare.F(5.000000),
-		},
-	)
+	_, err := client.Firewall.WAF.Overrides.List(context.TODO(), firewall.WAFOverrideListParams{
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:    cloudflare.F(1.000000),
+		PerPage: cloudflare.F(5.000000),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -131,8 +125,10 @@ func TestWAFOverrideDelete(t *testing.T) {
 	)
 	_, err := client.Firewall.WAF.Overrides.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"de677e5818985db1285d0e80225f06e5",
+		firewall.WAFOverrideDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -158,8 +154,10 @@ func TestWAFOverrideGet(t *testing.T) {
 	)
 	_, err := client.Firewall.WAF.Overrides.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"de677e5818985db1285d0e80225f06e5",
+		firewall.WAFOverrideGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

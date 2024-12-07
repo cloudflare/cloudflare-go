@@ -13,14 +13,14 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptService contains methods and other services that help with interacting
@@ -31,6 +31,8 @@ import (
 // the [NewScriptService] method instead.
 type ScriptService struct {
 	Options     []option.RequestOption
+	Assets      *ScriptAssetService
+	Subdomain   *ScriptSubdomainService
 	Schedules   *ScriptScheduleService
 	Tail        *ScriptTailService
 	Content     *ScriptContentService
@@ -45,6 +47,8 @@ type ScriptService struct {
 func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 	r = &ScriptService{}
 	r.Options = opts
+	r.Assets = NewScriptAssetService(opts...)
+	r.Subdomain = NewScriptSubdomainService(opts...)
 	r.Schedules = NewScriptScheduleService(opts...)
 	r.Tail = NewScriptTailService(opts...)
 	r.Content = NewScriptContentService(opts...)
@@ -146,6 +150,10 @@ type Script struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
+	// Whether a Worker contains assets.
+	HasAssets bool `json:"has_assets"`
+	// Whether a Worker contains modules.
+	HasModules bool `json:"has_modules"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// When the script was last modified.
@@ -164,6 +172,8 @@ type scriptJSON struct {
 	ID            apijson.Field
 	CreatedOn     apijson.Field
 	Etag          apijson.Field
+	HasAssets     apijson.Field
+	HasModules    apijson.Field
 	Logpush       apijson.Field
 	ModifiedOn    apijson.Field
 	PlacementMode apijson.Field
@@ -184,6 +194,8 @@ func (r scriptJSON) RawJSON() string {
 type ScriptSetting struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
+	// Observability settings for the Worker.
+	Observability ScriptSettingObservability `json:"observability"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript  `json:"tail_consumers"`
 	JSON          scriptSettingJSON `json:"-"`
@@ -192,6 +204,7 @@ type ScriptSetting struct {
 // scriptSettingJSON contains the JSON metadata for the struct [ScriptSetting]
 type scriptSettingJSON struct {
 	Logpush       apijson.Field
+	Observability apijson.Field
 	TailConsumers apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
@@ -205,14 +218,56 @@ func (r scriptSettingJSON) RawJSON() string {
 	return r.raw
 }
 
+// Observability settings for the Worker.
+type ScriptSettingObservability struct {
+	// Whether observability is enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate float64                        `json:"head_sampling_rate,nullable"`
+	JSON             scriptSettingObservabilityJSON `json:"-"`
+}
+
+// scriptSettingObservabilityJSON contains the JSON metadata for the struct
+// [ScriptSettingObservability]
+type scriptSettingObservabilityJSON struct {
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ScriptSettingObservability) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptSettingObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
 type ScriptSettingParam struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
+	// Observability settings for the Worker.
+	Observability param.Field[ScriptSettingObservabilityParam] `json:"observability"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
 }
 
 func (r ScriptSettingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Observability settings for the Worker.
+type ScriptSettingObservabilityParam struct {
+	// Whether observability is enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r ScriptSettingObservabilityParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -223,6 +278,10 @@ type ScriptUpdateResponse struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Hashed script content, can be used in a If-None-Match header when updating.
 	Etag string `json:"etag"`
+	// Whether a Worker contains assets.
+	HasAssets bool `json:"has_assets"`
+	// Whether a Worker contains modules.
+	HasModules bool `json:"has_modules"`
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// When the script was last modified.
@@ -243,6 +302,8 @@ type scriptUpdateResponseJSON struct {
 	ID            apijson.Field
 	CreatedOn     apijson.Field
 	Etag          apijson.Field
+	HasAssets     apijson.Field
+	HasModules    apijson.Field
 	Logpush       apijson.Field
 	ModifiedOn    apijson.Field
 	PlacementMode apijson.Field
@@ -295,11 +356,11 @@ func (r ScriptUpdateParams) URLQuery() (v url.Values) {
 }
 
 type ScriptUpdateParamsBody struct {
-	AnyPartName param.Field[interface{}] `json:"<any part name>,required"`
-	Metadata    param.Field[interface{}] `json:"metadata,required"`
+	AnyPartName param.Field[interface{}] `json:"<any part name>"`
 	// Rollback message to be associated with this deployment. Only parsed when query
 	// param `"rollback_to"` is present.
-	Message param.Field[string] `json:"message"`
+	Message  param.Field[string]      `json:"message"`
+	Metadata param.Field[interface{}] `json:"metadata"`
 }
 
 func (r ScriptUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -333,6 +394,8 @@ func (r ScriptUpdateParamsBodyObject) implementsWorkersScriptUpdateParamsBodyUni
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
 type ScriptUpdateParamsBodyObjectMetadata struct {
+	// Configuration for assets within a Worker
+	Assets param.Field[ScriptUpdateParamsBodyObjectMetadataAssets] `json:"assets"`
 	// List of bindings available to the worker.
 	Bindings param.Field[[]ScriptUpdateParamsBodyObjectMetadataBinding] `json:"bindings"`
 	// Name of the part in the multipart request that contains the script (e.g. the
@@ -346,6 +409,9 @@ type ScriptUpdateParamsBodyObjectMetadata struct {
 	// enable upcoming features or opt in or out of specific changes not included in a
 	// `compatibility_date`.
 	CompatibilityFlags param.Field[[]string] `json:"compatibility_flags"`
+	// Retain assets which exist for a previously uploaded Worker version; used in lieu
+	// of providing a completion token.
+	KeepAssets param.Field[bool] `json:"keep_assets"`
 	// List of binding types to keep from previous_upload.
 	KeepBindings param.Field[[]string] `json:"keep_bindings"`
 	// Whether Logpush is turned on for the Worker.
@@ -355,19 +421,86 @@ type ScriptUpdateParamsBodyObjectMetadata struct {
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations param.Field[ScriptUpdateParamsBodyObjectMetadataMigrationsUnion] `json:"migrations"`
-	Placement  param.Field[PlacementConfigurationParam]                         `json:"placement"`
-	// List of strings to use as tags for this Worker
+	// Observability settings for the Worker.
+	Observability param.Field[ScriptUpdateParamsBodyObjectMetadataObservability] `json:"observability"`
+	Placement     param.Field[PlacementConfigurationParam]                       `json:"placement"`
+	// List of strings to use as tags for this Worker.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
 	// Usage model to apply to invocations.
 	UsageModel param.Field[ScriptUpdateParamsBodyObjectMetadataUsageModel] `json:"usage_model"`
-	// Key-value pairs to use as tags for this version of this Worker
+	// Key-value pairs to use as tags for this version of this Worker.
 	VersionTags param.Field[map[string]string] `json:"version_tags"`
 }
 
 func (r ScriptUpdateParamsBodyObjectMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Configuration for assets within a Worker
+type ScriptUpdateParamsBodyObjectMetadataAssets struct {
+	// Configuration for assets within a Worker.
+	Config param.Field[ScriptUpdateParamsBodyObjectMetadataAssetsConfig] `json:"config"`
+	// Token provided upon successful upload of all files from a registered manifest.
+	JWT param.Field[string] `json:"jwt"`
+}
+
+func (r ScriptUpdateParamsBodyObjectMetadataAssets) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configuration for assets within a Worker.
+type ScriptUpdateParamsBodyObjectMetadataAssetsConfig struct {
+	// Determines the redirects and rewrites of requests for HTML content.
+	HTMLHandling param.Field[ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
+	// Determines the response when a request does not match a static asset, and there
+	// is no Worker script.
+	NotFoundHandling param.Field[ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
+	// When true and the incoming request matches an asset, that will be served instead
+	// of invoking the Worker script. When false, requests will always invoke the
+	// Worker script.
+	ServeDirectly param.Field[bool] `json:"serve_directly"`
+}
+
+func (r ScriptUpdateParamsBodyObjectMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Determines the redirects and rewrites of requests for HTML content.
+type ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling string
+
+const (
+	ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingAutoTrailingSlash  ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "auto-trailing-slash"
+	ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingForceTrailingSlash ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "force-trailing-slash"
+	ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingDropTrailingSlash  ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "drop-trailing-slash"
+	ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingNone               ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "none"
+)
+
+func (r ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingAutoTrailingSlash, ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingForceTrailingSlash, ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingDropTrailingSlash, ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingNone:
+		return true
+	}
+	return false
+}
+
+// Determines the response when a request does not match a static asset, and there
+// is no Worker script.
+type ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling string
+
+const (
+	ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingNone                  ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling = "none"
+	ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling404Page               ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling = "404-page"
+	ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingSinglePageApplication ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling = "single-page-application"
+)
+
+func (r ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingNone, ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling404Page, ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingSinglePageApplication:
+		return true
+	}
+	return false
 }
 
 type ScriptUpdateParamsBodyObjectMetadataBinding struct {
@@ -385,17 +518,17 @@ func (r ScriptUpdateParamsBodyObjectMetadataBinding) MarshalJSON() (data []byte,
 
 // Migrations to apply for Durable Objects associated with this Worker.
 type ScriptUpdateParamsBodyObjectMetadataMigrations struct {
+	DeletedClasses   param.Field[interface{}] `json:"deleted_classes"`
+	NewClasses       param.Field[interface{}] `json:"new_classes"`
+	NewSqliteClasses param.Field[interface{}] `json:"new_sqlite_classes"`
 	// Tag to set as the latest migration tag.
 	NewTag param.Field[string] `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
 	OldTag             param.Field[string]      `json:"old_tag"`
-	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
-	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
-	NewSqliteClasses   param.Field[interface{}] `json:"new_sqlite_classes,required"`
-	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
-	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
-	Steps              param.Field[interface{}] `json:"steps,required"`
+	RenamedClasses     param.Field[interface{}] `json:"renamed_classes"`
+	Steps              param.Field[interface{}] `json:"steps"`
+	TransferredClasses param.Field[interface{}] `json:"transferred_classes"`
 }
 
 func (r ScriptUpdateParamsBodyObjectMetadataMigrations) MarshalJSON() (data []byte, err error) {
@@ -412,6 +545,19 @@ func (r ScriptUpdateParamsBodyObjectMetadataMigrations) implementsWorkersScriptU
 // [ScriptUpdateParamsBodyObjectMetadataMigrations].
 type ScriptUpdateParamsBodyObjectMetadataMigrationsUnion interface {
 	implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion()
+}
+
+// Observability settings for the Worker.
+type ScriptUpdateParamsBodyObjectMetadataObservability struct {
+	// Whether observability is enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r ScriptUpdateParamsBodyObjectMetadataObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Usage model to apply to invocations.

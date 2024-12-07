@@ -11,12 +11,12 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -101,6 +101,18 @@ func (r *OperationService) Delete(ctx context.Context, operationID string, body 
 		return
 	}
 	path := fmt.Sprintf("zones/%s/api_gateway/operations/%s", body.ZoneID, operationID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
+}
+
+// Delete multiple operations
+func (r *OperationService) BulkDelete(ctx context.Context, body OperationBulkDeleteParams, opts ...option.RequestOption) (res *OperationBulkDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/api_gateway/operations", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
@@ -190,20 +202,20 @@ func (r APIShieldMethod) IsKnown() bool {
 
 type APIShieldFeatures struct {
 	// This field can have the runtime type of
-	// [APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds].
-	Thresholds interface{} `json:"thresholds,required"`
-	// This field can have the runtime type of
-	// [APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
-	ParameterSchemas interface{} `json:"parameter_schemas,required"`
-	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
-	APIRouting interface{} `json:"api_routing,required"`
+	APIRouting interface{} `json:"api_routing"`
 	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
-	ConfidenceIntervals interface{} `json:"confidence_intervals,required"`
+	ConfidenceIntervals interface{} `json:"confidence_intervals"`
+	// This field can have the runtime type of
+	// [APIShieldFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
+	ParameterSchemas interface{} `json:"parameter_schemas"`
 	// This field can have the runtime type of
 	// [APIShieldFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
-	SchemaInfo interface{}           `json:"schema_info,required"`
+	SchemaInfo interface{} `json:"schema_info"`
+	// This field can have the runtime type of
+	// [APIShieldFeaturesAPIShieldOperationFeatureThresholdsThresholds].
+	Thresholds interface{}           `json:"thresholds"`
 	JSON       apiShieldFeaturesJSON `json:"-"`
 	union      APIShieldFeaturesUnion
 }
@@ -211,11 +223,11 @@ type APIShieldFeatures struct {
 // apiShieldFeaturesJSON contains the JSON metadata for the struct
 // [APIShieldFeatures]
 type apiShieldFeaturesJSON struct {
-	Thresholds          apijson.Field
-	ParameterSchemas    apijson.Field
 	APIRouting          apijson.Field
 	ConfidenceIntervals apijson.Field
+	ParameterSchemas    apijson.Field
 	SchemaInfo          apijson.Field
+	Thresholds          apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -831,20 +843,20 @@ func (r OperationListResponseMethod) IsKnown() bool {
 
 type OperationListResponseFeatures struct {
 	// This field can have the runtime type of
-	// [OperationListResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
-	Thresholds interface{} `json:"thresholds,required"`
-	// This field can have the runtime type of
-	// [OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
-	ParameterSchemas interface{} `json:"parameter_schemas,required"`
-	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
-	APIRouting interface{} `json:"api_routing,required"`
+	APIRouting interface{} `json:"api_routing"`
 	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
-	ConfidenceIntervals interface{} `json:"confidence_intervals,required"`
+	ConfidenceIntervals interface{} `json:"confidence_intervals"`
+	// This field can have the runtime type of
+	// [OperationListResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
+	ParameterSchemas interface{} `json:"parameter_schemas"`
 	// This field can have the runtime type of
 	// [OperationListResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
-	SchemaInfo interface{}                       `json:"schema_info,required"`
+	SchemaInfo interface{} `json:"schema_info"`
+	// This field can have the runtime type of
+	// [OperationListResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
+	Thresholds interface{}                       `json:"thresholds"`
 	JSON       operationListResponseFeaturesJSON `json:"-"`
 	union      OperationListResponseFeaturesUnion
 }
@@ -852,11 +864,11 @@ type OperationListResponseFeatures struct {
 // operationListResponseFeaturesJSON contains the JSON metadata for the struct
 // [OperationListResponseFeatures]
 type operationListResponseFeaturesJSON struct {
-	Thresholds          apijson.Field
-	ParameterSchemas    apijson.Field
 	APIRouting          apijson.Field
 	ConfidenceIntervals apijson.Field
+	ParameterSchemas    apijson.Field
 	SchemaInfo          apijson.Field
+	Thresholds          apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -1454,6 +1466,47 @@ func (r OperationDeleteResponseSuccess) IsKnown() bool {
 	return false
 }
 
+type OperationBulkDeleteResponse struct {
+	Errors   Message `json:"errors,required"`
+	Messages Message `json:"messages,required"`
+	// Whether the API call was successful
+	Success OperationBulkDeleteResponseSuccess `json:"success,required"`
+	JSON    operationBulkDeleteResponseJSON    `json:"-"`
+}
+
+// operationBulkDeleteResponseJSON contains the JSON metadata for the struct
+// [OperationBulkDeleteResponse]
+type operationBulkDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OperationBulkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r operationBulkDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type OperationBulkDeleteResponseSuccess bool
+
+const (
+	OperationBulkDeleteResponseSuccessTrue OperationBulkDeleteResponseSuccess = true
+)
+
+func (r OperationBulkDeleteResponseSuccess) IsKnown() bool {
+	switch r {
+	case OperationBulkDeleteResponseSuccessTrue:
+		return true
+	}
+	return false
+}
+
 type OperationGetResponse struct {
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
@@ -1517,20 +1570,20 @@ func (r OperationGetResponseMethod) IsKnown() bool {
 
 type OperationGetResponseFeatures struct {
 	// This field can have the runtime type of
-	// [OperationGetResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
-	Thresholds interface{} `json:"thresholds,required"`
-	// This field can have the runtime type of
-	// [OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
-	ParameterSchemas interface{} `json:"parameter_schemas,required"`
-	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureAPIRoutingAPIRouting].
-	APIRouting interface{} `json:"api_routing,required"`
+	APIRouting interface{} `json:"api_routing"`
 	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureConfidenceIntervalsConfidenceIntervals].
-	ConfidenceIntervals interface{} `json:"confidence_intervals,required"`
+	ConfidenceIntervals interface{} `json:"confidence_intervals"`
+	// This field can have the runtime type of
+	// [OperationGetResponseFeaturesAPIShieldOperationFeatureParameterSchemasParameterSchemas].
+	ParameterSchemas interface{} `json:"parameter_schemas"`
 	// This field can have the runtime type of
 	// [OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInfo].
-	SchemaInfo interface{}                      `json:"schema_info,required"`
+	SchemaInfo interface{} `json:"schema_info"`
+	// This field can have the runtime type of
+	// [OperationGetResponseFeaturesAPIShieldOperationFeatureThresholdsThresholds].
+	Thresholds interface{}                      `json:"thresholds"`
 	JSON       operationGetResponseFeaturesJSON `json:"-"`
 	union      OperationGetResponseFeaturesUnion
 }
@@ -1538,11 +1591,11 @@ type OperationGetResponseFeatures struct {
 // operationGetResponseFeaturesJSON contains the JSON metadata for the struct
 // [OperationGetResponseFeatures]
 type operationGetResponseFeaturesJSON struct {
-	Thresholds          apijson.Field
-	ParameterSchemas    apijson.Field
 	APIRouting          apijson.Field
 	ConfidenceIntervals apijson.Field
+	ParameterSchemas    apijson.Field
 	SchemaInfo          apijson.Field
+	Thresholds          apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -2275,6 +2328,11 @@ func (r OperationListParamsOrder) IsKnown() bool {
 }
 
 type OperationDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type OperationBulkDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }

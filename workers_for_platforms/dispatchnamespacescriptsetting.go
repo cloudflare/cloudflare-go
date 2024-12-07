@@ -11,13 +11,13 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/workers"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
 	"github.com/tidwall/gjson"
 )
 
@@ -103,7 +103,9 @@ type DispatchNamespaceScriptSettingEditResponse struct {
 	Logpush bool `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations DispatchNamespaceScriptSettingEditResponseMigrations `json:"migrations"`
-	Placement  workers.PlacementConfiguration                       `json:"placement"`
+	// Observability settings for the Worker.
+	Observability DispatchNamespaceScriptSettingEditResponseObservability `json:"observability"`
+	Placement     workers.PlacementConfiguration                          `json:"placement"`
 	// Tags to help you manage your Workers
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -122,6 +124,7 @@ type dispatchNamespaceScriptSettingEditResponseJSON struct {
 	Limits             apijson.Field
 	Logpush            apijson.Field
 	Migrations         apijson.Field
+	Observability      apijson.Field
 	Placement          apijson.Field
 	Tags               apijson.Field
 	TailConsumers      apijson.Field
@@ -163,40 +166,40 @@ func (r dispatchNamespaceScriptSettingEditResponseLimitsJSON) RawJSON() string {
 
 // Migrations to apply for Durable Objects associated with this Worker.
 type DispatchNamespaceScriptSettingEditResponseMigrations struct {
+	// This field can have the runtime type of [[]string].
+	DeletedClasses interface{} `json:"deleted_classes"`
+	// This field can have the runtime type of [[]string].
+	NewClasses interface{} `json:"new_classes"`
+	// This field can have the runtime type of [[]string].
+	NewSqliteClasses interface{} `json:"new_sqlite_classes"`
 	// Tag to set as the latest migration tag.
 	NewTag string `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
 	OldTag string `json:"old_tag"`
-	// This field can have the runtime type of [[]string].
-	DeletedClasses interface{} `json:"deleted_classes,required"`
-	// This field can have the runtime type of [[]string].
-	NewClasses interface{} `json:"new_classes,required"`
-	// This field can have the runtime type of [[]string].
-	NewSqliteClasses interface{} `json:"new_sqlite_classes,required"`
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationRenamedClass].
-	RenamedClasses interface{} `json:"renamed_classes,required"`
+	RenamedClasses interface{} `json:"renamed_classes"`
+	// This field can have the runtime type of [[]workers.MigrationStep].
+	Steps interface{} `json:"steps"`
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationTransferredClass].
-	TransferredClasses interface{} `json:"transferred_classes,required"`
-	// This field can have the runtime type of [[]workers.MigrationStep].
-	Steps interface{}                                              `json:"steps,required"`
-	JSON  dispatchNamespaceScriptSettingEditResponseMigrationsJSON `json:"-"`
-	union DispatchNamespaceScriptSettingEditResponseMigrationsUnion
+	TransferredClasses interface{}                                              `json:"transferred_classes"`
+	JSON               dispatchNamespaceScriptSettingEditResponseMigrationsJSON `json:"-"`
+	union              DispatchNamespaceScriptSettingEditResponseMigrationsUnion
 }
 
 // dispatchNamespaceScriptSettingEditResponseMigrationsJSON contains the JSON
 // metadata for the struct [DispatchNamespaceScriptSettingEditResponseMigrations]
 type dispatchNamespaceScriptSettingEditResponseMigrationsJSON struct {
-	NewTag             apijson.Field
-	OldTag             apijson.Field
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewSqliteClasses   apijson.Field
+	NewTag             apijson.Field
+	OldTag             apijson.Field
 	RenamedClasses     apijson.Field
-	TransferredClasses apijson.Field
 	Steps              apijson.Field
+	TransferredClasses apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -245,6 +248,34 @@ func init() {
 	)
 }
 
+// Observability settings for the Worker.
+type DispatchNamespaceScriptSettingEditResponseObservability struct {
+	// Whether observability is enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate float64                                                     `json:"head_sampling_rate,nullable"`
+	JSON             dispatchNamespaceScriptSettingEditResponseObservabilityJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseObservabilityJSON contains the JSON
+// metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseObservability]
+type dispatchNamespaceScriptSettingEditResponseObservabilityJSON struct {
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseObservability) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
 type DispatchNamespaceScriptSettingGetResponse struct {
 	// List of bindings attached to this Worker
 	Bindings []workers.Binding `json:"bindings"`
@@ -258,7 +289,9 @@ type DispatchNamespaceScriptSettingGetResponse struct {
 	Logpush bool `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations DispatchNamespaceScriptSettingGetResponseMigrations `json:"migrations"`
-	Placement  workers.PlacementConfiguration                      `json:"placement"`
+	// Observability settings for the Worker.
+	Observability DispatchNamespaceScriptSettingGetResponseObservability `json:"observability"`
+	Placement     workers.PlacementConfiguration                         `json:"placement"`
 	// Tags to help you manage your Workers
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -277,6 +310,7 @@ type dispatchNamespaceScriptSettingGetResponseJSON struct {
 	Limits             apijson.Field
 	Logpush            apijson.Field
 	Migrations         apijson.Field
+	Observability      apijson.Field
 	Placement          apijson.Field
 	Tags               apijson.Field
 	TailConsumers      apijson.Field
@@ -318,40 +352,40 @@ func (r dispatchNamespaceScriptSettingGetResponseLimitsJSON) RawJSON() string {
 
 // Migrations to apply for Durable Objects associated with this Worker.
 type DispatchNamespaceScriptSettingGetResponseMigrations struct {
+	// This field can have the runtime type of [[]string].
+	DeletedClasses interface{} `json:"deleted_classes"`
+	// This field can have the runtime type of [[]string].
+	NewClasses interface{} `json:"new_classes"`
+	// This field can have the runtime type of [[]string].
+	NewSqliteClasses interface{} `json:"new_sqlite_classes"`
 	// Tag to set as the latest migration tag.
 	NewTag string `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
 	OldTag string `json:"old_tag"`
-	// This field can have the runtime type of [[]string].
-	DeletedClasses interface{} `json:"deleted_classes,required"`
-	// This field can have the runtime type of [[]string].
-	NewClasses interface{} `json:"new_classes,required"`
-	// This field can have the runtime type of [[]string].
-	NewSqliteClasses interface{} `json:"new_sqlite_classes,required"`
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationRenamedClass].
-	RenamedClasses interface{} `json:"renamed_classes,required"`
+	RenamedClasses interface{} `json:"renamed_classes"`
+	// This field can have the runtime type of [[]workers.MigrationStep].
+	Steps interface{} `json:"steps"`
 	// This field can have the runtime type of
 	// [[]workers.SingleStepMigrationTransferredClass].
-	TransferredClasses interface{} `json:"transferred_classes,required"`
-	// This field can have the runtime type of [[]workers.MigrationStep].
-	Steps interface{}                                             `json:"steps,required"`
-	JSON  dispatchNamespaceScriptSettingGetResponseMigrationsJSON `json:"-"`
-	union DispatchNamespaceScriptSettingGetResponseMigrationsUnion
+	TransferredClasses interface{}                                             `json:"transferred_classes"`
+	JSON               dispatchNamespaceScriptSettingGetResponseMigrationsJSON `json:"-"`
+	union              DispatchNamespaceScriptSettingGetResponseMigrationsUnion
 }
 
 // dispatchNamespaceScriptSettingGetResponseMigrationsJSON contains the JSON
 // metadata for the struct [DispatchNamespaceScriptSettingGetResponseMigrations]
 type dispatchNamespaceScriptSettingGetResponseMigrationsJSON struct {
-	NewTag             apijson.Field
-	OldTag             apijson.Field
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewSqliteClasses   apijson.Field
+	NewTag             apijson.Field
+	OldTag             apijson.Field
 	RenamedClasses     apijson.Field
-	TransferredClasses apijson.Field
 	Steps              apijson.Field
+	TransferredClasses apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -400,6 +434,33 @@ func init() {
 	)
 }
 
+// Observability settings for the Worker.
+type DispatchNamespaceScriptSettingGetResponseObservability struct {
+	// Whether observability is enabled for the Worker.
+	Enabled bool `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate float64                                                    `json:"head_sampling_rate,nullable"`
+	JSON             dispatchNamespaceScriptSettingGetResponseObservabilityJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseObservabilityJSON contains the JSON
+// metadata for the struct [DispatchNamespaceScriptSettingGetResponseObservability]
+type dispatchNamespaceScriptSettingGetResponseObservabilityJSON struct {
+	Enabled          apijson.Field
+	HeadSamplingRate apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseObservability) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseObservabilityJSON) RawJSON() string {
+	return r.raw
+}
+
 type DispatchNamespaceScriptSettingEditParams struct {
 	// Identifier
 	AccountID param.Field[string]                                           `path:"account_id,required"`
@@ -434,7 +495,9 @@ type DispatchNamespaceScriptSettingEditParamsSettings struct {
 	Logpush param.Field[bool] `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
 	Migrations param.Field[DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion] `json:"migrations"`
-	Placement  param.Field[workers.PlacementConfigurationParam]                             `json:"placement"`
+	// Observability settings for the Worker.
+	Observability param.Field[DispatchNamespaceScriptSettingEditParamsSettingsObservability] `json:"observability"`
+	Placement     param.Field[workers.PlacementConfigurationParam]                           `json:"placement"`
 	// Tags to help you manage your Workers
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
@@ -459,17 +522,17 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsLimits) MarshalJSON() (d
 
 // Migrations to apply for Durable Objects associated with this Worker.
 type DispatchNamespaceScriptSettingEditParamsSettingsMigrations struct {
+	DeletedClasses   param.Field[interface{}] `json:"deleted_classes"`
+	NewClasses       param.Field[interface{}] `json:"new_classes"`
+	NewSqliteClasses param.Field[interface{}] `json:"new_sqlite_classes"`
 	// Tag to set as the latest migration tag.
 	NewTag param.Field[string] `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
 	OldTag             param.Field[string]      `json:"old_tag"`
-	DeletedClasses     param.Field[interface{}] `json:"deleted_classes,required"`
-	NewClasses         param.Field[interface{}] `json:"new_classes,required"`
-	NewSqliteClasses   param.Field[interface{}] `json:"new_sqlite_classes,required"`
-	RenamedClasses     param.Field[interface{}] `json:"renamed_classes,required"`
-	TransferredClasses param.Field[interface{}] `json:"transferred_classes,required"`
-	Steps              param.Field[interface{}] `json:"steps,required"`
+	RenamedClasses     param.Field[interface{}] `json:"renamed_classes"`
+	Steps              param.Field[interface{}] `json:"steps"`
+	TransferredClasses param.Field[interface{}] `json:"transferred_classes"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) MarshalJSON() (data []byte, err error) {
@@ -486,6 +549,19 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) ImplementsWo
 // [DispatchNamespaceScriptSettingEditParamsSettingsMigrations].
 type DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion interface {
 	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion()
+}
+
+// Observability settings for the Worker.
+type DispatchNamespaceScriptSettingEditParamsSettingsObservability struct {
+	// Whether observability is enabled for the Worker.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
+	// Default is 1.
+	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsObservability) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelope struct {

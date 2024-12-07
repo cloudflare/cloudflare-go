@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/load_balancers"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/load_balancers"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestPoolHealthNewWithOptionalParams(t *testing.T) {
@@ -32,12 +32,12 @@ func TestPoolHealthNewWithOptionalParams(t *testing.T) {
 		"17b5962d775c646f3f9725cbc7a53df4",
 		load_balancers.PoolHealthNewParams{
 			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ExpectedCodes:   cloudflare.F("2xx"),
 			AllowInsecure:   cloudflare.F(true),
 			ConsecutiveDown: cloudflare.F(int64(0)),
 			ConsecutiveUp:   cloudflare.F(int64(0)),
 			Description:     cloudflare.F("Login page monitor"),
 			ExpectedBody:    cloudflare.F("alive"),
+			ExpectedCodes:   cloudflare.F("2xx"),
 			FollowRedirects: cloudflare.F(true),
 			Header: cloudflare.F(map[string][]string{
 				"Host":     {"example.com"},

@@ -7,15 +7,17 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -113,30 +115,30 @@ func (r *AccessApplicationService) Update(ctx context.Context, appID AppIDParam,
 }
 
 // Lists all Access applications in an account or zone.
-func (r *AccessApplicationService) List(ctx context.Context, query AccessApplicationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationListResponse], err error) {
+func (r *AccessApplicationService) List(ctx context.Context, params AccessApplicationListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
-	if query.AccountID.Value != "" && query.ZoneID.Value != "" {
+	if params.AccountID.Value != "" && params.ZoneID.Value != "" {
 		err = errors.New("account ID and zone ID are mutually exclusive")
 		return
 	}
-	if query.AccountID.Value == "" && query.ZoneID.Value == "" {
+	if params.AccountID.Value == "" && params.ZoneID.Value == "" {
 		err = errors.New("either account ID or zone ID must be provided")
 		return
 	}
-	if query.AccountID.Value != "" {
+	if params.AccountID.Value != "" {
 		accountOrZone = "accounts"
-		accountOrZoneID = query.AccountID
+		accountOrZoneID = params.AccountID
 	}
-	if query.ZoneID.Value != "" {
+	if params.ZoneID.Value != "" {
 		accountOrZone = "zones"
-		accountOrZoneID = query.ZoneID
+		accountOrZoneID = params.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/apps", accountOrZone, accountOrZoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, nil, &res, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -149,8 +151,8 @@ func (r *AccessApplicationService) List(ctx context.Context, query AccessApplica
 }
 
 // Lists all Access applications in an account or zone.
-func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, query AccessApplicationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationListResponse] {
-	return pagination.NewSinglePageAutoPager(r.List(ctx, query, opts...))
+func (r *AccessApplicationService) ListAutoPaging(ctx context.Context, params AccessApplicationListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationListResponse] {
+	return pagination.NewSinglePageAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an application from Access.
@@ -296,14 +298,10 @@ type AppIDParam = string
 
 type ApplicationPolicy struct {
 	// The UUID of the policy
-	ID string `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired bool      `json:"approval_required"`
-	CreatedAt        time.Time `json:"created_at" format:"date-time"`
-	// The action Access will take if a user matches this policy.
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
@@ -311,46 +309,28 @@ type ApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired bool `json:"isolation_required"`
 	// The name of the Access policy.
 	Name string `json:"name"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired bool `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
-	Require []AccessRule `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration string                `json:"session_duration"`
-	UpdatedAt       time.Time             `json:"updated_at" format:"date-time"`
-	JSON            applicationPolicyJSON `json:"-"`
+	Require   []AccessRule          `json:"require"`
+	UpdatedAt time.Time             `json:"updated_at" format:"date-time"`
+	JSON      applicationPolicyJSON `json:"-"`
 }
 
 // applicationPolicyJSON contains the JSON metadata for the struct
 // [ApplicationPolicy]
 type applicationPolicyJSON struct {
-	ID                           apijson.Field
-	ApprovalGroups               apijson.Field
-	ApprovalRequired             apijson.Field
-	CreatedAt                    apijson.Field
-	Decision                     apijson.Field
-	Exclude                      apijson.Field
-	Include                      apijson.Field
-	IsolationRequired            apijson.Field
-	Name                         apijson.Field
-	PurposeJustificationPrompt   apijson.Field
-	PurposeJustificationRequired apijson.Field
-	Require                      apijson.Field
-	SessionDuration              apijson.Field
-	UpdatedAt                    apijson.Field
-	raw                          string
-	ExtraFields                  map[string]apijson.Field
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *ApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -364,12 +344,8 @@ func (r applicationPolicyJSON) RawJSON() string {
 type ApplicationPolicyParam struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
 	Decision param.Field[Decision] `json:"decision"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
@@ -377,23 +353,11 @@ type ApplicationPolicyParam struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r ApplicationPolicyParam) MarshalJSON() (data []byte, err error) {
@@ -404,20 +368,21 @@ func (r ApplicationPolicyParam) MarshalJSON() (data []byte, err error) {
 type ApplicationType string
 
 const (
-	ApplicationTypeSelfHosted  ApplicationType = "self_hosted"
-	ApplicationTypeSaaS        ApplicationType = "saas"
-	ApplicationTypeSSH         ApplicationType = "ssh"
-	ApplicationTypeVNC         ApplicationType = "vnc"
-	ApplicationTypeAppLauncher ApplicationType = "app_launcher"
-	ApplicationTypeWARP        ApplicationType = "warp"
-	ApplicationTypeBISO        ApplicationType = "biso"
-	ApplicationTypeBookmark    ApplicationType = "bookmark"
-	ApplicationTypeDashSSO     ApplicationType = "dash_sso"
+	ApplicationTypeSelfHosted     ApplicationType = "self_hosted"
+	ApplicationTypeSaaS           ApplicationType = "saas"
+	ApplicationTypeSSH            ApplicationType = "ssh"
+	ApplicationTypeVNC            ApplicationType = "vnc"
+	ApplicationTypeAppLauncher    ApplicationType = "app_launcher"
+	ApplicationTypeWARP           ApplicationType = "warp"
+	ApplicationTypeBISO           ApplicationType = "biso"
+	ApplicationTypeBookmark       ApplicationType = "bookmark"
+	ApplicationTypeDashSSO        ApplicationType = "dash_sso"
+	ApplicationTypeInfrastructure ApplicationType = "infrastructure"
 )
 
 func (r ApplicationType) IsKnown() bool {
 	switch r {
-	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO:
+	case ApplicationTypeSelfHosted, ApplicationTypeSaaS, ApplicationTypeSSH, ApplicationTypeVNC, ApplicationTypeAppLauncher, ApplicationTypeWARP, ApplicationTypeBISO, ApplicationTypeBookmark, ApplicationTypeDashSSO, ApplicationTypeInfrastructure:
 		return true
 	}
 	return false
@@ -490,7 +455,8 @@ func (r CORSHeadersParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The action Access will take if a user matches this policy.
+// The action Access will take if a user matches this policy. Infrastructure
+// application policies can only use the Allow action.
 type Decision string
 
 const (
@@ -523,9 +489,9 @@ type OIDCSaaSApp struct {
 	// The application client id
 	ClientID string `json:"client_id"`
 	// The application client secret, only returned on POST request.
-	ClientSecret string                  `json:"client_secret"`
-	CreatedAt    time.Time               `json:"created_at" format:"date-time"`
-	CustomClaims OIDCSaaSAppCustomClaims `json:"custom_claims"`
+	ClientSecret string                   `json:"client_secret"`
+	CreatedAt    time.Time                `json:"created_at" format:"date-time"`
+	CustomClaims []OIDCSaaSAppCustomClaim `json:"custom_claims"`
 	// The OIDC flows supported by this application
 	GrantTypes []OIDCSaaSAppGrantType `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
@@ -599,7 +565,7 @@ func (r OIDCSaaSAppAuthType) IsKnown() bool {
 	return false
 }
 
-type OIDCSaaSAppCustomClaims struct {
+type OIDCSaaSAppCustomClaim struct {
 	// The name of the claim.
 	Name string `json:"name"`
 	// If the claim is required when building an OIDC token.
@@ -607,12 +573,12 @@ type OIDCSaaSAppCustomClaims struct {
 	// The scope of the claim.
 	Scope  OIDCSaaSAppCustomClaimsScope  `json:"scope"`
 	Source OIDCSaaSAppCustomClaimsSource `json:"source"`
-	JSON   oidcSaaSAppCustomClaimsJSON   `json:"-"`
+	JSON   oidcSaaSAppCustomClaimJSON    `json:"-"`
 }
 
-// oidcSaaSAppCustomClaimsJSON contains the JSON metadata for the struct
-// [OIDCSaaSAppCustomClaims]
-type oidcSaaSAppCustomClaimsJSON struct {
+// oidcSaaSAppCustomClaimJSON contains the JSON metadata for the struct
+// [OIDCSaaSAppCustomClaim]
+type oidcSaaSAppCustomClaimJSON struct {
 	Name        apijson.Field
 	Required    apijson.Field
 	Scope       apijson.Field
@@ -621,11 +587,11 @@ type oidcSaaSAppCustomClaimsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OIDCSaaSAppCustomClaims) UnmarshalJSON(data []byte) (err error) {
+func (r *OIDCSaaSAppCustomClaim) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r oidcSaaSAppCustomClaimsJSON) RawJSON() string {
+func (r oidcSaaSAppCustomClaimJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -770,8 +736,8 @@ type OIDCSaaSAppParam struct {
 	// The application client id
 	ClientID param.Field[string] `json:"client_id"`
 	// The application client secret, only returned on POST request.
-	ClientSecret param.Field[string]                       `json:"client_secret"`
-	CustomClaims param.Field[OIDCSaaSAppCustomClaimsParam] `json:"custom_claims"`
+	ClientSecret param.Field[string]                        `json:"client_secret"`
+	CustomClaims param.Field[[]OIDCSaaSAppCustomClaimParam] `json:"custom_claims"`
 	// The OIDC flows supported by this application
 	GrantTypes param.Field[[]OIDCSaaSAppGrantType] `json:"grant_types"`
 	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
@@ -798,7 +764,7 @@ func (r OIDCSaaSAppParam) implementsZeroTrustAccessApplicationNewParamsBodySaaSA
 func (r OIDCSaaSAppParam) implementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationSaaSAppUnion() {
 }
 
-type OIDCSaaSAppCustomClaimsParam struct {
+type OIDCSaaSAppCustomClaimParam struct {
 	// The name of the claim.
 	Name param.Field[string] `json:"name"`
 	// If the claim is required when building an OIDC token.
@@ -808,7 +774,7 @@ type OIDCSaaSAppCustomClaimsParam struct {
 	Source param.Field[OIDCSaaSAppCustomClaimsSourceParam] `json:"source"`
 }
 
-func (r OIDCSaaSAppCustomClaimsParam) MarshalJSON() (data []byte, err error) {
+func (r OIDCSaaSAppCustomClaimParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -844,23 +810,6 @@ func (r OIDCSaaSAppRefreshTokenOptionsParam) MarshalJSON() (data []byte, err err
 	return apijson.MarshalRoot(r)
 }
 
-// A globally unique name for an identity or service provider.
-type SaaSAppNameFormat string
-
-const (
-	SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified SaaSAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic       SaaSAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI         SaaSAppNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-)
-
-func (r SaaSAppNameFormat) IsKnown() bool {
-	switch r {
-	case SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified, SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic, SaaSAppNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI:
-		return true
-	}
-	return false
-}
-
 // The format of the name identifier sent to the SaaS application.
 type SaaSAppNameIDFormat string
 
@@ -877,50 +826,15 @@ func (r SaaSAppNameIDFormat) IsKnown() bool {
 	return false
 }
 
-type SaaSAppSource struct {
-	// The name of the IdP attribute.
-	Name string `json:"name"`
-	// A mapping from IdP ID to attribute name.
-	NameByIdP map[string]string `json:"name_by_idp"`
-	JSON      SaaSAppSourceJSON `json:"-"`
-}
-
-// SaaSAppSourceJSON contains the JSON metadata for the struct [SaaSAppSource]
-type SaaSAppSourceJSON struct {
-	Name        apijson.Field
-	NameByIdP   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SaaSAppSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r SaaSAppSourceJSON) RawJSON() string {
-	return r.raw
-}
-
-type SaaSAppSourceParam struct {
-	// The name of the IdP attribute.
-	Name param.Field[string] `json:"name"`
-	// A mapping from IdP ID to attribute name.
-	NameByIdP param.Field[map[string]string] `json:"name_by_idp"`
-}
-
-func (r SaaSAppSourceParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 type SAMLSaaSApp struct {
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
 	AuthType SAMLSaaSAppAuthType `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL string                      `json:"consumer_service_url"`
-	CreatedAt          time.Time                   `json:"created_at" format:"date-time"`
-	CustomAttributes   SAMLSaaSAppCustomAttributes `json:"custom_attributes"`
+	ConsumerServiceURL string                       `json:"consumer_service_url"`
+	CreatedAt          time.Time                    `json:"created_at" format:"date-time"`
+	CustomAttributes   []SAMLSaaSAppCustomAttribute `json:"custom_attributes"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
@@ -1001,22 +915,22 @@ func (r SAMLSaaSAppAuthType) IsKnown() bool {
 	return false
 }
 
-type SAMLSaaSAppCustomAttributes struct {
+type SAMLSaaSAppCustomAttribute struct {
 	// The SAML FriendlyName of the attribute.
 	FriendlyName string `json:"friendly_name"`
 	// The name of the attribute.
 	Name string `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat SaaSAppNameFormat `json:"name_format"`
+	NameFormat SAMLSaaSAppCustomAttributesNameFormat `json:"name_format"`
 	// If the attribute is required when building a SAML assertion.
-	Required bool                            `json:"required"`
-	Source   SaaSAppSource                   `json:"source"`
-	JSON     samlSaaSAppCustomAttributesJSON `json:"-"`
+	Required bool                              `json:"required"`
+	Source   SAMLSaaSAppCustomAttributesSource `json:"source"`
+	JSON     samlSaaSAppCustomAttributeJSON    `json:"-"`
 }
 
-// samlSaaSAppCustomAttributesJSON contains the JSON metadata for the struct
-// [SAMLSaaSAppCustomAttributes]
-type samlSaaSAppCustomAttributesJSON struct {
+// samlSaaSAppCustomAttributeJSON contains the JSON metadata for the struct
+// [SAMLSaaSAppCustomAttribute]
+type samlSaaSAppCustomAttributeJSON struct {
 	FriendlyName apijson.Field
 	Name         apijson.Field
 	NameFormat   apijson.Field
@@ -1026,11 +940,53 @@ type samlSaaSAppCustomAttributesJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SAMLSaaSAppCustomAttributes) UnmarshalJSON(data []byte) (err error) {
+func (r *SAMLSaaSAppCustomAttribute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r samlSaaSAppCustomAttributesJSON) RawJSON() string {
+func (r samlSaaSAppCustomAttributeJSON) RawJSON() string {
+	return r.raw
+}
+
+// A globally unique name for an identity or service provider.
+type SAMLSaaSAppCustomAttributesNameFormat string
+
+const (
+	SAMLSaaSAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified SAMLSaaSAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+	SAMLSaaSAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic       SAMLSaaSAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+	SAMLSaaSAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI         SAMLSaaSAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+)
+
+func (r SAMLSaaSAppCustomAttributesNameFormat) IsKnown() bool {
+	switch r {
+	case SAMLSaaSAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatUnspecified, SAMLSaaSAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatBasic, SAMLSaaSAppCustomAttributesNameFormatUrnOasisNamesTcSAML2_0AttrnameFormatURI:
+		return true
+	}
+	return false
+}
+
+type SAMLSaaSAppCustomAttributesSource struct {
+	// The name of the IdP attribute.
+	Name string `json:"name"`
+	// A mapping from IdP ID to attribute name.
+	NameByIdP map[string]string                     `json:"name_by_idp"`
+	JSON      samlSaaSAppCustomAttributesSourceJSON `json:"-"`
+}
+
+// samlSaaSAppCustomAttributesSourceJSON contains the JSON metadata for the struct
+// [SAMLSaaSAppCustomAttributesSource]
+type samlSaaSAppCustomAttributesSourceJSON struct {
+	Name        apijson.Field
+	NameByIdP   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SAMLSaaSAppCustomAttributesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r samlSaaSAppCustomAttributesSourceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1040,8 +996,8 @@ type SAMLSaaSAppParam struct {
 	AuthType param.Field[SAMLSaaSAppAuthType] `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL param.Field[string]                           `json:"consumer_service_url"`
-	CustomAttributes   param.Field[SAMLSaaSAppCustomAttributesParam] `json:"custom_attributes"`
+	ConsumerServiceURL param.Field[string]                            `json:"consumer_service_url"`
+	CustomAttributes   param.Field[[]SAMLSaaSAppCustomAttributeParam] `json:"custom_attributes"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState param.Field[string] `json:"default_relay_state"`
@@ -1078,19 +1034,30 @@ func (r SAMLSaaSAppParam) implementsZeroTrustAccessApplicationNewParamsBodySaaSA
 func (r SAMLSaaSAppParam) implementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationSaaSAppUnion() {
 }
 
-type SAMLSaaSAppCustomAttributesParam struct {
+type SAMLSaaSAppCustomAttributeParam struct {
 	// The SAML FriendlyName of the attribute.
 	FriendlyName param.Field[string] `json:"friendly_name"`
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[SaaSAppNameFormat] `json:"name_format"`
+	NameFormat param.Field[SAMLSaaSAppCustomAttributesNameFormat] `json:"name_format"`
 	// If the attribute is required when building a SAML assertion.
-	Required param.Field[bool]               `json:"required"`
-	Source   param.Field[SaaSAppSourceParam] `json:"source"`
+	Required param.Field[bool]                                   `json:"required"`
+	Source   param.Field[SAMLSaaSAppCustomAttributesSourceParam] `json:"source"`
 }
 
-func (r SAMLSaaSAppCustomAttributesParam) MarshalJSON() (data []byte, err error) {
+func (r SAMLSaaSAppCustomAttributeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SAMLSaaSAppCustomAttributesSourceParam struct {
+	// The name of the IdP attribute.
+	Name param.Field[string] `json:"name"`
+	// A mapping from IdP ID to attribute name.
+	NameByIdP param.Field[map[string]string] `json:"name_by_idp"`
+}
+
+func (r SAMLSaaSAppCustomAttributesSourceParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1148,6 +1115,9 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationN
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
+func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication() {
+}
+
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1170,6 +1140,9 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationU
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication() {
+}
+
+func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication() {
@@ -1196,6 +1169,9 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationL
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
+func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication() {
+}
+
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1218,6 +1194,9 @@ func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationG
 }
 
 func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication() {
+}
+
+func (r SCIMConfigAuthenticationHTTPBasic) implementsZeroTrustAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
@@ -1349,6 +1328,9 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
+func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication() {
+}
+
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1371,6 +1353,9 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication() {
+}
+
+func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication() {
@@ -1397,6 +1382,9 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
+func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication() {
+}
+
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1419,6 +1407,9 @@ func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessAppli
 }
 
 func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication() {
+}
+
+func (r SCIMConfigAuthenticationOAuthBearerToken) implementsZeroTrustAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
@@ -1564,6 +1555,9 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewR
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
+func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication() {
+}
+
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1586,6 +1580,9 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpda
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication() {
+}
+
+func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication() {
@@ -1612,6 +1609,9 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationList
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication() {
 }
 
+func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication() {
+}
+
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication() {
 }
 
@@ -1634,6 +1634,9 @@ func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetR
 }
 
 func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication() {
+}
+
+func (r SCIMConfigAuthenticationOauth2) implementsZeroTrustAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication() {
 }
 
 // The authentication scheme to use when making SCIM requests to this application.
@@ -1737,6 +1740,10 @@ type SCIMConfigMapping struct {
 	Filter string `json:"filter"`
 	// Whether or not this mapping applies to creates, updates, or deletes.
 	Operations SCIMConfigMappingOperations `json:"operations"`
+	// The level of adherence to outbound resource schemas when provisioning to this
+	// mapping. ‘Strict’ removes unknown values, while ‘passthrough’ passes unknown
+	// values to the target.
+	Strictness SCIMConfigMappingStrictness `json:"strictness"`
 	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
 	// provisioning it in the application.
 	TransformJsonata string                `json:"transform_jsonata"`
@@ -1750,6 +1757,7 @@ type scimConfigMappingJSON struct {
 	Enabled          apijson.Field
 	Filter           apijson.Field
 	Operations       apijson.Field
+	Strictness       apijson.Field
 	TransformJsonata apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
@@ -1792,6 +1800,24 @@ func (r scimConfigMappingOperationsJSON) RawJSON() string {
 	return r.raw
 }
 
+// The level of adherence to outbound resource schemas when provisioning to this
+// mapping. ‘Strict’ removes unknown values, while ‘passthrough’ passes unknown
+// values to the target.
+type SCIMConfigMappingStrictness string
+
+const (
+	SCIMConfigMappingStrictnessStrict      SCIMConfigMappingStrictness = "strict"
+	SCIMConfigMappingStrictnessPassthrough SCIMConfigMappingStrictness = "passthrough"
+)
+
+func (r SCIMConfigMappingStrictness) IsKnown() bool {
+	switch r {
+	case SCIMConfigMappingStrictnessStrict, SCIMConfigMappingStrictnessPassthrough:
+		return true
+	}
+	return false
+}
+
 // Transformations and filters applied to resources before they are provisioned in
 // the remote SCIM service.
 type SCIMConfigMappingParam struct {
@@ -1805,6 +1831,10 @@ type SCIMConfigMappingParam struct {
 	Filter param.Field[string] `json:"filter"`
 	// Whether or not this mapping applies to creates, updates, or deletes.
 	Operations param.Field[SCIMConfigMappingOperationsParam] `json:"operations"`
+	// The level of adherence to outbound resource schemas when provisioning to this
+	// mapping. ‘Strict’ removes unknown values, while ‘passthrough’ passes unknown
+	// values to the target.
+	Strictness param.Field[SCIMConfigMappingStrictness] `json:"strictness"`
 	// A [JSONata](https://jsonata.org/) expression that transforms the resource before
 	// provisioning it in the application.
 	TransformJsonata param.Field[string] `json:"transform_jsonata"`
@@ -1833,35 +1863,28 @@ type SelfHostedDomains = string
 type SelfHostedDomainsParam = string
 
 type AccessApplicationNewResponse struct {
-	// Audience tag.
-	AUD       string    `json:"aud"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
 	ID string `json:"id"`
-	// This field can have the runtime type of
-	// [AccessApplicationNewResponseSelfHostedApplicationSCIMConfig],
-	// [AccessApplicationNewResponseSaaSApplicationSCIMConfig],
-	// [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfig],
-	// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig],
-	// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfig],
-	// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
-	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationNewResponseBookmarkApplicationSCIMConfig].
-	SCIMConfig interface{} `json:"scim_config,required"`
-	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// This field can have the runtime type of [[]AllowedIdPs].
-	AllowedIdPs interface{} `json:"allowed_idps,required"`
+	AllowedIdPs interface{} `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
+	// Audience tag.
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
-	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor     string      `json:"bg_color"`
+	CORSHeaders CORSHeaders `json:"cors_headers"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -1872,16 +1895,33 @@ type AccessApplicationNewResponse struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// This field can have the runtime type of [[]string].
-	CustomPages interface{} `json:"custom_pages,required"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	CustomPages interface{} `json:"custom_pages"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseSelfHostedApplicationDestination],
+	// [[]AccessApplicationNewResponseBrowserSSHApplicationDestination],
+	// [[]AccessApplicationNewResponseBrowserVNCApplicationDestination].
+	Destinations interface{} `json:"destinations"`
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseAppLauncherApplicationFooterLink],
+	// [[]AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink],
+	// [[]AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink].
+	FooterLinks interface{} `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
 	// Enables the HttpOnly cookie attribute, which increases security against XSS
 	// attacks.
 	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
+	// This field can have the runtime type of
+	// [AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign],
+	// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
+	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	LandingPageDesign interface{} `json:"landing_page_design"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
@@ -1892,89 +1932,91 @@ type AccessApplicationNewResponse struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationNewResponseInfrastructureApplicationPolicy].
+	Policies interface{} `json:"policies"`
+	// This field can have the runtime type of
+	// [AccessApplicationNewResponseSaaSApplicationSaaSApp].
+	SaaSApp interface{} `json:"saas_app"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	// This field can have the runtime type of
+	// [AccessApplicationNewResponseSelfHostedApplicationSCIMConfig],
+	// [AccessApplicationNewResponseSaaSApplicationSCIMConfig],
+	// [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfig],
+	// [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig],
+	// [AccessApplicationNewResponseAppLauncherApplicationSCIMConfig],
+	// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
+	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig],
+	// [AccessApplicationNewResponseBookmarkApplicationSCIMConfig],
+	// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfig].
+	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
-	SelfHostedDomains interface{} `json:"self_hosted_domains,required"`
+	SelfHostedDomains interface{} `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// This field can have the runtime type of [[]string].
-	Tags interface{} `json:"tags,required"`
+	Tags interface{} `json:"tags"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseInfrastructureApplicationTargetCriterion].
+	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
-	Policies interface{} `json:"policies,required"`
-	// This field can have the runtime type of
-	// [AccessApplicationNewResponseSaaSApplicationSaaSApp].
-	SaaSApp interface{} `json:"saas_app,required"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
-	// The background color of the App Launcher page.
-	BgColor string `json:"bg_color"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationNewResponseAppLauncherApplicationFooterLink],
-	// [[]AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink],
-	// [[]AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink].
-	FooterLinks interface{} `json:"footer_links,required"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// This field can have the runtime type of
-	// [AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign],
-	// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
-	// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
-	LandingPageDesign interface{} `json:"landing_page_design,required"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                             `json:"skip_app_launcher_login_page"`
-	JSON                     accessApplicationNewResponseJSON `json:"-"`
-	union                    AccessApplicationNewResponseUnion
+	Type      string                           `json:"type"`
+	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseJSON `json:"-"`
+	union     AccessApplicationNewResponseUnion
 }
 
 // accessApplicationNewResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationNewResponse]
 type accessApplicationNewResponseJSON struct {
-	AUD                      apijson.Field
-	CreatedAt                apijson.Field
 	ID                       apijson.Field
-	SCIMConfig               apijson.Field
-	UpdatedAt                apijson.Field
 	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
 	AppLauncherVisible       apijson.Field
+	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
 	CORSHeaders              apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyMessage        apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
+	LandingPageDesign        apijson.Field
 	LogoURL                  apijson.Field
 	Name                     apijson.Field
 	OptionsPreflightBypass   apijson.Field
 	PathCookieAttribute      apijson.Field
+	Policies                 apijson.Field
+	SaaSApp                  apijson.Field
 	SameSiteCookieAttribute  apijson.Field
+	SCIMConfig               apijson.Field
 	SelfHostedDomains        apijson.Field
 	ServiceAuth401Redirect   apijson.Field
 	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
 	SkipInterstitial         apijson.Field
 	Tags                     apijson.Field
+	TargetCriteria           apijson.Field
 	Type                     apijson.Field
-	Policies                 apijson.Field
-	SaaSApp                  apijson.Field
-	AppLauncherLogoURL       apijson.Field
-	BgColor                  apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -2003,7 +2045,8 @@ func (r *AccessApplicationNewResponse) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.AccessApplicationNewResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationNewResponseBookmarkApplication].
+// [zero_trust.AccessApplicationNewResponseBookmarkApplication],
+// [zero_trust.AccessApplicationNewResponseInfrastructureApplication].
 func (r AccessApplicationNewResponse) AsUnion() AccessApplicationNewResponseUnion {
 	return r.union
 }
@@ -2015,8 +2058,9 @@ func (r AccessApplicationNewResponse) AsUnion() AccessApplicationNewResponseUnio
 // [zero_trust.AccessApplicationNewResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationNewResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication]
-// or [zero_trust.AccessApplicationNewResponseBookmarkApplication].
+// [zero_trust.AccessApplicationNewResponseBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationNewResponseBookmarkApplication] or
+// [zero_trust.AccessApplicationNewResponseInfrastructureApplication].
 type AccessApplicationNewResponseUnion interface {
 	implementsZeroTrustAccessApplicationNewResponse()
 }
@@ -2057,12 +2101,16 @@ func init() {
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationNewResponseBookmarkApplication{}),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationNewResponseInfrastructureApplication{}),
+		},
 	)
 }
 
 type AccessApplicationNewResponseSelfHostedApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -2096,6 +2144,10 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationNewResponseSelfHostedApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -2119,7 +2171,9 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -2153,6 +2207,7 @@ type accessApplicationNewResponseSelfHostedApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -2181,6 +2236,51 @@ func (r accessApplicationNewResponseSelfHostedApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationNewResponseSelfHostedApplication) implementsZeroTrustAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestination struct {
+	Type AccessApplicationNewResponseSelfHostedApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                           `json:"uri"`
+	JSON accessApplicationNewResponseSelfHostedApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseSelfHostedApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationDestination]
+type accessApplicationNewResponseSelfHostedApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationDestinationsType string
+
+const (
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "public"
+	AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationNewResponseSelfHostedApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationNewResponseSelfHostedApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -2231,12 +2331,8 @@ func (r accessApplicationNewResponseSelfHostedApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -2247,28 +2343,32 @@ type AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthentication s
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                        `json:"token_url"`
-	JSON     accessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                        `json:"user"`
+	JSON  accessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthentication]
 type accessApplicationNewResponseSelfHostedApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -2412,18 +2512,38 @@ func (r AccessApplicationNewResponseSaaSApplication) implementsZeroTrustAccessAp
 }
 
 type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
+	// If client secret should be required on the token endpoint when
+	// authorization_code_with_pkce grant is used.
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	// The URL where this applications tile redirects users
+	AppLauncherURL string `json:"app_launcher_url"`
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
 	AuthType AccessApplicationNewResponseSaaSApplicationSaaSAppAuthType `json:"auth_type"`
+	// The application client id
+	ClientID string `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret string `json:"client_secret"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL string    `json:"consumer_service_url"`
 	CreatedAt          time.Time `json:"created_at" format:"date-time"`
-	// This field can have the runtime type of [SAMLSaaSAppCustomAttributes].
-	CustomAttributes interface{} `json:"custom_attributes,required"`
+	// This field can have the runtime type of [[]SAMLSaaSAppCustomAttribute].
+	CustomAttributes interface{} `json:"custom_attributes"`
+	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
+	CustomClaims interface{} `json:"custom_claims"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
+	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
+	GrantTypes interface{} `json:"grant_types"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex string `json:"group_filter_regex"`
+	// This field can have the runtime type of [OIDCSaaSAppHybridAndImplicitOptions].
+	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
@@ -2435,75 +2555,55 @@ type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
 	NameIDTransformJsonata string `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey string `json:"public_key"`
+	// This field can have the runtime type of [[]string].
+	RedirectURIs interface{} `json:"redirect_uris"`
+	// This field can have the runtime type of [OIDCSaaSAppRefreshTokenOptions].
+	RefreshTokenOptions interface{} `json:"refresh_token_options"`
 	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
 	// user identities into attribute assertions in the SAML response. The expression
 	// can transform id, email, name, and groups values. It can also transform fields
 	// listed in the saml_attributes or oidc_fields of the identity provider used to
 	// authenticate. The output of this expression must be a JSON object.
 	SAMLAttributeTransformJsonata string `json:"saml_attribute_transform_jsonata"`
+	// This field can have the runtime type of [[]OIDCSaaSAppScope].
+	Scopes interface{} `json:"scopes"`
 	// A globally unique name for an identity or service provider.
 	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint string    `json:"sso_endpoint"`
-	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
-	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
-	// be greater than or equal to 1m and less than or equal to 24h.
-	AccessTokenLifetime string `json:"access_token_lifetime"`
-	// If client secret should be required on the token endpoint when
-	// authorization_code_with_pkce grant is used.
-	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
-	// The URL where this applications tile redirects users
-	AppLauncherURL string `json:"app_launcher_url"`
-	// The application client id
-	ClientID string `json:"client_id"`
-	// The application client secret, only returned on POST request.
-	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [OIDCSaaSAppCustomClaims].
-	CustomClaims interface{} `json:"custom_claims,required"`
-	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
-	GrantTypes interface{} `json:"grant_types,required"`
-	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex string `json:"group_filter_regex"`
-	// This field can have the runtime type of [OIDCSaaSAppHybridAndImplicitOptions].
-	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options,required"`
-	// This field can have the runtime type of [[]string].
-	RedirectURIs interface{} `json:"redirect_uris,required"`
-	// This field can have the runtime type of [OIDCSaaSAppRefreshTokenOptions].
-	RefreshTokenOptions interface{} `json:"refresh_token_options,required"`
-	// This field can have the runtime type of [[]OIDCSaaSAppScope].
-	Scopes interface{}                                            `json:"scopes,required"`
-	JSON   accessApplicationNewResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union  AccessApplicationNewResponseSaaSApplicationSaaSAppUnion
+	SSOEndpoint string                                                 `json:"sso_endpoint"`
+	UpdatedAt   time.Time                                              `json:"updated_at" format:"date-time"`
+	JSON        accessApplicationNewResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union       AccessApplicationNewResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationNewResponseSaaSApplicationSaaSAppJSON contains the JSON
 // metadata for the struct [AccessApplicationNewResponseSaaSApplicationSaaSApp]
 type accessApplicationNewResponseSaaSApplicationSaaSAppJSON struct {
+	AccessTokenLifetime           apijson.Field
+	AllowPKCEWithoutClientSecret  apijson.Field
+	AppLauncherURL                apijson.Field
 	AuthType                      apijson.Field
+	ClientID                      apijson.Field
+	ClientSecret                  apijson.Field
 	ConsumerServiceURL            apijson.Field
 	CreatedAt                     apijson.Field
 	CustomAttributes              apijson.Field
+	CustomClaims                  apijson.Field
 	DefaultRelayState             apijson.Field
+	GrantTypes                    apijson.Field
+	GroupFilterRegex              apijson.Field
+	HybridAndImplicitOptions      apijson.Field
 	IdPEntityID                   apijson.Field
 	NameIDFormat                  apijson.Field
 	NameIDTransformJsonata        apijson.Field
 	PublicKey                     apijson.Field
+	RedirectURIs                  apijson.Field
+	RefreshTokenOptions           apijson.Field
 	SAMLAttributeTransformJsonata apijson.Field
+	Scopes                        apijson.Field
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
-	AccessTokenLifetime           apijson.Field
-	AllowPKCEWithoutClientSecret  apijson.Field
-	AppLauncherURL                apijson.Field
-	ClientID                      apijson.Field
-	ClientSecret                  apijson.Field
-	CustomClaims                  apijson.Field
-	GrantTypes                    apijson.Field
-	GroupFilterRegex              apijson.Field
-	HybridAndImplicitOptions      apijson.Field
-	RedirectURIs                  apijson.Field
-	RefreshTokenOptions           apijson.Field
-	Scopes                        apijson.Field
 	raw                           string
 	ExtraFields                   map[string]apijson.Field
 }
@@ -2614,12 +2714,8 @@ func (r accessApplicationNewResponseSaaSApplicationSCIMConfigJSON) RawJSON() str
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -2630,28 +2726,32 @@ type AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthentication struct 
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                  `json:"token_url"`
-	JSON     accessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                  `json:"user"`
+	JSON  accessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationJSON contains
 // the JSON metadata for the struct
 // [AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthentication]
 type accessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -2728,8 +2828,8 @@ func (r AccessApplicationNewResponseSaaSApplicationSCIMConfigAuthenticationSchem
 }
 
 type AccessApplicationNewResponseBrowserSSHApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -2763,6 +2863,10 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationNewResponseBrowserSSHApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -2786,7 +2890,9 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -2820,6 +2926,7 @@ type accessApplicationNewResponseBrowserSSHApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -2848,6 +2955,51 @@ func (r accessApplicationNewResponseBrowserSSHApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationNewResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestination struct {
+	Type AccessApplicationNewResponseBrowserSSHApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                           `json:"uri"`
+	JSON accessApplicationNewResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationDestination]
+type accessApplicationNewResponseBrowserSSHApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationDestinationsType string
+
+const (
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationNewResponseBrowserSSHApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserSSHApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -2898,12 +3050,8 @@ func (r accessApplicationNewResponseBrowserSSHApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -2914,28 +3062,32 @@ type AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthentication s
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                        `json:"token_url"`
-	JSON     accessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                        `json:"user"`
+	JSON  accessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthentication]
 type accessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -3012,8 +3164,8 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 }
 
 type AccessApplicationNewResponseBrowserVNCApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -3047,6 +3199,10 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationNewResponseBrowserVNCApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -3070,7 +3226,9 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -3104,6 +3262,7 @@ type accessApplicationNewResponseBrowserVNCApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -3132,6 +3291,51 @@ func (r accessApplicationNewResponseBrowserVNCApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationNewResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestination struct {
+	Type AccessApplicationNewResponseBrowserVNCApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                           `json:"uri"`
+	JSON accessApplicationNewResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationDestination]
+type accessApplicationNewResponseBrowserVNCApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationDestinationsType string
+
+const (
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationNewResponseBrowserVNCApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewResponseBrowserVNCApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -3182,12 +3386,8 @@ func (r accessApplicationNewResponseBrowserVNCApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -3198,28 +3398,32 @@ type AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication s
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                        `json:"token_url"`
-	JSON     accessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                        `json:"user"`
+	JSON  accessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthentication]
 type accessApplicationNewResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -3313,8 +3517,8 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationNewResponseAppLauncherApplicationFooterLink `json:"footer_links"`
@@ -3484,12 +3688,8 @@ func (r accessApplicationNewResponseAppLauncherApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -3500,28 +3700,32 @@ type AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthentication 
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                         `json:"token_url"`
-	JSON     accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                         `json:"user"`
+	JSON  accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthentication]
 type accessApplicationNewResponseAppLauncherApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -3615,8 +3819,8 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
@@ -3787,12 +3991,8 @@ func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -3803,28 +4003,32 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfi
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                                         `json:"token_url"`
-	JSON     accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                                         `json:"user"`
+	JSON  accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication]
 type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -3918,8 +4122,8 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationNewResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
@@ -4090,12 +4294,8 @@ func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -4106,28 +4306,32 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfi
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                                         `json:"token_url"`
-	JSON     accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                                         `json:"user"`
+	JSON  accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication]
 type accessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -4306,12 +4510,8 @@ func (r accessApplicationNewResponseBookmarkApplicationSCIMConfigJSON) RawJSON()
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -4322,28 +4522,32 @@ type AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication str
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                      `json:"token_url"`
-	JSON     accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                      `json:"user"`
+	JSON  accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthentication]
 type accessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -4419,36 +4623,327 @@ func (r AccessApplicationNewResponseBookmarkApplicationSCIMConfigAuthenticationS
 	return false
 }
 
-type AccessApplicationUpdateResponse struct {
+type AccessApplicationNewResponseInfrastructureApplication struct {
+	TargetCriteria []AccessApplicationNewResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
 	// Audience tag.
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The name of the application.
+	Name     string                                                        `json:"name"`
+	Policies []AccessApplicationNewResponseInfrastructureApplicationPolicy `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	SCIMConfig AccessApplicationNewResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
+	UpdatedAt  time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON       accessApplicationNewResponseInfrastructureApplicationJSON       `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationJSON contains the JSON
+// metadata for the struct [AccessApplicationNewResponseInfrastructureApplication]
+type accessApplicationNewResponseInfrastructureApplicationJSON struct {
+	TargetCriteria apijson.Field
+	Type           apijson.Field
+	ID             apijson.Field
+	AUD            apijson.Field
+	CreatedAt      apijson.Field
+	Name           apijson.Field
+	Policies       apijson.Field
+	SCIMConfig     apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationNewResponseInfrastructureApplication) implementsZeroTrustAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port int64 `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes map[string][]string                                                      `json:"target_attributes,required"`
+	JSON             accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationTargetCriterion]
+type accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON struct {
+	Port             apijson.Field
+	Protocol         apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The communication protocol your application secures.
+type AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                    `json:"require"`
+	UpdatedAt time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationNewResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationPolicy]
+type accessApplicationNewResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationNewResponseInfrastructureApplicationSCIMConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID string `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI string `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete bool `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled bool `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings []SCIMConfigMapping                                                 `json:"mappings"`
+	JSON     accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfig]
+type accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON struct {
+	IdPUID             apijson.Field
+	RemoteURI          apijson.Field
+	Authentication     apijson.Field
+	DeactivateOnDelete apijson.Field
+	Enabled            apijson.Field
+	Mappings           apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication struct {
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	// Token used to authenticate with the remote SCIM service.
+	Token string `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL string `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID string `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                            `json:"user"`
+	JSON  accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
+}
+
+// accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication]
+type accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
+	Scheme           apijson.Field
+	Token            apijson.Field
+	AuthorizationURL apijson.Field
+	ClientID         apijson.Field
+	ClientSecret     apijson.Field
+	Password         apijson.Field
+	Scopes           apijson.Field
+	TokenURL         apijson.Field
+	User             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
+	return r.union
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthentication()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
+		},
+	)
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
+
+const (
+	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationNewResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponse struct {
 	// UUID
 	ID string `json:"id"`
-	// This field can have the runtime type of
-	// [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseSaaSApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfig].
-	SCIMConfig interface{} `json:"scim_config,required"`
-	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// This field can have the runtime type of [[]AllowedIdPs].
-	AllowedIdPs interface{} `json:"allowed_idps,required"`
+	AllowedIdPs interface{} `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
+	// Audience tag.
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
-	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor     string      `json:"bg_color"`
+	CORSHeaders CORSHeaders `json:"cors_headers"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -4459,16 +4954,33 @@ type AccessApplicationUpdateResponse struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// This field can have the runtime type of [[]string].
-	CustomPages interface{} `json:"custom_pages,required"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	CustomPages interface{} `json:"custom_pages"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseSelfHostedApplicationDestination],
+	// [[]AccessApplicationUpdateResponseBrowserSSHApplicationDestination],
+	// [[]AccessApplicationUpdateResponseBrowserVNCApplicationDestination].
+	Destinations interface{} `json:"destinations"`
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseAppLauncherApplicationFooterLink],
+	// [[]AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink],
+	// [[]AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink].
+	FooterLinks interface{} `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
 	// Enables the HttpOnly cookie attribute, which increases security against XSS
 	// attacks.
 	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
+	// This field can have the runtime type of
+	// [AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign],
+	// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
+	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	LandingPageDesign interface{} `json:"landing_page_design"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
@@ -4479,89 +4991,91 @@ type AccessApplicationUpdateResponse struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseInfrastructureApplicationPolicy].
+	Policies interface{} `json:"policies"`
+	// This field can have the runtime type of
+	// [AccessApplicationUpdateResponseSaaSApplicationSaaSApp].
+	SaaSApp interface{} `json:"saas_app"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	// This field can have the runtime type of
+	// [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseSaaSApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfig],
+	// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig].
+	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
-	SelfHostedDomains interface{} `json:"self_hosted_domains,required"`
+	SelfHostedDomains interface{} `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// This field can have the runtime type of [[]string].
-	Tags interface{} `json:"tags,required"`
+	Tags interface{} `json:"tags"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion].
+	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
-	Policies interface{} `json:"policies,required"`
-	// This field can have the runtime type of
-	// [AccessApplicationUpdateResponseSaaSApplicationSaaSApp].
-	SaaSApp interface{} `json:"saas_app,required"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
-	// The background color of the App Launcher page.
-	BgColor string `json:"bg_color"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationUpdateResponseAppLauncherApplicationFooterLink],
-	// [[]AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink],
-	// [[]AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink].
-	FooterLinks interface{} `json:"footer_links,required"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// This field can have the runtime type of
-	// [AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign],
-	// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
-	// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
-	LandingPageDesign interface{} `json:"landing_page_design,required"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                                `json:"skip_app_launcher_login_page"`
-	JSON                     accessApplicationUpdateResponseJSON `json:"-"`
-	union                    AccessApplicationUpdateResponseUnion
+	Type      string                              `json:"type"`
+	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseJSON `json:"-"`
+	union     AccessApplicationUpdateResponseUnion
 }
 
 // accessApplicationUpdateResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponse]
 type accessApplicationUpdateResponseJSON struct {
-	AUD                      apijson.Field
-	CreatedAt                apijson.Field
 	ID                       apijson.Field
-	SCIMConfig               apijson.Field
-	UpdatedAt                apijson.Field
 	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
 	AppLauncherVisible       apijson.Field
+	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
 	CORSHeaders              apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyMessage        apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
+	LandingPageDesign        apijson.Field
 	LogoURL                  apijson.Field
 	Name                     apijson.Field
 	OptionsPreflightBypass   apijson.Field
 	PathCookieAttribute      apijson.Field
+	Policies                 apijson.Field
+	SaaSApp                  apijson.Field
 	SameSiteCookieAttribute  apijson.Field
+	SCIMConfig               apijson.Field
 	SelfHostedDomains        apijson.Field
 	ServiceAuth401Redirect   apijson.Field
 	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
 	SkipInterstitial         apijson.Field
 	Tags                     apijson.Field
+	TargetCriteria           apijson.Field
 	Type                     apijson.Field
-	Policies                 apijson.Field
-	SaaSApp                  apijson.Field
-	AppLauncherLogoURL       apijson.Field
-	BgColor                  apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -4590,7 +5104,8 @@ func (r *AccessApplicationUpdateResponse) UnmarshalJSON(data []byte) (err error)
 // [zero_trust.AccessApplicationUpdateResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateResponseBookmarkApplication].
+// [zero_trust.AccessApplicationUpdateResponseBookmarkApplication],
+// [zero_trust.AccessApplicationUpdateResponseInfrastructureApplication].
 func (r AccessApplicationUpdateResponse) AsUnion() AccessApplicationUpdateResponseUnion {
 	return r.union
 }
@@ -4602,8 +5117,9 @@ func (r AccessApplicationUpdateResponse) AsUnion() AccessApplicationUpdateRespon
 // [zero_trust.AccessApplicationUpdateResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationUpdateResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication]
-// or [zero_trust.AccessApplicationUpdateResponseBookmarkApplication].
+// [zero_trust.AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationUpdateResponseBookmarkApplication] or
+// [zero_trust.AccessApplicationUpdateResponseInfrastructureApplication].
 type AccessApplicationUpdateResponseUnion interface {
 	implementsZeroTrustAccessApplicationUpdateResponse()
 }
@@ -4644,12 +5160,16 @@ func init() {
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationUpdateResponseBookmarkApplication{}),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationUpdateResponseInfrastructureApplication{}),
+		},
 	)
 }
 
 type AccessApplicationUpdateResponseSelfHostedApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -4683,6 +5203,10 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationUpdateResponseSelfHostedApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -4706,7 +5230,9 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -4740,6 +5266,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -4768,6 +5295,51 @@ func (r accessApplicationUpdateResponseSelfHostedApplicationJSON) RawJSON() stri
 }
 
 func (r AccessApplicationUpdateResponseSelfHostedApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestination struct {
+	Type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                              `json:"uri"`
+	JSON accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationDestination]
+type accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType string
+
+const (
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "public"
+	AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateResponseSelfHostedApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -4818,12 +5390,8 @@ func (r accessApplicationUpdateResponseSelfHostedApplicationSCIMConfigJSON) RawJ
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -4834,28 +5402,32 @@ type AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticatio
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                           `json:"token_url"`
-	JSON     accessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                           `json:"user"`
+	JSON  accessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthentication]
 type accessApplicationUpdateResponseSelfHostedApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -4999,18 +5571,38 @@ func (r AccessApplicationUpdateResponseSaaSApplication) implementsZeroTrustAcces
 }
 
 type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
+	// If client secret should be required on the token endpoint when
+	// authorization_code_with_pkce grant is used.
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	// The URL where this applications tile redirects users
+	AppLauncherURL string `json:"app_launcher_url"`
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
 	AuthType AccessApplicationUpdateResponseSaaSApplicationSaaSAppAuthType `json:"auth_type"`
+	// The application client id
+	ClientID string `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret string `json:"client_secret"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL string    `json:"consumer_service_url"`
 	CreatedAt          time.Time `json:"created_at" format:"date-time"`
-	// This field can have the runtime type of [SAMLSaaSAppCustomAttributes].
-	CustomAttributes interface{} `json:"custom_attributes,required"`
+	// This field can have the runtime type of [[]SAMLSaaSAppCustomAttribute].
+	CustomAttributes interface{} `json:"custom_attributes"`
+	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
+	CustomClaims interface{} `json:"custom_claims"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
+	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
+	GrantTypes interface{} `json:"grant_types"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex string `json:"group_filter_regex"`
+	// This field can have the runtime type of [OIDCSaaSAppHybridAndImplicitOptions].
+	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
@@ -5022,75 +5614,55 @@ type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
 	NameIDTransformJsonata string `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey string `json:"public_key"`
+	// This field can have the runtime type of [[]string].
+	RedirectURIs interface{} `json:"redirect_uris"`
+	// This field can have the runtime type of [OIDCSaaSAppRefreshTokenOptions].
+	RefreshTokenOptions interface{} `json:"refresh_token_options"`
 	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
 	// user identities into attribute assertions in the SAML response. The expression
 	// can transform id, email, name, and groups values. It can also transform fields
 	// listed in the saml_attributes or oidc_fields of the identity provider used to
 	// authenticate. The output of this expression must be a JSON object.
 	SAMLAttributeTransformJsonata string `json:"saml_attribute_transform_jsonata"`
+	// This field can have the runtime type of [[]OIDCSaaSAppScope].
+	Scopes interface{} `json:"scopes"`
 	// A globally unique name for an identity or service provider.
 	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint string    `json:"sso_endpoint"`
-	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
-	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
-	// be greater than or equal to 1m and less than or equal to 24h.
-	AccessTokenLifetime string `json:"access_token_lifetime"`
-	// If client secret should be required on the token endpoint when
-	// authorization_code_with_pkce grant is used.
-	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
-	// The URL where this applications tile redirects users
-	AppLauncherURL string `json:"app_launcher_url"`
-	// The application client id
-	ClientID string `json:"client_id"`
-	// The application client secret, only returned on POST request.
-	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [OIDCSaaSAppCustomClaims].
-	CustomClaims interface{} `json:"custom_claims,required"`
-	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
-	GrantTypes interface{} `json:"grant_types,required"`
-	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex string `json:"group_filter_regex"`
-	// This field can have the runtime type of [OIDCSaaSAppHybridAndImplicitOptions].
-	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options,required"`
-	// This field can have the runtime type of [[]string].
-	RedirectURIs interface{} `json:"redirect_uris,required"`
-	// This field can have the runtime type of [OIDCSaaSAppRefreshTokenOptions].
-	RefreshTokenOptions interface{} `json:"refresh_token_options,required"`
-	// This field can have the runtime type of [[]OIDCSaaSAppScope].
-	Scopes interface{}                                               `json:"scopes,required"`
-	JSON   accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union  AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion
+	SSOEndpoint string                                                    `json:"sso_endpoint"`
+	UpdatedAt   time.Time                                                 `json:"updated_at" format:"date-time"`
+	JSON        accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union       AccessApplicationUpdateResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON contains the JSON
 // metadata for the struct [AccessApplicationUpdateResponseSaaSApplicationSaaSApp]
 type accessApplicationUpdateResponseSaaSApplicationSaaSAppJSON struct {
+	AccessTokenLifetime           apijson.Field
+	AllowPKCEWithoutClientSecret  apijson.Field
+	AppLauncherURL                apijson.Field
 	AuthType                      apijson.Field
+	ClientID                      apijson.Field
+	ClientSecret                  apijson.Field
 	ConsumerServiceURL            apijson.Field
 	CreatedAt                     apijson.Field
 	CustomAttributes              apijson.Field
+	CustomClaims                  apijson.Field
 	DefaultRelayState             apijson.Field
+	GrantTypes                    apijson.Field
+	GroupFilterRegex              apijson.Field
+	HybridAndImplicitOptions      apijson.Field
 	IdPEntityID                   apijson.Field
 	NameIDFormat                  apijson.Field
 	NameIDTransformJsonata        apijson.Field
 	PublicKey                     apijson.Field
+	RedirectURIs                  apijson.Field
+	RefreshTokenOptions           apijson.Field
 	SAMLAttributeTransformJsonata apijson.Field
+	Scopes                        apijson.Field
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
-	AccessTokenLifetime           apijson.Field
-	AllowPKCEWithoutClientSecret  apijson.Field
-	AppLauncherURL                apijson.Field
-	ClientID                      apijson.Field
-	ClientSecret                  apijson.Field
-	CustomClaims                  apijson.Field
-	GrantTypes                    apijson.Field
-	GroupFilterRegex              apijson.Field
-	HybridAndImplicitOptions      apijson.Field
-	RedirectURIs                  apijson.Field
-	RefreshTokenOptions           apijson.Field
-	Scopes                        apijson.Field
 	raw                           string
 	ExtraFields                   map[string]apijson.Field
 }
@@ -5202,12 +5774,8 @@ func (r accessApplicationUpdateResponseSaaSApplicationSCIMConfigJSON) RawJSON() 
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -5218,28 +5786,32 @@ type AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthentication stru
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                     `json:"token_url"`
-	JSON     accessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                     `json:"user"`
+	JSON  accessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthentication]
 type accessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -5316,8 +5888,8 @@ func (r AccessApplicationUpdateResponseSaaSApplicationSCIMConfigAuthenticationSc
 }
 
 type AccessApplicationUpdateResponseBrowserSSHApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -5351,6 +5923,10 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationUpdateResponseBrowserSSHApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -5374,7 +5950,9 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -5408,6 +5986,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -5436,6 +6015,51 @@ func (r accessApplicationUpdateResponseBrowserSSHApplicationJSON) RawJSON() stri
 }
 
 func (r AccessApplicationUpdateResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestination struct {
+	Type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                              `json:"uri"`
+	JSON accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationDestination]
+type accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType string
+
+const (
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -5486,12 +6110,8 @@ func (r accessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigJSON) RawJ
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -5502,28 +6122,32 @@ type AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                           `json:"token_url"`
-	JSON     accessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                           `json:"user"`
+	JSON  accessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentication]
 type accessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -5600,8 +6224,8 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationSCIMConfigAuthentica
 }
 
 type AccessApplicationUpdateResponseBrowserVNCApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -5635,6 +6259,10 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationUpdateResponseBrowserVNCApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -5658,7 +6286,9 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -5692,6 +6322,7 @@ type accessApplicationUpdateResponseBrowserVNCApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -5720,6 +6351,51 @@ func (r accessApplicationUpdateResponseBrowserVNCApplicationJSON) RawJSON() stri
 }
 
 func (r AccessApplicationUpdateResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestination struct {
+	Type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                              `json:"uri"`
+	JSON accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationDestination]
+type accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType string
+
+const (
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -5770,12 +6446,8 @@ func (r accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigJSON) RawJ
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -5786,28 +6458,32 @@ type AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticatio
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                           `json:"token_url"`
-	JSON     accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                           `json:"user"`
+	JSON  accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthentication]
 type accessApplicationUpdateResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -5901,8 +6577,8 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationUpdateResponseAppLauncherApplicationFooterLink `json:"footer_links"`
@@ -6072,12 +6748,8 @@ func (r accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigJSON) Raw
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -6088,28 +6760,32 @@ type AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticati
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                            `json:"token_url"`
-	JSON     accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                            `json:"user"`
+	JSON  accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthentication]
 type accessApplicationUpdateResponseAppLauncherApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -6203,8 +6879,8 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struc
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
@@ -6375,12 +7051,8 @@ func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCI
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -6391,28 +7063,32 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                                            `json:"token_url"`
-	JSON     accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                                            `json:"user"`
+	JSON  accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication]
 type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -6506,8 +7182,8 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struc
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
@@ -6678,12 +7354,8 @@ func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCI
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -6694,28 +7366,32 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMCo
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                                            `json:"token_url"`
-	JSON     accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                                            `json:"user"`
+	JSON  accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication]
 type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -6894,12 +7570,8 @@ func (r accessApplicationUpdateResponseBookmarkApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -6910,28 +7582,32 @@ type AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication 
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                         `json:"token_url"`
-	JSON     accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                         `json:"user"`
+	JSON  accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthentication]
 type accessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -7007,36 +7683,328 @@ func (r AccessApplicationUpdateResponseBookmarkApplicationSCIMConfigAuthenticati
 	return false
 }
 
-type AccessApplicationListResponse struct {
+type AccessApplicationUpdateResponseInfrastructureApplication struct {
+	TargetCriteria []AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
 	// Audience tag.
 	AUD       string    `json:"aud"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The name of the application.
+	Name     string                                                           `json:"name"`
+	Policies []AccessApplicationUpdateResponseInfrastructureApplicationPolicy `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	SCIMConfig AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
+	UpdatedAt  time.Time                                                          `json:"updated_at" format:"date-time"`
+	JSON       accessApplicationUpdateResponseInfrastructureApplicationJSON       `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplication]
+type accessApplicationUpdateResponseInfrastructureApplicationJSON struct {
+	TargetCriteria apijson.Field
+	Type           apijson.Field
+	ID             apijson.Field
+	AUD            apijson.Field
+	CreatedAt      apijson.Field
+	Name           apijson.Field
+	Policies       apijson.Field
+	SCIMConfig     apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationUpdateResponseInfrastructureApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port int64 `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes map[string][]string                                                         `json:"target_attributes,required"`
+	JSON             accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion]
+type accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON struct {
+	Port             apijson.Field
+	Protocol         apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The communication protocol your application secures.
+type AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                       `json:"require"`
+	UpdatedAt time.Time                                                          `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationPolicy]
+type accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID string `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI string `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete bool `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled bool `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings []SCIMConfigMapping                                                    `json:"mappings"`
+	JSON     accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig]
+type accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON struct {
+	IdPUID             apijson.Field
+	RemoteURI          apijson.Field
+	Authentication     apijson.Field
+	DeactivateOnDelete apijson.Field
+	Enabled            apijson.Field
+	Mappings           apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication struct {
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	// Token used to authenticate with the remote SCIM service.
+	Token string `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL string `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID string `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                               `json:"user"`
+	JSON  accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication]
+type accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
+	Scheme           apijson.Field
+	Token            apijson.Field
+	AuthorizationURL apijson.Field
+	ClientID         apijson.Field
+	ClientSecret     apijson.Field
+	Password         apijson.Field
+	Scopes           apijson.Field
+	TokenURL         apijson.Field
+	User             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
+	return r.union
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthentication()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
+		},
+	)
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
+
+const (
+	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationUpdateResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponse struct {
 	// UUID
 	ID string `json:"id"`
-	// This field can have the runtime type of
-	// [AccessApplicationListResponseSelfHostedApplicationSCIMConfig],
-	// [AccessApplicationListResponseSaaSApplicationSCIMConfig],
-	// [AccessApplicationListResponseBrowserSSHApplicationSCIMConfig],
-	// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfig],
-	// [AccessApplicationListResponseAppLauncherApplicationSCIMConfig],
-	// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
-	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationListResponseBookmarkApplicationSCIMConfig].
-	SCIMConfig interface{} `json:"scim_config,required"`
-	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// This field can have the runtime type of [[]AllowedIdPs].
-	AllowedIdPs interface{} `json:"allowed_idps,required"`
+	AllowedIdPs interface{} `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
+	// Audience tag.
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
-	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor     string      `json:"bg_color"`
+	CORSHeaders CORSHeaders `json:"cors_headers"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -7047,16 +8015,33 @@ type AccessApplicationListResponse struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// This field can have the runtime type of [[]string].
-	CustomPages interface{} `json:"custom_pages,required"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	CustomPages interface{} `json:"custom_pages"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseSelfHostedApplicationDestination],
+	// [[]AccessApplicationListResponseBrowserSSHApplicationDestination],
+	// [[]AccessApplicationListResponseBrowserVNCApplicationDestination].
+	Destinations interface{} `json:"destinations"`
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseAppLauncherApplicationFooterLink],
+	// [[]AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink],
+	// [[]AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink].
+	FooterLinks interface{} `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
 	// Enables the HttpOnly cookie attribute, which increases security against XSS
 	// attacks.
 	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
+	// This field can have the runtime type of
+	// [AccessApplicationListResponseAppLauncherApplicationLandingPageDesign],
+	// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
+	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	LandingPageDesign interface{} `json:"landing_page_design"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
@@ -7067,89 +8052,91 @@ type AccessApplicationListResponse struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationListResponseInfrastructureApplicationPolicy].
+	Policies interface{} `json:"policies"`
+	// This field can have the runtime type of
+	// [AccessApplicationListResponseSaaSApplicationSaaSApp].
+	SaaSApp interface{} `json:"saas_app"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	// This field can have the runtime type of
+	// [AccessApplicationListResponseSelfHostedApplicationSCIMConfig],
+	// [AccessApplicationListResponseSaaSApplicationSCIMConfig],
+	// [AccessApplicationListResponseBrowserSSHApplicationSCIMConfig],
+	// [AccessApplicationListResponseBrowserVNCApplicationSCIMConfig],
+	// [AccessApplicationListResponseAppLauncherApplicationSCIMConfig],
+	// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
+	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig],
+	// [AccessApplicationListResponseBookmarkApplicationSCIMConfig],
+	// [AccessApplicationListResponseInfrastructureApplicationSCIMConfig].
+	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
-	SelfHostedDomains interface{} `json:"self_hosted_domains,required"`
+	SelfHostedDomains interface{} `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// This field can have the runtime type of [[]string].
-	Tags interface{} `json:"tags,required"`
+	Tags interface{} `json:"tags"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseInfrastructureApplicationTargetCriterion].
+	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
-	Policies interface{} `json:"policies,required"`
-	// This field can have the runtime type of
-	// [AccessApplicationListResponseSaaSApplicationSaaSApp].
-	SaaSApp interface{} `json:"saas_app,required"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
-	// The background color of the App Launcher page.
-	BgColor string `json:"bg_color"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationListResponseAppLauncherApplicationFooterLink],
-	// [[]AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink],
-	// [[]AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink].
-	FooterLinks interface{} `json:"footer_links,required"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// This field can have the runtime type of
-	// [AccessApplicationListResponseAppLauncherApplicationLandingPageDesign],
-	// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
-	// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
-	LandingPageDesign interface{} `json:"landing_page_design,required"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                              `json:"skip_app_launcher_login_page"`
-	JSON                     accessApplicationListResponseJSON `json:"-"`
-	union                    AccessApplicationListResponseUnion
+	Type      string                            `json:"type"`
+	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseJSON `json:"-"`
+	union     AccessApplicationListResponseUnion
 }
 
 // accessApplicationListResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationListResponse]
 type accessApplicationListResponseJSON struct {
-	AUD                      apijson.Field
-	CreatedAt                apijson.Field
 	ID                       apijson.Field
-	SCIMConfig               apijson.Field
-	UpdatedAt                apijson.Field
 	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
 	AppLauncherVisible       apijson.Field
+	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
 	CORSHeaders              apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyMessage        apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
+	LandingPageDesign        apijson.Field
 	LogoURL                  apijson.Field
 	Name                     apijson.Field
 	OptionsPreflightBypass   apijson.Field
 	PathCookieAttribute      apijson.Field
+	Policies                 apijson.Field
+	SaaSApp                  apijson.Field
 	SameSiteCookieAttribute  apijson.Field
+	SCIMConfig               apijson.Field
 	SelfHostedDomains        apijson.Field
 	ServiceAuth401Redirect   apijson.Field
 	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
 	SkipInterstitial         apijson.Field
 	Tags                     apijson.Field
+	TargetCriteria           apijson.Field
 	Type                     apijson.Field
-	Policies                 apijson.Field
-	SaaSApp                  apijson.Field
-	AppLauncherLogoURL       apijson.Field
-	BgColor                  apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -7178,7 +8165,8 @@ func (r *AccessApplicationListResponse) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.AccessApplicationListResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationListResponseBookmarkApplication].
+// [zero_trust.AccessApplicationListResponseBookmarkApplication],
+// [zero_trust.AccessApplicationListResponseInfrastructureApplication].
 func (r AccessApplicationListResponse) AsUnion() AccessApplicationListResponseUnion {
 	return r.union
 }
@@ -7190,8 +8178,9 @@ func (r AccessApplicationListResponse) AsUnion() AccessApplicationListResponseUn
 // [zero_trust.AccessApplicationListResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationListResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationListResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication]
-// or [zero_trust.AccessApplicationListResponseBookmarkApplication].
+// [zero_trust.AccessApplicationListResponseBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationListResponseBookmarkApplication] or
+// [zero_trust.AccessApplicationListResponseInfrastructureApplication].
 type AccessApplicationListResponseUnion interface {
 	implementsZeroTrustAccessApplicationListResponse()
 }
@@ -7232,12 +8221,16 @@ func init() {
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationListResponseBookmarkApplication{}),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationListResponseInfrastructureApplication{}),
+		},
 	)
 }
 
 type AccessApplicationListResponseSelfHostedApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -7271,6 +8264,10 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationListResponseSelfHostedApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -7294,7 +8291,9 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -7328,6 +8327,7 @@ type accessApplicationListResponseSelfHostedApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -7356,6 +8356,51 @@ func (r accessApplicationListResponseSelfHostedApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationListResponseSelfHostedApplication) implementsZeroTrustAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestination struct {
+	Type AccessApplicationListResponseSelfHostedApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                            `json:"uri"`
+	JSON accessApplicationListResponseSelfHostedApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseSelfHostedApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationDestination]
+type accessApplicationListResponseSelfHostedApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseSelfHostedApplicationDestinationsType string
+
+const (
+	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationListResponseSelfHostedApplicationDestinationsType = "public"
+	AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationListResponseSelfHostedApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationListResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationListResponseSelfHostedApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -7406,12 +8451,8 @@ func (r accessApplicationListResponseSelfHostedApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -7422,28 +8463,32 @@ type AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication 
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                         `json:"token_url"`
-	JSON     accessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                         `json:"user"`
+	JSON  accessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseSelfHostedApplicationSCIMConfigAuthentication]
 type accessApplicationListResponseSelfHostedApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -7587,18 +8632,38 @@ func (r AccessApplicationListResponseSaaSApplication) implementsZeroTrustAccessA
 }
 
 type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
+	// If client secret should be required on the token endpoint when
+	// authorization_code_with_pkce grant is used.
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	// The URL where this applications tile redirects users
+	AppLauncherURL string `json:"app_launcher_url"`
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
 	AuthType AccessApplicationListResponseSaaSApplicationSaaSAppAuthType `json:"auth_type"`
+	// The application client id
+	ClientID string `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret string `json:"client_secret"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL string    `json:"consumer_service_url"`
 	CreatedAt          time.Time `json:"created_at" format:"date-time"`
-	// This field can have the runtime type of [SAMLSaaSAppCustomAttributes].
-	CustomAttributes interface{} `json:"custom_attributes,required"`
+	// This field can have the runtime type of [[]SAMLSaaSAppCustomAttribute].
+	CustomAttributes interface{} `json:"custom_attributes"`
+	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
+	CustomClaims interface{} `json:"custom_claims"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
+	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
+	GrantTypes interface{} `json:"grant_types"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex string `json:"group_filter_regex"`
+	// This field can have the runtime type of [OIDCSaaSAppHybridAndImplicitOptions].
+	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
@@ -7610,75 +8675,55 @@ type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
 	NameIDTransformJsonata string `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey string `json:"public_key"`
+	// This field can have the runtime type of [[]string].
+	RedirectURIs interface{} `json:"redirect_uris"`
+	// This field can have the runtime type of [OIDCSaaSAppRefreshTokenOptions].
+	RefreshTokenOptions interface{} `json:"refresh_token_options"`
 	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
 	// user identities into attribute assertions in the SAML response. The expression
 	// can transform id, email, name, and groups values. It can also transform fields
 	// listed in the saml_attributes or oidc_fields of the identity provider used to
 	// authenticate. The output of this expression must be a JSON object.
 	SAMLAttributeTransformJsonata string `json:"saml_attribute_transform_jsonata"`
+	// This field can have the runtime type of [[]OIDCSaaSAppScope].
+	Scopes interface{} `json:"scopes"`
 	// A globally unique name for an identity or service provider.
 	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint string    `json:"sso_endpoint"`
-	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
-	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
-	// be greater than or equal to 1m and less than or equal to 24h.
-	AccessTokenLifetime string `json:"access_token_lifetime"`
-	// If client secret should be required on the token endpoint when
-	// authorization_code_with_pkce grant is used.
-	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
-	// The URL where this applications tile redirects users
-	AppLauncherURL string `json:"app_launcher_url"`
-	// The application client id
-	ClientID string `json:"client_id"`
-	// The application client secret, only returned on POST request.
-	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [OIDCSaaSAppCustomClaims].
-	CustomClaims interface{} `json:"custom_claims,required"`
-	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
-	GrantTypes interface{} `json:"grant_types,required"`
-	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex string `json:"group_filter_regex"`
-	// This field can have the runtime type of [OIDCSaaSAppHybridAndImplicitOptions].
-	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options,required"`
-	// This field can have the runtime type of [[]string].
-	RedirectURIs interface{} `json:"redirect_uris,required"`
-	// This field can have the runtime type of [OIDCSaaSAppRefreshTokenOptions].
-	RefreshTokenOptions interface{} `json:"refresh_token_options,required"`
-	// This field can have the runtime type of [[]OIDCSaaSAppScope].
-	Scopes interface{}                                             `json:"scopes,required"`
-	JSON   accessApplicationListResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union  AccessApplicationListResponseSaaSApplicationSaaSAppUnion
+	SSOEndpoint string                                                  `json:"sso_endpoint"`
+	UpdatedAt   time.Time                                               `json:"updated_at" format:"date-time"`
+	JSON        accessApplicationListResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union       AccessApplicationListResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationListResponseSaaSApplicationSaaSAppJSON contains the JSON
 // metadata for the struct [AccessApplicationListResponseSaaSApplicationSaaSApp]
 type accessApplicationListResponseSaaSApplicationSaaSAppJSON struct {
+	AccessTokenLifetime           apijson.Field
+	AllowPKCEWithoutClientSecret  apijson.Field
+	AppLauncherURL                apijson.Field
 	AuthType                      apijson.Field
+	ClientID                      apijson.Field
+	ClientSecret                  apijson.Field
 	ConsumerServiceURL            apijson.Field
 	CreatedAt                     apijson.Field
 	CustomAttributes              apijson.Field
+	CustomClaims                  apijson.Field
 	DefaultRelayState             apijson.Field
+	GrantTypes                    apijson.Field
+	GroupFilterRegex              apijson.Field
+	HybridAndImplicitOptions      apijson.Field
 	IdPEntityID                   apijson.Field
 	NameIDFormat                  apijson.Field
 	NameIDTransformJsonata        apijson.Field
 	PublicKey                     apijson.Field
+	RedirectURIs                  apijson.Field
+	RefreshTokenOptions           apijson.Field
 	SAMLAttributeTransformJsonata apijson.Field
+	Scopes                        apijson.Field
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
-	AccessTokenLifetime           apijson.Field
-	AllowPKCEWithoutClientSecret  apijson.Field
-	AppLauncherURL                apijson.Field
-	ClientID                      apijson.Field
-	ClientSecret                  apijson.Field
-	CustomClaims                  apijson.Field
-	GrantTypes                    apijson.Field
-	GroupFilterRegex              apijson.Field
-	HybridAndImplicitOptions      apijson.Field
-	RedirectURIs                  apijson.Field
-	RefreshTokenOptions           apijson.Field
-	Scopes                        apijson.Field
 	raw                           string
 	ExtraFields                   map[string]apijson.Field
 }
@@ -7789,12 +8834,8 @@ func (r accessApplicationListResponseSaaSApplicationSCIMConfigJSON) RawJSON() st
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationListResponseSaaSApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -7805,28 +8846,32 @@ type AccessApplicationListResponseSaaSApplicationSCIMConfigAuthentication struct
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                   `json:"token_url"`
-	JSON     accessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                   `json:"user"`
+	JSON  accessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseSaaSApplicationSCIMConfigAuthentication]
 type accessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -7903,8 +8948,8 @@ func (r AccessApplicationListResponseSaaSApplicationSCIMConfigAuthenticationSche
 }
 
 type AccessApplicationListResponseBrowserSSHApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -7938,6 +8983,10 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationListResponseBrowserSSHApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -7961,7 +9010,9 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -7995,6 +9046,7 @@ type accessApplicationListResponseBrowserSSHApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -8023,6 +9075,51 @@ func (r accessApplicationListResponseBrowserSSHApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationListResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestination struct {
+	Type AccessApplicationListResponseBrowserSSHApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                            `json:"uri"`
+	JSON accessApplicationListResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserSSHApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationDestination]
+type accessApplicationListResponseBrowserSSHApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationDestinationsType string
+
+const (
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationListResponseBrowserSSHApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserSSHApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -8073,12 +9170,8 @@ func (r accessApplicationListResponseBrowserSSHApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -8089,28 +9182,32 @@ type AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthentication 
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                         `json:"token_url"`
-	JSON     accessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                         `json:"user"`
+	JSON  accessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthentication]
 type accessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -8187,8 +9284,8 @@ func (r AccessApplicationListResponseBrowserSSHApplicationSCIMConfigAuthenticati
 }
 
 type AccessApplicationListResponseBrowserVNCApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -8222,6 +9319,10 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationListResponseBrowserVNCApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -8245,7 +9346,9 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -8279,6 +9382,7 @@ type accessApplicationListResponseBrowserVNCApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -8307,6 +9411,51 @@ func (r accessApplicationListResponseBrowserVNCApplicationJSON) RawJSON() string
 }
 
 func (r AccessApplicationListResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestination struct {
+	Type AccessApplicationListResponseBrowserVNCApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                            `json:"uri"`
+	JSON accessApplicationListResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationListResponseBrowserVNCApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationDestination]
+type accessApplicationListResponseBrowserVNCApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationDestinationsType string
+
+const (
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationListResponseBrowserVNCApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationListResponseBrowserVNCApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -8357,12 +9506,8 @@ func (r accessApplicationListResponseBrowserVNCApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -8373,28 +9518,32 @@ type AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication 
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                         `json:"token_url"`
-	JSON     accessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                         `json:"user"`
+	JSON  accessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthentication]
 type accessApplicationListResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -8488,8 +9637,8 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationListResponseAppLauncherApplicationFooterLink `json:"footer_links"`
@@ -8659,12 +9808,8 @@ func (r accessApplicationListResponseAppLauncherApplicationSCIMConfigJSON) RawJS
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -8675,28 +9820,32 @@ type AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentication
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                          `json:"token_url"`
-	JSON     accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                          `json:"user"`
+	JSON  accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseAppLauncherApplicationSCIMConfigAuthentication]
 type accessApplicationListResponseAppLauncherApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -8790,8 +9939,8 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct 
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
@@ -8962,12 +10111,8 @@ func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMC
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -8978,28 +10123,32 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConf
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                                          `json:"token_url"`
-	JSON     accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                                          `json:"user"`
+	JSON  accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication]
 type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -9093,8 +10242,8 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct 
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationListResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
@@ -9265,12 +10414,8 @@ func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMC
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -9281,28 +10426,32 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConf
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                                          `json:"token_url"`
-	JSON     accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                                          `json:"user"`
+	JSON  accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication]
 type accessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -9481,12 +10630,8 @@ func (r accessApplicationListResponseBookmarkApplicationSCIMConfigJSON) RawJSON(
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -9497,28 +10642,32 @@ type AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication st
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                       `json:"token_url"`
-	JSON     accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                       `json:"user"`
+	JSON  accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication]
 type accessApplicationListResponseBookmarkApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -9594,6 +10743,304 @@ func (r AccessApplicationListResponseBookmarkApplicationSCIMConfigAuthentication
 	return false
 }
 
+type AccessApplicationListResponseInfrastructureApplication struct {
+	TargetCriteria []AccessApplicationListResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// Audience tag.
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The name of the application.
+	Name     string                                                         `json:"name"`
+	Policies []AccessApplicationListResponseInfrastructureApplicationPolicy `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	SCIMConfig AccessApplicationListResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
+	UpdatedAt  time.Time                                                        `json:"updated_at" format:"date-time"`
+	JSON       accessApplicationListResponseInfrastructureApplicationJSON       `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationJSON contains the JSON
+// metadata for the struct [AccessApplicationListResponseInfrastructureApplication]
+type accessApplicationListResponseInfrastructureApplicationJSON struct {
+	TargetCriteria apijson.Field
+	Type           apijson.Field
+	ID             apijson.Field
+	AUD            apijson.Field
+	CreatedAt      apijson.Field
+	Name           apijson.Field
+	Policies       apijson.Field
+	SCIMConfig     apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationListResponseInfrastructureApplication) implementsZeroTrustAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port int64 `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes map[string][]string                                                       `json:"target_attributes,required"`
+	JSON             accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationTargetCriterion]
+type accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON struct {
+	Port             apijson.Field
+	Protocol         apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The communication protocol your application secures.
+type AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                     `json:"require"`
+	UpdatedAt time.Time                                                        `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationListResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationPolicy]
+type accessApplicationListResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationListResponseInfrastructureApplicationSCIMConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID string `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI string `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete bool `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled bool `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings []SCIMConfigMapping                                                  `json:"mappings"`
+	JSON     accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON contains
+// the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationSCIMConfig]
+type accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON struct {
+	IdPUID             apijson.Field
+	RemoteURI          apijson.Field
+	Authentication     apijson.Field
+	DeactivateOnDelete apijson.Field
+	Enabled            apijson.Field
+	Mappings           apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication struct {
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	// Token used to authenticate with the remote SCIM service.
+	Token string `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL string `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID string `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                             `json:"user"`
+	JSON  accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
+}
+
+// accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication]
+type accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
+	Scheme           apijson.Field
+	Token            apijson.Field
+	AuthorizationURL apijson.Field
+	ClientID         apijson.Field
+	ClientSecret     apijson.Field
+	Password         apijson.Field
+	Scopes           apijson.Field
+	TokenURL         apijson.Field
+	User             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
+	return r.union
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthentication()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
+		},
+	)
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
+
+const (
+	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationListResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationDeleteResponse struct {
 	// UUID
 	ID   string                              `json:"id"`
@@ -9617,35 +11064,28 @@ func (r accessApplicationDeleteResponseJSON) RawJSON() string {
 }
 
 type AccessApplicationGetResponse struct {
-	// Audience tag.
-	AUD       string    `json:"aud"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
 	ID string `json:"id"`
-	// This field can have the runtime type of
-	// [AccessApplicationGetResponseSelfHostedApplicationSCIMConfig],
-	// [AccessApplicationGetResponseSaaSApplicationSCIMConfig],
-	// [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfig],
-	// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig],
-	// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfig],
-	// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
-	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig],
-	// [AccessApplicationGetResponseBookmarkApplicationSCIMConfig].
-	SCIMConfig interface{} `json:"scim_config,required"`
-	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// This field can have the runtime type of [[]AllowedIdPs].
-	AllowedIdPs interface{} `json:"allowed_idps,required"`
+	AllowedIdPs interface{} `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible bool `json:"app_launcher_visible"`
+	// Audience tag.
+	AUD string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool        `json:"auto_redirect_to_identity"`
-	CORSHeaders            CORSHeaders `json:"cors_headers"`
+	AutoRedirectToIdentity bool `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor     string      `json:"bg_color"`
+	CORSHeaders CORSHeaders `json:"cors_headers"`
+	CreatedAt   time.Time   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -9656,16 +11096,33 @@ type AccessApplicationGetResponse struct {
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// This field can have the runtime type of [[]string].
-	CustomPages interface{} `json:"custom_pages,required"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	CustomPages interface{} `json:"custom_pages"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseSelfHostedApplicationDestination],
+	// [[]AccessApplicationGetResponseBrowserSSHApplicationDestination],
+	// [[]AccessApplicationGetResponseBrowserVNCApplicationDestination].
+	Destinations interface{} `json:"destinations"`
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseAppLauncherApplicationFooterLink],
+	// [[]AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink],
+	// [[]AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink].
+	FooterLinks interface{} `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor string `json:"header_bg_color"`
 	// Enables the HttpOnly cookie attribute, which increases security against XSS
 	// attacks.
 	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
+	// This field can have the runtime type of
+	// [AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign],
+	// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
+	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
+	LandingPageDesign interface{} `json:"landing_page_design"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
@@ -9676,89 +11133,91 @@ type AccessApplicationGetResponse struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
+	// This field can have the runtime type of [[]ApplicationPolicy],
+	// [[]AccessApplicationGetResponseInfrastructureApplicationPolicy].
+	Policies interface{} `json:"policies"`
+	// This field can have the runtime type of
+	// [AccessApplicationGetResponseSaaSApplicationSaaSApp].
+	SaaSApp interface{} `json:"saas_app"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	// This field can have the runtime type of
+	// [AccessApplicationGetResponseSelfHostedApplicationSCIMConfig],
+	// [AccessApplicationGetResponseSaaSApplicationSCIMConfig],
+	// [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfig],
+	// [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig],
+	// [AccessApplicationGetResponseAppLauncherApplicationSCIMConfig],
+	// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig],
+	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig],
+	// [AccessApplicationGetResponseBookmarkApplicationSCIMConfig],
+	// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfig].
+	SCIMConfig interface{} `json:"scim_config"`
 	// This field can have the runtime type of [[]SelfHostedDomains].
-	SelfHostedDomains interface{} `json:"self_hosted_domains,required"`
+	SelfHostedDomains interface{} `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration string `json:"session_duration"`
+	// Determines when to skip the App Launcher landing page.
+	SkipAppLauncherLoginPage bool `json:"skip_app_launcher_login_page"`
 	// Enables automatic authentication through cloudflared.
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// This field can have the runtime type of [[]string].
-	Tags interface{} `json:"tags,required"`
+	Tags interface{} `json:"tags"`
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseInfrastructureApplicationTargetCriterion].
+	TargetCriteria interface{} `json:"target_criteria"`
 	// The application type.
-	Type string `json:"type"`
-	// This field can have the runtime type of [[]ApplicationPolicy].
-	Policies interface{} `json:"policies,required"`
-	// This field can have the runtime type of
-	// [AccessApplicationGetResponseSaaSApplicationSaaSApp].
-	SaaSApp interface{} `json:"saas_app,required"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL string `json:"app_launcher_logo_url"`
-	// The background color of the App Launcher page.
-	BgColor string `json:"bg_color"`
-	// This field can have the runtime type of
-	// [[]AccessApplicationGetResponseAppLauncherApplicationFooterLink],
-	// [[]AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink],
-	// [[]AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink].
-	FooterLinks interface{} `json:"footer_links,required"`
-	// The background color of the App Launcher header.
-	HeaderBgColor string `json:"header_bg_color"`
-	// This field can have the runtime type of
-	// [AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign],
-	// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign],
-	// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign].
-	LandingPageDesign interface{} `json:"landing_page_design,required"`
-	// Determines when to skip the App Launcher landing page.
-	SkipAppLauncherLoginPage bool                             `json:"skip_app_launcher_login_page"`
-	JSON                     accessApplicationGetResponseJSON `json:"-"`
-	union                    AccessApplicationGetResponseUnion
+	Type      string                           `json:"type"`
+	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseJSON `json:"-"`
+	union     AccessApplicationGetResponseUnion
 }
 
 // accessApplicationGetResponseJSON contains the JSON metadata for the struct
 // [AccessApplicationGetResponse]
 type accessApplicationGetResponseJSON struct {
-	AUD                      apijson.Field
-	CreatedAt                apijson.Field
 	ID                       apijson.Field
-	SCIMConfig               apijson.Field
-	UpdatedAt                apijson.Field
 	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdPs              apijson.Field
+	AppLauncherLogoURL       apijson.Field
 	AppLauncherVisible       apijson.Field
+	AUD                      apijson.Field
 	AutoRedirectToIdentity   apijson.Field
+	BgColor                  apijson.Field
 	CORSHeaders              apijson.Field
+	CreatedAt                apijson.Field
 	CustomDenyMessage        apijson.Field
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
+	FooterLinks              apijson.Field
+	HeaderBgColor            apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
+	LandingPageDesign        apijson.Field
 	LogoURL                  apijson.Field
 	Name                     apijson.Field
 	OptionsPreflightBypass   apijson.Field
 	PathCookieAttribute      apijson.Field
+	Policies                 apijson.Field
+	SaaSApp                  apijson.Field
 	SameSiteCookieAttribute  apijson.Field
+	SCIMConfig               apijson.Field
 	SelfHostedDomains        apijson.Field
 	ServiceAuth401Redirect   apijson.Field
 	SessionDuration          apijson.Field
+	SkipAppLauncherLoginPage apijson.Field
 	SkipInterstitial         apijson.Field
 	Tags                     apijson.Field
+	TargetCriteria           apijson.Field
 	Type                     apijson.Field
-	Policies                 apijson.Field
-	SaaSApp                  apijson.Field
-	AppLauncherLogoURL       apijson.Field
-	BgColor                  apijson.Field
-	FooterLinks              apijson.Field
-	HeaderBgColor            apijson.Field
-	LandingPageDesign        apijson.Field
-	SkipAppLauncherLoginPage apijson.Field
+	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -9787,7 +11246,8 @@ func (r *AccessApplicationGetResponse) UnmarshalJSON(data []byte) (err error) {
 // [zero_trust.AccessApplicationGetResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
-// [zero_trust.AccessApplicationGetResponseBookmarkApplication].
+// [zero_trust.AccessApplicationGetResponseBookmarkApplication],
+// [zero_trust.AccessApplicationGetResponseInfrastructureApplication].
 func (r AccessApplicationGetResponse) AsUnion() AccessApplicationGetResponseUnion {
 	return r.union
 }
@@ -9799,8 +11259,9 @@ func (r AccessApplicationGetResponse) AsUnion() AccessApplicationGetResponseUnio
 // [zero_trust.AccessApplicationGetResponseBrowserVNCApplication],
 // [zero_trust.AccessApplicationGetResponseAppLauncherApplication],
 // [zero_trust.AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication],
-// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication]
-// or [zero_trust.AccessApplicationGetResponseBookmarkApplication].
+// [zero_trust.AccessApplicationGetResponseBrowserIsolationPermissionsApplication],
+// [zero_trust.AccessApplicationGetResponseBookmarkApplication] or
+// [zero_trust.AccessApplicationGetResponseInfrastructureApplication].
 type AccessApplicationGetResponseUnion interface {
 	implementsZeroTrustAccessApplicationGetResponse()
 }
@@ -9841,12 +11302,16 @@ func init() {
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(AccessApplicationGetResponseBookmarkApplication{}),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessApplicationGetResponseInfrastructureApplication{}),
+		},
 	)
 }
 
 type AccessApplicationGetResponseSelfHostedApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -9880,6 +11345,10 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationGetResponseSelfHostedApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -9903,7 +11372,9 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseSelfHostedApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -9937,6 +11408,7 @@ type accessApplicationGetResponseSelfHostedApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -9965,6 +11437,51 @@ func (r accessApplicationGetResponseSelfHostedApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationGetResponseSelfHostedApplication) implementsZeroTrustAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestination struct {
+	Type AccessApplicationGetResponseSelfHostedApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                           `json:"uri"`
+	JSON accessApplicationGetResponseSelfHostedApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseSelfHostedApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationDestination]
+type accessApplicationGetResponseSelfHostedApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationDestinationsType string
+
+const (
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic  AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "public"
+	AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate AccessApplicationGetResponseSelfHostedApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePublic, AccessApplicationGetResponseSelfHostedApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -10015,12 +11532,8 @@ func (r accessApplicationGetResponseSelfHostedApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -10031,28 +11544,32 @@ type AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication s
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                        `json:"token_url"`
-	JSON     accessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                        `json:"user"`
+	JSON  accessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthentication]
 type accessApplicationGetResponseSelfHostedApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -10196,18 +11713,38 @@ func (r AccessApplicationGetResponseSaaSApplication) implementsZeroTrustAccessAp
 }
 
 type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime string `json:"access_token_lifetime"`
+	// If client secret should be required on the token endpoint when
+	// authorization_code_with_pkce grant is used.
+	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
+	// The URL where this applications tile redirects users
+	AppLauncherURL string `json:"app_launcher_url"`
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
 	AuthType AccessApplicationGetResponseSaaSApplicationSaaSAppAuthType `json:"auth_type"`
+	// The application client id
+	ClientID string `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret string `json:"client_secret"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL string    `json:"consumer_service_url"`
 	CreatedAt          time.Time `json:"created_at" format:"date-time"`
-	// This field can have the runtime type of [SAMLSaaSAppCustomAttributes].
-	CustomAttributes interface{} `json:"custom_attributes,required"`
+	// This field can have the runtime type of [[]SAMLSaaSAppCustomAttribute].
+	CustomAttributes interface{} `json:"custom_attributes"`
+	// This field can have the runtime type of [[]OIDCSaaSAppCustomClaim].
+	CustomClaims interface{} `json:"custom_claims"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState string `json:"default_relay_state"`
+	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
+	GrantTypes interface{} `json:"grant_types"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex string `json:"group_filter_regex"`
+	// This field can have the runtime type of [OIDCSaaSAppHybridAndImplicitOptions].
+	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID string `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
@@ -10219,75 +11756,55 @@ type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
 	NameIDTransformJsonata string `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey string `json:"public_key"`
+	// This field can have the runtime type of [[]string].
+	RedirectURIs interface{} `json:"redirect_uris"`
+	// This field can have the runtime type of [OIDCSaaSAppRefreshTokenOptions].
+	RefreshTokenOptions interface{} `json:"refresh_token_options"`
 	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
 	// user identities into attribute assertions in the SAML response. The expression
 	// can transform id, email, name, and groups values. It can also transform fields
 	// listed in the saml_attributes or oidc_fields of the identity provider used to
 	// authenticate. The output of this expression must be a JSON object.
 	SAMLAttributeTransformJsonata string `json:"saml_attribute_transform_jsonata"`
+	// This field can have the runtime type of [[]OIDCSaaSAppScope].
+	Scopes interface{} `json:"scopes"`
 	// A globally unique name for an identity or service provider.
 	SPEntityID string `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint string    `json:"sso_endpoint"`
-	UpdatedAt   time.Time `json:"updated_at" format:"date-time"`
-	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
-	// be greater than or equal to 1m and less than or equal to 24h.
-	AccessTokenLifetime string `json:"access_token_lifetime"`
-	// If client secret should be required on the token endpoint when
-	// authorization_code_with_pkce grant is used.
-	AllowPKCEWithoutClientSecret bool `json:"allow_pkce_without_client_secret"`
-	// The URL where this applications tile redirects users
-	AppLauncherURL string `json:"app_launcher_url"`
-	// The application client id
-	ClientID string `json:"client_id"`
-	// The application client secret, only returned on POST request.
-	ClientSecret string `json:"client_secret"`
-	// This field can have the runtime type of [OIDCSaaSAppCustomClaims].
-	CustomClaims interface{} `json:"custom_claims,required"`
-	// This field can have the runtime type of [[]OIDCSaaSAppGrantType].
-	GrantTypes interface{} `json:"grant_types,required"`
-	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex string `json:"group_filter_regex"`
-	// This field can have the runtime type of [OIDCSaaSAppHybridAndImplicitOptions].
-	HybridAndImplicitOptions interface{} `json:"hybrid_and_implicit_options,required"`
-	// This field can have the runtime type of [[]string].
-	RedirectURIs interface{} `json:"redirect_uris,required"`
-	// This field can have the runtime type of [OIDCSaaSAppRefreshTokenOptions].
-	RefreshTokenOptions interface{} `json:"refresh_token_options,required"`
-	// This field can have the runtime type of [[]OIDCSaaSAppScope].
-	Scopes interface{}                                            `json:"scopes,required"`
-	JSON   accessApplicationGetResponseSaaSApplicationSaaSAppJSON `json:"-"`
-	union  AccessApplicationGetResponseSaaSApplicationSaaSAppUnion
+	SSOEndpoint string                                                 `json:"sso_endpoint"`
+	UpdatedAt   time.Time                                              `json:"updated_at" format:"date-time"`
+	JSON        accessApplicationGetResponseSaaSApplicationSaaSAppJSON `json:"-"`
+	union       AccessApplicationGetResponseSaaSApplicationSaaSAppUnion
 }
 
 // accessApplicationGetResponseSaaSApplicationSaaSAppJSON contains the JSON
 // metadata for the struct [AccessApplicationGetResponseSaaSApplicationSaaSApp]
 type accessApplicationGetResponseSaaSApplicationSaaSAppJSON struct {
+	AccessTokenLifetime           apijson.Field
+	AllowPKCEWithoutClientSecret  apijson.Field
+	AppLauncherURL                apijson.Field
 	AuthType                      apijson.Field
+	ClientID                      apijson.Field
+	ClientSecret                  apijson.Field
 	ConsumerServiceURL            apijson.Field
 	CreatedAt                     apijson.Field
 	CustomAttributes              apijson.Field
+	CustomClaims                  apijson.Field
 	DefaultRelayState             apijson.Field
+	GrantTypes                    apijson.Field
+	GroupFilterRegex              apijson.Field
+	HybridAndImplicitOptions      apijson.Field
 	IdPEntityID                   apijson.Field
 	NameIDFormat                  apijson.Field
 	NameIDTransformJsonata        apijson.Field
 	PublicKey                     apijson.Field
+	RedirectURIs                  apijson.Field
+	RefreshTokenOptions           apijson.Field
 	SAMLAttributeTransformJsonata apijson.Field
+	Scopes                        apijson.Field
 	SPEntityID                    apijson.Field
 	SSOEndpoint                   apijson.Field
 	UpdatedAt                     apijson.Field
-	AccessTokenLifetime           apijson.Field
-	AllowPKCEWithoutClientSecret  apijson.Field
-	AppLauncherURL                apijson.Field
-	ClientID                      apijson.Field
-	ClientSecret                  apijson.Field
-	CustomClaims                  apijson.Field
-	GrantTypes                    apijson.Field
-	GroupFilterRegex              apijson.Field
-	HybridAndImplicitOptions      apijson.Field
-	RedirectURIs                  apijson.Field
-	RefreshTokenOptions           apijson.Field
-	Scopes                        apijson.Field
 	raw                           string
 	ExtraFields                   map[string]apijson.Field
 }
@@ -10398,12 +11915,8 @@ func (r accessApplicationGetResponseSaaSApplicationSCIMConfigJSON) RawJSON() str
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -10414,28 +11927,32 @@ type AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthentication struct 
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                  `json:"token_url"`
-	JSON     accessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                  `json:"user"`
+	JSON  accessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationJSON contains
 // the JSON metadata for the struct
 // [AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthentication]
 type accessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -10512,8 +12029,8 @@ func (r AccessApplicationGetResponseSaaSApplicationSCIMConfigAuthenticationSchem
 }
 
 type AccessApplicationGetResponseBrowserSSHApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -10547,6 +12064,10 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationGetResponseBrowserSSHApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -10570,7 +12091,9 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseBrowserSSHApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -10604,6 +12127,7 @@ type accessApplicationGetResponseBrowserSSHApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -10632,6 +12156,51 @@ func (r accessApplicationGetResponseBrowserSSHApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationGetResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestination struct {
+	Type AccessApplicationGetResponseBrowserSSHApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                           `json:"uri"`
+	JSON accessApplicationGetResponseBrowserSSHApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationDestination]
+type accessApplicationGetResponseBrowserSSHApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationDestinationsType string
+
+const (
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic  AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate AccessApplicationGetResponseBrowserSSHApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserSSHApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -10682,12 +12251,8 @@ func (r accessApplicationGetResponseBrowserSSHApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -10698,28 +12263,32 @@ type AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthentication s
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                        `json:"token_url"`
-	JSON     accessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                        `json:"user"`
+	JSON  accessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthentication]
 type accessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -10796,8 +12365,8 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationSCIMConfigAuthenticatio
 }
 
 type AccessApplicationGetResponseBrowserVNCApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain,required"`
 	// The application type.
 	Type string `json:"type,required"`
@@ -10831,6 +12400,10 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations []AccessApplicationGetResponseBrowserVNCApplicationDestination `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -10854,7 +12427,9 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseBrowserVNCApplicationSCIMConfig `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains []SelfHostedDomains `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
@@ -10888,6 +12463,7 @@ type accessApplicationGetResponseBrowserVNCApplicationJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
+	Destinations             apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -10916,6 +12492,51 @@ func (r accessApplicationGetResponseBrowserVNCApplicationJSON) RawJSON() string 
 }
 
 func (r AccessApplicationGetResponseBrowserVNCApplication) implementsZeroTrustAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestination struct {
+	Type AccessApplicationGetResponseBrowserVNCApplicationDestinationsType `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI  string                                                           `json:"uri"`
+	JSON accessApplicationGetResponseBrowserVNCApplicationDestinationJSON `json:"-"`
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationDestinationJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationDestination]
+type accessApplicationGetResponseBrowserVNCApplicationDestinationJSON struct {
+	Type        apijson.Field
+	URI         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationDestination) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationDestinationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationDestinationsType string
+
+const (
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic  AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate AccessApplicationGetResponseBrowserVNCApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePublic, AccessApplicationGetResponseBrowserVNCApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -10966,12 +12587,8 @@ func (r accessApplicationGetResponseBrowserVNCApplicationSCIMConfigJSON) RawJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -10982,28 +12599,32 @@ type AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication s
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                        `json:"token_url"`
-	JSON     accessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                        `json:"user"`
+	JSON  accessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthentication]
 type accessApplicationGetResponseBrowserVNCApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -11097,8 +12718,8 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationGetResponseAppLauncherApplicationFooterLink `json:"footer_links"`
@@ -11268,12 +12889,8 @@ func (r accessApplicationGetResponseAppLauncherApplicationSCIMConfigJSON) RawJSO
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -11284,28 +12901,32 @@ type AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthentication 
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                         `json:"token_url"`
-	JSON     accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                         `json:"user"`
+	JSON  accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthentication]
 type accessApplicationGetResponseAppLauncherApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -11399,8 +13020,8 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationFooterLink `json:"footer_links"`
@@ -11571,12 +13192,8 @@ func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -11587,28 +13204,32 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfi
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                                         `json:"token_url"`
-	JSON     accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                                         `json:"user"`
+	JSON  accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication]
 type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -11702,8 +13323,8 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	// The background color of the App Launcher page.
 	BgColor   string    `json:"bg_color"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain string `json:"domain"`
 	// The links in the App Launcher footer.
 	FooterLinks []AccessApplicationGetResponseBrowserIsolationPermissionsApplicationFooterLink `json:"footer_links"`
@@ -11874,12 +13495,8 @@ func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMCo
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -11890,28 +13507,32 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfi
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                                         `json:"token_url"`
-	JSON     accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                                         `json:"user"`
+	JSON  accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthentication]
 type accessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -12090,12 +13711,8 @@ func (r accessApplicationGetResponseBookmarkApplicationSCIMConfigJSON) RawJSON()
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password string `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User string `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token string `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -12106,28 +13723,32 @@ type AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication str
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
 	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
 	// This field can have the runtime type of [[]string].
-	Scopes interface{} `json:"scopes,required"`
+	Scopes interface{} `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
-	TokenURL string                                                                      `json:"token_url"`
-	JSON     accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationJSON `json:"-"`
-	union    AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                      `json:"user"`
+	JSON  accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationUnion
 }
 
 // accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationJSON
 // contains the JSON metadata for the struct
 // [AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthentication]
 type accessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationJSON struct {
-	Password         apijson.Field
 	Scheme           apijson.Field
-	User             apijson.Field
 	Token            apijson.Field
 	AuthorizationURL apijson.Field
 	ClientID         apijson.Field
 	ClientSecret     apijson.Field
+	Password         apijson.Field
 	Scopes           apijson.Field
 	TokenURL         apijson.Field
+	User             apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -12203,6 +13824,304 @@ func (r AccessApplicationGetResponseBookmarkApplicationSCIMConfigAuthenticationS
 	return false
 }
 
+type AccessApplicationGetResponseInfrastructureApplication struct {
+	TargetCriteria []AccessApplicationGetResponseInfrastructureApplicationTargetCriterion `json:"target_criteria,required"`
+	// The application type.
+	Type ApplicationType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// Audience tag.
+	AUD       string    `json:"aud"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The name of the application.
+	Name     string                                                        `json:"name"`
+	Policies []AccessApplicationGetResponseInfrastructureApplicationPolicy `json:"policies"`
+	// Configuration for provisioning to this application via SCIM. This is currently
+	// in closed beta.
+	SCIMConfig AccessApplicationGetResponseInfrastructureApplicationSCIMConfig `json:"scim_config"`
+	UpdatedAt  time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON       accessApplicationGetResponseInfrastructureApplicationJSON       `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationJSON contains the JSON
+// metadata for the struct [AccessApplicationGetResponseInfrastructureApplication]
+type accessApplicationGetResponseInfrastructureApplicationJSON struct {
+	TargetCriteria apijson.Field
+	Type           apijson.Field
+	ID             apijson.Field
+	AUD            apijson.Field
+	CreatedAt      apijson.Field
+	Name           apijson.Field
+	Policies       apijson.Field
+	SCIMConfig     apijson.Field
+	UpdatedAt      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplication) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessApplicationGetResponseInfrastructureApplication) implementsZeroTrustAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port int64 `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes map[string][]string                                                      `json:"target_attributes,required"`
+	JSON             accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationTargetCriterion]
+type accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON struct {
+	Port             apijson.Field
+	Protocol         apijson.Field
+	TargetAttributes apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationTargetCriterion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationTargetCriterionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The communication protocol your application secures.
+type AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
+	// The UUID of the policy
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision Decision `json:"decision"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessRule `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessRule `json:"include"`
+	// The name of the Access policy.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessRule                                                    `json:"require"`
+	UpdatedAt time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON      accessApplicationGetResponseInfrastructureApplicationPolicyJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationPolicy]
+type accessApplicationGetResponseInfrastructureApplicationPolicyJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Decision    apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// Configuration for provisioning to this application via SCIM. This is currently
+// in closed beta.
+type AccessApplicationGetResponseInfrastructureApplicationSCIMConfig struct {
+	// The UID of the IdP to use as the source for SCIM resources to provision to this
+	// application.
+	IdPUID string `json:"idp_uid,required"`
+	// The base URI for the application's SCIM-compatible API.
+	RemoteURI string `json:"remote_uri,required"`
+	// Attributes for configuring HTTP Basic authentication scheme for SCIM
+	// provisioning to an application.
+	Authentication AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication `json:"authentication"`
+	// If false, propagates DELETE requests to the target application for SCIM
+	// resources. If true, sets 'active' to false on the SCIM resource. Note: Some
+	// targets do not support DELETE operations.
+	DeactivateOnDelete bool `json:"deactivate_on_delete"`
+	// Whether SCIM provisioning is turned on for this application.
+	Enabled bool `json:"enabled"`
+	// A list of mappings to apply to SCIM resources before provisioning them in this
+	// application. These can transform or filter the resources to be provisioned.
+	Mappings []SCIMConfigMapping                                                 `json:"mappings"`
+	JSON     accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfig]
+type accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON struct {
+	IdPUID             apijson.Field
+	RemoteURI          apijson.Field
+	Authentication     apijson.Field
+	DeactivateOnDelete apijson.Field
+	Enabled            apijson.Field
+	Mappings           apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigJSON) RawJSON() string {
+	return r.raw
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication struct {
+	// The authentication scheme to use when making SCIM requests to this application.
+	Scheme AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme `json:"scheme,required"`
+	// Token used to authenticate with the remote SCIM service.
+	Token string `json:"token"`
+	// URL used to generate the auth code used during token generation.
+	AuthorizationURL string `json:"authorization_url"`
+	// Client ID used to authenticate when generating a token for authenticating with
+	// the remote SCIM service.
+	ClientID string `json:"client_id"`
+	// Secret used to authenticate when generating a token for authenticating with the
+	// remove SCIM service.
+	ClientSecret string `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password string `json:"password"`
+	// This field can have the runtime type of [[]string].
+	Scopes interface{} `json:"scopes"`
+	// URL used to generate the token used to authenticate with the remote SCIM
+	// service.
+	TokenURL string `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User  string                                                                            `json:"user"`
+	JSON  accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON `json:"-"`
+	union AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion
+}
+
+// accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication]
+type accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON struct {
+	Scheme           apijson.Field
+	Token            apijson.Field
+	AuthorizationURL apijson.Field
+	ClientID         apijson.Field
+	ClientSecret     apijson.Field
+	Password         apijson.Field
+	Scopes           apijson.Field
+	TokenURL         apijson.Field
+	User             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication) UnmarshalJSON(data []byte) (err error) {
+	*r = AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a
+// [AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion]
+// interface which you can cast to the specific types for more type safety.
+//
+// Possible runtime types of the union are
+// [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken],
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication) AsUnion() AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion {
+	return r.union
+}
+
+// Attributes for configuring HTTP Basic authentication scheme for SCIM
+// provisioning to an application.
+//
+// Union satisfied by [zero_trust.SCIMConfigAuthenticationHTTPBasic],
+// [zero_trust.SCIMConfigAuthenticationOAuthBearerToken] or
+// [zero_trust.SCIMConfigAuthenticationOauth2].
+type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion interface {
+	implementsZeroTrustAccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthentication()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationHTTPBasic{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOAuthBearerToken{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SCIMConfigAuthenticationOauth2{}),
+		},
+	)
+}
+
+// The authentication scheme to use when making SCIM requests to this application.
+type AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme string
+
+const (
+	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic        AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "httpbasic"
+	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauthbearertoken"
+	AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2           AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme = "oauth2"
+)
+
+func (r AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationScheme) IsKnown() bool {
+	switch r {
+	case AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeHttpbasic, AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauthbearertoken, AccessApplicationGetResponseInfrastructureApplicationSCIMConfigAuthenticationSchemeOauth2:
+		return true
+	}
+	return false
+}
+
 type AccessApplicationRevokeTokensResponse = interface{}
 
 type AccessApplicationNewParams struct {
@@ -12223,13 +14142,17 @@ type AccessApplicationNewParamsBody struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool]        `json:"allow_authenticate_via_warp"`
-	AllowedIdPs              param.Field[interface{}] `json:"allowed_idps,required"`
+	AllowedIdPs              param.Field[interface{}] `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
-	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
+	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor     param.Field[string]           `json:"bg_color"`
+	CORSHeaders param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -12239,16 +14162,21 @@ type AccessApplicationNewParamsBody struct {
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL param.Field[string]      `json:"custom_non_identity_deny_url"`
-	CustomPages              param.Field[interface{}] `json:"custom_pages,required"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	CustomPages              param.Field[interface{}] `json:"custom_pages"`
+	Destinations             param.Field[interface{}] `json:"destinations"`
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
-	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
+	EnableBindingCookie param.Field[bool]        `json:"enable_binding_cookie"`
+	FooterLinks         param.Field[interface{}] `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// Enables the HttpOnly cookie attribute, which increases security against XSS
 	// attacks.
-	HTTPOnlyCookieAttribute param.Field[bool] `json:"http_only_cookie_attribute"`
+	HTTPOnlyCookieAttribute param.Field[bool]        `json:"http_only_cookie_attribute"`
+	LandingPageDesign       param.Field[interface{}] `json:"landing_page_design"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
@@ -12258,35 +14186,28 @@ type AccessApplicationNewParamsBody struct {
 	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
+	PathCookieAttribute param.Field[bool]        `json:"path_cookie_attribute"`
+	Policies            param.Field[interface{}] `json:"policies"`
+	SaaSApp             param.Field[interface{}] `json:"saas_app"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string]      `json:"same_site_cookie_attribute"`
-	SelfHostedDomains       param.Field[interface{}] `json:"self_hosted_domains,required"`
+	SCIMConfig              param.Field[interface{}] `json:"scim_config"`
+	SelfHostedDomains       param.Field[interface{}] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// Enables automatic authentication through cloudflared.
-	SkipInterstitial param.Field[bool]        `json:"skip_interstitial"`
-	Tags             param.Field[interface{}] `json:"tags,required"`
-	// The application type.
-	Type       param.Field[string]      `json:"type"`
-	Policies   param.Field[interface{}] `json:"policies,required"`
-	SCIMConfig param.Field[interface{}] `json:"scim_config,required"`
-	SaaSApp    param.Field[interface{}] `json:"saas_app,required"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
-	// The background color of the App Launcher page.
-	BgColor     param.Field[string]      `json:"bg_color"`
-	FooterLinks param.Field[interface{}] `json:"footer_links,required"`
-	// The background color of the App Launcher header.
-	HeaderBgColor     param.Field[string]      `json:"header_bg_color"`
-	LandingPageDesign param.Field[interface{}] `json:"landing_page_design,required"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
+	// Enables automatic authentication through cloudflared.
+	SkipInterstitial param.Field[bool]        `json:"skip_interstitial"`
+	Tags             param.Field[interface{}] `json:"tags"`
+	TargetCriteria   param.Field[interface{}] `json:"target_criteria"`
+	// The application type.
+	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessApplicationNewParamsBody) MarshalJSON() (data []byte, err error) {
@@ -12303,14 +14224,15 @@ func (r AccessApplicationNewParamsBody) implementsZeroTrustAccessApplicationNewP
 // [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication],
 // [zero_trust.AccessApplicationNewParamsBodyBookmarkApplication],
+// [zero_trust.AccessApplicationNewParamsBodyInfrastructureApplication],
 // [AccessApplicationNewParamsBody].
 type AccessApplicationNewParamsBodyUnion interface {
 	implementsZeroTrustAccessApplicationNewParamsBodyUnion()
 }
 
 type AccessApplicationNewParamsBodySelfHostedApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -12339,6 +14261,10 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -12355,7 +14281,7 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
@@ -12365,7 +14291,9 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig] `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -12387,32 +14315,55 @@ func (r AccessApplicationNewParamsBodySelfHostedApplication) MarshalJSON() (data
 func (r AccessApplicationNewParamsBodySelfHostedApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
 }
 
+type AccessApplicationNewParamsBodySelfHostedApplicationDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType string
+
+const (
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic  AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "public"
+	AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationNewParamsBodySelfHostedApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
+}
+
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -12454,13 +14405,6 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPoli
 }
 
 type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -12468,9 +14412,6 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -12482,9 +14423,6 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -12527,12 +14465,8 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfig) MarshalJS
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -12542,11 +14476,15 @@ type AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthentication
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationNewParamsBodySelfHostedApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -12599,7 +14537,7 @@ type AccessApplicationNewParamsBodySaaSApplication struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
@@ -12624,29 +14562,22 @@ func (r AccessApplicationNewParamsBodySaaSApplication) implementsZeroTrustAccess
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -12688,13 +14619,6 @@ func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink
 }
 
 type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -12702,9 +14626,6 @@ type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -12716,9 +14637,6 @@ type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -12733,16 +14651,33 @@ func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObject) ImplementsZ
 }
 
 type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
+	// If client secret should be required on the token endpoint when
+	// authorization_code_with_pkce grant is used.
+	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
+	// The URL where this applications tile redirects users
+	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
 	AuthType param.Field[AccessApplicationNewParamsBodySaaSApplicationSaaSAppAuthType] `json:"auth_type"`
+	// The application client id
+	ClientID param.Field[string] `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret param.Field[string] `json:"client_secret"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL param.Field[string]      `json:"consumer_service_url"`
-	CustomAttributes   param.Field[interface{}] `json:"custom_attributes,required"`
+	CustomAttributes   param.Field[interface{}] `json:"custom_attributes"`
+	CustomClaims       param.Field[interface{}] `json:"custom_claims"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
-	DefaultRelayState param.Field[string] `json:"default_relay_state"`
+	DefaultRelayState param.Field[string]      `json:"default_relay_state"`
+	GrantTypes        param.Field[interface{}] `json:"grant_types"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex         param.Field[string]      `json:"group_filter_regex"`
+	HybridAndImplicitOptions param.Field[interface{}] `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
@@ -12753,37 +14688,20 @@ type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
 	// the `name_id_format` setting.
 	NameIDTransformJsonata param.Field[string] `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
-	PublicKey param.Field[string] `json:"public_key"`
+	PublicKey           param.Field[string]      `json:"public_key"`
+	RedirectURIs        param.Field[interface{}] `json:"redirect_uris"`
+	RefreshTokenOptions param.Field[interface{}] `json:"refresh_token_options"`
 	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
 	// user identities into attribute assertions in the SAML response. The expression
 	// can transform id, email, name, and groups values. It can also transform fields
 	// listed in the saml_attributes or oidc_fields of the identity provider used to
 	// authenticate. The output of this expression must be a JSON object.
-	SAMLAttributeTransformJsonata param.Field[string] `json:"saml_attribute_transform_jsonata"`
+	SAMLAttributeTransformJsonata param.Field[string]      `json:"saml_attribute_transform_jsonata"`
+	Scopes                        param.Field[interface{}] `json:"scopes"`
 	// A globally unique name for an identity or service provider.
 	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
-	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
-	// be greater than or equal to 1m and less than or equal to 24h.
-	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
-	// If client secret should be required on the token endpoint when
-	// authorization_code_with_pkce grant is used.
-	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
-	// The URL where this applications tile redirects users
-	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
-	// The application client id
-	ClientID param.Field[string] `json:"client_id"`
-	// The application client secret, only returned on POST request.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	CustomClaims param.Field[interface{}] `json:"custom_claims,required"`
-	GrantTypes   param.Field[interface{}] `json:"grant_types,required"`
-	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex         param.Field[string]      `json:"group_filter_regex"`
-	HybridAndImplicitOptions param.Field[interface{}] `json:"hybrid_and_implicit_options,required"`
-	RedirectURIs             param.Field[interface{}] `json:"redirect_uris,required"`
-	RefreshTokenOptions      param.Field[interface{}] `json:"refresh_token_options,required"`
-	Scopes                   param.Field[interface{}] `json:"scopes,required"`
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationSaaSApp) MarshalJSON() (data []byte, err error) {
@@ -12845,12 +14763,8 @@ func (r AccessApplicationNewParamsBodySaaSApplicationSCIMConfig) MarshalJSON() (
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -12860,11 +14774,15 @@ type AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthentication struc
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -12903,8 +14821,8 @@ func (r AccessApplicationNewParamsBodySaaSApplicationSCIMConfigAuthenticationSch
 }
 
 type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -12933,6 +14851,10 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -12949,7 +14871,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
@@ -12959,7 +14881,9 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfig] `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -12981,32 +14905,55 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplication) MarshalJSON() (data
 func (r AccessApplicationNewParamsBodyBrowserSSHApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
 }
 
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic  AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
+}
+
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13048,13 +14995,6 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPoli
 }
 
 type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -13062,9 +15002,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -13076,9 +15013,6 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13121,12 +15055,8 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfig) MarshalJS
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -13136,11 +15066,15 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthentication
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -13179,8 +15113,8 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationSCIMConfigAuthenticat
 }
 
 type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -13209,6 +15143,10 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -13225,7 +15163,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
@@ -13235,7 +15173,9 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfig] `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -13257,32 +15197,55 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplication) MarshalJSON() (data
 func (r AccessApplicationNewParamsBodyBrowserVNCApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
 }
 
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestination struct {
+	Type param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType string
+
+const (
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic  AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
+}
+
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13324,13 +15287,6 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPoli
 }
 
 type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -13338,9 +15294,6 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -13352,9 +15305,6 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13397,12 +15347,8 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfig) MarshalJS
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -13412,11 +15358,15 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthentication
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserVNCApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -13473,7 +15423,7 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
@@ -13527,29 +15477,22 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign) M
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13591,13 +15534,6 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPol
 }
 
 type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -13605,9 +15541,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -13619,9 +15552,6 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13664,12 +15594,8 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfig) MarshalJ
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -13679,11 +15605,15 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthenticatio
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -13740,7 +15670,7 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -13794,29 +15724,22 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLand
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13858,13 +15781,6 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 }
 
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -13872,9 +15788,6 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicie
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -13886,9 +15799,6 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicie
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -13931,12 +15841,8 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIM
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -13946,11 +15852,15 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMCon
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -14007,7 +15917,7 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -14061,29 +15971,22 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLand
 // A JSON that links a reusable policy to an application.
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14125,13 +16028,6 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoli
 }
 
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -14139,9 +16035,6 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicie
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -14153,9 +16046,6 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicie
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14198,12 +16088,8 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIM
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -14213,11 +16099,15 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMCon
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -14310,12 +16200,8 @@ func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfig) MarshalJSON
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -14325,11 +16211,15 @@ type AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthentication s
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -14365,6 +16255,73 @@ func (r AccessApplicationNewParamsBodyBookmarkApplicationSCIMConfigAuthenticatio
 		return true
 	}
 	return false
+}
+
+type AccessApplicationNewParamsBodyInfrastructureApplication struct {
+	TargetCriteria param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria,required"`
+	// The application type.
+	Type param.Field[ApplicationType] `json:"type,required"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application.
+	Policies param.Field[[]AccessApplicationNewParamsBodyInfrastructureApplicationPolicy] `json:"policies"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplication) implementsZeroTrustAccessApplicationNewParamsBodyUnion() {
+}
+
+type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port param.Field[int64] `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes,required"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The communication protocol your application secures.
+type AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationNewParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationNewParamsBodyInfrastructureApplicationPolicy struct {
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision param.Field[Decision] `json:"decision,required"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	// The name of the Access policy.
+	Name param.Field[string] `json:"name,required"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationNewResponseEnvelope struct {
@@ -14428,13 +16385,17 @@ type AccessApplicationUpdateParamsBody struct {
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
 	AllowAuthenticateViaWARP param.Field[bool]        `json:"allow_authenticate_via_warp"`
-	AllowedIdPs              param.Field[interface{}] `json:"allowed_idps,required"`
+	AllowedIdPs              param.Field[interface{}] `json:"allowed_idps"`
+	// The image URL of the logo shown in the App Launcher header.
+	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
 	// Displays the application in the App Launcher.
 	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]             `json:"auto_redirect_to_identity"`
-	CORSHeaders            param.Field[CORSHeadersParam] `json:"cors_headers"`
+	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The background color of the App Launcher page.
+	BgColor     param.Field[string]           `json:"bg_color"`
+	CORSHeaders param.Field[CORSHeadersParam] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
@@ -14444,16 +16405,21 @@ type AccessApplicationUpdateParamsBody struct {
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing non-identity rules.
 	CustomNonIdentityDenyURL param.Field[string]      `json:"custom_non_identity_deny_url"`
-	CustomPages              param.Field[interface{}] `json:"custom_pages,required"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	CustomPages              param.Field[interface{}] `json:"custom_pages"`
+	Destinations             param.Field[interface{}] `json:"destinations"`
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
-	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
+	EnableBindingCookie param.Field[bool]        `json:"enable_binding_cookie"`
+	FooterLinks         param.Field[interface{}] `json:"footer_links"`
+	// The background color of the App Launcher header.
+	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// Enables the HttpOnly cookie attribute, which increases security against XSS
 	// attacks.
-	HTTPOnlyCookieAttribute param.Field[bool] `json:"http_only_cookie_attribute"`
+	HTTPOnlyCookieAttribute param.Field[bool]        `json:"http_only_cookie_attribute"`
+	LandingPageDesign       param.Field[interface{}] `json:"landing_page_design"`
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
@@ -14463,35 +16429,28 @@ type AccessApplicationUpdateParamsBody struct {
 	OptionsPreflightBypass param.Field[bool] `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
+	PathCookieAttribute param.Field[bool]        `json:"path_cookie_attribute"`
+	Policies            param.Field[interface{}] `json:"policies"`
+	SaaSApp             param.Field[interface{}] `json:"saas_app"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string]      `json:"same_site_cookie_attribute"`
-	SelfHostedDomains       param.Field[interface{}] `json:"self_hosted_domains,required"`
+	SCIMConfig              param.Field[interface{}] `json:"scim_config"`
+	SelfHostedDomains       param.Field[interface{}] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// Enables automatic authentication through cloudflared.
-	SkipInterstitial param.Field[bool]        `json:"skip_interstitial"`
-	Tags             param.Field[interface{}] `json:"tags,required"`
-	// The application type.
-	Type       param.Field[string]      `json:"type"`
-	Policies   param.Field[interface{}] `json:"policies,required"`
-	SCIMConfig param.Field[interface{}] `json:"scim_config,required"`
-	SaaSApp    param.Field[interface{}] `json:"saas_app,required"`
-	// The image URL of the logo shown in the App Launcher header.
-	AppLauncherLogoURL param.Field[string] `json:"app_launcher_logo_url"`
-	// The background color of the App Launcher page.
-	BgColor     param.Field[string]      `json:"bg_color"`
-	FooterLinks param.Field[interface{}] `json:"footer_links,required"`
-	// The background color of the App Launcher header.
-	HeaderBgColor     param.Field[string]      `json:"header_bg_color"`
-	LandingPageDesign param.Field[interface{}] `json:"landing_page_design,required"`
 	// Determines when to skip the App Launcher landing page.
 	SkipAppLauncherLoginPage param.Field[bool] `json:"skip_app_launcher_login_page"`
+	// Enables automatic authentication through cloudflared.
+	SkipInterstitial param.Field[bool]        `json:"skip_interstitial"`
+	Tags             param.Field[interface{}] `json:"tags"`
+	TargetCriteria   param.Field[interface{}] `json:"target_criteria"`
+	// The application type.
+	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessApplicationUpdateParamsBody) MarshalJSON() (data []byte, err error) {
@@ -14510,14 +16469,15 @@ func (r AccessApplicationUpdateParamsBody) implementsZeroTrustAccessApplicationU
 // [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication],
 // [zero_trust.AccessApplicationUpdateParamsBodyBookmarkApplication],
+// [zero_trust.AccessApplicationUpdateParamsBodyInfrastructureApplication],
 // [AccessApplicationUpdateParamsBody].
 type AccessApplicationUpdateParamsBodyUnion interface {
 	implementsZeroTrustAccessApplicationUpdateParamsBodyUnion()
 }
 
 type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -14546,6 +16506,10 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -14562,7 +16526,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
@@ -14572,7 +16536,9 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig] `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -14594,32 +16560,55 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplication) MarshalJSON() (d
 func (r AccessApplicationUpdateParamsBodySelfHostedApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
 }
 
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType string
+
+const (
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic  AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "public"
+	AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
+}
+
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14661,13 +16650,6 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppP
 }
 
 type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -14675,9 +16657,6 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -14689,9 +16668,6 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14734,12 +16710,8 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfig) Marsha
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -14749,11 +16721,15 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthenticat
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationUpdateParamsBodySelfHostedApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -14806,7 +16782,7 @@ type AccessApplicationUpdateParamsBodySaaSApplication struct {
 	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
 	Name param.Field[string] `json:"name"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
@@ -14831,29 +16807,22 @@ func (r AccessApplicationUpdateParamsBodySaaSApplication) implementsZeroTrustAcc
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14895,13 +16864,6 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyL
 }
 
 type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -14909,9 +16871,6 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -14923,9 +16882,6 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -14940,16 +16896,33 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject) Implemen
 }
 
 type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
+	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
+	// be greater than or equal to 1m and less than or equal to 24h.
+	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
+	// If client secret should be required on the token endpoint when
+	// authorization_code_with_pkce grant is used.
+	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
+	// The URL where this applications tile redirects users
+	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
 	// Optional identifier indicating the authentication protocol used for the saas
 	// app. Required for OIDC. Default if unset is "saml"
 	AuthType param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppAuthType] `json:"auth_type"`
+	// The application client id
+	ClientID param.Field[string] `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret param.Field[string] `json:"client_secret"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
 	ConsumerServiceURL param.Field[string]      `json:"consumer_service_url"`
-	CustomAttributes   param.Field[interface{}] `json:"custom_attributes,required"`
+	CustomAttributes   param.Field[interface{}] `json:"custom_attributes"`
+	CustomClaims       param.Field[interface{}] `json:"custom_claims"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
-	DefaultRelayState param.Field[string] `json:"default_relay_state"`
+	DefaultRelayState param.Field[string]      `json:"default_relay_state"`
+	GrantTypes        param.Field[interface{}] `json:"grant_types"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex         param.Field[string]      `json:"group_filter_regex"`
+	HybridAndImplicitOptions param.Field[interface{}] `json:"hybrid_and_implicit_options"`
 	// The unique identifier for your SaaS application.
 	IdPEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
@@ -14960,37 +16933,20 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
 	// the `name_id_format` setting.
 	NameIDTransformJsonata param.Field[string] `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
-	PublicKey param.Field[string] `json:"public_key"`
+	PublicKey           param.Field[string]      `json:"public_key"`
+	RedirectURIs        param.Field[interface{}] `json:"redirect_uris"`
+	RefreshTokenOptions param.Field[interface{}] `json:"refresh_token_options"`
 	// A [JSONata] (https://jsonata.org/) expression that transforms an application's
 	// user identities into attribute assertions in the SAML response. The expression
 	// can transform id, email, name, and groups values. It can also transform fields
 	// listed in the saml_attributes or oidc_fields of the identity provider used to
 	// authenticate. The output of this expression must be a JSON object.
-	SAMLAttributeTransformJsonata param.Field[string] `json:"saml_attribute_transform_jsonata"`
+	SAMLAttributeTransformJsonata param.Field[string]      `json:"saml_attribute_transform_jsonata"`
+	Scopes                        param.Field[interface{}] `json:"scopes"`
 	// A globally unique name for an identity or service provider.
 	SPEntityID param.Field[string] `json:"sp_entity_id"`
 	// The endpoint where your SaaS application will send login requests.
 	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
-	// The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must
-	// be greater than or equal to 1m and less than or equal to 24h.
-	AccessTokenLifetime param.Field[string] `json:"access_token_lifetime"`
-	// If client secret should be required on the token endpoint when
-	// authorization_code_with_pkce grant is used.
-	AllowPKCEWithoutClientSecret param.Field[bool] `json:"allow_pkce_without_client_secret"`
-	// The URL where this applications tile redirects users
-	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
-	// The application client id
-	ClientID param.Field[string] `json:"client_id"`
-	// The application client secret, only returned on POST request.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	CustomClaims param.Field[interface{}] `json:"custom_claims,required"`
-	GrantTypes   param.Field[interface{}] `json:"grant_types,required"`
-	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex         param.Field[string]      `json:"group_filter_regex"`
-	HybridAndImplicitOptions param.Field[interface{}] `json:"hybrid_and_implicit_options,required"`
-	RedirectURIs             param.Field[interface{}] `json:"redirect_uris,required"`
-	RefreshTokenOptions      param.Field[interface{}] `json:"refresh_token_options,required"`
-	Scopes                   param.Field[interface{}] `json:"scopes,required"`
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp) MarshalJSON() (data []byte, err error) {
@@ -15052,12 +17008,8 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfig) MarshalJSON(
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -15067,11 +17019,15 @@ type AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthentication st
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -15110,8 +17066,8 @@ func (r AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfigAuthentication
 }
 
 type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -15140,6 +17096,10 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -15156,7 +17116,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
@@ -15166,7 +17126,9 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfig] `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -15188,32 +17150,55 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) MarshalJSON() (d
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
 }
 
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic  AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "public"
+	AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
+}
+
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15255,13 +17240,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppP
 }
 
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -15269,9 +17247,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -15283,9 +17258,6 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15328,12 +17300,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfig) Marsha
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -15343,11 +17311,15 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenticat
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -15386,8 +17358,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationSCIMConfigAuthenti
 }
 
 type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
+	// The primary hostname and path secured by Access. This domain will be displayed
+	// if the app is visible in the App Launcher.
 	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
 	Type param.Field[string] `json:"type,required"`
@@ -15416,6 +17388,10 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// List of destinations secured by Access. This supersedes `self_hosted_domains` to
+	// allow for more flexibility in defining different types of domains. If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
+	Destinations param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination] `json:"destinations"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -15432,7 +17408,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
@@ -15442,7 +17418,9 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfig] `json:"scim_config"`
-	// List of domains that Access will secure.
+	// List of public domains that Access will secure. This field is deprecated in
+	// favor of `destinations` and will be supported until **November 21, 2025.** If
+	// `destinations` are provided, then `self_hosted_domains` will be ignored.
 	SelfHostedDomains param.Field[[]SelfHostedDomainsParam] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
 	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
@@ -15464,32 +17442,55 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) MarshalJSON() (d
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
 }
 
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination struct {
+	Type param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType] `json:"type"`
+	// The URI of the destination. Public destinations can include a domain and path
+	// with
+	// [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).
+	// Private destinations are an early access feature and gated behind a feature
+	// flag. Private destinations support private IPv4, IPv6, and Server Name
+	// Indications (SNI) with optional port ranges.
+	URI param.Field[string] `json:"uri"`
+}
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestination) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType string
+
+const (
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic  AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "public"
+	AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType = "private"
+)
+
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePublic, AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsTypePrivate:
+		return true
+	}
+	return false
+}
+
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15531,13 +17532,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppP
 }
 
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -15545,9 +17539,6 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -15559,9 +17550,6 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15604,12 +17592,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfig) Marsha
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -15619,11 +17603,15 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthenticat
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -15680,7 +17668,7 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
@@ -15734,29 +17722,22 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15798,13 +17779,6 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessApp
 }
 
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -15812,9 +17786,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struc
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -15826,9 +17797,6 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struc
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -15871,12 +17839,8 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfig) Marsh
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -15886,11 +17850,15 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthentica
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -15947,7 +17915,7 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -16001,29 +17969,22 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationL
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16065,13 +18026,6 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationP
 }
 
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -16079,9 +18033,6 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -16093,9 +18044,6 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16138,12 +18086,8 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationS
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -16153,11 +18097,15 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIM
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -16214,7 +18162,7 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	HeaderBgColor param.Field[string] `json:"header_bg_color"`
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationLandingPageDesign] `json:"landing_page_design"`
-	// The policies that will apply to the application, in ascending order of
+	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
 	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
@@ -16268,29 +18216,22 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationL
 // A JSON that links a reusable policy to an application.
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
 	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence     param.Field[int64]       `json:"precedence"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups,required"`
+	ID             param.Field[string]      `json:"id"`
+	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision]    `json:"decision"`
-	Exclude  param.Field[interface{}] `json:"exclude,required"`
-	Include  param.Field[interface{}] `json:"include,required"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
 	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name"`
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence param.Field[int64] `json:"precedence"`
 	// A custom message that will appear on the purpose justification screen.
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool]        `json:"purpose_justification_required"`
-	Require                      param.Field[interface{}] `json:"require,required"`
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16332,13 +18273,6 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationP
 }
 
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
-	// The action Access will take if a user matches this policy.
-	Decision param.Field[Decision] `json:"decision,required"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
-	// The name of the Access policy.
-	Name param.Field[string] `json:"name,required"`
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// Administrators who can approve a temporary authentication request.
@@ -16346,9 +18280,6 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	// Requires the user to request access from an administrator at the start of each
 	// session.
 	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
 	// Require this application to be served in an isolated browser for users matching
 	// this policy. 'Client Web Isolation' must be on for the account in order to use
 	// this feature.
@@ -16360,9 +18291,6 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
 	// Require users to enter a justification when they log in to the application.
 	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// Rules evaluated with an AND logical operator. To match the policy, a user must
-	// meet all of the Require rules.
-	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
 	// The amount of time that tokens issued for the application will be valid. Must be
 	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
 	// m, h.
@@ -16405,12 +18333,8 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationS
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -16420,11 +18344,15 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIM
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -16517,12 +18445,8 @@ func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfig) MarshalJ
 // Attributes for configuring HTTP Basic authentication scheme for SCIM
 // provisioning to an application.
 type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthentication struct {
-	// Password used to authenticate with the remote SCIM service.
-	Password param.Field[string] `json:"password"`
 	// The authentication scheme to use when making SCIM requests to this application.
 	Scheme param.Field[AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticationScheme] `json:"scheme,required"`
-	// User name used to authenticate with the remote SCIM service.
-	User param.Field[string] `json:"user"`
 	// Token used to authenticate with the remote SCIM service.
 	Token param.Field[string] `json:"token"`
 	// URL used to generate the auth code used during token generation.
@@ -16532,11 +18456,15 @@ type AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthenticatio
 	ClientID param.Field[string] `json:"client_id"`
 	// Secret used to authenticate when generating a token for authenticating with the
 	// remove SCIM service.
-	ClientSecret param.Field[string]      `json:"client_secret"`
-	Scopes       param.Field[interface{}] `json:"scopes,required"`
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Password used to authenticate with the remote SCIM service.
+	Password param.Field[string]      `json:"password"`
+	Scopes   param.Field[interface{}] `json:"scopes"`
 	// URL used to generate the token used to authenticate with the remote SCIM
 	// service.
 	TokenURL param.Field[string] `json:"token_url"`
+	// User name used to authenticate with the remote SCIM service.
+	User param.Field[string] `json:"user"`
 }
 
 func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthentication) MarshalJSON() (data []byte, err error) {
@@ -16572,6 +18500,73 @@ func (r AccessApplicationUpdateParamsBodyBookmarkApplicationSCIMConfigAuthentica
 		return true
 	}
 	return false
+}
+
+type AccessApplicationUpdateParamsBodyInfrastructureApplication struct {
+	TargetCriteria param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion] `json:"target_criteria,required"`
+	// The application type.
+	Type param.Field[ApplicationType] `json:"type,required"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// The policies that Access applies to the application.
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy] `json:"policies"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplication) implementsZeroTrustAccessApplicationUpdateParamsBodyUnion() {
+}
+
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion struct {
+	// The port that the targets use for the chosen communication protocol. A port
+	// cannot be assigned to multiple protocols.
+	Port param.Field[int64] `json:"port,required"`
+	// The communication protocol your application secures.
+	Protocol param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol] `json:"protocol,required"`
+	// Contains a map of target attribute keys to target attribute values.
+	TargetAttributes param.Field[map[string][]string] `json:"target_attributes,required"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriterion) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The communication protocol your application secures.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol string
+
+const (
+	AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol = "ssh"
+)
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocol) IsKnown() bool {
+	switch r {
+	case AccessApplicationUpdateParamsBodyInfrastructureApplicationTargetCriteriaProtocolSSH:
+		return true
+	}
+	return false
+}
+
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy struct {
+	// The action Access will take if a user matches this policy. Infrastructure
+	// application policies can only use the Allow action.
+	Decision param.Field[Decision] `json:"decision,required"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
+	// The name of the Access policy.
+	Name param.Field[string] `json:"name,required"`
+	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
+	// Rules evaluated with an AND logical operator. To match the policy, a user must
+	// meet all of the Require rules.
+	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type AccessApplicationUpdateResponseEnvelope struct {
@@ -16622,6 +18617,23 @@ type AccessApplicationListParams struct {
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
+	// The aud of the app.
+	AUD param.Field[string] `query:"aud"`
+	// The domain of the app.
+	Domain param.Field[string] `query:"domain"`
+	// The name of the app.
+	Name param.Field[string] `query:"name"`
+	// Search for apps by other listed query parameters.
+	Search param.Field[string] `query:"search"`
+}
+
+// URLQuery serializes [AccessApplicationListParams]'s query parameters as
+// `url.Values`.
+func (r AccessApplicationListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
+		NestedFormat: apiquery.NestedQueryFormatDots,
+	})
 }
 
 type AccessApplicationDeleteParams struct {
