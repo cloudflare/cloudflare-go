@@ -3,7 +3,7 @@
 package workers
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // AssetService contains methods and other services that help with interacting with
