@@ -1557,9 +1557,9 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall#DeletedFilter">DeletedFilter</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall#FirewallRule">FirewallRule</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall#Product">Product</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall">firewall</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/firewall#DeletedFilter">DeletedFilter</a>
 
 Methods:
 
