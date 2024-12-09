@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare
+package content_scanning
 
 import (
 	"context"
@@ -23,8 +23,8 @@ import (
 // the [NewContentScanningService] method instead.
 type ContentScanningService struct {
 	Options  []option.RequestOption
-	Payloads *ContentScanningPayloadService
-	Settings *ContentScanningSettingService
+	Payloads *PayloadService
+	Settings *SettingService
 }
 
 // NewContentScanningService generates a new service that applies the given options
@@ -33,8 +33,8 @@ type ContentScanningService struct {
 func NewContentScanningService(opts ...option.RequestOption) (r *ContentScanningService) {
 	r = &ContentScanningService{}
 	r.Options = opts
-	r.Payloads = NewContentScanningPayloadService(opts...)
-	r.Settings = NewContentScanningSettingService(opts...)
+	r.Payloads = NewPayloadService(opts...)
+	r.Settings = NewSettingService(opts...)
 	return
 }
 

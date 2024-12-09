@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare_test
+package leaked_credential_checks_test
 
 import (
 	"context"
@@ -10,10 +10,11 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v3/leaked_credential_checks"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestContentScanningDisable(t *testing.T) {
+func TestLeakedCredentialCheckNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,8 +27,9 @@ func TestContentScanningDisable(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ContentScanning.Disable(context.TODO(), cloudflare.ContentScanningDisableParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	_, err := client.LeakedCredentialChecks.New(context.TODO(), leaked_credential_checks.LeakedCredentialCheckNewParams{
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Enabled: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -38,7 +40,7 @@ func TestContentScanningDisable(t *testing.T) {
 	}
 }
 
-func TestContentScanningEnable(t *testing.T) {
+func TestLeakedCredentialCheckGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -51,7 +53,7 @@ func TestContentScanningEnable(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ContentScanning.Enable(context.TODO(), cloudflare.ContentScanningEnableParams{
+	_, err := client.LeakedCredentialChecks.Get(context.TODO(), leaked_credential_checks.LeakedCredentialCheckGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
