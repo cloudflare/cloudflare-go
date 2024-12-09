@@ -181,6 +181,7 @@ type Client struct {
 	Workflows                   *workflows.WorkflowService
 	ResourceSharing             *resource_sharing.ResourceSharingService
 	LeakedCredentialChecks      *LeakedCredentialCheckService
+	ContentScanning             *ContentScanningService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -289,6 +290,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Workflows = workflows.NewWorkflowService(opts...)
 	r.ResourceSharing = resource_sharing.NewResourceSharingService(opts...)
 	r.LeakedCredentialChecks = NewLeakedCredentialCheckService(opts...)
+	r.ContentScanning = NewContentScanningService(opts...)
 
 	return
 }
