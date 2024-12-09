@@ -5165,6 +5165,34 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#NetworkPathResponse">NetworkPathResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#Percentiles">Percentiles</a>
 
+### Commands
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandNewResponse">DEXCommandNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandListResponse">DEXCommandListResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/commands">client.ZeroTrust.DEX.Commands.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandNewParams">DEXCommandNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandNewResponse">DEXCommandNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/commands">client.ZeroTrust.DEX.Commands.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandListParams">DEXCommandListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/packages/pagination">pagination</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/packages/pagination#V4PagePagination">V4PagePagination</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandListResponse">DEXCommandListResponse</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+#### Downloads
+
+Methods:
+
+- <code title="get /accounts/{account_id}/commands/{command_id}/downloads/{filename}">client.ZeroTrust.DEX.Commands.Downloads.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandDownloadService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, commandID <a href="https://pkg.go.dev/builtin#string">string</a>, filename <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandDownloadGetParams">DEXCommandDownloadGetParams</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+#### Quota
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandQuotaGetResponse">DEXCommandQuotaGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/commands/quota">client.ZeroTrust.DEX.Commands.Quota.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandQuotaService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandQuotaGetParams">DEXCommandQuotaGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zero_trust#DEXCommandQuotaGetResponse">DEXCommandQuotaGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Colos
 
 Response Types:
