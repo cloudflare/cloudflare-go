@@ -15,6 +15,7 @@ import (
 // the [NewDEXService] method instead.
 type DEXService struct {
 	Options               []option.RequestOption
+	Commands              *DEXCommandService
 	Colos                 *DEXColoService
 	FleetStatus           *DEXFleetStatusService
 	HTTPTests             *DEXHTTPTestService
@@ -29,6 +30,7 @@ type DEXService struct {
 func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
 	r = &DEXService{}
 	r.Options = opts
+	r.Commands = NewDEXCommandService(opts...)
 	r.Colos = NewDEXColoService(opts...)
 	r.FleetStatus = NewDEXFleetStatusService(opts...)
 	r.HTTPTests = NewDEXHTTPTestService(opts...)
