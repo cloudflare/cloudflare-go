@@ -25,6 +25,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/client_certificates"
 	"github.com/cloudflare/cloudflare-go/v3/cloud_connector"
 	"github.com/cloudflare/cloudflare-go/v3/cloudforce_one"
+	"github.com/cloudflare/cloudflare-go/v3/content_scanning"
 	"github.com/cloudflare/cloudflare-go/v3/custom_certificates"
 	"github.com/cloudflare/cloudflare-go/v3/custom_hostnames"
 	"github.com/cloudflare/cloudflare-go/v3/custom_nameservers"
@@ -48,6 +49,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/ips"
 	"github.com/cloudflare/cloudflare-go/v3/keyless_certificates"
 	"github.com/cloudflare/cloudflare-go/v3/kv"
+	"github.com/cloudflare/cloudflare-go/v3/leaked_credential_checks"
 	"github.com/cloudflare/cloudflare-go/v3/load_balancers"
 	"github.com/cloudflare/cloudflare-go/v3/logpush"
 	"github.com/cloudflare/cloudflare-go/v3/logs"
@@ -180,8 +182,8 @@ type Client struct {
 	SecurityTXT                 *security_txt.SecurityTXTService
 	Workflows                   *workflows.WorkflowService
 	ResourceSharing             *resource_sharing.ResourceSharingService
-	LeakedCredentialChecks      *LeakedCredentialCheckService
-	ContentScanning             *ContentScanningService
+	LeakedCredentialChecks      *leaked_credential_checks.LeakedCredentialCheckService
+	ContentScanning             *content_scanning.ContentScanningService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -289,8 +291,8 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.SecurityTXT = security_txt.NewSecurityTXTService(opts...)
 	r.Workflows = workflows.NewWorkflowService(opts...)
 	r.ResourceSharing = resource_sharing.NewResourceSharingService(opts...)
-	r.LeakedCredentialChecks = NewLeakedCredentialCheckService(opts...)
-	r.ContentScanning = NewContentScanningService(opts...)
+	r.LeakedCredentialChecks = leaked_credential_checks.NewLeakedCredentialCheckService(opts...)
+	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
 
 	return
 }

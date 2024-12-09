@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package cloudflare
+package leaked_credential_checks
 
 import (
 	"context"
@@ -23,7 +23,7 @@ import (
 // the [NewLeakedCredentialCheckService] method instead.
 type LeakedCredentialCheckService struct {
 	Options    []option.RequestOption
-	Detections *LeakedCredentialCheckDetectionService
+	Detections *DetectionService
 }
 
 // NewLeakedCredentialCheckService generates a new service that applies the given
@@ -32,7 +32,7 @@ type LeakedCredentialCheckService struct {
 func NewLeakedCredentialCheckService(opts ...option.RequestOption) (r *LeakedCredentialCheckService) {
 	r = &LeakedCredentialCheckService{}
 	r.Options = opts
-	r.Detections = NewLeakedCredentialCheckDetectionService(opts...)
+	r.Detections = NewDetectionService(opts...)
 	return
 }
 
