@@ -272,6 +272,32 @@ func (r *RuleService) Get(ctx context.Context, ruleID string, params RuleGetPara
 	return
 }
 
+type DeletedFilter struct {
+	// The unique identifier of the filter.
+	ID string `json:"id,required"`
+	// When true, indicates that the firewall rule was deleted.
+	Deleted bool              `json:"deleted,required"`
+	JSON    deletedFilterJSON `json:"-"`
+}
+
+// deletedFilterJSON contains the JSON metadata for the struct [DeletedFilter]
+type deletedFilterJSON struct {
+	ID          apijson.Field
+	Deleted     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeletedFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deletedFilterJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DeletedFilter) ImplementsFirewallFirewallRuleFilter() {}
+
 type FirewallRule struct {
 	// The unique identifier of the firewall rule.
 	ID string `json:"id"`
@@ -408,32 +434,6 @@ func (r Product) IsKnown() bool {
 	}
 	return false
 }
-
-type DeletedFilter struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// When true, indicates that the firewall rule was deleted.
-	Deleted bool              `json:"deleted,required"`
-	JSON    deletedFilterJSON `json:"-"`
-}
-
-// deletedFilterJSON contains the JSON metadata for the struct [DeletedFilter]
-type deletedFilterJSON struct {
-	ID          apijson.Field
-	Deleted     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeletedFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r deletedFilterJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r DeletedFilter) ImplementsFirewallFirewallRuleFilter() {}
 
 type RuleNewParams struct {
 	// Identifier
