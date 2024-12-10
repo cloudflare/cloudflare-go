@@ -35,7 +35,7 @@ func NewResponseService(opts ...option.RequestOption) (r *ResponseService) {
 // will be returned.
 func (r *ResponseService) Get(ctx context.Context, accountID string, responseID string, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain or image")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
 	if accountID == "" {
 		err = errors.New("missing required accountId parameter")
 		return
