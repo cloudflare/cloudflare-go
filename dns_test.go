@@ -674,3 +674,99 @@ func TestDeleteDNSRecord(t *testing.T) {
 	err = client.DeleteDNSRecord(context.Background(), ZoneIdentifier(testZoneID), dnsRecordID)
 	require.NoError(t, err)
 }
+
+func TestCreateDNSRecordSettings(t *testing.T) {
+	setup()
+	defer teardown()
+
+	priority := uint16(10)
+	proxied := false
+	FlattenInput := DNSRecord{
+		Type:     "CNAME",
+		Name:     "example.com",
+		Content:  "example1.com",
+		TTL:      120,
+		Priority: &priority,
+		Proxied:  &proxied,
+		Settings: DNSRecordSettings{
+			FlattenCNAME: true,
+		},
+	}
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+
+		var v DNSRecord
+		err := json.NewDecoder(r.Body).Decode(&v)
+		require.NoError(t, err)
+		assert.Equal(t, FlattenInput, v)
+
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprint(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "372e67954025e0ba6aaa6d586b9e0b59",
+				"type": "CNAME",
+				"name": "example.com",
+				"content": "example1.com",
+				"proxiable": true,
+				"proxied": false,
+				"ttl": 120,
+				"created_on": "2014-01-01T05:20:00Z",
+				"modified_on": "2014-01-01T05:20:00Z",
+				"data": {},
+				"meta": {
+					"auto_added": true,
+					"source": "primary"
+				},
+				"settings": {
+					"flatten_cname": true
+				}
+			}
+		}`)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/dns_records", handler)
+
+	createdOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
+	modifiedOn, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00Z")
+	want := DNSRecord{
+		ID:         "372e67954025e0ba6aaa6d586b9e0b59",
+		Type:       "CNAME",
+		Name:       "example.com",
+		Content:    "example1.com",
+		Proxiable:  true,
+		Proxied:    FlattenInput.Proxied,
+		TTL:        FlattenInput.TTL,
+		CreatedOn:  createdOn,
+		ModifiedOn: modifiedOn,
+		Data:       map[string]interface{}{},
+		Meta: map[string]interface{}{
+			"auto_added": true,
+			"source":     "primary",
+		},
+		Settings: DNSRecordSettings{
+			FlattenCNAME: true,
+		},
+	}
+
+	_, err := client.CreateDNSRecord(context.Background(), ZoneIdentifier(""), CreateDNSRecordParams{})
+	assert.ErrorIs(t, err, ErrMissingZoneID)
+
+	actual, err := client.CreateDNSRecord(context.Background(), ZoneIdentifier(testZoneID), CreateDNSRecordParams{
+		Type:     "CNAME",
+		Name:     "example.com",
+		Content:  "example1.com",
+		TTL:      120,
+		Priority: &priority,
+		Proxied:  &proxied,
+		Settings: DNSRecordSettings{
+			FlattenCNAME: true,
+		},
+	})
+	require.NoError(t, err)
+
+	assert.Equal(t, want, actual)
+}
