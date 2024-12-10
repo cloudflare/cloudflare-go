@@ -16,7 +16,6 @@ import (
 )
 
 func TestNetworkRouteNewWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -46,7 +45,6 @@ func TestNetworkRouteNewWithOptionalParams(t *testing.T) {
 }
 
 func TestNetworkRouteListWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -83,7 +81,6 @@ func TestNetworkRouteListWithOptionalParams(t *testing.T) {
 }
 
 func TestNetworkRouteDelete(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -113,7 +110,6 @@ func TestNetworkRouteDelete(t *testing.T) {
 }
 
 func TestNetworkRouteEditWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -147,7 +143,6 @@ func TestNetworkRouteEditWithOptionalParams(t *testing.T) {
 }
 
 func TestNetworkRouteGet(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL

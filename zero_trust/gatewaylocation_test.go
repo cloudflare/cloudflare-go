@@ -15,7 +15,6 @@ import (
 )
 
 func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -72,7 +71,6 @@ func TestGatewayLocationNewWithOptionalParams(t *testing.T) {
 }
 
 func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -133,7 +131,6 @@ func TestGatewayLocationUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestGatewayLocationList(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -159,7 +156,6 @@ func TestGatewayLocationList(t *testing.T) {
 }
 
 func TestGatewayLocationDelete(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -189,7 +185,6 @@ func TestGatewayLocationDelete(t *testing.T) {
 }
 
 func TestGatewayLocationGet(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
