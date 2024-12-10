@@ -15,7 +15,6 @@ import (
 )
 
 func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -69,7 +68,6 @@ func TestDLPProfileCustomNewWithOptionalParams(t *testing.T) {
 }
 
 func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -124,7 +122,6 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 }
 
 func TestDLPProfileCustomDelete(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -154,7 +151,6 @@ func TestDLPProfileCustomDelete(t *testing.T) {
 }
 
 func TestDLPProfileCustomGet(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
