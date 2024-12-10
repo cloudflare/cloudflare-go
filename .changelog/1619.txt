@@ -1,0 +1,3 @@
+```release-note:breaking-change
+zaraz: no longer supported
+```
