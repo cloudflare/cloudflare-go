@@ -6,13 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zones"
 )
 
 type closureTransport struct {
@@ -50,12 +51,12 @@ func TestUserAgentHeader(t *testing.T) {
 }
 
 func TestRetryAfter(t *testing.T) {
-	attempts := 0
+	retryCountHeaders := make([]string, 0)
 	client := cloudflare.NewClient(
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
-					attempts++
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
 					return &http.Response{
 						StatusCode: http.StatusTooManyRequests,
 						Header: http.Header{
@@ -76,8 +77,85 @@ func TestRetryAfter(t *testing.T) {
 	if err == nil || res != nil {
 		t.Error("Expected there to be a cancel error and for the response to be nil")
 	}
-	if want := 3; attempts != want {
-		t.Errorf("Expected %d attempts, got %d", want, attempts)
+
+	attempts := len(retryCountHeaders)
+	if attempts != 3 {
+		t.Errorf("Expected %d attempts, got %d", 3, attempts)
+	}
+
+	expectedRetryCountHeaders := []string{"0", "1", "2"}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
+	}
+}
+
+func TestDeleteRetryCountHeader(t *testing.T) {
+	retryCountHeaders := make([]string, 0)
+	client := cloudflare.NewClient(
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
+					return &http.Response{
+						StatusCode: http.StatusTooManyRequests,
+						Header: http.Header{
+							http.CanonicalHeaderKey("Retry-After"): []string{"0.1"},
+						},
+					}, nil
+				},
+			},
+		}),
+		option.WithHeaderDel("X-Stainless-Retry-Count"),
+	)
+	res, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+	if err == nil || res != nil {
+		t.Error("Expected there to be a cancel error and for the response to be nil")
+	}
+
+	expectedRetryCountHeaders := []string{"", "", ""}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
+	}
+}
+
+func TestOverwriteRetryCountHeader(t *testing.T) {
+	retryCountHeaders := make([]string, 0)
+	client := cloudflare.NewClient(
+		option.WithHTTPClient(&http.Client{
+			Transport: &closureTransport{
+				fn: func(req *http.Request) (*http.Response, error) {
+					retryCountHeaders = append(retryCountHeaders, req.Header.Get("X-Stainless-Retry-Count"))
+					return &http.Response{
+						StatusCode: http.StatusTooManyRequests,
+						Header: http.Header{
+							http.CanonicalHeaderKey("Retry-After"): []string{"0.1"},
+						},
+					}, nil
+				},
+			},
+		}),
+		option.WithHeader("X-Stainless-Retry-Count", "42"),
+	)
+	res, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		}),
+		Name: cloudflare.F("example.com"),
+		Type: cloudflare.F(zones.TypeFull),
+	})
+	if err == nil || res != nil {
+		t.Error("Expected there to be a cancel error and for the response to be nil")
+	}
+
+	expectedRetryCountHeaders := []string{"42", "42", "42"}
+	if !reflect.DeepEqual(retryCountHeaders, expectedRetryCountHeaders) {
+		t.Errorf("Expected %v retry count headers, got %v", expectedRetryCountHeaders, retryCountHeaders)
 	}
 }
 

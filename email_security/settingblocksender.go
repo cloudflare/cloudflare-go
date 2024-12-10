@@ -11,13 +11,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -485,9 +485,37 @@ func (r SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTy
 	return false
 }
 
-type SettingBlockSenderNewParamsBodyArray []SettingBlockSenderNewParamsBodyArray
+type SettingBlockSenderNewParamsBodyArray []SettingBlockSenderNewParamsBodyArrayItem
 
 func (r SettingBlockSenderNewParamsBodyArray) implementsEmailSecuritySettingBlockSenderNewParamsBodyUnion() {
+}
+
+type SettingBlockSenderNewParamsBodyArrayItem struct {
+	IsRegex     param.Field[bool]                                            `json:"is_regex,required"`
+	Pattern     param.Field[string]                                          `json:"pattern,required"`
+	PatternType param.Field[SettingBlockSenderNewParamsBodyArrayPatternType] `json:"pattern_type,required"`
+	Comments    param.Field[string]                                          `json:"comments"`
+}
+
+func (r SettingBlockSenderNewParamsBodyArrayItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SettingBlockSenderNewParamsBodyArrayPatternType string
+
+const (
+	SettingBlockSenderNewParamsBodyArrayPatternTypeEmail   SettingBlockSenderNewParamsBodyArrayPatternType = "EMAIL"
+	SettingBlockSenderNewParamsBodyArrayPatternTypeDomain  SettingBlockSenderNewParamsBodyArrayPatternType = "DOMAIN"
+	SettingBlockSenderNewParamsBodyArrayPatternTypeIP      SettingBlockSenderNewParamsBodyArrayPatternType = "IP"
+	SettingBlockSenderNewParamsBodyArrayPatternTypeUnknown SettingBlockSenderNewParamsBodyArrayPatternType = "UNKNOWN"
+)
+
+func (r SettingBlockSenderNewParamsBodyArrayPatternType) IsKnown() bool {
+	switch r {
+	case SettingBlockSenderNewParamsBodyArrayPatternTypeEmail, SettingBlockSenderNewParamsBodyArrayPatternTypeDomain, SettingBlockSenderNewParamsBodyArrayPatternTypeIP, SettingBlockSenderNewParamsBodyArrayPatternTypeUnknown:
+		return true
+	}
+	return false
 }
 
 type SettingBlockSenderNewResponseEnvelope struct {
@@ -524,10 +552,10 @@ type SettingBlockSenderListParams struct {
 	Direction param.Field[SettingBlockSenderListParamsDirection] `query:"direction"`
 	// The field to sort by.
 	Order param.Field[SettingBlockSenderListParamsOrder] `query:"order"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page        param.Field[int64]                                   `query:"page"`
 	PatternType param.Field[SettingBlockSenderListParamsPatternType] `query:"pattern_type"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Allows searching in multiple properties of a record simultaneously. This
 	// parameter is intended for human users, not automation. Its exact behavior is

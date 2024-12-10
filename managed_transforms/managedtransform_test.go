@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/managed_transforms"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/managed_transforms"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestManagedTransformList(t *testing.T) {
@@ -57,20 +57,8 @@ func TestManagedTransformEdit(t *testing.T) {
 		ManagedRequestHeaders: cloudflare.F([]managed_transforms.RequestModelParam{{
 			ID:      cloudflare.F("add_cf-bot-score_header"),
 			Enabled: cloudflare.F(true),
-		}, {
-			ID:      cloudflare.F("add_cf-bot-score_header"),
-			Enabled: cloudflare.F(true),
-		}, {
-			ID:      cloudflare.F("add_cf-bot-score_header"),
-			Enabled: cloudflare.F(true),
 		}}),
 		ManagedResponseHeaders: cloudflare.F([]managed_transforms.RequestModelParam{{
-			ID:      cloudflare.F("add_cf-bot-score_header"),
-			Enabled: cloudflare.F(true),
-		}, {
-			ID:      cloudflare.F("add_cf-bot-score_header"),
-			Enabled: cloudflare.F(true),
-		}, {
 			ID:      cloudflare.F("add_cf-bot-score_header"),
 			Enabled: cloudflare.F(true),
 		}}),

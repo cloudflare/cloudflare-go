@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/magic_transit"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/magic_transit"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestAppNewWithOptionalParams(t *testing.T) {
@@ -32,8 +32,8 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:      cloudflare.F("Cloudflare Dashboard"),
 		Type:      cloudflare.F("Development"),
-		Hostnames: cloudflare.F([]string{"auth.cloudflare.com", "auth.cloudflare.com", "auth.cloudflare.com"}),
-		IPSubnets: cloudflare.F([]string{"1.1.1.1/32", "1.1.1.1/32", "1.1.1.1/32"}),
+		Hostnames: cloudflare.F([]string{"auth.cloudflare.com"}),
+		IPSubnets: cloudflare.F([]string{"1.1.1.1/32"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -63,8 +63,8 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		magic_transit.AppUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Hostnames: cloudflare.F([]string{"auth.cloudflare.com", "auth.cloudflare.com", "auth.cloudflare.com"}),
-			IPSubnets: cloudflare.F([]string{"1.1.1.1/32", "1.1.1.1/32", "1.1.1.1/32"}),
+			Hostnames: cloudflare.F([]string{"auth.cloudflare.com"}),
+			IPSubnets: cloudflare.F([]string{"1.1.1.1/32"}),
 			Name:      cloudflare.F("Cloudflare Dashboard"),
 			Type:      cloudflare.F("Development"),
 		},

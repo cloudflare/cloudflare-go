@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestHTTPAseTLSVersionGetWithOptionalParams(t *testing.T) {
@@ -32,22 +32,22 @@ func TestHTTPAseTLSVersionGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		radar.HTTPAseTLSVersionGetParamsTLSVersionTlSv1_0,
 		radar.HTTPAseTLSVersionGetParams{
-			ASN:           cloudflare.F([]string{"string", "string", "string"}),
-			BotClass:      cloudflare.F([]radar.HTTPAseTLSVersionGetParamsBotClass{radar.HTTPAseTLSVersionGetParamsBotClassLikelyAutomated, radar.HTTPAseTLSVersionGetParamsBotClassLikelyHuman}),
-			BrowserFamily: cloudflare.F([]radar.HTTPAseTLSVersionGetParamsBrowserFamily{radar.HTTPAseTLSVersionGetParamsBrowserFamilyChrome, radar.HTTPAseTLSVersionGetParamsBrowserFamilyEdge, radar.HTTPAseTLSVersionGetParamsBrowserFamilyFirefox}),
-			Continent:     cloudflare.F([]string{"string", "string", "string"}),
-			DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange:     cloudflare.F([]string{"7d", "7d", "7d"}),
-			DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DeviceType:    cloudflare.F([]radar.HTTPAseTLSVersionGetParamsDeviceType{radar.HTTPAseTLSVersionGetParamsDeviceTypeDesktop, radar.HTTPAseTLSVersionGetParamsDeviceTypeMobile, radar.HTTPAseTLSVersionGetParamsDeviceTypeOther}),
+			ASN:           cloudflare.F([]string{"string"}),
+			BotClass:      cloudflare.F([]radar.HTTPAseTLSVersionGetParamsBotClass{radar.HTTPAseTLSVersionGetParamsBotClassLikelyAutomated}),
+			BrowserFamily: cloudflare.F([]radar.HTTPAseTLSVersionGetParamsBrowserFamily{radar.HTTPAseTLSVersionGetParamsBrowserFamilyChrome}),
+			Continent:     cloudflare.F([]string{"string"}),
+			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+			DateRange:     cloudflare.F([]string{"7d"}),
+			DateStart:     cloudflare.F([]time.Time{time.Now()}),
+			DeviceType:    cloudflare.F([]radar.HTTPAseTLSVersionGetParamsDeviceType{radar.HTTPAseTLSVersionGetParamsDeviceTypeDesktop}),
 			Format:        cloudflare.F(radar.HTTPAseTLSVersionGetParamsFormatJson),
-			HTTPProtocol:  cloudflare.F([]radar.HTTPAseTLSVersionGetParamsHTTPProtocol{radar.HTTPAseTLSVersionGetParamsHTTPProtocolHTTP, radar.HTTPAseTLSVersionGetParamsHTTPProtocolHTTPS}),
-			HTTPVersion:   cloudflare.F([]radar.HTTPAseTLSVersionGetParamsHTTPVersion{radar.HTTPAseTLSVersionGetParamsHTTPVersionHttPv1, radar.HTTPAseTLSVersionGetParamsHTTPVersionHttPv2, radar.HTTPAseTLSVersionGetParamsHTTPVersionHttPv3}),
-			IPVersion:     cloudflare.F([]radar.HTTPAseTLSVersionGetParamsIPVersion{radar.HTTPAseTLSVersionGetParamsIPVersionIPv4, radar.HTTPAseTLSVersionGetParamsIPVersionIPv6}),
+			HTTPProtocol:  cloudflare.F([]radar.HTTPAseTLSVersionGetParamsHTTPProtocol{radar.HTTPAseTLSVersionGetParamsHTTPProtocolHTTP}),
+			HTTPVersion:   cloudflare.F([]radar.HTTPAseTLSVersionGetParamsHTTPVersion{radar.HTTPAseTLSVersionGetParamsHTTPVersionHttPv1}),
+			IPVersion:     cloudflare.F([]radar.HTTPAseTLSVersionGetParamsIPVersion{radar.HTTPAseTLSVersionGetParamsIPVersionIPv4}),
 			Limit:         cloudflare.F(int64(5)),
-			Location:      cloudflare.F([]string{"string", "string", "string"}),
-			Name:          cloudflare.F([]string{"string", "string", "string"}),
-			OS:            cloudflare.F([]radar.HTTPAseTLSVersionGetParamsOS{radar.HTTPAseTLSVersionGetParamsOSWindows, radar.HTTPAseTLSVersionGetParamsOSMacosx, radar.HTTPAseTLSVersionGetParamsOSIos}),
+			Location:      cloudflare.F([]string{"string"}),
+			Name:          cloudflare.F([]string{"string"}),
+			OS:            cloudflare.F([]radar.HTTPAseTLSVersionGetParamsOS{radar.HTTPAseTLSVersionGetParamsOSWindows}),
 		},
 	)
 	if err != nil {

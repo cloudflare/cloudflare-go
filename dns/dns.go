@@ -5,8 +5,8 @@ package dns
 import (
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // DNSService contains methods and other services that help with interacting with
@@ -16,11 +16,12 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDNSService] method instead.
 type DNSService struct {
-	Options   []option.RequestOption
-	Records   *RecordService
-	Settings  *SettingService
-	Analytics *AnalyticsService
-	Firewall  *FirewallService
+	Options       []option.RequestOption
+	DNSSEC        *DNSSECService
+	Records       *RecordService
+	Settings      *SettingService
+	Analytics     *AnalyticsService
+	ZoneTransfers *ZoneTransferService
 }
 
 // NewDNSService generates a new service that applies the given options to each
@@ -29,10 +30,11 @@ type DNSService struct {
 func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	r = &DNSService{}
 	r.Options = opts
+	r.DNSSEC = NewDNSSECService(opts...)
 	r.Records = NewRecordService(opts...)
 	r.Settings = NewSettingService(opts...)
 	r.Analytics = NewAnalyticsService(opts...)
-	r.Firewall = NewFirewallService(opts...)
+	r.ZoneTransfers = NewZoneTransferService(opts...)
 	return
 }
 
@@ -48,7 +50,7 @@ type DNSAnalyticsQuery struct {
 	// Start date and time of requesting data period in ISO 8601 format.
 	Since time.Time `json:"since,required" format:"date-time"`
 	// Unit of time to group data by.
-	TimeDelta Delta `json:"time_delta,required"`
+	TimeDelta DNSAnalyticsQueryTimeDelta `json:"time_delta,required"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until time.Time `json:"until,required" format:"date-time"`
 	// Segmentation filter in 'attribute operator value' format.
@@ -80,4 +82,28 @@ func (r *DNSAnalyticsQuery) UnmarshalJSON(data []byte) (err error) {
 
 func (r dnsAnalyticsQueryJSON) RawJSON() string {
 	return r.raw
+}
+
+// Unit of time to group data by.
+type DNSAnalyticsQueryTimeDelta string
+
+const (
+	DNSAnalyticsQueryTimeDeltaAll        DNSAnalyticsQueryTimeDelta = "all"
+	DNSAnalyticsQueryTimeDeltaAuto       DNSAnalyticsQueryTimeDelta = "auto"
+	DNSAnalyticsQueryTimeDeltaYear       DNSAnalyticsQueryTimeDelta = "year"
+	DNSAnalyticsQueryTimeDeltaQuarter    DNSAnalyticsQueryTimeDelta = "quarter"
+	DNSAnalyticsQueryTimeDeltaMonth      DNSAnalyticsQueryTimeDelta = "month"
+	DNSAnalyticsQueryTimeDeltaWeek       DNSAnalyticsQueryTimeDelta = "week"
+	DNSAnalyticsQueryTimeDeltaDay        DNSAnalyticsQueryTimeDelta = "day"
+	DNSAnalyticsQueryTimeDeltaHour       DNSAnalyticsQueryTimeDelta = "hour"
+	DNSAnalyticsQueryTimeDeltaDekaminute DNSAnalyticsQueryTimeDelta = "dekaminute"
+	DNSAnalyticsQueryTimeDeltaMinute     DNSAnalyticsQueryTimeDelta = "minute"
+)
+
+func (r DNSAnalyticsQueryTimeDelta) IsKnown() bool {
+	switch r {
+	case DNSAnalyticsQueryTimeDeltaAll, DNSAnalyticsQueryTimeDeltaAuto, DNSAnalyticsQueryTimeDeltaYear, DNSAnalyticsQueryTimeDeltaQuarter, DNSAnalyticsQueryTimeDeltaMonth, DNSAnalyticsQueryTimeDeltaWeek, DNSAnalyticsQueryTimeDeltaDay, DNSAnalyticsQueryTimeDeltaHour, DNSAnalyticsQueryTimeDeltaDekaminute, DNSAnalyticsQueryTimeDeltaMinute:
+		return true
+	}
+	return false
 }

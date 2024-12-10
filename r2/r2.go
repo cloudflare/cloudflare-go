@@ -3,7 +3,7 @@
 package r2
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // R2Service contains methods and other services that help with interacting with
@@ -15,9 +15,7 @@ import (
 type R2Service struct {
 	Options              []option.RequestOption
 	Buckets              *BucketService
-	Sippy                *SippyService
 	TemporaryCredentials *TemporaryCredentialService
-	Domains              *DomainService
 }
 
 // NewR2Service generates a new service that applies the given options to each
@@ -27,8 +25,6 @@ func NewR2Service(opts ...option.RequestOption) (r *R2Service) {
 	r = &R2Service{}
 	r.Options = opts
 	r.Buckets = NewBucketService(opts...)
-	r.Sippy = NewSippyService(opts...)
 	r.TemporaryCredentials = NewTemporaryCredentialService(opts...)
-	r.Domains = NewDomainService(opts...)
 	return
 }

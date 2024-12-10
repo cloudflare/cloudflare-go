@@ -8,12 +8,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // BGPHijackEventService contains methods and other services that help with
@@ -59,20 +59,20 @@ func (r *BGPHijackEventService) ListAutoPaging(ctx context.Context, query BGPHij
 }
 
 type BGPHijackEventListResponse struct {
-	Result     BGPHijackEventListResponseResult     `json:"result,required"`
-	ResultInfo BGPHijackEventListResponseResultInfo `json:"result_info,required"`
-	Success    bool                                 `json:"success,required"`
-	JSON       bgpHijackEventListResponseJSON       `json:"-"`
+	ASNInfo       []BGPHijackEventListResponseASNInfo `json:"asn_info,required"`
+	Events        []BGPHijackEventListResponseEvent   `json:"events,required"`
+	TotalMonitors int64                               `json:"total_monitors,required"`
+	JSON          bgpHijackEventListResponseJSON      `json:"-"`
 }
 
 // bgpHijackEventListResponseJSON contains the JSON metadata for the struct
 // [BGPHijackEventListResponse]
 type bgpHijackEventListResponseJSON struct {
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ASNInfo       apijson.Field
+	Events        apijson.Field
+	TotalMonitors apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *BGPHijackEventListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -83,41 +83,16 @@ func (r bgpHijackEventListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type BGPHijackEventListResponseResult struct {
-	ASNInfo       []BGPHijackEventListResponseResultASNInfo `json:"asn_info,required"`
-	Events        []BGPHijackEventListResponseResultEvent   `json:"events,required"`
-	TotalMonitors int64                                     `json:"total_monitors,required"`
-	JSON          bgpHijackEventListResponseResultJSON      `json:"-"`
+type BGPHijackEventListResponseASNInfo struct {
+	ASN         int64                                 `json:"asn,required"`
+	CountryCode string                                `json:"country_code,required"`
+	OrgName     string                                `json:"org_name,required"`
+	JSON        bgpHijackEventListResponseASNInfoJSON `json:"-"`
 }
 
-// bgpHijackEventListResponseResultJSON contains the JSON metadata for the struct
-// [BGPHijackEventListResponseResult]
-type bgpHijackEventListResponseResultJSON struct {
-	ASNInfo       apijson.Field
-	Events        apijson.Field
-	TotalMonitors apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *BGPHijackEventListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpHijackEventListResponseResultJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPHijackEventListResponseResultASNInfo struct {
-	ASN         int64                                       `json:"asn,required"`
-	CountryCode string                                      `json:"country_code,required"`
-	OrgName     string                                      `json:"org_name,required"`
-	JSON        bgpHijackEventListResponseResultASNInfoJSON `json:"-"`
-}
-
-// bgpHijackEventListResponseResultASNInfoJSON contains the JSON metadata for the
-// struct [BGPHijackEventListResponseResultASNInfo]
-type bgpHijackEventListResponseResultASNInfoJSON struct {
+// bgpHijackEventListResponseASNInfoJSON contains the JSON metadata for the struct
+// [BGPHijackEventListResponseASNInfo]
+type bgpHijackEventListResponseASNInfoJSON struct {
 	ASN         apijson.Field
 	CountryCode apijson.Field
 	OrgName     apijson.Field
@@ -125,39 +100,39 @@ type bgpHijackEventListResponseResultASNInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BGPHijackEventListResponseResultASNInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *BGPHijackEventListResponseASNInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpHijackEventListResponseResultASNInfoJSON) RawJSON() string {
+func (r bgpHijackEventListResponseASNInfoJSON) RawJSON() string {
 	return r.raw
 }
 
-type BGPHijackEventListResponseResultEvent struct {
-	ID              int64                                       `json:"id,required"`
-	ConfidenceScore int64                                       `json:"confidence_score,required"`
-	Duration        int64                                       `json:"duration,required"`
-	EventType       int64                                       `json:"event_type,required"`
-	HijackMsgsCount int64                                       `json:"hijack_msgs_count,required"`
-	HijackerASN     int64                                       `json:"hijacker_asn,required"`
-	HijackerCountry string                                      `json:"hijacker_country,required"`
-	IsStale         bool                                        `json:"is_stale,required"`
-	MaxHijackTs     string                                      `json:"max_hijack_ts,required"`
-	MaxMsgTs        string                                      `json:"max_msg_ts,required"`
-	MinHijackTs     string                                      `json:"min_hijack_ts,required"`
-	OnGoingCount    int64                                       `json:"on_going_count,required"`
-	PeerASNs        []int64                                     `json:"peer_asns,required"`
-	PeerIPCount     int64                                       `json:"peer_ip_count,required"`
-	Prefixes        []string                                    `json:"prefixes,required"`
-	Tags            []BGPHijackEventListResponseResultEventsTag `json:"tags,required"`
-	VictimASNs      []int64                                     `json:"victim_asns,required"`
-	VictimCountries []string                                    `json:"victim_countries,required"`
-	JSON            bgpHijackEventListResponseResultEventJSON   `json:"-"`
+type BGPHijackEventListResponseEvent struct {
+	ID              int64                                 `json:"id,required"`
+	ConfidenceScore int64                                 `json:"confidence_score,required"`
+	Duration        int64                                 `json:"duration,required"`
+	EventType       int64                                 `json:"event_type,required"`
+	HijackMsgsCount int64                                 `json:"hijack_msgs_count,required"`
+	HijackerASN     int64                                 `json:"hijacker_asn,required"`
+	HijackerCountry string                                `json:"hijacker_country,required"`
+	IsStale         bool                                  `json:"is_stale,required"`
+	MaxHijackTs     string                                `json:"max_hijack_ts,required"`
+	MaxMsgTs        string                                `json:"max_msg_ts,required"`
+	MinHijackTs     string                                `json:"min_hijack_ts,required"`
+	OnGoingCount    int64                                 `json:"on_going_count,required"`
+	PeerASNs        []int64                               `json:"peer_asns,required"`
+	PeerIPCount     int64                                 `json:"peer_ip_count,required"`
+	Prefixes        []string                              `json:"prefixes,required"`
+	Tags            []BGPHijackEventListResponseEventsTag `json:"tags,required"`
+	VictimASNs      []int64                               `json:"victim_asns,required"`
+	VictimCountries []string                              `json:"victim_countries,required"`
+	JSON            bgpHijackEventListResponseEventJSON   `json:"-"`
 }
 
-// bgpHijackEventListResponseResultEventJSON contains the JSON metadata for the
-// struct [BGPHijackEventListResponseResultEvent]
-type bgpHijackEventListResponseResultEventJSON struct {
+// bgpHijackEventListResponseEventJSON contains the JSON metadata for the struct
+// [BGPHijackEventListResponseEvent]
+type bgpHijackEventListResponseEventJSON struct {
 	ID              apijson.Field
 	ConfidenceScore apijson.Field
 	Duration        apijson.Field
@@ -180,61 +155,34 @@ type bgpHijackEventListResponseResultEventJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *BGPHijackEventListResponseResultEvent) UnmarshalJSON(data []byte) (err error) {
+func (r *BGPHijackEventListResponseEvent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpHijackEventListResponseResultEventJSON) RawJSON() string {
+func (r bgpHijackEventListResponseEventJSON) RawJSON() string {
 	return r.raw
 }
 
-type BGPHijackEventListResponseResultEventsTag struct {
-	Name  string                                        `json:"name,required"`
-	Score int64                                         `json:"score,required"`
-	JSON  bgpHijackEventListResponseResultEventsTagJSON `json:"-"`
+type BGPHijackEventListResponseEventsTag struct {
+	Name  string                                  `json:"name,required"`
+	Score int64                                   `json:"score,required"`
+	JSON  bgpHijackEventListResponseEventsTagJSON `json:"-"`
 }
 
-// bgpHijackEventListResponseResultEventsTagJSON contains the JSON metadata for the
-// struct [BGPHijackEventListResponseResultEventsTag]
-type bgpHijackEventListResponseResultEventsTagJSON struct {
+// bgpHijackEventListResponseEventsTagJSON contains the JSON metadata for the
+// struct [BGPHijackEventListResponseEventsTag]
+type bgpHijackEventListResponseEventsTagJSON struct {
 	Name        apijson.Field
 	Score       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BGPHijackEventListResponseResultEventsTag) UnmarshalJSON(data []byte) (err error) {
+func (r *BGPHijackEventListResponseEventsTag) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r bgpHijackEventListResponseResultEventsTagJSON) RawJSON() string {
-	return r.raw
-}
-
-type BGPHijackEventListResponseResultInfo struct {
-	Count      int64                                    `json:"count,required"`
-	Page       int64                                    `json:"page,required"`
-	PerPage    int64                                    `json:"per_page,required"`
-	TotalCount int64                                    `json:"total_count,required"`
-	JSON       bgpHijackEventListResponseResultInfoJSON `json:"-"`
-}
-
-// bgpHijackEventListResponseResultInfoJSON contains the JSON metadata for the
-// struct [BGPHijackEventListResponseResultInfo]
-type bgpHijackEventListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BGPHijackEventListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bgpHijackEventListResponseResultInfoJSON) RawJSON() string {
+func (r bgpHijackEventListResponseEventsTagJSON) RawJSON() string {
 	return r.raw
 }
 

@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RoleService contains methods and other services that help with interacting with
@@ -63,7 +63,7 @@ func (r *RoleService) ListAutoPaging(ctx context.Context, query RoleListParams, 
 }
 
 // Get information about a specific role for an account.
-func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponse, err error) {
+func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParams, opts ...option.RequestOption) (res *shared.Role, err error) {
 	var env RoleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -83,8 +83,6 @@ func (r *RoleService) Get(ctx context.Context, roleID string, query RoleGetParam
 	return
 }
 
-type RoleGetResponse = interface{}
-
 type RoleListParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -100,7 +98,7 @@ type RoleGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success RoleGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  RoleGetResponse                `json:"result"`
+	Result  shared.Role                    `json:"result"`
 	JSON    roleGetResponseEnvelopeJSON    `json:"-"`
 }
 

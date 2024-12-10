@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DeviceService contains methods and other services that help with interacting
@@ -27,6 +27,7 @@ type DeviceService struct {
 	Options       []option.RequestOption
 	DEXTests      *DeviceDEXTestService
 	Networks      *DeviceNetworkService
+	FleetStatus   *DeviceFleetStatusService
 	Policies      *DevicePolicyService
 	Posture       *DevicePostureService
 	Revoke        *DeviceRevokeService
@@ -43,6 +44,7 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 	r.Options = opts
 	r.DEXTests = NewDeviceDEXTestService(opts...)
 	r.Networks = NewDeviceNetworkService(opts...)
+	r.FleetStatus = NewDeviceFleetStatusService(opts...)
 	r.Policies = NewDevicePolicyService(opts...)
 	r.Posture = NewDevicePostureService(opts...)
 	r.Revoke = NewDeviceRevokeService(opts...)

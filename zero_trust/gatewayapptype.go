@@ -10,11 +10,11 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 	"github.com/tidwall/gjson"
 )
 
@@ -65,27 +65,27 @@ func (r *GatewayAppTypeService) ListAutoPaging(ctx context.Context, query Gatewa
 }
 
 type AppType struct {
+	// The identifier for this application. There is only one application per ID.
+	ID int64 `json:"id"`
 	// The identifier for the type of this application. There can be many applications
 	// with the same type. This refers to the `id` of a returned application type.
 	ApplicationTypeID int64     `json:"application_type_id"`
 	CreatedAt         time.Time `json:"created_at" format:"date-time"`
-	// The identifier for this application. There is only one application per ID.
-	ID int64 `json:"id"`
-	// The name of the application or application type.
-	Name string `json:"name"`
 	// A short summary of applications with this type.
-	Description string      `json:"description"`
-	JSON        appTypeJSON `json:"-"`
-	union       AppTypeUnion
+	Description string `json:"description"`
+	// The name of the application or application type.
+	Name  string      `json:"name"`
+	JSON  appTypeJSON `json:"-"`
+	union AppTypeUnion
 }
 
 // appTypeJSON contains the JSON metadata for the struct [AppType]
 type appTypeJSON struct {
+	ID                apijson.Field
 	ApplicationTypeID apijson.Field
 	CreatedAt         apijson.Field
-	ID                apijson.Field
-	Name              apijson.Field
 	Description       apijson.Field
+	Name              apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }

@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // MonitorReferenceService contains methods and other services that help with
@@ -109,9 +109,8 @@ type MonitorReferenceGetResponseEnvelope struct {
 	// List of resources that reference a given monitor.
 	Result []MonitorReferenceGetResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success    MonitorReferenceGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo MonitorReferenceGetResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       monitorReferenceGetResponseEnvelopeJSON       `json:"-"`
+	Success MonitorReferenceGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    monitorReferenceGetResponseEnvelopeJSON    `json:"-"`
 }
 
 // monitorReferenceGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -121,7 +120,6 @@ type monitorReferenceGetResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
-	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -147,35 +145,4 @@ func (r MonitorReferenceGetResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type MonitorReferenceGetResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count"`
-	JSON       monitorReferenceGetResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// monitorReferenceGetResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [MonitorReferenceGetResponseEnvelopeResultInfo]
-type monitorReferenceGetResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MonitorReferenceGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r monitorReferenceGetResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

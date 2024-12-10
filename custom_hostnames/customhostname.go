@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CustomHostnameService contains methods and other services that help with
@@ -2011,6 +2011,9 @@ type CustomHostnameNewParamsSSL struct {
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority param.Field[shared.CertificateCA] `json:"certificate_authority"`
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true
+	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.
@@ -2274,6 +2277,9 @@ type CustomHostnameEditParamsSSL struct {
 	BundleMethod param.Field[BundleMethod] `json:"bundle_method"`
 	// The Certificate Authority that will issue the certificate
 	CertificateAuthority param.Field[shared.CertificateCA] `json:"certificate_authority"`
+	// Whether or not to add Cloudflare Branding for the order. This will add a
+	// subdomain of sni.cloudflaressl.com as the Common Name if set to true
+	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
 	// If a custom uploaded certificate is used.
 	CustomCertificate param.Field[string] `json:"custom_certificate"`
 	// The key for a custom uploaded certificate.

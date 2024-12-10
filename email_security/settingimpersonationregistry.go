@@ -11,13 +11,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -57,7 +57,7 @@ func (r *SettingImpersonationRegistryService) New(ctx context.Context, params Se
 	return
 }
 
-// List, search, and sort entries in impersonation registry.
+// Lists, searches, and sorts entries in the impersonation registry.
 func (r *SettingImpersonationRegistryService) List(ctx context.Context, params SettingImpersonationRegistryListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingImpersonationRegistryListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -79,7 +79,7 @@ func (r *SettingImpersonationRegistryService) List(ctx context.Context, params S
 	return res, nil
 }
 
-// List, search, and sort entries in impersonation registry.
+// Lists, searches, and sorts entries in the impersonation registry.
 func (r *SettingImpersonationRegistryService) ListAutoPaging(ctx context.Context, params SettingImpersonationRegistryListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingImpersonationRegistryListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -158,35 +158,37 @@ func init() {
 }
 
 type SettingImpersonationRegistryNewResponseEmailSecurityDisplayName struct {
-	ID              int64                                                               `json:"id,required"`
-	CreatedAt       time.Time                                                           `json:"created_at,required" format:"date-time"`
-	IsEmailRegex    bool                                                                `json:"is_email_regex,required"`
-	LastModified    time.Time                                                           `json:"last_modified,required" format:"date-time"`
-	Name            string                                                              `json:"name,required"`
-	Comments        string                                                              `json:"comments,nullable"`
-	DirectoryID     int64                                                               `json:"directory_id,nullable"`
-	DirectoryNodeID string                                                              `json:"directory_node_id,nullable"`
-	Email           string                                                              `json:"email,nullable"`
-	Provenance      string                                                              `json:"provenance,nullable"`
-	JSON            settingImpersonationRegistryNewResponseEmailSecurityDisplayNameJSON `json:"-"`
+	ID                      int64                                                               `json:"id,required"`
+	CreatedAt               time.Time                                                           `json:"created_at,required" format:"date-time"`
+	IsEmailRegex            bool                                                                `json:"is_email_regex,required"`
+	LastModified            time.Time                                                           `json:"last_modified,required" format:"date-time"`
+	Name                    string                                                              `json:"name,required"`
+	Comments                string                                                              `json:"comments,nullable"`
+	DirectoryID             int64                                                               `json:"directory_id,nullable"`
+	DirectoryNodeID         int64                                                               `json:"directory_node_id,nullable"`
+	Email                   string                                                              `json:"email,nullable"`
+	ExternalDirectoryNodeID string                                                              `json:"external_directory_node_id,nullable"`
+	Provenance              string                                                              `json:"provenance,nullable"`
+	JSON                    settingImpersonationRegistryNewResponseEmailSecurityDisplayNameJSON `json:"-"`
 }
 
 // settingImpersonationRegistryNewResponseEmailSecurityDisplayNameJSON contains the
 // JSON metadata for the struct
 // [SettingImpersonationRegistryNewResponseEmailSecurityDisplayName]
 type settingImpersonationRegistryNewResponseEmailSecurityDisplayNameJSON struct {
-	ID              apijson.Field
-	CreatedAt       apijson.Field
-	IsEmailRegex    apijson.Field
-	LastModified    apijson.Field
-	Name            apijson.Field
-	Comments        apijson.Field
-	DirectoryID     apijson.Field
-	DirectoryNodeID apijson.Field
-	Email           apijson.Field
-	Provenance      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                      apijson.Field
+	CreatedAt               apijson.Field
+	IsEmailRegex            apijson.Field
+	LastModified            apijson.Field
+	Name                    apijson.Field
+	Comments                apijson.Field
+	DirectoryID             apijson.Field
+	DirectoryNodeID         apijson.Field
+	Email                   apijson.Field
+	ExternalDirectoryNodeID apijson.Field
+	Provenance              apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *SettingImpersonationRegistryNewResponseEmailSecurityDisplayName) UnmarshalJSON(data []byte) (err error) {
@@ -206,34 +208,36 @@ func (r SettingImpersonationRegistryNewResponseArray) implementsEmailSecuritySet
 }
 
 type SettingImpersonationRegistryNewResponseArrayItem struct {
-	ID              int64                                                `json:"id,required"`
-	CreatedAt       time.Time                                            `json:"created_at,required" format:"date-time"`
-	IsEmailRegex    bool                                                 `json:"is_email_regex,required"`
-	LastModified    time.Time                                            `json:"last_modified,required" format:"date-time"`
-	Name            string                                               `json:"name,required"`
-	Comments        string                                               `json:"comments,nullable"`
-	DirectoryID     int64                                                `json:"directory_id,nullable"`
-	DirectoryNodeID string                                               `json:"directory_node_id,nullable"`
-	Email           string                                               `json:"email,nullable"`
-	Provenance      string                                               `json:"provenance,nullable"`
-	JSON            settingImpersonationRegistryNewResponseArrayItemJSON `json:"-"`
+	ID                      int64                                                `json:"id,required"`
+	CreatedAt               time.Time                                            `json:"created_at,required" format:"date-time"`
+	IsEmailRegex            bool                                                 `json:"is_email_regex,required"`
+	LastModified            time.Time                                            `json:"last_modified,required" format:"date-time"`
+	Name                    string                                               `json:"name,required"`
+	Comments                string                                               `json:"comments,nullable"`
+	DirectoryID             int64                                                `json:"directory_id,nullable"`
+	DirectoryNodeID         int64                                                `json:"directory_node_id,nullable"`
+	Email                   string                                               `json:"email,nullable"`
+	ExternalDirectoryNodeID string                                               `json:"external_directory_node_id,nullable"`
+	Provenance              string                                               `json:"provenance,nullable"`
+	JSON                    settingImpersonationRegistryNewResponseArrayItemJSON `json:"-"`
 }
 
 // settingImpersonationRegistryNewResponseArrayItemJSON contains the JSON metadata
 // for the struct [SettingImpersonationRegistryNewResponseArrayItem]
 type settingImpersonationRegistryNewResponseArrayItemJSON struct {
-	ID              apijson.Field
-	CreatedAt       apijson.Field
-	IsEmailRegex    apijson.Field
-	LastModified    apijson.Field
-	Name            apijson.Field
-	Comments        apijson.Field
-	DirectoryID     apijson.Field
-	DirectoryNodeID apijson.Field
-	Email           apijson.Field
-	Provenance      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                      apijson.Field
+	CreatedAt               apijson.Field
+	IsEmailRegex            apijson.Field
+	LastModified            apijson.Field
+	Name                    apijson.Field
+	Comments                apijson.Field
+	DirectoryID             apijson.Field
+	DirectoryNodeID         apijson.Field
+	Email                   apijson.Field
+	ExternalDirectoryNodeID apijson.Field
+	Provenance              apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *SettingImpersonationRegistryNewResponseArrayItem) UnmarshalJSON(data []byte) (err error) {
@@ -245,34 +249,36 @@ func (r settingImpersonationRegistryNewResponseArrayItemJSON) RawJSON() string {
 }
 
 type SettingImpersonationRegistryListResponse struct {
-	ID              int64                                        `json:"id,required"`
-	CreatedAt       time.Time                                    `json:"created_at,required" format:"date-time"`
-	IsEmailRegex    bool                                         `json:"is_email_regex,required"`
-	LastModified    time.Time                                    `json:"last_modified,required" format:"date-time"`
-	Name            string                                       `json:"name,required"`
-	Comments        string                                       `json:"comments,nullable"`
-	DirectoryID     int64                                        `json:"directory_id,nullable"`
-	DirectoryNodeID string                                       `json:"directory_node_id,nullable"`
-	Email           string                                       `json:"email,nullable"`
-	Provenance      string                                       `json:"provenance,nullable"`
-	JSON            settingImpersonationRegistryListResponseJSON `json:"-"`
+	ID                      int64                                        `json:"id,required"`
+	CreatedAt               time.Time                                    `json:"created_at,required" format:"date-time"`
+	IsEmailRegex            bool                                         `json:"is_email_regex,required"`
+	LastModified            time.Time                                    `json:"last_modified,required" format:"date-time"`
+	Name                    string                                       `json:"name,required"`
+	Comments                string                                       `json:"comments,nullable"`
+	DirectoryID             int64                                        `json:"directory_id,nullable"`
+	DirectoryNodeID         int64                                        `json:"directory_node_id,nullable"`
+	Email                   string                                       `json:"email,nullable"`
+	ExternalDirectoryNodeID string                                       `json:"external_directory_node_id,nullable"`
+	Provenance              string                                       `json:"provenance,nullable"`
+	JSON                    settingImpersonationRegistryListResponseJSON `json:"-"`
 }
 
 // settingImpersonationRegistryListResponseJSON contains the JSON metadata for the
 // struct [SettingImpersonationRegistryListResponse]
 type settingImpersonationRegistryListResponseJSON struct {
-	ID              apijson.Field
-	CreatedAt       apijson.Field
-	IsEmailRegex    apijson.Field
-	LastModified    apijson.Field
-	Name            apijson.Field
-	Comments        apijson.Field
-	DirectoryID     apijson.Field
-	DirectoryNodeID apijson.Field
-	Email           apijson.Field
-	Provenance      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                      apijson.Field
+	CreatedAt               apijson.Field
+	IsEmailRegex            apijson.Field
+	LastModified            apijson.Field
+	Name                    apijson.Field
+	Comments                apijson.Field
+	DirectoryID             apijson.Field
+	DirectoryNodeID         apijson.Field
+	Email                   apijson.Field
+	ExternalDirectoryNodeID apijson.Field
+	Provenance              apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *SettingImpersonationRegistryListResponse) UnmarshalJSON(data []byte) (err error) {
@@ -305,34 +311,36 @@ func (r settingImpersonationRegistryDeleteResponseJSON) RawJSON() string {
 }
 
 type SettingImpersonationRegistryEditResponse struct {
-	ID              int64                                        `json:"id,required"`
-	CreatedAt       time.Time                                    `json:"created_at,required" format:"date-time"`
-	IsEmailRegex    bool                                         `json:"is_email_regex,required"`
-	LastModified    time.Time                                    `json:"last_modified,required" format:"date-time"`
-	Name            string                                       `json:"name,required"`
-	Comments        string                                       `json:"comments,nullable"`
-	DirectoryID     int64                                        `json:"directory_id,nullable"`
-	DirectoryNodeID string                                       `json:"directory_node_id,nullable"`
-	Email           string                                       `json:"email,nullable"`
-	Provenance      string                                       `json:"provenance,nullable"`
-	JSON            settingImpersonationRegistryEditResponseJSON `json:"-"`
+	ID                      int64                                        `json:"id,required"`
+	CreatedAt               time.Time                                    `json:"created_at,required" format:"date-time"`
+	IsEmailRegex            bool                                         `json:"is_email_regex,required"`
+	LastModified            time.Time                                    `json:"last_modified,required" format:"date-time"`
+	Name                    string                                       `json:"name,required"`
+	Comments                string                                       `json:"comments,nullable"`
+	DirectoryID             int64                                        `json:"directory_id,nullable"`
+	DirectoryNodeID         int64                                        `json:"directory_node_id,nullable"`
+	Email                   string                                       `json:"email,nullable"`
+	ExternalDirectoryNodeID string                                       `json:"external_directory_node_id,nullable"`
+	Provenance              string                                       `json:"provenance,nullable"`
+	JSON                    settingImpersonationRegistryEditResponseJSON `json:"-"`
 }
 
 // settingImpersonationRegistryEditResponseJSON contains the JSON metadata for the
 // struct [SettingImpersonationRegistryEditResponse]
 type settingImpersonationRegistryEditResponseJSON struct {
-	ID              apijson.Field
-	CreatedAt       apijson.Field
-	IsEmailRegex    apijson.Field
-	LastModified    apijson.Field
-	Name            apijson.Field
-	Comments        apijson.Field
-	DirectoryID     apijson.Field
-	DirectoryNodeID apijson.Field
-	Email           apijson.Field
-	Provenance      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                      apijson.Field
+	CreatedAt               apijson.Field
+	IsEmailRegex            apijson.Field
+	LastModified            apijson.Field
+	Name                    apijson.Field
+	Comments                apijson.Field
+	DirectoryID             apijson.Field
+	DirectoryNodeID         apijson.Field
+	Email                   apijson.Field
+	ExternalDirectoryNodeID apijson.Field
+	Provenance              apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *SettingImpersonationRegistryEditResponse) UnmarshalJSON(data []byte) (err error) {
@@ -344,34 +352,36 @@ func (r settingImpersonationRegistryEditResponseJSON) RawJSON() string {
 }
 
 type SettingImpersonationRegistryGetResponse struct {
-	ID              int64                                       `json:"id,required"`
-	CreatedAt       time.Time                                   `json:"created_at,required" format:"date-time"`
-	IsEmailRegex    bool                                        `json:"is_email_regex,required"`
-	LastModified    time.Time                                   `json:"last_modified,required" format:"date-time"`
-	Name            string                                      `json:"name,required"`
-	Comments        string                                      `json:"comments,nullable"`
-	DirectoryID     int64                                       `json:"directory_id,nullable"`
-	DirectoryNodeID string                                      `json:"directory_node_id,nullable"`
-	Email           string                                      `json:"email,nullable"`
-	Provenance      string                                      `json:"provenance,nullable"`
-	JSON            settingImpersonationRegistryGetResponseJSON `json:"-"`
+	ID                      int64                                       `json:"id,required"`
+	CreatedAt               time.Time                                   `json:"created_at,required" format:"date-time"`
+	IsEmailRegex            bool                                        `json:"is_email_regex,required"`
+	LastModified            time.Time                                   `json:"last_modified,required" format:"date-time"`
+	Name                    string                                      `json:"name,required"`
+	Comments                string                                      `json:"comments,nullable"`
+	DirectoryID             int64                                       `json:"directory_id,nullable"`
+	DirectoryNodeID         int64                                       `json:"directory_node_id,nullable"`
+	Email                   string                                      `json:"email,nullable"`
+	ExternalDirectoryNodeID string                                      `json:"external_directory_node_id,nullable"`
+	Provenance              string                                      `json:"provenance,nullable"`
+	JSON                    settingImpersonationRegistryGetResponseJSON `json:"-"`
 }
 
 // settingImpersonationRegistryGetResponseJSON contains the JSON metadata for the
 // struct [SettingImpersonationRegistryGetResponse]
 type settingImpersonationRegistryGetResponseJSON struct {
-	ID              apijson.Field
-	CreatedAt       apijson.Field
-	IsEmailRegex    apijson.Field
-	LastModified    apijson.Field
-	Name            apijson.Field
-	Comments        apijson.Field
-	DirectoryID     apijson.Field
-	DirectoryNodeID apijson.Field
-	Email           apijson.Field
-	Provenance      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	ID                      apijson.Field
+	CreatedAt               apijson.Field
+	IsEmailRegex            apijson.Field
+	LastModified            apijson.Field
+	Name                    apijson.Field
+	Comments                apijson.Field
+	DirectoryID             apijson.Field
+	DirectoryNodeID         apijson.Field
+	Email                   apijson.Field
+	ExternalDirectoryNodeID apijson.Field
+	Provenance              apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
 }
 
 func (r *SettingImpersonationRegistryGetResponse) UnmarshalJSON(data []byte) (err error) {
@@ -412,9 +422,19 @@ func (r SettingImpersonationRegistryNewParamsBodyEmailSecurityCreateDisplayName)
 func (r SettingImpersonationRegistryNewParamsBodyEmailSecurityCreateDisplayName) implementsEmailSecuritySettingImpersonationRegistryNewParamsBodyUnion() {
 }
 
-type SettingImpersonationRegistryNewParamsBodyArray []SettingImpersonationRegistryNewParamsBodyArray
+type SettingImpersonationRegistryNewParamsBodyArray []SettingImpersonationRegistryNewParamsBodyArrayItem
 
 func (r SettingImpersonationRegistryNewParamsBodyArray) implementsEmailSecuritySettingImpersonationRegistryNewParamsBodyUnion() {
+}
+
+type SettingImpersonationRegistryNewParamsBodyArrayItem struct {
+	Email        param.Field[string] `json:"email,required"`
+	IsEmailRegex param.Field[bool]   `json:"is_email_regex,required"`
+	Name         param.Field[string] `json:"name,required"`
+}
+
+func (r SettingImpersonationRegistryNewParamsBodyArrayItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type SettingImpersonationRegistryNewResponseEnvelope struct {
@@ -451,9 +471,9 @@ type SettingImpersonationRegistryListParams struct {
 	Direction param.Field[SettingImpersonationRegistryListParamsDirection] `query:"direction"`
 	// The field to sort by.
 	Order param.Field[SettingImpersonationRegistryListParamsOrder] `query:"order"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page param.Field[int64] `query:"page"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage    param.Field[int64]                                            `query:"per_page"`
 	Provenance param.Field[SettingImpersonationRegistryListParamsProvenance] `query:"provenance"`
 	// Allows searching in multiple properties of a record simultaneously. This

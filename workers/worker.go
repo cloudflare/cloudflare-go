@@ -5,9 +5,9 @@ package workers
 import (
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -20,6 +20,7 @@ import (
 type WorkerService struct {
 	Options         []option.RequestOption
 	AI              *AIService
+	Assets          *AssetService
 	Scripts         *ScriptService
 	AccountSettings *AccountSettingService
 	Domains         *DomainService
@@ -33,6 +34,7 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 	r = &WorkerService{}
 	r.Options = opts
 	r.AI = NewAIService(opts...)
+	r.Assets = NewAssetService(opts...)
 	r.Scripts = NewScriptService(opts...)
 	r.AccountSettings = NewAccountSettingService(opts...)
 	r.Domains = NewDomainService(opts...)
@@ -44,52 +46,52 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 type Binding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
-	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id"`
 	// The class of resource that the binding provides.
 	Type BindingType `json:"type,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Name of Worker to bind to
-	Service string `json:"service"`
-	// The exported class name of the Durable Object
-	ClassName string `json:"class_name"`
-	// The script where the Durable Object is defined, if it is external to this Worker
-	ScriptName string `json:"script_name"`
-	// R2 bucket to bind to
-	BucketName string `json:"bucket_name"`
-	// Name of the Queue to bind to
-	QueueName string `json:"queue_name"`
-	// A JavaScript variable name for the binding.
-	Binding string `json:"binding"`
 	// ID of the D1 database to bind to
 	ID string `json:"id"`
+	// A JavaScript variable name for the binding.
+	Binding string `json:"binding"`
+	// R2 bucket to bind to
+	BucketName string `json:"bucket_name"`
+	// ID of the certificate to bind to
+	CertificateID string `json:"certificate_id"`
+	// The exported class name of the Durable Object
+	ClassName string `json:"class_name"`
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment"`
 	// Namespace to bind to
 	Namespace string `json:"namespace"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id"`
 	// This field can have the runtime type of [DispatchNamespaceBindingOutbound].
-	Outbound interface{} `json:"outbound,required"`
-	// ID of the certificate to bind to
-	CertificateID string      `json:"certificate_id"`
-	JSON          bindingJSON `json:"-"`
-	union         BindingUnion
+	Outbound interface{} `json:"outbound"`
+	// Name of the Queue to bind to
+	QueueName string `json:"queue_name"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName string `json:"script_name"`
+	// Name of Worker to bind to
+	Service string      `json:"service"`
+	JSON    bindingJSON `json:"-"`
+	union   BindingUnion
 }
 
 // bindingJSON contains the JSON metadata for the struct [Binding]
 type bindingJSON struct {
 	Name          apijson.Field
-	NamespaceID   apijson.Field
 	Type          apijson.Field
-	Environment   apijson.Field
-	Service       apijson.Field
-	ClassName     apijson.Field
-	ScriptName    apijson.Field
-	BucketName    apijson.Field
-	QueueName     apijson.Field
-	Binding       apijson.Field
 	ID            apijson.Field
-	Namespace     apijson.Field
-	Outbound      apijson.Field
+	Binding       apijson.Field
+	BucketName    apijson.Field
 	CertificateID apijson.Field
+	ClassName     apijson.Field
+	Environment   apijson.Field
+	Namespace     apijson.Field
+	NamespaceID   apijson.Field
+	Outbound      apijson.Field
+	QueueName     apijson.Field
+	ScriptName    apijson.Field
+	Service       apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -113,7 +115,8 @@ func (r *Binding) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [workers.KVNamespaceBinding],
 // [workers.ServiceBinding], [workers.DurableObjectBinding], [workers.R2Binding],
 // [workers.BindingWorkersQueueBinding], [workers.D1Binding],
-// [workers.DispatchNamespaceBinding], [workers.MTLSCERTBinding].
+// [workers.DispatchNamespaceBinding], [workers.MTLSCERTBinding],
+// [workers.BindingWorkersAssetsBinding].
 func (r Binding) AsUnion() BindingUnion {
 	return r.union
 }
@@ -123,7 +126,8 @@ func (r Binding) AsUnion() BindingUnion {
 // Union satisfied by [workers.KVNamespaceBinding], [workers.ServiceBinding],
 // [workers.DurableObjectBinding], [workers.R2Binding],
 // [workers.BindingWorkersQueueBinding], [workers.D1Binding],
-// [workers.DispatchNamespaceBinding] or [workers.MTLSCERTBinding].
+// [workers.DispatchNamespaceBinding], [workers.MTLSCERTBinding] or
+// [workers.BindingWorkersAssetsBinding].
 type BindingUnion interface {
 	implementsWorkersBinding()
 }
@@ -163,6 +167,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(MTLSCERTBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BindingWorkersAssetsBinding{}),
 		},
 	)
 }
@@ -212,6 +220,48 @@ func (r BindingWorkersQueueBindingType) IsKnown() bool {
 	return false
 }
 
+type BindingWorkersAssetsBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type BindingWorkersAssetsBindingType `json:"type,required"`
+	JSON bindingWorkersAssetsBindingJSON `json:"-"`
+}
+
+// bindingWorkersAssetsBindingJSON contains the JSON metadata for the struct
+// [BindingWorkersAssetsBinding]
+type bindingWorkersAssetsBindingJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *BindingWorkersAssetsBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r bindingWorkersAssetsBindingJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r BindingWorkersAssetsBinding) implementsWorkersBinding() {}
+
+// The class of resource that the binding provides.
+type BindingWorkersAssetsBindingType string
+
+const (
+	BindingWorkersAssetsBindingTypeAssets BindingWorkersAssetsBindingType = "assets"
+)
+
+func (r BindingWorkersAssetsBindingType) IsKnown() bool {
+	switch r {
+	case BindingWorkersAssetsBindingTypeAssets:
+		return true
+	}
+	return false
+}
+
 // The class of resource that the binding provides.
 type BindingType string
 
@@ -224,11 +274,12 @@ const (
 	BindingTypeD1                     BindingType = "d1"
 	BindingTypeDispatchNamespace      BindingType = "dispatch_namespace"
 	BindingTypeMTLSCertificate        BindingType = "mtls_certificate"
+	BindingTypeAssets                 BindingType = "assets"
 )
 
 func (r BindingType) IsKnown() bool {
 	switch r {
-	case BindingTypeKVNamespace, BindingTypeService, BindingTypeDurableObjectNamespace, BindingTypeR2Bucket, BindingTypeQueue, BindingTypeD1, BindingTypeDispatchNamespace, BindingTypeMTLSCertificate:
+	case BindingTypeKVNamespace, BindingTypeService, BindingTypeDurableObjectNamespace, BindingTypeR2Bucket, BindingTypeQueue, BindingTypeD1, BindingTypeDispatchNamespace, BindingTypeMTLSCertificate, BindingTypeAssets:
 		return true
 	}
 	return false
@@ -238,25 +289,25 @@ func (r BindingType) IsKnown() bool {
 type BindingParam struct {
 	// The class of resource that the binding provides.
 	Type param.Field[BindingType] `json:"type,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment param.Field[string] `json:"environment"`
-	// Name of Worker to bind to
-	Service param.Field[string] `json:"service"`
-	// The exported class name of the Durable Object
-	ClassName param.Field[string] `json:"class_name"`
-	// The script where the Durable Object is defined, if it is external to this Worker
-	ScriptName param.Field[string] `json:"script_name"`
-	// R2 bucket to bind to
-	BucketName param.Field[string] `json:"bucket_name"`
-	// Name of the Queue to bind to
-	QueueName param.Field[string] `json:"queue_name"`
 	// ID of the D1 database to bind to
 	ID param.Field[string] `json:"id"`
-	// Namespace to bind to
-	Namespace param.Field[string]      `json:"namespace"`
-	Outbound  param.Field[interface{}] `json:"outbound,required"`
+	// R2 bucket to bind to
+	BucketName param.Field[string] `json:"bucket_name"`
 	// ID of the certificate to bind to
 	CertificateID param.Field[string] `json:"certificate_id"`
+	// The exported class name of the Durable Object
+	ClassName param.Field[string] `json:"class_name"`
+	// Optional environment if the Worker utilizes one.
+	Environment param.Field[string] `json:"environment"`
+	// Namespace to bind to
+	Namespace param.Field[string]      `json:"namespace"`
+	Outbound  param.Field[interface{}] `json:"outbound"`
+	// Name of the Queue to bind to
+	QueueName param.Field[string] `json:"queue_name"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName param.Field[string] `json:"script_name"`
+	// Name of Worker to bind to
+	Service param.Field[string] `json:"service"`
 }
 
 func (r BindingParam) MarshalJSON() (data []byte, err error) {
@@ -271,7 +322,7 @@ func (r BindingParam) implementsWorkersBindingUnionParam() {}
 // [workers.DurableObjectBindingParam], [workers.R2BindingParam],
 // [workers.BindingWorkersQueueBindingParam], [workers.D1BindingParam],
 // [workers.DispatchNamespaceBindingParam], [workers.MTLSCERTBindingParam],
-// [BindingParam].
+// [workers.BindingWorkersAssetsBindingParam], [BindingParam].
 type BindingUnionParam interface {
 	implementsWorkersBindingUnionParam()
 }
@@ -288,6 +339,17 @@ func (r BindingWorkersQueueBindingParam) MarshalJSON() (data []byte, err error) 
 }
 
 func (r BindingWorkersQueueBindingParam) implementsWorkersBindingUnionParam() {}
+
+type BindingWorkersAssetsBindingParam struct {
+	// The class of resource that the binding provides.
+	Type param.Field[BindingWorkersAssetsBindingType] `json:"type,required"`
+}
+
+func (r BindingWorkersAssetsBindingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r BindingWorkersAssetsBindingParam) implementsWorkersBindingUnionParam() {}
 
 type D1Binding struct {
 	// ID of the D1 database to bind to
@@ -739,20 +801,20 @@ func (r MigrationStepTransferredClassParam) MarshalJSON() (data []byte, err erro
 }
 
 type MTLSCERTBinding struct {
+	// ID of the certificate to bind to
+	CertificateID string `json:"certificate_id,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
 	Type MTLSCERTBindingType `json:"type,required"`
-	// ID of the certificate to bind to
-	CertificateID string              `json:"certificate_id"`
-	JSON          mtlscertBindingJSON `json:"-"`
+	JSON mtlscertBindingJSON `json:"-"`
 }
 
 // mtlscertBindingJSON contains the JSON metadata for the struct [MTLSCERTBinding]
 type mtlscertBindingJSON struct {
+	CertificateID apijson.Field
 	Name          apijson.Field
 	Type          apijson.Field
-	CertificateID apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -783,10 +845,10 @@ func (r MTLSCERTBindingType) IsKnown() bool {
 }
 
 type MTLSCERTBindingParam struct {
+	// ID of the certificate to bind to
+	CertificateID param.Field[string] `json:"certificate_id,required"`
 	// The class of resource that the binding provides.
 	Type param.Field[MTLSCERTBindingType] `json:"type,required"`
-	// ID of the certificate to bind to
-	CertificateID param.Field[string] `json:"certificate_id"`
 }
 
 func (r MTLSCERTBindingParam) MarshalJSON() (data []byte, err error) {
