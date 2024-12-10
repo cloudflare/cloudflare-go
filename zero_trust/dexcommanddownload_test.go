@@ -17,7 +17,6 @@ import (
 )
 
 func TestDEXCommandDownloadGet(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 		w.Write([]byte("abc"))

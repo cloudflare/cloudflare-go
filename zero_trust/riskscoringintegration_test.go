@@ -15,7 +15,6 @@ import (
 )
 
 func TestRiskScoringIntegrationNewWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -44,7 +43,6 @@ func TestRiskScoringIntegrationNewWithOptionalParams(t *testing.T) {
 }
 
 func TestRiskScoringIntegrationUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -103,7 +101,6 @@ func TestRiskScoringIntegrationList(t *testing.T) {
 }
 
 func TestRiskScoringIntegrationDelete(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -133,7 +130,6 @@ func TestRiskScoringIntegrationDelete(t *testing.T) {
 }
 
 func TestRiskScoringIntegrationGet(t *testing.T) {
-	t.Skip("TODO: investigate broken test")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
