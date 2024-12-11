@@ -31,7 +31,7 @@ func TestLockdownNew(t *testing.T) {
 	)
 	_, err := client.Firewall.Lockdowns.New(context.TODO(), firewall.LockdownNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Configurations: cloudflare.F([]firewall.ConfigurationItemUnionParam{firewall.LockdownIPConfigurationParam{
+		Configurations: cloudflare.F(firewall.ConfigurationParam{firewall.LockdownIPConfigurationParam{
 			Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
 		}}),
@@ -65,7 +65,7 @@ func TestLockdownUpdate(t *testing.T) {
 		"372e67954025e0ba6aaa6d586b9e0b59",
 		firewall.LockdownUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Configurations: cloudflare.F([]firewall.ConfigurationItemUnionParam{firewall.LockdownIPConfigurationParam{
+			Configurations: cloudflare.F(firewall.ConfigurationParam{firewall.LockdownIPConfigurationParam{
 				Target: cloudflare.F(firewall.LockdownIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
 			}}),
