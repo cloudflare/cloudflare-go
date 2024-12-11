@@ -309,7 +309,7 @@ func (r alwaysUseHTTPSJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AlwaysUseHTTPS) ImplementsPagerulesPageRuleAction() {}
+func (r AlwaysUseHTTPS) ImplementsPageRulesPageRuleAction() {}
 
 // If enabled, any ` http://“ URL is converted to  `https://` through a 301
 // redirect.
@@ -337,11 +337,11 @@ func (r AlwaysUseHTTPSParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AlwaysUseHTTPSParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r AlwaysUseHTTPSParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r AlwaysUseHTTPSParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r AlwaysUseHTTPSParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r AlwaysUseHTTPSParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r AlwaysUseHTTPSParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 type AutomaticHTTPSRewrites struct {
 	// Turn on or off Automatic HTTPS Rewrites.
@@ -368,7 +368,7 @@ func (r automaticHTTPSRewritesJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AutomaticHTTPSRewrites) ImplementsPagerulesPageRuleAction() {}
+func (r AutomaticHTTPSRewrites) ImplementsPageRulesPageRuleAction() {}
 
 // Turn on or off Automatic HTTPS Rewrites.
 type AutomaticHTTPSRewritesID string
@@ -412,11 +412,11 @@ func (r AutomaticHTTPSRewritesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AutomaticHTTPSRewritesParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r AutomaticHTTPSRewritesParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r AutomaticHTTPSRewritesParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r AutomaticHTTPSRewritesParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r AutomaticHTTPSRewritesParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r AutomaticHTTPSRewritesParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 type AutomaticPlatformOptimization struct {
 	// Indicates whether or not
@@ -609,7 +609,7 @@ func (r browserCacheTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BrowserCacheTTL) ImplementsPagerulesPageRuleAction() {}
+func (r BrowserCacheTTL) ImplementsPageRulesPageRuleAction() {}
 
 // Control how long resources cached by client browsers remain valid.
 type BrowserCacheTTLID string
@@ -638,11 +638,11 @@ func (r BrowserCacheTTLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BrowserCacheTTLParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r BrowserCacheTTLParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r BrowserCacheTTLParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r BrowserCacheTTLParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r BrowserCacheTTLParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r BrowserCacheTTLParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 type BrowserCheck struct {
 	// Inspect the visitor's browser for headers commonly associated with spammers and
@@ -669,7 +669,7 @@ func (r browserCheckJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r BrowserCheck) ImplementsPagerulesPageRuleAction() {}
+func (r BrowserCheck) ImplementsPageRulesPageRuleAction() {}
 
 // Inspect the visitor's browser for headers commonly associated with spammers and
 // certain bots.
@@ -715,11 +715,11 @@ func (r BrowserCheckParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r BrowserCheckParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r BrowserCheckParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r BrowserCheckParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r BrowserCheckParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r BrowserCheckParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r BrowserCheckParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 type CacheLevel struct {
 	// Apply custom caching based on the option selected.
@@ -752,7 +752,7 @@ func (r cacheLevelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r CacheLevel) ImplementsPagerulesPageRuleAction() {}
+func (r CacheLevel) ImplementsPageRulesPageRuleAction() {}
 
 // Apply custom caching based on the option selected.
 type CacheLevelID string
@@ -813,11 +813,11 @@ func (r CacheLevelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CacheLevelParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r CacheLevelParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r CacheLevelParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r CacheLevelParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r CacheLevelParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r CacheLevelParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Specify how long a visitor is allowed access to your site after successfully
 // completing a challenge (such as a CAPTCHA). After the TTL has expired the
@@ -1263,7 +1263,7 @@ func (r emailObfuscationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r EmailObfuscation) ImplementsPagerulesPageRuleAction() {}
+func (r EmailObfuscation) ImplementsPageRulesPageRuleAction() {}
 
 // Turn on or off **Email Obfuscation**.
 type EmailObfuscationID string
@@ -1307,11 +1307,11 @@ func (r EmailObfuscationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r EmailObfuscationParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r EmailObfuscationParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r EmailObfuscationParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r EmailObfuscationParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r EmailObfuscationParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r EmailObfuscationParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // HTTP/2 Edge Prioritization optimises the delivery of resources served through
 // HTTP/2 to improve page load performance. It also supports fine control of
@@ -1854,7 +1854,7 @@ func (r ipGeolocationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r IPGeolocation) ImplementsPagerulesPageRuleAction() {}
+func (r IPGeolocation) ImplementsPageRulesPageRuleAction() {}
 
 // Cloudflare adds a CF-IPCountry HTTP header containing the country code that
 // corresponds to the visitor.
@@ -1900,11 +1900,11 @@ func (r IPGeolocationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r IPGeolocationParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r IPGeolocationParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r IPGeolocationParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r IPGeolocationParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r IPGeolocationParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r IPGeolocationParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
@@ -2136,7 +2136,7 @@ func (r mirageJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Mirage) ImplementsPagerulesPageRuleAction() {}
+func (r Mirage) ImplementsPageRulesPageRuleAction() {}
 
 // Cloudflare Mirage reduces bandwidth used by images in mobile browsers. It can
 // accelerate loading of image-heavy websites on very slow mobile connections and
@@ -2184,11 +2184,11 @@ func (r MirageParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r MirageParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r MirageParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r MirageParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r MirageParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r MirageParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r MirageParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Enable Network Error Logging reporting on your zone. (Beta)
 type NEL struct {
@@ -2329,7 +2329,7 @@ func (r opportunisticEncryptionJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OpportunisticEncryption) ImplementsPagerulesPageRuleAction() {}
+func (r OpportunisticEncryption) ImplementsPageRulesPageRuleAction() {}
 
 // Opportunistic Encryption allows browsers to access HTTP URIs over an encrypted
 // TLS channel. It's not a substitute for HTTPS, but provides additional security
@@ -2377,11 +2377,11 @@ func (r OpportunisticEncryptionParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r OpportunisticEncryptionParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r OpportunisticEncryptionParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r OpportunisticEncryptionParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r OpportunisticEncryptionParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r OpportunisticEncryptionParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r OpportunisticEncryptionParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
@@ -2610,7 +2610,7 @@ func (r originErrorPagePassThruJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r OriginErrorPagePassThru) ImplementsPagerulesPageRuleAction() {}
+func (r OriginErrorPagePassThru) ImplementsPageRulesPageRuleAction() {}
 
 // Turn on or off Cloudflare error pages generated from issues sent from the origin
 // server. If enabled, this setting triggers error pages issued by the origin.
@@ -2656,11 +2656,11 @@ func (r OriginErrorPagePassThruParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r OriginErrorPagePassThruParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r OriginErrorPagePassThruParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r OriginErrorPagePassThruParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r OriginErrorPagePassThruParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r OriginErrorPagePassThruParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r OriginErrorPagePassThruParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 type Polish struct {
 	// Apply options from the Polish feature of the Cloudflare Speed app.
@@ -2686,7 +2686,7 @@ func (r polishJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Polish) ImplementsPagerulesPageRuleAction() {}
+func (r Polish) ImplementsPageRulesPageRuleAction() {}
 
 // Apply options from the Polish feature of the Cloudflare Speed app.
 type PolishID string
@@ -2731,11 +2731,11 @@ func (r PolishParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PolishParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r PolishParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r PolishParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r PolishParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r PolishParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r PolishParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
@@ -3046,7 +3046,7 @@ func (r responseBufferingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ResponseBuffering) ImplementsPagerulesPageRuleAction() {}
+func (r ResponseBuffering) ImplementsPageRulesPageRuleAction() {}
 
 // Turn on or off whether Cloudflare should wait for an entire file from the origin
 // server before forwarding it to the site visitor. By default, Cloudflare sends
@@ -3094,11 +3094,11 @@ func (r ResponseBufferingParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ResponseBufferingParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r ResponseBufferingParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r ResponseBufferingParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r ResponseBufferingParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r ResponseBufferingParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r ResponseBufferingParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 type RocketLoader struct {
 	// Turn on or off Rocket Loader in the Cloudflare Speed app.
@@ -3124,7 +3124,7 @@ func (r rocketLoaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RocketLoader) ImplementsPagerulesPageRuleAction() {}
+func (r RocketLoader) ImplementsPageRulesPageRuleAction() {}
 
 // Turn on or off Rocket Loader in the Cloudflare Speed app.
 type RocketLoaderID string
@@ -3168,11 +3168,11 @@ func (r RocketLoaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RocketLoaderParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r RocketLoaderParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r RocketLoaderParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r RocketLoaderParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r RocketLoaderParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r RocketLoaderParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Cloudflare security header for a zone.
 type SecurityHeaders struct {
@@ -3365,7 +3365,7 @@ func (r securityLevelJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SecurityLevel) ImplementsPagerulesPageRuleAction() {}
+func (r SecurityLevel) ImplementsPageRulesPageRuleAction() {}
 
 // Control options for the **Security Level** feature from the **Security** app.
 type SecurityLevelID string
@@ -3411,11 +3411,11 @@ func (r SecurityLevelParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SecurityLevelParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r SecurityLevelParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r SecurityLevelParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r SecurityLevelParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r SecurityLevelParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r SecurityLevelParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // If there is sensitive content on your website that you want visible to real
 // visitors, but that you want to hide from suspicious visitors, all you have to do
@@ -3562,7 +3562,7 @@ func (r sortQueryStringForCacheJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SortQueryStringForCache) ImplementsPagerulesPageRuleAction() {}
+func (r SortQueryStringForCache) ImplementsPageRulesPageRuleAction() {}
 
 // Turn on or off the reordering of query strings. When query strings have the same
 // structure, caching improves.
@@ -3608,11 +3608,11 @@ func (r SortQueryStringForCacheParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SortQueryStringForCacheParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r SortQueryStringForCacheParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r SortQueryStringForCacheParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r SortQueryStringForCacheParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r SortQueryStringForCacheParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r SortQueryStringForCacheParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 type SSL struct {
 	// Control options for the SSL feature of the Edge Certificates tab in the
@@ -3639,7 +3639,7 @@ func (r sslJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SSL) ImplementsPagerulesPageRuleAction() {}
+func (r SSL) ImplementsPageRulesPageRuleAction() {}
 
 // Control options for the SSL feature of the Edge Certificates tab in the
 // Cloudflare SSL/TLS app.
@@ -3688,11 +3688,11 @@ func (r SSLParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SSLParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r SSLParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r SSLParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r SSLParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r SSLParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r SSLParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
@@ -3980,7 +3980,7 @@ func (r trueClientIPHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r TrueClientIPHeader) ImplementsPagerulesPageRuleAction() {}
+func (r TrueClientIPHeader) ImplementsPageRulesPageRuleAction() {}
 
 // Turn on or off the True-Client-IP Header feature of the Cloudflare Network app.
 type TrueClientIPHeaderID string
@@ -4024,11 +4024,11 @@ func (r TrueClientIPHeaderParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r TrueClientIPHeaderParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r TrueClientIPHeaderParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r TrueClientIPHeaderParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r TrueClientIPHeaderParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r TrueClientIPHeaderParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r TrueClientIPHeaderParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 type WAF struct {
 	// Turn on or off
@@ -4056,7 +4056,7 @@ func (r wafJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r WAF) ImplementsPagerulesPageRuleAction() {}
+func (r WAF) ImplementsPageRulesPageRuleAction() {}
 
 // Turn on or off
 // [WAF managed rules (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/).
@@ -4104,11 +4104,11 @@ func (r WAFParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WAFParam) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r WAFParam) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
-func (r WAFParam) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r WAFParam) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
-func (r WAFParam) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r WAFParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will

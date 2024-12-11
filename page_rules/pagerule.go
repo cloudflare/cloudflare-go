@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package pagerules
+package page_rules
 
 import (
 	"context"
@@ -21,28 +21,28 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// PageruleService contains methods and other services that help with interacting
+// PageRuleService contains methods and other services that help with interacting
 // with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewPageruleService] method instead.
-type PageruleService struct {
+// the [NewPageRuleService] method instead.
+type PageRuleService struct {
 	Options []option.RequestOption
 }
 
-// NewPageruleService generates a new service that applies the given options to
+// NewPageRuleService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewPageruleService(opts ...option.RequestOption) (r *PageruleService) {
-	r = &PageruleService{}
+func NewPageRuleService(opts ...option.RequestOption) (r *PageRuleService) {
+	r = &PageRuleService{}
 	r.Options = opts
 	return
 }
 
 // Creates a new Page Rule.
-func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opts ...option.RequestOption) (res *PageRule, err error) {
-	var env PageruleNewResponseEnvelope
+func (r *PageRuleService) New(ctx context.Context, params PageRuleNewParams, opts ...option.RequestOption) (res *PageRule, err error) {
+	var env PageRuleNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -59,8 +59,8 @@ func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opt
 
 // Replaces the configuration of an existing Page Rule. The configuration of the
 // updated Page Rule will exactly match the data passed in the API request.
-func (r *PageruleService) Update(ctx context.Context, pageruleID string, params PageruleUpdateParams, opts ...option.RequestOption) (res *PageRule, err error) {
-	var env PageruleUpdateResponseEnvelope
+func (r *PageRuleService) Update(ctx context.Context, pageruleID string, params PageRuleUpdateParams, opts ...option.RequestOption) (res *PageRule, err error) {
+	var env PageRuleUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -80,8 +80,8 @@ func (r *PageruleService) Update(ctx context.Context, pageruleID string, params 
 }
 
 // Fetches Page Rules in a zone.
-func (r *PageruleService) List(ctx context.Context, params PageruleListParams, opts ...option.RequestOption) (res *[]PageRule, err error) {
-	var env PageruleListResponseEnvelope
+func (r *PageRuleService) List(ctx context.Context, params PageRuleListParams, opts ...option.RequestOption) (res *[]PageRule, err error) {
+	var env PageRuleListResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -97,8 +97,8 @@ func (r *PageruleService) List(ctx context.Context, params PageruleListParams, o
 }
 
 // Deletes an existing Page Rule.
-func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body PageruleDeleteParams, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
-	var env PageruleDeleteResponseEnvelope
+func (r *PageRuleService) Delete(ctx context.Context, pageruleID string, body PageRuleDeleteParams, opts ...option.RequestOption) (res *PageRuleDeleteResponse, err error) {
+	var env PageRuleDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -118,8 +118,8 @@ func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body Pa
 }
 
 // Updates one or more fields of an existing Page Rule.
-func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params PageruleEditParams, opts ...option.RequestOption) (res *PageRule, err error) {
-	var env PageruleEditResponseEnvelope
+func (r *PageRuleService) Edit(ctx context.Context, pageruleID string, params PageRuleEditParams, opts ...option.RequestOption) (res *PageRule, err error) {
+	var env PageRuleEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -139,8 +139,8 @@ func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params Pa
 }
 
 // Fetches the details of a Page Rule.
-func (r *PageruleService) Get(ctx context.Context, pageruleID string, query PageruleGetParams, opts ...option.RequestOption) (res *PageRule, err error) {
-	var env PageruleGetResponseEnvelope
+func (r *PageRuleService) Get(ctx context.Context, pageruleID string, query PageRuleGetParams, opts ...option.RequestOption) (res *PageRule, err error) {
+	var env PageRuleGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
@@ -250,23 +250,23 @@ func (r *PageRuleAction) UnmarshalJSON(data []byte) (err error) {
 //
 // Possible runtime types of the union are [zones.AlwaysUseHTTPS],
 // [zones.AutomaticHTTPSRewrites], [zones.BrowserCacheTTL], [zones.BrowserCheck],
-// [pagerules.PageRuleActionsBypassCacheOnCookie],
-// [pagerules.PageRuleActionsCacheByDeviceType],
-// [pagerules.PageRuleActionsCacheDeceptionArmor],
-// [pagerules.PageRuleActionsCacheKey], [zones.CacheLevel],
-// [pagerules.PageRuleActionsCacheOnCookie],
-// [pagerules.PageRuleActionsDisableApps],
-// [pagerules.PageRuleActionsDisablePerformance],
-// [pagerules.PageRuleActionsDisableSecurity],
-// [pagerules.PageRuleActionsDisableZaraz],
-// [pagerules.PageRuleActionsEdgeCacheTTL], [zones.EmailObfuscation],
-// [pagerules.PageRuleActionsExplicitCacheControl],
-// [pagerules.PageRuleActionsForwardingURL],
-// [pagerules.PageRuleActionsHostHeaderOverride], [zones.IPGeolocation],
+// [page_rules.PageRuleActionsBypassCacheOnCookie],
+// [page_rules.PageRuleActionsCacheByDeviceType],
+// [page_rules.PageRuleActionsCacheDeceptionArmor],
+// [page_rules.PageRuleActionsCacheKey], [zones.CacheLevel],
+// [page_rules.PageRuleActionsCacheOnCookie],
+// [page_rules.PageRuleActionsDisableApps],
+// [page_rules.PageRuleActionsDisablePerformance],
+// [page_rules.PageRuleActionsDisableSecurity],
+// [page_rules.PageRuleActionsDisableZaraz],
+// [page_rules.PageRuleActionsEdgeCacheTTL], [zones.EmailObfuscation],
+// [page_rules.PageRuleActionsExplicitCacheControl],
+// [page_rules.PageRuleActionsForwardingURL],
+// [page_rules.PageRuleActionsHostHeaderOverride], [zones.IPGeolocation],
 // [zones.Mirage], [zones.OpportunisticEncryption],
 // [zones.OriginErrorPagePassThru], [zones.Polish],
-// [pagerules.PageRuleActionsResolveOverride],
-// [pagerules.PageRuleActionsRespectStrongEtag], [zones.ResponseBuffering],
+// [page_rules.PageRuleActionsResolveOverride],
+// [page_rules.PageRuleActionsRespectStrongEtag], [zones.ResponseBuffering],
 // [zones.RocketLoader], [zones.SecurityLevel], [zones.SortQueryStringForCache],
 // [zones.SSL], [zones.TrueClientIPHeader], [zones.WAF].
 func (r PageRuleAction) AsUnion() PageRuleActionsUnion {
@@ -275,27 +275,27 @@ func (r PageRuleAction) AsUnion() PageRuleActionsUnion {
 
 // Union satisfied by [zones.AlwaysUseHTTPS], [zones.AutomaticHTTPSRewrites],
 // [zones.BrowserCacheTTL], [zones.BrowserCheck],
-// [pagerules.PageRuleActionsBypassCacheOnCookie],
-// [pagerules.PageRuleActionsCacheByDeviceType],
-// [pagerules.PageRuleActionsCacheDeceptionArmor],
-// [pagerules.PageRuleActionsCacheKey], [zones.CacheLevel],
-// [pagerules.PageRuleActionsCacheOnCookie],
-// [pagerules.PageRuleActionsDisableApps],
-// [pagerules.PageRuleActionsDisablePerformance],
-// [pagerules.PageRuleActionsDisableSecurity],
-// [pagerules.PageRuleActionsDisableZaraz],
-// [pagerules.PageRuleActionsEdgeCacheTTL], [zones.EmailObfuscation],
-// [pagerules.PageRuleActionsExplicitCacheControl],
-// [pagerules.PageRuleActionsForwardingURL],
-// [pagerules.PageRuleActionsHostHeaderOverride], [zones.IPGeolocation],
+// [page_rules.PageRuleActionsBypassCacheOnCookie],
+// [page_rules.PageRuleActionsCacheByDeviceType],
+// [page_rules.PageRuleActionsCacheDeceptionArmor],
+// [page_rules.PageRuleActionsCacheKey], [zones.CacheLevel],
+// [page_rules.PageRuleActionsCacheOnCookie],
+// [page_rules.PageRuleActionsDisableApps],
+// [page_rules.PageRuleActionsDisablePerformance],
+// [page_rules.PageRuleActionsDisableSecurity],
+// [page_rules.PageRuleActionsDisableZaraz],
+// [page_rules.PageRuleActionsEdgeCacheTTL], [zones.EmailObfuscation],
+// [page_rules.PageRuleActionsExplicitCacheControl],
+// [page_rules.PageRuleActionsForwardingURL],
+// [page_rules.PageRuleActionsHostHeaderOverride], [zones.IPGeolocation],
 // [zones.Mirage], [zones.OpportunisticEncryption],
 // [zones.OriginErrorPagePassThru], [zones.Polish],
-// [pagerules.PageRuleActionsResolveOverride],
-// [pagerules.PageRuleActionsRespectStrongEtag], [zones.ResponseBuffering],
+// [page_rules.PageRuleActionsResolveOverride],
+// [page_rules.PageRuleActionsRespectStrongEtag], [zones.ResponseBuffering],
 // [zones.RocketLoader], [zones.SecurityLevel], [zones.SortQueryStringForCache],
 // [zones.SSL], [zones.TrueClientIPHeader] or [zones.WAF].
 type PageRuleActionsUnion interface {
-	ImplementsPagerulesPageRuleAction()
+	ImplementsPageRulesPageRuleAction()
 }
 
 func init() {
@@ -498,7 +498,7 @@ func (r pageRuleActionsBypassCacheOnCookieJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsBypassCacheOnCookie) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsBypassCacheOnCookie) ImplementsPageRulesPageRuleAction() {}
 
 // Bypass cache and fetch resources from the origin server if a regular expression
 // matches against a cookie name present in the request.
@@ -541,7 +541,7 @@ func (r pageRuleActionsCacheByDeviceTypeJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsCacheByDeviceType) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsCacheByDeviceType) ImplementsPageRulesPageRuleAction() {}
 
 // Separate cached content based on the visitor's device type.
 type PageRuleActionsCacheByDeviceTypeID string
@@ -601,7 +601,7 @@ func (r pageRuleActionsCacheDeceptionArmorJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsCacheDeceptionArmor) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsCacheDeceptionArmor) ImplementsPageRulesPageRuleAction() {}
 
 // Protect from web cache deception attacks while still allowing static assets to
 // be cached. This setting verifies that the URL's extension matches the returned
@@ -662,7 +662,7 @@ func (r pageRuleActionsCacheKeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsCacheKey) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsCacheKey) ImplementsPageRulesPageRuleAction() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
@@ -828,10 +828,10 @@ func (r pageRuleActionsCacheKeyValueQueryStringJSON) RawJSON() string {
 // Ignore all query string parameters.
 //
 // Union satisfied by
-// [pagerules.PageRuleActionsCacheKeyValueQueryStringExcludeString] or
-// [pagerules.PageRuleActionsCacheKeyValueQueryStringExcludeArray].
+// [page_rules.PageRuleActionsCacheKeyValueQueryStringExcludeString] or
+// [page_rules.PageRuleActionsCacheKeyValueQueryStringExcludeArray].
 type PageRuleActionsCacheKeyValueQueryStringExcludeUnion interface {
-	implementsPagerulesPageRuleActionsCacheKeyValueQueryStringExcludeUnion()
+	implementsPageRulesPageRuleActionsCacheKeyValueQueryStringExcludeUnion()
 }
 
 func init() {
@@ -864,21 +864,21 @@ func (r PageRuleActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
 	return false
 }
 
-func (r PageRuleActionsCacheKeyValueQueryStringExcludeString) implementsPagerulesPageRuleActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleActionsCacheKeyValueQueryStringExcludeString) implementsPageRulesPageRuleActionsCacheKeyValueQueryStringExcludeUnion() {
 }
 
 type PageRuleActionsCacheKeyValueQueryStringExcludeArray []string
 
-func (r PageRuleActionsCacheKeyValueQueryStringExcludeArray) implementsPagerulesPageRuleActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleActionsCacheKeyValueQueryStringExcludeArray) implementsPageRulesPageRuleActionsCacheKeyValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
 //
 // Union satisfied by
-// [pagerules.PageRuleActionsCacheKeyValueQueryStringIncludeString] or
-// [pagerules.PageRuleActionsCacheKeyValueQueryStringIncludeArray].
+// [page_rules.PageRuleActionsCacheKeyValueQueryStringIncludeString] or
+// [page_rules.PageRuleActionsCacheKeyValueQueryStringIncludeArray].
 type PageRuleActionsCacheKeyValueQueryStringIncludeUnion interface {
-	implementsPagerulesPageRuleActionsCacheKeyValueQueryStringIncludeUnion()
+	implementsPageRulesPageRuleActionsCacheKeyValueQueryStringIncludeUnion()
 }
 
 func init() {
@@ -911,12 +911,12 @@ func (r PageRuleActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
 	return false
 }
 
-func (r PageRuleActionsCacheKeyValueQueryStringIncludeString) implementsPagerulesPageRuleActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleActionsCacheKeyValueQueryStringIncludeString) implementsPageRulesPageRuleActionsCacheKeyValueQueryStringIncludeUnion() {
 }
 
 type PageRuleActionsCacheKeyValueQueryStringIncludeArray []string
 
-func (r PageRuleActionsCacheKeyValueQueryStringIncludeArray) implementsPagerulesPageRuleActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleActionsCacheKeyValueQueryStringIncludeArray) implementsPageRulesPageRuleActionsCacheKeyValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
@@ -976,7 +976,7 @@ func (r pageRuleActionsCacheOnCookieJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsCacheOnCookie) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsCacheOnCookie) ImplementsPageRulesPageRuleAction() {}
 
 // Apply the Cache Everything option (Cache Level setting) based on a regular
 // expression match against a cookie name.
@@ -1018,7 +1018,7 @@ func (r pageRuleActionsDisableAppsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsDisableApps) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsDisableApps) ImplementsPageRulesPageRuleAction() {}
 
 // Turn off all active
 // [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
@@ -1062,7 +1062,7 @@ func (r pageRuleActionsDisablePerformanceJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsDisablePerformance) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsDisablePerformance) ImplementsPageRulesPageRuleAction() {}
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
@@ -1110,7 +1110,7 @@ func (r pageRuleActionsDisableSecurityJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsDisableSecurity) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsDisableSecurity) ImplementsPageRulesPageRuleAction() {}
 
 // Turn off
 // [Email Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/),
@@ -1155,7 +1155,7 @@ func (r pageRuleActionsDisableZarazJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsDisableZaraz) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsDisableZaraz) ImplementsPageRulesPageRuleAction() {}
 
 // Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
 type PageRuleActionsDisableZarazID string
@@ -1197,7 +1197,7 @@ func (r pageRuleActionsEdgeCacheTTLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsEdgeCacheTTL) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsEdgeCacheTTL) ImplementsPageRulesPageRuleAction() {}
 
 // Specify how long to cache a resource in the Cloudflare global network. _Edge
 // Cache TTL_ is not visible in response headers.
@@ -1241,7 +1241,7 @@ func (r pageRuleActionsExplicitCacheControlJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsExplicitCacheControl) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsExplicitCacheControl) ImplementsPageRulesPageRuleAction() {}
 
 // Origin Cache Control is enabled by default for Free, Pro, and Business domains
 // and disabled by default for Enterprise domains.
@@ -1300,7 +1300,7 @@ func (r pageRuleActionsForwardingURLJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsForwardingURL) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsForwardingURL) ImplementsPageRulesPageRuleAction() {}
 
 // Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 // [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
@@ -1387,7 +1387,7 @@ func (r pageRuleActionsHostHeaderOverrideJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsHostHeaderOverride) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsHostHeaderOverride) ImplementsPageRulesPageRuleAction() {}
 
 // Apply a specific host header.
 type PageRuleActionsHostHeaderOverrideID string
@@ -1429,7 +1429,7 @@ func (r pageRuleActionsResolveOverrideJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsResolveOverride) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsResolveOverride) ImplementsPageRulesPageRuleAction() {}
 
 // Change the origin address to the value specified in this setting.
 type PageRuleActionsResolveOverrideID string
@@ -1472,7 +1472,7 @@ func (r pageRuleActionsRespectStrongEtagJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsRespectStrongEtag) ImplementsPagerulesPageRuleAction() {}
+func (r PageRuleActionsRespectStrongEtag) ImplementsPageRulesPageRuleAction() {}
 
 // Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 // the origin server.
@@ -1681,34 +1681,34 @@ func (r TargetConstraintParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PageruleDeleteResponse struct {
+type PageRuleDeleteResponse struct {
 	// Identifier
 	ID   string                     `json:"id,required"`
-	JSON pageruleDeleteResponseJSON `json:"-"`
+	JSON pageRuleDeleteResponseJSON `json:"-"`
 }
 
-// pageruleDeleteResponseJSON contains the JSON metadata for the struct
-// [PageruleDeleteResponse]
-type pageruleDeleteResponseJSON struct {
+// pageRuleDeleteResponseJSON contains the JSON metadata for the struct
+// [PageRuleDeleteResponse]
+type pageRuleDeleteResponseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageruleDeleteResponseJSON) RawJSON() string {
+func (r pageRuleDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type PageruleNewParams struct {
+type PageRuleNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
-	Actions param.Field[[]PageruleNewParamsActionUnion] `json:"actions,required"`
+	Actions param.Field[[]PageRuleNewParamsActionUnion] `json:"actions,required"`
 	// The rule targets to evaluate on each request.
 	Targets param.Field[[]TargetParam] `json:"targets,required"`
 	// The priority of the rule, used to define which Page Rule is processed over
@@ -1718,232 +1718,233 @@ type PageruleNewParams struct {
 	// rule B so it overrides rule A.
 	Priority param.Field[int64] `json:"priority"`
 	// The status of the Page Rule.
-	Status param.Field[PageruleNewParamsStatus] `json:"status"`
+	Status param.Field[PageRuleNewParamsStatus] `json:"status"`
 }
 
-func (r PageruleNewParams) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PageruleNewParamsAction struct {
+type PageRuleNewParamsAction struct {
 	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
 	// redirect.
-	ID    param.Field[PageruleNewParamsActionsID] `json:"id"`
+	ID    param.Field[PageRuleNewParamsActionsID] `json:"id"`
 	Value param.Field[interface{}]                `json:"value"`
 }
 
-func (r PageruleNewParamsAction) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsAction) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsAction) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r PageRuleNewParamsAction) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
 // Satisfied by [zones.AlwaysUseHTTPSParam], [zones.AutomaticHTTPSRewritesParam],
 // [zones.BrowserCacheTTLParam], [zones.BrowserCheckParam],
-// [pagerules.PageruleNewParamsActionsBypassCacheOnCookie],
-// [pagerules.PageruleNewParamsActionsCacheByDeviceType],
-// [pagerules.PageruleNewParamsActionsCacheDeceptionArmor],
-// [pagerules.PageruleNewParamsActionsCacheKey], [zones.CacheLevelParam],
-// [pagerules.PageruleNewParamsActionsCacheOnCookie],
-// [pagerules.PageruleNewParamsActionsDisableApps],
-// [pagerules.PageruleNewParamsActionsDisablePerformance],
-// [pagerules.PageruleNewParamsActionsDisableSecurity],
-// [pagerules.PageruleNewParamsActionsDisableZaraz],
-// [pagerules.PageruleNewParamsActionsEdgeCacheTTL], [zones.EmailObfuscationParam],
-// [pagerules.PageruleNewParamsActionsExplicitCacheControl],
-// [pagerules.PageruleNewParamsActionsForwardingURL],
-// [pagerules.PageruleNewParamsActionsHostHeaderOverride],
+// [page_rules.PageRuleNewParamsActionsBypassCacheOnCookie],
+// [page_rules.PageRuleNewParamsActionsCacheByDeviceType],
+// [page_rules.PageRuleNewParamsActionsCacheDeceptionArmor],
+// [page_rules.PageRuleNewParamsActionsCacheKey], [zones.CacheLevelParam],
+// [page_rules.PageRuleNewParamsActionsCacheOnCookie],
+// [page_rules.PageRuleNewParamsActionsDisableApps],
+// [page_rules.PageRuleNewParamsActionsDisablePerformance],
+// [page_rules.PageRuleNewParamsActionsDisableSecurity],
+// [page_rules.PageRuleNewParamsActionsDisableZaraz],
+// [page_rules.PageRuleNewParamsActionsEdgeCacheTTL],
+// [zones.EmailObfuscationParam],
+// [page_rules.PageRuleNewParamsActionsExplicitCacheControl],
+// [page_rules.PageRuleNewParamsActionsForwardingURL],
+// [page_rules.PageRuleNewParamsActionsHostHeaderOverride],
 // [zones.IPGeolocationParam], [zones.MirageParam],
 // [zones.OpportunisticEncryptionParam], [zones.OriginErrorPagePassThruParam],
-// [zones.PolishParam], [pagerules.PageruleNewParamsActionsResolveOverride],
-// [pagerules.PageruleNewParamsActionsRespectStrongEtag],
+// [zones.PolishParam], [page_rules.PageRuleNewParamsActionsResolveOverride],
+// [page_rules.PageRuleNewParamsActionsRespectStrongEtag],
 // [zones.ResponseBufferingParam], [zones.RocketLoaderParam],
 // [zones.SecurityLevelParam], [zones.SortQueryStringForCacheParam],
 // [zones.SSLParam], [zones.TrueClientIPHeaderParam], [zones.WAFParam],
-// [PageruleNewParamsAction].
-type PageruleNewParamsActionUnion interface {
-	ImplementsPagerulesPageruleNewParamsActionUnion()
+// [PageRuleNewParamsAction].
+type PageRuleNewParamsActionUnion interface {
+	ImplementsPageRulesPageRuleNewParamsActionUnion()
 }
 
-type PageruleNewParamsActionsBypassCacheOnCookie struct {
+type PageRuleNewParamsActionsBypassCacheOnCookie struct {
 	// Bypass cache and fetch resources from the origin server if a regular expression
 	// matches against a cookie name present in the request.
-	ID param.Field[PageruleNewParamsActionsBypassCacheOnCookieID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsBypassCacheOnCookieID] `json:"id"`
 	// The regular expression to use for matching cookie names in the request. Refer to
 	// [Bypass Cache on Cookie setting](https://developers.cloudflare.com/rules/page-rules/reference/additional-reference/#bypass-cache-on-cookie-setting)
 	// to learn about limited regular expression support.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleNewParamsActionsBypassCacheOnCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsBypassCacheOnCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsBypassCacheOnCookie) ImplementsPagerulesPageruleNewParamsActionUnion() {
+func (r PageRuleNewParamsActionsBypassCacheOnCookie) ImplementsPageRulesPageRuleNewParamsActionUnion() {
 }
 
 // Bypass cache and fetch resources from the origin server if a regular expression
 // matches against a cookie name present in the request.
-type PageruleNewParamsActionsBypassCacheOnCookieID string
+type PageRuleNewParamsActionsBypassCacheOnCookieID string
 
 const (
-	PageruleNewParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie PageruleNewParamsActionsBypassCacheOnCookieID = "bypass_cache_on_cookie"
+	PageRuleNewParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie PageRuleNewParamsActionsBypassCacheOnCookieID = "bypass_cache_on_cookie"
 )
 
-func (r PageruleNewParamsActionsBypassCacheOnCookieID) IsKnown() bool {
+func (r PageRuleNewParamsActionsBypassCacheOnCookieID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie:
+	case PageRuleNewParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsCacheByDeviceType struct {
+type PageRuleNewParamsActionsCacheByDeviceType struct {
 	// Separate cached content based on the visitor's device type.
-	ID param.Field[PageruleNewParamsActionsCacheByDeviceTypeID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsCacheByDeviceTypeID] `json:"id"`
 	// The status of Cache By Device Type.
-	Value param.Field[PageruleNewParamsActionsCacheByDeviceTypeValue] `json:"value"`
+	Value param.Field[PageRuleNewParamsActionsCacheByDeviceTypeValue] `json:"value"`
 }
 
-func (r PageruleNewParamsActionsCacheByDeviceType) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheByDeviceType) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsCacheByDeviceType) ImplementsPagerulesPageruleNewParamsActionUnion() {
+func (r PageRuleNewParamsActionsCacheByDeviceType) ImplementsPageRulesPageRuleNewParamsActionUnion() {
 }
 
 // Separate cached content based on the visitor's device type.
-type PageruleNewParamsActionsCacheByDeviceTypeID string
+type PageRuleNewParamsActionsCacheByDeviceTypeID string
 
 const (
-	PageruleNewParamsActionsCacheByDeviceTypeIDCacheByDeviceType PageruleNewParamsActionsCacheByDeviceTypeID = "cache_by_device_type"
+	PageRuleNewParamsActionsCacheByDeviceTypeIDCacheByDeviceType PageRuleNewParamsActionsCacheByDeviceTypeID = "cache_by_device_type"
 )
 
-func (r PageruleNewParamsActionsCacheByDeviceTypeID) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheByDeviceTypeID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsCacheByDeviceTypeIDCacheByDeviceType:
+	case PageRuleNewParamsActionsCacheByDeviceTypeIDCacheByDeviceType:
 		return true
 	}
 	return false
 }
 
 // The status of Cache By Device Type.
-type PageruleNewParamsActionsCacheByDeviceTypeValue string
+type PageRuleNewParamsActionsCacheByDeviceTypeValue string
 
 const (
-	PageruleNewParamsActionsCacheByDeviceTypeValueOn  PageruleNewParamsActionsCacheByDeviceTypeValue = "on"
-	PageruleNewParamsActionsCacheByDeviceTypeValueOff PageruleNewParamsActionsCacheByDeviceTypeValue = "off"
+	PageRuleNewParamsActionsCacheByDeviceTypeValueOn  PageRuleNewParamsActionsCacheByDeviceTypeValue = "on"
+	PageRuleNewParamsActionsCacheByDeviceTypeValueOff PageRuleNewParamsActionsCacheByDeviceTypeValue = "off"
 )
 
-func (r PageruleNewParamsActionsCacheByDeviceTypeValue) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheByDeviceTypeValue) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsCacheByDeviceTypeValueOn, PageruleNewParamsActionsCacheByDeviceTypeValueOff:
+	case PageRuleNewParamsActionsCacheByDeviceTypeValueOn, PageRuleNewParamsActionsCacheByDeviceTypeValueOff:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsCacheDeceptionArmor struct {
+type PageRuleNewParamsActionsCacheDeceptionArmor struct {
 	// Protect from web cache deception attacks while still allowing static assets to
 	// be cached. This setting verifies that the URL's extension matches the returned
 	// `Content-Type`.
-	ID param.Field[PageruleNewParamsActionsCacheDeceptionArmorID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsCacheDeceptionArmorID] `json:"id"`
 	// The status of Cache Deception Armor.
-	Value param.Field[PageruleNewParamsActionsCacheDeceptionArmorValue] `json:"value"`
+	Value param.Field[PageRuleNewParamsActionsCacheDeceptionArmorValue] `json:"value"`
 }
 
-func (r PageruleNewParamsActionsCacheDeceptionArmor) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheDeceptionArmor) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsCacheDeceptionArmor) ImplementsPagerulesPageruleNewParamsActionUnion() {
+func (r PageRuleNewParamsActionsCacheDeceptionArmor) ImplementsPageRulesPageRuleNewParamsActionUnion() {
 }
 
 // Protect from web cache deception attacks while still allowing static assets to
 // be cached. This setting verifies that the URL's extension matches the returned
 // `Content-Type`.
-type PageruleNewParamsActionsCacheDeceptionArmorID string
+type PageRuleNewParamsActionsCacheDeceptionArmorID string
 
 const (
-	PageruleNewParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor PageruleNewParamsActionsCacheDeceptionArmorID = "cache_deception_armor"
+	PageRuleNewParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor PageRuleNewParamsActionsCacheDeceptionArmorID = "cache_deception_armor"
 )
 
-func (r PageruleNewParamsActionsCacheDeceptionArmorID) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheDeceptionArmorID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor:
+	case PageRuleNewParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor:
 		return true
 	}
 	return false
 }
 
 // The status of Cache Deception Armor.
-type PageruleNewParamsActionsCacheDeceptionArmorValue string
+type PageRuleNewParamsActionsCacheDeceptionArmorValue string
 
 const (
-	PageruleNewParamsActionsCacheDeceptionArmorValueOn  PageruleNewParamsActionsCacheDeceptionArmorValue = "on"
-	PageruleNewParamsActionsCacheDeceptionArmorValueOff PageruleNewParamsActionsCacheDeceptionArmorValue = "off"
+	PageRuleNewParamsActionsCacheDeceptionArmorValueOn  PageRuleNewParamsActionsCacheDeceptionArmorValue = "on"
+	PageRuleNewParamsActionsCacheDeceptionArmorValueOff PageRuleNewParamsActionsCacheDeceptionArmorValue = "off"
 )
 
-func (r PageruleNewParamsActionsCacheDeceptionArmorValue) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheDeceptionArmorValue) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsCacheDeceptionArmorValueOn, PageruleNewParamsActionsCacheDeceptionArmorValueOff:
+	case PageRuleNewParamsActionsCacheDeceptionArmorValueOn, PageRuleNewParamsActionsCacheDeceptionArmorValueOff:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsCacheKey struct {
+type PageRuleNewParamsActionsCacheKey struct {
 	// Control specifically what variables to include when deciding which resources to
 	// cache. This allows customers to determine what to cache based on something other
 	// than just the URL.
-	ID    param.Field[PageruleNewParamsActionsCacheKeyID]    `json:"id"`
-	Value param.Field[PageruleNewParamsActionsCacheKeyValue] `json:"value"`
+	ID    param.Field[PageRuleNewParamsActionsCacheKeyID]    `json:"id"`
+	Value param.Field[PageRuleNewParamsActionsCacheKeyValue] `json:"value"`
 }
 
-func (r PageruleNewParamsActionsCacheKey) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKey) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsCacheKey) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsCacheKey) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
 // than just the URL.
-type PageruleNewParamsActionsCacheKeyID string
+type PageRuleNewParamsActionsCacheKeyID string
 
 const (
-	PageruleNewParamsActionsCacheKeyIDCacheKey PageruleNewParamsActionsCacheKeyID = "cache_key"
+	PageRuleNewParamsActionsCacheKeyIDCacheKey PageRuleNewParamsActionsCacheKeyID = "cache_key"
 )
 
-func (r PageruleNewParamsActionsCacheKeyID) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheKeyID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsCacheKeyIDCacheKey:
+	case PageRuleNewParamsActionsCacheKeyIDCacheKey:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsCacheKeyValue struct {
+type PageRuleNewParamsActionsCacheKeyValue struct {
 	// Controls which cookies appear in the Cache Key.
-	Cookie param.Field[PageruleNewParamsActionsCacheKeyValueCookie] `json:"cookie"`
+	Cookie param.Field[PageRuleNewParamsActionsCacheKeyValueCookie] `json:"cookie"`
 	// Controls which headers go into the Cache Key. Exactly one of `include` or
 	// `exclude` is expected.
-	Header param.Field[PageruleNewParamsActionsCacheKeyValueHeader] `json:"header"`
+	Header param.Field[PageRuleNewParamsActionsCacheKeyValueHeader] `json:"header"`
 	// Determines which host header to include in the Cache Key.
-	Host param.Field[PageruleNewParamsActionsCacheKeyValueHost] `json:"host"`
+	Host param.Field[PageRuleNewParamsActionsCacheKeyValueHost] `json:"host"`
 	// Controls which URL query string parameters go into the Cache Key. Exactly one of
 	// `include` or `exclude` is expected.
-	QueryString param.Field[PageruleNewParamsActionsCacheKeyValueQueryString] `json:"query_string"`
+	QueryString param.Field[PageRuleNewParamsActionsCacheKeyValueQueryString] `json:"query_string"`
 	// Feature fields to add features about the end-user (client) into the Cache Key.
-	User param.Field[PageruleNewParamsActionsCacheKeyValueUser] `json:"user"`
+	User param.Field[PageRuleNewParamsActionsCacheKeyValueUser] `json:"user"`
 }
 
-func (r PageruleNewParamsActionsCacheKeyValue) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which cookies appear in the Cache Key.
-type PageruleNewParamsActionsCacheKeyValueCookie struct {
+type PageRuleNewParamsActionsCacheKeyValueCookie struct {
 	// A list of cookies to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -1951,13 +1952,13 @@ type PageruleNewParamsActionsCacheKeyValueCookie struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageruleNewParamsActionsCacheKeyValueCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyValueCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which headers go into the Cache Key. Exactly one of `include` or
 // `exclude` is expected.
-type PageruleNewParamsActionsCacheKeyValueHeader struct {
+type PageRuleNewParamsActionsCacheKeyValueHeader struct {
 	// A list of headers to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -1967,99 +1968,99 @@ type PageruleNewParamsActionsCacheKeyValueHeader struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageruleNewParamsActionsCacheKeyValueHeader) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyValueHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Determines which host header to include in the Cache Key.
-type PageruleNewParamsActionsCacheKeyValueHost struct {
+type PageRuleNewParamsActionsCacheKeyValueHost struct {
 	// Whether to include the Host header in the HTTP request sent to the origin.
 	Resolved param.Field[bool] `json:"resolved"`
 }
 
-func (r PageruleNewParamsActionsCacheKeyValueHost) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyValueHost) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which URL query string parameters go into the Cache Key. Exactly one of
 // `include` or `exclude` is expected.
-type PageruleNewParamsActionsCacheKeyValueQueryString struct {
+type PageRuleNewParamsActionsCacheKeyValueQueryString struct {
 	// Ignore all query string parameters.
-	Exclude param.Field[PageruleNewParamsActionsCacheKeyValueQueryStringExcludeUnion] `json:"exclude"`
+	Exclude param.Field[PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeUnion] `json:"exclude"`
 	// Include all query string parameters.
-	Include param.Field[PageruleNewParamsActionsCacheKeyValueQueryStringIncludeUnion] `json:"include"`
+	Include param.Field[PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeUnion] `json:"include"`
 }
 
-func (r PageruleNewParamsActionsCacheKeyValueQueryString) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyValueQueryString) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Ignore all query string parameters.
 //
 // Satisfied by
-// [pagerules.PageruleNewParamsActionsCacheKeyValueQueryStringExcludeString],
-// [pagerules.PageruleNewParamsActionsCacheKeyValueQueryStringExcludeArray].
-type PageruleNewParamsActionsCacheKeyValueQueryStringExcludeUnion interface {
-	implementsPagerulesPageruleNewParamsActionsCacheKeyValueQueryStringExcludeUnion()
+// [page_rules.PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeString],
+// [page_rules.PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeArray].
+type PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeUnion interface {
+	implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringExcludeUnion()
 }
 
 // Ignore all query string parameters.
-type PageruleNewParamsActionsCacheKeyValueQueryStringExcludeString string
+type PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeString string
 
 const (
-	PageruleNewParamsActionsCacheKeyValueQueryStringExcludeStringStar PageruleNewParamsActionsCacheKeyValueQueryStringExcludeString = "*"
+	PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeStringStar PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeString = "*"
 )
 
-func (r PageruleNewParamsActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsCacheKeyValueQueryStringExcludeStringStar:
+	case PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageruleNewParamsActionsCacheKeyValueQueryStringExcludeString) implementsPagerulesPageruleNewParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeString) implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringExcludeUnion() {
 }
 
-type PageruleNewParamsActionsCacheKeyValueQueryStringExcludeArray []string
+type PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeArray []string
 
-func (r PageruleNewParamsActionsCacheKeyValueQueryStringExcludeArray) implementsPagerulesPageruleNewParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeArray) implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
 //
 // Satisfied by
-// [pagerules.PageruleNewParamsActionsCacheKeyValueQueryStringIncludeString],
-// [pagerules.PageruleNewParamsActionsCacheKeyValueQueryStringIncludeArray].
-type PageruleNewParamsActionsCacheKeyValueQueryStringIncludeUnion interface {
-	implementsPagerulesPageruleNewParamsActionsCacheKeyValueQueryStringIncludeUnion()
+// [page_rules.PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeString],
+// [page_rules.PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeArray].
+type PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeUnion interface {
+	implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringIncludeUnion()
 }
 
 // Include all query string parameters.
-type PageruleNewParamsActionsCacheKeyValueQueryStringIncludeString string
+type PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeString string
 
 const (
-	PageruleNewParamsActionsCacheKeyValueQueryStringIncludeStringStar PageruleNewParamsActionsCacheKeyValueQueryStringIncludeString = "*"
+	PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeStringStar PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeString = "*"
 )
 
-func (r PageruleNewParamsActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsCacheKeyValueQueryStringIncludeStringStar:
+	case PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageruleNewParamsActionsCacheKeyValueQueryStringIncludeString) implementsPagerulesPageruleNewParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeString) implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringIncludeUnion() {
 }
 
-type PageruleNewParamsActionsCacheKeyValueQueryStringIncludeArray []string
+type PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeArray []string
 
-func (r PageruleNewParamsActionsCacheKeyValueQueryStringIncludeArray) implementsPagerulesPageruleNewParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeArray) implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
-type PageruleNewParamsActionsCacheKeyValueUser struct {
+type PageRuleNewParamsActionsCacheKeyValueUser struct {
 	// Classifies a request as `mobile`, `desktop`, or `tablet` based on the User
 	// Agent.
 	DeviceType param.Field[bool] `json:"device_type"`
@@ -2070,104 +2071,104 @@ type PageruleNewParamsActionsCacheKeyValueUser struct {
 	Lang param.Field[bool] `json:"lang"`
 }
 
-func (r PageruleNewParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PageruleNewParamsActionsCacheOnCookie struct {
+type PageRuleNewParamsActionsCacheOnCookie struct {
 	// Apply the Cache Everything option (Cache Level setting) based on a regular
 	// expression match against a cookie name.
-	ID param.Field[PageruleNewParamsActionsCacheOnCookieID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsCacheOnCookieID] `json:"id"`
 	// The regular expression to use for matching cookie names in the request.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleNewParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsCacheOnCookie) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsCacheOnCookie) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
 // Apply the Cache Everything option (Cache Level setting) based on a regular
 // expression match against a cookie name.
-type PageruleNewParamsActionsCacheOnCookieID string
+type PageRuleNewParamsActionsCacheOnCookieID string
 
 const (
-	PageruleNewParamsActionsCacheOnCookieIDCacheOnCookie PageruleNewParamsActionsCacheOnCookieID = "cache_on_cookie"
+	PageRuleNewParamsActionsCacheOnCookieIDCacheOnCookie PageRuleNewParamsActionsCacheOnCookieID = "cache_on_cookie"
 )
 
-func (r PageruleNewParamsActionsCacheOnCookieID) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheOnCookieID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsCacheOnCookieIDCacheOnCookie:
+	case PageRuleNewParamsActionsCacheOnCookieIDCacheOnCookie:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsDisableApps struct {
+type PageRuleNewParamsActionsDisableApps struct {
 	// Turn off all active
 	// [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
 	// (deprecated).
-	ID param.Field[PageruleNewParamsActionsDisableAppsID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsDisableAppsID] `json:"id"`
 }
 
-func (r PageruleNewParamsActionsDisableApps) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsDisableApps) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsDisableApps) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsDisableApps) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
 // Turn off all active
 // [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
 // (deprecated).
-type PageruleNewParamsActionsDisableAppsID string
+type PageRuleNewParamsActionsDisableAppsID string
 
 const (
-	PageruleNewParamsActionsDisableAppsIDDisableApps PageruleNewParamsActionsDisableAppsID = "disable_apps"
+	PageRuleNewParamsActionsDisableAppsIDDisableApps PageRuleNewParamsActionsDisableAppsID = "disable_apps"
 )
 
-func (r PageruleNewParamsActionsDisableAppsID) IsKnown() bool {
+func (r PageRuleNewParamsActionsDisableAppsID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsDisableAppsIDDisableApps:
+	case PageRuleNewParamsActionsDisableAppsIDDisableApps:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsDisablePerformance struct {
+type PageRuleNewParamsActionsDisablePerformance struct {
 	// Turn off
 	// [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
 	// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 	// and [Polish](https://developers.cloudflare.com/images/polish/).
-	ID param.Field[PageruleNewParamsActionsDisablePerformanceID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsDisablePerformanceID] `json:"id"`
 }
 
-func (r PageruleNewParamsActionsDisablePerformance) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsDisablePerformance) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsDisablePerformance) ImplementsPagerulesPageruleNewParamsActionUnion() {
+func (r PageRuleNewParamsActionsDisablePerformance) ImplementsPageRulesPageRuleNewParamsActionUnion() {
 }
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
 // [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 // and [Polish](https://developers.cloudflare.com/images/polish/).
-type PageruleNewParamsActionsDisablePerformanceID string
+type PageRuleNewParamsActionsDisablePerformanceID string
 
 const (
-	PageruleNewParamsActionsDisablePerformanceIDDisablePerformance PageruleNewParamsActionsDisablePerformanceID = "disable_performance"
+	PageRuleNewParamsActionsDisablePerformanceIDDisablePerformance PageRuleNewParamsActionsDisablePerformanceID = "disable_performance"
 )
 
-func (r PageruleNewParamsActionsDisablePerformanceID) IsKnown() bool {
+func (r PageRuleNewParamsActionsDisablePerformanceID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsDisablePerformanceIDDisablePerformance:
+	case PageRuleNewParamsActionsDisablePerformanceIDDisablePerformance:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsDisableSecurity struct {
+type PageRuleNewParamsActionsDisableSecurity struct {
 	// Turn off
 	// [Email Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/),
 	// [Rate Limiting (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-rate-limiting/),
@@ -2175,14 +2176,14 @@ type PageruleNewParamsActionsDisableSecurity struct {
 	// [URL (Zone) Lockdown](https://developers.cloudflare.com/waf/tools/zone-lockdown/),
 	// and
 	// [WAF managed rules (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/).
-	ID param.Field[PageruleNewParamsActionsDisableSecurityID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsDisableSecurityID] `json:"id"`
 }
 
-func (r PageruleNewParamsActionsDisableSecurity) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsDisableSecurity) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsDisableSecurity) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsDisableSecurity) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
 // Turn off
 // [Email Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/),
@@ -2191,280 +2192,280 @@ func (r PageruleNewParamsActionsDisableSecurity) ImplementsPagerulesPageruleNewP
 // [URL (Zone) Lockdown](https://developers.cloudflare.com/waf/tools/zone-lockdown/),
 // and
 // [WAF managed rules (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/).
-type PageruleNewParamsActionsDisableSecurityID string
+type PageRuleNewParamsActionsDisableSecurityID string
 
 const (
-	PageruleNewParamsActionsDisableSecurityIDDisableSecurity PageruleNewParamsActionsDisableSecurityID = "disable_security"
+	PageRuleNewParamsActionsDisableSecurityIDDisableSecurity PageRuleNewParamsActionsDisableSecurityID = "disable_security"
 )
 
-func (r PageruleNewParamsActionsDisableSecurityID) IsKnown() bool {
+func (r PageRuleNewParamsActionsDisableSecurityID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsDisableSecurityIDDisableSecurity:
+	case PageRuleNewParamsActionsDisableSecurityIDDisableSecurity:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsDisableZaraz struct {
+type PageRuleNewParamsActionsDisableZaraz struct {
 	// Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
-	ID param.Field[PageruleNewParamsActionsDisableZarazID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsDisableZarazID] `json:"id"`
 }
 
-func (r PageruleNewParamsActionsDisableZaraz) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsDisableZaraz) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsDisableZaraz) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsDisableZaraz) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
 // Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
-type PageruleNewParamsActionsDisableZarazID string
+type PageRuleNewParamsActionsDisableZarazID string
 
 const (
-	PageruleNewParamsActionsDisableZarazIDDisableZaraz PageruleNewParamsActionsDisableZarazID = "disable_zaraz"
+	PageRuleNewParamsActionsDisableZarazIDDisableZaraz PageRuleNewParamsActionsDisableZarazID = "disable_zaraz"
 )
 
-func (r PageruleNewParamsActionsDisableZarazID) IsKnown() bool {
+func (r PageRuleNewParamsActionsDisableZarazID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsDisableZarazIDDisableZaraz:
+	case PageRuleNewParamsActionsDisableZarazIDDisableZaraz:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsEdgeCacheTTL struct {
+type PageRuleNewParamsActionsEdgeCacheTTL struct {
 	// Specify how long to cache a resource in the Cloudflare global network. _Edge
 	// Cache TTL_ is not visible in response headers.
-	ID    param.Field[PageruleNewParamsActionsEdgeCacheTTLID] `json:"id"`
+	ID    param.Field[PageRuleNewParamsActionsEdgeCacheTTLID] `json:"id"`
 	Value param.Field[int64]                                  `json:"value"`
 }
 
-func (r PageruleNewParamsActionsEdgeCacheTTL) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsEdgeCacheTTL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsEdgeCacheTTL) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsEdgeCacheTTL) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
 // Specify how long to cache a resource in the Cloudflare global network. _Edge
 // Cache TTL_ is not visible in response headers.
-type PageruleNewParamsActionsEdgeCacheTTLID string
+type PageRuleNewParamsActionsEdgeCacheTTLID string
 
 const (
-	PageruleNewParamsActionsEdgeCacheTTLIDEdgeCacheTTL PageruleNewParamsActionsEdgeCacheTTLID = "edge_cache_ttl"
+	PageRuleNewParamsActionsEdgeCacheTTLIDEdgeCacheTTL PageRuleNewParamsActionsEdgeCacheTTLID = "edge_cache_ttl"
 )
 
-func (r PageruleNewParamsActionsEdgeCacheTTLID) IsKnown() bool {
+func (r PageRuleNewParamsActionsEdgeCacheTTLID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsEdgeCacheTTLIDEdgeCacheTTL:
+	case PageRuleNewParamsActionsEdgeCacheTTLIDEdgeCacheTTL:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsExplicitCacheControl struct {
+type PageRuleNewParamsActionsExplicitCacheControl struct {
 	// Origin Cache Control is enabled by default for Free, Pro, and Business domains
 	// and disabled by default for Enterprise domains.
-	ID param.Field[PageruleNewParamsActionsExplicitCacheControlID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsExplicitCacheControlID] `json:"id"`
 	// The status of Origin Cache Control.
-	Value param.Field[PageruleNewParamsActionsExplicitCacheControlValue] `json:"value"`
+	Value param.Field[PageRuleNewParamsActionsExplicitCacheControlValue] `json:"value"`
 }
 
-func (r PageruleNewParamsActionsExplicitCacheControl) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsExplicitCacheControl) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsExplicitCacheControl) ImplementsPagerulesPageruleNewParamsActionUnion() {
+func (r PageRuleNewParamsActionsExplicitCacheControl) ImplementsPageRulesPageRuleNewParamsActionUnion() {
 }
 
 // Origin Cache Control is enabled by default for Free, Pro, and Business domains
 // and disabled by default for Enterprise domains.
-type PageruleNewParamsActionsExplicitCacheControlID string
+type PageRuleNewParamsActionsExplicitCacheControlID string
 
 const (
-	PageruleNewParamsActionsExplicitCacheControlIDExplicitCacheControl PageruleNewParamsActionsExplicitCacheControlID = "explicit_cache_control"
+	PageRuleNewParamsActionsExplicitCacheControlIDExplicitCacheControl PageRuleNewParamsActionsExplicitCacheControlID = "explicit_cache_control"
 )
 
-func (r PageruleNewParamsActionsExplicitCacheControlID) IsKnown() bool {
+func (r PageRuleNewParamsActionsExplicitCacheControlID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsExplicitCacheControlIDExplicitCacheControl:
+	case PageRuleNewParamsActionsExplicitCacheControlIDExplicitCacheControl:
 		return true
 	}
 	return false
 }
 
 // The status of Origin Cache Control.
-type PageruleNewParamsActionsExplicitCacheControlValue string
+type PageRuleNewParamsActionsExplicitCacheControlValue string
 
 const (
-	PageruleNewParamsActionsExplicitCacheControlValueOn  PageruleNewParamsActionsExplicitCacheControlValue = "on"
-	PageruleNewParamsActionsExplicitCacheControlValueOff PageruleNewParamsActionsExplicitCacheControlValue = "off"
+	PageRuleNewParamsActionsExplicitCacheControlValueOn  PageRuleNewParamsActionsExplicitCacheControlValue = "on"
+	PageRuleNewParamsActionsExplicitCacheControlValueOff PageRuleNewParamsActionsExplicitCacheControlValue = "off"
 )
 
-func (r PageruleNewParamsActionsExplicitCacheControlValue) IsKnown() bool {
+func (r PageRuleNewParamsActionsExplicitCacheControlValue) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsExplicitCacheControlValueOn, PageruleNewParamsActionsExplicitCacheControlValueOff:
+	case PageRuleNewParamsActionsExplicitCacheControlValueOn, PageRuleNewParamsActionsExplicitCacheControlValueOff:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsForwardingURL struct {
+type PageRuleNewParamsActionsForwardingURL struct {
 	// Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 	// [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
-	ID    param.Field[PageruleNewParamsActionsForwardingURLID]    `json:"id"`
-	Value param.Field[PageruleNewParamsActionsForwardingURLValue] `json:"value"`
+	ID    param.Field[PageRuleNewParamsActionsForwardingURLID]    `json:"id"`
+	Value param.Field[PageRuleNewParamsActionsForwardingURLValue] `json:"value"`
 }
 
-func (r PageruleNewParamsActionsForwardingURL) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsForwardingURL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsForwardingURL) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsForwardingURL) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
 // Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 // [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
-type PageruleNewParamsActionsForwardingURLID string
+type PageRuleNewParamsActionsForwardingURLID string
 
 const (
-	PageruleNewParamsActionsForwardingURLIDForwardingURL PageruleNewParamsActionsForwardingURLID = "forwarding_url"
+	PageRuleNewParamsActionsForwardingURLIDForwardingURL PageRuleNewParamsActionsForwardingURLID = "forwarding_url"
 )
 
-func (r PageruleNewParamsActionsForwardingURLID) IsKnown() bool {
+func (r PageRuleNewParamsActionsForwardingURLID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsForwardingURLIDForwardingURL:
+	case PageRuleNewParamsActionsForwardingURLIDForwardingURL:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsForwardingURLValue struct {
+type PageRuleNewParamsActionsForwardingURLValue struct {
 	// The status code to use for the URL redirect. 301 is a permanent redirect. 302 is
 	// a temporary redirect.
-	StatusCode param.Field[PageruleNewParamsActionsForwardingURLValueStatusCode] `json:"status_code"`
+	StatusCode param.Field[PageRuleNewParamsActionsForwardingURLValueStatusCode] `json:"status_code"`
 	// The URL to redirect the request to. Notes: ${num} refers to the position of '\*'
 	// in the constraint value.
 	URL param.Field[string] `json:"url"`
 }
 
-func (r PageruleNewParamsActionsForwardingURLValue) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsForwardingURLValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The status code to use for the URL redirect. 301 is a permanent redirect. 302 is
 // a temporary redirect.
-type PageruleNewParamsActionsForwardingURLValueStatusCode int64
+type PageRuleNewParamsActionsForwardingURLValueStatusCode int64
 
 const (
-	PageruleNewParamsActionsForwardingURLValueStatusCode301 PageruleNewParamsActionsForwardingURLValueStatusCode = 301
-	PageruleNewParamsActionsForwardingURLValueStatusCode302 PageruleNewParamsActionsForwardingURLValueStatusCode = 302
+	PageRuleNewParamsActionsForwardingURLValueStatusCode301 PageRuleNewParamsActionsForwardingURLValueStatusCode = 301
+	PageRuleNewParamsActionsForwardingURLValueStatusCode302 PageRuleNewParamsActionsForwardingURLValueStatusCode = 302
 )
 
-func (r PageruleNewParamsActionsForwardingURLValueStatusCode) IsKnown() bool {
+func (r PageRuleNewParamsActionsForwardingURLValueStatusCode) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsForwardingURLValueStatusCode301, PageruleNewParamsActionsForwardingURLValueStatusCode302:
+	case PageRuleNewParamsActionsForwardingURLValueStatusCode301, PageRuleNewParamsActionsForwardingURLValueStatusCode302:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsHostHeaderOverride struct {
+type PageRuleNewParamsActionsHostHeaderOverride struct {
 	// Apply a specific host header.
-	ID param.Field[PageruleNewParamsActionsHostHeaderOverrideID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsHostHeaderOverrideID] `json:"id"`
 	// The hostname to use in the `Host` header
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleNewParamsActionsHostHeaderOverride) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsHostHeaderOverride) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsHostHeaderOverride) ImplementsPagerulesPageruleNewParamsActionUnion() {
+func (r PageRuleNewParamsActionsHostHeaderOverride) ImplementsPageRulesPageRuleNewParamsActionUnion() {
 }
 
 // Apply a specific host header.
-type PageruleNewParamsActionsHostHeaderOverrideID string
+type PageRuleNewParamsActionsHostHeaderOverrideID string
 
 const (
-	PageruleNewParamsActionsHostHeaderOverrideIDHostHeaderOverride PageruleNewParamsActionsHostHeaderOverrideID = "host_header_override"
+	PageRuleNewParamsActionsHostHeaderOverrideIDHostHeaderOverride PageRuleNewParamsActionsHostHeaderOverrideID = "host_header_override"
 )
 
-func (r PageruleNewParamsActionsHostHeaderOverrideID) IsKnown() bool {
+func (r PageRuleNewParamsActionsHostHeaderOverrideID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsHostHeaderOverrideIDHostHeaderOverride:
+	case PageRuleNewParamsActionsHostHeaderOverrideIDHostHeaderOverride:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsResolveOverride struct {
+type PageRuleNewParamsActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
-	ID param.Field[PageruleNewParamsActionsResolveOverrideID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsResolveOverrideID] `json:"id"`
 	// The origin address you want to override with.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleNewParamsActionsResolveOverride) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsResolveOverride) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsResolveOverride) ImplementsPagerulesPageruleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsResolveOverride) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
 // Change the origin address to the value specified in this setting.
-type PageruleNewParamsActionsResolveOverrideID string
+type PageRuleNewParamsActionsResolveOverrideID string
 
 const (
-	PageruleNewParamsActionsResolveOverrideIDResolveOverride PageruleNewParamsActionsResolveOverrideID = "resolve_override"
+	PageRuleNewParamsActionsResolveOverrideIDResolveOverride PageRuleNewParamsActionsResolveOverrideID = "resolve_override"
 )
 
-func (r PageruleNewParamsActionsResolveOverrideID) IsKnown() bool {
+func (r PageRuleNewParamsActionsResolveOverrideID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsResolveOverrideIDResolveOverride:
+	case PageRuleNewParamsActionsResolveOverrideIDResolveOverride:
 		return true
 	}
 	return false
 }
 
-type PageruleNewParamsActionsRespectStrongEtag struct {
+type PageRuleNewParamsActionsRespectStrongEtag struct {
 	// Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 	// the origin server.
-	ID param.Field[PageruleNewParamsActionsRespectStrongEtagID] `json:"id"`
+	ID param.Field[PageRuleNewParamsActionsRespectStrongEtagID] `json:"id"`
 	// The status of Respect Strong ETags
-	Value param.Field[PageruleNewParamsActionsRespectStrongEtagValue] `json:"value"`
+	Value param.Field[PageRuleNewParamsActionsRespectStrongEtagValue] `json:"value"`
 }
 
-func (r PageruleNewParamsActionsRespectStrongEtag) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsRespectStrongEtag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleNewParamsActionsRespectStrongEtag) ImplementsPagerulesPageruleNewParamsActionUnion() {
+func (r PageRuleNewParamsActionsRespectStrongEtag) ImplementsPageRulesPageRuleNewParamsActionUnion() {
 }
 
 // Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 // the origin server.
-type PageruleNewParamsActionsRespectStrongEtagID string
+type PageRuleNewParamsActionsRespectStrongEtagID string
 
 const (
-	PageruleNewParamsActionsRespectStrongEtagIDRespectStrongEtag PageruleNewParamsActionsRespectStrongEtagID = "respect_strong_etag"
+	PageRuleNewParamsActionsRespectStrongEtagIDRespectStrongEtag PageRuleNewParamsActionsRespectStrongEtagID = "respect_strong_etag"
 )
 
-func (r PageruleNewParamsActionsRespectStrongEtagID) IsKnown() bool {
+func (r PageRuleNewParamsActionsRespectStrongEtagID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsRespectStrongEtagIDRespectStrongEtag:
+	case PageRuleNewParamsActionsRespectStrongEtagIDRespectStrongEtag:
 		return true
 	}
 	return false
 }
 
 // The status of Respect Strong ETags
-type PageruleNewParamsActionsRespectStrongEtagValue string
+type PageRuleNewParamsActionsRespectStrongEtagValue string
 
 const (
-	PageruleNewParamsActionsRespectStrongEtagValueOn  PageruleNewParamsActionsRespectStrongEtagValue = "on"
-	PageruleNewParamsActionsRespectStrongEtagValueOff PageruleNewParamsActionsRespectStrongEtagValue = "off"
+	PageRuleNewParamsActionsRespectStrongEtagValueOn  PageRuleNewParamsActionsRespectStrongEtagValue = "on"
+	PageRuleNewParamsActionsRespectStrongEtagValueOff PageRuleNewParamsActionsRespectStrongEtagValue = "off"
 )
 
-func (r PageruleNewParamsActionsRespectStrongEtagValue) IsKnown() bool {
+func (r PageRuleNewParamsActionsRespectStrongEtagValue) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsRespectStrongEtagValueOn, PageruleNewParamsActionsRespectStrongEtagValueOff:
+	case PageRuleNewParamsActionsRespectStrongEtagValueOn, PageRuleNewParamsActionsRespectStrongEtagValueOff:
 		return true
 	}
 	return false
@@ -2472,80 +2473,80 @@ func (r PageruleNewParamsActionsRespectStrongEtagValue) IsKnown() bool {
 
 // If enabled, any ` http://“ URL is converted to  `https://` through a 301
 // redirect.
-type PageruleNewParamsActionsID string
+type PageRuleNewParamsActionsID string
 
 const (
-	PageruleNewParamsActionsIDAlwaysUseHTTPS          PageruleNewParamsActionsID = "always_use_https"
-	PageruleNewParamsActionsIDAutomaticHTTPSRewrites  PageruleNewParamsActionsID = "automatic_https_rewrites"
-	PageruleNewParamsActionsIDBrowserCacheTTL         PageruleNewParamsActionsID = "browser_cache_ttl"
-	PageruleNewParamsActionsIDBrowserCheck            PageruleNewParamsActionsID = "browser_check"
-	PageruleNewParamsActionsIDBypassCacheOnCookie     PageruleNewParamsActionsID = "bypass_cache_on_cookie"
-	PageruleNewParamsActionsIDCacheByDeviceType       PageruleNewParamsActionsID = "cache_by_device_type"
-	PageruleNewParamsActionsIDCacheDeceptionArmor     PageruleNewParamsActionsID = "cache_deception_armor"
-	PageruleNewParamsActionsIDCacheKey                PageruleNewParamsActionsID = "cache_key"
-	PageruleNewParamsActionsIDCacheLevel              PageruleNewParamsActionsID = "cache_level"
-	PageruleNewParamsActionsIDCacheOnCookie           PageruleNewParamsActionsID = "cache_on_cookie"
-	PageruleNewParamsActionsIDDisableApps             PageruleNewParamsActionsID = "disable_apps"
-	PageruleNewParamsActionsIDDisablePerformance      PageruleNewParamsActionsID = "disable_performance"
-	PageruleNewParamsActionsIDDisableSecurity         PageruleNewParamsActionsID = "disable_security"
-	PageruleNewParamsActionsIDDisableZaraz            PageruleNewParamsActionsID = "disable_zaraz"
-	PageruleNewParamsActionsIDEdgeCacheTTL            PageruleNewParamsActionsID = "edge_cache_ttl"
-	PageruleNewParamsActionsIDEmailObfuscation        PageruleNewParamsActionsID = "email_obfuscation"
-	PageruleNewParamsActionsIDExplicitCacheControl    PageruleNewParamsActionsID = "explicit_cache_control"
-	PageruleNewParamsActionsIDForwardingURL           PageruleNewParamsActionsID = "forwarding_url"
-	PageruleNewParamsActionsIDHostHeaderOverride      PageruleNewParamsActionsID = "host_header_override"
-	PageruleNewParamsActionsIDIPGeolocation           PageruleNewParamsActionsID = "ip_geolocation"
-	PageruleNewParamsActionsIDMirage                  PageruleNewParamsActionsID = "mirage"
-	PageruleNewParamsActionsIDOpportunisticEncryption PageruleNewParamsActionsID = "opportunistic_encryption"
-	PageruleNewParamsActionsIDOriginErrorPagePassThru PageruleNewParamsActionsID = "origin_error_page_pass_thru"
-	PageruleNewParamsActionsIDPolish                  PageruleNewParamsActionsID = "polish"
-	PageruleNewParamsActionsIDResolveOverride         PageruleNewParamsActionsID = "resolve_override"
-	PageruleNewParamsActionsIDRespectStrongEtag       PageruleNewParamsActionsID = "respect_strong_etag"
-	PageruleNewParamsActionsIDResponseBuffering       PageruleNewParamsActionsID = "response_buffering"
-	PageruleNewParamsActionsIDRocketLoader            PageruleNewParamsActionsID = "rocket_loader"
-	PageruleNewParamsActionsIDSecurityLevel           PageruleNewParamsActionsID = "security_level"
-	PageruleNewParamsActionsIDSortQueryStringForCache PageruleNewParamsActionsID = "sort_query_string_for_cache"
-	PageruleNewParamsActionsIDSSL                     PageruleNewParamsActionsID = "ssl"
-	PageruleNewParamsActionsIDTrueClientIPHeader      PageruleNewParamsActionsID = "true_client_ip_header"
-	PageruleNewParamsActionsIDWAF                     PageruleNewParamsActionsID = "waf"
+	PageRuleNewParamsActionsIDAlwaysUseHTTPS          PageRuleNewParamsActionsID = "always_use_https"
+	PageRuleNewParamsActionsIDAutomaticHTTPSRewrites  PageRuleNewParamsActionsID = "automatic_https_rewrites"
+	PageRuleNewParamsActionsIDBrowserCacheTTL         PageRuleNewParamsActionsID = "browser_cache_ttl"
+	PageRuleNewParamsActionsIDBrowserCheck            PageRuleNewParamsActionsID = "browser_check"
+	PageRuleNewParamsActionsIDBypassCacheOnCookie     PageRuleNewParamsActionsID = "bypass_cache_on_cookie"
+	PageRuleNewParamsActionsIDCacheByDeviceType       PageRuleNewParamsActionsID = "cache_by_device_type"
+	PageRuleNewParamsActionsIDCacheDeceptionArmor     PageRuleNewParamsActionsID = "cache_deception_armor"
+	PageRuleNewParamsActionsIDCacheKey                PageRuleNewParamsActionsID = "cache_key"
+	PageRuleNewParamsActionsIDCacheLevel              PageRuleNewParamsActionsID = "cache_level"
+	PageRuleNewParamsActionsIDCacheOnCookie           PageRuleNewParamsActionsID = "cache_on_cookie"
+	PageRuleNewParamsActionsIDDisableApps             PageRuleNewParamsActionsID = "disable_apps"
+	PageRuleNewParamsActionsIDDisablePerformance      PageRuleNewParamsActionsID = "disable_performance"
+	PageRuleNewParamsActionsIDDisableSecurity         PageRuleNewParamsActionsID = "disable_security"
+	PageRuleNewParamsActionsIDDisableZaraz            PageRuleNewParamsActionsID = "disable_zaraz"
+	PageRuleNewParamsActionsIDEdgeCacheTTL            PageRuleNewParamsActionsID = "edge_cache_ttl"
+	PageRuleNewParamsActionsIDEmailObfuscation        PageRuleNewParamsActionsID = "email_obfuscation"
+	PageRuleNewParamsActionsIDExplicitCacheControl    PageRuleNewParamsActionsID = "explicit_cache_control"
+	PageRuleNewParamsActionsIDForwardingURL           PageRuleNewParamsActionsID = "forwarding_url"
+	PageRuleNewParamsActionsIDHostHeaderOverride      PageRuleNewParamsActionsID = "host_header_override"
+	PageRuleNewParamsActionsIDIPGeolocation           PageRuleNewParamsActionsID = "ip_geolocation"
+	PageRuleNewParamsActionsIDMirage                  PageRuleNewParamsActionsID = "mirage"
+	PageRuleNewParamsActionsIDOpportunisticEncryption PageRuleNewParamsActionsID = "opportunistic_encryption"
+	PageRuleNewParamsActionsIDOriginErrorPagePassThru PageRuleNewParamsActionsID = "origin_error_page_pass_thru"
+	PageRuleNewParamsActionsIDPolish                  PageRuleNewParamsActionsID = "polish"
+	PageRuleNewParamsActionsIDResolveOverride         PageRuleNewParamsActionsID = "resolve_override"
+	PageRuleNewParamsActionsIDRespectStrongEtag       PageRuleNewParamsActionsID = "respect_strong_etag"
+	PageRuleNewParamsActionsIDResponseBuffering       PageRuleNewParamsActionsID = "response_buffering"
+	PageRuleNewParamsActionsIDRocketLoader            PageRuleNewParamsActionsID = "rocket_loader"
+	PageRuleNewParamsActionsIDSecurityLevel           PageRuleNewParamsActionsID = "security_level"
+	PageRuleNewParamsActionsIDSortQueryStringForCache PageRuleNewParamsActionsID = "sort_query_string_for_cache"
+	PageRuleNewParamsActionsIDSSL                     PageRuleNewParamsActionsID = "ssl"
+	PageRuleNewParamsActionsIDTrueClientIPHeader      PageRuleNewParamsActionsID = "true_client_ip_header"
+	PageRuleNewParamsActionsIDWAF                     PageRuleNewParamsActionsID = "waf"
 )
 
-func (r PageruleNewParamsActionsID) IsKnown() bool {
+func (r PageRuleNewParamsActionsID) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsActionsIDAlwaysUseHTTPS, PageruleNewParamsActionsIDAutomaticHTTPSRewrites, PageruleNewParamsActionsIDBrowserCacheTTL, PageruleNewParamsActionsIDBrowserCheck, PageruleNewParamsActionsIDBypassCacheOnCookie, PageruleNewParamsActionsIDCacheByDeviceType, PageruleNewParamsActionsIDCacheDeceptionArmor, PageruleNewParamsActionsIDCacheKey, PageruleNewParamsActionsIDCacheLevel, PageruleNewParamsActionsIDCacheOnCookie, PageruleNewParamsActionsIDDisableApps, PageruleNewParamsActionsIDDisablePerformance, PageruleNewParamsActionsIDDisableSecurity, PageruleNewParamsActionsIDDisableZaraz, PageruleNewParamsActionsIDEdgeCacheTTL, PageruleNewParamsActionsIDEmailObfuscation, PageruleNewParamsActionsIDExplicitCacheControl, PageruleNewParamsActionsIDForwardingURL, PageruleNewParamsActionsIDHostHeaderOverride, PageruleNewParamsActionsIDIPGeolocation, PageruleNewParamsActionsIDMirage, PageruleNewParamsActionsIDOpportunisticEncryption, PageruleNewParamsActionsIDOriginErrorPagePassThru, PageruleNewParamsActionsIDPolish, PageruleNewParamsActionsIDResolveOverride, PageruleNewParamsActionsIDRespectStrongEtag, PageruleNewParamsActionsIDResponseBuffering, PageruleNewParamsActionsIDRocketLoader, PageruleNewParamsActionsIDSecurityLevel, PageruleNewParamsActionsIDSortQueryStringForCache, PageruleNewParamsActionsIDSSL, PageruleNewParamsActionsIDTrueClientIPHeader, PageruleNewParamsActionsIDWAF:
+	case PageRuleNewParamsActionsIDAlwaysUseHTTPS, PageRuleNewParamsActionsIDAutomaticHTTPSRewrites, PageRuleNewParamsActionsIDBrowserCacheTTL, PageRuleNewParamsActionsIDBrowserCheck, PageRuleNewParamsActionsIDBypassCacheOnCookie, PageRuleNewParamsActionsIDCacheByDeviceType, PageRuleNewParamsActionsIDCacheDeceptionArmor, PageRuleNewParamsActionsIDCacheKey, PageRuleNewParamsActionsIDCacheLevel, PageRuleNewParamsActionsIDCacheOnCookie, PageRuleNewParamsActionsIDDisableApps, PageRuleNewParamsActionsIDDisablePerformance, PageRuleNewParamsActionsIDDisableSecurity, PageRuleNewParamsActionsIDDisableZaraz, PageRuleNewParamsActionsIDEdgeCacheTTL, PageRuleNewParamsActionsIDEmailObfuscation, PageRuleNewParamsActionsIDExplicitCacheControl, PageRuleNewParamsActionsIDForwardingURL, PageRuleNewParamsActionsIDHostHeaderOverride, PageRuleNewParamsActionsIDIPGeolocation, PageRuleNewParamsActionsIDMirage, PageRuleNewParamsActionsIDOpportunisticEncryption, PageRuleNewParamsActionsIDOriginErrorPagePassThru, PageRuleNewParamsActionsIDPolish, PageRuleNewParamsActionsIDResolveOverride, PageRuleNewParamsActionsIDRespectStrongEtag, PageRuleNewParamsActionsIDResponseBuffering, PageRuleNewParamsActionsIDRocketLoader, PageRuleNewParamsActionsIDSecurityLevel, PageRuleNewParamsActionsIDSortQueryStringForCache, PageRuleNewParamsActionsIDSSL, PageRuleNewParamsActionsIDTrueClientIPHeader, PageRuleNewParamsActionsIDWAF:
 		return true
 	}
 	return false
 }
 
 // The status of the Page Rule.
-type PageruleNewParamsStatus string
+type PageRuleNewParamsStatus string
 
 const (
-	PageruleNewParamsStatusActive   PageruleNewParamsStatus = "active"
-	PageruleNewParamsStatusDisabled PageruleNewParamsStatus = "disabled"
+	PageRuleNewParamsStatusActive   PageRuleNewParamsStatus = "active"
+	PageRuleNewParamsStatusDisabled PageRuleNewParamsStatus = "disabled"
 )
 
-func (r PageruleNewParamsStatus) IsKnown() bool {
+func (r PageRuleNewParamsStatus) IsKnown() bool {
 	switch r {
-	case PageruleNewParamsStatusActive, PageruleNewParamsStatusDisabled:
+	case PageRuleNewParamsStatusActive, PageRuleNewParamsStatusDisabled:
 		return true
 	}
 	return false
 }
 
-type PageruleNewResponseEnvelope struct {
+type PageRuleNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PageruleNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PageRuleNewResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                           `json:"result"`
-	JSON    pageruleNewResponseEnvelopeJSON    `json:"-"`
+	JSON    pageRuleNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// pageruleNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PageruleNewResponseEnvelope]
-type pageruleNewResponseEnvelopeJSON struct {
+// pageRuleNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageRuleNewResponseEnvelope]
+type pageRuleNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -2554,35 +2555,35 @@ type pageruleNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageruleNewResponseEnvelopeJSON) RawJSON() string {
+func (r pageRuleNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PageruleNewResponseEnvelopeSuccess bool
+type PageRuleNewResponseEnvelopeSuccess bool
 
 const (
-	PageruleNewResponseEnvelopeSuccessTrue PageruleNewResponseEnvelopeSuccess = true
+	PageRuleNewResponseEnvelopeSuccessTrue PageRuleNewResponseEnvelopeSuccess = true
 )
 
-func (r PageruleNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r PageRuleNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PageruleNewResponseEnvelopeSuccessTrue:
+	case PageRuleNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParams struct {
+type PageRuleUpdateParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
-	Actions param.Field[[]PageruleUpdateParamsActionUnion] `json:"actions,required"`
+	Actions param.Field[[]PageRuleUpdateParamsActionUnion] `json:"actions,required"`
 	// The rule targets to evaluate on each request.
 	Targets param.Field[[]TargetParam] `json:"targets,required"`
 	// The priority of the rule, used to define which Page Rule is processed over
@@ -2592,233 +2593,233 @@ type PageruleUpdateParams struct {
 	// rule B so it overrides rule A.
 	Priority param.Field[int64] `json:"priority"`
 	// The status of the Page Rule.
-	Status param.Field[PageruleUpdateParamsStatus] `json:"status"`
+	Status param.Field[PageRuleUpdateParamsStatus] `json:"status"`
 }
 
-func (r PageruleUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PageruleUpdateParamsAction struct {
+type PageRuleUpdateParamsAction struct {
 	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
 	// redirect.
-	ID    param.Field[PageruleUpdateParamsActionsID] `json:"id"`
+	ID    param.Field[PageRuleUpdateParamsActionsID] `json:"id"`
 	Value param.Field[interface{}]                   `json:"value"`
 }
 
-func (r PageruleUpdateParamsAction) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsAction) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsAction) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r PageRuleUpdateParamsAction) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
 // Satisfied by [zones.AlwaysUseHTTPSParam], [zones.AutomaticHTTPSRewritesParam],
 // [zones.BrowserCacheTTLParam], [zones.BrowserCheckParam],
-// [pagerules.PageruleUpdateParamsActionsBypassCacheOnCookie],
-// [pagerules.PageruleUpdateParamsActionsCacheByDeviceType],
-// [pagerules.PageruleUpdateParamsActionsCacheDeceptionArmor],
-// [pagerules.PageruleUpdateParamsActionsCacheKey], [zones.CacheLevelParam],
-// [pagerules.PageruleUpdateParamsActionsCacheOnCookie],
-// [pagerules.PageruleUpdateParamsActionsDisableApps],
-// [pagerules.PageruleUpdateParamsActionsDisablePerformance],
-// [pagerules.PageruleUpdateParamsActionsDisableSecurity],
-// [pagerules.PageruleUpdateParamsActionsDisableZaraz],
-// [pagerules.PageruleUpdateParamsActionsEdgeCacheTTL],
+// [page_rules.PageRuleUpdateParamsActionsBypassCacheOnCookie],
+// [page_rules.PageRuleUpdateParamsActionsCacheByDeviceType],
+// [page_rules.PageRuleUpdateParamsActionsCacheDeceptionArmor],
+// [page_rules.PageRuleUpdateParamsActionsCacheKey], [zones.CacheLevelParam],
+// [page_rules.PageRuleUpdateParamsActionsCacheOnCookie],
+// [page_rules.PageRuleUpdateParamsActionsDisableApps],
+// [page_rules.PageRuleUpdateParamsActionsDisablePerformance],
+// [page_rules.PageRuleUpdateParamsActionsDisableSecurity],
+// [page_rules.PageRuleUpdateParamsActionsDisableZaraz],
+// [page_rules.PageRuleUpdateParamsActionsEdgeCacheTTL],
 // [zones.EmailObfuscationParam],
-// [pagerules.PageruleUpdateParamsActionsExplicitCacheControl],
-// [pagerules.PageruleUpdateParamsActionsForwardingURL],
-// [pagerules.PageruleUpdateParamsActionsHostHeaderOverride],
+// [page_rules.PageRuleUpdateParamsActionsExplicitCacheControl],
+// [page_rules.PageRuleUpdateParamsActionsForwardingURL],
+// [page_rules.PageRuleUpdateParamsActionsHostHeaderOverride],
 // [zones.IPGeolocationParam], [zones.MirageParam],
 // [zones.OpportunisticEncryptionParam], [zones.OriginErrorPagePassThruParam],
-// [zones.PolishParam], [pagerules.PageruleUpdateParamsActionsResolveOverride],
-// [pagerules.PageruleUpdateParamsActionsRespectStrongEtag],
+// [zones.PolishParam], [page_rules.PageRuleUpdateParamsActionsResolveOverride],
+// [page_rules.PageRuleUpdateParamsActionsRespectStrongEtag],
 // [zones.ResponseBufferingParam], [zones.RocketLoaderParam],
 // [zones.SecurityLevelParam], [zones.SortQueryStringForCacheParam],
 // [zones.SSLParam], [zones.TrueClientIPHeaderParam], [zones.WAFParam],
-// [PageruleUpdateParamsAction].
-type PageruleUpdateParamsActionUnion interface {
-	ImplementsPagerulesPageruleUpdateParamsActionUnion()
+// [PageRuleUpdateParamsAction].
+type PageRuleUpdateParamsActionUnion interface {
+	ImplementsPageRulesPageRuleUpdateParamsActionUnion()
 }
 
-type PageruleUpdateParamsActionsBypassCacheOnCookie struct {
+type PageRuleUpdateParamsActionsBypassCacheOnCookie struct {
 	// Bypass cache and fetch resources from the origin server if a regular expression
 	// matches against a cookie name present in the request.
-	ID param.Field[PageruleUpdateParamsActionsBypassCacheOnCookieID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsBypassCacheOnCookieID] `json:"id"`
 	// The regular expression to use for matching cookie names in the request. Refer to
 	// [Bypass Cache on Cookie setting](https://developers.cloudflare.com/rules/page-rules/reference/additional-reference/#bypass-cache-on-cookie-setting)
 	// to learn about limited regular expression support.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsBypassCacheOnCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsBypassCacheOnCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsBypassCacheOnCookie) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsBypassCacheOnCookie) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Bypass cache and fetch resources from the origin server if a regular expression
 // matches against a cookie name present in the request.
-type PageruleUpdateParamsActionsBypassCacheOnCookieID string
+type PageRuleUpdateParamsActionsBypassCacheOnCookieID string
 
 const (
-	PageruleUpdateParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie PageruleUpdateParamsActionsBypassCacheOnCookieID = "bypass_cache_on_cookie"
+	PageRuleUpdateParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie PageRuleUpdateParamsActionsBypassCacheOnCookieID = "bypass_cache_on_cookie"
 )
 
-func (r PageruleUpdateParamsActionsBypassCacheOnCookieID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsBypassCacheOnCookieID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie:
+	case PageRuleUpdateParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsCacheByDeviceType struct {
+type PageRuleUpdateParamsActionsCacheByDeviceType struct {
 	// Separate cached content based on the visitor's device type.
-	ID param.Field[PageruleUpdateParamsActionsCacheByDeviceTypeID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsCacheByDeviceTypeID] `json:"id"`
 	// The status of Cache By Device Type.
-	Value param.Field[PageruleUpdateParamsActionsCacheByDeviceTypeValue] `json:"value"`
+	Value param.Field[PageRuleUpdateParamsActionsCacheByDeviceTypeValue] `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsCacheByDeviceType) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheByDeviceType) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsCacheByDeviceType) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsCacheByDeviceType) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Separate cached content based on the visitor's device type.
-type PageruleUpdateParamsActionsCacheByDeviceTypeID string
+type PageRuleUpdateParamsActionsCacheByDeviceTypeID string
 
 const (
-	PageruleUpdateParamsActionsCacheByDeviceTypeIDCacheByDeviceType PageruleUpdateParamsActionsCacheByDeviceTypeID = "cache_by_device_type"
+	PageRuleUpdateParamsActionsCacheByDeviceTypeIDCacheByDeviceType PageRuleUpdateParamsActionsCacheByDeviceTypeID = "cache_by_device_type"
 )
 
-func (r PageruleUpdateParamsActionsCacheByDeviceTypeID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheByDeviceTypeID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsCacheByDeviceTypeIDCacheByDeviceType:
+	case PageRuleUpdateParamsActionsCacheByDeviceTypeIDCacheByDeviceType:
 		return true
 	}
 	return false
 }
 
 // The status of Cache By Device Type.
-type PageruleUpdateParamsActionsCacheByDeviceTypeValue string
+type PageRuleUpdateParamsActionsCacheByDeviceTypeValue string
 
 const (
-	PageruleUpdateParamsActionsCacheByDeviceTypeValueOn  PageruleUpdateParamsActionsCacheByDeviceTypeValue = "on"
-	PageruleUpdateParamsActionsCacheByDeviceTypeValueOff PageruleUpdateParamsActionsCacheByDeviceTypeValue = "off"
+	PageRuleUpdateParamsActionsCacheByDeviceTypeValueOn  PageRuleUpdateParamsActionsCacheByDeviceTypeValue = "on"
+	PageRuleUpdateParamsActionsCacheByDeviceTypeValueOff PageRuleUpdateParamsActionsCacheByDeviceTypeValue = "off"
 )
 
-func (r PageruleUpdateParamsActionsCacheByDeviceTypeValue) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheByDeviceTypeValue) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsCacheByDeviceTypeValueOn, PageruleUpdateParamsActionsCacheByDeviceTypeValueOff:
+	case PageRuleUpdateParamsActionsCacheByDeviceTypeValueOn, PageRuleUpdateParamsActionsCacheByDeviceTypeValueOff:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsCacheDeceptionArmor struct {
+type PageRuleUpdateParamsActionsCacheDeceptionArmor struct {
 	// Protect from web cache deception attacks while still allowing static assets to
 	// be cached. This setting verifies that the URL's extension matches the returned
 	// `Content-Type`.
-	ID param.Field[PageruleUpdateParamsActionsCacheDeceptionArmorID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsCacheDeceptionArmorID] `json:"id"`
 	// The status of Cache Deception Armor.
-	Value param.Field[PageruleUpdateParamsActionsCacheDeceptionArmorValue] `json:"value"`
+	Value param.Field[PageRuleUpdateParamsActionsCacheDeceptionArmorValue] `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsCacheDeceptionArmor) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheDeceptionArmor) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsCacheDeceptionArmor) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsCacheDeceptionArmor) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Protect from web cache deception attacks while still allowing static assets to
 // be cached. This setting verifies that the URL's extension matches the returned
 // `Content-Type`.
-type PageruleUpdateParamsActionsCacheDeceptionArmorID string
+type PageRuleUpdateParamsActionsCacheDeceptionArmorID string
 
 const (
-	PageruleUpdateParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor PageruleUpdateParamsActionsCacheDeceptionArmorID = "cache_deception_armor"
+	PageRuleUpdateParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor PageRuleUpdateParamsActionsCacheDeceptionArmorID = "cache_deception_armor"
 )
 
-func (r PageruleUpdateParamsActionsCacheDeceptionArmorID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheDeceptionArmorID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor:
+	case PageRuleUpdateParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor:
 		return true
 	}
 	return false
 }
 
 // The status of Cache Deception Armor.
-type PageruleUpdateParamsActionsCacheDeceptionArmorValue string
+type PageRuleUpdateParamsActionsCacheDeceptionArmorValue string
 
 const (
-	PageruleUpdateParamsActionsCacheDeceptionArmorValueOn  PageruleUpdateParamsActionsCacheDeceptionArmorValue = "on"
-	PageruleUpdateParamsActionsCacheDeceptionArmorValueOff PageruleUpdateParamsActionsCacheDeceptionArmorValue = "off"
+	PageRuleUpdateParamsActionsCacheDeceptionArmorValueOn  PageRuleUpdateParamsActionsCacheDeceptionArmorValue = "on"
+	PageRuleUpdateParamsActionsCacheDeceptionArmorValueOff PageRuleUpdateParamsActionsCacheDeceptionArmorValue = "off"
 )
 
-func (r PageruleUpdateParamsActionsCacheDeceptionArmorValue) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheDeceptionArmorValue) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsCacheDeceptionArmorValueOn, PageruleUpdateParamsActionsCacheDeceptionArmorValueOff:
+	case PageRuleUpdateParamsActionsCacheDeceptionArmorValueOn, PageRuleUpdateParamsActionsCacheDeceptionArmorValueOff:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsCacheKey struct {
+type PageRuleUpdateParamsActionsCacheKey struct {
 	// Control specifically what variables to include when deciding which resources to
 	// cache. This allows customers to determine what to cache based on something other
 	// than just the URL.
-	ID    param.Field[PageruleUpdateParamsActionsCacheKeyID]    `json:"id"`
-	Value param.Field[PageruleUpdateParamsActionsCacheKeyValue] `json:"value"`
+	ID    param.Field[PageRuleUpdateParamsActionsCacheKeyID]    `json:"id"`
+	Value param.Field[PageRuleUpdateParamsActionsCacheKeyValue] `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsCacheKey) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKey) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsCacheKey) ImplementsPagerulesPageruleUpdateParamsActionUnion() {}
+func (r PageRuleUpdateParamsActionsCacheKey) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
 // than just the URL.
-type PageruleUpdateParamsActionsCacheKeyID string
+type PageRuleUpdateParamsActionsCacheKeyID string
 
 const (
-	PageruleUpdateParamsActionsCacheKeyIDCacheKey PageruleUpdateParamsActionsCacheKeyID = "cache_key"
+	PageRuleUpdateParamsActionsCacheKeyIDCacheKey PageRuleUpdateParamsActionsCacheKeyID = "cache_key"
 )
 
-func (r PageruleUpdateParamsActionsCacheKeyID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheKeyID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsCacheKeyIDCacheKey:
+	case PageRuleUpdateParamsActionsCacheKeyIDCacheKey:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsCacheKeyValue struct {
+type PageRuleUpdateParamsActionsCacheKeyValue struct {
 	// Controls which cookies appear in the Cache Key.
-	Cookie param.Field[PageruleUpdateParamsActionsCacheKeyValueCookie] `json:"cookie"`
+	Cookie param.Field[PageRuleUpdateParamsActionsCacheKeyValueCookie] `json:"cookie"`
 	// Controls which headers go into the Cache Key. Exactly one of `include` or
 	// `exclude` is expected.
-	Header param.Field[PageruleUpdateParamsActionsCacheKeyValueHeader] `json:"header"`
+	Header param.Field[PageRuleUpdateParamsActionsCacheKeyValueHeader] `json:"header"`
 	// Determines which host header to include in the Cache Key.
-	Host param.Field[PageruleUpdateParamsActionsCacheKeyValueHost] `json:"host"`
+	Host param.Field[PageRuleUpdateParamsActionsCacheKeyValueHost] `json:"host"`
 	// Controls which URL query string parameters go into the Cache Key. Exactly one of
 	// `include` or `exclude` is expected.
-	QueryString param.Field[PageruleUpdateParamsActionsCacheKeyValueQueryString] `json:"query_string"`
+	QueryString param.Field[PageRuleUpdateParamsActionsCacheKeyValueQueryString] `json:"query_string"`
 	// Feature fields to add features about the end-user (client) into the Cache Key.
-	User param.Field[PageruleUpdateParamsActionsCacheKeyValueUser] `json:"user"`
+	User param.Field[PageRuleUpdateParamsActionsCacheKeyValueUser] `json:"user"`
 }
 
-func (r PageruleUpdateParamsActionsCacheKeyValue) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which cookies appear in the Cache Key.
-type PageruleUpdateParamsActionsCacheKeyValueCookie struct {
+type PageRuleUpdateParamsActionsCacheKeyValueCookie struct {
 	// A list of cookies to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -2826,13 +2827,13 @@ type PageruleUpdateParamsActionsCacheKeyValueCookie struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageruleUpdateParamsActionsCacheKeyValueCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyValueCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which headers go into the Cache Key. Exactly one of `include` or
 // `exclude` is expected.
-type PageruleUpdateParamsActionsCacheKeyValueHeader struct {
+type PageRuleUpdateParamsActionsCacheKeyValueHeader struct {
 	// A list of headers to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -2842,99 +2843,99 @@ type PageruleUpdateParamsActionsCacheKeyValueHeader struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageruleUpdateParamsActionsCacheKeyValueHeader) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyValueHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Determines which host header to include in the Cache Key.
-type PageruleUpdateParamsActionsCacheKeyValueHost struct {
+type PageRuleUpdateParamsActionsCacheKeyValueHost struct {
 	// Whether to include the Host header in the HTTP request sent to the origin.
 	Resolved param.Field[bool] `json:"resolved"`
 }
 
-func (r PageruleUpdateParamsActionsCacheKeyValueHost) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyValueHost) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which URL query string parameters go into the Cache Key. Exactly one of
 // `include` or `exclude` is expected.
-type PageruleUpdateParamsActionsCacheKeyValueQueryString struct {
+type PageRuleUpdateParamsActionsCacheKeyValueQueryString struct {
 	// Ignore all query string parameters.
-	Exclude param.Field[PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion] `json:"exclude"`
+	Exclude param.Field[PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion] `json:"exclude"`
 	// Include all query string parameters.
-	Include param.Field[PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion] `json:"include"`
+	Include param.Field[PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion] `json:"include"`
 }
 
-func (r PageruleUpdateParamsActionsCacheKeyValueQueryString) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyValueQueryString) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Ignore all query string parameters.
 //
 // Satisfied by
-// [pagerules.PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeString],
-// [pagerules.PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeArray].
-type PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion interface {
-	implementsPagerulesPageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion()
+// [page_rules.PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeString],
+// [page_rules.PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeArray].
+type PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion interface {
+	implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion()
 }
 
 // Ignore all query string parameters.
-type PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeString string
+type PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeString string
 
 const (
-	PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeStringStar PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeString = "*"
+	PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeStringStar PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeString = "*"
 )
 
-func (r PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeStringStar:
+	case PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeString) implementsPagerulesPageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeString) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion() {
 }
 
-type PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeArray []string
+type PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeArray []string
 
-func (r PageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeArray) implementsPagerulesPageruleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeArray) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
 //
 // Satisfied by
-// [pagerules.PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeString],
-// [pagerules.PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeArray].
-type PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion interface {
-	implementsPagerulesPageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion()
+// [page_rules.PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeString],
+// [page_rules.PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeArray].
+type PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion interface {
+	implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion()
 }
 
 // Include all query string parameters.
-type PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeString string
+type PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeString string
 
 const (
-	PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeStringStar PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeString = "*"
+	PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeStringStar PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeString = "*"
 )
 
-func (r PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeStringStar:
+	case PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeString) implementsPagerulesPageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeString) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion() {
 }
 
-type PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeArray []string
+type PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeArray []string
 
-func (r PageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeArray) implementsPagerulesPageruleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeArray) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
-type PageruleUpdateParamsActionsCacheKeyValueUser struct {
+type PageRuleUpdateParamsActionsCacheKeyValueUser struct {
 	// Classifies a request as `mobile`, `desktop`, or `tablet` based on the User
 	// Agent.
 	DeviceType param.Field[bool] `json:"device_type"`
@@ -2945,106 +2946,106 @@ type PageruleUpdateParamsActionsCacheKeyValueUser struct {
 	Lang param.Field[bool] `json:"lang"`
 }
 
-func (r PageruleUpdateParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PageruleUpdateParamsActionsCacheOnCookie struct {
+type PageRuleUpdateParamsActionsCacheOnCookie struct {
 	// Apply the Cache Everything option (Cache Level setting) based on a regular
 	// expression match against a cookie name.
-	ID param.Field[PageruleUpdateParamsActionsCacheOnCookieID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsCacheOnCookieID] `json:"id"`
 	// The regular expression to use for matching cookie names in the request.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsCacheOnCookie) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsCacheOnCookie) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Apply the Cache Everything option (Cache Level setting) based on a regular
 // expression match against a cookie name.
-type PageruleUpdateParamsActionsCacheOnCookieID string
+type PageRuleUpdateParamsActionsCacheOnCookieID string
 
 const (
-	PageruleUpdateParamsActionsCacheOnCookieIDCacheOnCookie PageruleUpdateParamsActionsCacheOnCookieID = "cache_on_cookie"
+	PageRuleUpdateParamsActionsCacheOnCookieIDCacheOnCookie PageRuleUpdateParamsActionsCacheOnCookieID = "cache_on_cookie"
 )
 
-func (r PageruleUpdateParamsActionsCacheOnCookieID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheOnCookieID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsCacheOnCookieIDCacheOnCookie:
+	case PageRuleUpdateParamsActionsCacheOnCookieIDCacheOnCookie:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsDisableApps struct {
+type PageRuleUpdateParamsActionsDisableApps struct {
 	// Turn off all active
 	// [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
 	// (deprecated).
-	ID param.Field[PageruleUpdateParamsActionsDisableAppsID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsDisableAppsID] `json:"id"`
 }
 
-func (r PageruleUpdateParamsActionsDisableApps) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsDisableApps) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsDisableApps) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsDisableApps) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Turn off all active
 // [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
 // (deprecated).
-type PageruleUpdateParamsActionsDisableAppsID string
+type PageRuleUpdateParamsActionsDisableAppsID string
 
 const (
-	PageruleUpdateParamsActionsDisableAppsIDDisableApps PageruleUpdateParamsActionsDisableAppsID = "disable_apps"
+	PageRuleUpdateParamsActionsDisableAppsIDDisableApps PageRuleUpdateParamsActionsDisableAppsID = "disable_apps"
 )
 
-func (r PageruleUpdateParamsActionsDisableAppsID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsDisableAppsID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsDisableAppsIDDisableApps:
+	case PageRuleUpdateParamsActionsDisableAppsIDDisableApps:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsDisablePerformance struct {
+type PageRuleUpdateParamsActionsDisablePerformance struct {
 	// Turn off
 	// [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
 	// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 	// and [Polish](https://developers.cloudflare.com/images/polish/).
-	ID param.Field[PageruleUpdateParamsActionsDisablePerformanceID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsDisablePerformanceID] `json:"id"`
 }
 
-func (r PageruleUpdateParamsActionsDisablePerformance) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsDisablePerformance) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsDisablePerformance) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsDisablePerformance) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
 // [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 // and [Polish](https://developers.cloudflare.com/images/polish/).
-type PageruleUpdateParamsActionsDisablePerformanceID string
+type PageRuleUpdateParamsActionsDisablePerformanceID string
 
 const (
-	PageruleUpdateParamsActionsDisablePerformanceIDDisablePerformance PageruleUpdateParamsActionsDisablePerformanceID = "disable_performance"
+	PageRuleUpdateParamsActionsDisablePerformanceIDDisablePerformance PageRuleUpdateParamsActionsDisablePerformanceID = "disable_performance"
 )
 
-func (r PageruleUpdateParamsActionsDisablePerformanceID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsDisablePerformanceID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsDisablePerformanceIDDisablePerformance:
+	case PageRuleUpdateParamsActionsDisablePerformanceIDDisablePerformance:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsDisableSecurity struct {
+type PageRuleUpdateParamsActionsDisableSecurity struct {
 	// Turn off
 	// [Email Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/),
 	// [Rate Limiting (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-rate-limiting/),
@@ -3052,14 +3053,14 @@ type PageruleUpdateParamsActionsDisableSecurity struct {
 	// [URL (Zone) Lockdown](https://developers.cloudflare.com/waf/tools/zone-lockdown/),
 	// and
 	// [WAF managed rules (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/).
-	ID param.Field[PageruleUpdateParamsActionsDisableSecurityID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsDisableSecurityID] `json:"id"`
 }
 
-func (r PageruleUpdateParamsActionsDisableSecurity) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsDisableSecurity) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsDisableSecurity) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsDisableSecurity) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Turn off
@@ -3069,284 +3070,284 @@ func (r PageruleUpdateParamsActionsDisableSecurity) ImplementsPagerulesPageruleU
 // [URL (Zone) Lockdown](https://developers.cloudflare.com/waf/tools/zone-lockdown/),
 // and
 // [WAF managed rules (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/).
-type PageruleUpdateParamsActionsDisableSecurityID string
+type PageRuleUpdateParamsActionsDisableSecurityID string
 
 const (
-	PageruleUpdateParamsActionsDisableSecurityIDDisableSecurity PageruleUpdateParamsActionsDisableSecurityID = "disable_security"
+	PageRuleUpdateParamsActionsDisableSecurityIDDisableSecurity PageRuleUpdateParamsActionsDisableSecurityID = "disable_security"
 )
 
-func (r PageruleUpdateParamsActionsDisableSecurityID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsDisableSecurityID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsDisableSecurityIDDisableSecurity:
+	case PageRuleUpdateParamsActionsDisableSecurityIDDisableSecurity:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsDisableZaraz struct {
+type PageRuleUpdateParamsActionsDisableZaraz struct {
 	// Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
-	ID param.Field[PageruleUpdateParamsActionsDisableZarazID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsDisableZarazID] `json:"id"`
 }
 
-func (r PageruleUpdateParamsActionsDisableZaraz) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsDisableZaraz) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsDisableZaraz) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsDisableZaraz) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
-type PageruleUpdateParamsActionsDisableZarazID string
+type PageRuleUpdateParamsActionsDisableZarazID string
 
 const (
-	PageruleUpdateParamsActionsDisableZarazIDDisableZaraz PageruleUpdateParamsActionsDisableZarazID = "disable_zaraz"
+	PageRuleUpdateParamsActionsDisableZarazIDDisableZaraz PageRuleUpdateParamsActionsDisableZarazID = "disable_zaraz"
 )
 
-func (r PageruleUpdateParamsActionsDisableZarazID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsDisableZarazID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsDisableZarazIDDisableZaraz:
+	case PageRuleUpdateParamsActionsDisableZarazIDDisableZaraz:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsEdgeCacheTTL struct {
+type PageRuleUpdateParamsActionsEdgeCacheTTL struct {
 	// Specify how long to cache a resource in the Cloudflare global network. _Edge
 	// Cache TTL_ is not visible in response headers.
-	ID    param.Field[PageruleUpdateParamsActionsEdgeCacheTTLID] `json:"id"`
+	ID    param.Field[PageRuleUpdateParamsActionsEdgeCacheTTLID] `json:"id"`
 	Value param.Field[int64]                                     `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsEdgeCacheTTL) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsEdgeCacheTTL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsEdgeCacheTTL) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsEdgeCacheTTL) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Specify how long to cache a resource in the Cloudflare global network. _Edge
 // Cache TTL_ is not visible in response headers.
-type PageruleUpdateParamsActionsEdgeCacheTTLID string
+type PageRuleUpdateParamsActionsEdgeCacheTTLID string
 
 const (
-	PageruleUpdateParamsActionsEdgeCacheTTLIDEdgeCacheTTL PageruleUpdateParamsActionsEdgeCacheTTLID = "edge_cache_ttl"
+	PageRuleUpdateParamsActionsEdgeCacheTTLIDEdgeCacheTTL PageRuleUpdateParamsActionsEdgeCacheTTLID = "edge_cache_ttl"
 )
 
-func (r PageruleUpdateParamsActionsEdgeCacheTTLID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsEdgeCacheTTLID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsEdgeCacheTTLIDEdgeCacheTTL:
+	case PageRuleUpdateParamsActionsEdgeCacheTTLIDEdgeCacheTTL:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsExplicitCacheControl struct {
+type PageRuleUpdateParamsActionsExplicitCacheControl struct {
 	// Origin Cache Control is enabled by default for Free, Pro, and Business domains
 	// and disabled by default for Enterprise domains.
-	ID param.Field[PageruleUpdateParamsActionsExplicitCacheControlID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsExplicitCacheControlID] `json:"id"`
 	// The status of Origin Cache Control.
-	Value param.Field[PageruleUpdateParamsActionsExplicitCacheControlValue] `json:"value"`
+	Value param.Field[PageRuleUpdateParamsActionsExplicitCacheControlValue] `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsExplicitCacheControl) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsExplicitCacheControl) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsExplicitCacheControl) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsExplicitCacheControl) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Origin Cache Control is enabled by default for Free, Pro, and Business domains
 // and disabled by default for Enterprise domains.
-type PageruleUpdateParamsActionsExplicitCacheControlID string
+type PageRuleUpdateParamsActionsExplicitCacheControlID string
 
 const (
-	PageruleUpdateParamsActionsExplicitCacheControlIDExplicitCacheControl PageruleUpdateParamsActionsExplicitCacheControlID = "explicit_cache_control"
+	PageRuleUpdateParamsActionsExplicitCacheControlIDExplicitCacheControl PageRuleUpdateParamsActionsExplicitCacheControlID = "explicit_cache_control"
 )
 
-func (r PageruleUpdateParamsActionsExplicitCacheControlID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsExplicitCacheControlID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsExplicitCacheControlIDExplicitCacheControl:
+	case PageRuleUpdateParamsActionsExplicitCacheControlIDExplicitCacheControl:
 		return true
 	}
 	return false
 }
 
 // The status of Origin Cache Control.
-type PageruleUpdateParamsActionsExplicitCacheControlValue string
+type PageRuleUpdateParamsActionsExplicitCacheControlValue string
 
 const (
-	PageruleUpdateParamsActionsExplicitCacheControlValueOn  PageruleUpdateParamsActionsExplicitCacheControlValue = "on"
-	PageruleUpdateParamsActionsExplicitCacheControlValueOff PageruleUpdateParamsActionsExplicitCacheControlValue = "off"
+	PageRuleUpdateParamsActionsExplicitCacheControlValueOn  PageRuleUpdateParamsActionsExplicitCacheControlValue = "on"
+	PageRuleUpdateParamsActionsExplicitCacheControlValueOff PageRuleUpdateParamsActionsExplicitCacheControlValue = "off"
 )
 
-func (r PageruleUpdateParamsActionsExplicitCacheControlValue) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsExplicitCacheControlValue) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsExplicitCacheControlValueOn, PageruleUpdateParamsActionsExplicitCacheControlValueOff:
+	case PageRuleUpdateParamsActionsExplicitCacheControlValueOn, PageRuleUpdateParamsActionsExplicitCacheControlValueOff:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsForwardingURL struct {
+type PageRuleUpdateParamsActionsForwardingURL struct {
 	// Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 	// [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
-	ID    param.Field[PageruleUpdateParamsActionsForwardingURLID]    `json:"id"`
-	Value param.Field[PageruleUpdateParamsActionsForwardingURLValue] `json:"value"`
+	ID    param.Field[PageRuleUpdateParamsActionsForwardingURLID]    `json:"id"`
+	Value param.Field[PageRuleUpdateParamsActionsForwardingURLValue] `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsForwardingURL) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsForwardingURL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsForwardingURL) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsForwardingURL) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 // [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
-type PageruleUpdateParamsActionsForwardingURLID string
+type PageRuleUpdateParamsActionsForwardingURLID string
 
 const (
-	PageruleUpdateParamsActionsForwardingURLIDForwardingURL PageruleUpdateParamsActionsForwardingURLID = "forwarding_url"
+	PageRuleUpdateParamsActionsForwardingURLIDForwardingURL PageRuleUpdateParamsActionsForwardingURLID = "forwarding_url"
 )
 
-func (r PageruleUpdateParamsActionsForwardingURLID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsForwardingURLID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsForwardingURLIDForwardingURL:
+	case PageRuleUpdateParamsActionsForwardingURLIDForwardingURL:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsForwardingURLValue struct {
+type PageRuleUpdateParamsActionsForwardingURLValue struct {
 	// The status code to use for the URL redirect. 301 is a permanent redirect. 302 is
 	// a temporary redirect.
-	StatusCode param.Field[PageruleUpdateParamsActionsForwardingURLValueStatusCode] `json:"status_code"`
+	StatusCode param.Field[PageRuleUpdateParamsActionsForwardingURLValueStatusCode] `json:"status_code"`
 	// The URL to redirect the request to. Notes: ${num} refers to the position of '\*'
 	// in the constraint value.
 	URL param.Field[string] `json:"url"`
 }
 
-func (r PageruleUpdateParamsActionsForwardingURLValue) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsForwardingURLValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The status code to use for the URL redirect. 301 is a permanent redirect. 302 is
 // a temporary redirect.
-type PageruleUpdateParamsActionsForwardingURLValueStatusCode int64
+type PageRuleUpdateParamsActionsForwardingURLValueStatusCode int64
 
 const (
-	PageruleUpdateParamsActionsForwardingURLValueStatusCode301 PageruleUpdateParamsActionsForwardingURLValueStatusCode = 301
-	PageruleUpdateParamsActionsForwardingURLValueStatusCode302 PageruleUpdateParamsActionsForwardingURLValueStatusCode = 302
+	PageRuleUpdateParamsActionsForwardingURLValueStatusCode301 PageRuleUpdateParamsActionsForwardingURLValueStatusCode = 301
+	PageRuleUpdateParamsActionsForwardingURLValueStatusCode302 PageRuleUpdateParamsActionsForwardingURLValueStatusCode = 302
 )
 
-func (r PageruleUpdateParamsActionsForwardingURLValueStatusCode) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsForwardingURLValueStatusCode) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsForwardingURLValueStatusCode301, PageruleUpdateParamsActionsForwardingURLValueStatusCode302:
+	case PageRuleUpdateParamsActionsForwardingURLValueStatusCode301, PageRuleUpdateParamsActionsForwardingURLValueStatusCode302:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsHostHeaderOverride struct {
+type PageRuleUpdateParamsActionsHostHeaderOverride struct {
 	// Apply a specific host header.
-	ID param.Field[PageruleUpdateParamsActionsHostHeaderOverrideID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsHostHeaderOverrideID] `json:"id"`
 	// The hostname to use in the `Host` header
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsHostHeaderOverride) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsHostHeaderOverride) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsHostHeaderOverride) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsHostHeaderOverride) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Apply a specific host header.
-type PageruleUpdateParamsActionsHostHeaderOverrideID string
+type PageRuleUpdateParamsActionsHostHeaderOverrideID string
 
 const (
-	PageruleUpdateParamsActionsHostHeaderOverrideIDHostHeaderOverride PageruleUpdateParamsActionsHostHeaderOverrideID = "host_header_override"
+	PageRuleUpdateParamsActionsHostHeaderOverrideIDHostHeaderOverride PageRuleUpdateParamsActionsHostHeaderOverrideID = "host_header_override"
 )
 
-func (r PageruleUpdateParamsActionsHostHeaderOverrideID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsHostHeaderOverrideID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsHostHeaderOverrideIDHostHeaderOverride:
+	case PageRuleUpdateParamsActionsHostHeaderOverrideIDHostHeaderOverride:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsResolveOverride struct {
+type PageRuleUpdateParamsActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
-	ID param.Field[PageruleUpdateParamsActionsResolveOverrideID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsResolveOverrideID] `json:"id"`
 	// The origin address you want to override with.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsResolveOverride) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsResolveOverride) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsResolveOverride) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsResolveOverride) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Change the origin address to the value specified in this setting.
-type PageruleUpdateParamsActionsResolveOverrideID string
+type PageRuleUpdateParamsActionsResolveOverrideID string
 
 const (
-	PageruleUpdateParamsActionsResolveOverrideIDResolveOverride PageruleUpdateParamsActionsResolveOverrideID = "resolve_override"
+	PageRuleUpdateParamsActionsResolveOverrideIDResolveOverride PageRuleUpdateParamsActionsResolveOverrideID = "resolve_override"
 )
 
-func (r PageruleUpdateParamsActionsResolveOverrideID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsResolveOverrideID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsResolveOverrideIDResolveOverride:
+	case PageRuleUpdateParamsActionsResolveOverrideIDResolveOverride:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateParamsActionsRespectStrongEtag struct {
+type PageRuleUpdateParamsActionsRespectStrongEtag struct {
 	// Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 	// the origin server.
-	ID param.Field[PageruleUpdateParamsActionsRespectStrongEtagID] `json:"id"`
+	ID param.Field[PageRuleUpdateParamsActionsRespectStrongEtagID] `json:"id"`
 	// The status of Respect Strong ETags
-	Value param.Field[PageruleUpdateParamsActionsRespectStrongEtagValue] `json:"value"`
+	Value param.Field[PageRuleUpdateParamsActionsRespectStrongEtagValue] `json:"value"`
 }
 
-func (r PageruleUpdateParamsActionsRespectStrongEtag) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsRespectStrongEtag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleUpdateParamsActionsRespectStrongEtag) ImplementsPagerulesPageruleUpdateParamsActionUnion() {
+func (r PageRuleUpdateParamsActionsRespectStrongEtag) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
 }
 
 // Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 // the origin server.
-type PageruleUpdateParamsActionsRespectStrongEtagID string
+type PageRuleUpdateParamsActionsRespectStrongEtagID string
 
 const (
-	PageruleUpdateParamsActionsRespectStrongEtagIDRespectStrongEtag PageruleUpdateParamsActionsRespectStrongEtagID = "respect_strong_etag"
+	PageRuleUpdateParamsActionsRespectStrongEtagIDRespectStrongEtag PageRuleUpdateParamsActionsRespectStrongEtagID = "respect_strong_etag"
 )
 
-func (r PageruleUpdateParamsActionsRespectStrongEtagID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsRespectStrongEtagID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsRespectStrongEtagIDRespectStrongEtag:
+	case PageRuleUpdateParamsActionsRespectStrongEtagIDRespectStrongEtag:
 		return true
 	}
 	return false
 }
 
 // The status of Respect Strong ETags
-type PageruleUpdateParamsActionsRespectStrongEtagValue string
+type PageRuleUpdateParamsActionsRespectStrongEtagValue string
 
 const (
-	PageruleUpdateParamsActionsRespectStrongEtagValueOn  PageruleUpdateParamsActionsRespectStrongEtagValue = "on"
-	PageruleUpdateParamsActionsRespectStrongEtagValueOff PageruleUpdateParamsActionsRespectStrongEtagValue = "off"
+	PageRuleUpdateParamsActionsRespectStrongEtagValueOn  PageRuleUpdateParamsActionsRespectStrongEtagValue = "on"
+	PageRuleUpdateParamsActionsRespectStrongEtagValueOff PageRuleUpdateParamsActionsRespectStrongEtagValue = "off"
 )
 
-func (r PageruleUpdateParamsActionsRespectStrongEtagValue) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsRespectStrongEtagValue) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsRespectStrongEtagValueOn, PageruleUpdateParamsActionsRespectStrongEtagValueOff:
+	case PageRuleUpdateParamsActionsRespectStrongEtagValueOn, PageRuleUpdateParamsActionsRespectStrongEtagValueOff:
 		return true
 	}
 	return false
@@ -3354,80 +3355,80 @@ func (r PageruleUpdateParamsActionsRespectStrongEtagValue) IsKnown() bool {
 
 // If enabled, any ` http://“ URL is converted to  `https://` through a 301
 // redirect.
-type PageruleUpdateParamsActionsID string
+type PageRuleUpdateParamsActionsID string
 
 const (
-	PageruleUpdateParamsActionsIDAlwaysUseHTTPS          PageruleUpdateParamsActionsID = "always_use_https"
-	PageruleUpdateParamsActionsIDAutomaticHTTPSRewrites  PageruleUpdateParamsActionsID = "automatic_https_rewrites"
-	PageruleUpdateParamsActionsIDBrowserCacheTTL         PageruleUpdateParamsActionsID = "browser_cache_ttl"
-	PageruleUpdateParamsActionsIDBrowserCheck            PageruleUpdateParamsActionsID = "browser_check"
-	PageruleUpdateParamsActionsIDBypassCacheOnCookie     PageruleUpdateParamsActionsID = "bypass_cache_on_cookie"
-	PageruleUpdateParamsActionsIDCacheByDeviceType       PageruleUpdateParamsActionsID = "cache_by_device_type"
-	PageruleUpdateParamsActionsIDCacheDeceptionArmor     PageruleUpdateParamsActionsID = "cache_deception_armor"
-	PageruleUpdateParamsActionsIDCacheKey                PageruleUpdateParamsActionsID = "cache_key"
-	PageruleUpdateParamsActionsIDCacheLevel              PageruleUpdateParamsActionsID = "cache_level"
-	PageruleUpdateParamsActionsIDCacheOnCookie           PageruleUpdateParamsActionsID = "cache_on_cookie"
-	PageruleUpdateParamsActionsIDDisableApps             PageruleUpdateParamsActionsID = "disable_apps"
-	PageruleUpdateParamsActionsIDDisablePerformance      PageruleUpdateParamsActionsID = "disable_performance"
-	PageruleUpdateParamsActionsIDDisableSecurity         PageruleUpdateParamsActionsID = "disable_security"
-	PageruleUpdateParamsActionsIDDisableZaraz            PageruleUpdateParamsActionsID = "disable_zaraz"
-	PageruleUpdateParamsActionsIDEdgeCacheTTL            PageruleUpdateParamsActionsID = "edge_cache_ttl"
-	PageruleUpdateParamsActionsIDEmailObfuscation        PageruleUpdateParamsActionsID = "email_obfuscation"
-	PageruleUpdateParamsActionsIDExplicitCacheControl    PageruleUpdateParamsActionsID = "explicit_cache_control"
-	PageruleUpdateParamsActionsIDForwardingURL           PageruleUpdateParamsActionsID = "forwarding_url"
-	PageruleUpdateParamsActionsIDHostHeaderOverride      PageruleUpdateParamsActionsID = "host_header_override"
-	PageruleUpdateParamsActionsIDIPGeolocation           PageruleUpdateParamsActionsID = "ip_geolocation"
-	PageruleUpdateParamsActionsIDMirage                  PageruleUpdateParamsActionsID = "mirage"
-	PageruleUpdateParamsActionsIDOpportunisticEncryption PageruleUpdateParamsActionsID = "opportunistic_encryption"
-	PageruleUpdateParamsActionsIDOriginErrorPagePassThru PageruleUpdateParamsActionsID = "origin_error_page_pass_thru"
-	PageruleUpdateParamsActionsIDPolish                  PageruleUpdateParamsActionsID = "polish"
-	PageruleUpdateParamsActionsIDResolveOverride         PageruleUpdateParamsActionsID = "resolve_override"
-	PageruleUpdateParamsActionsIDRespectStrongEtag       PageruleUpdateParamsActionsID = "respect_strong_etag"
-	PageruleUpdateParamsActionsIDResponseBuffering       PageruleUpdateParamsActionsID = "response_buffering"
-	PageruleUpdateParamsActionsIDRocketLoader            PageruleUpdateParamsActionsID = "rocket_loader"
-	PageruleUpdateParamsActionsIDSecurityLevel           PageruleUpdateParamsActionsID = "security_level"
-	PageruleUpdateParamsActionsIDSortQueryStringForCache PageruleUpdateParamsActionsID = "sort_query_string_for_cache"
-	PageruleUpdateParamsActionsIDSSL                     PageruleUpdateParamsActionsID = "ssl"
-	PageruleUpdateParamsActionsIDTrueClientIPHeader      PageruleUpdateParamsActionsID = "true_client_ip_header"
-	PageruleUpdateParamsActionsIDWAF                     PageruleUpdateParamsActionsID = "waf"
+	PageRuleUpdateParamsActionsIDAlwaysUseHTTPS          PageRuleUpdateParamsActionsID = "always_use_https"
+	PageRuleUpdateParamsActionsIDAutomaticHTTPSRewrites  PageRuleUpdateParamsActionsID = "automatic_https_rewrites"
+	PageRuleUpdateParamsActionsIDBrowserCacheTTL         PageRuleUpdateParamsActionsID = "browser_cache_ttl"
+	PageRuleUpdateParamsActionsIDBrowserCheck            PageRuleUpdateParamsActionsID = "browser_check"
+	PageRuleUpdateParamsActionsIDBypassCacheOnCookie     PageRuleUpdateParamsActionsID = "bypass_cache_on_cookie"
+	PageRuleUpdateParamsActionsIDCacheByDeviceType       PageRuleUpdateParamsActionsID = "cache_by_device_type"
+	PageRuleUpdateParamsActionsIDCacheDeceptionArmor     PageRuleUpdateParamsActionsID = "cache_deception_armor"
+	PageRuleUpdateParamsActionsIDCacheKey                PageRuleUpdateParamsActionsID = "cache_key"
+	PageRuleUpdateParamsActionsIDCacheLevel              PageRuleUpdateParamsActionsID = "cache_level"
+	PageRuleUpdateParamsActionsIDCacheOnCookie           PageRuleUpdateParamsActionsID = "cache_on_cookie"
+	PageRuleUpdateParamsActionsIDDisableApps             PageRuleUpdateParamsActionsID = "disable_apps"
+	PageRuleUpdateParamsActionsIDDisablePerformance      PageRuleUpdateParamsActionsID = "disable_performance"
+	PageRuleUpdateParamsActionsIDDisableSecurity         PageRuleUpdateParamsActionsID = "disable_security"
+	PageRuleUpdateParamsActionsIDDisableZaraz            PageRuleUpdateParamsActionsID = "disable_zaraz"
+	PageRuleUpdateParamsActionsIDEdgeCacheTTL            PageRuleUpdateParamsActionsID = "edge_cache_ttl"
+	PageRuleUpdateParamsActionsIDEmailObfuscation        PageRuleUpdateParamsActionsID = "email_obfuscation"
+	PageRuleUpdateParamsActionsIDExplicitCacheControl    PageRuleUpdateParamsActionsID = "explicit_cache_control"
+	PageRuleUpdateParamsActionsIDForwardingURL           PageRuleUpdateParamsActionsID = "forwarding_url"
+	PageRuleUpdateParamsActionsIDHostHeaderOverride      PageRuleUpdateParamsActionsID = "host_header_override"
+	PageRuleUpdateParamsActionsIDIPGeolocation           PageRuleUpdateParamsActionsID = "ip_geolocation"
+	PageRuleUpdateParamsActionsIDMirage                  PageRuleUpdateParamsActionsID = "mirage"
+	PageRuleUpdateParamsActionsIDOpportunisticEncryption PageRuleUpdateParamsActionsID = "opportunistic_encryption"
+	PageRuleUpdateParamsActionsIDOriginErrorPagePassThru PageRuleUpdateParamsActionsID = "origin_error_page_pass_thru"
+	PageRuleUpdateParamsActionsIDPolish                  PageRuleUpdateParamsActionsID = "polish"
+	PageRuleUpdateParamsActionsIDResolveOverride         PageRuleUpdateParamsActionsID = "resolve_override"
+	PageRuleUpdateParamsActionsIDRespectStrongEtag       PageRuleUpdateParamsActionsID = "respect_strong_etag"
+	PageRuleUpdateParamsActionsIDResponseBuffering       PageRuleUpdateParamsActionsID = "response_buffering"
+	PageRuleUpdateParamsActionsIDRocketLoader            PageRuleUpdateParamsActionsID = "rocket_loader"
+	PageRuleUpdateParamsActionsIDSecurityLevel           PageRuleUpdateParamsActionsID = "security_level"
+	PageRuleUpdateParamsActionsIDSortQueryStringForCache PageRuleUpdateParamsActionsID = "sort_query_string_for_cache"
+	PageRuleUpdateParamsActionsIDSSL                     PageRuleUpdateParamsActionsID = "ssl"
+	PageRuleUpdateParamsActionsIDTrueClientIPHeader      PageRuleUpdateParamsActionsID = "true_client_ip_header"
+	PageRuleUpdateParamsActionsIDWAF                     PageRuleUpdateParamsActionsID = "waf"
 )
 
-func (r PageruleUpdateParamsActionsID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsID) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsActionsIDAlwaysUseHTTPS, PageruleUpdateParamsActionsIDAutomaticHTTPSRewrites, PageruleUpdateParamsActionsIDBrowserCacheTTL, PageruleUpdateParamsActionsIDBrowserCheck, PageruleUpdateParamsActionsIDBypassCacheOnCookie, PageruleUpdateParamsActionsIDCacheByDeviceType, PageruleUpdateParamsActionsIDCacheDeceptionArmor, PageruleUpdateParamsActionsIDCacheKey, PageruleUpdateParamsActionsIDCacheLevel, PageruleUpdateParamsActionsIDCacheOnCookie, PageruleUpdateParamsActionsIDDisableApps, PageruleUpdateParamsActionsIDDisablePerformance, PageruleUpdateParamsActionsIDDisableSecurity, PageruleUpdateParamsActionsIDDisableZaraz, PageruleUpdateParamsActionsIDEdgeCacheTTL, PageruleUpdateParamsActionsIDEmailObfuscation, PageruleUpdateParamsActionsIDExplicitCacheControl, PageruleUpdateParamsActionsIDForwardingURL, PageruleUpdateParamsActionsIDHostHeaderOverride, PageruleUpdateParamsActionsIDIPGeolocation, PageruleUpdateParamsActionsIDMirage, PageruleUpdateParamsActionsIDOpportunisticEncryption, PageruleUpdateParamsActionsIDOriginErrorPagePassThru, PageruleUpdateParamsActionsIDPolish, PageruleUpdateParamsActionsIDResolveOverride, PageruleUpdateParamsActionsIDRespectStrongEtag, PageruleUpdateParamsActionsIDResponseBuffering, PageruleUpdateParamsActionsIDRocketLoader, PageruleUpdateParamsActionsIDSecurityLevel, PageruleUpdateParamsActionsIDSortQueryStringForCache, PageruleUpdateParamsActionsIDSSL, PageruleUpdateParamsActionsIDTrueClientIPHeader, PageruleUpdateParamsActionsIDWAF:
+	case PageRuleUpdateParamsActionsIDAlwaysUseHTTPS, PageRuleUpdateParamsActionsIDAutomaticHTTPSRewrites, PageRuleUpdateParamsActionsIDBrowserCacheTTL, PageRuleUpdateParamsActionsIDBrowserCheck, PageRuleUpdateParamsActionsIDBypassCacheOnCookie, PageRuleUpdateParamsActionsIDCacheByDeviceType, PageRuleUpdateParamsActionsIDCacheDeceptionArmor, PageRuleUpdateParamsActionsIDCacheKey, PageRuleUpdateParamsActionsIDCacheLevel, PageRuleUpdateParamsActionsIDCacheOnCookie, PageRuleUpdateParamsActionsIDDisableApps, PageRuleUpdateParamsActionsIDDisablePerformance, PageRuleUpdateParamsActionsIDDisableSecurity, PageRuleUpdateParamsActionsIDDisableZaraz, PageRuleUpdateParamsActionsIDEdgeCacheTTL, PageRuleUpdateParamsActionsIDEmailObfuscation, PageRuleUpdateParamsActionsIDExplicitCacheControl, PageRuleUpdateParamsActionsIDForwardingURL, PageRuleUpdateParamsActionsIDHostHeaderOverride, PageRuleUpdateParamsActionsIDIPGeolocation, PageRuleUpdateParamsActionsIDMirage, PageRuleUpdateParamsActionsIDOpportunisticEncryption, PageRuleUpdateParamsActionsIDOriginErrorPagePassThru, PageRuleUpdateParamsActionsIDPolish, PageRuleUpdateParamsActionsIDResolveOverride, PageRuleUpdateParamsActionsIDRespectStrongEtag, PageRuleUpdateParamsActionsIDResponseBuffering, PageRuleUpdateParamsActionsIDRocketLoader, PageRuleUpdateParamsActionsIDSecurityLevel, PageRuleUpdateParamsActionsIDSortQueryStringForCache, PageRuleUpdateParamsActionsIDSSL, PageRuleUpdateParamsActionsIDTrueClientIPHeader, PageRuleUpdateParamsActionsIDWAF:
 		return true
 	}
 	return false
 }
 
 // The status of the Page Rule.
-type PageruleUpdateParamsStatus string
+type PageRuleUpdateParamsStatus string
 
 const (
-	PageruleUpdateParamsStatusActive   PageruleUpdateParamsStatus = "active"
-	PageruleUpdateParamsStatusDisabled PageruleUpdateParamsStatus = "disabled"
+	PageRuleUpdateParamsStatusActive   PageRuleUpdateParamsStatus = "active"
+	PageRuleUpdateParamsStatusDisabled PageRuleUpdateParamsStatus = "disabled"
 )
 
-func (r PageruleUpdateParamsStatus) IsKnown() bool {
+func (r PageRuleUpdateParamsStatus) IsKnown() bool {
 	switch r {
-	case PageruleUpdateParamsStatusActive, PageruleUpdateParamsStatusDisabled:
+	case PageRuleUpdateParamsStatusActive, PageRuleUpdateParamsStatusDisabled:
 		return true
 	}
 	return false
 }
 
-type PageruleUpdateResponseEnvelope struct {
+type PageRuleUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PageruleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	Success PageRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                              `json:"result"`
-	JSON    pageruleUpdateResponseEnvelopeJSON    `json:"-"`
+	JSON    pageRuleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// pageruleUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PageruleUpdateResponseEnvelope]
-type pageruleUpdateResponseEnvelopeJSON struct {
+// pageRuleUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageRuleUpdateResponseEnvelope]
+type pageRuleUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -3436,45 +3437,45 @@ type pageruleUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageruleUpdateResponseEnvelopeJSON) RawJSON() string {
+func (r pageRuleUpdateResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PageruleUpdateResponseEnvelopeSuccess bool
+type PageRuleUpdateResponseEnvelopeSuccess bool
 
 const (
-	PageruleUpdateResponseEnvelopeSuccessTrue PageruleUpdateResponseEnvelopeSuccess = true
+	PageRuleUpdateResponseEnvelopeSuccessTrue PageRuleUpdateResponseEnvelopeSuccess = true
 )
 
-func (r PageruleUpdateResponseEnvelopeSuccess) IsKnown() bool {
+func (r PageRuleUpdateResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PageruleUpdateResponseEnvelopeSuccessTrue:
+	case PageRuleUpdateResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type PageruleListParams struct {
+type PageRuleListParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The direction used to sort returned Page Rules.
-	Direction param.Field[PageruleListParamsDirection] `query:"direction"`
+	Direction param.Field[PageRuleListParamsDirection] `query:"direction"`
 	// When set to `all`, all the search requirements must match. When set to `any`,
 	// only one of the search requirements has to match.
-	Match param.Field[PageruleListParamsMatch] `query:"match"`
+	Match param.Field[PageRuleListParamsMatch] `query:"match"`
 	// The field used to sort returned Page Rules.
-	Order param.Field[PageruleListParamsOrder] `query:"order"`
+	Order param.Field[PageRuleListParamsOrder] `query:"order"`
 	// The status of the Page Rule.
-	Status param.Field[PageruleListParamsStatus] `query:"status"`
+	Status param.Field[PageRuleListParamsStatus] `query:"status"`
 }
 
-// URLQuery serializes [PageruleListParams]'s query parameters as `url.Values`.
-func (r PageruleListParams) URLQuery() (v url.Values) {
+// URLQuery serializes [PageRuleListParams]'s query parameters as `url.Values`.
+func (r PageRuleListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
@@ -3482,16 +3483,16 @@ func (r PageruleListParams) URLQuery() (v url.Values) {
 }
 
 // The direction used to sort returned Page Rules.
-type PageruleListParamsDirection string
+type PageRuleListParamsDirection string
 
 const (
-	PageruleListParamsDirectionAsc  PageruleListParamsDirection = "asc"
-	PageruleListParamsDirectionDesc PageruleListParamsDirection = "desc"
+	PageRuleListParamsDirectionAsc  PageRuleListParamsDirection = "asc"
+	PageRuleListParamsDirectionDesc PageRuleListParamsDirection = "desc"
 )
 
-func (r PageruleListParamsDirection) IsKnown() bool {
+func (r PageRuleListParamsDirection) IsKnown() bool {
 	switch r {
-	case PageruleListParamsDirectionAsc, PageruleListParamsDirectionDesc:
+	case PageRuleListParamsDirectionAsc, PageRuleListParamsDirectionDesc:
 		return true
 	}
 	return false
@@ -3499,65 +3500,65 @@ func (r PageruleListParamsDirection) IsKnown() bool {
 
 // When set to `all`, all the search requirements must match. When set to `any`,
 // only one of the search requirements has to match.
-type PageruleListParamsMatch string
+type PageRuleListParamsMatch string
 
 const (
-	PageruleListParamsMatchAny PageruleListParamsMatch = "any"
-	PageruleListParamsMatchAll PageruleListParamsMatch = "all"
+	PageRuleListParamsMatchAny PageRuleListParamsMatch = "any"
+	PageRuleListParamsMatchAll PageRuleListParamsMatch = "all"
 )
 
-func (r PageruleListParamsMatch) IsKnown() bool {
+func (r PageRuleListParamsMatch) IsKnown() bool {
 	switch r {
-	case PageruleListParamsMatchAny, PageruleListParamsMatchAll:
+	case PageRuleListParamsMatchAny, PageRuleListParamsMatchAll:
 		return true
 	}
 	return false
 }
 
 // The field used to sort returned Page Rules.
-type PageruleListParamsOrder string
+type PageRuleListParamsOrder string
 
 const (
-	PageruleListParamsOrderStatus   PageruleListParamsOrder = "status"
-	PageruleListParamsOrderPriority PageruleListParamsOrder = "priority"
+	PageRuleListParamsOrderStatus   PageRuleListParamsOrder = "status"
+	PageRuleListParamsOrderPriority PageRuleListParamsOrder = "priority"
 )
 
-func (r PageruleListParamsOrder) IsKnown() bool {
+func (r PageRuleListParamsOrder) IsKnown() bool {
 	switch r {
-	case PageruleListParamsOrderStatus, PageruleListParamsOrderPriority:
+	case PageRuleListParamsOrderStatus, PageRuleListParamsOrderPriority:
 		return true
 	}
 	return false
 }
 
 // The status of the Page Rule.
-type PageruleListParamsStatus string
+type PageRuleListParamsStatus string
 
 const (
-	PageruleListParamsStatusActive   PageruleListParamsStatus = "active"
-	PageruleListParamsStatusDisabled PageruleListParamsStatus = "disabled"
+	PageRuleListParamsStatusActive   PageRuleListParamsStatus = "active"
+	PageRuleListParamsStatusDisabled PageRuleListParamsStatus = "disabled"
 )
 
-func (r PageruleListParamsStatus) IsKnown() bool {
+func (r PageRuleListParamsStatus) IsKnown() bool {
 	switch r {
-	case PageruleListParamsStatusActive, PageruleListParamsStatusDisabled:
+	case PageRuleListParamsStatusActive, PageRuleListParamsStatusDisabled:
 		return true
 	}
 	return false
 }
 
-type PageruleListResponseEnvelope struct {
+type PageRuleListResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PageruleListResponseEnvelopeSuccess `json:"success,required"`
+	Success PageRuleListResponseEnvelopeSuccess `json:"success,required"`
 	Result  []PageRule                          `json:"result"`
-	JSON    pageruleListResponseEnvelopeJSON    `json:"-"`
+	JSON    pageRuleListResponseEnvelopeJSON    `json:"-"`
 }
 
-// pageruleListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PageruleListResponseEnvelope]
-type pageruleListResponseEnvelopeJSON struct {
+// pageRuleListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageRuleListResponseEnvelope]
+type pageRuleListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -3566,46 +3567,46 @@ type pageruleListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageruleListResponseEnvelopeJSON) RawJSON() string {
+func (r pageRuleListResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PageruleListResponseEnvelopeSuccess bool
+type PageRuleListResponseEnvelopeSuccess bool
 
 const (
-	PageruleListResponseEnvelopeSuccessTrue PageruleListResponseEnvelopeSuccess = true
+	PageRuleListResponseEnvelopeSuccessTrue PageRuleListResponseEnvelopeSuccess = true
 )
 
-func (r PageruleListResponseEnvelopeSuccess) IsKnown() bool {
+func (r PageRuleListResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PageruleListResponseEnvelopeSuccessTrue:
+	case PageRuleListResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type PageruleDeleteParams struct {
+type PageRuleDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type PageruleDeleteResponseEnvelope struct {
+type PageRuleDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PageruleDeleteResponseEnvelopeSuccess `json:"success,required"`
-	Result  PageruleDeleteResponse                `json:"result,nullable"`
-	JSON    pageruleDeleteResponseEnvelopeJSON    `json:"-"`
+	Success PageRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
+	Result  PageRuleDeleteResponse                `json:"result,nullable"`
+	JSON    pageRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// pageruleDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PageruleDeleteResponseEnvelope]
-type pageruleDeleteResponseEnvelopeJSON struct {
+// pageRuleDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageRuleDeleteResponseEnvelope]
+type pageRuleDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -3614,35 +3615,35 @@ type pageruleDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageruleDeleteResponseEnvelopeJSON) RawJSON() string {
+func (r pageRuleDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PageruleDeleteResponseEnvelopeSuccess bool
+type PageRuleDeleteResponseEnvelopeSuccess bool
 
 const (
-	PageruleDeleteResponseEnvelopeSuccessTrue PageruleDeleteResponseEnvelopeSuccess = true
+	PageRuleDeleteResponseEnvelopeSuccessTrue PageRuleDeleteResponseEnvelopeSuccess = true
 )
 
-func (r PageruleDeleteResponseEnvelopeSuccess) IsKnown() bool {
+func (r PageRuleDeleteResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PageruleDeleteResponseEnvelopeSuccessTrue:
+	case PageRuleDeleteResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParams struct {
+type PageRuleEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
-	Actions param.Field[[]PageruleEditParamsActionUnion] `json:"actions"`
+	Actions param.Field[[]PageRuleEditParamsActionUnion] `json:"actions"`
 	// The priority of the rule, used to define which Page Rule is processed over
 	// another. A higher number indicates a higher priority. For example, if you have a
 	// catch-all Page Rule (rule A: `/images/*`) but want a more specific Page Rule to
@@ -3650,235 +3651,235 @@ type PageruleEditParams struct {
 	// rule B so it overrides rule A.
 	Priority param.Field[int64] `json:"priority"`
 	// The status of the Page Rule.
-	Status param.Field[PageruleEditParamsStatus] `json:"status"`
+	Status param.Field[PageRuleEditParamsStatus] `json:"status"`
 	// The rule targets to evaluate on each request.
 	Targets param.Field[[]TargetParam] `json:"targets"`
 }
 
-func (r PageruleEditParams) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PageruleEditParamsAction struct {
+type PageRuleEditParamsAction struct {
 	// If enabled, any ` http://“ URL is converted to  `https://` through a 301
 	// redirect.
-	ID    param.Field[PageruleEditParamsActionsID] `json:"id"`
+	ID    param.Field[PageRuleEditParamsActionsID] `json:"id"`
 	Value param.Field[interface{}]                 `json:"value"`
 }
 
-func (r PageruleEditParamsAction) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsAction) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsAction) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r PageRuleEditParamsAction) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Satisfied by [zones.AlwaysUseHTTPSParam], [zones.AutomaticHTTPSRewritesParam],
 // [zones.BrowserCacheTTLParam], [zones.BrowserCheckParam],
-// [pagerules.PageruleEditParamsActionsBypassCacheOnCookie],
-// [pagerules.PageruleEditParamsActionsCacheByDeviceType],
-// [pagerules.PageruleEditParamsActionsCacheDeceptionArmor],
-// [pagerules.PageruleEditParamsActionsCacheKey], [zones.CacheLevelParam],
-// [pagerules.PageruleEditParamsActionsCacheOnCookie],
-// [pagerules.PageruleEditParamsActionsDisableApps],
-// [pagerules.PageruleEditParamsActionsDisablePerformance],
-// [pagerules.PageruleEditParamsActionsDisableSecurity],
-// [pagerules.PageruleEditParamsActionsDisableZaraz],
-// [pagerules.PageruleEditParamsActionsEdgeCacheTTL],
+// [page_rules.PageRuleEditParamsActionsBypassCacheOnCookie],
+// [page_rules.PageRuleEditParamsActionsCacheByDeviceType],
+// [page_rules.PageRuleEditParamsActionsCacheDeceptionArmor],
+// [page_rules.PageRuleEditParamsActionsCacheKey], [zones.CacheLevelParam],
+// [page_rules.PageRuleEditParamsActionsCacheOnCookie],
+// [page_rules.PageRuleEditParamsActionsDisableApps],
+// [page_rules.PageRuleEditParamsActionsDisablePerformance],
+// [page_rules.PageRuleEditParamsActionsDisableSecurity],
+// [page_rules.PageRuleEditParamsActionsDisableZaraz],
+// [page_rules.PageRuleEditParamsActionsEdgeCacheTTL],
 // [zones.EmailObfuscationParam],
-// [pagerules.PageruleEditParamsActionsExplicitCacheControl],
-// [pagerules.PageruleEditParamsActionsForwardingURL],
-// [pagerules.PageruleEditParamsActionsHostHeaderOverride],
+// [page_rules.PageRuleEditParamsActionsExplicitCacheControl],
+// [page_rules.PageRuleEditParamsActionsForwardingURL],
+// [page_rules.PageRuleEditParamsActionsHostHeaderOverride],
 // [zones.IPGeolocationParam], [zones.MirageParam],
 // [zones.OpportunisticEncryptionParam], [zones.OriginErrorPagePassThruParam],
-// [zones.PolishParam], [pagerules.PageruleEditParamsActionsResolveOverride],
-// [pagerules.PageruleEditParamsActionsRespectStrongEtag],
+// [zones.PolishParam], [page_rules.PageRuleEditParamsActionsResolveOverride],
+// [page_rules.PageRuleEditParamsActionsRespectStrongEtag],
 // [zones.ResponseBufferingParam], [zones.RocketLoaderParam],
 // [zones.SecurityLevelParam], [zones.SortQueryStringForCacheParam],
 // [zones.SSLParam], [zones.TrueClientIPHeaderParam], [zones.WAFParam],
-// [PageruleEditParamsAction].
-type PageruleEditParamsActionUnion interface {
-	ImplementsPagerulesPageruleEditParamsActionUnion()
+// [PageRuleEditParamsAction].
+type PageRuleEditParamsActionUnion interface {
+	ImplementsPageRulesPageRuleEditParamsActionUnion()
 }
 
-type PageruleEditParamsActionsBypassCacheOnCookie struct {
+type PageRuleEditParamsActionsBypassCacheOnCookie struct {
 	// Bypass cache and fetch resources from the origin server if a regular expression
 	// matches against a cookie name present in the request.
-	ID param.Field[PageruleEditParamsActionsBypassCacheOnCookieID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsBypassCacheOnCookieID] `json:"id"`
 	// The regular expression to use for matching cookie names in the request. Refer to
 	// [Bypass Cache on Cookie setting](https://developers.cloudflare.com/rules/page-rules/reference/additional-reference/#bypass-cache-on-cookie-setting)
 	// to learn about limited regular expression support.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleEditParamsActionsBypassCacheOnCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsBypassCacheOnCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsBypassCacheOnCookie) ImplementsPagerulesPageruleEditParamsActionUnion() {
+func (r PageRuleEditParamsActionsBypassCacheOnCookie) ImplementsPageRulesPageRuleEditParamsActionUnion() {
 }
 
 // Bypass cache and fetch resources from the origin server if a regular expression
 // matches against a cookie name present in the request.
-type PageruleEditParamsActionsBypassCacheOnCookieID string
+type PageRuleEditParamsActionsBypassCacheOnCookieID string
 
 const (
-	PageruleEditParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie PageruleEditParamsActionsBypassCacheOnCookieID = "bypass_cache_on_cookie"
+	PageRuleEditParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie PageRuleEditParamsActionsBypassCacheOnCookieID = "bypass_cache_on_cookie"
 )
 
-func (r PageruleEditParamsActionsBypassCacheOnCookieID) IsKnown() bool {
+func (r PageRuleEditParamsActionsBypassCacheOnCookieID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie:
+	case PageRuleEditParamsActionsBypassCacheOnCookieIDBypassCacheOnCookie:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsCacheByDeviceType struct {
+type PageRuleEditParamsActionsCacheByDeviceType struct {
 	// Separate cached content based on the visitor's device type.
-	ID param.Field[PageruleEditParamsActionsCacheByDeviceTypeID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsCacheByDeviceTypeID] `json:"id"`
 	// The status of Cache By Device Type.
-	Value param.Field[PageruleEditParamsActionsCacheByDeviceTypeValue] `json:"value"`
+	Value param.Field[PageRuleEditParamsActionsCacheByDeviceTypeValue] `json:"value"`
 }
 
-func (r PageruleEditParamsActionsCacheByDeviceType) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheByDeviceType) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsCacheByDeviceType) ImplementsPagerulesPageruleEditParamsActionUnion() {
+func (r PageRuleEditParamsActionsCacheByDeviceType) ImplementsPageRulesPageRuleEditParamsActionUnion() {
 }
 
 // Separate cached content based on the visitor's device type.
-type PageruleEditParamsActionsCacheByDeviceTypeID string
+type PageRuleEditParamsActionsCacheByDeviceTypeID string
 
 const (
-	PageruleEditParamsActionsCacheByDeviceTypeIDCacheByDeviceType PageruleEditParamsActionsCacheByDeviceTypeID = "cache_by_device_type"
+	PageRuleEditParamsActionsCacheByDeviceTypeIDCacheByDeviceType PageRuleEditParamsActionsCacheByDeviceTypeID = "cache_by_device_type"
 )
 
-func (r PageruleEditParamsActionsCacheByDeviceTypeID) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheByDeviceTypeID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsCacheByDeviceTypeIDCacheByDeviceType:
+	case PageRuleEditParamsActionsCacheByDeviceTypeIDCacheByDeviceType:
 		return true
 	}
 	return false
 }
 
 // The status of Cache By Device Type.
-type PageruleEditParamsActionsCacheByDeviceTypeValue string
+type PageRuleEditParamsActionsCacheByDeviceTypeValue string
 
 const (
-	PageruleEditParamsActionsCacheByDeviceTypeValueOn  PageruleEditParamsActionsCacheByDeviceTypeValue = "on"
-	PageruleEditParamsActionsCacheByDeviceTypeValueOff PageruleEditParamsActionsCacheByDeviceTypeValue = "off"
+	PageRuleEditParamsActionsCacheByDeviceTypeValueOn  PageRuleEditParamsActionsCacheByDeviceTypeValue = "on"
+	PageRuleEditParamsActionsCacheByDeviceTypeValueOff PageRuleEditParamsActionsCacheByDeviceTypeValue = "off"
 )
 
-func (r PageruleEditParamsActionsCacheByDeviceTypeValue) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheByDeviceTypeValue) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsCacheByDeviceTypeValueOn, PageruleEditParamsActionsCacheByDeviceTypeValueOff:
+	case PageRuleEditParamsActionsCacheByDeviceTypeValueOn, PageRuleEditParamsActionsCacheByDeviceTypeValueOff:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsCacheDeceptionArmor struct {
+type PageRuleEditParamsActionsCacheDeceptionArmor struct {
 	// Protect from web cache deception attacks while still allowing static assets to
 	// be cached. This setting verifies that the URL's extension matches the returned
 	// `Content-Type`.
-	ID param.Field[PageruleEditParamsActionsCacheDeceptionArmorID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsCacheDeceptionArmorID] `json:"id"`
 	// The status of Cache Deception Armor.
-	Value param.Field[PageruleEditParamsActionsCacheDeceptionArmorValue] `json:"value"`
+	Value param.Field[PageRuleEditParamsActionsCacheDeceptionArmorValue] `json:"value"`
 }
 
-func (r PageruleEditParamsActionsCacheDeceptionArmor) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheDeceptionArmor) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsCacheDeceptionArmor) ImplementsPagerulesPageruleEditParamsActionUnion() {
+func (r PageRuleEditParamsActionsCacheDeceptionArmor) ImplementsPageRulesPageRuleEditParamsActionUnion() {
 }
 
 // Protect from web cache deception attacks while still allowing static assets to
 // be cached. This setting verifies that the URL's extension matches the returned
 // `Content-Type`.
-type PageruleEditParamsActionsCacheDeceptionArmorID string
+type PageRuleEditParamsActionsCacheDeceptionArmorID string
 
 const (
-	PageruleEditParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor PageruleEditParamsActionsCacheDeceptionArmorID = "cache_deception_armor"
+	PageRuleEditParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor PageRuleEditParamsActionsCacheDeceptionArmorID = "cache_deception_armor"
 )
 
-func (r PageruleEditParamsActionsCacheDeceptionArmorID) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheDeceptionArmorID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor:
+	case PageRuleEditParamsActionsCacheDeceptionArmorIDCacheDeceptionArmor:
 		return true
 	}
 	return false
 }
 
 // The status of Cache Deception Armor.
-type PageruleEditParamsActionsCacheDeceptionArmorValue string
+type PageRuleEditParamsActionsCacheDeceptionArmorValue string
 
 const (
-	PageruleEditParamsActionsCacheDeceptionArmorValueOn  PageruleEditParamsActionsCacheDeceptionArmorValue = "on"
-	PageruleEditParamsActionsCacheDeceptionArmorValueOff PageruleEditParamsActionsCacheDeceptionArmorValue = "off"
+	PageRuleEditParamsActionsCacheDeceptionArmorValueOn  PageRuleEditParamsActionsCacheDeceptionArmorValue = "on"
+	PageRuleEditParamsActionsCacheDeceptionArmorValueOff PageRuleEditParamsActionsCacheDeceptionArmorValue = "off"
 )
 
-func (r PageruleEditParamsActionsCacheDeceptionArmorValue) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheDeceptionArmorValue) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsCacheDeceptionArmorValueOn, PageruleEditParamsActionsCacheDeceptionArmorValueOff:
+	case PageRuleEditParamsActionsCacheDeceptionArmorValueOn, PageRuleEditParamsActionsCacheDeceptionArmorValueOff:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsCacheKey struct {
+type PageRuleEditParamsActionsCacheKey struct {
 	// Control specifically what variables to include when deciding which resources to
 	// cache. This allows customers to determine what to cache based on something other
 	// than just the URL.
-	ID    param.Field[PageruleEditParamsActionsCacheKeyID]    `json:"id"`
-	Value param.Field[PageruleEditParamsActionsCacheKeyValue] `json:"value"`
+	ID    param.Field[PageRuleEditParamsActionsCacheKeyID]    `json:"id"`
+	Value param.Field[PageRuleEditParamsActionsCacheKeyValue] `json:"value"`
 }
 
-func (r PageruleEditParamsActionsCacheKey) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKey) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsCacheKey) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsCacheKey) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
 // than just the URL.
-type PageruleEditParamsActionsCacheKeyID string
+type PageRuleEditParamsActionsCacheKeyID string
 
 const (
-	PageruleEditParamsActionsCacheKeyIDCacheKey PageruleEditParamsActionsCacheKeyID = "cache_key"
+	PageRuleEditParamsActionsCacheKeyIDCacheKey PageRuleEditParamsActionsCacheKeyID = "cache_key"
 )
 
-func (r PageruleEditParamsActionsCacheKeyID) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheKeyID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsCacheKeyIDCacheKey:
+	case PageRuleEditParamsActionsCacheKeyIDCacheKey:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsCacheKeyValue struct {
+type PageRuleEditParamsActionsCacheKeyValue struct {
 	// Controls which cookies appear in the Cache Key.
-	Cookie param.Field[PageruleEditParamsActionsCacheKeyValueCookie] `json:"cookie"`
+	Cookie param.Field[PageRuleEditParamsActionsCacheKeyValueCookie] `json:"cookie"`
 	// Controls which headers go into the Cache Key. Exactly one of `include` or
 	// `exclude` is expected.
-	Header param.Field[PageruleEditParamsActionsCacheKeyValueHeader] `json:"header"`
+	Header param.Field[PageRuleEditParamsActionsCacheKeyValueHeader] `json:"header"`
 	// Determines which host header to include in the Cache Key.
-	Host param.Field[PageruleEditParamsActionsCacheKeyValueHost] `json:"host"`
+	Host param.Field[PageRuleEditParamsActionsCacheKeyValueHost] `json:"host"`
 	// Controls which URL query string parameters go into the Cache Key. Exactly one of
 	// `include` or `exclude` is expected.
-	QueryString param.Field[PageruleEditParamsActionsCacheKeyValueQueryString] `json:"query_string"`
+	QueryString param.Field[PageRuleEditParamsActionsCacheKeyValueQueryString] `json:"query_string"`
 	// Feature fields to add features about the end-user (client) into the Cache Key.
-	User param.Field[PageruleEditParamsActionsCacheKeyValueUser] `json:"user"`
+	User param.Field[PageRuleEditParamsActionsCacheKeyValueUser] `json:"user"`
 }
 
-func (r PageruleEditParamsActionsCacheKeyValue) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which cookies appear in the Cache Key.
-type PageruleEditParamsActionsCacheKeyValueCookie struct {
+type PageRuleEditParamsActionsCacheKeyValueCookie struct {
 	// A list of cookies to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -3886,13 +3887,13 @@ type PageruleEditParamsActionsCacheKeyValueCookie struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageruleEditParamsActionsCacheKeyValueCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyValueCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which headers go into the Cache Key. Exactly one of `include` or
 // `exclude` is expected.
-type PageruleEditParamsActionsCacheKeyValueHeader struct {
+type PageRuleEditParamsActionsCacheKeyValueHeader struct {
 	// A list of headers to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -3902,99 +3903,99 @@ type PageruleEditParamsActionsCacheKeyValueHeader struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageruleEditParamsActionsCacheKeyValueHeader) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyValueHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Determines which host header to include in the Cache Key.
-type PageruleEditParamsActionsCacheKeyValueHost struct {
+type PageRuleEditParamsActionsCacheKeyValueHost struct {
 	// Whether to include the Host header in the HTTP request sent to the origin.
 	Resolved param.Field[bool] `json:"resolved"`
 }
 
-func (r PageruleEditParamsActionsCacheKeyValueHost) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyValueHost) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which URL query string parameters go into the Cache Key. Exactly one of
 // `include` or `exclude` is expected.
-type PageruleEditParamsActionsCacheKeyValueQueryString struct {
+type PageRuleEditParamsActionsCacheKeyValueQueryString struct {
 	// Ignore all query string parameters.
-	Exclude param.Field[PageruleEditParamsActionsCacheKeyValueQueryStringExcludeUnion] `json:"exclude"`
+	Exclude param.Field[PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeUnion] `json:"exclude"`
 	// Include all query string parameters.
-	Include param.Field[PageruleEditParamsActionsCacheKeyValueQueryStringIncludeUnion] `json:"include"`
+	Include param.Field[PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeUnion] `json:"include"`
 }
 
-func (r PageruleEditParamsActionsCacheKeyValueQueryString) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyValueQueryString) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Ignore all query string parameters.
 //
 // Satisfied by
-// [pagerules.PageruleEditParamsActionsCacheKeyValueQueryStringExcludeString],
-// [pagerules.PageruleEditParamsActionsCacheKeyValueQueryStringExcludeArray].
-type PageruleEditParamsActionsCacheKeyValueQueryStringExcludeUnion interface {
-	implementsPagerulesPageruleEditParamsActionsCacheKeyValueQueryStringExcludeUnion()
+// [page_rules.PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeString],
+// [page_rules.PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeArray].
+type PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeUnion interface {
+	implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringExcludeUnion()
 }
 
 // Ignore all query string parameters.
-type PageruleEditParamsActionsCacheKeyValueQueryStringExcludeString string
+type PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeString string
 
 const (
-	PageruleEditParamsActionsCacheKeyValueQueryStringExcludeStringStar PageruleEditParamsActionsCacheKeyValueQueryStringExcludeString = "*"
+	PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeStringStar PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeString = "*"
 )
 
-func (r PageruleEditParamsActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsCacheKeyValueQueryStringExcludeStringStar:
+	case PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageruleEditParamsActionsCacheKeyValueQueryStringExcludeString) implementsPagerulesPageruleEditParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeString) implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringExcludeUnion() {
 }
 
-type PageruleEditParamsActionsCacheKeyValueQueryStringExcludeArray []string
+type PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeArray []string
 
-func (r PageruleEditParamsActionsCacheKeyValueQueryStringExcludeArray) implementsPagerulesPageruleEditParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeArray) implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
 //
 // Satisfied by
-// [pagerules.PageruleEditParamsActionsCacheKeyValueQueryStringIncludeString],
-// [pagerules.PageruleEditParamsActionsCacheKeyValueQueryStringIncludeArray].
-type PageruleEditParamsActionsCacheKeyValueQueryStringIncludeUnion interface {
-	implementsPagerulesPageruleEditParamsActionsCacheKeyValueQueryStringIncludeUnion()
+// [page_rules.PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeString],
+// [page_rules.PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeArray].
+type PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeUnion interface {
+	implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringIncludeUnion()
 }
 
 // Include all query string parameters.
-type PageruleEditParamsActionsCacheKeyValueQueryStringIncludeString string
+type PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeString string
 
 const (
-	PageruleEditParamsActionsCacheKeyValueQueryStringIncludeStringStar PageruleEditParamsActionsCacheKeyValueQueryStringIncludeString = "*"
+	PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeStringStar PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeString = "*"
 )
 
-func (r PageruleEditParamsActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsCacheKeyValueQueryStringIncludeStringStar:
+	case PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageruleEditParamsActionsCacheKeyValueQueryStringIncludeString) implementsPagerulesPageruleEditParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeString) implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringIncludeUnion() {
 }
 
-type PageruleEditParamsActionsCacheKeyValueQueryStringIncludeArray []string
+type PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeArray []string
 
-func (r PageruleEditParamsActionsCacheKeyValueQueryStringIncludeArray) implementsPagerulesPageruleEditParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeArray) implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
-type PageruleEditParamsActionsCacheKeyValueUser struct {
+type PageRuleEditParamsActionsCacheKeyValueUser struct {
 	// Classifies a request as `mobile`, `desktop`, or `tablet` based on the User
 	// Agent.
 	DeviceType param.Field[bool] `json:"device_type"`
@@ -4005,104 +4006,104 @@ type PageruleEditParamsActionsCacheKeyValueUser struct {
 	Lang param.Field[bool] `json:"lang"`
 }
 
-func (r PageruleEditParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PageruleEditParamsActionsCacheOnCookie struct {
+type PageRuleEditParamsActionsCacheOnCookie struct {
 	// Apply the Cache Everything option (Cache Level setting) based on a regular
 	// expression match against a cookie name.
-	ID param.Field[PageruleEditParamsActionsCacheOnCookieID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsCacheOnCookieID] `json:"id"`
 	// The regular expression to use for matching cookie names in the request.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleEditParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheOnCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsCacheOnCookie) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsCacheOnCookie) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Apply the Cache Everything option (Cache Level setting) based on a regular
 // expression match against a cookie name.
-type PageruleEditParamsActionsCacheOnCookieID string
+type PageRuleEditParamsActionsCacheOnCookieID string
 
 const (
-	PageruleEditParamsActionsCacheOnCookieIDCacheOnCookie PageruleEditParamsActionsCacheOnCookieID = "cache_on_cookie"
+	PageRuleEditParamsActionsCacheOnCookieIDCacheOnCookie PageRuleEditParamsActionsCacheOnCookieID = "cache_on_cookie"
 )
 
-func (r PageruleEditParamsActionsCacheOnCookieID) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheOnCookieID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsCacheOnCookieIDCacheOnCookie:
+	case PageRuleEditParamsActionsCacheOnCookieIDCacheOnCookie:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsDisableApps struct {
+type PageRuleEditParamsActionsDisableApps struct {
 	// Turn off all active
 	// [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
 	// (deprecated).
-	ID param.Field[PageruleEditParamsActionsDisableAppsID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsDisableAppsID] `json:"id"`
 }
 
-func (r PageruleEditParamsActionsDisableApps) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsDisableApps) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsDisableApps) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsDisableApps) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Turn off all active
 // [Cloudflare Apps](https://developers.cloudflare.com/support/more-dashboard-apps/cloudflare-apps/)
 // (deprecated).
-type PageruleEditParamsActionsDisableAppsID string
+type PageRuleEditParamsActionsDisableAppsID string
 
 const (
-	PageruleEditParamsActionsDisableAppsIDDisableApps PageruleEditParamsActionsDisableAppsID = "disable_apps"
+	PageRuleEditParamsActionsDisableAppsIDDisableApps PageRuleEditParamsActionsDisableAppsID = "disable_apps"
 )
 
-func (r PageruleEditParamsActionsDisableAppsID) IsKnown() bool {
+func (r PageRuleEditParamsActionsDisableAppsID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsDisableAppsIDDisableApps:
+	case PageRuleEditParamsActionsDisableAppsIDDisableApps:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsDisablePerformance struct {
+type PageRuleEditParamsActionsDisablePerformance struct {
 	// Turn off
 	// [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
 	// [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 	// and [Polish](https://developers.cloudflare.com/images/polish/).
-	ID param.Field[PageruleEditParamsActionsDisablePerformanceID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsDisablePerformanceID] `json:"id"`
 }
 
-func (r PageruleEditParamsActionsDisablePerformance) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsDisablePerformance) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsDisablePerformance) ImplementsPagerulesPageruleEditParamsActionUnion() {
+func (r PageRuleEditParamsActionsDisablePerformance) ImplementsPageRulesPageRuleEditParamsActionUnion() {
 }
 
 // Turn off
 // [Rocket Loader](https://developers.cloudflare.com/speed/optimization/content/rocket-loader/),
 // [Mirage](https://developers.cloudflare.com/speed/optimization/images/mirage/),
 // and [Polish](https://developers.cloudflare.com/images/polish/).
-type PageruleEditParamsActionsDisablePerformanceID string
+type PageRuleEditParamsActionsDisablePerformanceID string
 
 const (
-	PageruleEditParamsActionsDisablePerformanceIDDisablePerformance PageruleEditParamsActionsDisablePerformanceID = "disable_performance"
+	PageRuleEditParamsActionsDisablePerformanceIDDisablePerformance PageRuleEditParamsActionsDisablePerformanceID = "disable_performance"
 )
 
-func (r PageruleEditParamsActionsDisablePerformanceID) IsKnown() bool {
+func (r PageRuleEditParamsActionsDisablePerformanceID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsDisablePerformanceIDDisablePerformance:
+	case PageRuleEditParamsActionsDisablePerformanceIDDisablePerformance:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsDisableSecurity struct {
+type PageRuleEditParamsActionsDisableSecurity struct {
 	// Turn off
 	// [Email Obfuscation](https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/),
 	// [Rate Limiting (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-rate-limiting/),
@@ -4110,14 +4111,14 @@ type PageruleEditParamsActionsDisableSecurity struct {
 	// [URL (Zone) Lockdown](https://developers.cloudflare.com/waf/tools/zone-lockdown/),
 	// and
 	// [WAF managed rules (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/).
-	ID param.Field[PageruleEditParamsActionsDisableSecurityID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsDisableSecurityID] `json:"id"`
 }
 
-func (r PageruleEditParamsActionsDisableSecurity) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsDisableSecurity) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsDisableSecurity) ImplementsPagerulesPageruleEditParamsActionUnion() {
+func (r PageRuleEditParamsActionsDisableSecurity) ImplementsPageRulesPageRuleEditParamsActionUnion() {
 }
 
 // Turn off
@@ -4127,281 +4128,281 @@ func (r PageruleEditParamsActionsDisableSecurity) ImplementsPagerulesPageruleEdi
 // [URL (Zone) Lockdown](https://developers.cloudflare.com/waf/tools/zone-lockdown/),
 // and
 // [WAF managed rules (previous version, deprecated)](https://developers.cloudflare.com/waf/reference/legacy/old-waf-managed-rules/).
-type PageruleEditParamsActionsDisableSecurityID string
+type PageRuleEditParamsActionsDisableSecurityID string
 
 const (
-	PageruleEditParamsActionsDisableSecurityIDDisableSecurity PageruleEditParamsActionsDisableSecurityID = "disable_security"
+	PageRuleEditParamsActionsDisableSecurityIDDisableSecurity PageRuleEditParamsActionsDisableSecurityID = "disable_security"
 )
 
-func (r PageruleEditParamsActionsDisableSecurityID) IsKnown() bool {
+func (r PageRuleEditParamsActionsDisableSecurityID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsDisableSecurityIDDisableSecurity:
+	case PageRuleEditParamsActionsDisableSecurityIDDisableSecurity:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsDisableZaraz struct {
+type PageRuleEditParamsActionsDisableZaraz struct {
 	// Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
-	ID param.Field[PageruleEditParamsActionsDisableZarazID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsDisableZarazID] `json:"id"`
 }
 
-func (r PageruleEditParamsActionsDisableZaraz) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsDisableZaraz) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsDisableZaraz) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsDisableZaraz) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Turn off [Zaraz](https://developers.cloudflare.com/zaraz/).
-type PageruleEditParamsActionsDisableZarazID string
+type PageRuleEditParamsActionsDisableZarazID string
 
 const (
-	PageruleEditParamsActionsDisableZarazIDDisableZaraz PageruleEditParamsActionsDisableZarazID = "disable_zaraz"
+	PageRuleEditParamsActionsDisableZarazIDDisableZaraz PageRuleEditParamsActionsDisableZarazID = "disable_zaraz"
 )
 
-func (r PageruleEditParamsActionsDisableZarazID) IsKnown() bool {
+func (r PageRuleEditParamsActionsDisableZarazID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsDisableZarazIDDisableZaraz:
+	case PageRuleEditParamsActionsDisableZarazIDDisableZaraz:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsEdgeCacheTTL struct {
+type PageRuleEditParamsActionsEdgeCacheTTL struct {
 	// Specify how long to cache a resource in the Cloudflare global network. _Edge
 	// Cache TTL_ is not visible in response headers.
-	ID    param.Field[PageruleEditParamsActionsEdgeCacheTTLID] `json:"id"`
+	ID    param.Field[PageRuleEditParamsActionsEdgeCacheTTLID] `json:"id"`
 	Value param.Field[int64]                                   `json:"value"`
 }
 
-func (r PageruleEditParamsActionsEdgeCacheTTL) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsEdgeCacheTTL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsEdgeCacheTTL) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsEdgeCacheTTL) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Specify how long to cache a resource in the Cloudflare global network. _Edge
 // Cache TTL_ is not visible in response headers.
-type PageruleEditParamsActionsEdgeCacheTTLID string
+type PageRuleEditParamsActionsEdgeCacheTTLID string
 
 const (
-	PageruleEditParamsActionsEdgeCacheTTLIDEdgeCacheTTL PageruleEditParamsActionsEdgeCacheTTLID = "edge_cache_ttl"
+	PageRuleEditParamsActionsEdgeCacheTTLIDEdgeCacheTTL PageRuleEditParamsActionsEdgeCacheTTLID = "edge_cache_ttl"
 )
 
-func (r PageruleEditParamsActionsEdgeCacheTTLID) IsKnown() bool {
+func (r PageRuleEditParamsActionsEdgeCacheTTLID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsEdgeCacheTTLIDEdgeCacheTTL:
+	case PageRuleEditParamsActionsEdgeCacheTTLIDEdgeCacheTTL:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsExplicitCacheControl struct {
+type PageRuleEditParamsActionsExplicitCacheControl struct {
 	// Origin Cache Control is enabled by default for Free, Pro, and Business domains
 	// and disabled by default for Enterprise domains.
-	ID param.Field[PageruleEditParamsActionsExplicitCacheControlID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsExplicitCacheControlID] `json:"id"`
 	// The status of Origin Cache Control.
-	Value param.Field[PageruleEditParamsActionsExplicitCacheControlValue] `json:"value"`
+	Value param.Field[PageRuleEditParamsActionsExplicitCacheControlValue] `json:"value"`
 }
 
-func (r PageruleEditParamsActionsExplicitCacheControl) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsExplicitCacheControl) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsExplicitCacheControl) ImplementsPagerulesPageruleEditParamsActionUnion() {
+func (r PageRuleEditParamsActionsExplicitCacheControl) ImplementsPageRulesPageRuleEditParamsActionUnion() {
 }
 
 // Origin Cache Control is enabled by default for Free, Pro, and Business domains
 // and disabled by default for Enterprise domains.
-type PageruleEditParamsActionsExplicitCacheControlID string
+type PageRuleEditParamsActionsExplicitCacheControlID string
 
 const (
-	PageruleEditParamsActionsExplicitCacheControlIDExplicitCacheControl PageruleEditParamsActionsExplicitCacheControlID = "explicit_cache_control"
+	PageRuleEditParamsActionsExplicitCacheControlIDExplicitCacheControl PageRuleEditParamsActionsExplicitCacheControlID = "explicit_cache_control"
 )
 
-func (r PageruleEditParamsActionsExplicitCacheControlID) IsKnown() bool {
+func (r PageRuleEditParamsActionsExplicitCacheControlID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsExplicitCacheControlIDExplicitCacheControl:
+	case PageRuleEditParamsActionsExplicitCacheControlIDExplicitCacheControl:
 		return true
 	}
 	return false
 }
 
 // The status of Origin Cache Control.
-type PageruleEditParamsActionsExplicitCacheControlValue string
+type PageRuleEditParamsActionsExplicitCacheControlValue string
 
 const (
-	PageruleEditParamsActionsExplicitCacheControlValueOn  PageruleEditParamsActionsExplicitCacheControlValue = "on"
-	PageruleEditParamsActionsExplicitCacheControlValueOff PageruleEditParamsActionsExplicitCacheControlValue = "off"
+	PageRuleEditParamsActionsExplicitCacheControlValueOn  PageRuleEditParamsActionsExplicitCacheControlValue = "on"
+	PageRuleEditParamsActionsExplicitCacheControlValueOff PageRuleEditParamsActionsExplicitCacheControlValue = "off"
 )
 
-func (r PageruleEditParamsActionsExplicitCacheControlValue) IsKnown() bool {
+func (r PageRuleEditParamsActionsExplicitCacheControlValue) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsExplicitCacheControlValueOn, PageruleEditParamsActionsExplicitCacheControlValueOff:
+	case PageRuleEditParamsActionsExplicitCacheControlValueOn, PageRuleEditParamsActionsExplicitCacheControlValueOff:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsForwardingURL struct {
+type PageRuleEditParamsActionsForwardingURL struct {
 	// Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 	// [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
-	ID    param.Field[PageruleEditParamsActionsForwardingURLID]    `json:"id"`
-	Value param.Field[PageruleEditParamsActionsForwardingURLValue] `json:"value"`
+	ID    param.Field[PageRuleEditParamsActionsForwardingURLID]    `json:"id"`
+	Value param.Field[PageRuleEditParamsActionsForwardingURLValue] `json:"value"`
 }
 
-func (r PageruleEditParamsActionsForwardingURL) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsForwardingURL) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsForwardingURL) ImplementsPagerulesPageruleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsForwardingURL) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Redirects one URL to another using an `HTTP 301/302` redirect. Refer to
 // [Wildcard matching and referencing](https://developers.cloudflare.com/rules/page-rules/reference/wildcard-matching/).
-type PageruleEditParamsActionsForwardingURLID string
+type PageRuleEditParamsActionsForwardingURLID string
 
 const (
-	PageruleEditParamsActionsForwardingURLIDForwardingURL PageruleEditParamsActionsForwardingURLID = "forwarding_url"
+	PageRuleEditParamsActionsForwardingURLIDForwardingURL PageRuleEditParamsActionsForwardingURLID = "forwarding_url"
 )
 
-func (r PageruleEditParamsActionsForwardingURLID) IsKnown() bool {
+func (r PageRuleEditParamsActionsForwardingURLID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsForwardingURLIDForwardingURL:
+	case PageRuleEditParamsActionsForwardingURLIDForwardingURL:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsForwardingURLValue struct {
+type PageRuleEditParamsActionsForwardingURLValue struct {
 	// The status code to use for the URL redirect. 301 is a permanent redirect. 302 is
 	// a temporary redirect.
-	StatusCode param.Field[PageruleEditParamsActionsForwardingURLValueStatusCode] `json:"status_code"`
+	StatusCode param.Field[PageRuleEditParamsActionsForwardingURLValueStatusCode] `json:"status_code"`
 	// The URL to redirect the request to. Notes: ${num} refers to the position of '\*'
 	// in the constraint value.
 	URL param.Field[string] `json:"url"`
 }
 
-func (r PageruleEditParamsActionsForwardingURLValue) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsForwardingURLValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The status code to use for the URL redirect. 301 is a permanent redirect. 302 is
 // a temporary redirect.
-type PageruleEditParamsActionsForwardingURLValueStatusCode int64
+type PageRuleEditParamsActionsForwardingURLValueStatusCode int64
 
 const (
-	PageruleEditParamsActionsForwardingURLValueStatusCode301 PageruleEditParamsActionsForwardingURLValueStatusCode = 301
-	PageruleEditParamsActionsForwardingURLValueStatusCode302 PageruleEditParamsActionsForwardingURLValueStatusCode = 302
+	PageRuleEditParamsActionsForwardingURLValueStatusCode301 PageRuleEditParamsActionsForwardingURLValueStatusCode = 301
+	PageRuleEditParamsActionsForwardingURLValueStatusCode302 PageRuleEditParamsActionsForwardingURLValueStatusCode = 302
 )
 
-func (r PageruleEditParamsActionsForwardingURLValueStatusCode) IsKnown() bool {
+func (r PageRuleEditParamsActionsForwardingURLValueStatusCode) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsForwardingURLValueStatusCode301, PageruleEditParamsActionsForwardingURLValueStatusCode302:
+	case PageRuleEditParamsActionsForwardingURLValueStatusCode301, PageRuleEditParamsActionsForwardingURLValueStatusCode302:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsHostHeaderOverride struct {
+type PageRuleEditParamsActionsHostHeaderOverride struct {
 	// Apply a specific host header.
-	ID param.Field[PageruleEditParamsActionsHostHeaderOverrideID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsHostHeaderOverrideID] `json:"id"`
 	// The hostname to use in the `Host` header
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleEditParamsActionsHostHeaderOverride) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsHostHeaderOverride) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsHostHeaderOverride) ImplementsPagerulesPageruleEditParamsActionUnion() {
+func (r PageRuleEditParamsActionsHostHeaderOverride) ImplementsPageRulesPageRuleEditParamsActionUnion() {
 }
 
 // Apply a specific host header.
-type PageruleEditParamsActionsHostHeaderOverrideID string
+type PageRuleEditParamsActionsHostHeaderOverrideID string
 
 const (
-	PageruleEditParamsActionsHostHeaderOverrideIDHostHeaderOverride PageruleEditParamsActionsHostHeaderOverrideID = "host_header_override"
+	PageRuleEditParamsActionsHostHeaderOverrideIDHostHeaderOverride PageRuleEditParamsActionsHostHeaderOverrideID = "host_header_override"
 )
 
-func (r PageruleEditParamsActionsHostHeaderOverrideID) IsKnown() bool {
+func (r PageRuleEditParamsActionsHostHeaderOverrideID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsHostHeaderOverrideIDHostHeaderOverride:
+	case PageRuleEditParamsActionsHostHeaderOverrideIDHostHeaderOverride:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsResolveOverride struct {
+type PageRuleEditParamsActionsResolveOverride struct {
 	// Change the origin address to the value specified in this setting.
-	ID param.Field[PageruleEditParamsActionsResolveOverrideID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsResolveOverrideID] `json:"id"`
 	// The origin address you want to override with.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r PageruleEditParamsActionsResolveOverride) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsResolveOverride) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsResolveOverride) ImplementsPagerulesPageruleEditParamsActionUnion() {
+func (r PageRuleEditParamsActionsResolveOverride) ImplementsPageRulesPageRuleEditParamsActionUnion() {
 }
 
 // Change the origin address to the value specified in this setting.
-type PageruleEditParamsActionsResolveOverrideID string
+type PageRuleEditParamsActionsResolveOverrideID string
 
 const (
-	PageruleEditParamsActionsResolveOverrideIDResolveOverride PageruleEditParamsActionsResolveOverrideID = "resolve_override"
+	PageRuleEditParamsActionsResolveOverrideIDResolveOverride PageRuleEditParamsActionsResolveOverrideID = "resolve_override"
 )
 
-func (r PageruleEditParamsActionsResolveOverrideID) IsKnown() bool {
+func (r PageRuleEditParamsActionsResolveOverrideID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsResolveOverrideIDResolveOverride:
+	case PageRuleEditParamsActionsResolveOverrideIDResolveOverride:
 		return true
 	}
 	return false
 }
 
-type PageruleEditParamsActionsRespectStrongEtag struct {
+type PageRuleEditParamsActionsRespectStrongEtag struct {
 	// Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 	// the origin server.
-	ID param.Field[PageruleEditParamsActionsRespectStrongEtagID] `json:"id"`
+	ID param.Field[PageRuleEditParamsActionsRespectStrongEtagID] `json:"id"`
 	// The status of Respect Strong ETags
-	Value param.Field[PageruleEditParamsActionsRespectStrongEtagValue] `json:"value"`
+	Value param.Field[PageRuleEditParamsActionsRespectStrongEtagValue] `json:"value"`
 }
 
-func (r PageruleEditParamsActionsRespectStrongEtag) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsRespectStrongEtag) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageruleEditParamsActionsRespectStrongEtag) ImplementsPagerulesPageruleEditParamsActionUnion() {
+func (r PageRuleEditParamsActionsRespectStrongEtag) ImplementsPageRulesPageRuleEditParamsActionUnion() {
 }
 
 // Turn on or off byte-for-byte equivalency checks between the Cloudflare cache and
 // the origin server.
-type PageruleEditParamsActionsRespectStrongEtagID string
+type PageRuleEditParamsActionsRespectStrongEtagID string
 
 const (
-	PageruleEditParamsActionsRespectStrongEtagIDRespectStrongEtag PageruleEditParamsActionsRespectStrongEtagID = "respect_strong_etag"
+	PageRuleEditParamsActionsRespectStrongEtagIDRespectStrongEtag PageRuleEditParamsActionsRespectStrongEtagID = "respect_strong_etag"
 )
 
-func (r PageruleEditParamsActionsRespectStrongEtagID) IsKnown() bool {
+func (r PageRuleEditParamsActionsRespectStrongEtagID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsRespectStrongEtagIDRespectStrongEtag:
+	case PageRuleEditParamsActionsRespectStrongEtagIDRespectStrongEtag:
 		return true
 	}
 	return false
 }
 
 // The status of Respect Strong ETags
-type PageruleEditParamsActionsRespectStrongEtagValue string
+type PageRuleEditParamsActionsRespectStrongEtagValue string
 
 const (
-	PageruleEditParamsActionsRespectStrongEtagValueOn  PageruleEditParamsActionsRespectStrongEtagValue = "on"
-	PageruleEditParamsActionsRespectStrongEtagValueOff PageruleEditParamsActionsRespectStrongEtagValue = "off"
+	PageRuleEditParamsActionsRespectStrongEtagValueOn  PageRuleEditParamsActionsRespectStrongEtagValue = "on"
+	PageRuleEditParamsActionsRespectStrongEtagValueOff PageRuleEditParamsActionsRespectStrongEtagValue = "off"
 )
 
-func (r PageruleEditParamsActionsRespectStrongEtagValue) IsKnown() bool {
+func (r PageRuleEditParamsActionsRespectStrongEtagValue) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsRespectStrongEtagValueOn, PageruleEditParamsActionsRespectStrongEtagValueOff:
+	case PageRuleEditParamsActionsRespectStrongEtagValueOn, PageRuleEditParamsActionsRespectStrongEtagValueOff:
 		return true
 	}
 	return false
@@ -4409,80 +4410,80 @@ func (r PageruleEditParamsActionsRespectStrongEtagValue) IsKnown() bool {
 
 // If enabled, any ` http://“ URL is converted to  `https://` through a 301
 // redirect.
-type PageruleEditParamsActionsID string
+type PageRuleEditParamsActionsID string
 
 const (
-	PageruleEditParamsActionsIDAlwaysUseHTTPS          PageruleEditParamsActionsID = "always_use_https"
-	PageruleEditParamsActionsIDAutomaticHTTPSRewrites  PageruleEditParamsActionsID = "automatic_https_rewrites"
-	PageruleEditParamsActionsIDBrowserCacheTTL         PageruleEditParamsActionsID = "browser_cache_ttl"
-	PageruleEditParamsActionsIDBrowserCheck            PageruleEditParamsActionsID = "browser_check"
-	PageruleEditParamsActionsIDBypassCacheOnCookie     PageruleEditParamsActionsID = "bypass_cache_on_cookie"
-	PageruleEditParamsActionsIDCacheByDeviceType       PageruleEditParamsActionsID = "cache_by_device_type"
-	PageruleEditParamsActionsIDCacheDeceptionArmor     PageruleEditParamsActionsID = "cache_deception_armor"
-	PageruleEditParamsActionsIDCacheKey                PageruleEditParamsActionsID = "cache_key"
-	PageruleEditParamsActionsIDCacheLevel              PageruleEditParamsActionsID = "cache_level"
-	PageruleEditParamsActionsIDCacheOnCookie           PageruleEditParamsActionsID = "cache_on_cookie"
-	PageruleEditParamsActionsIDDisableApps             PageruleEditParamsActionsID = "disable_apps"
-	PageruleEditParamsActionsIDDisablePerformance      PageruleEditParamsActionsID = "disable_performance"
-	PageruleEditParamsActionsIDDisableSecurity         PageruleEditParamsActionsID = "disable_security"
-	PageruleEditParamsActionsIDDisableZaraz            PageruleEditParamsActionsID = "disable_zaraz"
-	PageruleEditParamsActionsIDEdgeCacheTTL            PageruleEditParamsActionsID = "edge_cache_ttl"
-	PageruleEditParamsActionsIDEmailObfuscation        PageruleEditParamsActionsID = "email_obfuscation"
-	PageruleEditParamsActionsIDExplicitCacheControl    PageruleEditParamsActionsID = "explicit_cache_control"
-	PageruleEditParamsActionsIDForwardingURL           PageruleEditParamsActionsID = "forwarding_url"
-	PageruleEditParamsActionsIDHostHeaderOverride      PageruleEditParamsActionsID = "host_header_override"
-	PageruleEditParamsActionsIDIPGeolocation           PageruleEditParamsActionsID = "ip_geolocation"
-	PageruleEditParamsActionsIDMirage                  PageruleEditParamsActionsID = "mirage"
-	PageruleEditParamsActionsIDOpportunisticEncryption PageruleEditParamsActionsID = "opportunistic_encryption"
-	PageruleEditParamsActionsIDOriginErrorPagePassThru PageruleEditParamsActionsID = "origin_error_page_pass_thru"
-	PageruleEditParamsActionsIDPolish                  PageruleEditParamsActionsID = "polish"
-	PageruleEditParamsActionsIDResolveOverride         PageruleEditParamsActionsID = "resolve_override"
-	PageruleEditParamsActionsIDRespectStrongEtag       PageruleEditParamsActionsID = "respect_strong_etag"
-	PageruleEditParamsActionsIDResponseBuffering       PageruleEditParamsActionsID = "response_buffering"
-	PageruleEditParamsActionsIDRocketLoader            PageruleEditParamsActionsID = "rocket_loader"
-	PageruleEditParamsActionsIDSecurityLevel           PageruleEditParamsActionsID = "security_level"
-	PageruleEditParamsActionsIDSortQueryStringForCache PageruleEditParamsActionsID = "sort_query_string_for_cache"
-	PageruleEditParamsActionsIDSSL                     PageruleEditParamsActionsID = "ssl"
-	PageruleEditParamsActionsIDTrueClientIPHeader      PageruleEditParamsActionsID = "true_client_ip_header"
-	PageruleEditParamsActionsIDWAF                     PageruleEditParamsActionsID = "waf"
+	PageRuleEditParamsActionsIDAlwaysUseHTTPS          PageRuleEditParamsActionsID = "always_use_https"
+	PageRuleEditParamsActionsIDAutomaticHTTPSRewrites  PageRuleEditParamsActionsID = "automatic_https_rewrites"
+	PageRuleEditParamsActionsIDBrowserCacheTTL         PageRuleEditParamsActionsID = "browser_cache_ttl"
+	PageRuleEditParamsActionsIDBrowserCheck            PageRuleEditParamsActionsID = "browser_check"
+	PageRuleEditParamsActionsIDBypassCacheOnCookie     PageRuleEditParamsActionsID = "bypass_cache_on_cookie"
+	PageRuleEditParamsActionsIDCacheByDeviceType       PageRuleEditParamsActionsID = "cache_by_device_type"
+	PageRuleEditParamsActionsIDCacheDeceptionArmor     PageRuleEditParamsActionsID = "cache_deception_armor"
+	PageRuleEditParamsActionsIDCacheKey                PageRuleEditParamsActionsID = "cache_key"
+	PageRuleEditParamsActionsIDCacheLevel              PageRuleEditParamsActionsID = "cache_level"
+	PageRuleEditParamsActionsIDCacheOnCookie           PageRuleEditParamsActionsID = "cache_on_cookie"
+	PageRuleEditParamsActionsIDDisableApps             PageRuleEditParamsActionsID = "disable_apps"
+	PageRuleEditParamsActionsIDDisablePerformance      PageRuleEditParamsActionsID = "disable_performance"
+	PageRuleEditParamsActionsIDDisableSecurity         PageRuleEditParamsActionsID = "disable_security"
+	PageRuleEditParamsActionsIDDisableZaraz            PageRuleEditParamsActionsID = "disable_zaraz"
+	PageRuleEditParamsActionsIDEdgeCacheTTL            PageRuleEditParamsActionsID = "edge_cache_ttl"
+	PageRuleEditParamsActionsIDEmailObfuscation        PageRuleEditParamsActionsID = "email_obfuscation"
+	PageRuleEditParamsActionsIDExplicitCacheControl    PageRuleEditParamsActionsID = "explicit_cache_control"
+	PageRuleEditParamsActionsIDForwardingURL           PageRuleEditParamsActionsID = "forwarding_url"
+	PageRuleEditParamsActionsIDHostHeaderOverride      PageRuleEditParamsActionsID = "host_header_override"
+	PageRuleEditParamsActionsIDIPGeolocation           PageRuleEditParamsActionsID = "ip_geolocation"
+	PageRuleEditParamsActionsIDMirage                  PageRuleEditParamsActionsID = "mirage"
+	PageRuleEditParamsActionsIDOpportunisticEncryption PageRuleEditParamsActionsID = "opportunistic_encryption"
+	PageRuleEditParamsActionsIDOriginErrorPagePassThru PageRuleEditParamsActionsID = "origin_error_page_pass_thru"
+	PageRuleEditParamsActionsIDPolish                  PageRuleEditParamsActionsID = "polish"
+	PageRuleEditParamsActionsIDResolveOverride         PageRuleEditParamsActionsID = "resolve_override"
+	PageRuleEditParamsActionsIDRespectStrongEtag       PageRuleEditParamsActionsID = "respect_strong_etag"
+	PageRuleEditParamsActionsIDResponseBuffering       PageRuleEditParamsActionsID = "response_buffering"
+	PageRuleEditParamsActionsIDRocketLoader            PageRuleEditParamsActionsID = "rocket_loader"
+	PageRuleEditParamsActionsIDSecurityLevel           PageRuleEditParamsActionsID = "security_level"
+	PageRuleEditParamsActionsIDSortQueryStringForCache PageRuleEditParamsActionsID = "sort_query_string_for_cache"
+	PageRuleEditParamsActionsIDSSL                     PageRuleEditParamsActionsID = "ssl"
+	PageRuleEditParamsActionsIDTrueClientIPHeader      PageRuleEditParamsActionsID = "true_client_ip_header"
+	PageRuleEditParamsActionsIDWAF                     PageRuleEditParamsActionsID = "waf"
 )
 
-func (r PageruleEditParamsActionsID) IsKnown() bool {
+func (r PageRuleEditParamsActionsID) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsActionsIDAlwaysUseHTTPS, PageruleEditParamsActionsIDAutomaticHTTPSRewrites, PageruleEditParamsActionsIDBrowserCacheTTL, PageruleEditParamsActionsIDBrowserCheck, PageruleEditParamsActionsIDBypassCacheOnCookie, PageruleEditParamsActionsIDCacheByDeviceType, PageruleEditParamsActionsIDCacheDeceptionArmor, PageruleEditParamsActionsIDCacheKey, PageruleEditParamsActionsIDCacheLevel, PageruleEditParamsActionsIDCacheOnCookie, PageruleEditParamsActionsIDDisableApps, PageruleEditParamsActionsIDDisablePerformance, PageruleEditParamsActionsIDDisableSecurity, PageruleEditParamsActionsIDDisableZaraz, PageruleEditParamsActionsIDEdgeCacheTTL, PageruleEditParamsActionsIDEmailObfuscation, PageruleEditParamsActionsIDExplicitCacheControl, PageruleEditParamsActionsIDForwardingURL, PageruleEditParamsActionsIDHostHeaderOverride, PageruleEditParamsActionsIDIPGeolocation, PageruleEditParamsActionsIDMirage, PageruleEditParamsActionsIDOpportunisticEncryption, PageruleEditParamsActionsIDOriginErrorPagePassThru, PageruleEditParamsActionsIDPolish, PageruleEditParamsActionsIDResolveOverride, PageruleEditParamsActionsIDRespectStrongEtag, PageruleEditParamsActionsIDResponseBuffering, PageruleEditParamsActionsIDRocketLoader, PageruleEditParamsActionsIDSecurityLevel, PageruleEditParamsActionsIDSortQueryStringForCache, PageruleEditParamsActionsIDSSL, PageruleEditParamsActionsIDTrueClientIPHeader, PageruleEditParamsActionsIDWAF:
+	case PageRuleEditParamsActionsIDAlwaysUseHTTPS, PageRuleEditParamsActionsIDAutomaticHTTPSRewrites, PageRuleEditParamsActionsIDBrowserCacheTTL, PageRuleEditParamsActionsIDBrowserCheck, PageRuleEditParamsActionsIDBypassCacheOnCookie, PageRuleEditParamsActionsIDCacheByDeviceType, PageRuleEditParamsActionsIDCacheDeceptionArmor, PageRuleEditParamsActionsIDCacheKey, PageRuleEditParamsActionsIDCacheLevel, PageRuleEditParamsActionsIDCacheOnCookie, PageRuleEditParamsActionsIDDisableApps, PageRuleEditParamsActionsIDDisablePerformance, PageRuleEditParamsActionsIDDisableSecurity, PageRuleEditParamsActionsIDDisableZaraz, PageRuleEditParamsActionsIDEdgeCacheTTL, PageRuleEditParamsActionsIDEmailObfuscation, PageRuleEditParamsActionsIDExplicitCacheControl, PageRuleEditParamsActionsIDForwardingURL, PageRuleEditParamsActionsIDHostHeaderOverride, PageRuleEditParamsActionsIDIPGeolocation, PageRuleEditParamsActionsIDMirage, PageRuleEditParamsActionsIDOpportunisticEncryption, PageRuleEditParamsActionsIDOriginErrorPagePassThru, PageRuleEditParamsActionsIDPolish, PageRuleEditParamsActionsIDResolveOverride, PageRuleEditParamsActionsIDRespectStrongEtag, PageRuleEditParamsActionsIDResponseBuffering, PageRuleEditParamsActionsIDRocketLoader, PageRuleEditParamsActionsIDSecurityLevel, PageRuleEditParamsActionsIDSortQueryStringForCache, PageRuleEditParamsActionsIDSSL, PageRuleEditParamsActionsIDTrueClientIPHeader, PageRuleEditParamsActionsIDWAF:
 		return true
 	}
 	return false
 }
 
 // The status of the Page Rule.
-type PageruleEditParamsStatus string
+type PageRuleEditParamsStatus string
 
 const (
-	PageruleEditParamsStatusActive   PageruleEditParamsStatus = "active"
-	PageruleEditParamsStatusDisabled PageruleEditParamsStatus = "disabled"
+	PageRuleEditParamsStatusActive   PageRuleEditParamsStatus = "active"
+	PageRuleEditParamsStatusDisabled PageRuleEditParamsStatus = "disabled"
 )
 
-func (r PageruleEditParamsStatus) IsKnown() bool {
+func (r PageRuleEditParamsStatus) IsKnown() bool {
 	switch r {
-	case PageruleEditParamsStatusActive, PageruleEditParamsStatusDisabled:
+	case PageRuleEditParamsStatusActive, PageRuleEditParamsStatusDisabled:
 		return true
 	}
 	return false
 }
 
-type PageruleEditResponseEnvelope struct {
+type PageRuleEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PageruleEditResponseEnvelopeSuccess `json:"success,required"`
+	Success PageRuleEditResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                            `json:"result"`
-	JSON    pageruleEditResponseEnvelopeJSON    `json:"-"`
+	JSON    pageRuleEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// pageruleEditResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PageruleEditResponseEnvelope]
-type pageruleEditResponseEnvelopeJSON struct {
+// pageRuleEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageRuleEditResponseEnvelope]
+type pageRuleEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -4491,46 +4492,46 @@ type pageruleEditResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageruleEditResponseEnvelopeJSON) RawJSON() string {
+func (r pageRuleEditResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PageruleEditResponseEnvelopeSuccess bool
+type PageRuleEditResponseEnvelopeSuccess bool
 
 const (
-	PageruleEditResponseEnvelopeSuccessTrue PageruleEditResponseEnvelopeSuccess = true
+	PageRuleEditResponseEnvelopeSuccessTrue PageRuleEditResponseEnvelopeSuccess = true
 )
 
-func (r PageruleEditResponseEnvelopeSuccess) IsKnown() bool {
+func (r PageRuleEditResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PageruleEditResponseEnvelopeSuccessTrue:
+	case PageRuleEditResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type PageruleGetParams struct {
+type PageRuleGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type PageruleGetResponseEnvelope struct {
+type PageRuleGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PageruleGetResponseEnvelopeSuccess `json:"success,required"`
+	Success PageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	Result  PageRule                           `json:"result"`
-	JSON    pageruleGetResponseEnvelopeJSON    `json:"-"`
+	JSON    pageRuleGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// pageruleGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PageruleGetResponseEnvelope]
-type pageruleGetResponseEnvelopeJSON struct {
+// pageRuleGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageRuleGetResponseEnvelope]
+type pageRuleGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -4539,24 +4540,24 @@ type pageruleGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageruleGetResponseEnvelopeJSON) RawJSON() string {
+func (r pageRuleGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PageruleGetResponseEnvelopeSuccess bool
+type PageRuleGetResponseEnvelopeSuccess bool
 
 const (
-	PageruleGetResponseEnvelopeSuccessTrue PageruleGetResponseEnvelopeSuccess = true
+	PageRuleGetResponseEnvelopeSuccessTrue PageRuleGetResponseEnvelopeSuccess = true
 )
 
-func (r PageruleGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r PageRuleGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PageruleGetResponseEnvelopeSuccessTrue:
+	case PageRuleGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
