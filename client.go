@@ -62,8 +62,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/origin_ca_certificates"
 	"github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption"
 	"github.com/cloudflare/cloudflare-go/v3/origin_tls_client_auth"
+	"github.com/cloudflare/cloudflare-go/v3/page_rules"
 	"github.com/cloudflare/cloudflare-go/v3/page_shield"
-	"github.com/cloudflare/cloudflare-go/v3/pagerules"
 	"github.com/cloudflare/cloudflare-go/v3/pages"
 	"github.com/cloudflare/cloudflare-go/v3/queues"
 	"github.com/cloudflare/cloudflare-go/v3/r2"
@@ -127,7 +127,7 @@ type Client struct {
 	Logpush                     *logpush.LogpushService
 	Logs                        *logs.LogService
 	OriginTLSClientAuth         *origin_tls_client_auth.OriginTLSClientAuthService
-	Pagerules                   *pagerules.PageruleService
+	PageRules                   *page_rules.PageRuleService
 	RateLimits                  *rate_limits.RateLimitService
 	WaitingRooms                *waiting_rooms.WaitingRoomService
 	Web3                        *web3.Web3Service
@@ -236,7 +236,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Logpush = logpush.NewLogpushService(opts...)
 	r.Logs = logs.NewLogService(opts...)
 	r.OriginTLSClientAuth = origin_tls_client_auth.NewOriginTLSClientAuthService(opts...)
-	r.Pagerules = pagerules.NewPageruleService(opts...)
+	r.PageRules = page_rules.NewPageRuleService(opts...)
 	r.RateLimits = rate_limits.NewRateLimitService(opts...)
 	r.WaitingRooms = waiting_rooms.NewWaitingRoomService(opts...)
 	r.Web3 = web3.NewWeb3Service(opts...)

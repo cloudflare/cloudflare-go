@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package pagerules
+package page_rules
 
 import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/apierror"

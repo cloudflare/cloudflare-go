@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package pagerules_test
+package page_rules_test
 
 import (
 	"context"
@@ -11,11 +11,11 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/pagerules"
+	"github.com/cloudflare/cloudflare-go/v3/page_rules"
 	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
-func TestPageruleNewWithOptionalParams(t *testing.T) {
+func TestPageRuleNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,21 +28,21 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Pagerules.New(context.TODO(), pagerules.PageruleNewParams{
+	_, err := client.PageRules.New(context.TODO(), page_rules.PageRuleNewParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Actions: cloudflare.F([]pagerules.PageruleNewParamsActionUnion{zones.BrowserCheckParam{
+		Actions: cloudflare.F([]page_rules.PageRuleNewParamsActionUnion{zones.BrowserCheckParam{
 			ID:    cloudflare.F(zones.BrowserCheckIDBrowserCheck),
 			Value: cloudflare.F(zones.BrowserCheckValueOn),
 		}}),
-		Targets: cloudflare.F([]pagerules.TargetParam{{
-			Constraint: cloudflare.F(pagerules.TargetConstraintParam{
-				Operator: cloudflare.F(pagerules.TargetConstraintOperatorMatches),
+		Targets: cloudflare.F([]page_rules.TargetParam{{
+			Constraint: cloudflare.F(page_rules.TargetConstraintParam{
+				Operator: cloudflare.F(page_rules.TargetConstraintOperatorMatches),
 				Value:    cloudflare.F("*example.com/images/*"),
 			}),
-			Target: cloudflare.F(pagerules.TargetTargetURL),
+			Target: cloudflare.F(page_rules.TargetTargetURL),
 		}}),
 		Priority: cloudflare.F(int64(0)),
-		Status:   cloudflare.F(pagerules.PageruleNewParamsStatusActive),
+		Status:   cloudflare.F(page_rules.PageRuleNewParamsStatusActive),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -53,7 +53,7 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPageruleUpdateWithOptionalParams(t *testing.T) {
+func TestPageRuleUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -66,24 +66,24 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Pagerules.Update(
+	_, err := client.PageRules.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		pagerules.PageruleUpdateParams{
+		page_rules.PageRuleUpdateParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Actions: cloudflare.F([]pagerules.PageruleUpdateParamsActionUnion{zones.BrowserCheckParam{
+			Actions: cloudflare.F([]page_rules.PageRuleUpdateParamsActionUnion{zones.BrowserCheckParam{
 				ID:    cloudflare.F(zones.BrowserCheckIDBrowserCheck),
 				Value: cloudflare.F(zones.BrowserCheckValueOn),
 			}}),
-			Targets: cloudflare.F([]pagerules.TargetParam{{
-				Constraint: cloudflare.F(pagerules.TargetConstraintParam{
-					Operator: cloudflare.F(pagerules.TargetConstraintOperatorMatches),
+			Targets: cloudflare.F([]page_rules.TargetParam{{
+				Constraint: cloudflare.F(page_rules.TargetConstraintParam{
+					Operator: cloudflare.F(page_rules.TargetConstraintOperatorMatches),
 					Value:    cloudflare.F("*example.com/images/*"),
 				}),
-				Target: cloudflare.F(pagerules.TargetTargetURL),
+				Target: cloudflare.F(page_rules.TargetTargetURL),
 			}}),
 			Priority: cloudflare.F(int64(0)),
-			Status:   cloudflare.F(pagerules.PageruleUpdateParamsStatusActive),
+			Status:   cloudflare.F(page_rules.PageRuleUpdateParamsStatusActive),
 		},
 	)
 	if err != nil {
@@ -95,7 +95,7 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPageruleListWithOptionalParams(t *testing.T) {
+func TestPageRuleListWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -108,12 +108,12 @@ func TestPageruleListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Pagerules.List(context.TODO(), pagerules.PageruleListParams{
+	_, err := client.PageRules.List(context.TODO(), page_rules.PageRuleListParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Direction: cloudflare.F(pagerules.PageruleListParamsDirectionAsc),
-		Match:     cloudflare.F(pagerules.PageruleListParamsMatchAny),
-		Order:     cloudflare.F(pagerules.PageruleListParamsOrderStatus),
-		Status:    cloudflare.F(pagerules.PageruleListParamsStatusActive),
+		Direction: cloudflare.F(page_rules.PageRuleListParamsDirectionAsc),
+		Match:     cloudflare.F(page_rules.PageRuleListParamsMatchAny),
+		Order:     cloudflare.F(page_rules.PageRuleListParamsOrderStatus),
+		Status:    cloudflare.F(page_rules.PageRuleListParamsStatusActive),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -124,7 +124,7 @@ func TestPageruleListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPageruleDelete(t *testing.T) {
+func TestPageRuleDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -137,10 +137,10 @@ func TestPageruleDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Pagerules.Delete(
+	_, err := client.PageRules.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		pagerules.PageruleDeleteParams{
+		page_rules.PageRuleDeleteParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -153,7 +153,7 @@ func TestPageruleDelete(t *testing.T) {
 	}
 }
 
-func TestPageruleEditWithOptionalParams(t *testing.T) {
+func TestPageRuleEditWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -166,23 +166,23 @@ func TestPageruleEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Pagerules.Edit(
+	_, err := client.PageRules.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		pagerules.PageruleEditParams{
+		page_rules.PageRuleEditParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Actions: cloudflare.F([]pagerules.PageruleEditParamsActionUnion{zones.BrowserCheckParam{
+			Actions: cloudflare.F([]page_rules.PageRuleEditParamsActionUnion{zones.BrowserCheckParam{
 				ID:    cloudflare.F(zones.BrowserCheckIDBrowserCheck),
 				Value: cloudflare.F(zones.BrowserCheckValueOn),
 			}}),
 			Priority: cloudflare.F(int64(0)),
-			Status:   cloudflare.F(pagerules.PageruleEditParamsStatusActive),
-			Targets: cloudflare.F([]pagerules.TargetParam{{
-				Constraint: cloudflare.F(pagerules.TargetConstraintParam{
-					Operator: cloudflare.F(pagerules.TargetConstraintOperatorMatches),
+			Status:   cloudflare.F(page_rules.PageRuleEditParamsStatusActive),
+			Targets: cloudflare.F([]page_rules.TargetParam{{
+				Constraint: cloudflare.F(page_rules.TargetConstraintParam{
+					Operator: cloudflare.F(page_rules.TargetConstraintOperatorMatches),
 					Value:    cloudflare.F("*example.com/images/*"),
 				}),
-				Target: cloudflare.F(pagerules.TargetTargetURL),
+				Target: cloudflare.F(page_rules.TargetTargetURL),
 			}}),
 		},
 	)
@@ -195,7 +195,7 @@ func TestPageruleEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPageruleGet(t *testing.T) {
+func TestPageRuleGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -208,10 +208,10 @@ func TestPageruleGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Pagerules.Get(
+	_, err := client.PageRules.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		pagerules.PageruleGetParams{
+		page_rules.PageRuleGetParams{
 			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
