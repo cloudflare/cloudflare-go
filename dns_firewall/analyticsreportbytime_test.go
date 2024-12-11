@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/dns_firewall"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/dns_firewall"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestAnalyticsReportBytimeGetWithOptionalParams(t *testing.T) {
