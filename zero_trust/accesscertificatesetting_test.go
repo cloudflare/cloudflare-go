@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestAccessCertificateSettingUpdateWithOptionalParams(t *testing.T) {
@@ -30,14 +30,6 @@ func TestAccessCertificateSettingUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Access.Certificates.Settings.Update(context.TODO(), zero_trust.AccessCertificateSettingUpdateParams{
 		Settings: cloudflare.F([]zero_trust.CertificateSettingsParam{{
-			ChinaNetwork:                cloudflare.F(false),
-			ClientCertificateForwarding: cloudflare.F(true),
-			Hostname:                    cloudflare.F("admin.example.com"),
-		}, {
-			ChinaNetwork:                cloudflare.F(false),
-			ClientCertificateForwarding: cloudflare.F(true),
-			Hostname:                    cloudflare.F("admin.example.com"),
-		}, {
 			ChinaNetwork:                cloudflare.F(false),
 			ClientCertificateForwarding: cloudflare.F(true),
 			Hostname:                    cloudflare.F("admin.example.com"),

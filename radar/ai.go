@@ -3,7 +3,7 @@
 package radar
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // AIService contains methods and other services that help with interacting with
@@ -13,8 +13,9 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAIService] method instead.
 type AIService struct {
-	Options []option.RequestOption
-	Gateway *AIGatewayService
+	Options          []option.RequestOption
+	Bots             *AIBotService
+	TimeseriesGroups *AITimeseriesGroupService
 }
 
 // NewAIService generates a new service that applies the given options to each
@@ -23,6 +24,7 @@ type AIService struct {
 func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r = &AIService{}
 	r.Options = opts
-	r.Gateway = NewAIGatewayService(opts...)
+	r.Bots = NewAIBotService(opts...)
+	r.TimeseriesGroups = NewAITimeseriesGroupService(opts...)
 	return
 }

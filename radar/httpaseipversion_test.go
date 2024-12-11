@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestHTTPAseIPVersionGetWithOptionalParams(t *testing.T) {
@@ -32,22 +32,22 @@ func TestHTTPAseIPVersionGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		radar.HTTPAseIPVersionGetParamsIPVersionIPv4,
 		radar.HTTPAseIPVersionGetParams{
-			ASN:           cloudflare.F([]string{"string", "string", "string"}),
-			BotClass:      cloudflare.F([]radar.HTTPAseIPVersionGetParamsBotClass{radar.HTTPAseIPVersionGetParamsBotClassLikelyAutomated, radar.HTTPAseIPVersionGetParamsBotClassLikelyHuman}),
-			BrowserFamily: cloudflare.F([]radar.HTTPAseIPVersionGetParamsBrowserFamily{radar.HTTPAseIPVersionGetParamsBrowserFamilyChrome, radar.HTTPAseIPVersionGetParamsBrowserFamilyEdge, radar.HTTPAseIPVersionGetParamsBrowserFamilyFirefox}),
-			Continent:     cloudflare.F([]string{"string", "string", "string"}),
-			DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange:     cloudflare.F([]string{"7d", "7d", "7d"}),
-			DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DeviceType:    cloudflare.F([]radar.HTTPAseIPVersionGetParamsDeviceType{radar.HTTPAseIPVersionGetParamsDeviceTypeDesktop, radar.HTTPAseIPVersionGetParamsDeviceTypeMobile, radar.HTTPAseIPVersionGetParamsDeviceTypeOther}),
+			ASN:           cloudflare.F([]string{"string"}),
+			BotClass:      cloudflare.F([]radar.HTTPAseIPVersionGetParamsBotClass{radar.HTTPAseIPVersionGetParamsBotClassLikelyAutomated}),
+			BrowserFamily: cloudflare.F([]radar.HTTPAseIPVersionGetParamsBrowserFamily{radar.HTTPAseIPVersionGetParamsBrowserFamilyChrome}),
+			Continent:     cloudflare.F([]string{"string"}),
+			DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+			DateRange:     cloudflare.F([]string{"7d"}),
+			DateStart:     cloudflare.F([]time.Time{time.Now()}),
+			DeviceType:    cloudflare.F([]radar.HTTPAseIPVersionGetParamsDeviceType{radar.HTTPAseIPVersionGetParamsDeviceTypeDesktop}),
 			Format:        cloudflare.F(radar.HTTPAseIPVersionGetParamsFormatJson),
-			HTTPProtocol:  cloudflare.F([]radar.HTTPAseIPVersionGetParamsHTTPProtocol{radar.HTTPAseIPVersionGetParamsHTTPProtocolHTTP, radar.HTTPAseIPVersionGetParamsHTTPProtocolHTTPS}),
-			HTTPVersion:   cloudflare.F([]radar.HTTPAseIPVersionGetParamsHTTPVersion{radar.HTTPAseIPVersionGetParamsHTTPVersionHttPv1, radar.HTTPAseIPVersionGetParamsHTTPVersionHttPv2, radar.HTTPAseIPVersionGetParamsHTTPVersionHttPv3}),
+			HTTPProtocol:  cloudflare.F([]radar.HTTPAseIPVersionGetParamsHTTPProtocol{radar.HTTPAseIPVersionGetParamsHTTPProtocolHTTP}),
+			HTTPVersion:   cloudflare.F([]radar.HTTPAseIPVersionGetParamsHTTPVersion{radar.HTTPAseIPVersionGetParamsHTTPVersionHttPv1}),
 			Limit:         cloudflare.F(int64(5)),
-			Location:      cloudflare.F([]string{"string", "string", "string"}),
-			Name:          cloudflare.F([]string{"string", "string", "string"}),
-			OS:            cloudflare.F([]radar.HTTPAseIPVersionGetParamsOS{radar.HTTPAseIPVersionGetParamsOSWindows, radar.HTTPAseIPVersionGetParamsOSMacosx, radar.HTTPAseIPVersionGetParamsOSIos}),
-			TLSVersion:    cloudflare.F([]radar.HTTPAseIPVersionGetParamsTLSVersion{radar.HTTPAseIPVersionGetParamsTLSVersionTlSv1_0, radar.HTTPAseIPVersionGetParamsTLSVersionTlSv1_1, radar.HTTPAseIPVersionGetParamsTLSVersionTlSv1_2}),
+			Location:      cloudflare.F([]string{"string"}),
+			Name:          cloudflare.F([]string{"string"}),
+			OS:            cloudflare.F([]radar.HTTPAseIPVersionGetParamsOS{radar.HTTPAseIPVersionGetParamsOSWindows}),
+			TLSVersion:    cloudflare.F([]radar.HTTPAseIPVersionGetParamsTLSVersion{radar.HTTPAseIPVersionGetParamsTLSVersionTlSv1_0}),
 		},
 	)
 	if err != nil {

@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ScriptSettingService contains methods and other services that help with
@@ -36,7 +36,7 @@ func NewScriptSettingService(opts ...option.RequestOption) (r *ScriptSettingServ
 
 // Patch script-level settings when using
 // [Worker Versions](https://developers.cloudflare.com/api/operations/worker-versions-list-versions).
-// Includes Logpush and Tail Consumers.
+// Including but not limited to Logpush and Tail Consumers.
 func (r *ScriptSettingService) Edit(ctx context.Context, scriptName string, params ScriptSettingEditParams, opts ...option.RequestOption) (res *ScriptSetting, err error) {
 	var env ScriptSettingEditResponseEnvelope
 	opts = append(r.Options[:], opts...)

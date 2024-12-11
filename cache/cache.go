@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // CacheService contains methods and other services that help with interacting with
@@ -156,13 +156,13 @@ func (r CachePurgeParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CachePurgeParamsBody struct {
-	Tags     param.Field[interface{}] `json:"tags,required"`
-	Hosts    param.Field[interface{}] `json:"hosts,required"`
-	Prefixes param.Field[interface{}] `json:"prefixes,required"`
+	Files    param.Field[interface{}] `json:"files"`
+	Hosts    param.Field[interface{}] `json:"hosts"`
+	Prefixes param.Field[interface{}] `json:"prefixes"`
 	// For more information, please refer to
 	// [purge everything documentation page](https://developers.cloudflare.com/cache/how-to/purge-cache/purge-everything/).
 	PurgeEverything param.Field[bool]        `json:"purge_everything"`
-	Files           param.Field[interface{}] `json:"files,required"`
+	Tags            param.Field[interface{}] `json:"tags"`
 }
 
 func (r CachePurgeParamsBody) MarshalJSON() (data []byte, err error) {

@@ -11,13 +11,13 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -29,6 +29,7 @@ import (
 // the [NewTunnelService] method instead.
 type TunnelService struct {
 	Options        []option.RequestOption
+	WARPConnector  *TunnelWARPConnectorService
 	Configurations *TunnelConfigurationService
 	Connections    *TunnelConnectionService
 	Token          *TunnelTokenService
@@ -42,6 +43,7 @@ type TunnelService struct {
 func NewTunnelService(opts ...option.RequestOption) (r *TunnelService) {
 	r = &TunnelService{}
 	r.Options = opts
+	r.WARPConnector = NewTunnelWARPConnectorService(opts...)
 	r.Configurations = NewTunnelConfigurationService(opts...)
 	r.Connections = NewTunnelConnectionService(opts...)
 	r.Token = NewTunnelTokenService(opts...)
@@ -159,11 +161,13 @@ func (r *TunnelService) Get(ctx context.Context, tunnelID string, query TunnelGe
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelNewResponse struct {
+	// UUID of the tunnel.
+	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelNewResponseTunnelWARPConnectorTunnelConnection].
-	Connections interface{} `json:"connections,required"`
+	Connections interface{} `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
@@ -175,10 +179,8 @@ type TunnelNewResponse struct {
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
-	// UUID of the tunnel.
-	ID string `json:"id" format:"uuid"`
 	// This field can have the runtime type of [interface{}].
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
@@ -198,13 +200,13 @@ type TunnelNewResponse struct {
 // tunnelNewResponseJSON contains the JSON metadata for the struct
 // [TunnelNewResponse]
 type tunnelNewResponseJSON struct {
+	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
 	CreatedAt       apijson.Field
 	DeletedAt       apijson.Field
-	ID              apijson.Field
 	Metadata        apijson.Field
 	Name            apijson.Field
 	RemoteConfig    apijson.Field
@@ -448,11 +450,13 @@ func (r TunnelNewResponseTunType) IsKnown() bool {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelListResponse struct {
+	// UUID of the tunnel.
+	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelListResponseTunnelWARPConnectorTunnelConnection].
-	Connections interface{} `json:"connections,required"`
+	Connections interface{} `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
@@ -464,10 +468,8 @@ type TunnelListResponse struct {
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
-	// UUID of the tunnel.
-	ID string `json:"id" format:"uuid"`
 	// This field can have the runtime type of [interface{}].
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
@@ -487,13 +489,13 @@ type TunnelListResponse struct {
 // tunnelListResponseJSON contains the JSON metadata for the struct
 // [TunnelListResponse]
 type tunnelListResponseJSON struct {
+	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
 	CreatedAt       apijson.Field
 	DeletedAt       apijson.Field
-	ID              apijson.Field
 	Metadata        apijson.Field
 	Name            apijson.Field
 	RemoteConfig    apijson.Field
@@ -737,11 +739,13 @@ func (r TunnelListResponseTunType) IsKnown() bool {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelDeleteResponse struct {
+	// UUID of the tunnel.
+	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelDeleteResponseTunnelWARPConnectorTunnelConnection].
-	Connections interface{} `json:"connections,required"`
+	Connections interface{} `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
@@ -753,10 +757,8 @@ type TunnelDeleteResponse struct {
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
-	// UUID of the tunnel.
-	ID string `json:"id" format:"uuid"`
 	// This field can have the runtime type of [interface{}].
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
@@ -776,13 +778,13 @@ type TunnelDeleteResponse struct {
 // tunnelDeleteResponseJSON contains the JSON metadata for the struct
 // [TunnelDeleteResponse]
 type tunnelDeleteResponseJSON struct {
+	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
 	CreatedAt       apijson.Field
 	DeletedAt       apijson.Field
-	ID              apijson.Field
 	Metadata        apijson.Field
 	Name            apijson.Field
 	RemoteConfig    apijson.Field
@@ -1027,11 +1029,13 @@ func (r TunnelDeleteResponseTunType) IsKnown() bool {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelEditResponse struct {
+	// UUID of the tunnel.
+	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelEditResponseTunnelWARPConnectorTunnelConnection].
-	Connections interface{} `json:"connections,required"`
+	Connections interface{} `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
@@ -1043,10 +1047,8 @@ type TunnelEditResponse struct {
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
-	// UUID of the tunnel.
-	ID string `json:"id" format:"uuid"`
 	// This field can have the runtime type of [interface{}].
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
@@ -1066,13 +1068,13 @@ type TunnelEditResponse struct {
 // tunnelEditResponseJSON contains the JSON metadata for the struct
 // [TunnelEditResponse]
 type tunnelEditResponseJSON struct {
+	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
 	CreatedAt       apijson.Field
 	DeletedAt       apijson.Field
-	ID              apijson.Field
 	Metadata        apijson.Field
 	Name            apijson.Field
 	RemoteConfig    apijson.Field
@@ -1316,11 +1318,13 @@ func (r TunnelEditResponseTunType) IsKnown() bool {
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 type TunnelGetResponse struct {
+	// UUID of the tunnel.
+	ID string `json:"id" format:"uuid"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// This field can have the runtime type of [[]shared.CloudflareTunnelConnection],
 	// [[]TunnelGetResponseTunnelWARPConnectorTunnelConnection].
-	Connections interface{} `json:"connections,required"`
+	Connections interface{} `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at" format:"date-time"`
@@ -1332,10 +1336,8 @@ type TunnelGetResponse struct {
 	// Timestamp of when the resource was deleted. If `null`, the resource has not been
 	// deleted.
 	DeletedAt time.Time `json:"deleted_at" format:"date-time"`
-	// UUID of the tunnel.
-	ID string `json:"id" format:"uuid"`
 	// This field can have the runtime type of [interface{}].
-	Metadata interface{} `json:"metadata,required"`
+	Metadata interface{} `json:"metadata"`
 	// A user-friendly name for a tunnel.
 	Name string `json:"name"`
 	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
@@ -1355,13 +1357,13 @@ type TunnelGetResponse struct {
 // tunnelGetResponseJSON contains the JSON metadata for the struct
 // [TunnelGetResponse]
 type tunnelGetResponseJSON struct {
+	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
 	ConnsActiveAt   apijson.Field
 	ConnsInactiveAt apijson.Field
 	CreatedAt       apijson.Field
 	DeletedAt       apijson.Field
-	ID              apijson.Field
 	Metadata        apijson.Field
 	Name            apijson.Field
 	RemoteConfig    apijson.Field

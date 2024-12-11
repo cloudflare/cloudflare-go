@@ -3,7 +3,7 @@
 package email_security
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // SettingService contains methods and other services that help with interacting
@@ -14,7 +14,7 @@ import (
 // the [NewSettingService] method instead.
 type SettingService struct {
 	Options               []option.RequestOption
-	AllowPatterns         *SettingAllowPatternService
+	AllowPolicies         *SettingAllowPolicyService
 	BlockSenders          *SettingBlockSenderService
 	Domains               *SettingDomainService
 	ImpersonationRegistry *SettingImpersonationRegistryService
@@ -27,7 +27,7 @@ type SettingService struct {
 func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r = &SettingService{}
 	r.Options = opts
-	r.AllowPatterns = NewSettingAllowPatternService(opts...)
+	r.AllowPolicies = NewSettingAllowPolicyService(opts...)
 	r.BlockSenders = NewSettingBlockSenderService(opts...)
 	r.Domains = NewSettingDomainService(opts...)
 	r.ImpersonationRegistry = NewSettingImpersonationRegistryService(opts...)

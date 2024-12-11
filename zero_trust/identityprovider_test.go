@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
@@ -44,9 +44,8 @@ func TestIdentityProviderNewWithOptionalParams(t *testing.T) {
 			Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
 			SCIMConfig: cloudflare.F(zero_trust.IdentityProviderSCIMConfigParam{
 				Enabled:                cloudflare.F(true),
-				GroupMemberDeprovision: cloudflare.F(true),
+				IdentityUpdateBehavior: cloudflare.F(zero_trust.IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic),
 				SeatDeprovision:        cloudflare.F(true),
-				Secret:                 cloudflare.F("secret"),
 				UserDeprovision:        cloudflare.F(true),
 			}),
 		},
@@ -94,9 +93,8 @@ func TestIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 				Type: cloudflare.F(zero_trust.IdentityProviderTypeOnetimepin),
 				SCIMConfig: cloudflare.F(zero_trust.IdentityProviderSCIMConfigParam{
 					Enabled:                cloudflare.F(true),
-					GroupMemberDeprovision: cloudflare.F(true),
+					IdentityUpdateBehavior: cloudflare.F(zero_trust.IdentityProviderSCIMConfigIdentityUpdateBehaviorAutomatic),
 					SeatDeprovision:        cloudflare.F(true),
-					Secret:                 cloudflare.F("secret"),
 					UserDeprovision:        cloudflare.F(true),
 				}),
 			},
@@ -127,7 +125,8 @@ func TestIdentityProviderListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.IdentityProviders.List(context.TODO(), zero_trust.IdentityProviderListParams{
-		AccountID: cloudflare.F("account_id"),
+		AccountID:   cloudflare.F("account_id"),
+		SCIMEnabled: cloudflare.F("scim_enabled"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

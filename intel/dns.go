@@ -10,13 +10,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
 )
 
 // DNSService contains methods and other services that help with interacting with
@@ -38,8 +37,8 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	return
 }
 
-// Get Passive DNS by IP
-func (r *DNSService) List(ctx context.Context, params DNSListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DNSListResponse], err error) {
+// Gets a list of all the domains that have resolved to a specific IP address.
+func (r *DNSService) List(ctx context.Context, params DNSListParams, opts ...option.RequestOption) (res *pagination.V4PagePagination[DNS], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -60,8 +59,8 @@ func (r *DNSService) List(ctx context.Context, params DNSListParams, opts ...opt
 	return res, nil
 }
 
-// Get Passive DNS by IP
-func (r *DNSService) ListAutoPaging(ctx context.Context, params DNSListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[DNSListResponse] {
+// Gets a list of all the domains that have resolved to a specific IP address.
+func (r *DNSService) ListAutoPaging(ctx context.Context, params DNSListParams, opts ...option.RequestOption) *pagination.V4PagePaginationAutoPager[DNS] {
 	return pagination.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -99,7 +98,7 @@ type DNSReverseRecord struct {
 	// First seen date of the DNS record during the time period.
 	FirstSeen time.Time `json:"first_seen" format:"date"`
 	// Hostname that the IP was observed resolving to.
-	Hostname interface{} `json:"hostname"`
+	Hostname string `json:"hostname"`
 	// Last seen date of the DNS record during the time period.
 	LastSeen time.Time            `json:"last_seen" format:"date"`
 	JSON     dnsReverseRecordJSON `json:"-"`
@@ -121,48 +120,6 @@ func (r *DNSReverseRecord) UnmarshalJSON(data []byte) (err error) {
 
 func (r dnsReverseRecordJSON) RawJSON() string {
 	return r.raw
-}
-
-type DNSListResponse struct {
-	Errors   []shared.ResponseInfo `json:"errors,required"`
-	Messages []shared.ResponseInfo `json:"messages,required"`
-	// Whether the API call was successful
-	Success DNSListResponseSuccess `json:"success,required"`
-	Result  DNS                    `json:"result"`
-	JSON    dnsListResponseJSON    `json:"-"`
-}
-
-// dnsListResponseJSON contains the JSON metadata for the struct [DNSListResponse]
-type dnsListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dnsListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type DNSListResponseSuccess bool
-
-const (
-	DNSListResponseSuccessTrue DNSListResponseSuccess = true
-)
-
-func (r DNSListResponseSuccess) IsKnown() bool {
-	switch r {
-	case DNSListResponseSuccessTrue:
-		return true
-	}
-	return false
 }
 
 type DNSListParams struct {
