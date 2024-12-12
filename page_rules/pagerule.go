@@ -210,15 +210,16 @@ type PageRuleAction struct {
 	// This field can have the runtime type of [zones.AutomaticHTTPSRewritesValue],
 	// [int64], [zones.BrowserCheckValue], [string],
 	// [PageRuleActionsCacheByDeviceTypeValue],
-	// [PageRuleActionsCacheDeceptionArmorValue], [PageRuleActionsCacheKeyValue],
-	// [zones.CacheLevelValue], [zones.EmailObfuscationValue],
-	// [PageRuleActionsExplicitCacheControlValue], [PageRuleActionsForwardingURLValue],
-	// [zones.IPGeolocationValue], [zones.MirageValue],
-	// [zones.OpportunisticEncryptionValue], [zones.OriginErrorPagePassThruValue],
-	// [zones.PolishValue], [PageRuleActionsRespectStrongEtagValue],
-	// [zones.ResponseBufferingValue], [zones.RocketLoaderValue],
-	// [zones.SecurityLevelValue], [zones.SortQueryStringForCacheValue],
-	// [zones.SSLValue], [zones.TrueClientIPHeaderValue], [zones.WAFValue].
+	// [PageRuleActionsCacheDeceptionArmorValue], [PageRuleActionsCacheKeyFieldsValue],
+	// [zones.CacheLevelValue], [map[string]PageRuleActionsCacheTTLByStatusValueUnion],
+	// [zones.EmailObfuscationValue], [PageRuleActionsExplicitCacheControlValue],
+	// [PageRuleActionsForwardingURLValue], [zones.IPGeolocationValue],
+	// [zones.MirageValue], [zones.OpportunisticEncryptionValue],
+	// [zones.OriginErrorPagePassThruValue], [zones.PolishValue],
+	// [PageRuleActionsRespectStrongEtagValue], [zones.ResponseBufferingValue],
+	// [zones.RocketLoaderValue], [zones.SecurityLevelValue],
+	// [zones.SortQueryStringForCacheValue], [zones.SSLValue],
+	// [zones.TrueClientIPHeaderValue], [zones.WAFValue].
 	Value interface{}        `json:"value"`
 	JSON  pageRuleActionJSON `json:"-"`
 	union PageRuleActionsUnion
@@ -253,8 +254,9 @@ func (r *PageRuleAction) UnmarshalJSON(data []byte) (err error) {
 // [page_rules.PageRuleActionsBypassCacheOnCookie],
 // [page_rules.PageRuleActionsCacheByDeviceType],
 // [page_rules.PageRuleActionsCacheDeceptionArmor],
-// [page_rules.PageRuleActionsCacheKey], [zones.CacheLevel],
+// [page_rules.PageRuleActionsCacheKeyFields], [zones.CacheLevel],
 // [page_rules.PageRuleActionsCacheOnCookie],
+// [page_rules.PageRuleActionsCacheTTLByStatus],
 // [page_rules.PageRuleActionsDisableApps],
 // [page_rules.PageRuleActionsDisablePerformance],
 // [page_rules.PageRuleActionsDisableSecurity],
@@ -278,8 +280,9 @@ func (r PageRuleAction) AsUnion() PageRuleActionsUnion {
 // [page_rules.PageRuleActionsBypassCacheOnCookie],
 // [page_rules.PageRuleActionsCacheByDeviceType],
 // [page_rules.PageRuleActionsCacheDeceptionArmor],
-// [page_rules.PageRuleActionsCacheKey], [zones.CacheLevel],
+// [page_rules.PageRuleActionsCacheKeyFields], [zones.CacheLevel],
 // [page_rules.PageRuleActionsCacheOnCookie],
+// [page_rules.PageRuleActionsCacheTTLByStatus],
 // [page_rules.PageRuleActionsDisableApps],
 // [page_rules.PageRuleActionsDisablePerformance],
 // [page_rules.PageRuleActionsDisableSecurity],
@@ -339,8 +342,8 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(PageRuleActionsCacheKey{}),
-			DiscriminatorValue: "cache_key",
+			Type:               reflect.TypeOf(PageRuleActionsCacheKeyFields{}),
+			DiscriminatorValue: "cache_key_fields",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -351,6 +354,11 @@ func init() {
 			TypeFilter:         gjson.JSON,
 			Type:               reflect.TypeOf(PageRuleActionsCacheOnCookie{}),
 			DiscriminatorValue: "cache_on_cookie",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(PageRuleActionsCacheTTLByStatus{}),
+			DiscriminatorValue: "cache_ttl_by_status",
 		},
 		apijson.UnionVariant{
 			TypeFilter:         gjson.JSON,
@@ -636,70 +644,70 @@ func (r PageRuleActionsCacheDeceptionArmorValue) IsKnown() bool {
 	return false
 }
 
-type PageRuleActionsCacheKey struct {
+type PageRuleActionsCacheKeyFields struct {
 	// Control specifically what variables to include when deciding which resources to
 	// cache. This allows customers to determine what to cache based on something other
 	// than just the URL.
-	ID    PageRuleActionsCacheKeyID    `json:"id"`
-	Value PageRuleActionsCacheKeyValue `json:"value"`
-	JSON  pageRuleActionsCacheKeyJSON  `json:"-"`
+	ID    PageRuleActionsCacheKeyFieldsID    `json:"id"`
+	Value PageRuleActionsCacheKeyFieldsValue `json:"value"`
+	JSON  pageRuleActionsCacheKeyFieldsJSON  `json:"-"`
 }
 
-// pageRuleActionsCacheKeyJSON contains the JSON metadata for the struct
-// [PageRuleActionsCacheKey]
-type pageRuleActionsCacheKeyJSON struct {
+// pageRuleActionsCacheKeyFieldsJSON contains the JSON metadata for the struct
+// [PageRuleActionsCacheKeyFields]
+type pageRuleActionsCacheKeyFieldsJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageRuleActionsCacheKey) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleActionsCacheKeyFields) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageRuleActionsCacheKeyJSON) RawJSON() string {
+func (r pageRuleActionsCacheKeyFieldsJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r PageRuleActionsCacheKey) ImplementsPageRulesPageRuleAction() {}
+func (r PageRuleActionsCacheKeyFields) ImplementsPageRulesPageRuleAction() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
 // than just the URL.
-type PageRuleActionsCacheKeyID string
+type PageRuleActionsCacheKeyFieldsID string
 
 const (
-	PageRuleActionsCacheKeyIDCacheKey PageRuleActionsCacheKeyID = "cache_key"
+	PageRuleActionsCacheKeyFieldsIDCacheKeyFields PageRuleActionsCacheKeyFieldsID = "cache_key_fields"
 )
 
-func (r PageRuleActionsCacheKeyID) IsKnown() bool {
+func (r PageRuleActionsCacheKeyFieldsID) IsKnown() bool {
 	switch r {
-	case PageRuleActionsCacheKeyIDCacheKey:
+	case PageRuleActionsCacheKeyFieldsIDCacheKeyFields:
 		return true
 	}
 	return false
 }
 
-type PageRuleActionsCacheKeyValue struct {
+type PageRuleActionsCacheKeyFieldsValue struct {
 	// Controls which cookies appear in the Cache Key.
-	Cookie PageRuleActionsCacheKeyValueCookie `json:"cookie"`
+	Cookie PageRuleActionsCacheKeyFieldsValueCookie `json:"cookie"`
 	// Controls which headers go into the Cache Key. Exactly one of `include` or
 	// `exclude` is expected.
-	Header PageRuleActionsCacheKeyValueHeader `json:"header"`
+	Header PageRuleActionsCacheKeyFieldsValueHeader `json:"header"`
 	// Determines which host header to include in the Cache Key.
-	Host PageRuleActionsCacheKeyValueHost `json:"host"`
+	Host PageRuleActionsCacheKeyFieldsValueHost `json:"host"`
 	// Controls which URL query string parameters go into the Cache Key. Exactly one of
 	// `include` or `exclude` is expected.
-	QueryString PageRuleActionsCacheKeyValueQueryString `json:"query_string"`
+	QueryString PageRuleActionsCacheKeyFieldsValueQueryString `json:"query_string"`
 	// Feature fields to add features about the end-user (client) into the Cache Key.
-	User PageRuleActionsCacheKeyValueUser `json:"user"`
-	JSON pageRuleActionsCacheKeyValueJSON `json:"-"`
+	User PageRuleActionsCacheKeyFieldsValueUser `json:"user"`
+	JSON pageRuleActionsCacheKeyFieldsValueJSON `json:"-"`
 }
 
-// pageRuleActionsCacheKeyValueJSON contains the JSON metadata for the struct
-// [PageRuleActionsCacheKeyValue]
-type pageRuleActionsCacheKeyValueJSON struct {
+// pageRuleActionsCacheKeyFieldsValueJSON contains the JSON metadata for the struct
+// [PageRuleActionsCacheKeyFieldsValue]
+type pageRuleActionsCacheKeyFieldsValueJSON struct {
 	Cookie      apijson.Field
 	Header      apijson.Field
 	Host        apijson.Field
@@ -709,57 +717,57 @@ type pageRuleActionsCacheKeyValueJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageRuleActionsCacheKeyValue) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleActionsCacheKeyFieldsValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageRuleActionsCacheKeyValueJSON) RawJSON() string {
+func (r pageRuleActionsCacheKeyFieldsValueJSON) RawJSON() string {
 	return r.raw
 }
 
 // Controls which cookies appear in the Cache Key.
-type PageRuleActionsCacheKeyValueCookie struct {
+type PageRuleActionsCacheKeyFieldsValueCookie struct {
 	// A list of cookies to check for the presence of, without including their actual
 	// values.
 	CheckPresence []string `json:"check_presence"`
 	// A list of cookies to include.
-	Include []string                               `json:"include"`
-	JSON    pageRuleActionsCacheKeyValueCookieJSON `json:"-"`
+	Include []string                                     `json:"include"`
+	JSON    pageRuleActionsCacheKeyFieldsValueCookieJSON `json:"-"`
 }
 
-// pageRuleActionsCacheKeyValueCookieJSON contains the JSON metadata for the struct
-// [PageRuleActionsCacheKeyValueCookie]
-type pageRuleActionsCacheKeyValueCookieJSON struct {
+// pageRuleActionsCacheKeyFieldsValueCookieJSON contains the JSON metadata for the
+// struct [PageRuleActionsCacheKeyFieldsValueCookie]
+type pageRuleActionsCacheKeyFieldsValueCookieJSON struct {
 	CheckPresence apijson.Field
 	Include       apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *PageRuleActionsCacheKeyValueCookie) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleActionsCacheKeyFieldsValueCookie) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageRuleActionsCacheKeyValueCookieJSON) RawJSON() string {
+func (r pageRuleActionsCacheKeyFieldsValueCookieJSON) RawJSON() string {
 	return r.raw
 }
 
 // Controls which headers go into the Cache Key. Exactly one of `include` or
 // `exclude` is expected.
-type PageRuleActionsCacheKeyValueHeader struct {
+type PageRuleActionsCacheKeyFieldsValueHeader struct {
 	// A list of headers to check for the presence of, without including their actual
 	// values.
 	CheckPresence []string `json:"check_presence"`
 	// A list of headers to ignore.
 	Exclude []string `json:"exclude"`
 	// A list of headers to include.
-	Include []string                               `json:"include"`
-	JSON    pageRuleActionsCacheKeyValueHeaderJSON `json:"-"`
+	Include []string                                     `json:"include"`
+	JSON    pageRuleActionsCacheKeyFieldsValueHeaderJSON `json:"-"`
 }
 
-// pageRuleActionsCacheKeyValueHeaderJSON contains the JSON metadata for the struct
-// [PageRuleActionsCacheKeyValueHeader]
-type pageRuleActionsCacheKeyValueHeaderJSON struct {
+// pageRuleActionsCacheKeyFieldsValueHeaderJSON contains the JSON metadata for the
+// struct [PageRuleActionsCacheKeyFieldsValueHeader]
+type pageRuleActionsCacheKeyFieldsValueHeaderJSON struct {
 	CheckPresence apijson.Field
 	Exclude       apijson.Field
 	Include       apijson.Field
@@ -767,160 +775,160 @@ type pageRuleActionsCacheKeyValueHeaderJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *PageRuleActionsCacheKeyValueHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleActionsCacheKeyFieldsValueHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageRuleActionsCacheKeyValueHeaderJSON) RawJSON() string {
+func (r pageRuleActionsCacheKeyFieldsValueHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
 // Determines which host header to include in the Cache Key.
-type PageRuleActionsCacheKeyValueHost struct {
+type PageRuleActionsCacheKeyFieldsValueHost struct {
 	// Whether to include the Host header in the HTTP request sent to the origin.
-	Resolved bool                                 `json:"resolved"`
-	JSON     pageRuleActionsCacheKeyValueHostJSON `json:"-"`
+	Resolved bool                                       `json:"resolved"`
+	JSON     pageRuleActionsCacheKeyFieldsValueHostJSON `json:"-"`
 }
 
-// pageRuleActionsCacheKeyValueHostJSON contains the JSON metadata for the struct
-// [PageRuleActionsCacheKeyValueHost]
-type pageRuleActionsCacheKeyValueHostJSON struct {
+// pageRuleActionsCacheKeyFieldsValueHostJSON contains the JSON metadata for the
+// struct [PageRuleActionsCacheKeyFieldsValueHost]
+type pageRuleActionsCacheKeyFieldsValueHostJSON struct {
 	Resolved    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageRuleActionsCacheKeyValueHost) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleActionsCacheKeyFieldsValueHost) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageRuleActionsCacheKeyValueHostJSON) RawJSON() string {
+func (r pageRuleActionsCacheKeyFieldsValueHostJSON) RawJSON() string {
 	return r.raw
 }
 
 // Controls which URL query string parameters go into the Cache Key. Exactly one of
 // `include` or `exclude` is expected.
-type PageRuleActionsCacheKeyValueQueryString struct {
+type PageRuleActionsCacheKeyFieldsValueQueryString struct {
 	// Ignore all query string parameters.
-	Exclude PageRuleActionsCacheKeyValueQueryStringExcludeUnion `json:"exclude"`
+	Exclude PageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion `json:"exclude"`
 	// Include all query string parameters.
-	Include PageRuleActionsCacheKeyValueQueryStringIncludeUnion `json:"include"`
-	JSON    pageRuleActionsCacheKeyValueQueryStringJSON         `json:"-"`
+	Include PageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion `json:"include"`
+	JSON    pageRuleActionsCacheKeyFieldsValueQueryStringJSON         `json:"-"`
 }
 
-// pageRuleActionsCacheKeyValueQueryStringJSON contains the JSON metadata for the
-// struct [PageRuleActionsCacheKeyValueQueryString]
-type pageRuleActionsCacheKeyValueQueryStringJSON struct {
+// pageRuleActionsCacheKeyFieldsValueQueryStringJSON contains the JSON metadata for
+// the struct [PageRuleActionsCacheKeyFieldsValueQueryString]
+type pageRuleActionsCacheKeyFieldsValueQueryStringJSON struct {
 	Exclude     apijson.Field
 	Include     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageRuleActionsCacheKeyValueQueryString) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleActionsCacheKeyFieldsValueQueryString) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageRuleActionsCacheKeyValueQueryStringJSON) RawJSON() string {
+func (r pageRuleActionsCacheKeyFieldsValueQueryStringJSON) RawJSON() string {
 	return r.raw
 }
 
 // Ignore all query string parameters.
 //
 // Union satisfied by
-// [page_rules.PageRuleActionsCacheKeyValueQueryStringExcludeString] or
-// [page_rules.PageRuleActionsCacheKeyValueQueryStringExcludeArray].
-type PageRuleActionsCacheKeyValueQueryStringExcludeUnion interface {
-	implementsPageRulesPageRuleActionsCacheKeyValueQueryStringExcludeUnion()
+// [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString] or
+// [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray].
+type PageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion interface {
+	implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PageRuleActionsCacheKeyValueQueryStringExcludeUnion)(nil)).Elem(),
+		reflect.TypeOf((*PageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(PageRuleActionsCacheKeyValueQueryStringExcludeString("")),
+			Type:       reflect.TypeOf(PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString("")),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PageRuleActionsCacheKeyValueQueryStringExcludeArray{}),
+			Type:       reflect.TypeOf(PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray{}),
 		},
 	)
 }
 
 // Ignore all query string parameters.
-type PageRuleActionsCacheKeyValueQueryStringExcludeString string
+type PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString string
 
 const (
-	PageRuleActionsCacheKeyValueQueryStringExcludeStringStar PageRuleActionsCacheKeyValueQueryStringExcludeString = "*"
+	PageRuleActionsCacheKeyFieldsValueQueryStringExcludeStringStar PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString = "*"
 )
 
-func (r PageRuleActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
+func (r PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString) IsKnown() bool {
 	switch r {
-	case PageRuleActionsCacheKeyValueQueryStringExcludeStringStar:
+	case PageRuleActionsCacheKeyFieldsValueQueryStringExcludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageRuleActionsCacheKeyValueQueryStringExcludeString) implementsPageRulesPageRuleActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
-type PageRuleActionsCacheKeyValueQueryStringExcludeArray []string
+type PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray []string
 
-func (r PageRuleActionsCacheKeyValueQueryStringExcludeArray) implementsPageRulesPageRuleActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
 //
 // Union satisfied by
-// [page_rules.PageRuleActionsCacheKeyValueQueryStringIncludeString] or
-// [page_rules.PageRuleActionsCacheKeyValueQueryStringIncludeArray].
-type PageRuleActionsCacheKeyValueQueryStringIncludeUnion interface {
-	implementsPageRulesPageRuleActionsCacheKeyValueQueryStringIncludeUnion()
+// [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString] or
+// [page_rules.PageRuleActionsCacheKeyFieldsValueQueryStringIncludeArray].
+type PageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion interface {
+	implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PageRuleActionsCacheKeyValueQueryStringIncludeUnion)(nil)).Elem(),
+		reflect.TypeOf((*PageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(PageRuleActionsCacheKeyValueQueryStringIncludeString("")),
+			Type:       reflect.TypeOf(PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString("")),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PageRuleActionsCacheKeyValueQueryStringIncludeArray{}),
+			Type:       reflect.TypeOf(PageRuleActionsCacheKeyFieldsValueQueryStringIncludeArray{}),
 		},
 	)
 }
 
 // Include all query string parameters.
-type PageRuleActionsCacheKeyValueQueryStringIncludeString string
+type PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString string
 
 const (
-	PageRuleActionsCacheKeyValueQueryStringIncludeStringStar PageRuleActionsCacheKeyValueQueryStringIncludeString = "*"
+	PageRuleActionsCacheKeyFieldsValueQueryStringIncludeStringStar PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString = "*"
 )
 
-func (r PageRuleActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
+func (r PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString) IsKnown() bool {
 	switch r {
-	case PageRuleActionsCacheKeyValueQueryStringIncludeStringStar:
+	case PageRuleActionsCacheKeyFieldsValueQueryStringIncludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageRuleActionsCacheKeyValueQueryStringIncludeString) implementsPageRulesPageRuleActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
-type PageRuleActionsCacheKeyValueQueryStringIncludeArray []string
+type PageRuleActionsCacheKeyFieldsValueQueryStringIncludeArray []string
 
-func (r PageRuleActionsCacheKeyValueQueryStringIncludeArray) implementsPageRulesPageRuleActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRulesPageRuleActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
-type PageRuleActionsCacheKeyValueUser struct {
+type PageRuleActionsCacheKeyFieldsValueUser struct {
 	// Classifies a request as `mobile`, `desktop`, or `tablet` based on the User
 	// Agent.
 	DeviceType bool `json:"device_type"`
@@ -928,13 +936,13 @@ type PageRuleActionsCacheKeyValueUser struct {
 	Geo bool `json:"geo"`
 	// Includes the first language code contained in the `Accept-Language` header sent
 	// by the client.
-	Lang bool                                 `json:"lang"`
-	JSON pageRuleActionsCacheKeyValueUserJSON `json:"-"`
+	Lang bool                                       `json:"lang"`
+	JSON pageRuleActionsCacheKeyFieldsValueUserJSON `json:"-"`
 }
 
-// pageRuleActionsCacheKeyValueUserJSON contains the JSON metadata for the struct
-// [PageRuleActionsCacheKeyValueUser]
-type pageRuleActionsCacheKeyValueUserJSON struct {
+// pageRuleActionsCacheKeyFieldsValueUserJSON contains the JSON metadata for the
+// struct [PageRuleActionsCacheKeyFieldsValueUser]
+type pageRuleActionsCacheKeyFieldsValueUserJSON struct {
 	DeviceType  apijson.Field
 	Geo         apijson.Field
 	Lang        apijson.Field
@@ -942,11 +950,11 @@ type pageRuleActionsCacheKeyValueUserJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageRuleActionsCacheKeyValueUser) UnmarshalJSON(data []byte) (err error) {
+func (r *PageRuleActionsCacheKeyFieldsValueUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r pageRuleActionsCacheKeyValueUserJSON) RawJSON() string {
+func (r pageRuleActionsCacheKeyFieldsValueUserJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -992,6 +1000,116 @@ func (r PageRuleActionsCacheOnCookieID) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type PageRuleActionsCacheTTLByStatus struct {
+	// Enterprise customers can set cache time-to-live (TTL) based on the response
+	// status from the origin web server. Cache TTL refers to the duration of a
+	// resource in the Cloudflare network before being marked as stale or discarded
+	// from cache. Status codes are returned by a resource's origin. Setting cache TTL
+	// based on response status overrides the default cache behavior (standard caching)
+	// for static files and overrides cache instructions sent by the origin web server.
+	// To cache non-static assets, set a Cache Level of Cache Everything using a Page
+	// Rule. Setting no-store Cache-Control or a low TTL (using `max-age`/`s-maxage`)
+	// increases requests to origin web servers and decreases performance.
+	ID PageRuleActionsCacheTTLByStatusID `json:"id"`
+	// A JSON object containing status codes and their corresponding TTLs. Each
+	// key-value pair in the cache TTL by status cache rule has the following syntax
+	//
+	//   - `status_code`: An integer value such as 200 or 500. status_code matches the
+	//     exact status code from the origin web server. Valid status codes are between
+	//     100-999.
+	//   - `status_code_range`: Integer values for from and to. status_code_range matches
+	//     any status code from the origin web server within the specified range.
+	//   - `value`: An integer value that defines the duration an asset is valid in
+	//     seconds or one of the following strings: no-store (equivalent to -1), no-cache
+	//     (equivalent to 0).
+	Value map[string]PageRuleActionsCacheTTLByStatusValueUnion `json:"value"`
+	JSON  pageRuleActionsCacheTTLByStatusJSON                  `json:"-"`
+}
+
+// pageRuleActionsCacheTTLByStatusJSON contains the JSON metadata for the struct
+// [PageRuleActionsCacheTTLByStatus]
+type pageRuleActionsCacheTTLByStatusJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageRuleActionsCacheTTLByStatus) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageRuleActionsCacheTTLByStatusJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r PageRuleActionsCacheTTLByStatus) ImplementsPageRulesPageRuleAction() {}
+
+// Enterprise customers can set cache time-to-live (TTL) based on the response
+// status from the origin web server. Cache TTL refers to the duration of a
+// resource in the Cloudflare network before being marked as stale or discarded
+// from cache. Status codes are returned by a resource's origin. Setting cache TTL
+// based on response status overrides the default cache behavior (standard caching)
+// for static files and overrides cache instructions sent by the origin web server.
+// To cache non-static assets, set a Cache Level of Cache Everything using a Page
+// Rule. Setting no-store Cache-Control or a low TTL (using `max-age`/`s-maxage`)
+// increases requests to origin web servers and decreases performance.
+type PageRuleActionsCacheTTLByStatusID string
+
+const (
+	PageRuleActionsCacheTTLByStatusIDCacheTTLByStatus PageRuleActionsCacheTTLByStatusID = "cache_ttl_by_status"
+)
+
+func (r PageRuleActionsCacheTTLByStatusID) IsKnown() bool {
+	switch r {
+	case PageRuleActionsCacheTTLByStatusIDCacheTTLByStatus:
+		return true
+	}
+	return false
+}
+
+// `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
+//
+// Union satisfied by [page_rules.PageRuleActionsCacheTTLByStatusValueString] or
+// [shared.UnionInt].
+type PageRuleActionsCacheTTLByStatusValueUnion interface {
+	ImplementsPageRulesPageRuleActionsCacheTTLByStatusValueUnion()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*PageRuleActionsCacheTTLByStatusValueUnion)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(PageRuleActionsCacheTTLByStatusValueString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionInt(0)),
+		},
+	)
+}
+
+// `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
+type PageRuleActionsCacheTTLByStatusValueString string
+
+const (
+	PageRuleActionsCacheTTLByStatusValueStringNoCache PageRuleActionsCacheTTLByStatusValueString = "no-cache"
+	PageRuleActionsCacheTTLByStatusValueStringNoStore PageRuleActionsCacheTTLByStatusValueString = "no-store"
+)
+
+func (r PageRuleActionsCacheTTLByStatusValueString) IsKnown() bool {
+	switch r {
+	case PageRuleActionsCacheTTLByStatusValueStringNoCache, PageRuleActionsCacheTTLByStatusValueStringNoStore:
+		return true
+	}
+	return false
+}
+
+func (r PageRuleActionsCacheTTLByStatusValueString) ImplementsPageRulesPageRuleActionsCacheTTLByStatusValueUnion() {
 }
 
 type PageRuleActionsDisableApps struct {
@@ -1518,9 +1636,10 @@ const (
 	PageRuleActionsIDBypassCacheOnCookie     PageRuleActionsID = "bypass_cache_on_cookie"
 	PageRuleActionsIDCacheByDeviceType       PageRuleActionsID = "cache_by_device_type"
 	PageRuleActionsIDCacheDeceptionArmor     PageRuleActionsID = "cache_deception_armor"
-	PageRuleActionsIDCacheKey                PageRuleActionsID = "cache_key"
+	PageRuleActionsIDCacheKeyFields          PageRuleActionsID = "cache_key_fields"
 	PageRuleActionsIDCacheLevel              PageRuleActionsID = "cache_level"
 	PageRuleActionsIDCacheOnCookie           PageRuleActionsID = "cache_on_cookie"
+	PageRuleActionsIDCacheTTLByStatus        PageRuleActionsID = "cache_ttl_by_status"
 	PageRuleActionsIDDisableApps             PageRuleActionsID = "disable_apps"
 	PageRuleActionsIDDisablePerformance      PageRuleActionsID = "disable_performance"
 	PageRuleActionsIDDisableSecurity         PageRuleActionsID = "disable_security"
@@ -1548,7 +1667,7 @@ const (
 
 func (r PageRuleActionsID) IsKnown() bool {
 	switch r {
-	case PageRuleActionsIDAlwaysUseHTTPS, PageRuleActionsIDAutomaticHTTPSRewrites, PageRuleActionsIDBrowserCacheTTL, PageRuleActionsIDBrowserCheck, PageRuleActionsIDBypassCacheOnCookie, PageRuleActionsIDCacheByDeviceType, PageRuleActionsIDCacheDeceptionArmor, PageRuleActionsIDCacheKey, PageRuleActionsIDCacheLevel, PageRuleActionsIDCacheOnCookie, PageRuleActionsIDDisableApps, PageRuleActionsIDDisablePerformance, PageRuleActionsIDDisableSecurity, PageRuleActionsIDDisableZaraz, PageRuleActionsIDEdgeCacheTTL, PageRuleActionsIDEmailObfuscation, PageRuleActionsIDExplicitCacheControl, PageRuleActionsIDForwardingURL, PageRuleActionsIDHostHeaderOverride, PageRuleActionsIDIPGeolocation, PageRuleActionsIDMirage, PageRuleActionsIDOpportunisticEncryption, PageRuleActionsIDOriginErrorPagePassThru, PageRuleActionsIDPolish, PageRuleActionsIDResolveOverride, PageRuleActionsIDRespectStrongEtag, PageRuleActionsIDResponseBuffering, PageRuleActionsIDRocketLoader, PageRuleActionsIDSecurityLevel, PageRuleActionsIDSortQueryStringForCache, PageRuleActionsIDSSL, PageRuleActionsIDTrueClientIPHeader, PageRuleActionsIDWAF:
+	case PageRuleActionsIDAlwaysUseHTTPS, PageRuleActionsIDAutomaticHTTPSRewrites, PageRuleActionsIDBrowserCacheTTL, PageRuleActionsIDBrowserCheck, PageRuleActionsIDBypassCacheOnCookie, PageRuleActionsIDCacheByDeviceType, PageRuleActionsIDCacheDeceptionArmor, PageRuleActionsIDCacheKeyFields, PageRuleActionsIDCacheLevel, PageRuleActionsIDCacheOnCookie, PageRuleActionsIDCacheTTLByStatus, PageRuleActionsIDDisableApps, PageRuleActionsIDDisablePerformance, PageRuleActionsIDDisableSecurity, PageRuleActionsIDDisableZaraz, PageRuleActionsIDEdgeCacheTTL, PageRuleActionsIDEmailObfuscation, PageRuleActionsIDExplicitCacheControl, PageRuleActionsIDForwardingURL, PageRuleActionsIDHostHeaderOverride, PageRuleActionsIDIPGeolocation, PageRuleActionsIDMirage, PageRuleActionsIDOpportunisticEncryption, PageRuleActionsIDOriginErrorPagePassThru, PageRuleActionsIDPolish, PageRuleActionsIDResolveOverride, PageRuleActionsIDRespectStrongEtag, PageRuleActionsIDResponseBuffering, PageRuleActionsIDRocketLoader, PageRuleActionsIDSecurityLevel, PageRuleActionsIDSortQueryStringForCache, PageRuleActionsIDSSL, PageRuleActionsIDTrueClientIPHeader, PageRuleActionsIDWAF:
 		return true
 	}
 	return false
@@ -1743,8 +1862,9 @@ func (r PageRuleNewParamsAction) ImplementsPageRulesPageRuleNewParamsActionUnion
 // [page_rules.PageRuleNewParamsActionsBypassCacheOnCookie],
 // [page_rules.PageRuleNewParamsActionsCacheByDeviceType],
 // [page_rules.PageRuleNewParamsActionsCacheDeceptionArmor],
-// [page_rules.PageRuleNewParamsActionsCacheKey], [zones.CacheLevelParam],
+// [page_rules.PageRuleNewParamsActionsCacheKeyFields], [zones.CacheLevelParam],
 // [page_rules.PageRuleNewParamsActionsCacheOnCookie],
+// [page_rules.PageRuleNewParamsActionsCacheTTLByStatus],
 // [page_rules.PageRuleNewParamsActionsDisableApps],
 // [page_rules.PageRuleNewParamsActionsDisablePerformance],
 // [page_rules.PageRuleNewParamsActionsDisableSecurity],
@@ -1893,58 +2013,58 @@ func (r PageRuleNewParamsActionsCacheDeceptionArmorValue) IsKnown() bool {
 	return false
 }
 
-type PageRuleNewParamsActionsCacheKey struct {
+type PageRuleNewParamsActionsCacheKeyFields struct {
 	// Control specifically what variables to include when deciding which resources to
 	// cache. This allows customers to determine what to cache based on something other
 	// than just the URL.
-	ID    param.Field[PageRuleNewParamsActionsCacheKeyID]    `json:"id"`
-	Value param.Field[PageRuleNewParamsActionsCacheKeyValue] `json:"value"`
+	ID    param.Field[PageRuleNewParamsActionsCacheKeyFieldsID]    `json:"id"`
+	Value param.Field[PageRuleNewParamsActionsCacheKeyFieldsValue] `json:"value"`
 }
 
-func (r PageRuleNewParamsActionsCacheKey) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyFields) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleNewParamsActionsCacheKey) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+func (r PageRuleNewParamsActionsCacheKeyFields) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
 // than just the URL.
-type PageRuleNewParamsActionsCacheKeyID string
+type PageRuleNewParamsActionsCacheKeyFieldsID string
 
 const (
-	PageRuleNewParamsActionsCacheKeyIDCacheKey PageRuleNewParamsActionsCacheKeyID = "cache_key"
+	PageRuleNewParamsActionsCacheKeyFieldsIDCacheKeyFields PageRuleNewParamsActionsCacheKeyFieldsID = "cache_key_fields"
 )
 
-func (r PageRuleNewParamsActionsCacheKeyID) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheKeyFieldsID) IsKnown() bool {
 	switch r {
-	case PageRuleNewParamsActionsCacheKeyIDCacheKey:
+	case PageRuleNewParamsActionsCacheKeyFieldsIDCacheKeyFields:
 		return true
 	}
 	return false
 }
 
-type PageRuleNewParamsActionsCacheKeyValue struct {
+type PageRuleNewParamsActionsCacheKeyFieldsValue struct {
 	// Controls which cookies appear in the Cache Key.
-	Cookie param.Field[PageRuleNewParamsActionsCacheKeyValueCookie] `json:"cookie"`
+	Cookie param.Field[PageRuleNewParamsActionsCacheKeyFieldsValueCookie] `json:"cookie"`
 	// Controls which headers go into the Cache Key. Exactly one of `include` or
 	// `exclude` is expected.
-	Header param.Field[PageRuleNewParamsActionsCacheKeyValueHeader] `json:"header"`
+	Header param.Field[PageRuleNewParamsActionsCacheKeyFieldsValueHeader] `json:"header"`
 	// Determines which host header to include in the Cache Key.
-	Host param.Field[PageRuleNewParamsActionsCacheKeyValueHost] `json:"host"`
+	Host param.Field[PageRuleNewParamsActionsCacheKeyFieldsValueHost] `json:"host"`
 	// Controls which URL query string parameters go into the Cache Key. Exactly one of
 	// `include` or `exclude` is expected.
-	QueryString param.Field[PageRuleNewParamsActionsCacheKeyValueQueryString] `json:"query_string"`
+	QueryString param.Field[PageRuleNewParamsActionsCacheKeyFieldsValueQueryString] `json:"query_string"`
 	// Feature fields to add features about the end-user (client) into the Cache Key.
-	User param.Field[PageRuleNewParamsActionsCacheKeyValueUser] `json:"user"`
+	User param.Field[PageRuleNewParamsActionsCacheKeyFieldsValueUser] `json:"user"`
 }
 
-func (r PageRuleNewParamsActionsCacheKeyValue) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which cookies appear in the Cache Key.
-type PageRuleNewParamsActionsCacheKeyValueCookie struct {
+type PageRuleNewParamsActionsCacheKeyFieldsValueCookie struct {
 	// A list of cookies to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -1952,13 +2072,13 @@ type PageRuleNewParamsActionsCacheKeyValueCookie struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageRuleNewParamsActionsCacheKeyValueCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which headers go into the Cache Key. Exactly one of `include` or
 // `exclude` is expected.
-type PageRuleNewParamsActionsCacheKeyValueHeader struct {
+type PageRuleNewParamsActionsCacheKeyFieldsValueHeader struct {
 	// A list of headers to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -1968,99 +2088,99 @@ type PageRuleNewParamsActionsCacheKeyValueHeader struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageRuleNewParamsActionsCacheKeyValueHeader) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Determines which host header to include in the Cache Key.
-type PageRuleNewParamsActionsCacheKeyValueHost struct {
+type PageRuleNewParamsActionsCacheKeyFieldsValueHost struct {
 	// Whether to include the Host header in the HTTP request sent to the origin.
 	Resolved param.Field[bool] `json:"resolved"`
 }
 
-func (r PageRuleNewParamsActionsCacheKeyValueHost) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueHost) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which URL query string parameters go into the Cache Key. Exactly one of
 // `include` or `exclude` is expected.
-type PageRuleNewParamsActionsCacheKeyValueQueryString struct {
+type PageRuleNewParamsActionsCacheKeyFieldsValueQueryString struct {
 	// Ignore all query string parameters.
-	Exclude param.Field[PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeUnion] `json:"exclude"`
+	Exclude param.Field[PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion] `json:"exclude"`
 	// Include all query string parameters.
-	Include param.Field[PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeUnion] `json:"include"`
+	Include param.Field[PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion] `json:"include"`
 }
 
-func (r PageRuleNewParamsActionsCacheKeyValueQueryString) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryString) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Ignore all query string parameters.
 //
 // Satisfied by
-// [page_rules.PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeString],
-// [page_rules.PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeArray].
-type PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeUnion interface {
-	implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringExcludeUnion()
+// [page_rules.PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeString],
+// [page_rules.PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeArray].
+type PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion interface {
+	implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion()
 }
 
 // Ignore all query string parameters.
-type PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeString string
+type PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeString string
 
 const (
-	PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeStringStar PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeString = "*"
+	PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeStringStar PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeString = "*"
 )
 
-func (r PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeString) IsKnown() bool {
 	switch r {
-	case PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeStringStar:
+	case PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeString) implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
-type PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeArray []string
+type PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeArray []string
 
-func (r PageRuleNewParamsActionsCacheKeyValueQueryStringExcludeArray) implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
 //
 // Satisfied by
-// [page_rules.PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeString],
-// [page_rules.PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeArray].
-type PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeUnion interface {
-	implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringIncludeUnion()
+// [page_rules.PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeString],
+// [page_rules.PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeArray].
+type PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion interface {
+	implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion()
 }
 
 // Include all query string parameters.
-type PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeString string
+type PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeString string
 
 const (
-	PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeStringStar PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeString = "*"
+	PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeStringStar PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeString = "*"
 )
 
-func (r PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeString) IsKnown() bool {
 	switch r {
-	case PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeStringStar:
+	case PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeString) implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
-type PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeArray []string
+type PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeArray []string
 
-func (r PageRuleNewParamsActionsCacheKeyValueQueryStringIncludeArray) implementsPageRulesPageRuleNewParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRulesPageRuleNewParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
-type PageRuleNewParamsActionsCacheKeyValueUser struct {
+type PageRuleNewParamsActionsCacheKeyFieldsValueUser struct {
 	// Classifies a request as `mobile`, `desktop`, or `tablet` based on the User
 	// Agent.
 	DeviceType param.Field[bool] `json:"device_type"`
@@ -2071,7 +2191,7 @@ type PageRuleNewParamsActionsCacheKeyValueUser struct {
 	Lang param.Field[bool] `json:"lang"`
 }
 
-func (r PageRuleNewParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, err error) {
+func (r PageRuleNewParamsActionsCacheKeyFieldsValueUser) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2103,6 +2223,87 @@ func (r PageRuleNewParamsActionsCacheOnCookieID) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type PageRuleNewParamsActionsCacheTTLByStatus struct {
+	// Enterprise customers can set cache time-to-live (TTL) based on the response
+	// status from the origin web server. Cache TTL refers to the duration of a
+	// resource in the Cloudflare network before being marked as stale or discarded
+	// from cache. Status codes are returned by a resource's origin. Setting cache TTL
+	// based on response status overrides the default cache behavior (standard caching)
+	// for static files and overrides cache instructions sent by the origin web server.
+	// To cache non-static assets, set a Cache Level of Cache Everything using a Page
+	// Rule. Setting no-store Cache-Control or a low TTL (using `max-age`/`s-maxage`)
+	// increases requests to origin web servers and decreases performance.
+	ID param.Field[PageRuleNewParamsActionsCacheTTLByStatusID] `json:"id"`
+	// A JSON object containing status codes and their corresponding TTLs. Each
+	// key-value pair in the cache TTL by status cache rule has the following syntax
+	//
+	//   - `status_code`: An integer value such as 200 or 500. status_code matches the
+	//     exact status code from the origin web server. Valid status codes are between
+	//     100-999.
+	//   - `status_code_range`: Integer values for from and to. status_code_range matches
+	//     any status code from the origin web server within the specified range.
+	//   - `value`: An integer value that defines the duration an asset is valid in
+	//     seconds or one of the following strings: no-store (equivalent to -1), no-cache
+	//     (equivalent to 0).
+	Value param.Field[map[string]PageRuleNewParamsActionsCacheTTLByStatusValueUnion] `json:"value"`
+}
+
+func (r PageRuleNewParamsActionsCacheTTLByStatus) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r PageRuleNewParamsActionsCacheTTLByStatus) ImplementsPageRulesPageRuleNewParamsActionUnion() {}
+
+// Enterprise customers can set cache time-to-live (TTL) based on the response
+// status from the origin web server. Cache TTL refers to the duration of a
+// resource in the Cloudflare network before being marked as stale or discarded
+// from cache. Status codes are returned by a resource's origin. Setting cache TTL
+// based on response status overrides the default cache behavior (standard caching)
+// for static files and overrides cache instructions sent by the origin web server.
+// To cache non-static assets, set a Cache Level of Cache Everything using a Page
+// Rule. Setting no-store Cache-Control or a low TTL (using `max-age`/`s-maxage`)
+// increases requests to origin web servers and decreases performance.
+type PageRuleNewParamsActionsCacheTTLByStatusID string
+
+const (
+	PageRuleNewParamsActionsCacheTTLByStatusIDCacheTTLByStatus PageRuleNewParamsActionsCacheTTLByStatusID = "cache_ttl_by_status"
+)
+
+func (r PageRuleNewParamsActionsCacheTTLByStatusID) IsKnown() bool {
+	switch r {
+	case PageRuleNewParamsActionsCacheTTLByStatusIDCacheTTLByStatus:
+		return true
+	}
+	return false
+}
+
+// `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
+//
+// Satisfied by [page_rules.PageRuleNewParamsActionsCacheTTLByStatusValueString],
+// [shared.UnionInt].
+type PageRuleNewParamsActionsCacheTTLByStatusValueUnion interface {
+	ImplementsPageRulesPageRuleNewParamsActionsCacheTTLByStatusValueUnion()
+}
+
+// `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
+type PageRuleNewParamsActionsCacheTTLByStatusValueString string
+
+const (
+	PageRuleNewParamsActionsCacheTTLByStatusValueStringNoCache PageRuleNewParamsActionsCacheTTLByStatusValueString = "no-cache"
+	PageRuleNewParamsActionsCacheTTLByStatusValueStringNoStore PageRuleNewParamsActionsCacheTTLByStatusValueString = "no-store"
+)
+
+func (r PageRuleNewParamsActionsCacheTTLByStatusValueString) IsKnown() bool {
+	switch r {
+	case PageRuleNewParamsActionsCacheTTLByStatusValueStringNoCache, PageRuleNewParamsActionsCacheTTLByStatusValueStringNoStore:
+		return true
+	}
+	return false
+}
+
+func (r PageRuleNewParamsActionsCacheTTLByStatusValueString) ImplementsPageRulesPageRuleNewParamsActionsCacheTTLByStatusValueUnion() {
 }
 
 type PageRuleNewParamsActionsDisableApps struct {
@@ -2483,9 +2684,10 @@ const (
 	PageRuleNewParamsActionsIDBypassCacheOnCookie     PageRuleNewParamsActionsID = "bypass_cache_on_cookie"
 	PageRuleNewParamsActionsIDCacheByDeviceType       PageRuleNewParamsActionsID = "cache_by_device_type"
 	PageRuleNewParamsActionsIDCacheDeceptionArmor     PageRuleNewParamsActionsID = "cache_deception_armor"
-	PageRuleNewParamsActionsIDCacheKey                PageRuleNewParamsActionsID = "cache_key"
+	PageRuleNewParamsActionsIDCacheKeyFields          PageRuleNewParamsActionsID = "cache_key_fields"
 	PageRuleNewParamsActionsIDCacheLevel              PageRuleNewParamsActionsID = "cache_level"
 	PageRuleNewParamsActionsIDCacheOnCookie           PageRuleNewParamsActionsID = "cache_on_cookie"
+	PageRuleNewParamsActionsIDCacheTTLByStatus        PageRuleNewParamsActionsID = "cache_ttl_by_status"
 	PageRuleNewParamsActionsIDDisableApps             PageRuleNewParamsActionsID = "disable_apps"
 	PageRuleNewParamsActionsIDDisablePerformance      PageRuleNewParamsActionsID = "disable_performance"
 	PageRuleNewParamsActionsIDDisableSecurity         PageRuleNewParamsActionsID = "disable_security"
@@ -2513,7 +2715,7 @@ const (
 
 func (r PageRuleNewParamsActionsID) IsKnown() bool {
 	switch r {
-	case PageRuleNewParamsActionsIDAlwaysUseHTTPS, PageRuleNewParamsActionsIDAutomaticHTTPSRewrites, PageRuleNewParamsActionsIDBrowserCacheTTL, PageRuleNewParamsActionsIDBrowserCheck, PageRuleNewParamsActionsIDBypassCacheOnCookie, PageRuleNewParamsActionsIDCacheByDeviceType, PageRuleNewParamsActionsIDCacheDeceptionArmor, PageRuleNewParamsActionsIDCacheKey, PageRuleNewParamsActionsIDCacheLevel, PageRuleNewParamsActionsIDCacheOnCookie, PageRuleNewParamsActionsIDDisableApps, PageRuleNewParamsActionsIDDisablePerformance, PageRuleNewParamsActionsIDDisableSecurity, PageRuleNewParamsActionsIDDisableZaraz, PageRuleNewParamsActionsIDEdgeCacheTTL, PageRuleNewParamsActionsIDEmailObfuscation, PageRuleNewParamsActionsIDExplicitCacheControl, PageRuleNewParamsActionsIDForwardingURL, PageRuleNewParamsActionsIDHostHeaderOverride, PageRuleNewParamsActionsIDIPGeolocation, PageRuleNewParamsActionsIDMirage, PageRuleNewParamsActionsIDOpportunisticEncryption, PageRuleNewParamsActionsIDOriginErrorPagePassThru, PageRuleNewParamsActionsIDPolish, PageRuleNewParamsActionsIDResolveOverride, PageRuleNewParamsActionsIDRespectStrongEtag, PageRuleNewParamsActionsIDResponseBuffering, PageRuleNewParamsActionsIDRocketLoader, PageRuleNewParamsActionsIDSecurityLevel, PageRuleNewParamsActionsIDSortQueryStringForCache, PageRuleNewParamsActionsIDSSL, PageRuleNewParamsActionsIDTrueClientIPHeader, PageRuleNewParamsActionsIDWAF:
+	case PageRuleNewParamsActionsIDAlwaysUseHTTPS, PageRuleNewParamsActionsIDAutomaticHTTPSRewrites, PageRuleNewParamsActionsIDBrowserCacheTTL, PageRuleNewParamsActionsIDBrowserCheck, PageRuleNewParamsActionsIDBypassCacheOnCookie, PageRuleNewParamsActionsIDCacheByDeviceType, PageRuleNewParamsActionsIDCacheDeceptionArmor, PageRuleNewParamsActionsIDCacheKeyFields, PageRuleNewParamsActionsIDCacheLevel, PageRuleNewParamsActionsIDCacheOnCookie, PageRuleNewParamsActionsIDCacheTTLByStatus, PageRuleNewParamsActionsIDDisableApps, PageRuleNewParamsActionsIDDisablePerformance, PageRuleNewParamsActionsIDDisableSecurity, PageRuleNewParamsActionsIDDisableZaraz, PageRuleNewParamsActionsIDEdgeCacheTTL, PageRuleNewParamsActionsIDEmailObfuscation, PageRuleNewParamsActionsIDExplicitCacheControl, PageRuleNewParamsActionsIDForwardingURL, PageRuleNewParamsActionsIDHostHeaderOverride, PageRuleNewParamsActionsIDIPGeolocation, PageRuleNewParamsActionsIDMirage, PageRuleNewParamsActionsIDOpportunisticEncryption, PageRuleNewParamsActionsIDOriginErrorPagePassThru, PageRuleNewParamsActionsIDPolish, PageRuleNewParamsActionsIDResolveOverride, PageRuleNewParamsActionsIDRespectStrongEtag, PageRuleNewParamsActionsIDResponseBuffering, PageRuleNewParamsActionsIDRocketLoader, PageRuleNewParamsActionsIDSecurityLevel, PageRuleNewParamsActionsIDSortQueryStringForCache, PageRuleNewParamsActionsIDSSL, PageRuleNewParamsActionsIDTrueClientIPHeader, PageRuleNewParamsActionsIDWAF:
 		return true
 	}
 	return false
@@ -2618,8 +2820,9 @@ func (r PageRuleUpdateParamsAction) ImplementsPageRulesPageRuleUpdateParamsActio
 // [page_rules.PageRuleUpdateParamsActionsBypassCacheOnCookie],
 // [page_rules.PageRuleUpdateParamsActionsCacheByDeviceType],
 // [page_rules.PageRuleUpdateParamsActionsCacheDeceptionArmor],
-// [page_rules.PageRuleUpdateParamsActionsCacheKey], [zones.CacheLevelParam],
+// [page_rules.PageRuleUpdateParamsActionsCacheKeyFields], [zones.CacheLevelParam],
 // [page_rules.PageRuleUpdateParamsActionsCacheOnCookie],
+// [page_rules.PageRuleUpdateParamsActionsCacheTTLByStatus],
 // [page_rules.PageRuleUpdateParamsActionsDisableApps],
 // [page_rules.PageRuleUpdateParamsActionsDisablePerformance],
 // [page_rules.PageRuleUpdateParamsActionsDisableSecurity],
@@ -2768,58 +2971,59 @@ func (r PageRuleUpdateParamsActionsCacheDeceptionArmorValue) IsKnown() bool {
 	return false
 }
 
-type PageRuleUpdateParamsActionsCacheKey struct {
+type PageRuleUpdateParamsActionsCacheKeyFields struct {
 	// Control specifically what variables to include when deciding which resources to
 	// cache. This allows customers to determine what to cache based on something other
 	// than just the URL.
-	ID    param.Field[PageRuleUpdateParamsActionsCacheKeyID]    `json:"id"`
-	Value param.Field[PageRuleUpdateParamsActionsCacheKeyValue] `json:"value"`
+	ID    param.Field[PageRuleUpdateParamsActionsCacheKeyFieldsID]    `json:"id"`
+	Value param.Field[PageRuleUpdateParamsActionsCacheKeyFieldsValue] `json:"value"`
 }
 
-func (r PageRuleUpdateParamsActionsCacheKey) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyFields) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleUpdateParamsActionsCacheKey) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {}
+func (r PageRuleUpdateParamsActionsCacheKeyFields) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
+}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
 // than just the URL.
-type PageRuleUpdateParamsActionsCacheKeyID string
+type PageRuleUpdateParamsActionsCacheKeyFieldsID string
 
 const (
-	PageRuleUpdateParamsActionsCacheKeyIDCacheKey PageRuleUpdateParamsActionsCacheKeyID = "cache_key"
+	PageRuleUpdateParamsActionsCacheKeyFieldsIDCacheKeyFields PageRuleUpdateParamsActionsCacheKeyFieldsID = "cache_key_fields"
 )
 
-func (r PageRuleUpdateParamsActionsCacheKeyID) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsID) IsKnown() bool {
 	switch r {
-	case PageRuleUpdateParamsActionsCacheKeyIDCacheKey:
+	case PageRuleUpdateParamsActionsCacheKeyFieldsIDCacheKeyFields:
 		return true
 	}
 	return false
 }
 
-type PageRuleUpdateParamsActionsCacheKeyValue struct {
+type PageRuleUpdateParamsActionsCacheKeyFieldsValue struct {
 	// Controls which cookies appear in the Cache Key.
-	Cookie param.Field[PageRuleUpdateParamsActionsCacheKeyValueCookie] `json:"cookie"`
+	Cookie param.Field[PageRuleUpdateParamsActionsCacheKeyFieldsValueCookie] `json:"cookie"`
 	// Controls which headers go into the Cache Key. Exactly one of `include` or
 	// `exclude` is expected.
-	Header param.Field[PageRuleUpdateParamsActionsCacheKeyValueHeader] `json:"header"`
+	Header param.Field[PageRuleUpdateParamsActionsCacheKeyFieldsValueHeader] `json:"header"`
 	// Determines which host header to include in the Cache Key.
-	Host param.Field[PageRuleUpdateParamsActionsCacheKeyValueHost] `json:"host"`
+	Host param.Field[PageRuleUpdateParamsActionsCacheKeyFieldsValueHost] `json:"host"`
 	// Controls which URL query string parameters go into the Cache Key. Exactly one of
 	// `include` or `exclude` is expected.
-	QueryString param.Field[PageRuleUpdateParamsActionsCacheKeyValueQueryString] `json:"query_string"`
+	QueryString param.Field[PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryString] `json:"query_string"`
 	// Feature fields to add features about the end-user (client) into the Cache Key.
-	User param.Field[PageRuleUpdateParamsActionsCacheKeyValueUser] `json:"user"`
+	User param.Field[PageRuleUpdateParamsActionsCacheKeyFieldsValueUser] `json:"user"`
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyValue) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which cookies appear in the Cache Key.
-type PageRuleUpdateParamsActionsCacheKeyValueCookie struct {
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueCookie struct {
 	// A list of cookies to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -2827,13 +3031,13 @@ type PageRuleUpdateParamsActionsCacheKeyValueCookie struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which headers go into the Cache Key. Exactly one of `include` or
 // `exclude` is expected.
-type PageRuleUpdateParamsActionsCacheKeyValueHeader struct {
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueHeader struct {
 	// A list of headers to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -2843,99 +3047,99 @@ type PageRuleUpdateParamsActionsCacheKeyValueHeader struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueHeader) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Determines which host header to include in the Cache Key.
-type PageRuleUpdateParamsActionsCacheKeyValueHost struct {
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueHost struct {
 	// Whether to include the Host header in the HTTP request sent to the origin.
 	Resolved param.Field[bool] `json:"resolved"`
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueHost) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueHost) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which URL query string parameters go into the Cache Key. Exactly one of
 // `include` or `exclude` is expected.
-type PageRuleUpdateParamsActionsCacheKeyValueQueryString struct {
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryString struct {
 	// Ignore all query string parameters.
-	Exclude param.Field[PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion] `json:"exclude"`
+	Exclude param.Field[PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion] `json:"exclude"`
 	// Include all query string parameters.
-	Include param.Field[PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion] `json:"include"`
+	Include param.Field[PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion] `json:"include"`
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueQueryString) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryString) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Ignore all query string parameters.
 //
 // Satisfied by
-// [page_rules.PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeString],
-// [page_rules.PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeArray].
-type PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion interface {
-	implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion()
+// [page_rules.PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeString],
+// [page_rules.PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeArray].
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion interface {
+	implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion()
 }
 
 // Ignore all query string parameters.
-type PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeString string
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeString string
 
 const (
-	PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeStringStar PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeString = "*"
+	PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeStringStar PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeString = "*"
 )
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeString) IsKnown() bool {
 	switch r {
-	case PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeStringStar:
+	case PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeString) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
-type PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeArray []string
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeArray []string
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeArray) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
 //
 // Satisfied by
-// [page_rules.PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeString],
-// [page_rules.PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeArray].
-type PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion interface {
-	implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion()
+// [page_rules.PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeString],
+// [page_rules.PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeArray].
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion interface {
+	implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion()
 }
 
 // Include all query string parameters.
-type PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeString string
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeString string
 
 const (
-	PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeStringStar PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeString = "*"
+	PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeStringStar PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeString = "*"
 )
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeString) IsKnown() bool {
 	switch r {
-	case PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeStringStar:
+	case PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeString) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
-type PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeArray []string
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeArray []string
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeArray) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRulesPageRuleUpdateParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
-type PageRuleUpdateParamsActionsCacheKeyValueUser struct {
+type PageRuleUpdateParamsActionsCacheKeyFieldsValueUser struct {
 	// Classifies a request as `mobile`, `desktop`, or `tablet` based on the User
 	// Agent.
 	DeviceType param.Field[bool] `json:"device_type"`
@@ -2946,7 +3150,7 @@ type PageRuleUpdateParamsActionsCacheKeyValueUser struct {
 	Lang param.Field[bool] `json:"lang"`
 }
 
-func (r PageRuleUpdateParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, err error) {
+func (r PageRuleUpdateParamsActionsCacheKeyFieldsValueUser) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -2979,6 +3183,89 @@ func (r PageRuleUpdateParamsActionsCacheOnCookieID) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type PageRuleUpdateParamsActionsCacheTTLByStatus struct {
+	// Enterprise customers can set cache time-to-live (TTL) based on the response
+	// status from the origin web server. Cache TTL refers to the duration of a
+	// resource in the Cloudflare network before being marked as stale or discarded
+	// from cache. Status codes are returned by a resource's origin. Setting cache TTL
+	// based on response status overrides the default cache behavior (standard caching)
+	// for static files and overrides cache instructions sent by the origin web server.
+	// To cache non-static assets, set a Cache Level of Cache Everything using a Page
+	// Rule. Setting no-store Cache-Control or a low TTL (using `max-age`/`s-maxage`)
+	// increases requests to origin web servers and decreases performance.
+	ID param.Field[PageRuleUpdateParamsActionsCacheTTLByStatusID] `json:"id"`
+	// A JSON object containing status codes and their corresponding TTLs. Each
+	// key-value pair in the cache TTL by status cache rule has the following syntax
+	//
+	//   - `status_code`: An integer value such as 200 or 500. status_code matches the
+	//     exact status code from the origin web server. Valid status codes are between
+	//     100-999.
+	//   - `status_code_range`: Integer values for from and to. status_code_range matches
+	//     any status code from the origin web server within the specified range.
+	//   - `value`: An integer value that defines the duration an asset is valid in
+	//     seconds or one of the following strings: no-store (equivalent to -1), no-cache
+	//     (equivalent to 0).
+	Value param.Field[map[string]PageRuleUpdateParamsActionsCacheTTLByStatusValueUnion] `json:"value"`
+}
+
+func (r PageRuleUpdateParamsActionsCacheTTLByStatus) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r PageRuleUpdateParamsActionsCacheTTLByStatus) ImplementsPageRulesPageRuleUpdateParamsActionUnion() {
+}
+
+// Enterprise customers can set cache time-to-live (TTL) based on the response
+// status from the origin web server. Cache TTL refers to the duration of a
+// resource in the Cloudflare network before being marked as stale or discarded
+// from cache. Status codes are returned by a resource's origin. Setting cache TTL
+// based on response status overrides the default cache behavior (standard caching)
+// for static files and overrides cache instructions sent by the origin web server.
+// To cache non-static assets, set a Cache Level of Cache Everything using a Page
+// Rule. Setting no-store Cache-Control or a low TTL (using `max-age`/`s-maxage`)
+// increases requests to origin web servers and decreases performance.
+type PageRuleUpdateParamsActionsCacheTTLByStatusID string
+
+const (
+	PageRuleUpdateParamsActionsCacheTTLByStatusIDCacheTTLByStatus PageRuleUpdateParamsActionsCacheTTLByStatusID = "cache_ttl_by_status"
+)
+
+func (r PageRuleUpdateParamsActionsCacheTTLByStatusID) IsKnown() bool {
+	switch r {
+	case PageRuleUpdateParamsActionsCacheTTLByStatusIDCacheTTLByStatus:
+		return true
+	}
+	return false
+}
+
+// `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
+//
+// Satisfied by
+// [page_rules.PageRuleUpdateParamsActionsCacheTTLByStatusValueString],
+// [shared.UnionInt].
+type PageRuleUpdateParamsActionsCacheTTLByStatusValueUnion interface {
+	ImplementsPageRulesPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion()
+}
+
+// `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
+type PageRuleUpdateParamsActionsCacheTTLByStatusValueString string
+
+const (
+	PageRuleUpdateParamsActionsCacheTTLByStatusValueStringNoCache PageRuleUpdateParamsActionsCacheTTLByStatusValueString = "no-cache"
+	PageRuleUpdateParamsActionsCacheTTLByStatusValueStringNoStore PageRuleUpdateParamsActionsCacheTTLByStatusValueString = "no-store"
+)
+
+func (r PageRuleUpdateParamsActionsCacheTTLByStatusValueString) IsKnown() bool {
+	switch r {
+	case PageRuleUpdateParamsActionsCacheTTLByStatusValueStringNoCache, PageRuleUpdateParamsActionsCacheTTLByStatusValueStringNoStore:
+		return true
+	}
+	return false
+}
+
+func (r PageRuleUpdateParamsActionsCacheTTLByStatusValueString) ImplementsPageRulesPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion() {
 }
 
 type PageRuleUpdateParamsActionsDisableApps struct {
@@ -3365,9 +3652,10 @@ const (
 	PageRuleUpdateParamsActionsIDBypassCacheOnCookie     PageRuleUpdateParamsActionsID = "bypass_cache_on_cookie"
 	PageRuleUpdateParamsActionsIDCacheByDeviceType       PageRuleUpdateParamsActionsID = "cache_by_device_type"
 	PageRuleUpdateParamsActionsIDCacheDeceptionArmor     PageRuleUpdateParamsActionsID = "cache_deception_armor"
-	PageRuleUpdateParamsActionsIDCacheKey                PageRuleUpdateParamsActionsID = "cache_key"
+	PageRuleUpdateParamsActionsIDCacheKeyFields          PageRuleUpdateParamsActionsID = "cache_key_fields"
 	PageRuleUpdateParamsActionsIDCacheLevel              PageRuleUpdateParamsActionsID = "cache_level"
 	PageRuleUpdateParamsActionsIDCacheOnCookie           PageRuleUpdateParamsActionsID = "cache_on_cookie"
+	PageRuleUpdateParamsActionsIDCacheTTLByStatus        PageRuleUpdateParamsActionsID = "cache_ttl_by_status"
 	PageRuleUpdateParamsActionsIDDisableApps             PageRuleUpdateParamsActionsID = "disable_apps"
 	PageRuleUpdateParamsActionsIDDisablePerformance      PageRuleUpdateParamsActionsID = "disable_performance"
 	PageRuleUpdateParamsActionsIDDisableSecurity         PageRuleUpdateParamsActionsID = "disable_security"
@@ -3395,7 +3683,7 @@ const (
 
 func (r PageRuleUpdateParamsActionsID) IsKnown() bool {
 	switch r {
-	case PageRuleUpdateParamsActionsIDAlwaysUseHTTPS, PageRuleUpdateParamsActionsIDAutomaticHTTPSRewrites, PageRuleUpdateParamsActionsIDBrowserCacheTTL, PageRuleUpdateParamsActionsIDBrowserCheck, PageRuleUpdateParamsActionsIDBypassCacheOnCookie, PageRuleUpdateParamsActionsIDCacheByDeviceType, PageRuleUpdateParamsActionsIDCacheDeceptionArmor, PageRuleUpdateParamsActionsIDCacheKey, PageRuleUpdateParamsActionsIDCacheLevel, PageRuleUpdateParamsActionsIDCacheOnCookie, PageRuleUpdateParamsActionsIDDisableApps, PageRuleUpdateParamsActionsIDDisablePerformance, PageRuleUpdateParamsActionsIDDisableSecurity, PageRuleUpdateParamsActionsIDDisableZaraz, PageRuleUpdateParamsActionsIDEdgeCacheTTL, PageRuleUpdateParamsActionsIDEmailObfuscation, PageRuleUpdateParamsActionsIDExplicitCacheControl, PageRuleUpdateParamsActionsIDForwardingURL, PageRuleUpdateParamsActionsIDHostHeaderOverride, PageRuleUpdateParamsActionsIDIPGeolocation, PageRuleUpdateParamsActionsIDMirage, PageRuleUpdateParamsActionsIDOpportunisticEncryption, PageRuleUpdateParamsActionsIDOriginErrorPagePassThru, PageRuleUpdateParamsActionsIDPolish, PageRuleUpdateParamsActionsIDResolveOverride, PageRuleUpdateParamsActionsIDRespectStrongEtag, PageRuleUpdateParamsActionsIDResponseBuffering, PageRuleUpdateParamsActionsIDRocketLoader, PageRuleUpdateParamsActionsIDSecurityLevel, PageRuleUpdateParamsActionsIDSortQueryStringForCache, PageRuleUpdateParamsActionsIDSSL, PageRuleUpdateParamsActionsIDTrueClientIPHeader, PageRuleUpdateParamsActionsIDWAF:
+	case PageRuleUpdateParamsActionsIDAlwaysUseHTTPS, PageRuleUpdateParamsActionsIDAutomaticHTTPSRewrites, PageRuleUpdateParamsActionsIDBrowserCacheTTL, PageRuleUpdateParamsActionsIDBrowserCheck, PageRuleUpdateParamsActionsIDBypassCacheOnCookie, PageRuleUpdateParamsActionsIDCacheByDeviceType, PageRuleUpdateParamsActionsIDCacheDeceptionArmor, PageRuleUpdateParamsActionsIDCacheKeyFields, PageRuleUpdateParamsActionsIDCacheLevel, PageRuleUpdateParamsActionsIDCacheOnCookie, PageRuleUpdateParamsActionsIDCacheTTLByStatus, PageRuleUpdateParamsActionsIDDisableApps, PageRuleUpdateParamsActionsIDDisablePerformance, PageRuleUpdateParamsActionsIDDisableSecurity, PageRuleUpdateParamsActionsIDDisableZaraz, PageRuleUpdateParamsActionsIDEdgeCacheTTL, PageRuleUpdateParamsActionsIDEmailObfuscation, PageRuleUpdateParamsActionsIDExplicitCacheControl, PageRuleUpdateParamsActionsIDForwardingURL, PageRuleUpdateParamsActionsIDHostHeaderOverride, PageRuleUpdateParamsActionsIDIPGeolocation, PageRuleUpdateParamsActionsIDMirage, PageRuleUpdateParamsActionsIDOpportunisticEncryption, PageRuleUpdateParamsActionsIDOriginErrorPagePassThru, PageRuleUpdateParamsActionsIDPolish, PageRuleUpdateParamsActionsIDResolveOverride, PageRuleUpdateParamsActionsIDRespectStrongEtag, PageRuleUpdateParamsActionsIDResponseBuffering, PageRuleUpdateParamsActionsIDRocketLoader, PageRuleUpdateParamsActionsIDSecurityLevel, PageRuleUpdateParamsActionsIDSortQueryStringForCache, PageRuleUpdateParamsActionsIDSSL, PageRuleUpdateParamsActionsIDTrueClientIPHeader, PageRuleUpdateParamsActionsIDWAF:
 		return true
 	}
 	return false
@@ -3678,8 +3966,9 @@ func (r PageRuleEditParamsAction) ImplementsPageRulesPageRuleEditParamsActionUni
 // [page_rules.PageRuleEditParamsActionsBypassCacheOnCookie],
 // [page_rules.PageRuleEditParamsActionsCacheByDeviceType],
 // [page_rules.PageRuleEditParamsActionsCacheDeceptionArmor],
-// [page_rules.PageRuleEditParamsActionsCacheKey], [zones.CacheLevelParam],
+// [page_rules.PageRuleEditParamsActionsCacheKeyFields], [zones.CacheLevelParam],
 // [page_rules.PageRuleEditParamsActionsCacheOnCookie],
+// [page_rules.PageRuleEditParamsActionsCacheTTLByStatus],
 // [page_rules.PageRuleEditParamsActionsDisableApps],
 // [page_rules.PageRuleEditParamsActionsDisablePerformance],
 // [page_rules.PageRuleEditParamsActionsDisableSecurity],
@@ -3828,58 +4117,58 @@ func (r PageRuleEditParamsActionsCacheDeceptionArmorValue) IsKnown() bool {
 	return false
 }
 
-type PageRuleEditParamsActionsCacheKey struct {
+type PageRuleEditParamsActionsCacheKeyFields struct {
 	// Control specifically what variables to include when deciding which resources to
 	// cache. This allows customers to determine what to cache based on something other
 	// than just the URL.
-	ID    param.Field[PageRuleEditParamsActionsCacheKeyID]    `json:"id"`
-	Value param.Field[PageRuleEditParamsActionsCacheKeyValue] `json:"value"`
+	ID    param.Field[PageRuleEditParamsActionsCacheKeyFieldsID]    `json:"id"`
+	Value param.Field[PageRuleEditParamsActionsCacheKeyFieldsValue] `json:"value"`
 }
 
-func (r PageRuleEditParamsActionsCacheKey) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyFields) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PageRuleEditParamsActionsCacheKey) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
+func (r PageRuleEditParamsActionsCacheKeyFields) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
 // Control specifically what variables to include when deciding which resources to
 // cache. This allows customers to determine what to cache based on something other
 // than just the URL.
-type PageRuleEditParamsActionsCacheKeyID string
+type PageRuleEditParamsActionsCacheKeyFieldsID string
 
 const (
-	PageRuleEditParamsActionsCacheKeyIDCacheKey PageRuleEditParamsActionsCacheKeyID = "cache_key"
+	PageRuleEditParamsActionsCacheKeyFieldsIDCacheKeyFields PageRuleEditParamsActionsCacheKeyFieldsID = "cache_key_fields"
 )
 
-func (r PageRuleEditParamsActionsCacheKeyID) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheKeyFieldsID) IsKnown() bool {
 	switch r {
-	case PageRuleEditParamsActionsCacheKeyIDCacheKey:
+	case PageRuleEditParamsActionsCacheKeyFieldsIDCacheKeyFields:
 		return true
 	}
 	return false
 }
 
-type PageRuleEditParamsActionsCacheKeyValue struct {
+type PageRuleEditParamsActionsCacheKeyFieldsValue struct {
 	// Controls which cookies appear in the Cache Key.
-	Cookie param.Field[PageRuleEditParamsActionsCacheKeyValueCookie] `json:"cookie"`
+	Cookie param.Field[PageRuleEditParamsActionsCacheKeyFieldsValueCookie] `json:"cookie"`
 	// Controls which headers go into the Cache Key. Exactly one of `include` or
 	// `exclude` is expected.
-	Header param.Field[PageRuleEditParamsActionsCacheKeyValueHeader] `json:"header"`
+	Header param.Field[PageRuleEditParamsActionsCacheKeyFieldsValueHeader] `json:"header"`
 	// Determines which host header to include in the Cache Key.
-	Host param.Field[PageRuleEditParamsActionsCacheKeyValueHost] `json:"host"`
+	Host param.Field[PageRuleEditParamsActionsCacheKeyFieldsValueHost] `json:"host"`
 	// Controls which URL query string parameters go into the Cache Key. Exactly one of
 	// `include` or `exclude` is expected.
-	QueryString param.Field[PageRuleEditParamsActionsCacheKeyValueQueryString] `json:"query_string"`
+	QueryString param.Field[PageRuleEditParamsActionsCacheKeyFieldsValueQueryString] `json:"query_string"`
 	// Feature fields to add features about the end-user (client) into the Cache Key.
-	User param.Field[PageRuleEditParamsActionsCacheKeyValueUser] `json:"user"`
+	User param.Field[PageRuleEditParamsActionsCacheKeyFieldsValueUser] `json:"user"`
 }
 
-func (r PageRuleEditParamsActionsCacheKeyValue) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which cookies appear in the Cache Key.
-type PageRuleEditParamsActionsCacheKeyValueCookie struct {
+type PageRuleEditParamsActionsCacheKeyFieldsValueCookie struct {
 	// A list of cookies to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -3887,13 +4176,13 @@ type PageRuleEditParamsActionsCacheKeyValueCookie struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageRuleEditParamsActionsCacheKeyValueCookie) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueCookie) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which headers go into the Cache Key. Exactly one of `include` or
 // `exclude` is expected.
-type PageRuleEditParamsActionsCacheKeyValueHeader struct {
+type PageRuleEditParamsActionsCacheKeyFieldsValueHeader struct {
 	// A list of headers to check for the presence of, without including their actual
 	// values.
 	CheckPresence param.Field[[]string] `json:"check_presence"`
@@ -3903,99 +4192,99 @@ type PageRuleEditParamsActionsCacheKeyValueHeader struct {
 	Include param.Field[[]string] `json:"include"`
 }
 
-func (r PageRuleEditParamsActionsCacheKeyValueHeader) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Determines which host header to include in the Cache Key.
-type PageRuleEditParamsActionsCacheKeyValueHost struct {
+type PageRuleEditParamsActionsCacheKeyFieldsValueHost struct {
 	// Whether to include the Host header in the HTTP request sent to the origin.
 	Resolved param.Field[bool] `json:"resolved"`
 }
 
-func (r PageRuleEditParamsActionsCacheKeyValueHost) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueHost) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Controls which URL query string parameters go into the Cache Key. Exactly one of
 // `include` or `exclude` is expected.
-type PageRuleEditParamsActionsCacheKeyValueQueryString struct {
+type PageRuleEditParamsActionsCacheKeyFieldsValueQueryString struct {
 	// Ignore all query string parameters.
-	Exclude param.Field[PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeUnion] `json:"exclude"`
+	Exclude param.Field[PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion] `json:"exclude"`
 	// Include all query string parameters.
-	Include param.Field[PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeUnion] `json:"include"`
+	Include param.Field[PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion] `json:"include"`
 }
 
-func (r PageRuleEditParamsActionsCacheKeyValueQueryString) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryString) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Ignore all query string parameters.
 //
 // Satisfied by
-// [page_rules.PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeString],
-// [page_rules.PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeArray].
-type PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeUnion interface {
-	implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringExcludeUnion()
+// [page_rules.PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeString],
+// [page_rules.PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeArray].
+type PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion interface {
+	implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion()
 }
 
 // Ignore all query string parameters.
-type PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeString string
+type PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeString string
 
 const (
-	PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeStringStar PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeString = "*"
+	PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeStringStar PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeString = "*"
 )
 
-func (r PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeString) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeString) IsKnown() bool {
 	switch r {
-	case PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeStringStar:
+	case PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeString) implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeString) implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
-type PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeArray []string
+type PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeArray []string
 
-func (r PageRuleEditParamsActionsCacheKeyValueQueryStringExcludeArray) implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringExcludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeArray) implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringExcludeUnion() {
 }
 
 // Include all query string parameters.
 //
 // Satisfied by
-// [page_rules.PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeString],
-// [page_rules.PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeArray].
-type PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeUnion interface {
-	implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringIncludeUnion()
+// [page_rules.PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeString],
+// [page_rules.PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeArray].
+type PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion interface {
+	implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion()
 }
 
 // Include all query string parameters.
-type PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeString string
+type PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeString string
 
 const (
-	PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeStringStar PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeString = "*"
+	PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeStringStar PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeString = "*"
 )
 
-func (r PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeString) IsKnown() bool {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeString) IsKnown() bool {
 	switch r {
-	case PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeStringStar:
+	case PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeStringStar:
 		return true
 	}
 	return false
 }
 
-func (r PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeString) implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeString) implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
-type PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeArray []string
+type PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeArray []string
 
-func (r PageRuleEditParamsActionsCacheKeyValueQueryStringIncludeArray) implementsPageRulesPageRuleEditParamsActionsCacheKeyValueQueryStringIncludeUnion() {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeArray) implementsPageRulesPageRuleEditParamsActionsCacheKeyFieldsValueQueryStringIncludeUnion() {
 }
 
 // Feature fields to add features about the end-user (client) into the Cache Key.
-type PageRuleEditParamsActionsCacheKeyValueUser struct {
+type PageRuleEditParamsActionsCacheKeyFieldsValueUser struct {
 	// Classifies a request as `mobile`, `desktop`, or `tablet` based on the User
 	// Agent.
 	DeviceType param.Field[bool] `json:"device_type"`
@@ -4006,7 +4295,7 @@ type PageRuleEditParamsActionsCacheKeyValueUser struct {
 	Lang param.Field[bool] `json:"lang"`
 }
 
-func (r PageRuleEditParamsActionsCacheKeyValueUser) MarshalJSON() (data []byte, err error) {
+func (r PageRuleEditParamsActionsCacheKeyFieldsValueUser) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -4038,6 +4327,88 @@ func (r PageRuleEditParamsActionsCacheOnCookieID) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type PageRuleEditParamsActionsCacheTTLByStatus struct {
+	// Enterprise customers can set cache time-to-live (TTL) based on the response
+	// status from the origin web server. Cache TTL refers to the duration of a
+	// resource in the Cloudflare network before being marked as stale or discarded
+	// from cache. Status codes are returned by a resource's origin. Setting cache TTL
+	// based on response status overrides the default cache behavior (standard caching)
+	// for static files and overrides cache instructions sent by the origin web server.
+	// To cache non-static assets, set a Cache Level of Cache Everything using a Page
+	// Rule. Setting no-store Cache-Control or a low TTL (using `max-age`/`s-maxage`)
+	// increases requests to origin web servers and decreases performance.
+	ID param.Field[PageRuleEditParamsActionsCacheTTLByStatusID] `json:"id"`
+	// A JSON object containing status codes and their corresponding TTLs. Each
+	// key-value pair in the cache TTL by status cache rule has the following syntax
+	//
+	//   - `status_code`: An integer value such as 200 or 500. status_code matches the
+	//     exact status code from the origin web server. Valid status codes are between
+	//     100-999.
+	//   - `status_code_range`: Integer values for from and to. status_code_range matches
+	//     any status code from the origin web server within the specified range.
+	//   - `value`: An integer value that defines the duration an asset is valid in
+	//     seconds or one of the following strings: no-store (equivalent to -1), no-cache
+	//     (equivalent to 0).
+	Value param.Field[map[string]PageRuleEditParamsActionsCacheTTLByStatusValueUnion] `json:"value"`
+}
+
+func (r PageRuleEditParamsActionsCacheTTLByStatus) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r PageRuleEditParamsActionsCacheTTLByStatus) ImplementsPageRulesPageRuleEditParamsActionUnion() {
+}
+
+// Enterprise customers can set cache time-to-live (TTL) based on the response
+// status from the origin web server. Cache TTL refers to the duration of a
+// resource in the Cloudflare network before being marked as stale or discarded
+// from cache. Status codes are returned by a resource's origin. Setting cache TTL
+// based on response status overrides the default cache behavior (standard caching)
+// for static files and overrides cache instructions sent by the origin web server.
+// To cache non-static assets, set a Cache Level of Cache Everything using a Page
+// Rule. Setting no-store Cache-Control or a low TTL (using `max-age`/`s-maxage`)
+// increases requests to origin web servers and decreases performance.
+type PageRuleEditParamsActionsCacheTTLByStatusID string
+
+const (
+	PageRuleEditParamsActionsCacheTTLByStatusIDCacheTTLByStatus PageRuleEditParamsActionsCacheTTLByStatusID = "cache_ttl_by_status"
+)
+
+func (r PageRuleEditParamsActionsCacheTTLByStatusID) IsKnown() bool {
+	switch r {
+	case PageRuleEditParamsActionsCacheTTLByStatusIDCacheTTLByStatus:
+		return true
+	}
+	return false
+}
+
+// `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
+//
+// Satisfied by [page_rules.PageRuleEditParamsActionsCacheTTLByStatusValueString],
+// [shared.UnionInt].
+type PageRuleEditParamsActionsCacheTTLByStatusValueUnion interface {
+	ImplementsPageRulesPageRuleEditParamsActionsCacheTTLByStatusValueUnion()
+}
+
+// `no-store` (equivalent to -1), `no-cache` (equivalent to 0)
+type PageRuleEditParamsActionsCacheTTLByStatusValueString string
+
+const (
+	PageRuleEditParamsActionsCacheTTLByStatusValueStringNoCache PageRuleEditParamsActionsCacheTTLByStatusValueString = "no-cache"
+	PageRuleEditParamsActionsCacheTTLByStatusValueStringNoStore PageRuleEditParamsActionsCacheTTLByStatusValueString = "no-store"
+)
+
+func (r PageRuleEditParamsActionsCacheTTLByStatusValueString) IsKnown() bool {
+	switch r {
+	case PageRuleEditParamsActionsCacheTTLByStatusValueStringNoCache, PageRuleEditParamsActionsCacheTTLByStatusValueStringNoStore:
+		return true
+	}
+	return false
+}
+
+func (r PageRuleEditParamsActionsCacheTTLByStatusValueString) ImplementsPageRulesPageRuleEditParamsActionsCacheTTLByStatusValueUnion() {
 }
 
 type PageRuleEditParamsActionsDisableApps struct {
@@ -4420,9 +4791,10 @@ const (
 	PageRuleEditParamsActionsIDBypassCacheOnCookie     PageRuleEditParamsActionsID = "bypass_cache_on_cookie"
 	PageRuleEditParamsActionsIDCacheByDeviceType       PageRuleEditParamsActionsID = "cache_by_device_type"
 	PageRuleEditParamsActionsIDCacheDeceptionArmor     PageRuleEditParamsActionsID = "cache_deception_armor"
-	PageRuleEditParamsActionsIDCacheKey                PageRuleEditParamsActionsID = "cache_key"
+	PageRuleEditParamsActionsIDCacheKeyFields          PageRuleEditParamsActionsID = "cache_key_fields"
 	PageRuleEditParamsActionsIDCacheLevel              PageRuleEditParamsActionsID = "cache_level"
 	PageRuleEditParamsActionsIDCacheOnCookie           PageRuleEditParamsActionsID = "cache_on_cookie"
+	PageRuleEditParamsActionsIDCacheTTLByStatus        PageRuleEditParamsActionsID = "cache_ttl_by_status"
 	PageRuleEditParamsActionsIDDisableApps             PageRuleEditParamsActionsID = "disable_apps"
 	PageRuleEditParamsActionsIDDisablePerformance      PageRuleEditParamsActionsID = "disable_performance"
 	PageRuleEditParamsActionsIDDisableSecurity         PageRuleEditParamsActionsID = "disable_security"
@@ -4450,7 +4822,7 @@ const (
 
 func (r PageRuleEditParamsActionsID) IsKnown() bool {
 	switch r {
-	case PageRuleEditParamsActionsIDAlwaysUseHTTPS, PageRuleEditParamsActionsIDAutomaticHTTPSRewrites, PageRuleEditParamsActionsIDBrowserCacheTTL, PageRuleEditParamsActionsIDBrowserCheck, PageRuleEditParamsActionsIDBypassCacheOnCookie, PageRuleEditParamsActionsIDCacheByDeviceType, PageRuleEditParamsActionsIDCacheDeceptionArmor, PageRuleEditParamsActionsIDCacheKey, PageRuleEditParamsActionsIDCacheLevel, PageRuleEditParamsActionsIDCacheOnCookie, PageRuleEditParamsActionsIDDisableApps, PageRuleEditParamsActionsIDDisablePerformance, PageRuleEditParamsActionsIDDisableSecurity, PageRuleEditParamsActionsIDDisableZaraz, PageRuleEditParamsActionsIDEdgeCacheTTL, PageRuleEditParamsActionsIDEmailObfuscation, PageRuleEditParamsActionsIDExplicitCacheControl, PageRuleEditParamsActionsIDForwardingURL, PageRuleEditParamsActionsIDHostHeaderOverride, PageRuleEditParamsActionsIDIPGeolocation, PageRuleEditParamsActionsIDMirage, PageRuleEditParamsActionsIDOpportunisticEncryption, PageRuleEditParamsActionsIDOriginErrorPagePassThru, PageRuleEditParamsActionsIDPolish, PageRuleEditParamsActionsIDResolveOverride, PageRuleEditParamsActionsIDRespectStrongEtag, PageRuleEditParamsActionsIDResponseBuffering, PageRuleEditParamsActionsIDRocketLoader, PageRuleEditParamsActionsIDSecurityLevel, PageRuleEditParamsActionsIDSortQueryStringForCache, PageRuleEditParamsActionsIDSSL, PageRuleEditParamsActionsIDTrueClientIPHeader, PageRuleEditParamsActionsIDWAF:
+	case PageRuleEditParamsActionsIDAlwaysUseHTTPS, PageRuleEditParamsActionsIDAutomaticHTTPSRewrites, PageRuleEditParamsActionsIDBrowserCacheTTL, PageRuleEditParamsActionsIDBrowserCheck, PageRuleEditParamsActionsIDBypassCacheOnCookie, PageRuleEditParamsActionsIDCacheByDeviceType, PageRuleEditParamsActionsIDCacheDeceptionArmor, PageRuleEditParamsActionsIDCacheKeyFields, PageRuleEditParamsActionsIDCacheLevel, PageRuleEditParamsActionsIDCacheOnCookie, PageRuleEditParamsActionsIDCacheTTLByStatus, PageRuleEditParamsActionsIDDisableApps, PageRuleEditParamsActionsIDDisablePerformance, PageRuleEditParamsActionsIDDisableSecurity, PageRuleEditParamsActionsIDDisableZaraz, PageRuleEditParamsActionsIDEdgeCacheTTL, PageRuleEditParamsActionsIDEmailObfuscation, PageRuleEditParamsActionsIDExplicitCacheControl, PageRuleEditParamsActionsIDForwardingURL, PageRuleEditParamsActionsIDHostHeaderOverride, PageRuleEditParamsActionsIDIPGeolocation, PageRuleEditParamsActionsIDMirage, PageRuleEditParamsActionsIDOpportunisticEncryption, PageRuleEditParamsActionsIDOriginErrorPagePassThru, PageRuleEditParamsActionsIDPolish, PageRuleEditParamsActionsIDResolveOverride, PageRuleEditParamsActionsIDRespectStrongEtag, PageRuleEditParamsActionsIDResponseBuffering, PageRuleEditParamsActionsIDRocketLoader, PageRuleEditParamsActionsIDSecurityLevel, PageRuleEditParamsActionsIDSortQueryStringForCache, PageRuleEditParamsActionsIDSSL, PageRuleEditParamsActionsIDTrueClientIPHeader, PageRuleEditParamsActionsIDWAF:
 		return true
 	}
 	return false

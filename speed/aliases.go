@@ -357,11 +357,6 @@ type TokenPolicyPermissionGroup = shared.TokenPolicyPermissionGroup
 // This is an alias to an internal type.
 type TokenPolicyPermissionGroupsMeta = shared.TokenPolicyPermissionGroupsMeta
 
-// A list of resource names that the policy applies to.
-//
-// This is an alias to an internal type.
-type TokenPolicyResources = shared.TokenPolicyResources
-
 // This is an alias to an internal type.
 type TokenPolicyParam = shared.TokenPolicyParam
 
@@ -375,11 +370,6 @@ type TokenPolicyPermissionGroupParam = shared.TokenPolicyPermissionGroupParam
 //
 // This is an alias to an internal type.
 type TokenPolicyPermissionGroupsMetaParam = shared.TokenPolicyPermissionGroupsMetaParam
-
-// A list of resource names that the policy applies to.
-//
-// This is an alias to an internal type.
-type TokenPolicyResourcesParam = shared.TokenPolicyResourcesParam
 
 // The token value.
 //
