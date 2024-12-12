@@ -46,9 +46,9 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 					Value: cloudflare.F("value"),
 				}),
 			}}),
-			Resources: cloudflare.F(shared.TokenPolicyResourcesParam{
-				Resource: cloudflare.F("resource"),
-				Scope:    cloudflare.F("scope"),
+			Resources: cloudflare.F(map[string]string{
+				"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
+				"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 			}),
 		}}),
 		Condition: cloudflare.F(accounts.TokenNewParamsCondition{
@@ -103,9 +103,9 @@ func TestTokenUpdateWithOptionalParams(t *testing.T) {
 							Value: cloudflare.F("value"),
 						}),
 					}}),
-					Resources: cloudflare.F(shared.TokenPolicyResourcesParam{
-						Resource: cloudflare.F("resource"),
-						Scope:    cloudflare.F("scope"),
+					Resources: cloudflare.F(map[string]string{
+						"com.cloudflare.api.account.zone.22b1de5f1c0e4b3ea97bb1e963b06a43": "*",
+						"com.cloudflare.api.account.zone.eb78d65290b24279ba6f44721b3ea3c4": "*",
 					}),
 				}}),
 				Status: cloudflare.F(shared.TokenStatusActive),

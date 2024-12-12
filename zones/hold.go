@@ -193,14 +193,21 @@ func (r HoldDeleteParams) URLQuery() (v url.Values) {
 }
 
 type HoldDeleteResponseEnvelope struct {
-	Result ZoneHold                       `json:"result"`
-	JSON   holdDeleteResponseEnvelopeJSON `json:"-"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	Result   ZoneHold              `json:"result,required"`
+	// Whether the API call was successful
+	Success HoldDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    holdDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
 // holdDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [HoldDeleteResponseEnvelope]
 type holdDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -211,6 +218,21 @@ func (r *HoldDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 
 func (r holdDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
+}
+
+// Whether the API call was successful
+type HoldDeleteResponseEnvelopeSuccess bool
+
+const (
+	HoldDeleteResponseEnvelopeSuccessTrue HoldDeleteResponseEnvelopeSuccess = true
+)
+
+func (r HoldDeleteResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case HoldDeleteResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
 }
 
 type HoldGetParams struct {
