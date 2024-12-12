@@ -113,12 +113,16 @@ func (UnionBool) ImplementsAIGatewayEvaluationGetResponseDatasetsFiltersValueUni
 
 type UnionInt int64
 
-func (UnionInt) ImplementsLogsReceivedGetParamsEndUnion()   {}
-func (UnionInt) ImplementsLogsReceivedGetParamsStartUnion() {}
-func (UnionInt) ImplementsSpectrumOriginPortUnionParam()    {}
-func (UnionInt) ImplementsSpectrumOriginPortUnion()         {}
-func (UnionInt) ImplementsRulesListItemListResponseUnion()  {}
-func (UnionInt) ImplementsRulesListItemGetResponseUnion()   {}
+func (UnionInt) ImplementsLogsReceivedGetParamsEndUnion()                                  {}
+func (UnionInt) ImplementsLogsReceivedGetParamsStartUnion()                                {}
+func (UnionInt) ImplementsPageRulesPageRuleActionsCacheTTLByStatusValueUnion()             {}
+func (UnionInt) ImplementsPageRulesPageRuleNewParamsActionsCacheTTLByStatusValueUnion()    {}
+func (UnionInt) ImplementsPageRulesPageRuleUpdateParamsActionsCacheTTLByStatusValueUnion() {}
+func (UnionInt) ImplementsPageRulesPageRuleEditParamsActionsCacheTTLByStatusValueUnion()   {}
+func (UnionInt) ImplementsSpectrumOriginPortUnionParam()                                   {}
+func (UnionInt) ImplementsSpectrumOriginPortUnion()                                        {}
+func (UnionInt) ImplementsRulesListItemListResponseUnion()                                 {}
+func (UnionInt) ImplementsRulesListItemGetResponseUnion()                                  {}
 
 type UnionFloat float64
 
