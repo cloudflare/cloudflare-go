@@ -3,7 +3,7 @@ module github.com/cloudflare/cloudflare-go
 go 1.21
 
 require (
-	github.com/goccy/go-json v0.10.3
+	github.com/goccy/go-json v0.10.4
 	github.com/google/go-querystring v1.1.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/stretchr/testify v1.10.0
