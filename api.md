@@ -2151,28 +2151,6 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#SingleStepMigration">SingleStepMigration</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#SteppedMigration">SteppedMigration</a>
 
-## AI
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIRunResponseUnion">AIRunResponseUnion</a>
-
-Methods:
-
-- <code title="post /accounts/{account_id}/ai/run/{model_name}">client.Workers.AI.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIService.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, modelName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIRunParams">AIRunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIRunResponseUnion">AIRunResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-### Models
-
-#### Schema
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIModelSchemaGetResponse">AIModelSchemaGetResponse</a>
-
-Methods:
-
-- <code title="get /accounts/{account_id}/ai/models/schema">client.Workers.AI.Models.Schema.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIModelSchemaService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIModelSchemaGetParams">AIModelSchemaGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIModelSchemaGetResponse">AIModelSchemaGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## Assets
 
 ### Upload
@@ -7604,3 +7582,25 @@ Methods:
 Methods:
 
 - <code title="post /accounts/{account_id}/v1/abuse-reports/{report_type}">client.AbuseReports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports#AbuseReportService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, reportType <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports#AbuseReportNewParamsReportType">AbuseReportNewParamsReportType</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports#AbuseReportNewParams">AbuseReportNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+# AI
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#AIRunResponseUnion">AIRunResponseUnion</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/ai/run/{model_name}">client.AI.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#AIService.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, modelName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#AIRunParams">AIRunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#AIRunResponseUnion">AIRunResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Models
+
+### Schema
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#ModelSchemaGetResponse">ModelSchemaGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/ai/models/schema">client.AI.Models.Schema.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#ModelSchemaService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#ModelSchemaGetParams">ModelSchemaGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#ModelSchemaGetResponse">ModelSchemaGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
