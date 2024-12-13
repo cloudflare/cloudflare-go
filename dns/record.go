@@ -291,22 +291,8 @@ func (r *RecordService) Scan(ctx context.Context, params RecordScanParams, opts 
 }
 
 type ARecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type ARecordType `json:"type"`
 	JSON aRecordJSON `json:"-"`
@@ -314,12 +300,7 @@ type ARecord struct {
 
 // aRecordJSON contains the JSON metadata for the struct [ARecord]
 type aRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -367,22 +348,8 @@ func (r ARecordType) IsKnown() bool {
 }
 
 type ARecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// A valid IPv4 address.
 	Content param.Field[string] `json:"content" format:"ipv4"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[ARecordType] `json:"type"`
 }
@@ -394,22 +361,8 @@ func (r ARecordParam) MarshalJSON() (data []byte, err error) {
 func (r ARecordParam) implementsDNSRecordUnionParam() {}
 
 type AAAARecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv6 address.
 	Content string `json:"content" format:"ipv6"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type AAAARecordType `json:"type"`
 	JSON aaaaRecordJSON `json:"-"`
@@ -417,12 +370,7 @@ type AAAARecord struct {
 
 // aaaaRecordJSON contains the JSON metadata for the struct [AAAARecord]
 type aaaaRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -470,22 +418,8 @@ func (r AAAARecordType) IsKnown() bool {
 }
 
 type AAAARecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// A valid IPv6 address.
 	Content param.Field[string] `json:"content" format:"ipv6"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[AAAARecordType] `json:"type"`
 }
@@ -497,24 +431,10 @@ func (r AAAARecordParam) MarshalJSON() (data []byte, err error) {
 func (r AAAARecordParam) implementsDNSRecordUnionParam() {}
 
 type CAARecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted CAA content. See 'data' to set CAA properties.
 	Content string `json:"content"`
 	// Components of a CAA record.
 	Data CAARecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type CAARecordType `json:"type"`
 	JSON caaRecordJSON `json:"-"`
@@ -522,13 +442,8 @@ type CAARecord struct {
 
 // caaRecordJSON contains the JSON metadata for the struct [CAARecord]
 type caaRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -604,22 +519,8 @@ func (r CAARecordType) IsKnown() bool {
 }
 
 type CAARecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a CAA record.
 	Data param.Field[CAARecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[CAARecordType] `json:"type"`
 }
@@ -645,24 +546,10 @@ func (r CAARecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type CERTRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted CERT content. See 'data' to set CERT properties.
 	Content string `json:"content"`
 	// Components of a CERT record.
 	Data CERTRecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type CERTRecordType `json:"type"`
 	JSON certRecordJSON `json:"-"`
@@ -670,13 +557,8 @@ type CERTRecord struct {
 
 // certRecordJSON contains the JSON metadata for the struct [CERTRecord]
 type certRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -755,22 +637,8 @@ func (r CERTRecordType) IsKnown() bool {
 }
 
 type CERTRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a CERT record.
 	Data param.Field[CERTRecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[CERTRecordType] `json:"type"`
 }
@@ -798,23 +666,9 @@ func (r CERTRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type CNAMERecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid hostname. Must not match the record's name.
-	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied  bool                `json:"proxied"`
+	Content  string              `json:"content"`
 	Settings CNAMERecordSettings `json:"settings"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type CNAMERecordType `json:"type"`
 	JSON cnameRecordJSON `json:"-"`
@@ -822,13 +676,8 @@ type CNAMERecord struct {
 
 // cnameRecordJSON contains the JSON metadata for the struct [CNAMERecord]
 type cnameRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
 	Settings    apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -901,23 +750,9 @@ func (r CNAMERecordType) IsKnown() bool {
 }
 
 type CNAMERecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// A valid hostname. Must not match the record's name.
-	Content param.Field[string] `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied  param.Field[bool]                     `json:"proxied"`
+	Content  param.Field[string]                   `json:"content"`
 	Settings param.Field[CNAMERecordSettingsParam] `json:"settings"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[CNAMERecordType] `json:"type"`
 }
@@ -941,24 +776,10 @@ func (r CNAMERecordSettingsParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DNSKEYRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted DNSKEY content. See 'data' to set DNSKEY properties.
 	Content string `json:"content"`
 	// Components of a DNSKEY record.
 	Data DNSKEYRecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type DNSKEYRecordType `json:"type"`
 	JSON dnskeyRecordJSON `json:"-"`
@@ -966,13 +787,8 @@ type DNSKEYRecord struct {
 
 // dnskeyRecordJSON contains the JSON metadata for the struct [DNSKEYRecord]
 type dnskeyRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1052,22 +868,8 @@ func (r DNSKEYRecordType) IsKnown() bool {
 }
 
 type DNSKEYRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a DNSKEY record.
 	Data param.Field[DNSKEYRecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[DNSKEYRecordType] `json:"type"`
 }
@@ -1095,24 +897,10 @@ func (r DNSKEYRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type DSRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted DS content. See 'data' to set DS properties.
 	Content string `json:"content"`
 	// Components of a DS record.
 	Data DSRecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type DSRecordType `json:"type"`
 	JSON dsRecordJSON `json:"-"`
@@ -1120,13 +908,8 @@ type DSRecord struct {
 
 // dsRecordJSON contains the JSON metadata for the struct [DSRecord]
 type dsRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1205,22 +988,8 @@ func (r DSRecordType) IsKnown() bool {
 }
 
 type DSRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a DS record.
 	Data param.Field[DSRecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[DSRecordType] `json:"type"`
 }
@@ -1248,24 +1017,10 @@ func (r DSRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type HTTPSRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted HTTPS content. See 'data' to set HTTPS properties.
 	Content string `json:"content"`
 	// Components of a HTTPS record.
 	Data HTTPSRecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type HTTPSRecordType `json:"type"`
 	JSON httpsRecordJSON `json:"-"`
@@ -1273,13 +1028,8 @@ type HTTPSRecord struct {
 
 // httpsRecordJSON contains the JSON metadata for the struct [HTTPSRecord]
 type httpsRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1355,22 +1105,8 @@ func (r HTTPSRecordType) IsKnown() bool {
 }
 
 type HTTPSRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a HTTPS record.
 	Data param.Field[HTTPSRecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[HTTPSRecordType] `json:"type"`
 }
@@ -1396,24 +1132,10 @@ func (r HTTPSRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type LOCRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted LOC content. See 'data' to set LOC properties.
 	Content string `json:"content"`
 	// Components of a LOC record.
 	Data LOCRecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type LOCRecordType `json:"type"`
 	JSON locRecordJSON `json:"-"`
@@ -1421,13 +1143,8 @@ type LOCRecord struct {
 
 // locRecordJSON contains the JSON metadata for the struct [LOCRecord]
 type locRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1562,22 +1279,8 @@ func (r LOCRecordType) IsKnown() bool {
 }
 
 type LOCRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a LOC record.
 	Data param.Field[LOCRecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[LOCRecordType] `json:"type"`
 }
@@ -1621,25 +1324,11 @@ func (r LOCRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type MXRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid mail server hostname.
 	Content string `json:"content" format:"hostname"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type MXRecordType `json:"type"`
 	JSON mxRecordJSON `json:"-"`
@@ -1647,13 +1336,8 @@ type MXRecord struct {
 
 // mxRecordJSON contains the JSON metadata for the struct [MXRecord]
 type mxRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1701,25 +1385,11 @@ func (r MXRecordType) IsKnown() bool {
 }
 
 type MXRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// A valid mail server hostname.
 	Content param.Field[string] `json:"content" format:"hostname"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority param.Field[float64] `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[MXRecordType] `json:"type"`
 }
@@ -1731,24 +1401,10 @@ func (r MXRecordParam) MarshalJSON() (data []byte, err error) {
 func (r MXRecordParam) implementsDNSRecordUnionParam() {}
 
 type NAPTRRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted NAPTR content. See 'data' to set NAPTR properties.
 	Content string `json:"content"`
 	// Components of a NAPTR record.
 	Data NAPTRRecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type NAPTRRecordType `json:"type"`
 	JSON naptrRecordJSON `json:"-"`
@@ -1756,13 +1412,8 @@ type NAPTRRecord struct {
 
 // naptrRecordJSON contains the JSON metadata for the struct [NAPTRRecord]
 type naptrRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1847,22 +1498,8 @@ func (r NAPTRRecordType) IsKnown() bool {
 }
 
 type NAPTRRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a NAPTR record.
 	Data param.Field[NAPTRRecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[NAPTRRecordType] `json:"type"`
 }
@@ -1894,22 +1531,8 @@ func (r NAPTRRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type NSRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid name server host name.
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type NSRecordType `json:"type"`
 	JSON nsRecordJSON `json:"-"`
@@ -1917,12 +1540,7 @@ type NSRecord struct {
 
 // nsRecordJSON contains the JSON metadata for the struct [NSRecord]
 type nsRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -1970,22 +1588,8 @@ func (r NSRecordType) IsKnown() bool {
 }
 
 type NSRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// A valid name server host name.
 	Content param.Field[string] `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[NSRecordType] `json:"type"`
 }
@@ -1997,22 +1601,8 @@ func (r NSRecordParam) MarshalJSON() (data []byte, err error) {
 func (r NSRecordParam) implementsDNSRecordUnionParam() {}
 
 type PTRRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Domain name pointing to the address.
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type PTRRecordType `json:"type"`
 	JSON ptrRecordJSON `json:"-"`
@@ -2020,12 +1610,7 @@ type PTRRecord struct {
 
 // ptrRecordJSON contains the JSON metadata for the struct [PTRRecord]
 type ptrRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2073,22 +1658,8 @@ func (r PTRRecordType) IsKnown() bool {
 }
 
 type PTRRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Domain name pointing to the address.
 	Content param.Field[string] `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[PTRRecordType] `json:"type"`
 }
@@ -2100,26 +1671,13 @@ func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
 func (r PTRRecordParam) implementsDNSRecordUnionParam() {}
 
 type RecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// A valid IPv4 address.
 	Content param.Field[string]      `json:"content" format:"ipv4"`
 	Data    param.Field[interface{}] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
-	Priority param.Field[float64] `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied  param.Field[bool]        `json:"proxied"`
+	Priority param.Field[float64]     `json:"priority"`
 	Settings param.Field[interface{}] `json:"settings"`
-	Tags     param.Field[interface{}] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[RecordType] `json:"type"`
 }
@@ -2134,51 +1692,37 @@ func (r RecordParam) implementsDNSRecordUnionParam() {}
 // [dns.CERTRecordParam], [dns.CNAMERecordParam], [dns.DNSKEYRecordParam],
 // [dns.DSRecordParam], [dns.HTTPSRecordParam], [dns.LOCRecordParam],
 // [dns.MXRecordParam], [dns.NAPTRRecordParam], [dns.NSRecordParam],
-// [dns.RecordDNSRecordsOpenpgpkeyRecordParam], [dns.PTRRecordParam],
-// [dns.SMIMEARecordParam], [dns.SRVRecordParam], [dns.SSHFPRecordParam],
-// [dns.SVCBRecordParam], [dns.TLSARecordParam], [dns.TXTRecordParam],
-// [dns.URIRecordParam], [RecordParam].
+// [dns.RecordOpenpgpkeyParam], [dns.PTRRecordParam], [dns.SMIMEARecordParam],
+// [dns.SRVRecordParam], [dns.SSHFPRecordParam], [dns.SVCBRecordParam],
+// [dns.TLSARecordParam], [dns.TXTRecordParam], [dns.URIRecordParam],
+// [RecordParam].
 type RecordUnionParam interface {
 	implementsDNSRecordUnionParam()
 }
 
-type RecordDNSRecordsOpenpgpkeyRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
+type RecordOpenpgpkeyParam struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
 	Content param.Field[string] `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
-	Type param.Field[RecordDNSRecordsOpenpgpkeyRecordType] `json:"type"`
+	Type param.Field[RecordOpenpgpkeyType] `json:"type"`
 }
 
-func (r RecordDNSRecordsOpenpgpkeyRecordParam) MarshalJSON() (data []byte, err error) {
+func (r RecordOpenpgpkeyParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RecordDNSRecordsOpenpgpkeyRecordParam) implementsDNSRecordUnionParam() {}
+func (r RecordOpenpgpkeyParam) implementsDNSRecordUnionParam() {}
 
 // Record type.
-type RecordDNSRecordsOpenpgpkeyRecordType string
+type RecordOpenpgpkeyType string
 
 const (
-	RecordDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordOpenpgpkeyTypeOpenpgpkey RecordOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
@@ -2247,29 +1791,11 @@ func (r recordProcessTimingJSON) RawJSON() string {
 	return r.raw
 }
 
-type RecordTags = string
-
-type RecordTagsParam = string
-
 type SMIMEARecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted SMIMEA content. See 'data' to set SMIMEA properties.
 	Content string `json:"content"`
 	// Components of a SMIMEA record.
 	Data SMIMEARecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type SMIMEARecordType `json:"type"`
 	JSON smimeaRecordJSON `json:"-"`
@@ -2277,13 +1803,8 @@ type SMIMEARecord struct {
 
 // smimeaRecordJSON contains the JSON metadata for the struct [SMIMEARecord]
 type smimeaRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2363,22 +1884,8 @@ func (r SMIMEARecordType) IsKnown() bool {
 }
 
 type SMIMEARecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a SMIMEA record.
 	Data param.Field[SMIMEARecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[SMIMEARecordType] `json:"type"`
 }
@@ -2406,25 +1913,11 @@ func (r SMIMEARecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type SRVRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Priority, weight, port, and SRV target. See 'data' for setting the individual
 	// component values.
 	Content string `json:"content"`
 	// Components of a SRV record.
 	Data SRVRecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type SRVRecordType `json:"type"`
 	JSON srvRecordJSON `json:"-"`
@@ -2432,13 +1925,8 @@ type SRVRecord struct {
 
 // srvRecordJSON contains the JSON metadata for the struct [SRVRecord]
 type srvRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2518,22 +2006,8 @@ func (r SRVRecordType) IsKnown() bool {
 }
 
 type SRVRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a SRV record.
 	Data param.Field[SRVRecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[SRVRecordType] `json:"type"`
 }
@@ -2562,24 +2036,10 @@ func (r SRVRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type SSHFPRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted SSHFP content. See 'data' to set SSHFP properties.
 	Content string `json:"content"`
 	// Components of a SSHFP record.
 	Data SSHFPRecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type SSHFPRecordType `json:"type"`
 	JSON sshfpRecordJSON `json:"-"`
@@ -2587,13 +2047,8 @@ type SSHFPRecord struct {
 
 // sshfpRecordJSON contains the JSON metadata for the struct [SSHFPRecord]
 type sshfpRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2669,22 +2124,8 @@ func (r SSHFPRecordType) IsKnown() bool {
 }
 
 type SSHFPRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a SSHFP record.
 	Data param.Field[SSHFPRecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[SSHFPRecordType] `json:"type"`
 }
@@ -2710,24 +2151,10 @@ func (r SSHFPRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type SVCBRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted SVCB content. See 'data' to set SVCB properties.
 	Content string `json:"content"`
 	// Components of a SVCB record.
 	Data SVCBRecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type SVCBRecordType `json:"type"`
 	JSON svcbRecordJSON `json:"-"`
@@ -2735,13 +2162,8 @@ type SVCBRecord struct {
 
 // svcbRecordJSON contains the JSON metadata for the struct [SVCBRecord]
 type svcbRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2817,22 +2239,8 @@ func (r SVCBRecordType) IsKnown() bool {
 }
 
 type SVCBRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a SVCB record.
 	Data param.Field[SVCBRecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[SVCBRecordType] `json:"type"`
 }
@@ -2858,24 +2266,10 @@ func (r SVCBRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type TLSARecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted TLSA content. See 'data' to set TLSA properties.
 	Content string `json:"content"`
 	// Components of a TLSA record.
 	Data TLSARecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type TLSARecordType `json:"type"`
 	JSON tlsaRecordJSON `json:"-"`
@@ -2883,13 +2277,8 @@ type TLSARecord struct {
 
 // tlsaRecordJSON contains the JSON metadata for the struct [TLSARecord]
 type tlsaRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -2968,22 +2357,8 @@ func (r TLSARecordType) IsKnown() bool {
 }
 
 type TLSARecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a TLSA record.
 	Data param.Field[TLSARecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[TLSARecordType] `json:"type"`
 }
@@ -3010,27 +2385,7 @@ func (r TLSARecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-// Value must be between 60 and 86400, with the minimum reduced to 30 for
-// Enterprise zones.
-type TTL float64
-
-const (
-	TTL1 TTL = 1
-)
-
-func (r TTL) IsKnown() bool {
-	switch r {
-	case TTL1:
-		return true
-	}
-	return false
-}
-
 type TXTRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Text content for the record. The content must consist of quoted "character
 	// strings" (RFC 1035), each with a length of up to 255 bytes. Strings exceeding
 	// this allowed maximum length are automatically split.
@@ -3038,17 +2393,6 @@ type TXTRecord struct {
 	// Learn more at
 	// <https://www.cloudflare.com/learning/dns/dns-records/dns-txt-record/>.
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type TXTRecordType `json:"type"`
 	JSON txtRecordJSON `json:"-"`
@@ -3056,12 +2400,7 @@ type TXTRecord struct {
 
 // txtRecordJSON contains the JSON metadata for the struct [TXTRecord]
 type txtRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -3109,9 +2448,6 @@ func (r TXTRecordType) IsKnown() bool {
 }
 
 type TXTRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Text content for the record. The content must consist of quoted "character
 	// strings" (RFC 1035), each with a length of up to 255 bytes. Strings exceeding
 	// this allowed maximum length are automatically split.
@@ -3119,17 +2455,6 @@ type TXTRecordParam struct {
 	// Learn more at
 	// <https://www.cloudflare.com/learning/dns/dns-records/dns-txt-record/>.
 	Content param.Field[string] `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[TXTRecordType] `json:"type"`
 }
@@ -3141,27 +2466,13 @@ func (r TXTRecordParam) MarshalJSON() (data []byte, err error) {
 func (r TXTRecordParam) implementsDNSRecordUnionParam() {}
 
 type URIRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// Formatted URI content. See 'data' to set URI properties.
 	Content string `json:"content"`
 	// Components of a URI record.
 	Data URIRecordData `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type URIRecordType `json:"type"`
 	JSON uriRecordJSON `json:"-"`
@@ -3169,14 +2480,9 @@ type URIRecord struct {
 
 // uriRecordJSON contains the JSON metadata for the struct [URIRecord]
 type uriRecordJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -3249,25 +2555,11 @@ func (r URIRecordType) IsKnown() bool {
 }
 
 type URIRecordParam struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment param.Field[string] `json:"comment"`
 	// Components of a URI record.
 	Data param.Field[URIRecordDataParam] `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name param.Field[string] `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority param.Field[float64] `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied param.Field[bool] `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags param.Field[[]RecordTagsParam] `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL param.Field[TTL] `json:"ttl"`
 	// Record type.
 	Type param.Field[URIRecordType] `json:"type"`
 }
@@ -3291,9 +2583,6 @@ func (r URIRecordDataParam) MarshalJSON() (data []byte, err error) {
 }
 
 type RecordNewResponse struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
@@ -3301,22 +2590,11 @@ type RecordNewResponse struct {
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings"`
-	// This field can have the runtime type of [[]RecordTags].
-	Tags interface{} `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type  RecordNewResponseType `json:"type"`
 	JSON  recordNewResponseJSON `json:"-"`
@@ -3326,15 +2604,10 @@ type RecordNewResponse struct {
 // recordNewResponseJSON contains the JSON metadata for the struct
 // [RecordNewResponse]
 type recordNewResponseJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
 	Settings    apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -3359,10 +2632,9 @@ func (r *RecordNewResponse) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
 // [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
 // [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord],
-// [dns.RecordNewResponseDNSRecordsOpenpgpkeyRecord], [dns.PTRRecord],
-// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
-// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordNewResponseOpenpgpkey],
+// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
+// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
 func (r RecordNewResponse) AsUnion() RecordNewResponseUnion {
 	return r.union
 }
@@ -3370,9 +2642,9 @@ func (r RecordNewResponse) AsUnion() RecordNewResponseUnion {
 // Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
 // [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
 // [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.RecordNewResponseDNSRecordsOpenpgpkeyRecord],
-// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
-// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
+// [dns.NSRecord], [dns.RecordNewResponseOpenpgpkey], [dns.PTRRecord],
+// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
+// [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
 type RecordNewResponseUnion interface {
 	implementsDNSRecordNewResponse()
 }
@@ -3380,150 +2652,152 @@ type RecordNewResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordNewResponseUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ARecord{}),
+			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AAAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AAAARecord{}),
+			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CAARecord{}),
+			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CERTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CERTRecord{}),
+			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CNAMERecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CNAMERecord{}),
+			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSKEYRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSKEYRecord{}),
+			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DSRecord{}),
+			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(HTTPSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(HTTPSRecord{}),
+			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(LOCRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LOCRecord{}),
+			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MXRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(MXRecord{}),
+			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NAPTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NAPTRRecord{}),
+			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NSRecord{}),
+			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordNewResponseDNSRecordsOpenpgpkeyRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordNewResponseOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(PTRRecord{}),
+			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SMIMEARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SMIMEARecord{}),
+			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SRVRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SRVRecord{}),
+			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SSHFPRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SSHFPRecord{}),
+			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SVCBRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SVCBRecord{}),
+			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TLSARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TLSARecord{}),
+			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TXTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TXTRecord{}),
+			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(URIRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(URIRecord{}),
+			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordNewResponseDNSRecordsOpenpgpkeyRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
+type RecordNewResponseOpenpgpkey struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
-	Type RecordNewResponseDNSRecordsOpenpgpkeyRecordType `json:"type"`
-	JSON recordNewResponseDNSRecordsOpenpgpkeyRecordJSON `json:"-"`
+	Type RecordNewResponseOpenpgpkeyType `json:"type"`
+	JSON recordNewResponseOpenpgpkeyJSON `json:"-"`
 }
 
-// recordNewResponseDNSRecordsOpenpgpkeyRecordJSON contains the JSON metadata for
-// the struct [RecordNewResponseDNSRecordsOpenpgpkeyRecord]
-type recordNewResponseDNSRecordsOpenpgpkeyRecordJSON struct {
-	Comment     apijson.Field
+// recordNewResponseOpenpgpkeyJSON contains the JSON metadata for the struct
+// [RecordNewResponseOpenpgpkey]
+type recordNewResponseOpenpgpkeyJSON struct {
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordNewResponseDNSRecordsOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordNewResponseOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordNewResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
+func (r recordNewResponseOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordNewResponseDNSRecordsOpenpgpkeyRecord) implementsDNSRecordNewResponse() {}
+func (r RecordNewResponseOpenpgpkey) implementsDNSRecordNewResponse() {}
 
 // Record type.
-type RecordNewResponseDNSRecordsOpenpgpkeyRecordType string
+type RecordNewResponseOpenpgpkeyType string
 
 const (
-	RecordNewResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordNewResponseDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordNewResponseOpenpgpkeyTypeOpenpgpkey RecordNewResponseOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordNewResponseDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordNewResponseOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordNewResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordNewResponseOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
@@ -3565,9 +2839,6 @@ func (r RecordNewResponseType) IsKnown() bool {
 }
 
 type RecordUpdateResponse struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
@@ -3575,22 +2846,11 @@ type RecordUpdateResponse struct {
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings"`
-	// This field can have the runtime type of [[]RecordTags].
-	Tags interface{} `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type  RecordUpdateResponseType `json:"type"`
 	JSON  recordUpdateResponseJSON `json:"-"`
@@ -3600,15 +2860,10 @@ type RecordUpdateResponse struct {
 // recordUpdateResponseJSON contains the JSON metadata for the struct
 // [RecordUpdateResponse]
 type recordUpdateResponseJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
 	Settings    apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -3633,10 +2888,9 @@ func (r *RecordUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
 // [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
 // [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord],
-// [dns.RecordUpdateResponseDNSRecordsOpenpgpkeyRecord], [dns.PTRRecord],
-// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
-// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordUpdateResponseOpenpgpkey],
+// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
+// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
 func (r RecordUpdateResponse) AsUnion() RecordUpdateResponseUnion {
 	return r.union
 }
@@ -3644,9 +2898,9 @@ func (r RecordUpdateResponse) AsUnion() RecordUpdateResponseUnion {
 // Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
 // [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
 // [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.RecordUpdateResponseDNSRecordsOpenpgpkeyRecord],
-// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
-// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
+// [dns.NSRecord], [dns.RecordUpdateResponseOpenpgpkey], [dns.PTRRecord],
+// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
+// [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
 type RecordUpdateResponseUnion interface {
 	implementsDNSRecordUpdateResponse()
 }
@@ -3654,150 +2908,152 @@ type RecordUpdateResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordUpdateResponseUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ARecord{}),
+			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AAAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AAAARecord{}),
+			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CAARecord{}),
+			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CERTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CERTRecord{}),
+			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CNAMERecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CNAMERecord{}),
+			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSKEYRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSKEYRecord{}),
+			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DSRecord{}),
+			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(HTTPSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(HTTPSRecord{}),
+			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(LOCRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LOCRecord{}),
+			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MXRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(MXRecord{}),
+			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NAPTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NAPTRRecord{}),
+			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NSRecord{}),
+			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordUpdateResponseDNSRecordsOpenpgpkeyRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordUpdateResponseOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(PTRRecord{}),
+			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SMIMEARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SMIMEARecord{}),
+			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SRVRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SRVRecord{}),
+			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SSHFPRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SSHFPRecord{}),
+			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SVCBRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SVCBRecord{}),
+			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TLSARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TLSARecord{}),
+			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TXTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TXTRecord{}),
+			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(URIRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(URIRecord{}),
+			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordUpdateResponseDNSRecordsOpenpgpkeyRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
+type RecordUpdateResponseOpenpgpkey struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
-	Type RecordUpdateResponseDNSRecordsOpenpgpkeyRecordType `json:"type"`
-	JSON recordUpdateResponseDNSRecordsOpenpgpkeyRecordJSON `json:"-"`
+	Type RecordUpdateResponseOpenpgpkeyType `json:"type"`
+	JSON recordUpdateResponseOpenpgpkeyJSON `json:"-"`
 }
 
-// recordUpdateResponseDNSRecordsOpenpgpkeyRecordJSON contains the JSON metadata
-// for the struct [RecordUpdateResponseDNSRecordsOpenpgpkeyRecord]
-type recordUpdateResponseDNSRecordsOpenpgpkeyRecordJSON struct {
-	Comment     apijson.Field
+// recordUpdateResponseOpenpgpkeyJSON contains the JSON metadata for the struct
+// [RecordUpdateResponseOpenpgpkey]
+type recordUpdateResponseOpenpgpkeyJSON struct {
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordUpdateResponseDNSRecordsOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordUpdateResponseOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordUpdateResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
+func (r recordUpdateResponseOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordUpdateResponseDNSRecordsOpenpgpkeyRecord) implementsDNSRecordUpdateResponse() {}
+func (r RecordUpdateResponseOpenpgpkey) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
-type RecordUpdateResponseDNSRecordsOpenpgpkeyRecordType string
+type RecordUpdateResponseOpenpgpkeyType string
 
 const (
-	RecordUpdateResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordUpdateResponseDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordUpdateResponseOpenpgpkeyTypeOpenpgpkey RecordUpdateResponseOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordUpdateResponseDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordUpdateResponseOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordUpdateResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordUpdateResponseOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
@@ -3839,9 +3095,6 @@ func (r RecordUpdateResponseType) IsKnown() bool {
 }
 
 type RecordListResponse struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
@@ -3849,22 +3102,11 @@ type RecordListResponse struct {
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings"`
-	// This field can have the runtime type of [[]RecordTags].
-	Tags interface{} `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type  RecordListResponseType `json:"type"`
 	JSON  recordListResponseJSON `json:"-"`
@@ -3874,15 +3116,10 @@ type RecordListResponse struct {
 // recordListResponseJSON contains the JSON metadata for the struct
 // [RecordListResponse]
 type recordListResponseJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
 	Settings    apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -3907,10 +3144,9 @@ func (r *RecordListResponse) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
 // [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
 // [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord],
-// [dns.RecordListResponseDNSRecordsOpenpgpkeyRecord], [dns.PTRRecord],
-// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
-// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordListResponseOpenpgpkey],
+// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
+// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
 func (r RecordListResponse) AsUnion() RecordListResponseUnion {
 	return r.union
 }
@@ -3918,9 +3154,9 @@ func (r RecordListResponse) AsUnion() RecordListResponseUnion {
 // Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
 // [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
 // [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.RecordListResponseDNSRecordsOpenpgpkeyRecord],
-// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
-// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
+// [dns.NSRecord], [dns.RecordListResponseOpenpgpkey], [dns.PTRRecord],
+// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
+// [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
 type RecordListResponseUnion interface {
 	implementsDNSRecordListResponse()
 }
@@ -3928,150 +3164,152 @@ type RecordListResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordListResponseUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ARecord{}),
+			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AAAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AAAARecord{}),
+			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CAARecord{}),
+			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CERTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CERTRecord{}),
+			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CNAMERecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CNAMERecord{}),
+			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSKEYRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSKEYRecord{}),
+			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DSRecord{}),
+			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(HTTPSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(HTTPSRecord{}),
+			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(LOCRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LOCRecord{}),
+			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MXRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(MXRecord{}),
+			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NAPTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NAPTRRecord{}),
+			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NSRecord{}),
+			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordListResponseDNSRecordsOpenpgpkeyRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordListResponseOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(PTRRecord{}),
+			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SMIMEARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SMIMEARecord{}),
+			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SRVRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SRVRecord{}),
+			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SSHFPRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SSHFPRecord{}),
+			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SVCBRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SVCBRecord{}),
+			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TLSARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TLSARecord{}),
+			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TXTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TXTRecord{}),
+			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(URIRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(URIRecord{}),
+			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordListResponseDNSRecordsOpenpgpkeyRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
+type RecordListResponseOpenpgpkey struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
-	Type RecordListResponseDNSRecordsOpenpgpkeyRecordType `json:"type"`
-	JSON recordListResponseDNSRecordsOpenpgpkeyRecordJSON `json:"-"`
+	Type RecordListResponseOpenpgpkeyType `json:"type"`
+	JSON recordListResponseOpenpgpkeyJSON `json:"-"`
 }
 
-// recordListResponseDNSRecordsOpenpgpkeyRecordJSON contains the JSON metadata for
-// the struct [RecordListResponseDNSRecordsOpenpgpkeyRecord]
-type recordListResponseDNSRecordsOpenpgpkeyRecordJSON struct {
-	Comment     apijson.Field
+// recordListResponseOpenpgpkeyJSON contains the JSON metadata for the struct
+// [RecordListResponseOpenpgpkey]
+type recordListResponseOpenpgpkeyJSON struct {
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordListResponseDNSRecordsOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordListResponseOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordListResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
+func (r recordListResponseOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordListResponseDNSRecordsOpenpgpkeyRecord) implementsDNSRecordListResponse() {}
+func (r RecordListResponseOpenpgpkey) implementsDNSRecordListResponse() {}
 
 // Record type.
-type RecordListResponseDNSRecordsOpenpgpkeyRecordType string
+type RecordListResponseOpenpgpkeyType string
 
 const (
-	RecordListResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordListResponseDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordListResponseOpenpgpkeyTypeOpenpgpkey RecordListResponseOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordListResponseDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordListResponseOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordListResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordListResponseOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
@@ -4162,9 +3400,6 @@ func (r recordBatchResponseJSON) RawJSON() string {
 }
 
 type RecordBatchResponseDelete struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
@@ -4172,22 +3407,11 @@ type RecordBatchResponseDelete struct {
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings"`
-	// This field can have the runtime type of [[]RecordTags].
-	Tags interface{} `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type  RecordBatchResponseDeletesType `json:"type"`
 	JSON  recordBatchResponseDeleteJSON  `json:"-"`
@@ -4197,15 +3421,10 @@ type RecordBatchResponseDelete struct {
 // recordBatchResponseDeleteJSON contains the JSON metadata for the struct
 // [RecordBatchResponseDelete]
 type recordBatchResponseDeleteJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
 	Settings    apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -4230,10 +3449,9 @@ func (r *RecordBatchResponseDelete) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
 // [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
 // [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord],
-// [dns.RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecord], [dns.PTRRecord],
-// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
-// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordBatchResponseDeletesOpenpgpkey],
+// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
+// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
 func (r RecordBatchResponseDelete) AsUnion() RecordBatchResponseDeletesUnion {
 	return r.union
 }
@@ -4241,9 +3459,9 @@ func (r RecordBatchResponseDelete) AsUnion() RecordBatchResponseDeletesUnion {
 // Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
 // [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
 // [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecord],
-// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
-// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
+// [dns.NSRecord], [dns.RecordBatchResponseDeletesOpenpgpkey], [dns.PTRRecord],
+// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
+// [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
 type RecordBatchResponseDeletesUnion interface {
 	implementsDNSRecordBatchResponseDelete()
 }
@@ -4251,151 +3469,152 @@ type RecordBatchResponseDeletesUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordBatchResponseDeletesUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ARecord{}),
+			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AAAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AAAARecord{}),
+			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CAARecord{}),
+			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CERTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CERTRecord{}),
+			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CNAMERecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CNAMERecord{}),
+			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSKEYRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSKEYRecord{}),
+			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DSRecord{}),
+			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(HTTPSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(HTTPSRecord{}),
+			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(LOCRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LOCRecord{}),
+			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MXRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(MXRecord{}),
+			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NAPTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NAPTRRecord{}),
+			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NSRecord{}),
+			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordBatchResponseDeletesOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(PTRRecord{}),
+			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SMIMEARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SMIMEARecord{}),
+			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SRVRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SRVRecord{}),
+			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SSHFPRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SSHFPRecord{}),
+			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SVCBRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SVCBRecord{}),
+			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TLSARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TLSARecord{}),
+			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TXTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TXTRecord{}),
+			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(URIRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(URIRecord{}),
+			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
+type RecordBatchResponseDeletesOpenpgpkey struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
-	Type RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordType `json:"type"`
-	JSON recordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordJSON `json:"-"`
+	Type RecordBatchResponseDeletesOpenpgpkeyType `json:"type"`
+	JSON recordBatchResponseDeletesOpenpgpkeyJSON `json:"-"`
 }
 
-// recordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordJSON contains the JSON
-// metadata for the struct [RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecord]
-type recordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordJSON struct {
-	Comment     apijson.Field
+// recordBatchResponseDeletesOpenpgpkeyJSON contains the JSON metadata for the
+// struct [RecordBatchResponseDeletesOpenpgpkey]
+type recordBatchResponseDeletesOpenpgpkeyJSON struct {
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordBatchResponseDeletesOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
+func (r recordBatchResponseDeletesOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecord) implementsDNSRecordBatchResponseDelete() {
-}
+func (r RecordBatchResponseDeletesOpenpgpkey) implementsDNSRecordBatchResponseDelete() {}
 
 // Record type.
-type RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordType string
+type RecordBatchResponseDeletesOpenpgpkeyType string
 
 const (
-	RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordBatchResponseDeletesOpenpgpkeyTypeOpenpgpkey RecordBatchResponseDeletesOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordBatchResponseDeletesOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordBatchResponseDeletesOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
@@ -4437,9 +3656,6 @@ func (r RecordBatchResponseDeletesType) IsKnown() bool {
 }
 
 type RecordBatchResponsePatch struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
@@ -4447,22 +3663,11 @@ type RecordBatchResponsePatch struct {
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings"`
-	// This field can have the runtime type of [[]RecordTags].
-	Tags interface{} `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type  RecordBatchResponsePatchesType `json:"type"`
 	JSON  recordBatchResponsePatchJSON   `json:"-"`
@@ -4472,15 +3677,10 @@ type RecordBatchResponsePatch struct {
 // recordBatchResponsePatchJSON contains the JSON metadata for the struct
 // [RecordBatchResponsePatch]
 type recordBatchResponsePatchJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
 	Settings    apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -4505,10 +3705,9 @@ func (r *RecordBatchResponsePatch) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
 // [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
 // [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord],
-// [dns.RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecord], [dns.PTRRecord],
-// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
-// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordBatchResponsePatchesOpenpgpkey],
+// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
+// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
 func (r RecordBatchResponsePatch) AsUnion() RecordBatchResponsePatchesUnion {
 	return r.union
 }
@@ -4516,9 +3715,9 @@ func (r RecordBatchResponsePatch) AsUnion() RecordBatchResponsePatchesUnion {
 // Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
 // [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
 // [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecord],
-// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
-// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
+// [dns.NSRecord], [dns.RecordBatchResponsePatchesOpenpgpkey], [dns.PTRRecord],
+// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
+// [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
 type RecordBatchResponsePatchesUnion interface {
 	implementsDNSRecordBatchResponsePatch()
 }
@@ -4526,151 +3725,152 @@ type RecordBatchResponsePatchesUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordBatchResponsePatchesUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ARecord{}),
+			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AAAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AAAARecord{}),
+			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CAARecord{}),
+			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CERTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CERTRecord{}),
+			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CNAMERecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CNAMERecord{}),
+			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSKEYRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSKEYRecord{}),
+			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DSRecord{}),
+			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(HTTPSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(HTTPSRecord{}),
+			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(LOCRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LOCRecord{}),
+			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MXRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(MXRecord{}),
+			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NAPTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NAPTRRecord{}),
+			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NSRecord{}),
+			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordBatchResponsePatchesOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(PTRRecord{}),
+			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SMIMEARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SMIMEARecord{}),
+			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SRVRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SRVRecord{}),
+			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SSHFPRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SSHFPRecord{}),
+			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SVCBRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SVCBRecord{}),
+			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TLSARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TLSARecord{}),
+			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TXTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TXTRecord{}),
+			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(URIRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(URIRecord{}),
+			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
+type RecordBatchResponsePatchesOpenpgpkey struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
-	Type RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordType `json:"type"`
-	JSON recordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordJSON `json:"-"`
+	Type RecordBatchResponsePatchesOpenpgpkeyType `json:"type"`
+	JSON recordBatchResponsePatchesOpenpgpkeyJSON `json:"-"`
 }
 
-// recordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordJSON contains the JSON
-// metadata for the struct [RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecord]
-type recordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordJSON struct {
-	Comment     apijson.Field
+// recordBatchResponsePatchesOpenpgpkeyJSON contains the JSON metadata for the
+// struct [RecordBatchResponsePatchesOpenpgpkey]
+type recordBatchResponsePatchesOpenpgpkeyJSON struct {
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordBatchResponsePatchesOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
+func (r recordBatchResponsePatchesOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecord) implementsDNSRecordBatchResponsePatch() {
-}
+func (r RecordBatchResponsePatchesOpenpgpkey) implementsDNSRecordBatchResponsePatch() {}
 
 // Record type.
-type RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordType string
+type RecordBatchResponsePatchesOpenpgpkeyType string
 
 const (
-	RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordBatchResponsePatchesOpenpgpkeyTypeOpenpgpkey RecordBatchResponsePatchesOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordBatchResponsePatchesOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordBatchResponsePatchesOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
@@ -4712,9 +3912,6 @@ func (r RecordBatchResponsePatchesType) IsKnown() bool {
 }
 
 type RecordBatchResponsePost struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
@@ -4722,22 +3919,11 @@ type RecordBatchResponsePost struct {
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings"`
-	// This field can have the runtime type of [[]RecordTags].
-	Tags interface{} `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type  RecordBatchResponsePostsType `json:"type"`
 	JSON  recordBatchResponsePostJSON  `json:"-"`
@@ -4747,15 +3933,10 @@ type RecordBatchResponsePost struct {
 // recordBatchResponsePostJSON contains the JSON metadata for the struct
 // [RecordBatchResponsePost]
 type recordBatchResponsePostJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
 	Settings    apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -4780,10 +3961,9 @@ func (r *RecordBatchResponsePost) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
 // [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
 // [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord],
-// [dns.RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecord], [dns.PTRRecord],
-// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
-// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordBatchResponsePostsOpenpgpkey],
+// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
+// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
 func (r RecordBatchResponsePost) AsUnion() RecordBatchResponsePostsUnion {
 	return r.union
 }
@@ -4791,9 +3971,9 @@ func (r RecordBatchResponsePost) AsUnion() RecordBatchResponsePostsUnion {
 // Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
 // [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
 // [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecord],
-// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
-// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
+// [dns.NSRecord], [dns.RecordBatchResponsePostsOpenpgpkey], [dns.PTRRecord],
+// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
+// [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
 type RecordBatchResponsePostsUnion interface {
 	implementsDNSRecordBatchResponsePost()
 }
@@ -4801,150 +3981,152 @@ type RecordBatchResponsePostsUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordBatchResponsePostsUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ARecord{}),
+			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AAAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AAAARecord{}),
+			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CAARecord{}),
+			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CERTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CERTRecord{}),
+			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CNAMERecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CNAMERecord{}),
+			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSKEYRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSKEYRecord{}),
+			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DSRecord{}),
+			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(HTTPSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(HTTPSRecord{}),
+			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(LOCRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LOCRecord{}),
+			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MXRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(MXRecord{}),
+			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NAPTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NAPTRRecord{}),
+			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NSRecord{}),
+			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordBatchResponsePostsOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(PTRRecord{}),
+			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SMIMEARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SMIMEARecord{}),
+			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SRVRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SRVRecord{}),
+			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SSHFPRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SSHFPRecord{}),
+			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SVCBRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SVCBRecord{}),
+			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TLSARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TLSARecord{}),
+			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TXTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TXTRecord{}),
+			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(URIRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(URIRecord{}),
+			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
+type RecordBatchResponsePostsOpenpgpkey struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
-	Type RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordType `json:"type"`
-	JSON recordBatchResponsePostsDNSRecordsOpenpgpkeyRecordJSON `json:"-"`
+	Type RecordBatchResponsePostsOpenpgpkeyType `json:"type"`
+	JSON recordBatchResponsePostsOpenpgpkeyJSON `json:"-"`
 }
 
-// recordBatchResponsePostsDNSRecordsOpenpgpkeyRecordJSON contains the JSON
-// metadata for the struct [RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecord]
-type recordBatchResponsePostsDNSRecordsOpenpgpkeyRecordJSON struct {
-	Comment     apijson.Field
+// recordBatchResponsePostsOpenpgpkeyJSON contains the JSON metadata for the struct
+// [RecordBatchResponsePostsOpenpgpkey]
+type recordBatchResponsePostsOpenpgpkeyJSON struct {
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordBatchResponsePostsOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordBatchResponsePostsDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
+func (r recordBatchResponsePostsOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecord) implementsDNSRecordBatchResponsePost() {}
+func (r RecordBatchResponsePostsOpenpgpkey) implementsDNSRecordBatchResponsePost() {}
 
 // Record type.
-type RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordType string
+type RecordBatchResponsePostsOpenpgpkeyType string
 
 const (
-	RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordBatchResponsePostsOpenpgpkeyTypeOpenpgpkey RecordBatchResponsePostsOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordBatchResponsePostsOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordBatchResponsePostsOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
@@ -4986,9 +4168,6 @@ func (r RecordBatchResponsePostsType) IsKnown() bool {
 }
 
 type RecordBatchResponsePut struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
@@ -4996,22 +4175,11 @@ type RecordBatchResponsePut struct {
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings"`
-	// This field can have the runtime type of [[]RecordTags].
-	Tags interface{} `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type  RecordBatchResponsePutsType `json:"type"`
 	JSON  recordBatchResponsePutJSON  `json:"-"`
@@ -5021,15 +4189,10 @@ type RecordBatchResponsePut struct {
 // recordBatchResponsePutJSON contains the JSON metadata for the struct
 // [RecordBatchResponsePut]
 type recordBatchResponsePutJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
 	Settings    apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -5054,10 +4217,9 @@ func (r *RecordBatchResponsePut) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
 // [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
 // [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord],
-// [dns.RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecord], [dns.PTRRecord],
-// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
-// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordBatchResponsePutsOpenpgpkey],
+// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
+// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
 func (r RecordBatchResponsePut) AsUnion() RecordBatchResponsePutsUnion {
 	return r.union
 }
@@ -5065,9 +4227,9 @@ func (r RecordBatchResponsePut) AsUnion() RecordBatchResponsePutsUnion {
 // Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
 // [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
 // [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecord],
-// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
-// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
+// [dns.NSRecord], [dns.RecordBatchResponsePutsOpenpgpkey], [dns.PTRRecord],
+// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
+// [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
 type RecordBatchResponsePutsUnion interface {
 	implementsDNSRecordBatchResponsePut()
 }
@@ -5075,150 +4237,152 @@ type RecordBatchResponsePutsUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordBatchResponsePutsUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ARecord{}),
+			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AAAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AAAARecord{}),
+			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CAARecord{}),
+			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CERTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CERTRecord{}),
+			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CNAMERecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CNAMERecord{}),
+			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSKEYRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSKEYRecord{}),
+			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DSRecord{}),
+			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(HTTPSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(HTTPSRecord{}),
+			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(LOCRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LOCRecord{}),
+			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MXRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(MXRecord{}),
+			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NAPTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NAPTRRecord{}),
+			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NSRecord{}),
+			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordBatchResponsePutsOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(PTRRecord{}),
+			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SMIMEARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SMIMEARecord{}),
+			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SRVRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SRVRecord{}),
+			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SSHFPRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SSHFPRecord{}),
+			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SVCBRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SVCBRecord{}),
+			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TLSARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TLSARecord{}),
+			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TXTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TXTRecord{}),
+			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(URIRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(URIRecord{}),
+			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
+type RecordBatchResponsePutsOpenpgpkey struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
-	Type RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordType `json:"type"`
-	JSON recordBatchResponsePutsDNSRecordsOpenpgpkeyRecordJSON `json:"-"`
+	Type RecordBatchResponsePutsOpenpgpkeyType `json:"type"`
+	JSON recordBatchResponsePutsOpenpgpkeyJSON `json:"-"`
 }
 
-// recordBatchResponsePutsDNSRecordsOpenpgpkeyRecordJSON contains the JSON metadata
-// for the struct [RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecord]
-type recordBatchResponsePutsDNSRecordsOpenpgpkeyRecordJSON struct {
-	Comment     apijson.Field
+// recordBatchResponsePutsOpenpgpkeyJSON contains the JSON metadata for the struct
+// [RecordBatchResponsePutsOpenpgpkey]
+type recordBatchResponsePutsOpenpgpkeyJSON struct {
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordBatchResponsePutsOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordBatchResponsePutsDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
+func (r recordBatchResponsePutsOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecord) implementsDNSRecordBatchResponsePut() {}
+func (r RecordBatchResponsePutsOpenpgpkey) implementsDNSRecordBatchResponsePut() {}
 
 // Record type.
-type RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordType string
+type RecordBatchResponsePutsOpenpgpkeyType string
 
 const (
-	RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordBatchResponsePutsOpenpgpkeyTypeOpenpgpkey RecordBatchResponsePutsOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordBatchResponsePutsOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordBatchResponsePutsOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
@@ -5260,9 +4424,6 @@ func (r RecordBatchResponsePutsType) IsKnown() bool {
 }
 
 type RecordEditResponse struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
@@ -5270,22 +4431,11 @@ type RecordEditResponse struct {
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings"`
-	// This field can have the runtime type of [[]RecordTags].
-	Tags interface{} `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type  RecordEditResponseType `json:"type"`
 	JSON  recordEditResponseJSON `json:"-"`
@@ -5295,15 +4445,10 @@ type RecordEditResponse struct {
 // recordEditResponseJSON contains the JSON metadata for the struct
 // [RecordEditResponse]
 type recordEditResponseJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
 	Settings    apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -5328,10 +4473,9 @@ func (r *RecordEditResponse) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
 // [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
 // [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord],
-// [dns.RecordEditResponseDNSRecordsOpenpgpkeyRecord], [dns.PTRRecord],
-// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
-// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordEditResponseOpenpgpkey],
+// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
+// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
 func (r RecordEditResponse) AsUnion() RecordEditResponseUnion {
 	return r.union
 }
@@ -5339,9 +4483,9 @@ func (r RecordEditResponse) AsUnion() RecordEditResponseUnion {
 // Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
 // [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
 // [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.RecordEditResponseDNSRecordsOpenpgpkeyRecord],
-// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
-// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
+// [dns.NSRecord], [dns.RecordEditResponseOpenpgpkey], [dns.PTRRecord],
+// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
+// [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
 type RecordEditResponseUnion interface {
 	implementsDNSRecordEditResponse()
 }
@@ -5349,150 +4493,152 @@ type RecordEditResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordEditResponseUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ARecord{}),
+			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AAAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AAAARecord{}),
+			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CAARecord{}),
+			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CERTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CERTRecord{}),
+			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CNAMERecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CNAMERecord{}),
+			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSKEYRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSKEYRecord{}),
+			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DSRecord{}),
+			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(HTTPSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(HTTPSRecord{}),
+			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(LOCRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LOCRecord{}),
+			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MXRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(MXRecord{}),
+			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NAPTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NAPTRRecord{}),
+			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NSRecord{}),
+			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordEditResponseDNSRecordsOpenpgpkeyRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordEditResponseOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(PTRRecord{}),
+			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SMIMEARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SMIMEARecord{}),
+			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SRVRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SRVRecord{}),
+			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SSHFPRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SSHFPRecord{}),
+			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SVCBRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SVCBRecord{}),
+			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TLSARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TLSARecord{}),
+			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TXTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TXTRecord{}),
+			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(URIRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(URIRecord{}),
+			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordEditResponseDNSRecordsOpenpgpkeyRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
+type RecordEditResponseOpenpgpkey struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
-	Type RecordEditResponseDNSRecordsOpenpgpkeyRecordType `json:"type"`
-	JSON recordEditResponseDNSRecordsOpenpgpkeyRecordJSON `json:"-"`
+	Type RecordEditResponseOpenpgpkeyType `json:"type"`
+	JSON recordEditResponseOpenpgpkeyJSON `json:"-"`
 }
 
-// recordEditResponseDNSRecordsOpenpgpkeyRecordJSON contains the JSON metadata for
-// the struct [RecordEditResponseDNSRecordsOpenpgpkeyRecord]
-type recordEditResponseDNSRecordsOpenpgpkeyRecordJSON struct {
-	Comment     apijson.Field
+// recordEditResponseOpenpgpkeyJSON contains the JSON metadata for the struct
+// [RecordEditResponseOpenpgpkey]
+type recordEditResponseOpenpgpkeyJSON struct {
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordEditResponseDNSRecordsOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordEditResponseOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordEditResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
+func (r recordEditResponseOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordEditResponseDNSRecordsOpenpgpkeyRecord) implementsDNSRecordEditResponse() {}
+func (r RecordEditResponseOpenpgpkey) implementsDNSRecordEditResponse() {}
 
 // Record type.
-type RecordEditResponseDNSRecordsOpenpgpkeyRecordType string
+type RecordEditResponseOpenpgpkeyType string
 
 const (
-	RecordEditResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordEditResponseDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordEditResponseOpenpgpkeyTypeOpenpgpkey RecordEditResponseOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordEditResponseDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordEditResponseOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordEditResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordEditResponseOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
@@ -5534,9 +4680,6 @@ func (r RecordEditResponseType) IsKnown() bool {
 }
 
 type RecordGetResponse struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
 	// A valid IPv4 address.
 	Content string `json:"content" format:"ipv4"`
 	// This field can have the runtime type of [CAARecordData], [CERTRecordData],
@@ -5544,22 +4687,11 @@ type RecordGetResponse struct {
 	// [NAPTRRecordData], [SMIMEARecordData], [SRVRecordData], [SSHFPRecordData],
 	// [SVCBRecordData], [TLSARecordData], [URIRecordData].
 	Data interface{} `json:"data"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
 	// This field can have the runtime type of [CNAMERecordSettings].
 	Settings interface{} `json:"settings"`
-	// This field can have the runtime type of [[]RecordTags].
-	Tags interface{} `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
 	Type  RecordGetResponseType `json:"type"`
 	JSON  recordGetResponseJSON `json:"-"`
@@ -5569,15 +4701,10 @@ type RecordGetResponse struct {
 // recordGetResponseJSON contains the JSON metadata for the struct
 // [RecordGetResponse]
 type recordGetResponseJSON struct {
-	Comment     apijson.Field
 	Content     apijson.Field
 	Data        apijson.Field
-	Name        apijson.Field
 	Priority    apijson.Field
-	Proxied     apijson.Field
 	Settings    apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -5602,10 +4729,9 @@ func (r *RecordGetResponse) UnmarshalJSON(data []byte) (err error) {
 // Possible runtime types of the union are [dns.ARecord], [dns.AAAARecord],
 // [dns.CAARecord], [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord],
 // [dns.DSRecord], [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord],
-// [dns.NAPTRRecord], [dns.NSRecord],
-// [dns.RecordGetResponseDNSRecordsOpenpgpkeyRecord], [dns.PTRRecord],
-// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
-// [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
+// [dns.NAPTRRecord], [dns.NSRecord], [dns.RecordGetResponseOpenpgpkey],
+// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
+// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord], [dns.URIRecord].
 func (r RecordGetResponse) AsUnion() RecordGetResponseUnion {
 	return r.union
 }
@@ -5613,9 +4739,9 @@ func (r RecordGetResponse) AsUnion() RecordGetResponseUnion {
 // Union satisfied by [dns.ARecord], [dns.AAAARecord], [dns.CAARecord],
 // [dns.CERTRecord], [dns.CNAMERecord], [dns.DNSKEYRecord], [dns.DSRecord],
 // [dns.HTTPSRecord], [dns.LOCRecord], [dns.MXRecord], [dns.NAPTRRecord],
-// [dns.NSRecord], [dns.RecordGetResponseDNSRecordsOpenpgpkeyRecord],
-// [dns.PTRRecord], [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord],
-// [dns.SVCBRecord], [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
+// [dns.NSRecord], [dns.RecordGetResponseOpenpgpkey], [dns.PTRRecord],
+// [dns.SMIMEARecord], [dns.SRVRecord], [dns.SSHFPRecord], [dns.SVCBRecord],
+// [dns.TLSARecord], [dns.TXTRecord] or [dns.URIRecord].
 type RecordGetResponseUnion interface {
 	implementsDNSRecordGetResponse()
 }
@@ -5623,150 +4749,152 @@ type RecordGetResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*RecordGetResponseUnion)(nil)).Elem(),
-		"",
+		"type",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(ARecord{}),
+			DiscriminatorValue: "A",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AAAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AAAARecord{}),
+			DiscriminatorValue: "AAAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CAARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CAARecord{}),
+			DiscriminatorValue: "CAA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CERTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CERTRecord{}),
+			DiscriminatorValue: "CERT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CNAMERecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(CNAMERecord{}),
+			DiscriminatorValue: "CNAME",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DNSKEYRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSKEYRecord{}),
+			DiscriminatorValue: "DNSKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DSRecord{}),
+			DiscriminatorValue: "DS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(HTTPSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(HTTPSRecord{}),
+			DiscriminatorValue: "HTTPS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(LOCRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(LOCRecord{}),
+			DiscriminatorValue: "LOC",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(MXRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(MXRecord{}),
+			DiscriminatorValue: "MX",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NAPTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NAPTRRecord{}),
+			DiscriminatorValue: "NAPTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(NSRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(NSRecord{}),
+			DiscriminatorValue: "NS",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(RecordGetResponseDNSRecordsOpenpgpkeyRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RecordGetResponseOpenpgpkey{}),
+			DiscriminatorValue: "OPENPGPKEY",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(PTRRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(PTRRecord{}),
+			DiscriminatorValue: "PTR",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SMIMEARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SMIMEARecord{}),
+			DiscriminatorValue: "SMIMEA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SRVRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SRVRecord{}),
+			DiscriminatorValue: "SRV",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SSHFPRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SSHFPRecord{}),
+			DiscriminatorValue: "SSHFP",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SVCBRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SVCBRecord{}),
+			DiscriminatorValue: "SVCB",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TLSARecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TLSARecord{}),
+			DiscriminatorValue: "TLSA",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(TXTRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(TXTRecord{}),
+			DiscriminatorValue: "TXT",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(URIRecord{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(URIRecord{}),
+			DiscriminatorValue: "URI",
 		},
 	)
 }
 
-type RecordGetResponseDNSRecordsOpenpgpkeyRecord struct {
-	// Comments or notes about the DNS record. This field has no effect on DNS
-	// responses.
-	Comment string `json:"comment"`
+type RecordGetResponseOpenpgpkey struct {
 	// A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
 	Content string `json:"content"`
-	// DNS record name (or @ for the zone apex) in Punycode.
-	Name string `json:"name"`
-	// Whether the record is receiving the performance and security benefits of
-	// Cloudflare.
-	Proxied bool `json:"proxied"`
-	// Custom tags for the DNS record. This field has no effect on DNS responses.
-	Tags []RecordTags `json:"tags"`
-	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
-	// Value must be between 60 and 86400, with the minimum reduced to 30 for
-	// Enterprise zones.
-	TTL TTL `json:"ttl"`
 	// Record type.
-	Type RecordGetResponseDNSRecordsOpenpgpkeyRecordType `json:"type"`
-	JSON recordGetResponseDNSRecordsOpenpgpkeyRecordJSON `json:"-"`
+	Type RecordGetResponseOpenpgpkeyType `json:"type"`
+	JSON recordGetResponseOpenpgpkeyJSON `json:"-"`
 }
 
-// recordGetResponseDNSRecordsOpenpgpkeyRecordJSON contains the JSON metadata for
-// the struct [RecordGetResponseDNSRecordsOpenpgpkeyRecord]
-type recordGetResponseDNSRecordsOpenpgpkeyRecordJSON struct {
-	Comment     apijson.Field
+// recordGetResponseOpenpgpkeyJSON contains the JSON metadata for the struct
+// [RecordGetResponseOpenpgpkey]
+type recordGetResponseOpenpgpkeyJSON struct {
 	Content     apijson.Field
-	Name        apijson.Field
-	Proxied     apijson.Field
-	Tags        apijson.Field
-	TTL         apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RecordGetResponseDNSRecordsOpenpgpkeyRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *RecordGetResponseOpenpgpkey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r recordGetResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
+func (r recordGetResponseOpenpgpkeyJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r RecordGetResponseDNSRecordsOpenpgpkeyRecord) implementsDNSRecordGetResponse() {}
+func (r RecordGetResponseOpenpgpkey) implementsDNSRecordGetResponse() {}
 
 // Record type.
-type RecordGetResponseDNSRecordsOpenpgpkeyRecordType string
+type RecordGetResponseOpenpgpkeyType string
 
 const (
-	RecordGetResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey RecordGetResponseDNSRecordsOpenpgpkeyRecordType = "OPENPGPKEY"
+	RecordGetResponseOpenpgpkeyTypeOpenpgpkey RecordGetResponseOpenpgpkeyType = "OPENPGPKEY"
 )
 
-func (r RecordGetResponseDNSRecordsOpenpgpkeyRecordType) IsKnown() bool {
+func (r RecordGetResponseOpenpgpkeyType) IsKnown() bool {
 	switch r {
-	case RecordGetResponseDNSRecordsOpenpgpkeyRecordTypeOpenpgpkey:
+	case RecordGetResponseOpenpgpkeyTypeOpenpgpkey:
 		return true
 	}
 	return false
