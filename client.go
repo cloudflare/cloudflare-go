@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/cloudflare/cloudflare-go/v3/abuse_reports"
 	"github.com/cloudflare/cloudflare-go/v3/accounts"
 	"github.com/cloudflare/cloudflare-go/v3/acm"
 	"github.com/cloudflare/cloudflare-go/v3/addressing"
@@ -184,6 +185,7 @@ type Client struct {
 	ResourceSharing             *resource_sharing.ResourceSharingService
 	LeakedCredentialChecks      *leaked_credential_checks.LeakedCredentialCheckService
 	ContentScanning             *content_scanning.ContentScanningService
+	AbuseReports                *abuse_reports.AbuseReportService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -293,6 +295,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.ResourceSharing = resource_sharing.NewResourceSharingService(opts...)
 	r.LeakedCredentialChecks = leaked_credential_checks.NewLeakedCredentialCheckService(opts...)
 	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
+	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
 
 	return
 }
