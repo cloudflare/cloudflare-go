@@ -431,8 +431,8 @@ Response Types:
 Methods:
 
 - <code title="post /zones/{zone_id}/hold">client.Zones.Holds.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#HoldService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#HoldNewParams">HoldNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#ZoneHold">ZoneHold</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="patch /zones/{zone_id}/hold">client.Zones.Holds.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#HoldService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#HoldUpdateParams">HoldUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#ZoneHold">ZoneHold</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="delete /zones/{zone_id}/hold">client.Zones.Holds.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#HoldService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#HoldDeleteParams">HoldDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#ZoneHold">ZoneHold</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /zones/{zone_id}/hold">client.Zones.Holds.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#HoldService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#HoldEditParams">HoldEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#ZoneHold">ZoneHold</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/hold">client.Zones.Holds.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#HoldService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#HoldGetParams">HoldGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones">zones</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/zones#ZoneHold">ZoneHold</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Subscriptions
@@ -1019,13 +1019,11 @@ Params Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#NSRecordParam">NSRecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#PTRRecordParam">PTRRecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#RecordUnionParam">RecordUnionParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#RecordTagsParam">RecordTagsParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#SMIMEARecordParam">SMIMEARecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#SRVRecordParam">SRVRecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#SSHFPRecordParam">SSHFPRecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#SVCBRecordParam">SVCBRecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#TLSARecordParam">TLSARecordParam</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#TTL">TTL</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#TXTRecordParam">TXTRecordParam</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#URIRecordParam">URIRecordParam</a>
 
@@ -1045,13 +1043,11 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#NSRecord">NSRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#PTRRecord">PTRRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#RecordProcessTiming">RecordProcessTiming</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#RecordTags">RecordTags</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#SMIMEARecord">SMIMEARecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#SRVRecord">SRVRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#SSHFPRecord">SSHFPRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#SVCBRecord">SVCBRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#TLSARecord">TLSARecord</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#TTL">TTL</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#TXTRecord">TXTRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#URIRecord">URIRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#RecordNewResponse">RecordNewResponse</a>
@@ -2154,6 +2150,28 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#ServiceBinding">ServiceBinding</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#SingleStepMigration">SingleStepMigration</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#SteppedMigration">SteppedMigration</a>
+
+## AI
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIRunResponseUnion">AIRunResponseUnion</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/ai/run/{model_name}">client.Workers.AI.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIService.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, modelName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIRunParams">AIRunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIRunResponseUnion">AIRunResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+### Models
+
+#### Schema
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIModelSchemaGetResponse">AIModelSchemaGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/ai/models/schema">client.Workers.AI.Models.Schema.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIModelSchemaService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIModelSchemaGetParams">AIModelSchemaGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers">workers</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/workers#AIModelSchemaGetResponse">AIModelSchemaGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Assets
 
@@ -7586,25 +7604,3 @@ Methods:
 Methods:
 
 - <code title="post /accounts/{account_id}/v1/abuse-reports/{report_type}">client.AbuseReports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports#AbuseReportService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, reportType <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports#AbuseReportNewParamsReportType">AbuseReportNewParamsReportType</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports#AbuseReportNewParams">AbuseReportNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-# AI
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#AIRunResponseUnion">AIRunResponseUnion</a>
-
-Methods:
-
-- <code title="post /accounts/{account_id}/ai/run/{model_name}">client.AI.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#AIService.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, modelName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#AIRunParams">AIRunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#AIRunResponseUnion">AIRunResponseUnion</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-## Models
-
-### Schema
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#ModelSchemaGetResponse">ModelSchemaGetResponse</a>
-
-Methods:
-
-- <code title="get /accounts/{account_id}/ai/models/schema">client.AI.Models.Schema.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#ModelSchemaService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#ModelSchemaGetParams">ModelSchemaGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai">ai</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/ai#ModelSchemaGetResponse">ModelSchemaGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
