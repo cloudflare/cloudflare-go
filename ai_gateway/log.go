@@ -412,6 +412,7 @@ func (r LogListParamsFilter) URLQuery() (v url.Values) {
 type LogListParamsFiltersKey string
 
 const (
+	LogListParamsFiltersKeyID                  LogListParamsFiltersKey = "id"
 	LogListParamsFiltersKeyCreatedAt           LogListParamsFiltersKey = "created_at"
 	LogListParamsFiltersKeyRequestContentType  LogListParamsFiltersKey = "request_content_type"
 	LogListParamsFiltersKeyResponseContentType LogListParamsFiltersKey = "response_content_type"
@@ -426,11 +427,15 @@ const (
 	LogListParamsFiltersKeyTokensOut           LogListParamsFiltersKey = "tokens_out"
 	LogListParamsFiltersKeyDuration            LogListParamsFiltersKey = "duration"
 	LogListParamsFiltersKeyFeedback            LogListParamsFiltersKey = "feedback"
+	LogListParamsFiltersKeyEventID             LogListParamsFiltersKey = "event_id"
+	LogListParamsFiltersKeyRequestType         LogListParamsFiltersKey = "request_type"
+	LogListParamsFiltersKeyMetadataKey         LogListParamsFiltersKey = "metadata.key"
+	LogListParamsFiltersKeyMetadataValue       LogListParamsFiltersKey = "metadata.value"
 )
 
 func (r LogListParamsFiltersKey) IsKnown() bool {
 	switch r {
-	case LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyModelType, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback:
+	case LogListParamsFiltersKeyID, LogListParamsFiltersKeyCreatedAt, LogListParamsFiltersKeyRequestContentType, LogListParamsFiltersKeyResponseContentType, LogListParamsFiltersKeySuccess, LogListParamsFiltersKeyCached, LogListParamsFiltersKeyProvider, LogListParamsFiltersKeyModel, LogListParamsFiltersKeyModelType, LogListParamsFiltersKeyCost, LogListParamsFiltersKeyTokens, LogListParamsFiltersKeyTokensIn, LogListParamsFiltersKeyTokensOut, LogListParamsFiltersKeyDuration, LogListParamsFiltersKeyFeedback, LogListParamsFiltersKeyEventID, LogListParamsFiltersKeyRequestType, LogListParamsFiltersKeyMetadataKey, LogListParamsFiltersKeyMetadataValue:
 		return true
 	}
 	return false
@@ -526,6 +531,7 @@ func (r LogDeleteParamsFilter) URLQuery() (v url.Values) {
 type LogDeleteParamsFiltersKey string
 
 const (
+	LogDeleteParamsFiltersKeyID                  LogDeleteParamsFiltersKey = "id"
 	LogDeleteParamsFiltersKeyCreatedAt           LogDeleteParamsFiltersKey = "created_at"
 	LogDeleteParamsFiltersKeyRequestContentType  LogDeleteParamsFiltersKey = "request_content_type"
 	LogDeleteParamsFiltersKeyResponseContentType LogDeleteParamsFiltersKey = "response_content_type"
@@ -540,11 +546,15 @@ const (
 	LogDeleteParamsFiltersKeyTokensOut           LogDeleteParamsFiltersKey = "tokens_out"
 	LogDeleteParamsFiltersKeyDuration            LogDeleteParamsFiltersKey = "duration"
 	LogDeleteParamsFiltersKeyFeedback            LogDeleteParamsFiltersKey = "feedback"
+	LogDeleteParamsFiltersKeyEventID             LogDeleteParamsFiltersKey = "event_id"
+	LogDeleteParamsFiltersKeyRequestType         LogDeleteParamsFiltersKey = "request_type"
+	LogDeleteParamsFiltersKeyMetadataKey         LogDeleteParamsFiltersKey = "metadata.key"
+	LogDeleteParamsFiltersKeyMetadataValue       LogDeleteParamsFiltersKey = "metadata.value"
 )
 
 func (r LogDeleteParamsFiltersKey) IsKnown() bool {
 	switch r {
-	case LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyModelType, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback:
+	case LogDeleteParamsFiltersKeyID, LogDeleteParamsFiltersKeyCreatedAt, LogDeleteParamsFiltersKeyRequestContentType, LogDeleteParamsFiltersKeyResponseContentType, LogDeleteParamsFiltersKeySuccess, LogDeleteParamsFiltersKeyCached, LogDeleteParamsFiltersKeyProvider, LogDeleteParamsFiltersKeyModel, LogDeleteParamsFiltersKeyModelType, LogDeleteParamsFiltersKeyCost, LogDeleteParamsFiltersKeyTokens, LogDeleteParamsFiltersKeyTokensIn, LogDeleteParamsFiltersKeyTokensOut, LogDeleteParamsFiltersKeyDuration, LogDeleteParamsFiltersKeyFeedback, LogDeleteParamsFiltersKeyEventID, LogDeleteParamsFiltersKeyRequestType, LogDeleteParamsFiltersKeyMetadataKey, LogDeleteParamsFiltersKeyMetadataValue:
 		return true
 	}
 	return false
