@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package workers
+package ai
 
 import (
 	"context"
@@ -16,28 +16,28 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-// AIModelSchemaService contains methods and other services that help with
+// ModelSchemaService contains methods and other services that help with
 // interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAIModelSchemaService] method instead.
-type AIModelSchemaService struct {
+// the [NewModelSchemaService] method instead.
+type ModelSchemaService struct {
 	Options []option.RequestOption
 }
 
-// NewAIModelSchemaService generates a new service that applies the given options
-// to each request. These options are applied after the parent client's options (if
+// NewModelSchemaService generates a new service that applies the given options to
+// each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewAIModelSchemaService(opts ...option.RequestOption) (r *AIModelSchemaService) {
-	r = &AIModelSchemaService{}
+func NewModelSchemaService(opts ...option.RequestOption) (r *ModelSchemaService) {
+	r = &ModelSchemaService{}
 	r.Options = opts
 	return
 }
 
 // Get Model Schema
-func (r *AIModelSchemaService) Get(ctx context.Context, params AIModelSchemaGetParams, opts ...option.RequestOption) (res *AIModelSchemaGetResponse, err error) {
-	var env AIModelSchemaGetResponseEnvelope
+func (r *ModelSchemaService) Get(ctx context.Context, params ModelSchemaGetParams, opts ...option.RequestOption) (res *ModelSchemaGetResponse, err error) {
+	var env ModelSchemaGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -52,41 +52,41 @@ func (r *AIModelSchemaService) Get(ctx context.Context, params AIModelSchemaGetP
 	return
 }
 
-type AIModelSchemaGetResponse = interface{}
+type ModelSchemaGetResponse = interface{}
 
-type AIModelSchemaGetParams struct {
+type ModelSchemaGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Model Name
 	Model param.Field[string] `query:"model,required"`
 }
 
-// URLQuery serializes [AIModelSchemaGetParams]'s query parameters as `url.Values`.
-func (r AIModelSchemaGetParams) URLQuery() (v url.Values) {
+// URLQuery serializes [ModelSchemaGetParams]'s query parameters as `url.Values`.
+func (r ModelSchemaGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
 }
 
-type AIModelSchemaGetResponseEnvelope struct {
-	Result  AIModelSchemaGetResponse             `json:"result,required"`
-	Success bool                                 `json:"success,required"`
-	JSON    aiModelSchemaGetResponseEnvelopeJSON `json:"-"`
+type ModelSchemaGetResponseEnvelope struct {
+	Result  ModelSchemaGetResponse             `json:"result,required"`
+	Success bool                               `json:"success,required"`
+	JSON    modelSchemaGetResponseEnvelopeJSON `json:"-"`
 }
 
-// aiModelSchemaGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AIModelSchemaGetResponseEnvelope]
-type aiModelSchemaGetResponseEnvelopeJSON struct {
+// modelSchemaGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ModelSchemaGetResponseEnvelope]
+type modelSchemaGetResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AIModelSchemaGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ModelSchemaGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aiModelSchemaGetResponseEnvelopeJSON) RawJSON() string {
+func (r modelSchemaGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

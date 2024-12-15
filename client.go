@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/accounts"
 	"github.com/cloudflare/cloudflare-go/v3/acm"
 	"github.com/cloudflare/cloudflare-go/v3/addressing"
+	"github.com/cloudflare/cloudflare-go/v3/ai"
 	"github.com/cloudflare/cloudflare-go/v3/ai_gateway"
 	"github.com/cloudflare/cloudflare-go/v3/alerting"
 	"github.com/cloudflare/cloudflare-go/v3/api_gateway"
@@ -186,6 +187,7 @@ type Client struct {
 	LeakedCredentialChecks      *leaked_credential_checks.LeakedCredentialCheckService
 	ContentScanning             *content_scanning.ContentScanningService
 	AbuseReports                *abuse_reports.AbuseReportService
+	AI                          *ai.AIService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -296,6 +298,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.LeakedCredentialChecks = leaked_credential_checks.NewLeakedCredentialCheckService(opts...)
 	r.ContentScanning = content_scanning.NewContentScanningService(opts...)
 	r.AbuseReports = abuse_reports.NewAbuseReportService(opts...)
+	r.AI = ai.NewAIService(opts...)
 
 	return
 }
