@@ -126,6 +126,7 @@ func (UnionInt) ImplementsRulesListItemGetResponseUnion()                       
 
 type UnionFloat float64
 
+func (UnionFloat) ImplementsDNSTTL()                                                         {}
 func (UnionFloat) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()                {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnionParam()                                {}
 func (UnionFloat) ImplementsHostnamesSettingValueUnion()                                     {}
