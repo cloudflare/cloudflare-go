@@ -17,8 +17,6 @@ type UnionString string
 
 func (UnionString) ImplementsLogsReceivedGetParamsEndUnion()                                    {}
 func (UnionString) ImplementsLogsReceivedGetParamsStartUnion()                                  {}
-func (UnionString) ImplementsWorkersAIRunResponseUnion()                                        {}
-func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsTextUnion()                    {}
 func (UnionString) ImplementsSpectrumOriginPortUnionParam()                                     {}
 func (UnionString) ImplementsSpectrumOriginPortUnion()                                          {}
 func (UnionString) ImplementsMagicTransitHealthCheckTargetUnionParam()                          {}
@@ -93,6 +91,8 @@ func (UnionString) ImplementsAIGatewayEvaluationGetResponseDatasetsFiltersValueU
 func (UnionString) ImplementsWorkflowsInstanceGetResponseOutputUnion()                        {}
 func (UnionString) ImplementsWorkflowsInstanceGetResponseStepsObjectConfigRetriesDelayUnion() {}
 func (UnionString) ImplementsWorkflowsInstanceGetResponseStepsObjectConfigTimeoutUnion()      {}
+func (UnionString) ImplementsAIAIRunResponseUnion()                                           {}
+func (UnionString) ImplementsAIAIRunParamsBodyTextEmbeddingsTextUnion()                       {}
 
 type UnionBool bool
 
