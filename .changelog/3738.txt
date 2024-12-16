@@ -1,0 +1,3 @@
+```release-note:dependency
+teams_location: add new BYOIPv6 block id to the location payload
+```

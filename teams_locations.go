@@ -26,18 +26,19 @@ type TeamsLocationNetwork struct {
 }
 
 type TeamsLocation struct {
-	ID                    string                 `json:"id"`
-	Name                  string                 `json:"name"`
-	Networks              []TeamsLocationNetwork `json:"networks"`
-	PolicyIDs             []string               `json:"policy_ids"`
-	Ip                    string                 `json:"ip,omitempty"`
-	Subdomain             string                 `json:"doh_subdomain"`
-	AnonymizedLogsEnabled bool                   `json:"anonymized_logs_enabled"`
-	IPv4Destination       string                 `json:"ipv4_destination"`
-	IPv4DestinationBackup string                 `json:"ipv4_destination_backup"`
-	DNSDestinationIPsID   string                 `json:"dns_destination_ips_id"`
-	ClientDefault         bool                   `json:"client_default"`
-	ECSSupport            *bool                  `json:"ecs_support,omitempty"`
+	ID                        string                 `json:"id"`
+	Name                      string                 `json:"name"`
+	Networks                  []TeamsLocationNetwork `json:"networks"`
+	PolicyIDs                 []string               `json:"policy_ids"`
+	Ip                        string                 `json:"ip,omitempty"`
+	Subdomain                 string                 `json:"doh_subdomain"`
+	AnonymizedLogsEnabled     bool                   `json:"anonymized_logs_enabled"`
+	IPv4Destination           string                 `json:"ipv4_destination"`
+	IPv4DestinationBackup     string                 `json:"ipv4_destination_backup"`
+	DNSDestinationIPsID       string                 `json:"dns_destination_ips_id"`
+	DNSDestinationIPv6BlockID string                 `json:"dns_destination_ipv6_block_id"`
+	ClientDefault             bool                   `json:"client_default"`
+	ECSSupport                *bool                  `json:"ecs_support,omitempty"`
 
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
