@@ -44,7 +44,7 @@ type UpdateAccessUserSeatResponse struct {
 
 // UpdateAccessUserSeat updates a single Access User Seat.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/zero-trust-seats-update-a-user-seat
+// API documentation: https://developers.cloudflare.com/api/resources/zero_trust/subresources/seats/methods/edit/
 func (api *API) UpdateAccessUserSeat(ctx context.Context, rc *ResourceContainer, params UpdateAccessUserSeatParams) ([]AccessUpdateAccessUserSeatResult, error) {
 	if rc.Level != AccountRouteLevel {
 		return []AccessUpdateAccessUserSeatResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
@@ -77,7 +77,7 @@ func (api *API) UpdateAccessUserSeat(ctx context.Context, rc *ResourceContainer,
 
 // UpdateAccessUsersSeats updates many Access User Seats.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/zero-trust-seats-update-a-user-seat
+// API documentation: https://developers.cloudflare.com/api/resources/zero_trust/subresources/seats/methods/edit/
 func (api *API) UpdateAccessUsersSeats(ctx context.Context, rc *ResourceContainer, params UpdateAccessUsersSeatsParams) ([]AccessUpdateAccessUserSeatResult, error) {
 	if rc.Level != AccountRouteLevel {
 		return []AccessUpdateAccessUserSeatResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)

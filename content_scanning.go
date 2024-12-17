@@ -70,7 +70,7 @@ type ContentScanningDeleteCustomExpressionsResponse struct {
 
 // ContentScanningEnable enables Content Scanning.
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-content-scanning-enable
+// API reference: https://developers.cloudflare.com/api/resources/content_scanning/methods/enable/
 func (api *API) ContentScanningEnable(ctx context.Context, rc *ResourceContainer, params ContentScanningEnableParams) (ContentScanningEnableResponse, error) {
 	if rc.Identifier == "" {
 		return ContentScanningEnableResponse{}, ErrMissingZoneID
@@ -90,7 +90,7 @@ func (api *API) ContentScanningEnable(ctx context.Context, rc *ResourceContainer
 
 // ContentScanningDisable disables Content Scanning.
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-content-scanning-disable
+// API reference: https://developers.cloudflare.com/api/resources/content_scanning/methods/disable/
 func (api *API) ContentScanningDisable(ctx context.Context, rc *ResourceContainer, params ContentScanningDisableParams) (ContentScanningDisableResponse, error) {
 	if rc.Identifier == "" {
 		return ContentScanningDisableResponse{}, ErrMissingZoneID
@@ -110,7 +110,7 @@ func (api *API) ContentScanningDisable(ctx context.Context, rc *ResourceContaine
 
 // ContentScanningStatus reads the status of Content Scanning.
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-content-scanning-get-status
+// API reference: https://developers.cloudflare.com/api/resources/content_scanning/subresources/settings/methods/get/
 func (api *API) ContentScanningStatus(ctx context.Context, rc *ResourceContainer, params ContentScanningStatusParams) (ContentScanningStatusResponse, error) {
 	if rc.Identifier == "" {
 		return ContentScanningStatusResponse{}, ErrMissingZoneID
@@ -130,7 +130,7 @@ func (api *API) ContentScanningStatus(ctx context.Context, rc *ResourceContainer
 
 // ContentScanningListCustomExpressions retrieves the list of existing custom scan expressions for Content Scanning
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-content-scanning-list-custom-scan-expressions
+// API reference: https://developers.cloudflare.com/api/resources/content_scanning/subresources/payloads/methods/list/
 func (api *API) ContentScanningListCustomExpressions(ctx context.Context, rc *ResourceContainer, params ContentScanningListCustomExpressionsParams) ([]ContentScanningCustomExpression, error) {
 	if rc.Identifier == "" {
 		return []ContentScanningCustomExpression{}, ErrMissingZoneID
@@ -150,7 +150,7 @@ func (api *API) ContentScanningListCustomExpressions(ctx context.Context, rc *Re
 
 // ContentScanningAddCustomExpressions add new custom scan expressions for Content Scanning
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-content-scanning-list-custom-scan-expressions
+// API reference: https://developers.cloudflare.com/api/resources/content_scanning/subresources/payloads/methods/list/
 func (api *API) ContentScanningAddCustomExpressions(ctx context.Context, rc *ResourceContainer, params ContentScanningAddCustomExpressionsParams) ([]ContentScanningCustomExpression, error) {
 	if rc.Identifier == "" {
 		return []ContentScanningCustomExpression{}, ErrMissingZoneID
@@ -170,7 +170,7 @@ func (api *API) ContentScanningAddCustomExpressions(ctx context.Context, rc *Res
 
 // ContentScanningDeleteCustomExpressions delete custom scan expressions for Content Scanning
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-content-scanning-delete-custom-scan-expressions
+// API reference: https://developers.cloudflare.com/api/resources/content_scanning/subresources/payloads/methods/delete/
 func (api *API) ContentScanningDeleteCustomExpression(ctx context.Context, rc *ResourceContainer, params ContentScanningDeleteCustomExpressionsParams) ([]ContentScanningCustomExpression, error) {
 	if rc.Identifier == "" {
 		return []ContentScanningCustomExpression{}, ErrMissingZoneID

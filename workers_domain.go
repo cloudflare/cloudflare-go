@@ -53,7 +53,7 @@ type WorkersDomainListResponse struct {
 
 // ListWorkersDomains lists all Worker Domains.
 //
-// API reference: https://developers.cloudflare.com/api/operations/worker-domain-list-domains
+// API reference: https://developers.cloudflare.com/api/resources/workers/subresources/domains/methods/list/
 func (api *API) ListWorkersDomains(ctx context.Context, rc *ResourceContainer, params ListWorkersDomainParams) ([]WorkersDomain, error) {
 	if rc.Identifier == "" {
 		return []WorkersDomain{}, ErrMissingAccountID
@@ -75,7 +75,7 @@ func (api *API) ListWorkersDomains(ctx context.Context, rc *ResourceContainer, p
 
 // AttachWorkersDomain attaches a worker to a zone and hostname.
 //
-// API reference: https://developers.cloudflare.com/api/operations/worker-domain-attach-to-domain
+// API reference: https://developers.cloudflare.com/api/resources/workers/subresources/domains/methods/update/
 func (api *API) AttachWorkersDomain(ctx context.Context, rc *ResourceContainer, domain AttachWorkersDomainParams) (WorkersDomain, error) {
 	if rc.Identifier == "" {
 		return WorkersDomain{}, ErrMissingAccountID
@@ -113,7 +113,7 @@ func (api *API) AttachWorkersDomain(ctx context.Context, rc *ResourceContainer, 
 
 // GetWorkersDomain gets a single Worker Domain.
 //
-// API reference: https://developers.cloudflare.com/api/operations/worker-domain-get-a-domain
+// API reference: https://developers.cloudflare.com/api/resources/workers/subresources/domains/methods/get/
 func (api *API) GetWorkersDomain(ctx context.Context, rc *ResourceContainer, domainID string) (WorkersDomain, error) {
 	if rc.Identifier == "" {
 		return WorkersDomain{}, ErrMissingAccountID
@@ -135,7 +135,7 @@ func (api *API) GetWorkersDomain(ctx context.Context, rc *ResourceContainer, dom
 
 // DetachWorkersDomain detaches a worker from a zone and hostname.
 //
-// API reference: https://developers.cloudflare.com/api/operations/worker-domain-detach-from-domain
+// API reference: https://developers.cloudflare.com/api/resources/workers/subresources/domains/methods/delete/
 func (api *API) DetachWorkersDomain(ctx context.Context, rc *ResourceContainer, domainID string) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID

@@ -60,7 +60,7 @@ var (
 
 // ListHostnameTLSSettings returns a list of all user-created tls setting values for the specified setting and hostnames.
 //
-// API reference: https://developers.cloudflare.com/api/operations/per-hostname-tls-settings-list
+// API reference: https://developers.cloudflare.com/api/resources/hostnames/subresources/settings/subresources/tls/methods/get/
 func (api *API) ListHostnameTLSSettings(ctx context.Context, rc *ResourceContainer, params ListHostnameTLSSettingsParams) ([]HostnameTLSSetting, ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []HostnameTLSSetting{}, ResultInfo{}, ErrMissingZoneID
@@ -83,7 +83,7 @@ func (api *API) ListHostnameTLSSettings(ctx context.Context, rc *ResourceContain
 
 // UpdateHostnameTLSSetting will update the per-hostname tls setting for the specified hostname.
 //
-// API reference: https://developers.cloudflare.com/api/operations/per-hostname-tls-settings-put
+// API reference: https://developers.cloudflare.com/api/resources/hostnames/subresources/settings/subresources/tls/methods/update/
 func (api *API) UpdateHostnameTLSSetting(ctx context.Context, rc *ResourceContainer, params UpdateHostnameTLSSettingParams) (HostnameTLSSetting, error) {
 	if rc.Identifier == "" {
 		return HostnameTLSSetting{}, ErrMissingZoneID
@@ -109,7 +109,7 @@ func (api *API) UpdateHostnameTLSSetting(ctx context.Context, rc *ResourceContai
 
 // DeleteHostnameTLSSetting will delete the specified per-hostname tls setting.
 //
-// API reference: https://developers.cloudflare.com/api/operations/per-hostname-tls-settings-delete
+// API reference: https://developers.cloudflare.com/api/resources/hostnames/subresources/settings/subresources/tls/methods/delete/
 func (api *API) DeleteHostnameTLSSetting(ctx context.Context, rc *ResourceContainer, params DeleteHostnameTLSSettingParams) (HostnameTLSSetting, error) {
 	if rc.Identifier == "" {
 		return HostnameTLSSetting{}, ErrMissingZoneID
@@ -177,7 +177,7 @@ type DeleteHostnameTLSSettingCiphersParams struct {
 // ListHostnameTLSSettingsCiphers returns a list of all user-created tls setting ciphers values for the specified setting and hostnames.
 // Ciphers functions are separate due to the API returning a list of strings as the value, rather than a string (as is the case for the other tls settings).
 //
-// API reference: https://developers.cloudflare.com/api/operations/per-hostname-tls-settings-list
+// API reference: https://developers.cloudflare.com/api/resources/hostnames/subresources/settings/subresources/tls/methods/get/
 func (api *API) ListHostnameTLSSettingsCiphers(ctx context.Context, rc *ResourceContainer, params ListHostnameTLSSettingsCiphersParams) ([]HostnameTLSSettingCiphers, ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []HostnameTLSSettingCiphers{}, ResultInfo{}, ErrMissingZoneID
@@ -198,7 +198,7 @@ func (api *API) ListHostnameTLSSettingsCiphers(ctx context.Context, rc *Resource
 // UpdateHostnameTLSSettingCiphers will update the per-hostname ciphers tls setting for the specified hostname.
 // Ciphers functions are separate due to the API returning a list of strings as the value, rather than a string (as is the case for the other tls settings).
 //
-// API reference: https://developers.cloudflare.com/api/operations/per-hostname-tls-settings-put
+// API reference: https://developers.cloudflare.com/api/resources/hostnames/subresources/settings/subresources/tls/methods/update/
 func (api *API) UpdateHostnameTLSSettingCiphers(ctx context.Context, rc *ResourceContainer, params UpdateHostnameTLSSettingCiphersParams) (HostnameTLSSettingCiphers, error) {
 	if rc.Identifier == "" {
 		return HostnameTLSSettingCiphers{}, ErrMissingZoneID
@@ -222,7 +222,7 @@ func (api *API) UpdateHostnameTLSSettingCiphers(ctx context.Context, rc *Resourc
 // DeleteHostnameTLSSettingCiphers will delete the specified per-hostname ciphers tls setting value.
 // Ciphers functions are separate due to the API returning a list of strings as the value, rather than a string (as is the case for the other tls settings).
 //
-// API reference: https://developers.cloudflare.com/api/operations/per-hostname-tls-settings-delete
+// API reference: https://developers.cloudflare.com/api/resources/hostnames/subresources/settings/subresources/tls/methods/delete/
 func (api *API) DeleteHostnameTLSSettingCiphers(ctx context.Context, rc *ResourceContainer, params DeleteHostnameTLSSettingCiphersParams) (HostnameTLSSettingCiphers, error) {
 	if rc.Identifier == "" {
 		return HostnameTLSSettingCiphers{}, ErrMissingZoneID

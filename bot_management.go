@@ -44,7 +44,7 @@ type UpdateBotManagementParams struct {
 
 // GetBotManagement gets a zone API shield configuration.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/bot-management-for-a-zone-get-config
+// API documentation: https://developers.cloudflare.com/api/resources/bot_management/methods/get/
 func (api *API) GetBotManagement(ctx context.Context, rc *ResourceContainer) (BotManagement, error) {
 	uri := fmt.Sprintf("/zones/%s/bot_management", rc.Identifier)
 
@@ -63,7 +63,7 @@ func (api *API) GetBotManagement(ctx context.Context, rc *ResourceContainer) (Bo
 
 // UpdateBotManagement sets a zone API shield configuration.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/bot-management-for-a-zone-update-config
+// API documentation: https://developers.cloudflare.com/api/resources/bot_management/methods/update/
 func (api *API) UpdateBotManagement(ctx context.Context, rc *ResourceContainer, params UpdateBotManagementParams) (BotManagement, error) {
 	uri := fmt.Sprintf("/zones/%s/bot_management", rc.Identifier)
 

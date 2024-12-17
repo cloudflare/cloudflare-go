@@ -41,7 +41,7 @@ type GetZoneHoldParams struct{}
 // CreateZoneHold enforces a zone hold on the zone, blocking the creation and
 // activation of zone.
 //
-// API reference: https://developers.cloudflare.com/api/operations/zones-0-hold-post
+// API reference: https://developers.cloudflare.com/api/resources/zones/subresources/holds/methods/create/
 func (api *API) CreateZoneHold(ctx context.Context, rc *ResourceContainer, params CreateZoneHoldParams) (ZoneHold, error) {
 	if rc.Level != ZoneRouteLevel {
 		return ZoneHold{}, ErrRequiredZoneLevelResourceContainer
@@ -65,7 +65,7 @@ func (api *API) CreateZoneHold(ctx context.Context, rc *ResourceContainer, param
 // DeleteZoneHold removes enforcement of a zone hold on the zone, permanently or
 // temporarily, allowing the creation and activation of zones with this hostname.
 //
-// API reference:https://developers.cloudflare.com/api/operations/zones-0-hold-delete
+// API reference:https://developers.cloudflare.com/api/resources/zones/subresources/holds/methods/delete/
 func (api *API) DeleteZoneHold(ctx context.Context, rc *ResourceContainer, params DeleteZoneHoldParams) (ZoneHold, error) {
 	if rc.Level != ZoneRouteLevel {
 		return ZoneHold{}, ErrRequiredZoneLevelResourceContainer
@@ -89,7 +89,7 @@ func (api *API) DeleteZoneHold(ctx context.Context, rc *ResourceContainer, param
 // GetZoneHold retrieves whether the zone is subject to a zone hold, and the
 // metadata about the hold.
 //
-// API reference: https://developers.cloudflare.com/api/operations/zones-0-hold-get
+// API reference: https://developers.cloudflare.com/api/resources/zones/subresources/holds/methods/get/
 func (api *API) GetZoneHold(ctx context.Context, rc *ResourceContainer, params GetZoneHoldParams) (ZoneHold, error) {
 	if rc.Level != ZoneRouteLevel {
 		return ZoneHold{}, ErrRequiredZoneLevelResourceContainer

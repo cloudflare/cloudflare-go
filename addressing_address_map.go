@@ -121,7 +121,7 @@ type DeleteIPAddressFromAddressMapParams struct {
 
 // ListAddressMaps lists all address maps owned by the account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-list-address-maps
+// API reference: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/methods/list/
 func (api *API) ListAddressMaps(ctx context.Context, rc *ResourceContainer, params ListAddressMapsParams) ([]AddressMap, error) {
 	if rc.Level != AccountRouteLevel {
 		return []AddressMap{}, ErrRequiredAccountLevelResourceContainer
@@ -143,7 +143,7 @@ func (api *API) ListAddressMaps(ctx context.Context, rc *ResourceContainer, para
 
 // CreateAddressMap creates a new address map under the account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-create-address-map
+// API reference: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/methods/create/
 func (api *API) CreateAddressMap(ctx context.Context, rc *ResourceContainer, params CreateAddressMapParams) (AddressMap, error) {
 	if rc.Level != AccountRouteLevel {
 		return AddressMap{}, ErrRequiredAccountLevelResourceContainer
@@ -165,7 +165,7 @@ func (api *API) CreateAddressMap(ctx context.Context, rc *ResourceContainer, par
 
 // GetAddressMap returns a specific address map.
 //
-// API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-address-map-details
+// API reference: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/methods/get/
 func (api *API) GetAddressMap(ctx context.Context, rc *ResourceContainer, id string) (AddressMap, error) {
 	if rc.Level != AccountRouteLevel {
 		return AddressMap{}, ErrRequiredAccountLevelResourceContainer
@@ -187,7 +187,7 @@ func (api *API) GetAddressMap(ctx context.Context, rc *ResourceContainer, id str
 
 // UpdateAddressMap modifies properties of an address map owned by the account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-update-address-map
+// API reference: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/methods/edit/
 func (api *API) UpdateAddressMap(ctx context.Context, rc *ResourceContainer, params UpdateAddressMapParams) (AddressMap, error) {
 	if rc.Level != AccountRouteLevel {
 		return AddressMap{}, ErrRequiredAccountLevelResourceContainer
@@ -209,7 +209,7 @@ func (api *API) UpdateAddressMap(ctx context.Context, rc *ResourceContainer, par
 
 // DeleteAddressMap deletes a particular address map owned by the account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-delete-address-map
+// API reference: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/methods/delete/
 func (api *API) DeleteAddressMap(ctx context.Context, rc *ResourceContainer, id string) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer
@@ -222,7 +222,7 @@ func (api *API) DeleteAddressMap(ctx context.Context, rc *ResourceContainer, id 
 
 // CreateIPAddressToAddressMap adds an IP address from a prefix owned by the account to a particular address map.
 //
-// API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-add-an-ip-to-an-address-map
+// API reference: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/subresources/ips/methods/update/
 func (api *API) CreateIPAddressToAddressMap(ctx context.Context, rc *ResourceContainer, params CreateIPAddressToAddressMapParams) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer
@@ -235,7 +235,7 @@ func (api *API) CreateIPAddressToAddressMap(ctx context.Context, rc *ResourceCon
 
 // DeleteIPAddressFromAddressMap removes an IP address from a particular address map.
 //
-// API reference: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-remove-an-ip-from-an-address-map
+// API reference: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/subresources/ips/methods/delete/
 func (api *API) DeleteIPAddressFromAddressMap(ctx context.Context, rc *ResourceContainer, params DeleteIPAddressFromAddressMapParams) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer
@@ -249,8 +249,8 @@ func (api *API) DeleteIPAddressFromAddressMap(ctx context.Context, rc *ResourceC
 // CreateMembershipToAddressMap adds a zone/account as a member of a particular address map.
 //
 // API reference:
-//   - account: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-add-an-account-membership-to-an-address-map
-//   - zone: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-add-a-zone-membership-to-an-address-map
+//   - account: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/subresources/accounts/methods/update/
+//   - zone: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/subresources/zones/methods/update/
 func (api *API) CreateMembershipToAddressMap(ctx context.Context, rc *ResourceContainer, params CreateMembershipToAddressMapParams) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer
@@ -268,8 +268,8 @@ func (api *API) CreateMembershipToAddressMap(ctx context.Context, rc *ResourceCo
 // DeleteMembershipFromAddressMap removes a zone/account as a member of a particular address map.
 //
 // API reference:
-//   - account: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-remove-an-account-membership-from-an-address-map
-//   - zone: https://developers.cloudflare.com/api/operations/ip-address-management-address-maps-remove-a-zone-membership-from-an-address-map
+//   - account: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/subresources/accounts/methods/delete/
+//   - zone: https://developers.cloudflare.com/api/resources/addressing/subresources/address_maps/subresources/zones/methods/delete/
 func (api *API) DeleteMembershipFromAddressMap(ctx context.Context, rc *ResourceContainer, params DeleteMembershipFromAddressMapParams) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer

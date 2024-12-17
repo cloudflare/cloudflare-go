@@ -73,7 +73,7 @@ type UpdateCustomNameserverZoneMetadataParams struct {
 
 // GetCustomNameservers lists custom nameservers.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-list-account-custom-nameservers
+// API documentation: https://developers.cloudflare.com/api/resources/custom_nameservers/methods/get/
 func (api *API) GetCustomNameservers(ctx context.Context, rc *ResourceContainer, params GetCustomNameserversParams) ([]CustomNameserverResult, error) {
 	if rc.Level != AccountRouteLevel {
 		return []CustomNameserverResult{}, ErrRequiredAccountLevelResourceContainer
@@ -96,7 +96,7 @@ func (api *API) GetCustomNameservers(ctx context.Context, rc *ResourceContainer,
 
 // CreateCustomNameservers adds a custom nameserver.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-add-account-custom-nameserver
+// API documentation: https://developers.cloudflare.com/api/resources/custom_nameservers/methods/create/
 func (api *API) CreateCustomNameservers(ctx context.Context, rc *ResourceContainer, params CreateCustomNameserversParams) (CustomNameserverResult, error) {
 	if rc.Level != AccountRouteLevel {
 		return CustomNameserverResult{}, ErrRequiredAccountLevelResourceContainer
@@ -120,7 +120,7 @@ func (api *API) CreateCustomNameservers(ctx context.Context, rc *ResourceContain
 
 // DeleteCustomNameservers removes a custom nameserver.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-delete-account-custom-nameserver
+// API documentation: https://developers.cloudflare.com/api/resources/custom_nameservers/methods/delete/
 func (api *API) DeleteCustomNameservers(ctx context.Context, rc *ResourceContainer, params DeleteCustomNameserversParams) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer
@@ -142,7 +142,7 @@ func (api *API) DeleteCustomNameservers(ctx context.Context, rc *ResourceContain
 
 // GetEligibleZonesAccountCustomNameservers lists zones eligible for custom nameservers.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-get-eligible-zones-for-account-custom-nameservers
+// API documentation: https://developers.cloudflare.com/api/resources/custom_nameservers/methods/availabilty/
 func (api *API) GetEligibleZonesAccountCustomNameservers(ctx context.Context, rc *ResourceContainer, params GetEligibleZonesAccountCustomNameserversParams) ([]string, error) {
 	if rc.Level != AccountRouteLevel {
 		return []string{}, ErrRequiredAccountLevelResourceContainer
@@ -166,7 +166,7 @@ func (api *API) GetEligibleZonesAccountCustomNameservers(ctx context.Context, rc
 
 // GetCustomNameserverZoneMetadata get metadata for custom nameservers on a zone.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-usage-for-a-zone-get-account-custom-nameserver-related-zone-metadata
+// API documentation: https://developers.cloudflare.com/api/resources/zones/subresources/custom_nameservers/methods/get/
 func (api *API) GetCustomNameserverZoneMetadata(ctx context.Context, rc *ResourceContainer, params GetCustomNameserverZoneMetadataParams) (CustomNameserverZoneMetadata, error) {
 	if rc.Level != ZoneRouteLevel {
 		return CustomNameserverZoneMetadata{}, ErrRequiredZoneLevelResourceContainer
@@ -190,7 +190,7 @@ func (api *API) GetCustomNameserverZoneMetadata(ctx context.Context, rc *Resourc
 
 // UpdateCustomNameserverZoneMetadata set metadata for custom nameservers on a zone.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/account-level-custom-nameservers-usage-for-a-zone-set-account-custom-nameserver-related-zone-metadata
+// API documentation: https://developers.cloudflare.com/api/resources/zones/subresources/custom_nameservers/methods/update/
 func (api *API) UpdateCustomNameserverZoneMetadata(ctx context.Context, rc *ResourceContainer, params UpdateCustomNameserverZoneMetadataParams) error {
 	if rc.Level != ZoneRouteLevel {
 		return ErrRequiredZoneLevelResourceContainer

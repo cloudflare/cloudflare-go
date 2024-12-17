@@ -201,7 +201,7 @@ type GetAccessUserSingleActiveSessionResult struct {
 
 // ListAccessUsers returns a list of users for a single cloudflare access/zerotrust account.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/zero-trust-users-get-users
+// API documentation: https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/users/methods/list/
 func (api *API) ListAccessUsers(ctx context.Context, rc *ResourceContainer, params AccessUserParams) ([]AccessUser, *ResultInfo, error) {
 	if rc.Level != AccountRouteLevel {
 		return []AccessUser{}, &ResultInfo{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
@@ -250,7 +250,7 @@ func (api *API) ListAccessUsers(ctx context.Context, rc *ResourceContainer, para
 
 // GetAccessUserActiveSessions returns a list of active sessions for an user.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/zero-trust-users-get-active-sessions
+// API documentation: https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/users/subresources/active_sessions/methods/list/
 func (api *API) GetAccessUserActiveSessions(ctx context.Context, rc *ResourceContainer, userID string) ([]AccessUserActiveSessionResult, error) {
 	if rc.Level != AccountRouteLevel {
 		return []AccessUserActiveSessionResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
@@ -278,7 +278,7 @@ func (api *API) GetAccessUserActiveSessions(ctx context.Context, rc *ResourceCon
 
 // GetAccessUserSingleActiveSession returns a single active session for a user.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/zero-trust-users-get-active-session
+// API documentation: https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/users/subresources/active_sessions/methods/get/
 func (api *API) GetAccessUserSingleActiveSession(ctx context.Context, rc *ResourceContainer, userID string, sessionID string) (GetAccessUserSingleActiveSessionResult, error) {
 	if rc.Level != AccountRouteLevel {
 		return GetAccessUserSingleActiveSessionResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
@@ -307,7 +307,7 @@ func (api *API) GetAccessUserSingleActiveSession(ctx context.Context, rc *Resour
 
 // GetAccessUserFailedLogins returns a list of failed logins for a user.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/zero-trust-users-get-failed-logins
+// API documentation: https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/users/subresources/failed_logins/methods/list/
 func (api *API) GetAccessUserFailedLogins(ctx context.Context, rc *ResourceContainer, userID string) ([]AccessUserFailedLoginResult, error) {
 	if rc.Level != AccountRouteLevel {
 		return []AccessUserFailedLoginResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
@@ -335,7 +335,7 @@ func (api *API) GetAccessUserFailedLogins(ctx context.Context, rc *ResourceConta
 
 // GetAccessUserLastSeenIdentity returns the last seen identity for a user.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/zero-trust-users-get-last-seen-identity
+// API documentation: https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/users/subresources/last_seen_identity/methods/get/
 func (api *API) GetAccessUserLastSeenIdentity(ctx context.Context, rc *ResourceContainer, userID string) (GetAccessUserLastSeenIdentityResult, error) {
 	if rc.Level != AccountRouteLevel {
 		return GetAccessUserLastSeenIdentityResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)

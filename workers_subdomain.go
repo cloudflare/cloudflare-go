@@ -19,7 +19,7 @@ type WorkersSubdomainResponse struct {
 
 // WorkersCreateSubdomain Creates a Workers subdomain for an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/worker-subdomain-create-subdomain
+// API reference: https://developers.cloudflare.com/api/resources/workers/subresources/subdomains/methods/update/
 func (api *API) WorkersCreateSubdomain(ctx context.Context, rc *ResourceContainer, params WorkersSubdomain) (WorkersSubdomain, error) {
 	if rc.Identifier == "" {
 		return WorkersSubdomain{}, ErrMissingAccountID
@@ -39,7 +39,7 @@ func (api *API) WorkersCreateSubdomain(ctx context.Context, rc *ResourceContaine
 
 // WorkersGetSubdomain Creates a Workers subdomain for an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/worker-subdomain-get-subdomain
+// API reference: https://developers.cloudflare.com/api/resources/workers/subresources/subdomains/methods/get/
 func (api *API) WorkersGetSubdomain(ctx context.Context, rc *ResourceContainer) (WorkersSubdomain, error) {
 	if rc.Identifier == "" {
 		return WorkersSubdomain{}, ErrMissingAccountID

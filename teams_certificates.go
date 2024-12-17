@@ -41,7 +41,7 @@ type TeamsCertificatesResponse struct {
 
 // TeamsCertificates returns all certificates in an account
 //
-// API reference: https://developers.cloudflare.com/api/operations/zero-trust-certificates-list-zero-trust-certificates
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/gateway/subresources/certificates/methods/list/
 func (api *API) TeamsCertificates(ctx context.Context, accountID string) ([]TeamsCertificate, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway/certificates", accountID)
 
@@ -61,7 +61,7 @@ func (api *API) TeamsCertificates(ctx context.Context, accountID string) ([]Team
 
 // TeamsCertificate returns teams account certificate.
 //
-// API reference: https://developers.cloudflare.com/api/operations/zero-trust-certificates-zero-trust-certificate-details
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/gateway/subresources/certificates/methods/get/
 func (api *API) TeamsCertificate(ctx context.Context, accountID string, certificateId string) (TeamsCertificate, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway/certificates/%s", accountID, certificateId)
 
@@ -81,7 +81,7 @@ func (api *API) TeamsCertificate(ctx context.Context, accountID string, certific
 
 // TeamsGenerateCertificate generates a new gateway managed certificate
 //
-// API reference: https://developers.cloudflare.com/api/operations/zero-trust-certificates-create-zero-trust-certificate
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/gateway/subresources/certificates/methods/create/
 func (api *API) TeamsGenerateCertificate(ctx context.Context, accountID string, certificateRequest TeamsCertificateCreateRequest) (TeamsCertificate, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway/certificates", accountID)
 
@@ -105,7 +105,7 @@ func (api *API) TeamsGenerateCertificate(ctx context.Context, accountID string, 
 
 // TeamsActivateCertificate activates a certificate
 //
-// API reference: https://developers.cloudflare.com/api/operations/zero-trust-certificates-activate-zero-trust-certificate
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/gateway/subresources/certificates/methods/activate/
 func (api *API) TeamsActivateCertificate(ctx context.Context, accountID string, certificateId string) (TeamsCertificate, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway/certificates/%s/activate", accountID, certificateId)
 
@@ -125,7 +125,7 @@ func (api *API) TeamsActivateCertificate(ctx context.Context, accountID string, 
 
 // TeamsDectivateCertificate deactivates a certificate
 //
-// API reference: https://developers.cloudflare.com/api/operations/zero-trust-certificates-deactivate-zero-trust-certificate
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/gateway/subresources/certificates/methods/deactivate/
 func (api *API) TeamsDeactivateCertificate(ctx context.Context, accountID string, certificateId string) (TeamsCertificate, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway/certificates/%s/deactivate", accountID, certificateId)
 
@@ -145,7 +145,7 @@ func (api *API) TeamsDeactivateCertificate(ctx context.Context, accountID string
 
 // TeamsDeleteCertificate deletes a certificate.
 //
-// API reference: https://developers.cloudflare.com/api/operations/zero-trust-certificates-delete-zero-trust-certificate
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/gateway/subresources/certificates/methods/delete/
 func (api *API) TeamsDeleteCertificate(ctx context.Context, accountID string, certificateId string) error {
 	uri := fmt.Sprintf("/accounts/%s/gateway/certificates/%s", accountID, certificateId)
 

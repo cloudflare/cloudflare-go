@@ -34,7 +34,7 @@ type CreateWorkersForPlatformsDispatchNamespaceParams struct {
 
 // ListWorkersForPlatformsDispatchNamespaces lists the dispatch namespaces.
 //
-// API reference: https://developers.cloudflare.com/api/operations/namespace-worker-list
+// API reference: https://developers.cloudflare.com/api/resources/workers_for_platforms/subresources/dispatch/subresources/namespaces/methods/list/
 func (api *API) ListWorkersForPlatformsDispatchNamespaces(ctx context.Context, rc *ResourceContainer) (*ListWorkersForPlatformsDispatchNamespaceResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return nil, ErrRequiredAccountLevelResourceContainer
@@ -62,7 +62,7 @@ func (api *API) ListWorkersForPlatformsDispatchNamespaces(ctx context.Context, r
 
 // GetWorkersForPlatformsDispatchNamespace gets a specific dispatch namespace.
 //
-// API reference: https://developers.cloudflare.com/api/operations/namespace-worker-get-namespace
+// API reference: https://developers.cloudflare.com/api/resources/workers_for_platforms/subresources/dispatch/subresources/namespaces/methods/get/
 func (api *API) GetWorkersForPlatformsDispatchNamespace(ctx context.Context, rc *ResourceContainer, name string) (*GetWorkersForPlatformsDispatchNamespaceResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return nil, ErrRequiredAccountLevelResourceContainer
@@ -90,7 +90,7 @@ func (api *API) GetWorkersForPlatformsDispatchNamespace(ctx context.Context, rc 
 
 // CreateWorkersForPlatformsDispatchNamespace creates a new dispatch namespace.
 //
-// API reference: https://developers.cloudflare.com/api/operations/namespace-worker-create
+// API reference: https://developers.cloudflare.com/api/resources/workers_for_platforms/subresources/dispatch/subresources/namespaces/methods/create/
 func (api *API) CreateWorkersForPlatformsDispatchNamespace(ctx context.Context, rc *ResourceContainer, params CreateWorkersForPlatformsDispatchNamespaceParams) (*GetWorkersForPlatformsDispatchNamespaceResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return nil, ErrRequiredAccountLevelResourceContainer
@@ -118,7 +118,7 @@ func (api *API) CreateWorkersForPlatformsDispatchNamespace(ctx context.Context, 
 
 // DeleteWorkersForPlatformsDispatchNamespace deletes a dispatch namespace.
 //
-// API reference: https://developers.cloudflare.com/api/operations/namespace-worker-delete-namespace
+// API reference: https://developers.cloudflare.com/api/resources/workers_for_platforms/subresources/dispatch/subresources/namespaces/methods/delete/
 func (api *API) DeleteWorkersForPlatformsDispatchNamespace(ctx context.Context, rc *ResourceContainer, name string) error {
 	if rc.Level != AccountRouteLevel {
 		return ErrRequiredAccountLevelResourceContainer

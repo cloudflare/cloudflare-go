@@ -69,7 +69,7 @@ type InfrastructureAccessTargetListParams struct {
 
 // ListInfrastructureAccessTargets returns all infrastructure access targets within an account.
 //
-// Account API reference: https://developers.cloudflare.com/api/operations/infra-targets-list
+// Account API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/infrastructure/subresources/targets/methods/list/
 func (api *API) ListInfrastructureAccessTargets(ctx context.Context, rc *ResourceContainer, params InfrastructureAccessTargetListParams) ([]InfrastructureAccessTarget, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []InfrastructureAccessTarget{}, &ResultInfo{}, ErrMissingAccountID
@@ -117,7 +117,7 @@ func (api *API) ListInfrastructureAccessTargets(ctx context.Context, rc *Resourc
 
 // CreateInfrastructureAccessTarget creates a new infrastructure access target.
 //
-// Account API reference: https://developers.cloudflare.com/api/operations/infra-targets-post
+// Account API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/infrastructure/subresources/targets/methods/create/
 func (api *API) CreateInfrastructureAccessTarget(ctx context.Context, rc *ResourceContainer, params CreateInfrastructureAccessTargetParams) (InfrastructureAccessTarget, error) {
 	if rc.Identifier == "" {
 		return InfrastructureAccessTarget{}, ErrMissingAccountID
@@ -141,7 +141,7 @@ func (api *API) CreateInfrastructureAccessTarget(ctx context.Context, rc *Resour
 
 // UpdateInfrastructureAccessTarget updates an existing infrastructure access target.
 //
-// Account API reference: https://developers.cloudflare.com/api/operations/infra-targets-put
+// Account API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/infrastructure/subresources/targets/methods/update/
 func (api *API) UpdateInfrastructureAccessTarget(ctx context.Context, rc *ResourceContainer, params UpdateInfrastructureAccessTargetParams) (InfrastructureAccessTarget, error) {
 	if rc.Identifier == "" {
 		return InfrastructureAccessTarget{}, ErrMissingAccountID
@@ -175,7 +175,7 @@ func (api *API) UpdateInfrastructureAccessTarget(ctx context.Context, rc *Resour
 // GetInfrastructureAccessTarget returns a single infrastructure access target based on target ID
 // ID for either account or zone.
 //
-// Account API reference: https://developers.cloudflare.com/api/operations/infra-targets-get
+// Account API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/infrastructure/subresources/targets/methods/get/
 func (api *API) GetInfrastructureAccessTarget(ctx context.Context, rc *ResourceContainer, targetID string) (InfrastructureAccessTarget, error) {
 	if rc.Identifier == "" {
 		return InfrastructureAccessTarget{}, ErrMissingAccountID
@@ -208,7 +208,7 @@ func (api *API) GetInfrastructureAccessTarget(ctx context.Context, rc *ResourceC
 
 // DeleteInfrastructureAccessTarget deletes an infrastructure access target.
 //
-// Account API reference: https://developers.cloudflare.com/api/operations/infra-targets-delete
+// Account API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/access/subresources/infrastructure/subresources/targets/methods/delete/
 func (api *API) DeleteInfrastructureAccessTarget(ctx context.Context, rc *ResourceContainer, targetID string) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID

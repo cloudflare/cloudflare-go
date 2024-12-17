@@ -55,7 +55,7 @@ type ImagesVariantResponse struct {
 
 // Lists existing variants.
 //
-// API Reference: https://developers.cloudflare.com/api/operations/cloudflare-images-variants-list-variants
+// API Reference: https://developers.cloudflare.com/api/resources/images/subresources/v1/subresources/variants/methods/list/
 func (api *API) ListImagesVariants(ctx context.Context, rc *ResourceContainer, params ListImageVariantsParams) (ListImageVariantsResult, error) {
 	if rc.Identifier == "" {
 		return ListImageVariantsResult{}, ErrMissingAccountID
@@ -78,7 +78,7 @@ func (api *API) ListImagesVariants(ctx context.Context, rc *ResourceContainer, p
 
 // Fetch details for a single variant.
 //
-// API Reference: https://developers.cloudflare.com/api/operations/cloudflare-images-variants-variant-details
+// API Reference: https://developers.cloudflare.com/api/resources/images/subresources/v1/subresources/variants/methods/get/
 func (api *API) GetImagesVariant(ctx context.Context, rc *ResourceContainer, variantID string) (ImagesVariant, error) {
 	if rc.Identifier == "" {
 		return ImagesVariant{}, ErrMissingAccountID
@@ -101,7 +101,7 @@ func (api *API) GetImagesVariant(ctx context.Context, rc *ResourceContainer, var
 
 // Specify variants that allow you to resize images for different use cases.
 //
-// API Reference: https://developers.cloudflare.com/api/operations/cloudflare-images-variants-create-a-variant
+// API Reference: https://developers.cloudflare.com/api/resources/images/subresources/v1/subresources/variants/methods/create/
 func (api *API) CreateImagesVariant(ctx context.Context, rc *ResourceContainer, params CreateImagesVariantParams) (ImagesVariant, error) {
 	if rc.Identifier == "" {
 		return ImagesVariant{}, ErrMissingAccountID
@@ -124,7 +124,7 @@ func (api *API) CreateImagesVariant(ctx context.Context, rc *ResourceContainer, 
 
 // Deleting a variant purges the cache for all images associated with the variant.
 //
-// API Reference: https://developers.cloudflare.com/api/operations/cloudflare-images-variants-variant-details
+// API Reference: https://developers.cloudflare.com/api/resources/images/subresources/v1/subresources/variants/methods/get/
 func (api *API) DeleteImagesVariant(ctx context.Context, rc *ResourceContainer, variantID string) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID
@@ -141,7 +141,7 @@ func (api *API) DeleteImagesVariant(ctx context.Context, rc *ResourceContainer, 
 
 // Updating a variant purges the cache for all images associated with the variant.
 //
-// API Reference: https://developers.cloudflare.com/api/operations/cloudflare-images-variants-variant-details
+// API Reference: https://developers.cloudflare.com/api/resources/images/subresources/v1/subresources/variants/methods/get/
 func (api *API) UpdateImagesVariant(ctx context.Context, rc *ResourceContainer, params UpdateImagesVariantParams) (ImagesVariant, error) {
 	if rc.Identifier == "" {
 		return ImagesVariant{}, ErrMissingAccountID

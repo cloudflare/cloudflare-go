@@ -411,7 +411,7 @@ func (api *API) StreamListVideos(ctx context.Context, params StreamListParameter
 
 // StreamInitiateTUSVideoUpload generates a direct upload TUS url for a video.
 //
-// API Reference: https://developers.cloudflare.com/api/operations/stream-videos-initiate-video-uploads-using-tus
+// API Reference: https://developers.cloudflare.com/api/resources/stream/methods/create/
 func (api *API) StreamInitiateTUSVideoUpload(ctx context.Context, rc *ResourceContainer, params StreamInitiateTUSUploadParameters) (StreamInitiateTUSUploadResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return StreamInitiateTUSUploadResponse{}, ErrRequiredAccountLevelResourceContainer
