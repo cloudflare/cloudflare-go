@@ -53,7 +53,7 @@ type APIShieldDiscoveryOperation struct {
 
 // ListAPIShieldDiscoveryOperationsParams represents the parameters to pass when retrieving discovered operations.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-api-discovery-retrieve-discovered-operations-on-a-zone
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/discovery/subresources/operations/methods/list/
 type ListAPIShieldDiscoveryOperationsParams struct {
 	// Direction to order results.
 	Direction string `url:"direction,omitempty"`
@@ -80,7 +80,7 @@ type ListAPIShieldDiscoveryOperationsParams struct {
 
 // UpdateAPIShieldDiscoveryOperationParams represents the parameters to pass to patch a discovery operation
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-api-patch-discovered-operation
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/discovery/subresources/operations/methods/edit/
 type UpdateAPIShieldDiscoveryOperationParams struct {
 	// OperationID is the ID, formatted as UUID, of the operation to be updated
 	OperationID string                  `json:"-" url:"-"`
@@ -95,7 +95,7 @@ type UpdateAPIShieldDiscoveryOperationParams struct {
 //			"99522293-a505-45e5-bbad-bbc339f5dc40": PatchAPIShieldDiscoveryOperation{ State: "review" },
 //	}
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-api-patch-discovered-operations
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/discovery/subresources/operations/methods/bulk_edit/
 type UpdateAPIShieldDiscoveryOperationsParams map[string]UpdateAPIShieldDiscoveryOperation
 
 // UpdateAPIShieldDiscoveryOperation represents the state to set on a discovery operation.
@@ -125,7 +125,7 @@ type APIShieldPatchDiscoveryOperationsResponse struct {
 
 // ListAPIShieldDiscoveryOperations retrieve the most up to date view of discovered operations.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-api-discovery-retrieve-discovered-operations-on-a-zone
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/discovery/subresources/operations/methods/list/
 func (api *API) ListAPIShieldDiscoveryOperations(ctx context.Context, rc *ResourceContainer, params ListAPIShieldDiscoveryOperationsParams) ([]APIShieldDiscoveryOperation, ResultInfo, error) {
 	uri := buildURI(fmt.Sprintf("/zones/%s/api_gateway/discovery/operations", rc.Identifier), params)
 
@@ -145,7 +145,7 @@ func (api *API) ListAPIShieldDiscoveryOperations(ctx context.Context, rc *Resour
 
 // UpdateAPIShieldDiscoveryOperation updates certain fields on a discovered operation.
 //
-// API Documentation: https://developers.cloudflare.com/api/operations/api-shield-api-patch-discovered-operation
+// API Documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/discovery/subresources/operations/methods/edit/
 func (api *API) UpdateAPIShieldDiscoveryOperation(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldDiscoveryOperationParams) (*UpdateAPIShieldDiscoveryOperation, error) {
 	if params.OperationID == "" {
 		return nil, fmt.Errorf("operation ID must be provided")
@@ -170,7 +170,7 @@ func (api *API) UpdateAPIShieldDiscoveryOperation(ctx context.Context, rc *Resou
 
 // UpdateAPIShieldDiscoveryOperations bulk updates certain fields on multiple discovered operations
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-api-patch-discovered-operations
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/discovery/subresources/operations/methods/bulk_edit/
 func (api *API) UpdateAPIShieldDiscoveryOperations(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldDiscoveryOperationsParams) (*UpdateAPIShieldDiscoveryOperationsParams, error) {
 	uri := fmt.Sprintf("/zones/%s/api_gateway/discovery/operations", rc.Identifier)
 

@@ -105,7 +105,7 @@ type ListWorkersKVsParams struct {
 // A 400 is returned if the account already owns a namespace with this title.
 // A namespace must be explicitly deleted to be replaced.
 //
-// API reference: https://developers.cloudflare.com/api/operations/workers-kv-namespace-create-a-namespace
+// API reference: https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/methods/create/
 func (api *API) CreateWorkersKVNamespace(ctx context.Context, rc *ResourceContainer, params CreateWorkersKVNamespaceParams) (WorkersKVNamespaceResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkersKVNamespaceResponse{}, ErrRequiredAccountLevelResourceContainer
@@ -130,7 +130,7 @@ func (api *API) CreateWorkersKVNamespace(ctx context.Context, rc *ResourceContai
 
 // ListWorkersKVNamespaces lists storage namespaces.
 //
-// API reference: https://developers.cloudflare.com/api/operations/workers-kv-namespace-list-namespaces
+// API reference: https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/methods/list/
 func (api *API) ListWorkersKVNamespaces(ctx context.Context, rc *ResourceContainer, params ListWorkersKVNamespacesParams) ([]WorkersKVNamespace, *ResultInfo, error) {
 	if rc.Level != AccountRouteLevel {
 		return []WorkersKVNamespace{}, &ResultInfo{}, ErrRequiredAccountLevelResourceContainer
@@ -180,7 +180,7 @@ func (api *API) ListWorkersKVNamespaces(ctx context.Context, rc *ResourceContain
 
 // DeleteWorkersKVNamespace deletes the namespace corresponding to the given ID.
 //
-// API reference: https://developers.cloudflare.com/api/operations/workers-kv-namespace-remove-a-namespace
+// API reference: https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/methods/delete/
 func (api *API) DeleteWorkersKVNamespace(ctx context.Context, rc *ResourceContainer, namespaceID string) (Response, error) {
 	uri := fmt.Sprintf("/accounts/%s/storage/kv/namespaces/%s", rc.Identifier, namespaceID)
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
@@ -198,7 +198,7 @@ func (api *API) DeleteWorkersKVNamespace(ctx context.Context, rc *ResourceContai
 
 // UpdateWorkersKVNamespace modifies a KV namespace based on the ID.
 //
-// API reference: https://developers.cloudflare.com/api/operations/workers-kv-namespace-rename-a-namespace
+// API reference: https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/methods/update/
 func (api *API) UpdateWorkersKVNamespace(ctx context.Context, rc *ResourceContainer, params UpdateWorkersKVNamespaceParams) (Response, error) {
 	if rc.Level != AccountRouteLevel {
 		return Response{}, ErrRequiredAccountLevelResourceContainer
@@ -224,7 +224,7 @@ func (api *API) UpdateWorkersKVNamespace(ctx context.Context, rc *ResourceContai
 
 // WriteWorkersKVEntry writes a single KV value based on the key.
 //
-// API reference: https://developers.cloudflare.com/api/operations/workers-kv-namespace-write-key-value-pair-with-metadata
+// API reference: https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/subresources/values/methods/update/
 func (api *API) WriteWorkersKVEntry(ctx context.Context, rc *ResourceContainer, params WriteWorkersKVEntryParams) (Response, error) {
 	if rc.Level != AccountRouteLevel {
 		return Response{}, ErrRequiredAccountLevelResourceContainer
@@ -252,7 +252,7 @@ func (api *API) WriteWorkersKVEntry(ctx context.Context, rc *ResourceContainer, 
 
 // WriteWorkersKVEntries writes multiple KVs at once.
 //
-// API reference: https://developers.cloudflare.com/api/operations/workers-kv-namespace-write-multiple-key-value-pairs
+// API reference: https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/methods/bulk_update/
 func (api *API) WriteWorkersKVEntries(ctx context.Context, rc *ResourceContainer, params WriteWorkersKVEntriesParams) (Response, error) {
 	if rc.Level != AccountRouteLevel {
 		return Response{}, ErrRequiredAccountLevelResourceContainer
@@ -281,7 +281,7 @@ func (api *API) WriteWorkersKVEntries(ctx context.Context, rc *ResourceContainer
 // GetWorkersKV returns the value associated with the given key in the
 // given namespace.
 //
-// API reference: https://developers.cloudflare.com/api/operations/workers-kv-namespace-read-key-value-pair
+// API reference: https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/subresources/values/methods/get/
 func (api API) GetWorkersKV(ctx context.Context, rc *ResourceContainer, params GetWorkersKVParams) ([]byte, error) {
 	if rc.Level != AccountRouteLevel {
 		return []byte(``), ErrRequiredAccountLevelResourceContainer
@@ -300,7 +300,7 @@ func (api API) GetWorkersKV(ctx context.Context, rc *ResourceContainer, params G
 
 // DeleteWorkersKVEntry deletes a key and value for a provided storage namespace.
 //
-// API reference: https://developers.cloudflare.com/api/operations/workers-kv-namespace-delete-key-value-pair
+// API reference: https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/subresources/values/methods/delete/
 func (api API) DeleteWorkersKVEntry(ctx context.Context, rc *ResourceContainer, params DeleteWorkersKVEntryParams) (Response, error) {
 	if rc.Level != AccountRouteLevel {
 		return Response{}, ErrRequiredAccountLevelResourceContainer
@@ -324,7 +324,7 @@ func (api API) DeleteWorkersKVEntry(ctx context.Context, rc *ResourceContainer, 
 
 // DeleteWorkersKVEntries deletes multiple KVs at once.
 //
-// API reference: https://developers.cloudflare.com/api/operations/workers-kv-namespace-delete-multiple-key-value-pairs
+// API reference: https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/methods/bulk_delete/
 func (api *API) DeleteWorkersKVEntries(ctx context.Context, rc *ResourceContainer, params DeleteWorkersKVEntriesParams) (Response, error) {
 	if rc.Level != AccountRouteLevel {
 		return Response{}, ErrRequiredAccountLevelResourceContainer
@@ -351,7 +351,7 @@ func (api *API) DeleteWorkersKVEntries(ctx context.Context, rc *ResourceContaine
 
 // ListWorkersKVKeys lists a namespace's keys.
 //
-// API Reference: https://developers.cloudflare.com/api/operations/workers-kv-namespace-list-a-namespace'-s-keys
+// API Reference: https://developers.cloudflare.com/api/resources/kv/subresources/namespaces/subresources/keys/methods/list/
 func (api API) ListWorkersKVKeys(ctx context.Context, rc *ResourceContainer, params ListWorkersKVsParams) (ListStorageKeysResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return ListStorageKeysResponse{}, ErrRequiredAccountLevelResourceContainer

@@ -58,7 +58,7 @@ type ListRiskScoreIntegrationParams struct{}
 
 // GetRiskScoreIntegration returns a single Risk Score Integration by its ID.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-zt-risk-score-integration-get
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/risk_scoring/subresources/integrations/methods/get/
 func (api *API) GetRiskScoreIntegration(ctx context.Context, rc *ResourceContainer, integrationID string) (RiskScoreIntegration, error) {
 	if rc.Identifier == "" {
 		return RiskScoreIntegration{}, ErrMissingResourceIdentifier
@@ -86,7 +86,7 @@ func (api *API) GetRiskScoreIntegration(ctx context.Context, rc *ResourceContain
 
 // ListRiskScoreIntegrations returns all Risk Score Integrations for an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-zt-risk-score-integration-list
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/risk_scoring/subresources/integrations/methods/list/
 func (api *API) ListRiskScoreIntegrations(ctx context.Context, rc *ResourceContainer, params ListRiskScoreIntegrationParams) ([]RiskScoreIntegration, error) {
 	if rc.Identifier == "" {
 		return []RiskScoreIntegration{}, ErrMissingResourceIdentifier
@@ -110,7 +110,7 @@ func (api *API) ListRiskScoreIntegrations(ctx context.Context, rc *ResourceConta
 
 // CreateRiskScoreIntegration creates a new Risk Score Integration.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-zt-risk-score-integration-create
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/risk_scoring/subresources/integrations/methods/create/
 func (api *API) CreateRiskScoreIntegration(ctx context.Context, rc *ResourceContainer, params RiskScoreIntegrationCreateRequest) (RiskScoreIntegration, error) {
 	if rc.Identifier == "" {
 		return RiskScoreIntegration{}, ErrMissingResourceIdentifier
@@ -135,7 +135,7 @@ func (api *API) CreateRiskScoreIntegration(ctx context.Context, rc *ResourceCont
 // UpdateRiskScoreIntegration updates a Risk Score Integration.
 //
 // Can be used to disable or active the integration using the "active" boolean property.
-// API reference: https://developers.cloudflare.com/api/operations/dlp-zt-risk-score-integration-update
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/risk_scoring/subresources/integrations/methods/update/
 func (api *API) UpdateRiskScoreIntegration(ctx context.Context, rc *ResourceContainer, integrationID string, params RiskScoreIntegrationUpdateRequest) (RiskScoreIntegration, error) {
 	if rc.Identifier == "" {
 		return RiskScoreIntegration{}, ErrMissingResourceIdentifier
@@ -163,7 +163,7 @@ func (api *API) UpdateRiskScoreIntegration(ctx context.Context, rc *ResourceCont
 
 // DeleteRiskScoreIntegration deletes a Risk Score Integration.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-zt-risk-score-integration-delete
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/risk_scoring/subresources/integrations/methods/delete/
 func (api *API) DeleteRiskScoreIntegration(ctx context.Context, rc *ResourceContainer, integrationID string) error {
 	if rc.Identifier == "" {
 		return ErrMissingResourceIdentifier

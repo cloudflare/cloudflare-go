@@ -26,7 +26,7 @@ type HostnameAssociation = string
 
 // List Hostname Associations
 //
-// API Reference: https://developers.cloudflare.com/api/operations/client-certificate-for-a-zone-list-hostname-associations
+// API Reference: https://developers.cloudflare.com/api/resources/certificate_authorities/subresources/hostname_associations/methods/get/
 func (api *API) ListCertificateAuthoritiesHostnameAssociations(ctx context.Context, rc *ResourceContainer, params ListCertificateAuthoritiesHostnameAssociationsParams) ([]HostnameAssociation, error) {
 
 	uri := fmt.Sprintf(
@@ -51,7 +51,7 @@ func (api *API) ListCertificateAuthoritiesHostnameAssociations(ctx context.Conte
 
 // Replace Hostname Associations
 //
-// API Reference: https://developers.cloudflare.com/api/operations/client-certificate-for-a-zone-put-hostname-associations
+// API Reference: https://developers.cloudflare.com/api/resources/certificate_authorities/subresources/hostname_associations/methods/update/
 func (api *API) UpdateCertificateAuthoritiesHostnameAssociations(ctx context.Context, rc *ResourceContainer, params UpdateCertificateAuthoritiesHostnameAssociationsParams) ([]HostnameAssociation, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/certificate_authorities/hostname_associations",

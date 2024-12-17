@@ -35,7 +35,7 @@ type ListGatewayCategoriesParams struct {
 
 // ListGatewayCategories returns all gateway categories within an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/zero-trust-gateway-categories-list-categories
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/gateway/subresources/categories/methods/list/
 func (api *API) ListGatewayCategories(ctx context.Context, rc *ResourceContainer, params ListGatewayCategoriesParams) ([]GatewayCategory, ResultInfo, error) {
 	uri := fmt.Sprintf("/accounts/%s/gateway/categories", rc.Identifier)
 

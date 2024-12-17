@@ -37,7 +37,7 @@ type UpdateCacheReserveParams struct {
 
 // GetCacheReserve returns information about the current cache reserve settings.
 //
-// API reference: https://developers.cloudflare.com/api/operations/zone-cache-settings-get-cache-reserve-setting
+// API reference: https://developers.cloudflare.com/api/resources/cache/subresources/cache_reserve/methods/get/
 func (api *API) GetCacheReserve(ctx context.Context, rc *ResourceContainer, params GetCacheReserveParams) (CacheReserve, error) {
 	if rc.Level != ZoneRouteLevel {
 		return CacheReserve{}, ErrRequiredZoneLevelResourceContainer
@@ -60,7 +60,7 @@ func (api *API) GetCacheReserve(ctx context.Context, rc *ResourceContainer, para
 
 // UpdateCacheReserve updates the cache reserve setting for a zone
 //
-// API reference: https://developers.cloudflare.com/api/operations/zone-cache-settings-change-cache-reserve-setting
+// API reference: https://developers.cloudflare.com/api/resources/cache/subresources/cache_reserve/methods/edit/
 func (api *API) UpdateCacheReserve(ctx context.Context, rc *ResourceContainer, params UpdateCacheReserveParams) (CacheReserve, error) {
 	if rc.Level != ZoneRouteLevel {
 		return CacheReserve{}, ErrRequiredZoneLevelResourceContainer

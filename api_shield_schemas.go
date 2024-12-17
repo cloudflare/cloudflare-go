@@ -31,7 +31,7 @@ type APIShieldSchema struct {
 
 // CreateAPIShieldSchemaParams represents the parameters to pass when creating a schema in Schema Validation 2.0.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-post-schema
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/user_schemas/methods/create/
 type CreateAPIShieldSchemaParams struct {
 	// Source is a io.Reader containing the contents of the schema
 	Source io.Reader
@@ -45,7 +45,7 @@ type CreateAPIShieldSchemaParams struct {
 
 // GetAPIShieldSchemaParams represents the parameters to pass when retrieving a schema with a given schema ID.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-retrieve-information-about-specific-schema
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/user_schemas/methods/get/
 type GetAPIShieldSchemaParams struct {
 	// SchemaID is the ID of the schema to retrieve
 	SchemaID string `url:"-"`
@@ -56,7 +56,7 @@ type GetAPIShieldSchemaParams struct {
 
 // ListAPIShieldSchemasParams represents the parameters to pass when retrieving all schemas.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-retrieve-information-about-all-schemas
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/user_schemas/methods/list/
 type ListAPIShieldSchemasParams struct {
 	// OmitSource specifies whether the contents of the schema should be returned in the "Source" field.
 	OmitSource *bool `url:"omit_source,omitempty"`
@@ -70,7 +70,7 @@ type ListAPIShieldSchemasParams struct {
 
 // DeleteAPIShieldSchemaParams represents the parameters to pass to delete a schema.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-delete-a-schema
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/user_schemas/methods/delete/
 type DeleteAPIShieldSchemaParams struct {
 	// SchemaID is the schema to be deleted
 	SchemaID string `url:"-"`
@@ -78,7 +78,7 @@ type DeleteAPIShieldSchemaParams struct {
 
 // UpdateAPIShieldSchemaParams represents the parameters to pass to patch certain fields on an existing schema
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-enable-validation-for-a-schema
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/user_schemas/methods/edit/
 type UpdateAPIShieldSchemaParams struct {
 	// SchemaID is the schema to be patched
 	SchemaID string `json:"-" url:"-"`
@@ -180,7 +180,7 @@ func (cse APIShieldCreateSchemaEventWithLocations) String() string {
 
 // GetAPIShieldSchema retrieves information about a specific schema on a zone
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-retrieve-information-about-specific-schema
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/user_schemas/methods/get/
 func (api *API) GetAPIShieldSchema(ctx context.Context, rc *ResourceContainer, params GetAPIShieldSchemaParams) (*APIShieldSchema, error) {
 	if params.SchemaID == "" {
 		return nil, fmt.Errorf("schema ID must be provided")
@@ -206,7 +206,7 @@ func (api *API) GetAPIShieldSchema(ctx context.Context, rc *ResourceContainer, p
 
 // ListAPIShieldSchemas retrieves all schemas for a zone
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-retrieve-information-about-all-schemas
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/user_schemas/methods/list/
 func (api *API) ListAPIShieldSchemas(ctx context.Context, rc *ResourceContainer, params ListAPIShieldSchemasParams) ([]APIShieldSchema, ResultInfo, error) {
 	path := fmt.Sprintf("/zones/%s/api_gateway/user_schemas", rc.Identifier)
 
@@ -228,7 +228,7 @@ func (api *API) ListAPIShieldSchemas(ctx context.Context, rc *ResourceContainer,
 
 // CreateAPIShieldSchema uploads a schema to a zone
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-post-schema
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/user_schemas/methods/create/
 func (api *API) CreateAPIShieldSchema(ctx context.Context, rc *ResourceContainer, params CreateAPIShieldSchemaParams) (*APIShieldCreateSchemaResult, error) {
 	uri := fmt.Sprintf("/zones/%s/api_gateway/user_schemas", rc.Identifier)
 
@@ -287,7 +287,7 @@ func (api *API) CreateAPIShieldSchema(ctx context.Context, rc *ResourceContainer
 
 // DeleteAPIShieldSchema deletes a single schema
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-delete-a-schema
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/user_schemas/methods/delete/
 func (api *API) DeleteAPIShieldSchema(ctx context.Context, rc *ResourceContainer, params DeleteAPIShieldSchemaParams) error {
 	if params.SchemaID == "" {
 		return fmt.Errorf("schema ID must be provided")
@@ -311,7 +311,7 @@ func (api *API) DeleteAPIShieldSchema(ctx context.Context, rc *ResourceContainer
 
 // UpdateAPIShieldSchema updates certain fields on an existing schema.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-enable-validation-for-a-schema
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/user_schemas/methods/edit/
 func (api *API) UpdateAPIShieldSchema(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldSchemaParams) (*APIShieldSchema, error) {
 	if params.SchemaID == "" {
 		return nil, fmt.Errorf("schema ID must be provided")
@@ -350,7 +350,7 @@ type APIShieldSchemaValidationSettings struct {
 // UpdateAPIShieldSchemaValidationSettingsParams represents the parameters to pass to update certain fields
 // on schema validation settings on the zone
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-patch-zone-level-settings
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/settings/subresources/schema_validation/methods/edit/
 type UpdateAPIShieldSchemaValidationSettingsParams struct {
 	// DefaultMitigationAction is the mitigation to apply when there is no operation-level
 	// mitigation action defined
@@ -373,7 +373,7 @@ type APIShieldSchemaValidationSettingsResponse struct {
 
 // GetAPIShieldSchemaValidationSettings retrieves zone level schema validation settings
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-retrieve-zone-level-settings
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/settings/subresources/schema_validation/methods/get/
 func (api *API) GetAPIShieldSchemaValidationSettings(ctx context.Context, rc *ResourceContainer) (*APIShieldSchemaValidationSettings, error) {
 	path := fmt.Sprintf("/zones/%s/api_gateway/settings/schema_validation", rc.Identifier)
 
@@ -395,7 +395,7 @@ func (api *API) GetAPIShieldSchemaValidationSettings(ctx context.Context, rc *Re
 
 // UpdateAPIShieldSchemaValidationSettings updates certain fields on zone level schema validation settings
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-patch-zone-level-settings
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/settings/subresources/schema_validation/methods/edit/
 func (api *API) UpdateAPIShieldSchemaValidationSettings(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldSchemaValidationSettingsParams) (*APIShieldSchemaValidationSettings, error) {
 	path := fmt.Sprintf("/zones/%s/api_gateway/settings/schema_validation", rc.Identifier)
 
@@ -425,7 +425,7 @@ type APIShieldOperationSchemaValidationSettings struct {
 // GetAPIShieldOperationSchemaValidationSettingsParams represents the parameters to pass to retrieve
 // the schema validation settings set on the operation.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-retrieve-operation-level-settings
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/subresources/schema_validation/methods/get/
 type GetAPIShieldOperationSchemaValidationSettingsParams struct {
 	// The Operation ID to apply the mitigation action to
 	OperationID string `url:"-"`
@@ -441,7 +441,7 @@ type GetAPIShieldOperationSchemaValidationSettingsParams struct {
 //			"99522293-a505-45e5-bbad-bbc339f5dc40": APIShieldOperationSchemaValidationSettings{ MitigationAction: nil },
 //	}
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-update-multiple-operation-level-settings
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/subresources/schema_validation/methods/edit/
 type UpdateAPIShieldOperationSchemaValidationSettings map[string]APIShieldOperationSchemaValidationSettings
 
 // APIShieldOperationSchemaValidationSettingsResponse represents the response from the GET api_gateway/operation/{operationID}/schema_validation endpoint.
@@ -458,7 +458,7 @@ type UpdateAPIShieldOperationSchemaValidationSettingsResponse struct {
 
 // GetAPIShieldOperationSchemaValidationSettings retrieves operation level schema validation settings
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-retrieve-operation-level-settings
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/subresources/schema_validation/methods/get/
 func (api *API) GetAPIShieldOperationSchemaValidationSettings(ctx context.Context, rc *ResourceContainer, params GetAPIShieldOperationSchemaValidationSettingsParams) (*APIShieldOperationSchemaValidationSettings, error) {
 	if params.OperationID == "" {
 		return nil, fmt.Errorf("operation ID must be provided")
@@ -484,7 +484,7 @@ func (api *API) GetAPIShieldOperationSchemaValidationSettings(ctx context.Contex
 
 // UpdateAPIShieldOperationSchemaValidationSettings update multiple operation level schema validation settings
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-schema-validation-update-multiple-operation-level-settings
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/subresources/schema_validation/methods/edit/
 func (api *API) UpdateAPIShieldOperationSchemaValidationSettings(ctx context.Context, rc *ResourceContainer, params UpdateAPIShieldOperationSchemaValidationSettings) (*UpdateAPIShieldOperationSchemaValidationSettings, error) {
 	path := fmt.Sprintf("/zones/%s/api_gateway/operations/schema_validation", rc.Identifier)
 

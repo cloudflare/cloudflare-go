@@ -1080,7 +1080,7 @@ BREAKING CHANGES:
 
 NOTES:
 
-- pages: removed the v1 logs endpoint for Pages deployments. Please switch to v2: https://developers.cloudflare.com/api/operations/pages-deployment-get-deployment-logs ([#1135](https://github.com/cloudflare/cloudflare-go/issues/1135))
+- pages: removed the v1 logs endpoint for Pages deployments. Please switch to v2: https://developers.cloudflare.com/api/resources/pages/subresources/projects/subresources/deployments/subresources/history/subresources/logs/methods/get/ ([#1135](https://github.com/cloudflare/cloudflare-go/issues/1135))
 
 ENHANCEMENTS:
 

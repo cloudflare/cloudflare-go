@@ -245,7 +245,7 @@ func (api *API) TeamsAccountLoggingConfiguration(ctx context.Context, accountID 
 
 // TeamsAccountConnectivityConfiguration returns zero trust account connectivity settings.
 //
-// API reference: https://developers.cloudflare.com/api/operations/zero-trust-accounts-get-connectivity-settings
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/connectivity_settings/methods/get/
 func (api *API) TeamsAccountConnectivityConfiguration(ctx context.Context, accountID string) (TeamsConnectivitySettings, error) {
 	uri := fmt.Sprintf("/accounts/%s/zerotrust/connectivity_settings", accountID)
 
@@ -325,7 +325,7 @@ func (api *API) TeamsAccountDeviceUpdateConfiguration(ctx context.Context, accou
 
 // TeamsAccountConnectivityUpdateConfiguration updates zero trust account connectivity settings.
 //
-// API reference: https://developers.cloudflare.com/api/operations/zero-trust-accounts-patch-connectivity-settings
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/connectivity_settings/methods/edit/
 func (api *API) TeamsAccountConnectivityUpdateConfiguration(ctx context.Context, accountID string, settings TeamsConnectivitySettings) (TeamsConnectivitySettings, error) {
 	uri := fmt.Sprintf("/accounts/%s/zerotrust/connectivity_settings", accountID)
 
