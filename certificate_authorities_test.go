@@ -22,10 +22,12 @@ func TestListCertificateAuthoritiesHostnameAssociations(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": [
-				"admin.example.com",
-				"foobar.example.com"
-			]
+			"result": {
+				"hostnames": [
+					"admin.example.com",
+					"foobar.example.com"
+				]
+			}
 		}`)
 	}
 
@@ -68,10 +70,12 @@ func TestUpdateCertificateAuthoritiesHostnameAssociations(t *testing.T) {
 			"success": true,
 			"errors": [],
 			"messages": [],
-			"result": [
-				"admin.example.com",
-				"foobar.example.com"
-			]
+			"result": {
+				"hostnames": [
+					"admin.example.com",
+					"foobar.example.com"
+				]
+			}
 		}`)
 	}
 

@@ -24,7 +24,11 @@ type HostnameAssociationsUpdateRequest struct {
 
 type HostnameAssociationsResponse struct {
 	Response
-	Result []HostnameAssociation `json:"result"`
+	Result HostnameAssociations `json:"result"`
+}
+
+type HostnameAssociations struct {
+	Hostnames []HostnameAssociation `json:"hostnames"`
 }
 
 type HostnameAssociation = string
@@ -50,7 +54,7 @@ func (api *API) ListCertificateAuthoritiesHostnameAssociations(ctx context.Conte
 		return []HostnameAssociation{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return hostnameAssociationsResponse.Result, nil
+	return hostnameAssociationsResponse.Result.Hostnames, nil
 }
 
 // Replace Hostname Associations
@@ -74,5 +78,5 @@ func (api *API) UpdateCertificateAuthoritiesHostnameAssociations(ctx context.Con
 		return []HostnameAssociation{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return hostnameAssociationsResponse.Result, nil
+	return hostnameAssociationsResponse.Result.Hostnames, nil
 }
