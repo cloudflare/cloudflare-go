@@ -74,8 +74,8 @@ func (r *InvestigatePreviewService) Get(ctx context.Context, postfixID string, q
 }
 
 type InvestigatePreviewNewResponse struct {
+	// A base64 encoded PNG image of the email.
 	Screenshot string                            `json:"screenshot,required"`
-	Error      string                            `json:"error,nullable"`
 	JSON       investigatePreviewNewResponseJSON `json:"-"`
 }
 
@@ -83,7 +83,6 @@ type InvestigatePreviewNewResponse struct {
 // [InvestigatePreviewNewResponse]
 type investigatePreviewNewResponseJSON struct {
 	Screenshot  apijson.Field
-	Error       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
