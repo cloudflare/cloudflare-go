@@ -17,6 +17,11 @@ type UpdateCertificateAuthoritiesHostnameAssociationsParams struct {
 	MTLSCertificateID string                `json:"mtls_certificate_id,omitempty"`
 }
 
+type HostnameAssociationsUpdateRequest struct {
+	Hostnames         []HostnameAssociation `json:"hostnames,omitempty"`
+	MTLSCertificateID string                `json:"mtls_certificate_id,omitempty"`
+}
+
 type HostnameAssociationsResponse struct {
 	Response
 	Result []HostnameAssociation `json:"result"`
@@ -28,12 +33,11 @@ type HostnameAssociation = string
 //
 // API Reference: https://developers.cloudflare.com/api/resources/certificate_authorities/subresources/hostname_associations/methods/get/
 func (api *API) ListCertificateAuthoritiesHostnameAssociations(ctx context.Context, rc *ResourceContainer, params ListCertificateAuthoritiesHostnameAssociationsParams) ([]HostnameAssociation, error) {
+	if rc.Level != ZoneRouteLevel {
+		return []HostnameAssociation{}, ErrRequiredZoneLevelResourceContainer
+	}
 
-	uri := fmt.Sprintf(
-		"/%s/%s/certificate_authorities/hostname_associations",
-		rc.Level,
-		rc.Identifier,
-	)
+	uri := buildURI(fmt.Sprintf("/zones/%s/certificate_authorities/hostname_associations", rc.Identifier), params)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
@@ -53,11 +57,11 @@ func (api *API) ListCertificateAuthoritiesHostnameAssociations(ctx context.Conte
 //
 // API Reference: https://developers.cloudflare.com/api/resources/certificate_authorities/subresources/hostname_associations/methods/update/
 func (api *API) UpdateCertificateAuthoritiesHostnameAssociations(ctx context.Context, rc *ResourceContainer, params UpdateCertificateAuthoritiesHostnameAssociationsParams) ([]HostnameAssociation, error) {
-	uri := fmt.Sprintf(
-		"/%s/%s/certificate_authorities/hostname_associations",
-		rc.Level,
-		rc.Identifier,
-	)
+	if rc.Level != ZoneRouteLevel {
+		return []HostnameAssociation{}, ErrRequiredZoneLevelResourceContainer
+	}
+	
+	uri := fmt.Sprintf("/zones/%s/certificate_authorities/hostname_associations", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
 	if err != nil {
