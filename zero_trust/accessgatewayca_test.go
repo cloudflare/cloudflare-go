@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package addressing_test
+package zero_trust_test
 
 import (
 	"context"
@@ -9,12 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/addressing"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
 )
 
-func TestPrefixBGPPrefixNewWithOptionalParams(t *testing.T) {
+func TestAccessGatewayCANew(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,14 +27,9 @@ func TestPrefixBGPPrefixNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Prefixes.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		addressing.PrefixBGPPrefixNewParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CIDR:      cloudflare.F("192.0.2.0/24"),
-		},
-	)
+	_, err := client.ZeroTrust.Access.GatewayCA.New(context.TODO(), zero_trust.AccessGatewayCANewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -44,7 +39,7 @@ func TestPrefixBGPPrefixNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPrefixBGPPrefixList(t *testing.T) {
+func TestAccessGatewayCAList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -57,13 +52,9 @@ func TestPrefixBGPPrefixList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Prefixes.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		addressing.PrefixBGPPrefixListParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		},
-	)
+	_, err := client.ZeroTrust.Access.GatewayCA.List(context.TODO(), zero_trust.AccessGatewayCAListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -73,7 +64,7 @@ func TestPrefixBGPPrefixList(t *testing.T) {
 	}
 }
 
-func TestPrefixBGPPrefixEditWithOptionalParams(t *testing.T) {
+func TestAccessGatewayCADelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -86,44 +77,10 @@ func TestPrefixBGPPrefixEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Prefixes.Edit(
+	_, err := client.ZeroTrust.Access.GatewayCA.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		addressing.PrefixBGPPrefixEditParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			OnDemand: cloudflare.F(addressing.PrefixBGPPrefixEditParamsOnDemand{
-				Advertised: cloudflare.F(true),
-			}),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestPrefixBGPPrefixGet(t *testing.T) {
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.Addressing.Prefixes.BGP.Prefixes.Get(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		addressing.PrefixBGPPrefixGetParams{
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		zero_trust.AccessGatewayCADeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
