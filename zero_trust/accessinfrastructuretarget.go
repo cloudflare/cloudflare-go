@@ -76,7 +76,9 @@ func (r *AccessInfrastructureTargetService) Update(ctx context.Context, targetID
 	return
 }
 
-// List all targets
+// Lists and sorts an account’s targets. Filters are optional and are ORed
+// together. However, when a timestamp is specified with both its before and after
+// counterparts, the timestamp filters are ANDed.
 func (r *AccessInfrastructureTargetService) List(ctx context.Context, params AccessInfrastructureTargetListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[AccessInfrastructureTargetListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -98,7 +100,9 @@ func (r *AccessInfrastructureTargetService) List(ctx context.Context, params Acc
 	return res, nil
 }
 
-// List all targets
+// Lists and sorts an account’s targets. Filters are optional and are ORed
+// together. However, when a timestamp is specified with both its before and after
+// counterparts, the timestamp filters are ANDed.
 func (r *AccessInfrastructureTargetService) ListAutoPaging(ctx context.Context, params AccessInfrastructureTargetListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[AccessInfrastructureTargetListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -931,8 +935,12 @@ func (r AccessInfrastructureTargetUpdateResponseEnvelopeSuccess) IsKnown() bool 
 type AccessInfrastructureTargetListParams struct {
 	// Account identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Date and time at which the target was created
+	// Date and time at which the target was created after (inclusive)
 	CreatedAfter param.Field[time.Time] `query:"created_after" format:"date-time"`
+	// Date and time at which the target was created before (inclusive)
+	CreatedBefore param.Field[time.Time] `query:"created_before" format:"date-time"`
+	// The sorting direction.
+	Direction param.Field[AccessInfrastructureTargetListParamsDirection] `query:"direction"`
 	// Hostname of a target
 	Hostname param.Field[string] `query:"hostname"`
 	// Partial match to the hostname of a target
@@ -941,8 +949,15 @@ type AccessInfrastructureTargetListParams struct {
 	IPV4 param.Field[string] `query:"ip_v4"`
 	// IPv6 address of the target
 	IPV6 param.Field[string] `query:"ip_v6"`
-	// Date and time at which the target was modified
+	// Filters for targets that have any of the following IP addresses. Specify `ips`
+	// multiple times in query parameter to build list of candidates.
+	IPs param.Field[[]string] `query:"ips"`
+	// Date and time at which the target was modified after (inclusive)
 	ModifiedAfter param.Field[time.Time] `query:"modified_after" format:"date-time"`
+	// Date and time at which the target was modified before (inclusive)
+	ModifiedBefore param.Field[time.Time] `query:"modified_before" format:"date-time"`
+	// The field to sort by.
+	Order param.Field[AccessInfrastructureTargetListParamsOrder] `query:"order"`
 	// Current page in the response
 	Page param.Field[int64] `query:"page"`
 	// Max amount of entries returned per page
@@ -958,6 +973,38 @@ func (r AccessInfrastructureTargetListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
+}
+
+// The sorting direction.
+type AccessInfrastructureTargetListParamsDirection string
+
+const (
+	AccessInfrastructureTargetListParamsDirectionAsc  AccessInfrastructureTargetListParamsDirection = "asc"
+	AccessInfrastructureTargetListParamsDirectionDesc AccessInfrastructureTargetListParamsDirection = "desc"
+)
+
+func (r AccessInfrastructureTargetListParamsDirection) IsKnown() bool {
+	switch r {
+	case AccessInfrastructureTargetListParamsDirectionAsc, AccessInfrastructureTargetListParamsDirectionDesc:
+		return true
+	}
+	return false
+}
+
+// The field to sort by.
+type AccessInfrastructureTargetListParamsOrder string
+
+const (
+	AccessInfrastructureTargetListParamsOrderHostname  AccessInfrastructureTargetListParamsOrder = "hostname"
+	AccessInfrastructureTargetListParamsOrderCreatedAt AccessInfrastructureTargetListParamsOrder = "created_at"
+)
+
+func (r AccessInfrastructureTargetListParamsOrder) IsKnown() bool {
+	switch r {
+	case AccessInfrastructureTargetListParamsOrderHostname, AccessInfrastructureTargetListParamsOrderCreatedAt:
+		return true
+	}
+	return false
 }
 
 type AccessInfrastructureTargetDeleteParams struct {

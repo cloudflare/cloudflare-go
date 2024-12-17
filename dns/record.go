@@ -301,6 +301,8 @@ type ARecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings ARecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -318,6 +320,7 @@ type aRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -351,6 +354,37 @@ func (r ARecord) implementsDNSRecordEditResponse() {}
 
 func (r ARecord) implementsDNSRecordGetResponse() {}
 
+// Settings for the DNS record.
+type ARecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                `json:"ipv6_only"`
+	JSON     aRecordSettingsJSON `json:"-"`
+}
+
+// aRecordSettingsJSON contains the JSON metadata for the struct [ARecordSettings]
+type aRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ARecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type ARecordType string
 
@@ -377,6 +411,8 @@ type ARecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[ARecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -393,6 +429,24 @@ func (r ARecordParam) MarshalJSON() (data []byte, err error) {
 
 func (r ARecordParam) implementsDNSRecordUnionParam() {}
 
+// Settings for the DNS record.
+type ARecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r ARecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type AAAARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -404,6 +458,8 @@ type AAAARecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings AAAARecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -421,6 +477,7 @@ type aaaaRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -454,6 +511,38 @@ func (r AAAARecord) implementsDNSRecordEditResponse() {}
 
 func (r AAAARecord) implementsDNSRecordGetResponse() {}
 
+// Settings for the DNS record.
+type AAAARecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                   `json:"ipv6_only"`
+	JSON     aaaaRecordSettingsJSON `json:"-"`
+}
+
+// aaaaRecordSettingsJSON contains the JSON metadata for the struct
+// [AAAARecordSettings]
+type aaaaRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AAAARecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aaaaRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type AAAARecordType string
 
@@ -480,6 +569,8 @@ type AAAARecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[AAAARecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -496,6 +587,24 @@ func (r AAAARecordParam) MarshalJSON() (data []byte, err error) {
 
 func (r AAAARecordParam) implementsDNSRecordUnionParam() {}
 
+// Settings for the DNS record.
+type AAAARecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r AAAARecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type CAARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -509,6 +618,8 @@ type CAARecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings CAARecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -527,6 +638,7 @@ type caaRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -588,6 +700,38 @@ func (r caaRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type CAARecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                  `json:"ipv6_only"`
+	JSON     caaRecordSettingsJSON `json:"-"`
+}
+
+// caaRecordSettingsJSON contains the JSON metadata for the struct
+// [CAARecordSettings]
+type caaRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CAARecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r caaRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type CAARecordType string
 
@@ -614,6 +758,8 @@ type CAARecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[CAARecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -644,6 +790,24 @@ func (r CAARecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type CAARecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r CAARecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type CERTRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -657,6 +821,8 @@ type CERTRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings CERTRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -675,6 +841,7 @@ type certRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -739,6 +906,38 @@ func (r certRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type CERTRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                   `json:"ipv6_only"`
+	JSON     certRecordSettingsJSON `json:"-"`
+}
+
+// certRecordSettingsJSON contains the JSON metadata for the struct
+// [CERTRecordSettings]
+type certRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CERTRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type CERTRecordType string
 
@@ -765,6 +964,8 @@ type CERTRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[CERTRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -797,6 +998,24 @@ func (r CERTRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type CERTRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r CERTRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type CNAMERecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -807,7 +1026,8 @@ type CNAMERecord struct {
 	Name string `json:"name"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
-	Proxied  bool                `json:"proxied"`
+	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
 	Settings CNAMERecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
@@ -860,19 +1080,32 @@ func (r CNAMERecord) implementsDNSRecordEditResponse() {}
 
 func (r CNAMERecord) implementsDNSRecordGetResponse() {}
 
+// Settings for the DNS record.
 type CNAMERecordSettings struct {
 	// If enabled, causes the CNAME record to be resolved externally and the resulting
 	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
 	// itself. This setting has no effect on proxied records, which are always
 	// flattened.
-	FlattenCNAME bool                    `json:"flatten_cname"`
-	JSON         cnameRecordSettingsJSON `json:"-"`
+	FlattenCNAME bool `json:"flatten_cname"`
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                    `json:"ipv6_only"`
+	JSON     cnameRecordSettingsJSON `json:"-"`
 }
 
 // cnameRecordSettingsJSON contains the JSON metadata for the struct
 // [CNAMERecordSettings]
 type cnameRecordSettingsJSON struct {
 	FlattenCNAME apijson.Field
+	IPV4Only     apijson.Field
+	IPV6Only     apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -910,7 +1143,8 @@ type CNAMERecordParam struct {
 	Name param.Field[string] `json:"name"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
-	Proxied  param.Field[bool]                     `json:"proxied"`
+	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
 	Settings param.Field[CNAMERecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
@@ -928,12 +1162,23 @@ func (r CNAMERecordParam) MarshalJSON() (data []byte, err error) {
 
 func (r CNAMERecordParam) implementsDNSRecordUnionParam() {}
 
+// Settings for the DNS record.
 type CNAMERecordSettingsParam struct {
 	// If enabled, causes the CNAME record to be resolved externally and the resulting
 	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
 	// itself. This setting has no effect on proxied records, which are always
 	// flattened.
 	FlattenCNAME param.Field[bool] `json:"flatten_cname"`
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
 }
 
 func (r CNAMERecordSettingsParam) MarshalJSON() (data []byte, err error) {
@@ -953,6 +1198,8 @@ type DNSKEYRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings DNSKEYRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -971,6 +1218,7 @@ type dnskeyRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -1036,6 +1284,38 @@ func (r dnskeyRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type DNSKEYRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                     `json:"ipv6_only"`
+	JSON     dnskeyRecordSettingsJSON `json:"-"`
+}
+
+// dnskeyRecordSettingsJSON contains the JSON metadata for the struct
+// [DNSKEYRecordSettings]
+type dnskeyRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSKEYRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnskeyRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSKEYRecordType string
 
@@ -1062,6 +1342,8 @@ type DNSKEYRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[DNSKEYRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1094,6 +1376,24 @@ func (r DNSKEYRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type DNSKEYRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r DNSKEYRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type DSRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -1107,6 +1407,8 @@ type DSRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings DSRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1125,6 +1427,7 @@ type dsRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -1189,6 +1492,38 @@ func (r dsRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type DSRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                 `json:"ipv6_only"`
+	JSON     dsRecordSettingsJSON `json:"-"`
+}
+
+// dsRecordSettingsJSON contains the JSON metadata for the struct
+// [DSRecordSettings]
+type dsRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DSRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dsRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DSRecordType string
 
@@ -1215,6 +1550,8 @@ type DSRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[DSRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1247,6 +1584,24 @@ func (r DSRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type DSRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r DSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type HTTPSRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -1260,6 +1615,8 @@ type HTTPSRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings HTTPSRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1278,6 +1635,7 @@ type httpsRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -1339,6 +1697,38 @@ func (r httpsRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type HTTPSRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                    `json:"ipv6_only"`
+	JSON     httpsRecordSettingsJSON `json:"-"`
+}
+
+// httpsRecordSettingsJSON contains the JSON metadata for the struct
+// [HTTPSRecordSettings]
+type httpsRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPSRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpsRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type HTTPSRecordType string
 
@@ -1365,6 +1755,8 @@ type HTTPSRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[HTTPSRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1395,6 +1787,24 @@ func (r HTTPSRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type HTTPSRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r HTTPSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type LOCRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -1408,6 +1818,8 @@ type LOCRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings LOCRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1426,6 +1838,7 @@ type locRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -1546,6 +1959,38 @@ func (r LOCRecordDataLongDirection) IsKnown() bool {
 	return false
 }
 
+// Settings for the DNS record.
+type LOCRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                  `json:"ipv6_only"`
+	JSON     locRecordSettingsJSON `json:"-"`
+}
+
+// locRecordSettingsJSON contains the JSON metadata for the struct
+// [LOCRecordSettings]
+type locRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LOCRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r locRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type LOCRecordType string
 
@@ -1572,6 +2017,8 @@ type LOCRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[LOCRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1620,6 +2067,24 @@ func (r LOCRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type LOCRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r LOCRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type MXRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -1634,6 +2099,8 @@ type MXRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings MXRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1652,6 +2119,7 @@ type mxRecordJSON struct {
 	Name        apijson.Field
 	Priority    apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -1685,6 +2153,38 @@ func (r MXRecord) implementsDNSRecordEditResponse() {}
 
 func (r MXRecord) implementsDNSRecordGetResponse() {}
 
+// Settings for the DNS record.
+type MXRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                 `json:"ipv6_only"`
+	JSON     mxRecordSettingsJSON `json:"-"`
+}
+
+// mxRecordSettingsJSON contains the JSON metadata for the struct
+// [MXRecordSettings]
+type mxRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MXRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mxRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type MXRecordType string
 
@@ -1714,6 +2214,8 @@ type MXRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[MXRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1730,6 +2232,24 @@ func (r MXRecordParam) MarshalJSON() (data []byte, err error) {
 
 func (r MXRecordParam) implementsDNSRecordUnionParam() {}
 
+// Settings for the DNS record.
+type MXRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r MXRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type NAPTRRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -1743,6 +2263,8 @@ type NAPTRRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings NAPTRRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1761,6 +2283,7 @@ type naptrRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -1831,6 +2354,38 @@ func (r naptrRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type NAPTRRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                    `json:"ipv6_only"`
+	JSON     naptrRecordSettingsJSON `json:"-"`
+}
+
+// naptrRecordSettingsJSON contains the JSON metadata for the struct
+// [NAPTRRecordSettings]
+type naptrRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NAPTRRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r naptrRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type NAPTRRecordType string
 
@@ -1857,6 +2412,8 @@ type NAPTRRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[NAPTRRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1893,6 +2450,24 @@ func (r NAPTRRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type NAPTRRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r NAPTRRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type NSRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -1904,6 +2479,8 @@ type NSRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings NSRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1921,6 +2498,7 @@ type nsRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -1954,6 +2532,38 @@ func (r NSRecord) implementsDNSRecordEditResponse() {}
 
 func (r NSRecord) implementsDNSRecordGetResponse() {}
 
+// Settings for the DNS record.
+type NSRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                 `json:"ipv6_only"`
+	JSON     nsRecordSettingsJSON `json:"-"`
+}
+
+// nsRecordSettingsJSON contains the JSON metadata for the struct
+// [NSRecordSettings]
+type nsRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *NSRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r nsRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type NSRecordType string
 
@@ -1980,6 +2590,8 @@ type NSRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[NSRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1996,6 +2608,24 @@ func (r NSRecordParam) MarshalJSON() (data []byte, err error) {
 
 func (r NSRecordParam) implementsDNSRecordUnionParam() {}
 
+// Settings for the DNS record.
+type NSRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r NSRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type PTRRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -2007,6 +2637,8 @@ type PTRRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings PTRRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2024,6 +2656,7 @@ type ptrRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -2057,6 +2690,38 @@ func (r PTRRecord) implementsDNSRecordEditResponse() {}
 
 func (r PTRRecord) implementsDNSRecordGetResponse() {}
 
+// Settings for the DNS record.
+type PTRRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                  `json:"ipv6_only"`
+	JSON     ptrRecordSettingsJSON `json:"-"`
+}
+
+// ptrRecordSettingsJSON contains the JSON metadata for the struct
+// [PTRRecordSettings]
+type ptrRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PTRRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ptrRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type PTRRecordType string
 
@@ -2083,6 +2748,8 @@ type PTRRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[PTRRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2098,6 +2765,24 @@ func (r PTRRecordParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r PTRRecordParam) implementsDNSRecordUnionParam() {}
+
+// Settings for the DNS record.
+type PTRRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r PTRRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 type RecordParam struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2153,6 +2838,8 @@ type RecordDNSRecordsOpenpgpkeyRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[RecordDNSRecordsOpenpgpkeyRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2168,6 +2855,24 @@ func (r RecordDNSRecordsOpenpgpkeyRecordParam) MarshalJSON() (data []byte, err e
 }
 
 func (r RecordDNSRecordsOpenpgpkeyRecordParam) implementsDNSRecordUnionParam() {}
+
+// Settings for the DNS record.
+type RecordDNSRecordsOpenpgpkeyRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r RecordDNSRecordsOpenpgpkeyRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Record type.
 type RecordDNSRecordsOpenpgpkeyRecordType string
@@ -2264,6 +2969,8 @@ type SMIMEARecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings SMIMEARecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2282,6 +2989,7 @@ type smimeaRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -2347,6 +3055,38 @@ func (r smimeaRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type SMIMEARecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                     `json:"ipv6_only"`
+	JSON     smimeaRecordSettingsJSON `json:"-"`
+}
+
+// smimeaRecordSettingsJSON contains the JSON metadata for the struct
+// [SMIMEARecordSettings]
+type smimeaRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SMIMEARecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r smimeaRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type SMIMEARecordType string
 
@@ -2373,6 +3113,8 @@ type SMIMEARecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[SMIMEARecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2405,6 +3147,24 @@ func (r SMIMEARecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type SMIMEARecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r SMIMEARecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type SRVRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -2419,6 +3179,8 @@ type SRVRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings SRVRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2437,6 +3199,7 @@ type srvRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -2502,6 +3265,38 @@ func (r srvRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type SRVRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                  `json:"ipv6_only"`
+	JSON     srvRecordSettingsJSON `json:"-"`
+}
+
+// srvRecordSettingsJSON contains the JSON metadata for the struct
+// [SRVRecordSettings]
+type srvRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SRVRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r srvRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type SRVRecordType string
 
@@ -2528,6 +3323,8 @@ type SRVRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[SRVRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2561,6 +3358,24 @@ func (r SRVRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type SRVRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r SRVRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type SSHFPRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -2574,6 +3389,8 @@ type SSHFPRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings SSHFPRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2592,6 +3409,7 @@ type sshfpRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -2653,6 +3471,38 @@ func (r sshfpRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type SSHFPRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                    `json:"ipv6_only"`
+	JSON     sshfpRecordSettingsJSON `json:"-"`
+}
+
+// sshfpRecordSettingsJSON contains the JSON metadata for the struct
+// [SSHFPRecordSettings]
+type sshfpRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSHFPRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sshfpRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type SSHFPRecordType string
 
@@ -2679,6 +3529,8 @@ type SSHFPRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[SSHFPRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2709,6 +3561,24 @@ func (r SSHFPRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type SSHFPRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r SSHFPRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type SVCBRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -2722,6 +3592,8 @@ type SVCBRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings SVCBRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2740,6 +3612,7 @@ type svcbRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -2801,6 +3674,38 @@ func (r svcbRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type SVCBRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                   `json:"ipv6_only"`
+	JSON     svcbRecordSettingsJSON `json:"-"`
+}
+
+// svcbRecordSettingsJSON contains the JSON metadata for the struct
+// [SVCBRecordSettings]
+type svcbRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SVCBRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r svcbRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type SVCBRecordType string
 
@@ -2827,6 +3732,8 @@ type SVCBRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[SVCBRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2857,6 +3764,24 @@ func (r SVCBRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type SVCBRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r SVCBRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type TLSARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -2870,6 +3795,8 @@ type TLSARecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings TLSARecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2888,6 +3815,7 @@ type tlsaRecordJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -2952,6 +3880,38 @@ func (r tlsaRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type TLSARecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                   `json:"ipv6_only"`
+	JSON     tlsaRecordSettingsJSON `json:"-"`
+}
+
+// tlsaRecordSettingsJSON contains the JSON metadata for the struct
+// [TLSARecordSettings]
+type tlsaRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TLSARecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tlsaRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type TLSARecordType string
 
@@ -2978,6 +3938,8 @@ type TLSARecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[TLSARecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3007,6 +3969,24 @@ type TLSARecordDataParam struct {
 }
 
 func (r TLSARecordDataParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Settings for the DNS record.
+type TLSARecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r TLSARecordSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -3043,6 +4023,8 @@ type TXTRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings TXTRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3060,6 +4042,7 @@ type txtRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -3093,6 +4076,38 @@ func (r TXTRecord) implementsDNSRecordEditResponse() {}
 
 func (r TXTRecord) implementsDNSRecordGetResponse() {}
 
+// Settings for the DNS record.
+type TXTRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                  `json:"ipv6_only"`
+	JSON     txtRecordSettingsJSON `json:"-"`
+}
+
+// txtRecordSettingsJSON contains the JSON metadata for the struct
+// [TXTRecordSettings]
+type txtRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TXTRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r txtRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type TXTRecordType string
 
@@ -3124,6 +4139,8 @@ type TXTRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[TXTRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3139,6 +4156,24 @@ func (r TXTRecordParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r TXTRecordParam) implementsDNSRecordUnionParam() {}
+
+// Settings for the DNS record.
+type TXTRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r TXTRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 type URIRecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3156,6 +4191,8 @@ type URIRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings URIRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3175,6 +4212,7 @@ type uriRecordJSON struct {
 	Name        apijson.Field
 	Priority    apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -3233,6 +4271,38 @@ func (r uriRecordDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings for the DNS record.
+type URIRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                  `json:"ipv6_only"`
+	JSON     uriRecordSettingsJSON `json:"-"`
+}
+
+// uriRecordSettingsJSON contains the JSON metadata for the struct
+// [URIRecordSettings]
+type uriRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URIRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r uriRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type URIRecordType string
 
@@ -3262,6 +4332,8 @@ type URIRecordParam struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
+	// Settings for the DNS record.
+	Settings param.Field[URIRecordSettingsParam] `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags param.Field[[]RecordTagsParam] `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3290,6 +4362,24 @@ func (r URIRecordDataParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings for the DNS record.
+type URIRecordSettingsParam struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only param.Field[bool] `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only param.Field[bool] `json:"ipv6_only"`
+}
+
+func (r URIRecordSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 type RecordNewResponse struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
@@ -3309,7 +4399,14 @@ type RecordNewResponse struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
-	// This field can have the runtime type of [CNAMERecordSettings].
+	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
+	// [CAARecordSettings], [CERTRecordSettings], [CNAMERecordSettings],
+	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
+	// [LOCRecordSettings], [MXRecordSettings], [NAPTRRecordSettings],
+	// [NSRecordSettings], [RecordNewResponseDNSRecordsOpenpgpkeyRecordSettings],
+	// [PTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
+	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
+	// [TXTRecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -3479,6 +4576,8 @@ type RecordNewResponseDNSRecordsOpenpgpkeyRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings RecordNewResponseDNSRecordsOpenpgpkeyRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3497,6 +4596,7 @@ type recordNewResponseDNSRecordsOpenpgpkeyRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -3513,6 +4613,38 @@ func (r recordNewResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
 }
 
 func (r RecordNewResponseDNSRecordsOpenpgpkeyRecord) implementsDNSRecordNewResponse() {}
+
+// Settings for the DNS record.
+type RecordNewResponseDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                                                    `json:"ipv6_only"`
+	JSON     recordNewResponseDNSRecordsOpenpgpkeyRecordSettingsJSON `json:"-"`
+}
+
+// recordNewResponseDNSRecordsOpenpgpkeyRecordSettingsJSON contains the JSON
+// metadata for the struct [RecordNewResponseDNSRecordsOpenpgpkeyRecordSettings]
+type recordNewResponseDNSRecordsOpenpgpkeyRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordNewResponseDNSRecordsOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordNewResponseDNSRecordsOpenpgpkeyRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
 
 // Record type.
 type RecordNewResponseDNSRecordsOpenpgpkeyRecordType string
@@ -3583,7 +4715,14 @@ type RecordUpdateResponse struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
-	// This field can have the runtime type of [CNAMERecordSettings].
+	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
+	// [CAARecordSettings], [CERTRecordSettings], [CNAMERecordSettings],
+	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
+	// [LOCRecordSettings], [MXRecordSettings], [NAPTRRecordSettings],
+	// [NSRecordSettings], [RecordUpdateResponseDNSRecordsOpenpgpkeyRecordSettings],
+	// [PTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
+	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
+	// [TXTRecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -3753,6 +4892,8 @@ type RecordUpdateResponseDNSRecordsOpenpgpkeyRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings RecordUpdateResponseDNSRecordsOpenpgpkeyRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3771,6 +4912,7 @@ type recordUpdateResponseDNSRecordsOpenpgpkeyRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -3787,6 +4929,38 @@ func (r recordUpdateResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
 }
 
 func (r RecordUpdateResponseDNSRecordsOpenpgpkeyRecord) implementsDNSRecordUpdateResponse() {}
+
+// Settings for the DNS record.
+type RecordUpdateResponseDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                                                       `json:"ipv6_only"`
+	JSON     recordUpdateResponseDNSRecordsOpenpgpkeyRecordSettingsJSON `json:"-"`
+}
+
+// recordUpdateResponseDNSRecordsOpenpgpkeyRecordSettingsJSON contains the JSON
+// metadata for the struct [RecordUpdateResponseDNSRecordsOpenpgpkeyRecordSettings]
+type recordUpdateResponseDNSRecordsOpenpgpkeyRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordUpdateResponseDNSRecordsOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordUpdateResponseDNSRecordsOpenpgpkeyRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
 
 // Record type.
 type RecordUpdateResponseDNSRecordsOpenpgpkeyRecordType string
@@ -3857,7 +5031,14 @@ type RecordListResponse struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
-	// This field can have the runtime type of [CNAMERecordSettings].
+	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
+	// [CAARecordSettings], [CERTRecordSettings], [CNAMERecordSettings],
+	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
+	// [LOCRecordSettings], [MXRecordSettings], [NAPTRRecordSettings],
+	// [NSRecordSettings], [RecordListResponseDNSRecordsOpenpgpkeyRecordSettings],
+	// [PTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
+	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
+	// [TXTRecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -4027,6 +5208,8 @@ type RecordListResponseDNSRecordsOpenpgpkeyRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings RecordListResponseDNSRecordsOpenpgpkeyRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4045,6 +5228,7 @@ type recordListResponseDNSRecordsOpenpgpkeyRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -4061,6 +5245,38 @@ func (r recordListResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
 }
 
 func (r RecordListResponseDNSRecordsOpenpgpkeyRecord) implementsDNSRecordListResponse() {}
+
+// Settings for the DNS record.
+type RecordListResponseDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                                                     `json:"ipv6_only"`
+	JSON     recordListResponseDNSRecordsOpenpgpkeyRecordSettingsJSON `json:"-"`
+}
+
+// recordListResponseDNSRecordsOpenpgpkeyRecordSettingsJSON contains the JSON
+// metadata for the struct [RecordListResponseDNSRecordsOpenpgpkeyRecordSettings]
+type recordListResponseDNSRecordsOpenpgpkeyRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordListResponseDNSRecordsOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordListResponseDNSRecordsOpenpgpkeyRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
 
 // Record type.
 type RecordListResponseDNSRecordsOpenpgpkeyRecordType string
@@ -4180,7 +5396,15 @@ type RecordBatchResponseDelete struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
-	// This field can have the runtime type of [CNAMERecordSettings].
+	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
+	// [CAARecordSettings], [CERTRecordSettings], [CNAMERecordSettings],
+	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
+	// [LOCRecordSettings], [MXRecordSettings], [NAPTRRecordSettings],
+	// [NSRecordSettings],
+	// [RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordSettings],
+	// [PTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
+	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
+	// [TXTRecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -4350,6 +5574,8 @@ type RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4368,6 +5594,7 @@ type recordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -4384,6 +5611,39 @@ func (r recordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordJSON) RawJSON() stri
 }
 
 func (r RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecord) implementsDNSRecordBatchResponseDelete() {
+}
+
+// Settings for the DNS record.
+type RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                                                             `json:"ipv6_only"`
+	JSON     recordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordSettingsJSON `json:"-"`
+}
+
+// recordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordSettingsJSON contains the
+// JSON metadata for the struct
+// [RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordSettings]
+type recordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponseDeletesDNSRecordsOpenpgpkeyRecordSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -4455,7 +5715,15 @@ type RecordBatchResponsePatch struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
-	// This field can have the runtime type of [CNAMERecordSettings].
+	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
+	// [CAARecordSettings], [CERTRecordSettings], [CNAMERecordSettings],
+	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
+	// [LOCRecordSettings], [MXRecordSettings], [NAPTRRecordSettings],
+	// [NSRecordSettings],
+	// [RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordSettings],
+	// [PTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
+	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
+	// [TXTRecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -4625,6 +5893,8 @@ type RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4643,6 +5913,7 @@ type recordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -4659,6 +5930,39 @@ func (r recordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordJSON) RawJSON() stri
 }
 
 func (r RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecord) implementsDNSRecordBatchResponsePatch() {
+}
+
+// Settings for the DNS record.
+type RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                                                             `json:"ipv6_only"`
+	JSON     recordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordSettingsJSON `json:"-"`
+}
+
+// recordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordSettingsJSON contains the
+// JSON metadata for the struct
+// [RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordSettings]
+type recordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponsePatchesDNSRecordsOpenpgpkeyRecordSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -4730,7 +6034,15 @@ type RecordBatchResponsePost struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
-	// This field can have the runtime type of [CNAMERecordSettings].
+	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
+	// [CAARecordSettings], [CERTRecordSettings], [CNAMERecordSettings],
+	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
+	// [LOCRecordSettings], [MXRecordSettings], [NAPTRRecordSettings],
+	// [NSRecordSettings],
+	// [RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordSettings],
+	// [PTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
+	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
+	// [TXTRecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -4900,6 +6212,8 @@ type RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4918,6 +6232,7 @@ type recordBatchResponsePostsDNSRecordsOpenpgpkeyRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -4934,6 +6249,39 @@ func (r recordBatchResponsePostsDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string
 }
 
 func (r RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecord) implementsDNSRecordBatchResponsePost() {}
+
+// Settings for the DNS record.
+type RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                                                           `json:"ipv6_only"`
+	JSON     recordBatchResponsePostsDNSRecordsOpenpgpkeyRecordSettingsJSON `json:"-"`
+}
+
+// recordBatchResponsePostsDNSRecordsOpenpgpkeyRecordSettingsJSON contains the JSON
+// metadata for the struct
+// [RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordSettings]
+type recordBatchResponsePostsDNSRecordsOpenpgpkeyRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponsePostsDNSRecordsOpenpgpkeyRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
 
 // Record type.
 type RecordBatchResponsePostsDNSRecordsOpenpgpkeyRecordType string
@@ -5004,7 +6352,14 @@ type RecordBatchResponsePut struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
-	// This field can have the runtime type of [CNAMERecordSettings].
+	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
+	// [CAARecordSettings], [CERTRecordSettings], [CNAMERecordSettings],
+	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
+	// [LOCRecordSettings], [MXRecordSettings], [NAPTRRecordSettings],
+	// [NSRecordSettings], [RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordSettings],
+	// [PTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
+	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
+	// [TXTRecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -5174,6 +6529,8 @@ type RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5192,6 +6549,7 @@ type recordBatchResponsePutsDNSRecordsOpenpgpkeyRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -5208,6 +6566,39 @@ func (r recordBatchResponsePutsDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string 
 }
 
 func (r RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecord) implementsDNSRecordBatchResponsePut() {}
+
+// Settings for the DNS record.
+type RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                                                          `json:"ipv6_only"`
+	JSON     recordBatchResponsePutsDNSRecordsOpenpgpkeyRecordSettingsJSON `json:"-"`
+}
+
+// recordBatchResponsePutsDNSRecordsOpenpgpkeyRecordSettingsJSON contains the JSON
+// metadata for the struct
+// [RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordSettings]
+type recordBatchResponsePutsDNSRecordsOpenpgpkeyRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordBatchResponsePutsDNSRecordsOpenpgpkeyRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
 
 // Record type.
 type RecordBatchResponsePutsDNSRecordsOpenpgpkeyRecordType string
@@ -5278,7 +6669,14 @@ type RecordEditResponse struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
-	// This field can have the runtime type of [CNAMERecordSettings].
+	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
+	// [CAARecordSettings], [CERTRecordSettings], [CNAMERecordSettings],
+	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
+	// [LOCRecordSettings], [MXRecordSettings], [NAPTRRecordSettings],
+	// [NSRecordSettings], [RecordEditResponseDNSRecordsOpenpgpkeyRecordSettings],
+	// [PTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
+	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
+	// [TXTRecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -5448,6 +6846,8 @@ type RecordEditResponseDNSRecordsOpenpgpkeyRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings RecordEditResponseDNSRecordsOpenpgpkeyRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5466,6 +6866,7 @@ type recordEditResponseDNSRecordsOpenpgpkeyRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -5482,6 +6883,38 @@ func (r recordEditResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
 }
 
 func (r RecordEditResponseDNSRecordsOpenpgpkeyRecord) implementsDNSRecordEditResponse() {}
+
+// Settings for the DNS record.
+type RecordEditResponseDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                                                     `json:"ipv6_only"`
+	JSON     recordEditResponseDNSRecordsOpenpgpkeyRecordSettingsJSON `json:"-"`
+}
+
+// recordEditResponseDNSRecordsOpenpgpkeyRecordSettingsJSON contains the JSON
+// metadata for the struct [RecordEditResponseDNSRecordsOpenpgpkeyRecordSettings]
+type recordEditResponseDNSRecordsOpenpgpkeyRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordEditResponseDNSRecordsOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordEditResponseDNSRecordsOpenpgpkeyRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
 
 // Record type.
 type RecordEditResponseDNSRecordsOpenpgpkeyRecordType string
@@ -5552,7 +6985,14 @@ type RecordGetResponse struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
-	// This field can have the runtime type of [CNAMERecordSettings].
+	// This field can have the runtime type of [ARecordSettings], [AAAARecordSettings],
+	// [CAARecordSettings], [CERTRecordSettings], [CNAMERecordSettings],
+	// [DNSKEYRecordSettings], [DSRecordSettings], [HTTPSRecordSettings],
+	// [LOCRecordSettings], [MXRecordSettings], [NAPTRRecordSettings],
+	// [NSRecordSettings], [RecordGetResponseDNSRecordsOpenpgpkeyRecordSettings],
+	// [PTRRecordSettings], [SMIMEARecordSettings], [SRVRecordSettings],
+	// [SSHFPRecordSettings], [SVCBRecordSettings], [TLSARecordSettings],
+	// [TXTRecordSettings], [URIRecordSettings].
 	Settings interface{} `json:"settings"`
 	// This field can have the runtime type of [[]RecordTags].
 	Tags interface{} `json:"tags"`
@@ -5722,6 +7162,8 @@ type RecordGetResponseDNSRecordsOpenpgpkeyRecord struct {
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied bool `json:"proxied"`
+	// Settings for the DNS record.
+	Settings RecordGetResponseDNSRecordsOpenpgpkeyRecordSettings `json:"settings"`
 	// Custom tags for the DNS record. This field has no effect on DNS responses.
 	Tags []RecordTags `json:"tags"`
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5740,6 +7182,7 @@ type recordGetResponseDNSRecordsOpenpgpkeyRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Proxied     apijson.Field
+	Settings    apijson.Field
 	Tags        apijson.Field
 	TTL         apijson.Field
 	Type        apijson.Field
@@ -5756,6 +7199,38 @@ func (r recordGetResponseDNSRecordsOpenpgpkeyRecordJSON) RawJSON() string {
 }
 
 func (r RecordGetResponseDNSRecordsOpenpgpkeyRecord) implementsDNSRecordGetResponse() {}
+
+// Settings for the DNS record.
+type RecordGetResponseDNSRecordsOpenpgpkeyRecordSettings struct {
+	// When enabled, only A records will be generated, and AAAA records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV4Only bool `json:"ipv4_only"`
+	// When enabled, only AAAA records will be generated, and A records will not be
+	// created. This setting is intended for exceptional cases. Note that this option
+	// only applies to proxied records and it has no effect on whether Cloudflare
+	// communicates with the origin using IPv4 or IPv6.
+	IPV6Only bool                                                    `json:"ipv6_only"`
+	JSON     recordGetResponseDNSRecordsOpenpgpkeyRecordSettingsJSON `json:"-"`
+}
+
+// recordGetResponseDNSRecordsOpenpgpkeyRecordSettingsJSON contains the JSON
+// metadata for the struct [RecordGetResponseDNSRecordsOpenpgpkeyRecordSettings]
+type recordGetResponseDNSRecordsOpenpgpkeyRecordSettingsJSON struct {
+	IPV4Only    apijson.Field
+	IPV6Only    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RecordGetResponseDNSRecordsOpenpgpkeyRecordSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r recordGetResponseDNSRecordsOpenpgpkeyRecordSettingsJSON) RawJSON() string {
+	return r.raw
+}
 
 // Record type.
 type RecordGetResponseDNSRecordsOpenpgpkeyRecordType string
