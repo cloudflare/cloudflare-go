@@ -1,3 +1,3 @@
 ```release-note:enhancement
-teams_location: add new BYOIPv6 block id to the location payload
+teams_location: add support for `dns_destination_ipv6_block_id` to the location payload
 ```
