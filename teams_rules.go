@@ -68,7 +68,19 @@ type TeamsRuleSettings struct {
 	DnsResolverSettings *TeamsDnsResolverSettings `json:"dns_resolvers,omitempty"`
 
 	NotificationSettings *TeamsNotificationSettings `json:"notification_settings"`
+	Quarantine           *Quarantine                `json:"quarantine,omitempty"`
+	ForensicCopySettings *ForensicCopySettings      `json:"forensic_copy,omitempty"`
 }
+
+type ForensicCopySettings struct {
+	Enabled bool `json:"enabled"`
+}
+
+type Quarantine struct {
+	FileTypes []FileType `json:"file_types"`
+}
+
+type FileType = string
 
 type TeamsGatewayUntrustedCertAction string
 
@@ -219,6 +231,28 @@ type TeamsRule struct {
 	DevicePosture string             `json:"device_posture"`
 	Version       uint64             `json:"version"`
 	RuleSettings  TeamsRuleSettings  `json:"rule_settings,omitempty"`
+	Schedule      *RuleSchedule      `json:"schedule,omitempty"`   // only available at DNS rules
+	Expiration    *RuleExpiration    `json:"expiration,omitempty"` // only available at DNS rules
+}
+
+type RuleExpiration struct {
+	ExpiresAt *time.Time `json:"expires_at"`
+	Duration  *uint64    `json:"duration,omitempty"` // read only
+	Expired   bool       `json:"expired"`            // read only
+}
+
+// format HH:MM,HH:MM,....,HH:MM
+type ScheduleTimes string
+
+type RuleSchedule struct {
+	Monday    ScheduleTimes `json:"mon,omitempty"`
+	Tuesday   ScheduleTimes `json:"tue,omitempty"`
+	Wednesday ScheduleTimes `json:"wed,omitempty"`
+	Thursday  ScheduleTimes `json:"thu,omitempty"`
+	Friday    ScheduleTimes `json:"fri,omitempty"`
+	Saturday  ScheduleTimes `json:"sat,omitempty"`
+	Sunday    ScheduleTimes `json:"sun,omitempty"`
+	TimeZone  string        `json:"time_zone,omitempty"` // default to user TZ based on the user IP location, fall backs to colo TZ
 }
 
 // TeamsRuleResponse is the API response, containing a single rule.
