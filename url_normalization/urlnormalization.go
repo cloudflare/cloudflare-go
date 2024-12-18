@@ -50,6 +50,19 @@ func (r *URLNormalizationService) Update(ctx context.Context, params URLNormaliz
 	return
 }
 
+// Deletes the URL Normalization settings.
+func (r *URLNormalizationService) Delete(ctx context.Context, body URLNormalizationDeleteParams, opts ...option.RequestOption) (err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/url_normalization", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	return
+}
+
 // Fetches the current URL Normalization settings.
 func (r *URLNormalizationService) Get(ctx context.Context, query URLNormalizationGetParams, opts ...option.RequestOption) (res *URLNormalizationGetResponse, err error) {
 	var env URLNormalizationGetResponseEnvelope
@@ -377,6 +390,11 @@ func (r URLNormalizationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type URLNormalizationDeleteParams struct {
+	// The unique ID of the zone.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type URLNormalizationGetParams struct {

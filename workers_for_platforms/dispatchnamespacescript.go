@@ -30,12 +30,13 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewDispatchNamespaceScriptService] method instead.
 type DispatchNamespaceScriptService struct {
-	Options  []option.RequestOption
-	Content  *DispatchNamespaceScriptContentService
-	Settings *DispatchNamespaceScriptSettingService
-	Bindings *DispatchNamespaceScriptBindingService
-	Secrets  *DispatchNamespaceScriptSecretService
-	Tags     *DispatchNamespaceScriptTagService
+	Options     []option.RequestOption
+	AssetUpload *DispatchNamespaceScriptAssetUploadService
+	Content     *DispatchNamespaceScriptContentService
+	Settings    *DispatchNamespaceScriptSettingService
+	Bindings    *DispatchNamespaceScriptBindingService
+	Secrets     *DispatchNamespaceScriptSecretService
+	Tags        *DispatchNamespaceScriptTagService
 }
 
 // NewDispatchNamespaceScriptService generates a new service that applies the given
@@ -44,6 +45,7 @@ type DispatchNamespaceScriptService struct {
 func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *DispatchNamespaceScriptService) {
 	r = &DispatchNamespaceScriptService{}
 	r.Options = opts
+	r.AssetUpload = NewDispatchNamespaceScriptAssetUploadService(opts...)
 	r.Content = NewDispatchNamespaceScriptContentService(opts...)
 	r.Settings = NewDispatchNamespaceScriptSettingService(opts...)
 	r.Bindings = NewDispatchNamespaceScriptBindingService(opts...)
