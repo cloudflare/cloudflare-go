@@ -1,0 +1,3 @@
+```release-note:bug
+certificate_authorities: fixes for methods to interact with Certificate Authorities Hostname Associations API
+```
