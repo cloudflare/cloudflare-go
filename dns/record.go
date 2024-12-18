@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
@@ -2922,34 +2921,6 @@ func (r RecordType) IsKnown() bool {
 		return true
 	}
 	return false
-}
-
-type RecordProcessTiming struct {
-	// When the file parsing ended.
-	EndTime time.Time `json:"end_time" format:"date-time"`
-	// Processing time of the file in seconds.
-	ProcessTime float64 `json:"process_time"`
-	// When the file parsing started.
-	StartTime time.Time               `json:"start_time" format:"date-time"`
-	JSON      recordProcessTimingJSON `json:"-"`
-}
-
-// recordProcessTimingJSON contains the JSON metadata for the struct
-// [RecordProcessTiming]
-type recordProcessTimingJSON struct {
-	EndTime     apijson.Field
-	ProcessTime apijson.Field
-	StartTime   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RecordProcessTiming) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r recordProcessTimingJSON) RawJSON() string {
-	return r.raw
 }
 
 type RecordTags = string
@@ -7905,7 +7876,6 @@ type RecordImportResponseEnvelope struct {
 	// Whether the API call was successful
 	Success RecordImportResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordImportResponse                `json:"result"`
-	Timing  RecordProcessTiming                 `json:"timing"`
 	JSON    recordImportResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -7916,7 +7886,6 @@ type recordImportResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	Timing      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -7960,7 +7929,6 @@ type RecordScanResponseEnvelope struct {
 	// Whether the API call was successful
 	Success RecordScanResponseEnvelopeSuccess `json:"success,required"`
 	Result  RecordScanResponse                `json:"result"`
-	Timing  RecordProcessTiming               `json:"timing"`
 	JSON    recordScanResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -7971,7 +7939,6 @@ type recordScanResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Success     apijson.Field
 	Result      apijson.Field
-	Timing      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
