@@ -2649,13 +2649,8 @@ Methods:
 
 # ManagedTransforms
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/managed_transforms">managed_transforms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/managed_transforms#RequestModelParam">RequestModelParam</a>
-
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/managed_transforms">managed_transforms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/managed_transforms#RequestModel">RequestModel</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/managed_transforms">managed_transforms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/managed_transforms#ManagedTransformListResponse">ManagedTransformListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/managed_transforms">managed_transforms</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/managed_transforms#ManagedTransformEditResponse">ManagedTransformEditResponse</a>
 
