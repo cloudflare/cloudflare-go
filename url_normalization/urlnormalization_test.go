@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/url_normalization"
 )
 
-func TestURLNormalizationUpdateWithOptionalParams(t *testing.T) {
+func TestURLNormalizationUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -28,9 +28,9 @@ func TestURLNormalizationUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.URLNormalization.Update(context.TODO(), url_normalization.URLNormalizationUpdateParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Scope:  cloudflare.F("incoming"),
-		Type:   cloudflare.F("cloudflare"),
+		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
+		Scope:  cloudflare.F(url_normalization.URLNormalizationUpdateParamsScopeIncoming),
+		Type:   cloudflare.F(url_normalization.URLNormalizationUpdateParamsTypeCloudflare),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -55,7 +55,7 @@ func TestURLNormalizationGet(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.URLNormalization.Get(context.TODO(), url_normalization.URLNormalizationGetParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
