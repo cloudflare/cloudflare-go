@@ -346,12 +346,12 @@ func (r logAuditListResponseZoneJSON) RawJSON() string {
 type LogAuditListParams struct {
 	// The unique id that identifies the account.
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Filters actions based on a given timestamp, returning only logs that occurred
-	// before the specified date.
-	Before param.Field[LogAuditListParamsBeforeUnion] `query:"before,required" format:"date"`
-	// Filters actions based on a given timestamp, returning only logs that occurred
-	// after the specified date.
-	Since param.Field[LogAuditListParamsSinceUnion] `query:"since,required" format:"date"`
+	// Filters actions based on a given timestamp in the format yyyy-mm-dd, returning
+	// only logs that occurred on and before the specified date.
+	Before param.Field[time.Time] `query:"before,required" format:"date"`
+	// Filters actions based on a given timestamp in the format yyyy-mm-dd, returning
+	// only logs that occurred on and after the specified date.
+	Since param.Field[time.Time] `query:"since,required" format:"date"`
 	// Filters by the account name.
 	AccountName param.Field[string] `query:"account_name"`
 	// Whether the action was successful or not.
@@ -414,22 +414,6 @@ func (r LogAuditListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatDots,
 	})
-}
-
-// Filters actions based on a given timestamp, returning only logs that occurred
-// before the specified date.
-//
-// Satisfied by [shared.UnionTime], [shared.UnionTime].
-type LogAuditListParamsBeforeUnion interface {
-	ImplementsAccountsLogAuditListParamsBeforeUnion()
-}
-
-// Filters actions based on a given timestamp, returning only logs that occurred
-// after the specified date.
-//
-// Satisfied by [shared.UnionTime], [shared.UnionTime].
-type LogAuditListParamsSinceUnion interface {
-	ImplementsAccountsLogAuditListParamsSinceUnion()
 }
 
 // Whether the action was successful or not.

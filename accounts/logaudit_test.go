@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/accounts"
 	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
 func TestLogAuditListWithOptionalParams(t *testing.T) {
@@ -31,8 +30,8 @@ func TestLogAuditListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Accounts.Logs.Audit.List(context.TODO(), accounts.LogAuditListParams{
 		AccountID:       cloudflare.F("a67e14daa5f8dceeb91fe5449ba496ef"),
-		Before:          cloudflare.F[accounts.LogAuditListParamsBeforeUnion](shared.UnionTime(time.Now())),
-		Since:           cloudflare.F[accounts.LogAuditListParamsSinceUnion](shared.UnionTime(time.Now())),
+		Before:          cloudflare.F(time.Now()),
+		Since:           cloudflare.F(time.Now()),
 		AccountName:     cloudflare.F("account_name"),
 		ActionResult:    cloudflare.F(accounts.LogAuditListParamsActionResultSuccess),
 		ActionType:      cloudflare.F(accounts.LogAuditListParamsActionTypeCreate),

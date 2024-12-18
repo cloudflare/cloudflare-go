@@ -8,8 +8,6 @@ import (
 
 type UnionTime time.Time
 
-func (UnionTime) ImplementsAccountsLogAuditListParamsBeforeUnion()  {}
-func (UnionTime) ImplementsAccountsLogAuditListParamsSinceUnion()   {}
 func (UnionTime) ImplementsUserAuditLogListParamsBeforeUnion()      {}
 func (UnionTime) ImplementsUserAuditLogListParamsSinceUnion()       {}
 func (UnionTime) ImplementsAuditLogsAuditLogListParamsBeforeUnion() {}
