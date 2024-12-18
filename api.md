@@ -1056,7 +1056,6 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#NAPTRRecord">NAPTRRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#NSRecord">NSRecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#PTRRecord">PTRRecord</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#RecordProcessTiming">RecordProcessTiming</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#RecordTags">RecordTags</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#SMIMEARecord">SMIMEARecord</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns">dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/dns#SRVRecord">SRVRecord</a>
