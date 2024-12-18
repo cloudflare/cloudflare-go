@@ -82,7 +82,7 @@ func (r *DeviceService) ListAutoPaging(ctx context.Context, query DeviceListPara
 }
 
 // Fetches details for a single device.
-func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *DeviceGetResponse, err error) {
 	var env DeviceGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
@@ -223,6 +223,132 @@ func (r deviceUserJSON) RawJSON() string {
 	return r.raw
 }
 
+type DeviceGetResponse struct {
+	// Device ID.
+	ID      string                   `json:"id"`
+	Account DeviceGetResponseAccount `json:"account"`
+	// When the device was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// True if the device was deleted.
+	Deleted         bool   `json:"deleted"`
+	DeviceType      string `json:"device_type"`
+	GatewayDeviceID string `json:"gateway_device_id"`
+	// IPv4 or IPv6 address.
+	IP string `json:"ip"`
+	// The device's public key.
+	Key string `json:"key"`
+	// Type of the key.
+	KeyType string `json:"key_type"`
+	// When the device last connected to Cloudflare services.
+	LastSeen time.Time `json:"last_seen" format:"date-time"`
+	// The device mac address.
+	MacAddress string `json:"mac_address"`
+	// The device model name.
+	Model string `json:"model"`
+	// The device name.
+	Name string `json:"name"`
+	// The operating system version.
+	OSVersion string `json:"os_version"`
+	// The device serial number.
+	SerialNumber string `json:"serial_number"`
+	// Type of the tunnel connection used.
+	TunnelType string `json:"tunnel_type"`
+	// When the device was updated.
+	Updated time.Time             `json:"updated" format:"date-time"`
+	User    DeviceGetResponseUser `json:"user"`
+	// The WARP client version.
+	Version string                `json:"version"`
+	JSON    deviceGetResponseJSON `json:"-"`
+}
+
+// deviceGetResponseJSON contains the JSON metadata for the struct
+// [DeviceGetResponse]
+type deviceGetResponseJSON struct {
+	ID              apijson.Field
+	Account         apijson.Field
+	Created         apijson.Field
+	Deleted         apijson.Field
+	DeviceType      apijson.Field
+	GatewayDeviceID apijson.Field
+	IP              apijson.Field
+	Key             apijson.Field
+	KeyType         apijson.Field
+	LastSeen        apijson.Field
+	MacAddress      apijson.Field
+	Model           apijson.Field
+	Name            apijson.Field
+	OSVersion       apijson.Field
+	SerialNumber    apijson.Field
+	TunnelType      apijson.Field
+	Updated         apijson.Field
+	User            apijson.Field
+	Version         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DeviceGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceGetResponseAccount struct {
+	ID          string `json:"id"`
+	AccountType string `json:"account_type"`
+	// The name of the enrolled account.
+	Name string                       `json:"name"`
+	JSON deviceGetResponseAccountJSON `json:"-"`
+}
+
+// deviceGetResponseAccountJSON contains the JSON metadata for the struct
+// [DeviceGetResponseAccount]
+type deviceGetResponseAccountJSON struct {
+	ID          apijson.Field
+	AccountType apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceGetResponseAccount) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceGetResponseAccountJSON) RawJSON() string {
+	return r.raw
+}
+
+type DeviceGetResponseUser struct {
+	// UUID
+	ID string `json:"id"`
+	// The contact email address of the user.
+	Email string `json:"email"`
+	// The enrolled device user's name.
+	Name string                    `json:"name"`
+	JSON deviceGetResponseUserJSON `json:"-"`
+}
+
+// deviceGetResponseUserJSON contains the JSON metadata for the struct
+// [DeviceGetResponseUser]
+type deviceGetResponseUserJSON struct {
+	ID          apijson.Field
+	Email       apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceGetResponseUser) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r deviceGetResponseUserJSON) RawJSON() string {
+	return r.raw
+}
+
 type DeviceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
@@ -234,7 +360,7 @@ type DeviceGetParams struct {
 type DeviceGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   DeviceGetResponse     `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DeviceGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    deviceGetResponseEnvelopeJSON    `json:"-"`
