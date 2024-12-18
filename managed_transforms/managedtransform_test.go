@@ -28,7 +28,7 @@ func TestManagedTransformList(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ManagedTransforms.List(context.TODO(), managed_transforms.ManagedTransformListParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -53,13 +53,13 @@ func TestManagedTransformEdit(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ManagedTransforms.Edit(context.TODO(), managed_transforms.ManagedTransformEditParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		ManagedRequestHeaders: cloudflare.F([]managed_transforms.RequestModelParam{{
-			ID:      cloudflare.F("add_cf-bot-score_header"),
+		ZoneID: cloudflare.F("9f1839b6152d298aca64c4e906b6d074"),
+		ManagedRequestHeaders: cloudflare.F([]managed_transforms.ManagedTransformEditParamsManagedRequestHeader{{
+			ID:      cloudflare.F("add_bot_protection_headers"),
 			Enabled: cloudflare.F(true),
 		}}),
-		ManagedResponseHeaders: cloudflare.F([]managed_transforms.RequestModelParam{{
-			ID:      cloudflare.F("add_cf-bot-score_header"),
+		ManagedResponseHeaders: cloudflare.F([]managed_transforms.ManagedTransformEditParamsManagedResponseHeader{{
+			ID:      cloudflare.F("add_security_headers"),
 			Enabled: cloudflare.F(true),
 		}}),
 	})
