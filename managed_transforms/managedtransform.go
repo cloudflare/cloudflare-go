@@ -50,6 +50,19 @@ func (r *ManagedTransformService) List(ctx context.Context, query ManagedTransfo
 	return
 }
 
+// Disables all Managed Transforms.
+func (r *ManagedTransformService) Delete(ctx context.Context, body ManagedTransformDeleteParams, opts ...option.RequestOption) (err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	if body.ZoneID.Value == "" {
+		err = errors.New("missing required zone_id parameter")
+		return
+	}
+	path := fmt.Sprintf("zones/%s/managed_headers", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	return
+}
+
 // Updates the status of one or more Managed Transforms.
 func (r *ManagedTransformService) Edit(ctx context.Context, params ManagedTransformEditParams, opts ...option.RequestOption) (res *ManagedTransformEditResponse, err error) {
 	var env ManagedTransformEditResponseEnvelope
@@ -489,6 +502,11 @@ func (r ManagedTransformListResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type ManagedTransformDeleteParams struct {
+	// The unique ID of the zone.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type ManagedTransformEditParams struct {
