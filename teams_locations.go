@@ -26,51 +26,51 @@ type TeamsLocationNetwork struct {
 }
 
 type TeamsLocation struct {
-	ID                        string                 `json:"id"`
-	Name                      string                 `json:"name"`
-	Networks                  []TeamsLocationNetwork `json:"networks"`
-	Ip                        string                 `json:"ip,omitempty"`
-	Subdomain                 string                 `json:"doh_subdomain"`
-	AnonymizedLogsEnabled     bool                   `json:"anonymized_logs_enabled"`
-	IPv4Destination           string                 `json:"ipv4_destination"`
-	IPv4DestinationBackup     string                 `json:"ipv4_destination_backup"`
-	DNSDestinationIPsID       string                 `json:"dns_destination_ips_id"`
-	DNSDestinationIPv6BlockID string                 `json:"dns_destination_ipv6_block_id"`
-	ClientDefault             bool                   `json:"client_default"`
-	ECSSupport                *bool                  `json:"ecs_support,omitempty"`
-	Endpoints                 *LocationEndpoints     `json:"endpoints,omitempty"`
+	ID                        string                  `json:"id"`
+	Name                      string                  `json:"name"`
+	Networks                  []TeamsLocationNetwork  `json:"networks"`
+	Ip                        string                  `json:"ip,omitempty"`
+	Subdomain                 string                  `json:"doh_subdomain"`
+	AnonymizedLogsEnabled     bool                    `json:"anonymized_logs_enabled"`
+	IPv4Destination           string                  `json:"ipv4_destination"`
+	IPv4DestinationBackup     string                  `json:"ipv4_destination_backup"`
+	DNSDestinationIPsID       string                  `json:"dns_destination_ips_id"`
+	DNSDestinationIPv6BlockID string                  `json:"dns_destination_ipv6_block_id"`
+	ClientDefault             bool                    `json:"client_default"`
+	ECSSupport                *bool                   `json:"ecs_support,omitempty"`
+	Endpoints                 *TeamsLocationEndpoints `json:"endpoints,omitempty"`
 
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
-type LocationEndpoints struct {
-	IPv4Endpoint IPv4EndpointFields `json:"ipv4"`
-	IPv6Endpoint IPv6EndpointFields `json:"ipv6"`
-	DotEndpoint  DotEndpointFields  `json:"dot"`
-	DohEndpoint  DohEndpointFields  `json:"doh"`
+type TeamsLocationEndpoints struct {
+	IPv4Endpoint TeamsLocationIPv4EndpointFields `json:"ipv4"`
+	IPv6Endpoint TeamsLocationIPv6EndpointFields `json:"ipv6"`
+	DotEndpoint  TeamsLocationDotEndpointFields  `json:"dot"`
+	DohEndpoint  TeamsLocationDohEndpointFields  `json:"doh"`
 }
 
-type IPv4EndpointFields struct {
+type TeamsLocationIPv4EndpointFields struct {
 	Enabled               bool `json:"enabled"`
 	AuthenticationEnabled bool `json:"authentication_enabled,omitempty"`
 }
 
-type IPv6EndpointFields struct {
-	EndpointFields
+type TeamsLocationIPv6EndpointFields struct {
+	TeamsLocationEndpointFields
 }
 
-type DotEndpointFields struct {
+type TeamsLocationDotEndpointFields struct {
 	RequireToken bool `json:"require_token"`
-	EndpointFields
+	TeamsLocationEndpointFields
 }
 
-type DohEndpointFields struct {
+type TeamsLocationDohEndpointFields struct {
 	RequireToken bool `json:"require_token"`
-	EndpointFields
+	TeamsLocationEndpointFields
 }
 
-type EndpointFields struct {
+type TeamsLocationEndpointFields struct {
 	Enabled                       bool                   `json:"enabled"`
 	AuthenticationEnabledUIHelper bool                   `json:"authentication_enabled,omitempty"`
 	Networks                      []TeamsLocationNetwork `json:"networks,omitempty"`
