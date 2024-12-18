@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestOrganizationNewWithOptionalParams(t *testing.T) {
@@ -143,8 +143,12 @@ func TestOrganizationRevokeUsersWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.RevokeUsers(context.TODO(), zero_trust.OrganizationRevokeUsersParams{
-		Email:     cloudflare.F("test@example.com"),
-		AccountID: cloudflare.F("account_id"),
+		Email:             cloudflare.F("test@example.com"),
+		AccountID:         cloudflare.F("account_id"),
+		QueryDevices:      cloudflare.F(true),
+		BodyDevices:       cloudflare.F(true),
+		UserUID:           cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		WARPSessionReauth: cloudflare.F(true),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

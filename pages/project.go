@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ProjectService contains methods and other services that help with interacting
@@ -640,7 +640,7 @@ type ProjectDeploymentConfigsPreview struct {
 	// Analytics Engine bindings used for Pages Functions.
 	AnalyticsEngineDatasets map[string]ProjectDeploymentConfigsPreviewAnalyticsEngineDataset `json:"analytics_engine_datasets,nullable"`
 	// Browser bindings used for Pages Functions.
-	Browsers map[string]interface{} `json:"browsers,nullable"`
+	Browsers map[string]ProjectDeploymentConfigsPreviewBrowser `json:"browsers,nullable"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate string `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
@@ -743,6 +743,26 @@ func (r *ProjectDeploymentConfigsPreviewAnalyticsEngineDataset) UnmarshalJSON(da
 }
 
 func (r projectDeploymentConfigsPreviewAnalyticsEngineDatasetJSON) RawJSON() string {
+	return r.raw
+}
+
+// Browser binding.
+type ProjectDeploymentConfigsPreviewBrowser struct {
+	JSON projectDeploymentConfigsPreviewBrowserJSON `json:"-"`
+}
+
+// projectDeploymentConfigsPreviewBrowserJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsPreviewBrowser]
+type projectDeploymentConfigsPreviewBrowserJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDeploymentConfigsPreviewBrowser) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDeploymentConfigsPreviewBrowserJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1031,7 +1051,7 @@ type ProjectDeploymentConfigsProduction struct {
 	// Analytics Engine bindings used for Pages Functions.
 	AnalyticsEngineDatasets map[string]ProjectDeploymentConfigsProductionAnalyticsEngineDataset `json:"analytics_engine_datasets,nullable"`
 	// Browser bindings used for Pages Functions.
-	Browsers map[string]interface{} `json:"browsers,nullable"`
+	Browsers map[string]ProjectDeploymentConfigsProductionBrowser `json:"browsers,nullable"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate string `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
@@ -1135,6 +1155,26 @@ func (r *ProjectDeploymentConfigsProductionAnalyticsEngineDataset) UnmarshalJSON
 }
 
 func (r projectDeploymentConfigsProductionAnalyticsEngineDatasetJSON) RawJSON() string {
+	return r.raw
+}
+
+// Browser binding.
+type ProjectDeploymentConfigsProductionBrowser struct {
+	JSON projectDeploymentConfigsProductionBrowserJSON `json:"-"`
+}
+
+// projectDeploymentConfigsProductionBrowserJSON contains the JSON metadata for the
+// struct [ProjectDeploymentConfigsProductionBrowser]
+type projectDeploymentConfigsProductionBrowserJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ProjectDeploymentConfigsProductionBrowser) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r projectDeploymentConfigsProductionBrowserJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -1550,7 +1590,7 @@ type ProjectDeploymentConfigsPreviewParam struct {
 	// Analytics Engine bindings used for Pages Functions.
 	AnalyticsEngineDatasets param.Field[map[string]ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetParam] `json:"analytics_engine_datasets"`
 	// Browser bindings used for Pages Functions.
-	Browsers param.Field[map[string]interface{}] `json:"browsers"`
+	Browsers param.Field[map[string]ProjectDeploymentConfigsPreviewBrowserParam] `json:"browsers"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
@@ -1599,6 +1639,14 @@ type ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetParam struct {
 }
 
 func (r ProjectDeploymentConfigsPreviewAnalyticsEngineDatasetParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Browser binding.
+type ProjectDeploymentConfigsPreviewBrowserParam struct {
+}
+
+func (r ProjectDeploymentConfigsPreviewBrowserParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1724,7 +1772,7 @@ type ProjectDeploymentConfigsProductionParam struct {
 	// Analytics Engine bindings used for Pages Functions.
 	AnalyticsEngineDatasets param.Field[map[string]ProjectDeploymentConfigsProductionAnalyticsEngineDatasetParam] `json:"analytics_engine_datasets"`
 	// Browser bindings used for Pages Functions.
-	Browsers param.Field[map[string]interface{}] `json:"browsers"`
+	Browsers param.Field[map[string]ProjectDeploymentConfigsProductionBrowserParam] `json:"browsers"`
 	// Compatibility date used for Pages Functions.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Compatibility flags used for Pages Functions.
@@ -1773,6 +1821,14 @@ type ProjectDeploymentConfigsProductionAnalyticsEngineDatasetParam struct {
 }
 
 func (r ProjectDeploymentConfigsProductionAnalyticsEngineDatasetParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Browser binding.
+type ProjectDeploymentConfigsProductionBrowserParam struct {
+}
+
+func (r ProjectDeploymentConfigsProductionBrowserParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

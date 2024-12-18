@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/workers"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
 func TestScriptScheduleUpdate(t *testing.T) {
@@ -33,10 +33,6 @@ func TestScriptScheduleUpdate(t *testing.T) {
 		workers.ScriptScheduleUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: []workers.ScheduleParam{{
-				Cron: cloudflare.F("*/30 * * * *"),
-			}, {
-				Cron: cloudflare.F("*/30 * * * *"),
-			}, {
 				Cron: cloudflare.F("*/30 * * * *"),
 			}},
 		},

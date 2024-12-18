@@ -3,17 +3,15 @@
 package workers_test
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	"io"
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/workers"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
 func TestScriptVersionNewWithOptionalParams(t *testing.T) {
@@ -34,8 +32,7 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"this-is_my_script-01",
 		workers.ScriptVersionNewParams{
-			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Metadata: cloudflare.F(workers.ScriptVersionNewParamsMetadata{
 				Annotations: cloudflare.F(workers.ScriptVersionNewParamsMetadataAnnotations{
 					WorkersMessage: cloudflare.F("Fixed worker code."),
@@ -47,8 +44,8 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 					"type": "plain_text",
 				}}),
 				CompatibilityDate:  cloudflare.F("2023-07-25"),
-				CompatibilityFlags: cloudflare.F([]string{"string", "string", "string"}),
-				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
+				CompatibilityFlags: cloudflare.F([]string{"string"}),
+				KeepBindings:       cloudflare.F([]string{"string"}),
 				MainModule:         cloudflare.F("worker.js"),
 				UsageModel:         cloudflare.F(workers.ScriptVersionNewParamsMetadataUsageModelStandard),
 			}),

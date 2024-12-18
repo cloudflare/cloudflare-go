@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
@@ -30,19 +30,19 @@ func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer3.Timeseries(context.TODO(), radar.AttackLayer3TimeseriesParams{
 		AggInterval:   cloudflare.F(radar.AttackLayer3TimeseriesParamsAggInterval15m),
-		ASN:           cloudflare.F([]string{"string", "string", "string"}),
-		Continent:     cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:     cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:           cloudflare.F([]string{"string"}),
+		Continent:     cloudflare.F([]string{"string"}),
+		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+		DateRange:     cloudflare.F([]string{"7d"}),
+		DateStart:     cloudflare.F([]time.Time{time.Now()}),
 		Direction:     cloudflare.F(radar.AttackLayer3TimeseriesParamsDirectionOrigin),
 		Format:        cloudflare.F(radar.AttackLayer3TimeseriesParamsFormatJson),
-		IPVersion:     cloudflare.F([]radar.AttackLayer3TimeseriesParamsIPVersion{radar.AttackLayer3TimeseriesParamsIPVersionIPv4, radar.AttackLayer3TimeseriesParamsIPVersionIPv6}),
-		Location:      cloudflare.F([]string{"string", "string", "string"}),
+		IPVersion:     cloudflare.F([]radar.AttackLayer3TimeseriesParamsIPVersion{radar.AttackLayer3TimeseriesParamsIPVersionIPv4}),
+		Location:      cloudflare.F([]string{"string"}),
 		Metric:        cloudflare.F(radar.AttackLayer3TimeseriesParamsMetricBytes),
-		Name:          cloudflare.F([]string{"string", "string", "string"}),
+		Name:          cloudflare.F([]string{"string"}),
 		Normalization: cloudflare.F(radar.AttackLayer3TimeseriesParamsNormalizationPercentageChange),
-		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesParamsProtocol{radar.AttackLayer3TimeseriesParamsProtocolUdp, radar.AttackLayer3TimeseriesParamsProtocolTCP, radar.AttackLayer3TimeseriesParamsProtocolIcmp}),
+		Protocol:      cloudflare.F([]radar.AttackLayer3TimeseriesParamsProtocol{radar.AttackLayer3TimeseriesParamsProtocolUdp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

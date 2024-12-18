@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // VariantService contains methods and other services that help with interacting
@@ -105,7 +105,7 @@ func (r *VariantService) Get(ctx context.Context, query VariantGetParams, opts .
 // be indicated with BYPASS cache status in the response headers.
 type CacheVariant struct {
 	// ID of the zone setting.
-	ID CacheVariantIdentifier `json:"id,required"`
+	ID CacheVariantID `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time        `json:"modified_on,required,nullable" format:"date-time"`
 	JSON       cacheVariantJSON `json:"-"`
@@ -128,15 +128,15 @@ func (r cacheVariantJSON) RawJSON() string {
 }
 
 // ID of the zone setting.
-type CacheVariantIdentifier string
+type CacheVariantID string
 
 const (
-	CacheVariantIdentifierVariants CacheVariantIdentifier = "variants"
+	CacheVariantIDVariants CacheVariantID = "variants"
 )
 
-func (r CacheVariantIdentifier) IsKnown() bool {
+func (r CacheVariantID) IsKnown() bool {
 	switch r {
-	case CacheVariantIdentifierVariants:
+	case CacheVariantIDVariants:
 		return true
 	}
 	return false
@@ -149,7 +149,7 @@ func (r CacheVariantIdentifier) IsKnown() bool {
 // be indicated with BYPASS cache status in the response headers.
 type VariantEditResponse struct {
 	// ID of the zone setting.
-	ID CacheVariantIdentifier `json:"id,required"`
+	ID VariantEditResponseID `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the zone setting.
@@ -173,6 +173,21 @@ func (r *VariantEditResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r variantEditResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// ID of the zone setting.
+type VariantEditResponseID string
+
+const (
+	VariantEditResponseIDVariants VariantEditResponseID = "variants"
+)
+
+func (r VariantEditResponseID) IsKnown() bool {
+	switch r {
+	case VariantEditResponseIDVariants:
+		return true
+	}
+	return false
 }
 
 // Value of the zone setting.
@@ -246,7 +261,7 @@ func (r variantEditResponseValueJSON) RawJSON() string {
 // be indicated with BYPASS cache status in the response headers.
 type VariantGetResponse struct {
 	// ID of the zone setting.
-	ID CacheVariantIdentifier `json:"id,required"`
+	ID VariantGetResponseID `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the zone setting.
@@ -270,6 +285,21 @@ func (r *VariantGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r variantGetResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// ID of the zone setting.
+type VariantGetResponseID string
+
+const (
+	VariantGetResponseIDVariants VariantGetResponseID = "variants"
+)
+
+func (r VariantGetResponseID) IsKnown() bool {
+	switch r {
+	case VariantGetResponseIDVariants:
+		return true
+	}
+	return false
 }
 
 // Value of the zone setting.

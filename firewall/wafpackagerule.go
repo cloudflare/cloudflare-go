@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -179,23 +179,23 @@ func (r wafRuleGroupJSON) RawJSON() string {
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
 type WAFPackageRuleListResponse struct {
+	// The unique identifier of the WAF rule.
+	ID string `json:"id,required"`
+	// This field can have the runtime type of [[]AllowedModesAnomaly],
+	// [[]WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode],
+	// [[]WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode].
+	AllowedModes interface{} `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
 	Group WAFRuleGroup `json:"group,required"`
-	// The unique identifier of the WAF rule.
-	ID string `json:"id,required"`
+	// When set to `on`, the current WAF rule will be used when evaluating the request.
+	// Applies to anomaly detection WAF rules.
+	Mode AllowedModesAnomaly `json:"mode,required"`
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
 	Priority string `json:"priority,required"`
-	// This field can have the runtime type of [[]AllowedModesAnomaly],
-	// [[]WAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode],
-	// [[]WAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode].
-	AllowedModes interface{} `json:"allowed_modes"`
-	// When set to `on`, the current WAF rule will be used when evaluating the request.
-	// Applies to anomaly detection WAF rules.
-	Mode AllowedModesAnomaly `json:"mode,required"`
 	// The default action/mode of a rule.
 	DefaultMode WAFPackageRuleListResponseDefaultMode `json:"default_mode"`
 	JSON        wafPackageRuleListResponseJSON        `json:"-"`
@@ -205,13 +205,13 @@ type WAFPackageRuleListResponse struct {
 // wafPackageRuleListResponseJSON contains the JSON metadata for the struct
 // [WAFPackageRuleListResponse]
 type wafPackageRuleListResponseJSON struct {
+	ID           apijson.Field
+	AllowedModes apijson.Field
 	Description  apijson.Field
 	Group        apijson.Field
-	ID           apijson.Field
+	Mode         apijson.Field
 	PackageID    apijson.Field
 	Priority     apijson.Field
-	AllowedModes apijson.Field
-	Mode         apijson.Field
 	DefaultMode  apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
@@ -537,23 +537,23 @@ func (r WAFPackageRuleListResponseDefaultMode) IsKnown() bool {
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
 type WAFPackageRuleEditResponse struct {
+	// The unique identifier of the WAF rule.
+	ID string `json:"id,required"`
+	// This field can have the runtime type of [[]AllowedModesAnomaly],
+	// [[]WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedMode],
+	// [[]WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode].
+	AllowedModes interface{} `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
 	Group WAFRuleGroup `json:"group,required"`
-	// The unique identifier of the WAF rule.
-	ID string `json:"id,required"`
+	// When set to `on`, the current WAF rule will be used when evaluating the request.
+	// Applies to anomaly detection WAF rules.
+	Mode AllowedModesAnomaly `json:"mode,required"`
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
 	Priority string `json:"priority,required"`
-	// This field can have the runtime type of [[]AllowedModesAnomaly],
-	// [[]WAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleAllowedMode],
-	// [[]WAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleAllowedMode].
-	AllowedModes interface{} `json:"allowed_modes"`
-	// When set to `on`, the current WAF rule will be used when evaluating the request.
-	// Applies to anomaly detection WAF rules.
-	Mode AllowedModesAnomaly `json:"mode,required"`
 	// The default action/mode of a rule.
 	DefaultMode WAFPackageRuleEditResponseDefaultMode `json:"default_mode"`
 	JSON        wafPackageRuleEditResponseJSON        `json:"-"`
@@ -563,13 +563,13 @@ type WAFPackageRuleEditResponse struct {
 // wafPackageRuleEditResponseJSON contains the JSON metadata for the struct
 // [WAFPackageRuleEditResponse]
 type wafPackageRuleEditResponseJSON struct {
+	ID           apijson.Field
+	AllowedModes apijson.Field
 	Description  apijson.Field
 	Group        apijson.Field
-	ID           apijson.Field
+	Mode         apijson.Field
 	PackageID    apijson.Field
 	Priority     apijson.Field
-	AllowedModes apijson.Field
-	Mode         apijson.Field
 	DefaultMode  apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestRankingDomainGetWithOptionalParams(t *testing.T) {
@@ -31,10 +31,10 @@ func TestRankingDomainGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"google.com",
 		radar.RankingDomainGetParams{
-			Date:        cloudflare.F([]string{"string", "string", "string"}),
+			Date:        cloudflare.F([]string{"string"}),
 			Format:      cloudflare.F(radar.RankingDomainGetParamsFormatJson),
 			Limit:       cloudflare.F(int64(5)),
-			Name:        cloudflare.F([]string{"string", "string", "string"}),
+			Name:        cloudflare.F([]string{"string"}),
 			RankingType: cloudflare.F(radar.RankingDomainGetParamsRankingTypePopular),
 		},
 	)

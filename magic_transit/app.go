@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -197,17 +197,17 @@ type AppListResponse struct {
 	// Magic account app ID.
 	AccountAppID string `json:"account_app_id"`
 	// This field can have the runtime type of [[]string].
-	Hostnames interface{} `json:"hostnames,required"`
+	Hostnames interface{} `json:"hostnames"`
 	// This field can have the runtime type of [[]string].
-	IPSubnets interface{} `json:"ip_subnets,required"`
+	IPSubnets interface{} `json:"ip_subnets"`
+	// Managed app ID.
+	ManagedAppID string `json:"managed_app_id"`
 	// Display name for the app.
 	Name string `json:"name"`
 	// Category of the app.
-	Type string `json:"type"`
-	// Managed app ID.
-	ManagedAppID string              `json:"managed_app_id"`
-	JSON         appListResponseJSON `json:"-"`
-	union        AppListResponseUnion
+	Type  string              `json:"type"`
+	JSON  appListResponseJSON `json:"-"`
+	union AppListResponseUnion
 }
 
 // appListResponseJSON contains the JSON metadata for the struct [AppListResponse]
@@ -215,9 +215,9 @@ type appListResponseJSON struct {
 	AccountAppID apijson.Field
 	Hostnames    apijson.Field
 	IPSubnets    apijson.Field
+	ManagedAppID apijson.Field
 	Name         apijson.Field
 	Type         apijson.Field
-	ManagedAppID apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }

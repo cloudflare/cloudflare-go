@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestDevicePostureNewWithOptionalParams(t *testing.T) {
@@ -41,10 +41,6 @@ func TestDevicePostureNewWithOptionalParams(t *testing.T) {
 			Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
 		}),
 		Match: cloudflare.F([]zero_trust.DeviceMatchParam{{
-			Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
-		}, {
-			Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
-		}, {
 			Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
 		}}),
 		Schedule: cloudflare.F("1h"),
@@ -88,10 +84,6 @@ func TestDevicePostureUpdateWithOptionalParams(t *testing.T) {
 				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
 			}),
 			Match: cloudflare.F([]zero_trust.DeviceMatchParam{{
-				Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
-			}, {
-				Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
-			}, {
 				Platform: cloudflare.F(zero_trust.DeviceMatchPlatformWindows),
 			}}),
 			Schedule: cloudflare.F("1h"),

@@ -7,17 +7,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
 	"mime/multipart"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/workers"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
 // DispatchNamespaceScriptContentService contains methods and other services that
@@ -89,15 +88,8 @@ func (r *DispatchNamespaceScriptContentService) Get(ctx context.Context, dispatc
 type DispatchNamespaceScriptContentUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A module comprising a Worker script, often a javascript file. Multiple modules
-	// may be provided as separate named parts, but at least one module must be
-	// present. This should be referenced either in the metadata as `main_module`
-	// (esm)/`body_part` (service worker) or as a header `CF-WORKER-MAIN-MODULE-PART`
-	// (esm) /`CF-WORKER-BODY-PART` (service worker) by part name. Source maps may also
-	// be included using the `application/source-map` content type.
-	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[workers.WorkerMetadataParam] `json:"metadata"`
+	Metadata               param.Field[workers.WorkerMetadataParam] `json:"metadata,required"`
 	CfWorkerBodyPart       param.Field[string]                      `header:"CF-WORKER-BODY-PART"`
 	CfWorkerMainModulePart param.Field[string]                      `header:"CF-WORKER-MAIN-MODULE-PART"`
 }

@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // GatewayLocationService contains methods and other services that help with
@@ -409,6 +409,10 @@ type Location struct {
 	CreatedAt     time.Time `json:"created_at" format:"date-time"`
 	// The identifier of the pair of IPv4 addresses assigned to this location.
 	DNSDestinationIPsID string `json:"dns_destination_ips_id"`
+	// The uuid identifier of the IPv6 block brought to the gateway, so that this
+	// location's IPv6 address is allocated from the Bring Your Own Ipv6(BYOIPv6) block
+	// and not from the standard CloudFlare IPv6 block.
+	DNSDestinationIPV6BlockID string `json:"dns_destination_ipv6_block_id"`
 	// The DNS over HTTPS domain to send DNS requests to. This field is auto-generated
 	// by Gateway.
 	DOHSubdomain string `json:"doh_subdomain"`
@@ -440,21 +444,22 @@ type Location struct {
 
 // locationJSON contains the JSON metadata for the struct [Location]
 type locationJSON struct {
-	ID                    apijson.Field
-	ClientDefault         apijson.Field
-	CreatedAt             apijson.Field
-	DNSDestinationIPsID   apijson.Field
-	DOHSubdomain          apijson.Field
-	ECSSupport            apijson.Field
-	Endpoints             apijson.Field
-	IP                    apijson.Field
-	IPV4Destination       apijson.Field
-	IPV4DestinationBackup apijson.Field
-	Name                  apijson.Field
-	Networks              apijson.Field
-	UpdatedAt             apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
+	ID                        apijson.Field
+	ClientDefault             apijson.Field
+	CreatedAt                 apijson.Field
+	DNSDestinationIPsID       apijson.Field
+	DNSDestinationIPV6BlockID apijson.Field
+	DOHSubdomain              apijson.Field
+	ECSSupport                apijson.Field
+	Endpoints                 apijson.Field
+	IP                        apijson.Field
+	IPV4Destination           apijson.Field
+	IPV4DestinationBackup     apijson.Field
+	Name                      apijson.Field
+	Networks                  apijson.Field
+	UpdatedAt                 apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
 }
 
 func (r *Location) UnmarshalJSON(data []byte) (err error) {

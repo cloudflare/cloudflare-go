@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // TokenValueService contains methods and other services that help with interacting
@@ -34,7 +34,7 @@ func NewTokenValueService(opts ...option.RequestOption) (r *TokenValueService) {
 }
 
 // Roll the token secret.
-func (r *TokenValueService) Update(ctx context.Context, tokenID string, body TokenValueUpdateParams, opts ...option.RequestOption) (res *Value, err error) {
+func (r *TokenValueService) Update(ctx context.Context, tokenID string, body TokenValueUpdateParams, opts ...option.RequestOption) (res *shared.TokenValue, err error) {
 	var env TokenValueUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if tokenID == "" {
@@ -50,8 +50,6 @@ func (r *TokenValueService) Update(ctx context.Context, tokenID string, body Tok
 	return
 }
 
-type Value = string
-
 type TokenValueUpdateParams struct {
 	Body interface{} `json:"body,required"`
 }
@@ -66,7 +64,7 @@ type TokenValueUpdateResponseEnvelope struct {
 	// Whether the API call was successful
 	Success TokenValueUpdateResponseEnvelopeSuccess `json:"success,required"`
 	// The token value.
-	Result Value                                `json:"result"`
+	Result shared.TokenValue                    `json:"result"`
 	JSON   tokenValueUpdateResponseEnvelopeJSON `json:"-"`
 }
 

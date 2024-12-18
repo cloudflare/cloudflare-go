@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/workers"
-	"github.com/cloudflare/cloudflare-go/v3/workers_for_platforms"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
+	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
 )
 
 func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
@@ -38,30 +38,20 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 			Settings: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettings{
 				Bindings: cloudflare.F([]workers.BindingUnionParam{workers.KVNamespaceBindingParam{
 					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
-				}, workers.KVNamespaceBindingParam{
-					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
-				}, workers.KVNamespaceBindingParam{
-					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
 				}}),
-				CompatibilityDate:  cloudflare.F("2022-04-05"),
-				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
+				CompatibilityDate:  cloudflare.F("2021-01-01"),
+				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 				Limits: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsLimits{
 					CPUMs: cloudflare.F(int64(50)),
 				}),
 				Logpush: cloudflare.F(false),
 				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion](workers.SingleStepMigrationParam{
-					DeletedClasses:   cloudflare.F([]string{"string", "string", "string"}),
-					NewClasses:       cloudflare.F([]string{"string", "string", "string"}),
-					NewSqliteClasses: cloudflare.F([]string{"string", "string", "string"}),
+					DeletedClasses:   cloudflare.F([]string{"string"}),
+					NewClasses:       cloudflare.F([]string{"string"}),
+					NewSqliteClasses: cloudflare.F([]string{"string"}),
 					NewTag:           cloudflare.F("v2"),
 					OldTag:           cloudflare.F("v1"),
 					RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
-						From: cloudflare.F("from"),
-						To:   cloudflare.F("to"),
-					}, {
-						From: cloudflare.F("from"),
-						To:   cloudflare.F("to"),
-					}, {
 						From: cloudflare.F("from"),
 						To:   cloudflare.F("to"),
 					}}),
@@ -69,34 +59,22 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 						From:       cloudflare.F("from"),
 						FromScript: cloudflare.F("from_script"),
 						To:         cloudflare.F("to"),
-					}, {
-						From:       cloudflare.F("from"),
-						FromScript: cloudflare.F("from_script"),
-						To:         cloudflare.F("to"),
-					}, {
-						From:       cloudflare.F("from"),
-						FromScript: cloudflare.F("from_script"),
-						To:         cloudflare.F("to"),
 					}}),
+				}),
+				Observability: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsObservability{
+					Enabled:          cloudflare.F(true),
+					HeadSamplingRate: cloudflare.F(0.100000),
 				}),
 				Placement: cloudflare.F(workers.PlacementConfigurationParam{
 					Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
 				}),
-				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
+				Tags: cloudflare.F([]string{"my-tag"}),
 				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
 					Service:     cloudflare.F("my-log-consumer"),
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
-				}, {
-					Service:     cloudflare.F("my-log-consumer"),
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
-				}, {
-					Service:     cloudflare.F("my-log-consumer"),
-					Environment: cloudflare.F("production"),
-					Namespace:   cloudflare.F("my-namespace"),
 				}}),
-				UsageModel: cloudflare.F("unbound"),
+				UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsUsageModelBundled),
 			}),
 		},
 	)
