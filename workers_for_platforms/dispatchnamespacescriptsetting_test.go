@@ -39,8 +39,8 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 				Bindings: cloudflare.F([]workers.BindingUnionParam{workers.KVNamespaceBindingParam{
 					Type: cloudflare.F(workers.KVNamespaceBindingTypeKVNamespace),
 				}}),
-				CompatibilityDate:  cloudflare.F("2022-04-05"),
-				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files"}),
+				CompatibilityDate:  cloudflare.F("2021-01-01"),
+				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 				Limits: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsLimits{
 					CPUMs: cloudflare.F(int64(50)),
 				}),
@@ -74,7 +74,7 @@ func TestDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 				}}),
-				UsageModel: cloudflare.F("unbound"),
+				UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsUsageModelBundled),
 			}),
 		},
 	)

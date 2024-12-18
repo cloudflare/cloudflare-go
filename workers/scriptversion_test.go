@@ -3,10 +3,8 @@
 package workers_test
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	"io"
 	"os"
 	"testing"
 
@@ -34,8 +32,7 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"this-is_my_script-01",
 		workers.ScriptVersionNewParams{
-			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Metadata: cloudflare.F(workers.ScriptVersionNewParamsMetadata{
 				Annotations: cloudflare.F(workers.ScriptVersionNewParamsMetadataAnnotations{
 					WorkersMessage: cloudflare.F("Fixed worker code."),

@@ -162,9 +162,9 @@ type Script struct {
 	PlacementMode string `json:"placement_mode"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string     `json:"usage_model"`
-	JSON       scriptJSON `json:"-"`
+	// Usage model for the Worker invocations.
+	UsageModel ScriptUsageModel `json:"usage_model"`
+	JSON       scriptJSON       `json:"-"`
 }
 
 // scriptJSON contains the JSON metadata for the struct [Script]
@@ -189,6 +189,22 @@ func (r *Script) UnmarshalJSON(data []byte) (err error) {
 
 func (r scriptJSON) RawJSON() string {
 	return r.raw
+}
+
+// Usage model for the Worker invocations.
+type ScriptUsageModel string
+
+const (
+	ScriptUsageModelBundled ScriptUsageModel = "bundled"
+	ScriptUsageModelUnbound ScriptUsageModel = "unbound"
+)
+
+func (r ScriptUsageModel) IsKnown() bool {
+	switch r {
+	case ScriptUsageModelBundled, ScriptUsageModelUnbound:
+		return true
+	}
+	return false
 }
 
 type ScriptSetting struct {
@@ -291,9 +307,9 @@ type ScriptUpdateResponse struct {
 	StartupTimeMs int64  `json:"startup_time_ms"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                   `json:"usage_model"`
-	JSON       scriptUpdateResponseJSON `json:"-"`
+	// Usage model for the Worker invocations.
+	UsageModel ScriptUpdateResponseUsageModel `json:"usage_model"`
+	JSON       scriptUpdateResponseJSON       `json:"-"`
 }
 
 // scriptUpdateResponseJSON contains the JSON metadata for the struct
@@ -320,6 +336,22 @@ func (r *ScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r scriptUpdateResponseJSON) RawJSON() string {
 	return r.raw
+}
+
+// Usage model for the Worker invocations.
+type ScriptUpdateResponseUsageModel string
+
+const (
+	ScriptUpdateResponseUsageModelBundled ScriptUpdateResponseUsageModel = "bundled"
+	ScriptUpdateResponseUsageModelUnbound ScriptUpdateResponseUsageModel = "unbound"
+)
+
+func (r ScriptUpdateResponseUsageModel) IsKnown() bool {
+	switch r {
+	case ScriptUpdateResponseUsageModelBundled, ScriptUpdateResponseUsageModelUnbound:
+		return true
+	}
+	return false
 }
 
 type ScriptUpdateParams struct {
@@ -356,7 +388,6 @@ func (r ScriptUpdateParams) URLQuery() (v url.Values) {
 }
 
 type ScriptUpdateParamsBody struct {
-	AnyPartName param.Field[interface{}] `json:"<any part name>"`
 	// Rollback message to be associated with this deployment. Only parsed when query
 	// param `"rollback_to"` is present.
 	Message  param.Field[string]      `json:"message"`
@@ -369,35 +400,30 @@ func (r ScriptUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r ScriptUpdateParamsBody) implementsWorkersScriptUpdateParamsBodyUnion() {}
 
-// Satisfied by [workers.ScriptUpdateParamsBodyObject],
+// Satisfied by [workers.ScriptUpdateParamsBodyMetadata],
 // [workers.ScriptUpdateParamsBodyMessage], [ScriptUpdateParamsBody].
 type ScriptUpdateParamsBodyUnion interface {
 	implementsWorkersScriptUpdateParamsBodyUnion()
 }
 
-type ScriptUpdateParamsBodyObject struct {
-	// A module comprising a Worker script, often a javascript file. Multiple modules
-	// may be provided as separate named parts, but at least one module must be present
-	// and referenced in the metadata as `main_module` or `body_part` by part name.
-	// Source maps may also be included using the `application/source-map` content
-	// type.
-	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
+type ScriptUpdateParamsBodyMetadata struct {
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata param.Field[ScriptUpdateParamsBodyObjectMetadata] `json:"metadata"`
+	Metadata    param.Field[ScriptUpdateParamsBodyMetadataMetadata] `json:"metadata,required"`
+	ExtraFields map[string][]io.Reader                              `json:"-,extras"`
 }
 
-func (r ScriptUpdateParamsBodyObject) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsBodyMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsBodyObject) implementsWorkersScriptUpdateParamsBodyUnion() {}
+func (r ScriptUpdateParamsBodyMetadata) implementsWorkersScriptUpdateParamsBodyUnion() {}
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
-type ScriptUpdateParamsBodyObjectMetadata struct {
+type ScriptUpdateParamsBodyMetadataMetadata struct {
 	// Configuration for assets within a Worker
-	Assets param.Field[ScriptUpdateParamsBodyObjectMetadataAssets] `json:"assets"`
+	Assets param.Field[ScriptUpdateParamsBodyMetadataMetadataAssets] `json:"assets"`
 	// List of bindings available to the worker.
-	Bindings param.Field[[]ScriptUpdateParamsBodyObjectMetadataBinding] `json:"bindings"`
+	Bindings param.Field[[]ScriptUpdateParamsBodyMetadataMetadataBinding] `json:"bindings"`
 	// Name of the part in the multipart request that contains the script (e.g. the
 	// file adding a listener to the `fetch` event). Indicates a
 	// `service worker syntax` Worker.
@@ -420,66 +446,66 @@ type ScriptUpdateParamsBodyObjectMetadata struct {
 	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations param.Field[ScriptUpdateParamsBodyObjectMetadataMigrationsUnion] `json:"migrations"`
+	Migrations param.Field[ScriptUpdateParamsBodyMetadataMetadataMigrationsUnion] `json:"migrations"`
 	// Observability settings for the Worker.
-	Observability param.Field[ScriptUpdateParamsBodyObjectMetadataObservability] `json:"observability"`
-	Placement     param.Field[PlacementConfigurationParam]                       `json:"placement"`
+	Observability param.Field[ScriptUpdateParamsBodyMetadataMetadataObservability] `json:"observability"`
+	Placement     param.Field[PlacementConfigurationParam]                         `json:"placement"`
 	// List of strings to use as tags for this Worker.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
-	// Usage model to apply to invocations.
-	UsageModel param.Field[ScriptUpdateParamsBodyObjectMetadataUsageModel] `json:"usage_model"`
+	// Usage model for the Worker invocations.
+	UsageModel param.Field[ScriptUpdateParamsBodyMetadataMetadataUsageModel] `json:"usage_model"`
 	// Key-value pairs to use as tags for this version of this Worker.
 	VersionTags param.Field[map[string]string] `json:"version_tags"`
 }
 
-func (r ScriptUpdateParamsBodyObjectMetadata) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsBodyMetadataMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configuration for assets within a Worker
-type ScriptUpdateParamsBodyObjectMetadataAssets struct {
+type ScriptUpdateParamsBodyMetadataMetadataAssets struct {
 	// Configuration for assets within a Worker.
-	Config param.Field[ScriptUpdateParamsBodyObjectMetadataAssetsConfig] `json:"config"`
+	Config param.Field[ScriptUpdateParamsBodyMetadataMetadataAssetsConfig] `json:"config"`
 	// Token provided upon successful upload of all files from a registered manifest.
 	JWT param.Field[string] `json:"jwt"`
 }
 
-func (r ScriptUpdateParamsBodyObjectMetadataAssets) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsBodyMetadataMetadataAssets) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configuration for assets within a Worker.
-type ScriptUpdateParamsBodyObjectMetadataAssetsConfig struct {
+type ScriptUpdateParamsBodyMetadataMetadataAssetsConfig struct {
 	// Determines the redirects and rewrites of requests for HTML content.
-	HTMLHandling param.Field[ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
+	HTMLHandling param.Field[ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
 	// Determines the response when a request does not match a static asset, and there
 	// is no Worker script.
-	NotFoundHandling param.Field[ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
+	NotFoundHandling param.Field[ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
 	// When true and the incoming request matches an asset, that will be served instead
 	// of invoking the Worker script. When false, requests will always invoke the
 	// Worker script.
 	ServeDirectly param.Field[bool] `json:"serve_directly"`
 }
 
-func (r ScriptUpdateParamsBodyObjectMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsBodyMetadataMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Determines the redirects and rewrites of requests for HTML content.
-type ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling string
+type ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling string
 
 const (
-	ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingAutoTrailingSlash  ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "auto-trailing-slash"
-	ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingForceTrailingSlash ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "force-trailing-slash"
-	ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingDropTrailingSlash  ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "drop-trailing-slash"
-	ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingNone               ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "none"
+	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingAutoTrailingSlash  ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "auto-trailing-slash"
+	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingForceTrailingSlash ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "force-trailing-slash"
+	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingDropTrailingSlash  ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "drop-trailing-slash"
+	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingNone               ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "none"
 )
 
-func (r ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling) IsKnown() bool {
+func (r ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingAutoTrailingSlash, ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingForceTrailingSlash, ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingDropTrailingSlash, ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingNone:
+	case ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingAutoTrailingSlash, ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingForceTrailingSlash, ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingDropTrailingSlash, ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingNone:
 		return true
 	}
 	return false
@@ -487,23 +513,23 @@ func (r ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling) IsKnown() 
 
 // Determines the response when a request does not match a static asset, and there
 // is no Worker script.
-type ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling string
+type ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling string
 
 const (
-	ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingNone                  ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling = "none"
-	ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling404Page               ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling = "404-page"
-	ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingSinglePageApplication ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling = "single-page-application"
+	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingNone                  ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling = "none"
+	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling404Page               ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling = "404-page"
+	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingSinglePageApplication ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling = "single-page-application"
 )
 
-func (r ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling) IsKnown() bool {
+func (r ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingNone, ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling404Page, ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingSinglePageApplication:
+	case ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingNone, ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling404Page, ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingSinglePageApplication:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsBodyObjectMetadataBinding struct {
+type ScriptUpdateParamsBodyMetadataMetadataBinding struct {
 	// Name of the binding variable.
 	Name param.Field[string] `json:"name"`
 	// Type of binding. You can find more about bindings on our docs:
@@ -512,12 +538,12 @@ type ScriptUpdateParamsBodyObjectMetadataBinding struct {
 	ExtraFields map[string]interface{} `json:"-,extras"`
 }
 
-func (r ScriptUpdateParamsBodyObjectMetadataBinding) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsBodyMetadataMetadataBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
-type ScriptUpdateParamsBodyObjectMetadataMigrations struct {
+type ScriptUpdateParamsBodyMetadataMetadataMigrations struct {
 	DeletedClasses   param.Field[interface{}] `json:"deleted_classes"`
 	NewClasses       param.Field[interface{}] `json:"new_classes"`
 	NewSqliteClasses param.Field[interface{}] `json:"new_sqlite_classes"`
@@ -531,24 +557,41 @@ type ScriptUpdateParamsBodyObjectMetadataMigrations struct {
 	TransferredClasses param.Field[interface{}] `json:"transferred_classes"`
 }
 
-func (r ScriptUpdateParamsBodyObjectMetadataMigrations) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsBodyMetadataMetadataMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsBodyObjectMetadataMigrations) implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+func (r ScriptUpdateParamsBodyMetadataMetadataMigrations) implementsWorkersScriptUpdateParamsBodyMetadataMetadataMigrationsUnion() {
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by [workers.SingleStepMigrationParam],
-// [workers.SteppedMigrationParam],
-// [ScriptUpdateParamsBodyObjectMetadataMigrations].
-type ScriptUpdateParamsBodyObjectMetadataMigrationsUnion interface {
-	implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion()
+// [workers.ScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations],
+// [ScriptUpdateParamsBodyMetadataMetadataMigrations].
+type ScriptUpdateParamsBodyMetadataMetadataMigrationsUnion interface {
+	implementsWorkersScriptUpdateParamsBodyMetadataMetadataMigrationsUnion()
+}
+
+type ScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag param.Field[string] `json:"old_tag"`
+	// Migrations to apply in order.
+	Steps param.Field[[]MigrationStepParam] `json:"steps"`
+}
+
+func (r ScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations) implementsWorkersScriptUpdateParamsBodyMetadataMetadataMigrationsUnion() {
 }
 
 // Observability settings for the Worker.
-type ScriptUpdateParamsBodyObjectMetadataObservability struct {
+type ScriptUpdateParamsBodyMetadataMetadataObservability struct {
 	// Whether observability is enabled for the Worker.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
@@ -556,21 +599,21 @@ type ScriptUpdateParamsBodyObjectMetadataObservability struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 }
 
-func (r ScriptUpdateParamsBodyObjectMetadataObservability) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsBodyMetadataMetadataObservability) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Usage model to apply to invocations.
-type ScriptUpdateParamsBodyObjectMetadataUsageModel string
+// Usage model for the Worker invocations.
+type ScriptUpdateParamsBodyMetadataMetadataUsageModel string
 
 const (
-	ScriptUpdateParamsBodyObjectMetadataUsageModelBundled ScriptUpdateParamsBodyObjectMetadataUsageModel = "bundled"
-	ScriptUpdateParamsBodyObjectMetadataUsageModelUnbound ScriptUpdateParamsBodyObjectMetadataUsageModel = "unbound"
+	ScriptUpdateParamsBodyMetadataMetadataUsageModelBundled ScriptUpdateParamsBodyMetadataMetadataUsageModel = "bundled"
+	ScriptUpdateParamsBodyMetadataMetadataUsageModelUnbound ScriptUpdateParamsBodyMetadataMetadataUsageModel = "unbound"
 )
 
-func (r ScriptUpdateParamsBodyObjectMetadataUsageModel) IsKnown() bool {
+func (r ScriptUpdateParamsBodyMetadataMetadataUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsBodyObjectMetadataUsageModelBundled, ScriptUpdateParamsBodyObjectMetadataUsageModelUnbound:
+	case ScriptUpdateParamsBodyMetadataMetadataUsageModelBundled, ScriptUpdateParamsBodyMetadataMetadataUsageModelUnbound:
 		return true
 	}
 	return false

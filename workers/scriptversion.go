@@ -7,7 +7,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -204,12 +203,8 @@ func (r scriptVersionGetResponseJSON) RawJSON() string {
 type ScriptVersionNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// A module comprising a Worker script, often a javascript file. Multiple modules
-	// may be provided as separate named parts, but at least one module must be present
-	// and referenced in the metadata as `main_module`.
-	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata param.Field[ScriptVersionNewParamsMetadata] `json:"metadata"`
+	Metadata param.Field[ScriptVersionNewParamsMetadata] `json:"metadata,required"`
 }
 
 func (r ScriptVersionNewParams) MarshalMultipart() (data []byte, contentType string, err error) {

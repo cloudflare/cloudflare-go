@@ -1149,10 +1149,10 @@ func (r SingleStepMigrationParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SingleStepMigrationParam) implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+func (r SingleStepMigrationParam) implementsWorkersScriptUpdateParamsBodyMetadataMetadataMigrationsUnion() {
 }
 
-func (r SingleStepMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+func (r SingleStepMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrationsUnion() {
 }
 
 func (r SingleStepMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
@@ -1175,64 +1175,6 @@ type SingleStepMigrationTransferredClassParam struct {
 
 func (r SingleStepMigrationTransferredClassParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type SteppedMigration struct {
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
-	// Migrations to apply in order.
-	Steps []MigrationStep      `json:"steps"`
-	JSON  steppedMigrationJSON `json:"-"`
-}
-
-// steppedMigrationJSON contains the JSON metadata for the struct
-// [SteppedMigration]
-type steppedMigrationJSON struct {
-	NewTag      apijson.Field
-	OldTag      apijson.Field
-	Steps       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SteppedMigration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r steppedMigrationJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SteppedMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
-}
-
-func (r SteppedMigration) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
-}
-
-type SteppedMigrationParam struct {
-	// Tag to set as the latest migration tag.
-	NewTag param.Field[string] `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag param.Field[string] `json:"old_tag"`
-	// Migrations to apply in order.
-	Steps param.Field[[]MigrationStepParam] `json:"steps"`
-}
-
-func (r SteppedMigrationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SteppedMigrationParam) implementsWorkersScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
-}
-
-func (r SteppedMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
-}
-
-func (r SteppedMigrationParam) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
 }
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
