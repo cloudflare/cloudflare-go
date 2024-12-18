@@ -93,9 +93,12 @@ func (r *DispatchNamespaceScriptSettingService) Get(ctx context.Context, dispatc
 type DispatchNamespaceScriptSettingEditResponse struct {
 	// List of bindings attached to this Worker
 	Bindings []workers.Binding `json:"bindings"`
-	// Opt your Worker into changes after this date
+	// Date indicating targeted support in the Workers runtime. Backwards incompatible
+	// fixes to the runtime following this date will not affect this Worker.
 	CompatibilityDate string `json:"compatibility_date"`
-	// Opt your Worker into specific changes
+	// Flags that enable or disable certain features in the Workers runtime. Used to
+	// enable upcoming features or opt in or out of specific changes not included in a
+	// `compatibility_date`.
 	CompatibilityFlags []string `json:"compatibility_flags"`
 	// Limits to apply for this Worker.
 	Limits DispatchNamespaceScriptSettingEditResponseLimits `json:"limits"`
@@ -110,9 +113,9 @@ type DispatchNamespaceScriptSettingEditResponse struct {
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []workers.ConsumerScript `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                                         `json:"usage_model"`
-	JSON       dispatchNamespaceScriptSettingEditResponseJSON `json:"-"`
+	// Usage model for the Worker invocations.
+	UsageModel DispatchNamespaceScriptSettingEditResponseUsageModel `json:"usage_model"`
+	JSON       dispatchNamespaceScriptSettingEditResponseJSON       `json:"-"`
 }
 
 // dispatchNamespaceScriptSettingEditResponseJSON contains the JSON metadata for
@@ -221,14 +224,15 @@ func (r *DispatchNamespaceScriptSettingEditResponseMigrations) UnmarshalJSON(dat
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [workers.SingleStepMigration],
-// [workers.SteppedMigration].
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations].
 func (r DispatchNamespaceScriptSettingEditResponseMigrations) AsUnion() DispatchNamespaceScriptSettingEditResponseMigrationsUnion {
 	return r.union
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
-// Union satisfied by [workers.SingleStepMigration] or [workers.SteppedMigration].
+// Union satisfied by [workers.SingleStepMigration] or
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations].
 type DispatchNamespaceScriptSettingEditResponseMigrationsUnion interface {
 	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations()
 }
@@ -243,9 +247,42 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(workers.SteppedMigration{}),
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations{}),
 		},
 	)
+}
+
+type DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag string `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag string `json:"old_tag"`
+	// Migrations to apply in order.
+	Steps []workers.MigrationStep                                                               `json:"steps"`
+	JSON  dispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations]
+type dispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON struct {
+	NewTag      apijson.Field
+	OldTag      apijson.Field
+	Steps       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrationsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingEditResponseMigrationsWorkersMultipleStepMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseMigrations() {
 }
 
 // Observability settings for the Worker.
@@ -276,12 +313,31 @@ func (r dispatchNamespaceScriptSettingEditResponseObservabilityJSON) RawJSON() s
 	return r.raw
 }
 
+// Usage model for the Worker invocations.
+type DispatchNamespaceScriptSettingEditResponseUsageModel string
+
+const (
+	DispatchNamespaceScriptSettingEditResponseUsageModelBundled DispatchNamespaceScriptSettingEditResponseUsageModel = "bundled"
+	DispatchNamespaceScriptSettingEditResponseUsageModelUnbound DispatchNamespaceScriptSettingEditResponseUsageModel = "unbound"
+)
+
+func (r DispatchNamespaceScriptSettingEditResponseUsageModel) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditResponseUsageModelBundled, DispatchNamespaceScriptSettingEditResponseUsageModelUnbound:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptSettingGetResponse struct {
 	// List of bindings attached to this Worker
 	Bindings []workers.Binding `json:"bindings"`
-	// Opt your Worker into changes after this date
+	// Date indicating targeted support in the Workers runtime. Backwards incompatible
+	// fixes to the runtime following this date will not affect this Worker.
 	CompatibilityDate string `json:"compatibility_date"`
-	// Opt your Worker into specific changes
+	// Flags that enable or disable certain features in the Workers runtime. Used to
+	// enable upcoming features or opt in or out of specific changes not included in a
+	// `compatibility_date`.
 	CompatibilityFlags []string `json:"compatibility_flags"`
 	// Limits to apply for this Worker.
 	Limits DispatchNamespaceScriptSettingGetResponseLimits `json:"limits"`
@@ -296,9 +352,9 @@ type DispatchNamespaceScriptSettingGetResponse struct {
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []workers.ConsumerScript `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                                        `json:"usage_model"`
-	JSON       dispatchNamespaceScriptSettingGetResponseJSON `json:"-"`
+	// Usage model for the Worker invocations.
+	UsageModel DispatchNamespaceScriptSettingGetResponseUsageModel `json:"usage_model"`
+	JSON       dispatchNamespaceScriptSettingGetResponseJSON       `json:"-"`
 }
 
 // dispatchNamespaceScriptSettingGetResponseJSON contains the JSON metadata for the
@@ -407,14 +463,15 @@ func (r *DispatchNamespaceScriptSettingGetResponseMigrations) UnmarshalJSON(data
 // interface which you can cast to the specific types for more type safety.
 //
 // Possible runtime types of the union are [workers.SingleStepMigration],
-// [workers.SteppedMigration].
+// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations].
 func (r DispatchNamespaceScriptSettingGetResponseMigrations) AsUnion() DispatchNamespaceScriptSettingGetResponseMigrationsUnion {
 	return r.union
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
-// Union satisfied by [workers.SingleStepMigration] or [workers.SteppedMigration].
+// Union satisfied by [workers.SingleStepMigration] or
+// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations].
 type DispatchNamespaceScriptSettingGetResponseMigrationsUnion interface {
 	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations()
 }
@@ -429,9 +486,42 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(workers.SteppedMigration{}),
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations{}),
 		},
 	)
+}
+
+type DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag string `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag string `json:"old_tag"`
+	// Migrations to apply in order.
+	Steps []workers.MigrationStep                                                              `json:"steps"`
+	JSON  dispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON `json:"-"`
+}
+
+// dispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON
+// contains the JSON metadata for the struct
+// [DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations]
+type dispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON struct {
+	NewTag      apijson.Field
+	OldTag      apijson.Field
+	Steps       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrationsJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r DispatchNamespaceScriptSettingGetResponseMigrationsWorkersMultipleStepMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseMigrations() {
 }
 
 // Observability settings for the Worker.
@@ -461,6 +551,22 @@ func (r dispatchNamespaceScriptSettingGetResponseObservabilityJSON) RawJSON() st
 	return r.raw
 }
 
+// Usage model for the Worker invocations.
+type DispatchNamespaceScriptSettingGetResponseUsageModel string
+
+const (
+	DispatchNamespaceScriptSettingGetResponseUsageModelBundled DispatchNamespaceScriptSettingGetResponseUsageModel = "bundled"
+	DispatchNamespaceScriptSettingGetResponseUsageModelUnbound DispatchNamespaceScriptSettingGetResponseUsageModel = "unbound"
+)
+
+func (r DispatchNamespaceScriptSettingGetResponseUsageModel) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingGetResponseUsageModelBundled, DispatchNamespaceScriptSettingGetResponseUsageModelUnbound:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptSettingEditParams struct {
 	// Identifier
 	AccountID param.Field[string]                                           `path:"account_id,required"`
@@ -485,9 +591,12 @@ func (r DispatchNamespaceScriptSettingEditParams) MarshalMultipart() (data []byt
 type DispatchNamespaceScriptSettingEditParamsSettings struct {
 	// List of bindings attached to this Worker
 	Bindings param.Field[[]workers.BindingUnionParam] `json:"bindings"`
-	// Opt your Worker into changes after this date
+	// Date indicating targeted support in the Workers runtime. Backwards incompatible
+	// fixes to the runtime following this date will not affect this Worker.
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
-	// Opt your Worker into specific changes
+	// Flags that enable or disable certain features in the Workers runtime. Used to
+	// enable upcoming features or opt in or out of specific changes not included in a
+	// `compatibility_date`.
 	CompatibilityFlags param.Field[[]string] `json:"compatibility_flags"`
 	// Limits to apply for this Worker.
 	Limits param.Field[DispatchNamespaceScriptSettingEditParamsSettingsLimits] `json:"limits"`
@@ -502,8 +611,8 @@ type DispatchNamespaceScriptSettingEditParamsSettings struct {
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]workers.ConsumerScriptParam] `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel param.Field[string] `json:"usage_model"`
+	// Usage model for the Worker invocations.
+	UsageModel param.Field[DispatchNamespaceScriptSettingEditParamsSettingsUsageModel] `json:"usage_model"`
 }
 
 func (r DispatchNamespaceScriptSettingEditParamsSettings) MarshalJSON() (data []byte, err error) {
@@ -545,10 +654,27 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrations) ImplementsWo
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by [workers.SingleStepMigrationParam],
-// [workers.SteppedMigrationParam],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsMigrationsWorkersMultipleStepMigrations],
 // [DispatchNamespaceScriptSettingEditParamsSettingsMigrations].
 type DispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion interface {
 	ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion()
+}
+
+type DispatchNamespaceScriptSettingEditParamsSettingsMigrationsWorkersMultipleStepMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag param.Field[string] `json:"old_tag"`
+	// Migrations to apply in order.
+	Steps param.Field[[]workers.MigrationStepParam] `json:"steps"`
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrationsWorkersMultipleStepMigrations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsMigrationsWorkersMultipleStepMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsMigrationsUnion() {
 }
 
 // Observability settings for the Worker.
@@ -562,6 +688,22 @@ type DispatchNamespaceScriptSettingEditParamsSettingsObservability struct {
 
 func (r DispatchNamespaceScriptSettingEditParamsSettingsObservability) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Usage model for the Worker invocations.
+type DispatchNamespaceScriptSettingEditParamsSettingsUsageModel string
+
+const (
+	DispatchNamespaceScriptSettingEditParamsSettingsUsageModelBundled DispatchNamespaceScriptSettingEditParamsSettingsUsageModel = "bundled"
+	DispatchNamespaceScriptSettingEditParamsSettingsUsageModelUnbound DispatchNamespaceScriptSettingEditParamsSettingsUsageModel = "unbound"
+)
+
+func (r DispatchNamespaceScriptSettingEditParamsSettingsUsageModel) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptSettingEditParamsSettingsUsageModelBundled, DispatchNamespaceScriptSettingEditParamsSettingsUsageModelUnbound:
+		return true
+	}
+	return false
 }
 
 type DispatchNamespaceScriptSettingEditResponseEnvelope struct {

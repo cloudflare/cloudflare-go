@@ -176,9 +176,9 @@ type DispatchNamespaceScriptUpdateResponse struct {
 	StartupTimeMs int64  `json:"startup_time_ms"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []workers.ConsumerScript `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                                    `json:"usage_model"`
-	JSON       dispatchNamespaceScriptUpdateResponseJSON `json:"-"`
+	// Usage model for the Worker invocations.
+	UsageModel DispatchNamespaceScriptUpdateResponseUsageModel `json:"usage_model"`
+	JSON       dispatchNamespaceScriptUpdateResponseJSON       `json:"-"`
 }
 
 // dispatchNamespaceScriptUpdateResponseJSON contains the JSON metadata for the
@@ -207,6 +207,22 @@ func (r dispatchNamespaceScriptUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Usage model for the Worker invocations.
+type DispatchNamespaceScriptUpdateResponseUsageModel string
+
+const (
+	DispatchNamespaceScriptUpdateResponseUsageModelBundled DispatchNamespaceScriptUpdateResponseUsageModel = "bundled"
+	DispatchNamespaceScriptUpdateResponseUsageModelUnbound DispatchNamespaceScriptUpdateResponseUsageModel = "unbound"
+)
+
+func (r DispatchNamespaceScriptUpdateResponseUsageModel) IsKnown() bool {
+	switch r {
+	case DispatchNamespaceScriptUpdateResponseUsageModelBundled, DispatchNamespaceScriptUpdateResponseUsageModelUnbound:
+		return true
+	}
+	return false
+}
+
 type DispatchNamespaceScriptUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string]                          `path:"account_id,required"`
@@ -229,7 +245,6 @@ func (r DispatchNamespaceScriptUpdateParams) MarshalMultipart() (data []byte, co
 }
 
 type DispatchNamespaceScriptUpdateParamsBody struct {
-	AnyPartName param.Field[interface{}] `json:"<any part name>"`
 	// Rollback message to be associated with this deployment. Only parsed when query
 	// param `"rollback_to"` is present.
 	Message  param.Field[string]      `json:"message"`
@@ -244,37 +259,32 @@ func (r DispatchNamespaceScriptUpdateParamsBody) implementsWorkersForPlatformsDi
 }
 
 // Satisfied by
-// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObject],
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyMetadata],
 // [workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyMessage],
 // [DispatchNamespaceScriptUpdateParamsBody].
 type DispatchNamespaceScriptUpdateParamsBodyUnion interface {
 	implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyUnion()
 }
 
-type DispatchNamespaceScriptUpdateParamsBodyObject struct {
-	// A module comprising a Worker script, often a javascript file. Multiple modules
-	// may be provided as separate named parts, but at least one module must be present
-	// and referenced in the metadata as `main_module` or `body_part` by part name.
-	// Source maps may also be included using the `application/source-map` content
-	// type.
-	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
+type DispatchNamespaceScriptUpdateParamsBodyMetadata struct {
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadata] `json:"metadata"`
+	Metadata    param.Field[DispatchNamespaceScriptUpdateParamsBodyMetadataMetadata] `json:"metadata,required"`
+	ExtraFields map[string][]io.Reader                                               `json:"-,extras"`
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObject) MarshalJSON() (data []byte, err error) {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObject) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyUnion() {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadata) implementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyUnion() {
 }
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
-type DispatchNamespaceScriptUpdateParamsBodyObjectMetadata struct {
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadata struct {
 	// Configuration for assets within a Worker
-	Assets param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssets] `json:"assets"`
+	Assets param.Field[DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssets] `json:"assets"`
 	// List of bindings available to the worker.
-	Bindings param.Field[[]DispatchNamespaceScriptUpdateParamsBodyObjectMetadataBinding] `json:"bindings"`
+	Bindings param.Field[[]DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataBinding] `json:"bindings"`
 	// Name of the part in the multipart request that contains the script (e.g. the
 	// file adding a listener to the `fetch` event). Indicates a
 	// `service worker syntax` Worker.
@@ -297,66 +307,66 @@ type DispatchNamespaceScriptUpdateParamsBodyObjectMetadata struct {
 	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion] `json:"migrations"`
+	Migrations param.Field[DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrationsUnion] `json:"migrations"`
 	// Observability settings for the Worker.
-	Observability param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadataObservability] `json:"observability"`
-	Placement     param.Field[workers.PlacementConfigurationParam]                                `json:"placement"`
+	Observability param.Field[DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataObservability] `json:"observability"`
+	Placement     param.Field[workers.PlacementConfigurationParam]                                  `json:"placement"`
 	// List of strings to use as tags for this Worker.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]workers.ConsumerScriptParam] `json:"tail_consumers"`
-	// Usage model to apply to invocations.
-	UsageModel param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModel] `json:"usage_model"`
+	// Usage model for the Worker invocations.
+	UsageModel param.Field[DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataUsageModel] `json:"usage_model"`
 	// Key-value pairs to use as tags for this version of this Worker.
 	VersionTags param.Field[map[string]string] `json:"version_tags"`
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadata) MarshalJSON() (data []byte, err error) {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configuration for assets within a Worker
-type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssets struct {
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssets struct {
 	// Configuration for assets within a Worker.
-	Config param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfig] `json:"config"`
+	Config param.Field[DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfig] `json:"config"`
 	// Token provided upon successful upload of all files from a registered manifest.
 	JWT param.Field[string] `json:"jwt"`
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssets) MarshalJSON() (data []byte, err error) {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssets) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configuration for assets within a Worker.
-type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfig struct {
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfig struct {
 	// Determines the redirects and rewrites of requests for HTML content.
-	HTMLHandling param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
+	HTMLHandling param.Field[DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
 	// Determines the response when a request does not match a static asset, and there
 	// is no Worker script.
-	NotFoundHandling param.Field[DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
+	NotFoundHandling param.Field[DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
 	// When true and the incoming request matches an asset, that will be served instead
 	// of invoking the Worker script. When false, requests will always invoke the
 	// Worker script.
 	ServeDirectly param.Field[bool] `json:"serve_directly"`
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Determines the redirects and rewrites of requests for HTML content.
-type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling string
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling string
 
 const (
-	DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingAutoTrailingSlash  DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "auto-trailing-slash"
-	DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingForceTrailingSlash DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "force-trailing-slash"
-	DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingDropTrailingSlash  DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "drop-trailing-slash"
-	DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingNone               DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling = "none"
+	DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingAutoTrailingSlash  DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "auto-trailing-slash"
+	DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingForceTrailingSlash DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "force-trailing-slash"
+	DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingDropTrailingSlash  DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "drop-trailing-slash"
+	DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingNone               DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "none"
 )
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandling) IsKnown() bool {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingAutoTrailingSlash, DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingForceTrailingSlash, DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingDropTrailingSlash, DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingNone:
+	case DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingAutoTrailingSlash, DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingForceTrailingSlash, DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingDropTrailingSlash, DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingNone:
 		return true
 	}
 	return false
@@ -364,23 +374,23 @@ func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHan
 
 // Determines the response when a request does not match a static asset, and there
 // is no Worker script.
-type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling string
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling string
 
 const (
-	DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingNone                  DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling = "none"
-	DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling404Page               DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling = "404-page"
-	DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingSinglePageApplication DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling = "single-page-application"
+	DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingNone                  DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling = "none"
+	DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling404Page               DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling = "404-page"
+	DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingSinglePageApplication DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling = "single-page-application"
 )
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling) IsKnown() bool {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingNone, DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandling404Page, DispatchNamespaceScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingSinglePageApplication:
+	case DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingNone, DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling404Page, DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingSinglePageApplication:
 		return true
 	}
 	return false
 }
 
-type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataBinding struct {
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataBinding struct {
 	// Name of the binding variable.
 	Name param.Field[string] `json:"name"`
 	// Type of binding. You can find more about bindings on our docs:
@@ -389,12 +399,12 @@ type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataBinding struct {
 	ExtraFields map[string]interface{} `json:"-,extras"`
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataBinding) MarshalJSON() (data []byte, err error) {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
-type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations struct {
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrations struct {
 	DeletedClasses   param.Field[interface{}] `json:"deleted_classes"`
 	NewClasses       param.Field[interface{}] `json:"new_classes"`
 	NewSqliteClasses param.Field[interface{}] `json:"new_sqlite_classes"`
@@ -408,24 +418,41 @@ type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations struct {
 	TransferredClasses param.Field[interface{}] `json:"transferred_classes"`
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) MarshalJSON() (data []byte, err error) {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion() {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrationsUnion() {
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by [workers.SingleStepMigrationParam],
-// [workers.SteppedMigrationParam],
-// [DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrations].
-type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion interface {
-	ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion()
+// [workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations],
+// [DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrations].
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrationsUnion interface {
+	ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrationsUnion()
+}
+
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag param.Field[string] `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag param.Field[string] `json:"old_tag"`
+	// Migrations to apply in order.
+	Steps param.Field[[]workers.MigrationStepParam] `json:"steps"`
+}
+
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations) ImplementsWorkersForPlatformsDispatchNamespaceScriptUpdateParamsBodyMetadataMetadataMigrationsUnion() {
 }
 
 // Observability settings for the Worker.
-type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataObservability struct {
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataObservability struct {
 	// Whether observability is enabled for the Worker.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
@@ -433,21 +460,21 @@ type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataObservability struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 }
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataObservability) MarshalJSON() (data []byte, err error) {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataObservability) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Usage model to apply to invocations.
-type DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModel string
+// Usage model for the Worker invocations.
+type DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataUsageModel string
 
 const (
-	DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModelBundled DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModel = "bundled"
-	DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModelUnbound DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModel = "unbound"
+	DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataUsageModelBundled DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataUsageModel = "bundled"
+	DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataUsageModelUnbound DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataUsageModel = "unbound"
 )
 
-func (r DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModel) IsKnown() bool {
+func (r DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataUsageModel) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModelBundled, DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModelUnbound:
+	case DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataUsageModelBundled, DispatchNamespaceScriptUpdateParamsBodyMetadataMetadataUsageModelUnbound:
 		return true
 	}
 	return false

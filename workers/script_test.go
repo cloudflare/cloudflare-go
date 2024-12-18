@@ -37,29 +37,28 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers.ScriptUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: workers.ScriptUpdateParamsBodyObject{
-				AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
-				Metadata: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadata{
-					Assets: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssets{
-						Config: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssetsConfig{
-							HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
-							NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataAssetsConfigNotFoundHandlingNone),
+			Body: workers.ScriptUpdateParamsBodyMetadata{
+				Metadata: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadata{
+					Assets: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataAssets{
+						Config: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataAssetsConfig{
+							HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
+							NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingNone),
 							ServeDirectly:    cloudflare.F(true),
 						}),
 						JWT: cloudflare.F("jwt"),
 					}),
-					Bindings: cloudflare.F([]workers.ScriptUpdateParamsBodyObjectMetadataBinding{{
+					Bindings: cloudflare.F([]workers.ScriptUpdateParamsBodyMetadataMetadataBinding{{
 						Name: cloudflare.F("MY_ENV_VAR"),
 						Type: cloudflare.F("plain_text"),
 					}}),
 					BodyPart:           cloudflare.F("worker.js"),
-					CompatibilityDate:  cloudflare.F("2023-07-25"),
-					CompatibilityFlags: cloudflare.F([]string{"string"}),
+					CompatibilityDate:  cloudflare.F("2021-01-01"),
+					CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
 					KeepAssets:         cloudflare.F(false),
 					KeepBindings:       cloudflare.F([]string{"string"}),
 					Logpush:            cloudflare.F(false),
 					MainModule:         cloudflare.F("worker.js"),
-					Migrations: cloudflare.F[workers.ScriptUpdateParamsBodyObjectMetadataMigrationsUnion](workers.SingleStepMigrationParam{
+					Migrations: cloudflare.F[workers.ScriptUpdateParamsBodyMetadataMetadataMigrationsUnion](workers.SingleStepMigrationParam{
 						DeletedClasses:   cloudflare.F([]string{"string"}),
 						NewClasses:       cloudflare.F([]string{"string"}),
 						NewSqliteClasses: cloudflare.F([]string{"string"}),
@@ -75,7 +74,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 							To:         cloudflare.F("to"),
 						}}),
 					}),
-					Observability: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataObservability{
+					Observability: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataObservability{
 						Enabled:          cloudflare.F(true),
 						HeadSamplingRate: cloudflare.F(0.100000),
 					}),
@@ -88,7 +87,7 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 						Environment: cloudflare.F("production"),
 						Namespace:   cloudflare.F("my-namespace"),
 					}}),
-					UsageModel: cloudflare.F(workers.ScriptUpdateParamsBodyObjectMetadataUsageModelBundled),
+					UsageModel: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataUsageModelBundled),
 					VersionTags: cloudflare.F(map[string]string{
 						"foo": "string",
 					}),
