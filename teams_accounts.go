@@ -10,9 +10,11 @@ import (
 )
 
 type TeamsAccount struct {
-	GatewayTag   string `json:"gateway_tag"`   // Internal teams ID
-	ProviderName string `json:"provider_name"` // Auth provider
-	ID           string `json:"id"`            // cloudflare account ID
+	GatewayTag      string `json:"gateway_tag"`                 // Internal teams ID
+	ProviderName    string `json:"provider_name"`               // Auth provider
+	ID              string `json:"id"`                          // cloudflare account ID
+	TenantAccountID string `json:"tenant_account_id,omitempty"` // cloudflare Tenant account ID, if a tenant account
+	TenantID        string `json:"tenant_id,omitempty"`         // cloudflare Tenant ID, if a tenant account id
 }
 
 // TeamsAccountResponse is the API response, containing information on teams
@@ -48,6 +50,12 @@ type TeamsAccountSettings struct {
 	ExtendedEmailMatching *TeamsExtendedEmailMatching `json:"extended_email_matching,omitempty"`
 	CustomCertificate     *TeamsCustomCertificate     `json:"custom_certificate,omitempty"`
 	Certificate           *TeamsCertificateSetting    `json:"certificate,omitempty"`
+	Sandbox               *TeamsSandboxAccountSetting `json:"sandbox,omitempty"`
+}
+
+type TeamsSandboxAccountSetting struct {
+	Enabled        *bool  `db:"enabled" json:"enabled" validate:"required"`
+	FallbackAction string `db:"fallback_action" json:"fallback_action" validate:"omitempty,oneof=allow block"`
 }
 
 type BrowserIsolation struct {
