@@ -431,7 +431,7 @@ func (r FipsSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// account settings.
+// Account settings
 type GatewayConfigurationSettings struct {
 	// Activity log settings.
 	ActivityLog ActivityLogSettings `json:"activity_log"`
@@ -557,7 +557,7 @@ func (r GatewayConfigurationSettingsSandboxFallbackAction) IsKnown() bool {
 	return false
 }
 
-// account settings.
+// Account settings
 type GatewayConfigurationSettingsParam struct {
 	// Activity log settings.
 	ActivityLog param.Field[ActivityLogSettingsParam] `json:"activity_log"`
@@ -728,10 +728,10 @@ func (r TLSSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// account settings.
+// Account settings
 type GatewayConfigurationUpdateResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// account settings.
+	// Account settings
 	Settings  GatewayConfigurationSettings           `json:"settings"`
 	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationUpdateResponseJSON `json:"-"`
@@ -755,10 +755,10 @@ func (r gatewayConfigurationUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// account settings.
+// Account settings
 type GatewayConfigurationEditResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// account settings.
+	// Account settings
 	Settings  GatewayConfigurationSettings         `json:"settings"`
 	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationEditResponseJSON `json:"-"`
@@ -782,10 +782,10 @@ func (r gatewayConfigurationEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// account settings.
+// Account settings
 type GatewayConfigurationGetResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// account settings.
+	// Account settings
 	Settings  GatewayConfigurationSettings        `json:"settings"`
 	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationGetResponseJSON `json:"-"`
@@ -811,7 +811,7 @@ func (r gatewayConfigurationGetResponseJSON) RawJSON() string {
 
 type GatewayConfigurationUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// account settings.
+	// Account settings
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
 
@@ -824,7 +824,7 @@ type GatewayConfigurationUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
-	// account settings.
+	// Account settings
 	Result GatewayConfigurationUpdateResponse             `json:"result"`
 	JSON   gatewayConfigurationUpdateResponseEnvelopeJSON `json:"-"`
 }
@@ -865,7 +865,7 @@ func (r GatewayConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayConfigurationEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// account settings.
+	// Account settings
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
 
@@ -878,7 +878,7 @@ type GatewayConfigurationEditResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayConfigurationEditResponseEnvelopeSuccess `json:"success,required"`
-	// account settings.
+	// Account settings
 	Result GatewayConfigurationEditResponse             `json:"result"`
 	JSON   gatewayConfigurationEditResponseEnvelopeJSON `json:"-"`
 }
@@ -926,7 +926,7 @@ type GatewayConfigurationGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
-	// account settings.
+	// Account settings
 	Result GatewayConfigurationGetResponse             `json:"result"`
 	JSON   gatewayConfigurationGetResponseEnvelopeJSON `json:"-"`
 }
