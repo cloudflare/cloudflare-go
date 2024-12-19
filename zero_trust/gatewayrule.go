@@ -323,9 +323,11 @@ type GatewayRule struct {
 	// policies.
 	Schedule Schedule `json:"schedule"`
 	// The wirefilter expression used for traffic matching.
-	Traffic   string          `json:"traffic"`
-	UpdatedAt time.Time       `json:"updated_at" format:"date-time"`
-	JSON      gatewayRuleJSON `json:"-"`
+	Traffic   string    `json:"traffic"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// version number of the rule
+	Version int64           `json:"version"`
+	JSON    gatewayRuleJSON `json:"-"`
 }
 
 // gatewayRuleJSON contains the JSON metadata for the struct [GatewayRule]
@@ -346,6 +348,7 @@ type gatewayRuleJSON struct {
 	Schedule      apijson.Field
 	Traffic       apijson.Field
 	UpdatedAt     apijson.Field
+	Version       apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
