@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/cloudforce_one"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/cloudforce_one"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 func TestRequestPriorityNew(t *testing.T) {
@@ -35,7 +35,7 @@ func TestRequestPriorityNew(t *testing.T) {
 				Labels:      cloudflare.F([]cloudforce_one.LabelParam{"DoS", "CVE"}),
 				Priority:    cloudflare.F(int64(1)),
 				Requirement: cloudflare.F("DoS attacks carried out by CVEs"),
-				Tlp:         cloudflare.F(cloudforce_one.PriorityEditTlpClear),
+				TLP:         cloudflare.F(cloudforce_one.PriorityEditTLPClear),
 			},
 		},
 	)
@@ -70,7 +70,7 @@ func TestRequestPriorityUpdate(t *testing.T) {
 				Labels:      cloudflare.F([]cloudforce_one.LabelParam{"DoS", "CVE"}),
 				Priority:    cloudflare.F(int64(1)),
 				Requirement: cloudflare.F("DoS attacks carried out by CVEs"),
-				Tlp:         cloudflare.F(cloudforce_one.PriorityEditTlpClear),
+				TLP:         cloudflare.F(cloudforce_one.PriorityEditTLPClear),
 			},
 		},
 	)

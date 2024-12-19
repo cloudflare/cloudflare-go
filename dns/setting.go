@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingService contains methods and other services that help with interacting
@@ -23,6 +23,7 @@ import (
 // the [NewSettingService] method instead.
 type SettingService struct {
 	Options []option.RequestOption
+	Views   *SettingViewService
 }
 
 // NewSettingService generates a new service that applies the given options to each
@@ -31,6 +32,7 @@ type SettingService struct {
 func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r = &SettingService{}
 	r.Options = opts
+	r.Views = NewSettingViewService(opts...)
 	return
 }
 
@@ -96,7 +98,28 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 	return
 }
 
-type DNSSetting struct {
+type SettingEditResponse struct {
+	ZoneDefaults SettingEditResponseZoneDefaults `json:"zone_defaults"`
+	JSON         settingEditResponseJSON         `json:"-"`
+}
+
+// settingEditResponseJSON contains the JSON metadata for the struct
+// [SettingEditResponse]
+type settingEditResponseJSON struct {
+	ZoneDefaults apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingEditResponseZoneDefaults struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
 	FlattenAllCNAMEs bool `json:"flatten_all_cnames"`
@@ -107,21 +130,22 @@ type DNSSetting struct {
 	// zone apex during outbound zone transfers.
 	MultiProvider bool `json:"multi_provider"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers Nameserver `json:"nameservers"`
+	Nameservers SettingEditResponseZoneDefaultsNameservers `json:"nameservers"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
 	NSTTL float64 `json:"ns_ttl"`
 	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
 	// flattening at the zone apex.
 	SecondaryOverrides bool `json:"secondary_overrides"`
 	// Components of the zone's SOA record.
-	SOA DNSSettingSOA `json:"soa"`
+	SOA SettingEditResponseZoneDefaultsSOA `json:"soa"`
 	// Whether the zone mode is a regular or CDN/DNS only zone.
-	ZoneMode DNSSettingZoneMode `json:"zone_mode"`
-	JSON     dnsSettingJSON     `json:"-"`
+	ZoneMode SettingEditResponseZoneDefaultsZoneMode `json:"zone_mode"`
+	JSON     settingEditResponseZoneDefaultsJSON     `json:"-"`
 }
 
-// dnsSettingJSON contains the JSON metadata for the struct [DNSSetting]
-type dnsSettingJSON struct {
+// settingEditResponseZoneDefaultsJSON contains the JSON metadata for the struct
+// [SettingEditResponseZoneDefaults]
+type settingEditResponseZoneDefaultsJSON struct {
 	FlattenAllCNAMEs   apijson.Field
 	FoundationDNS      apijson.Field
 	MultiProvider      apijson.Field
@@ -134,16 +158,57 @@ type dnsSettingJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DNSSetting) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingEditResponseZoneDefaults) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsSettingJSON) RawJSON() string {
+func (r settingEditResponseZoneDefaultsJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings determining the nameservers through which the zone should be available.
+type SettingEditResponseZoneDefaultsNameservers struct {
+	// Nameserver type
+	Type SettingEditResponseZoneDefaultsNameserversType `json:"type,required"`
+	JSON settingEditResponseZoneDefaultsNameserversJSON `json:"-"`
+}
+
+// settingEditResponseZoneDefaultsNameserversJSON contains the JSON metadata for
+// the struct [SettingEditResponseZoneDefaultsNameservers]
+type settingEditResponseZoneDefaultsNameserversJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEditResponseZoneDefaultsNameservers) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingEditResponseZoneDefaultsNameserversJSON) RawJSON() string {
+	return r.raw
+}
+
+// Nameserver type
+type SettingEditResponseZoneDefaultsNameserversType string
+
+const (
+	SettingEditResponseZoneDefaultsNameserversTypeCloudflareStandard       SettingEditResponseZoneDefaultsNameserversType = "cloudflare.standard"
+	SettingEditResponseZoneDefaultsNameserversTypeCloudflareStandardRandom SettingEditResponseZoneDefaultsNameserversType = "cloudflare.standard.random"
+	SettingEditResponseZoneDefaultsNameserversTypeCustomAccount            SettingEditResponseZoneDefaultsNameserversType = "custom.account"
+	SettingEditResponseZoneDefaultsNameserversTypeCustomTenant             SettingEditResponseZoneDefaultsNameserversType = "custom.tenant"
+)
+
+func (r SettingEditResponseZoneDefaultsNameserversType) IsKnown() bool {
+	switch r {
+	case SettingEditResponseZoneDefaultsNameserversTypeCloudflareStandard, SettingEditResponseZoneDefaultsNameserversTypeCloudflareStandardRandom, SettingEditResponseZoneDefaultsNameserversTypeCustomAccount, SettingEditResponseZoneDefaultsNameserversTypeCustomTenant:
+		return true
+	}
+	return false
+}
+
 // Components of the zone's SOA record.
-type DNSSettingSOA struct {
+type SettingEditResponseZoneDefaultsSOA struct {
 	// Time in seconds of being unable to query the primary server after which
 	// secondary servers should stop serving the zone.
 	Expire float64 `json:"expire,required"`
@@ -161,12 +226,13 @@ type DNSSettingSOA struct {
 	// the local part of the email address.
 	RNAME string `json:"rname,required"`
 	// The time to live (TTL) of the SOA record itself.
-	TTL  float64           `json:"ttl,required"`
-	JSON dnsSettingSOAJSON `json:"-"`
+	TTL  float64                                `json:"ttl,required"`
+	JSON settingEditResponseZoneDefaultsSOAJSON `json:"-"`
 }
 
-// dnsSettingSOAJSON contains the JSON metadata for the struct [DNSSettingSOA]
-type dnsSettingSOAJSON struct {
+// settingEditResponseZoneDefaultsSOAJSON contains the JSON metadata for the struct
+// [SettingEditResponseZoneDefaultsSOA]
+type settingEditResponseZoneDefaultsSOAJSON struct {
 	Expire      apijson.Field
 	MinTTL      apijson.Field
 	MNAME       apijson.Field
@@ -178,32 +244,215 @@ type dnsSettingSOAJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSSettingSOA) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingEditResponseZoneDefaultsSOA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsSettingSOAJSON) RawJSON() string {
+func (r settingEditResponseZoneDefaultsSOAJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the zone mode is a regular or CDN/DNS only zone.
-type DNSSettingZoneMode string
+type SettingEditResponseZoneDefaultsZoneMode string
 
 const (
-	DNSSettingZoneModeStandard DNSSettingZoneMode = "standard"
-	DNSSettingZoneModeCDNOnly  DNSSettingZoneMode = "cdn_only"
-	DNSSettingZoneModeDNSOnly  DNSSettingZoneMode = "dns_only"
+	SettingEditResponseZoneDefaultsZoneModeStandard SettingEditResponseZoneDefaultsZoneMode = "standard"
+	SettingEditResponseZoneDefaultsZoneModeCDNOnly  SettingEditResponseZoneDefaultsZoneMode = "cdn_only"
+	SettingEditResponseZoneDefaultsZoneModeDNSOnly  SettingEditResponseZoneDefaultsZoneMode = "dns_only"
 )
 
-func (r DNSSettingZoneMode) IsKnown() bool {
+func (r SettingEditResponseZoneDefaultsZoneMode) IsKnown() bool {
 	switch r {
-	case DNSSettingZoneModeStandard, DNSSettingZoneModeCDNOnly, DNSSettingZoneModeDNSOnly:
+	case SettingEditResponseZoneDefaultsZoneModeStandard, SettingEditResponseZoneDefaultsZoneModeCDNOnly, SettingEditResponseZoneDefaultsZoneModeDNSOnly:
 		return true
 	}
 	return false
 }
 
-type DNSSettingParam struct {
+type SettingGetResponse struct {
+	ZoneDefaults SettingGetResponseZoneDefaults `json:"zone_defaults"`
+	JSON         settingGetResponseJSON         `json:"-"`
+}
+
+// settingGetResponseJSON contains the JSON metadata for the struct
+// [SettingGetResponse]
+type settingGetResponseJSON struct {
+	ZoneDefaults apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingGetResponseZoneDefaults struct {
+	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
+	// limitations, a CNAME record at the zone apex will always be flattened.
+	FlattenAllCNAMEs bool `json:"flatten_all_cnames"`
+	// Whether to enable Foundation DNS Advanced Nameservers on the zone.
+	FoundationDNS bool `json:"foundation_dns"`
+	// Whether to enable multi-provider DNS, which causes Cloudflare to activate the
+	// zone even when non-Cloudflare NS records exist, and to respect NS records at the
+	// zone apex during outbound zone transfers.
+	MultiProvider bool `json:"multi_provider"`
+	// Settings determining the nameservers through which the zone should be available.
+	Nameservers SettingGetResponseZoneDefaultsNameservers `json:"nameservers"`
+	// The time to live (TTL) of the zone's nameserver (NS) records.
+	NSTTL float64 `json:"ns_ttl"`
+	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
+	// flattening at the zone apex.
+	SecondaryOverrides bool `json:"secondary_overrides"`
+	// Components of the zone's SOA record.
+	SOA SettingGetResponseZoneDefaultsSOA `json:"soa"`
+	// Whether the zone mode is a regular or CDN/DNS only zone.
+	ZoneMode SettingGetResponseZoneDefaultsZoneMode `json:"zone_mode"`
+	JSON     settingGetResponseZoneDefaultsJSON     `json:"-"`
+}
+
+// settingGetResponseZoneDefaultsJSON contains the JSON metadata for the struct
+// [SettingGetResponseZoneDefaults]
+type settingGetResponseZoneDefaultsJSON struct {
+	FlattenAllCNAMEs   apijson.Field
+	FoundationDNS      apijson.Field
+	MultiProvider      apijson.Field
+	Nameservers        apijson.Field
+	NSTTL              apijson.Field
+	SecondaryOverrides apijson.Field
+	SOA                apijson.Field
+	ZoneMode           apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZoneDefaults) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZoneDefaultsJSON) RawJSON() string {
+	return r.raw
+}
+
+// Settings determining the nameservers through which the zone should be available.
+type SettingGetResponseZoneDefaultsNameservers struct {
+	// Nameserver type
+	Type SettingGetResponseZoneDefaultsNameserversType `json:"type,required"`
+	JSON settingGetResponseZoneDefaultsNameserversJSON `json:"-"`
+}
+
+// settingGetResponseZoneDefaultsNameserversJSON contains the JSON metadata for the
+// struct [SettingGetResponseZoneDefaultsNameservers]
+type settingGetResponseZoneDefaultsNameserversJSON struct {
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZoneDefaultsNameservers) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZoneDefaultsNameserversJSON) RawJSON() string {
+	return r.raw
+}
+
+// Nameserver type
+type SettingGetResponseZoneDefaultsNameserversType string
+
+const (
+	SettingGetResponseZoneDefaultsNameserversTypeCloudflareStandard       SettingGetResponseZoneDefaultsNameserversType = "cloudflare.standard"
+	SettingGetResponseZoneDefaultsNameserversTypeCloudflareStandardRandom SettingGetResponseZoneDefaultsNameserversType = "cloudflare.standard.random"
+	SettingGetResponseZoneDefaultsNameserversTypeCustomAccount            SettingGetResponseZoneDefaultsNameserversType = "custom.account"
+	SettingGetResponseZoneDefaultsNameserversTypeCustomTenant             SettingGetResponseZoneDefaultsNameserversType = "custom.tenant"
+)
+
+func (r SettingGetResponseZoneDefaultsNameserversType) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZoneDefaultsNameserversTypeCloudflareStandard, SettingGetResponseZoneDefaultsNameserversTypeCloudflareStandardRandom, SettingGetResponseZoneDefaultsNameserversTypeCustomAccount, SettingGetResponseZoneDefaultsNameserversTypeCustomTenant:
+		return true
+	}
+	return false
+}
+
+// Components of the zone's SOA record.
+type SettingGetResponseZoneDefaultsSOA struct {
+	// Time in seconds of being unable to query the primary server after which
+	// secondary servers should stop serving the zone.
+	Expire float64 `json:"expire,required"`
+	// The time to live (TTL) for negative caching of records within the zone.
+	MinTTL float64 `json:"min_ttl,required"`
+	// The primary nameserver, which may be used for outbound zone transfers.
+	MNAME string `json:"mname,required"`
+	// Time in seconds after which secondary servers should re-check the SOA record to
+	// see if the zone has been updated.
+	Refresh float64 `json:"refresh,required"`
+	// Time in seconds after which secondary servers should retry queries after the
+	// primary server was unresponsive.
+	Retry float64 `json:"retry,required"`
+	// The email address of the zone administrator, with the first label representing
+	// the local part of the email address.
+	RNAME string `json:"rname,required"`
+	// The time to live (TTL) of the SOA record itself.
+	TTL  float64                               `json:"ttl,required"`
+	JSON settingGetResponseZoneDefaultsSOAJSON `json:"-"`
+}
+
+// settingGetResponseZoneDefaultsSOAJSON contains the JSON metadata for the struct
+// [SettingGetResponseZoneDefaultsSOA]
+type settingGetResponseZoneDefaultsSOAJSON struct {
+	Expire      apijson.Field
+	MinTTL      apijson.Field
+	MNAME       apijson.Field
+	Refresh     apijson.Field
+	Retry       apijson.Field
+	RNAME       apijson.Field
+	TTL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingGetResponseZoneDefaultsSOA) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingGetResponseZoneDefaultsSOAJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the zone mode is a regular or CDN/DNS only zone.
+type SettingGetResponseZoneDefaultsZoneMode string
+
+const (
+	SettingGetResponseZoneDefaultsZoneModeStandard SettingGetResponseZoneDefaultsZoneMode = "standard"
+	SettingGetResponseZoneDefaultsZoneModeCDNOnly  SettingGetResponseZoneDefaultsZoneMode = "cdn_only"
+	SettingGetResponseZoneDefaultsZoneModeDNSOnly  SettingGetResponseZoneDefaultsZoneMode = "dns_only"
+)
+
+func (r SettingGetResponseZoneDefaultsZoneMode) IsKnown() bool {
+	switch r {
+	case SettingGetResponseZoneDefaultsZoneModeStandard, SettingGetResponseZoneDefaultsZoneModeCDNOnly, SettingGetResponseZoneDefaultsZoneModeDNSOnly:
+		return true
+	}
+	return false
+}
+
+type SettingEditParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID       param.Field[string]                        `path:"zone_id"`
+	ZoneDefaults param.Field[SettingEditParamsZoneDefaults] `json:"zone_defaults"`
+}
+
+func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SettingEditParamsZoneDefaults struct {
 	// Whether to flatten all CNAME records in the zone. Note that, due to DNS
 	// limitations, a CNAME record at the zone apex will always be flattened.
 	FlattenAllCNAMEs param.Field[bool] `json:"flatten_all_cnames"`
@@ -214,24 +463,52 @@ type DNSSettingParam struct {
 	// zone apex during outbound zone transfers.
 	MultiProvider param.Field[bool] `json:"multi_provider"`
 	// Settings determining the nameservers through which the zone should be available.
-	Nameservers param.Field[NameserverParam] `json:"nameservers"`
+	Nameservers param.Field[SettingEditParamsZoneDefaultsNameservers] `json:"nameservers"`
 	// The time to live (TTL) of the zone's nameserver (NS) records.
 	NSTTL param.Field[float64] `json:"ns_ttl"`
 	// Allows a Secondary DNS zone to use (proxied) override records and CNAME
 	// flattening at the zone apex.
 	SecondaryOverrides param.Field[bool] `json:"secondary_overrides"`
 	// Components of the zone's SOA record.
-	SOA param.Field[DNSSettingSOAParam] `json:"soa"`
+	SOA param.Field[SettingEditParamsZoneDefaultsSOA] `json:"soa"`
 	// Whether the zone mode is a regular or CDN/DNS only zone.
-	ZoneMode param.Field[DNSSettingZoneMode] `json:"zone_mode"`
+	ZoneMode param.Field[SettingEditParamsZoneDefaultsZoneMode] `json:"zone_mode"`
 }
 
-func (r DNSSettingParam) MarshalJSON() (data []byte, err error) {
+func (r SettingEditParamsZoneDefaults) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Settings determining the nameservers through which the zone should be available.
+type SettingEditParamsZoneDefaultsNameservers struct {
+	// Nameserver type
+	Type param.Field[SettingEditParamsZoneDefaultsNameserversType] `json:"type,required"`
+}
+
+func (r SettingEditParamsZoneDefaultsNameservers) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Nameserver type
+type SettingEditParamsZoneDefaultsNameserversType string
+
+const (
+	SettingEditParamsZoneDefaultsNameserversTypeCloudflareStandard       SettingEditParamsZoneDefaultsNameserversType = "cloudflare.standard"
+	SettingEditParamsZoneDefaultsNameserversTypeCloudflareStandardRandom SettingEditParamsZoneDefaultsNameserversType = "cloudflare.standard.random"
+	SettingEditParamsZoneDefaultsNameserversTypeCustomAccount            SettingEditParamsZoneDefaultsNameserversType = "custom.account"
+	SettingEditParamsZoneDefaultsNameserversTypeCustomTenant             SettingEditParamsZoneDefaultsNameserversType = "custom.tenant"
+)
+
+func (r SettingEditParamsZoneDefaultsNameserversType) IsKnown() bool {
+	switch r {
+	case SettingEditParamsZoneDefaultsNameserversTypeCloudflareStandard, SettingEditParamsZoneDefaultsNameserversTypeCloudflareStandardRandom, SettingEditParamsZoneDefaultsNameserversTypeCustomAccount, SettingEditParamsZoneDefaultsNameserversTypeCustomTenant:
+		return true
+	}
+	return false
+}
+
 // Components of the zone's SOA record.
-type DNSSettingSOAParam struct {
+type SettingEditParamsZoneDefaultsSOA struct {
 	// Time in seconds of being unable to query the primary server after which
 	// secondary servers should stop serving the zone.
 	Expire param.Field[float64] `json:"expire,required"`
@@ -252,113 +529,25 @@ type DNSSettingSOAParam struct {
 	TTL param.Field[float64] `json:"ttl,required"`
 }
 
-func (r DNSSettingSOAParam) MarshalJSON() (data []byte, err error) {
+func (r SettingEditParamsZoneDefaultsSOA) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Settings determining the nameservers through which the zone should be available.
-type Nameserver struct {
-	// Nameserver type
-	Type NameserverType `json:"type,required"`
-	JSON nameserverJSON `json:"-"`
-}
-
-// nameserverJSON contains the JSON metadata for the struct [Nameserver]
-type nameserverJSON struct {
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Nameserver) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r nameserverJSON) RawJSON() string {
-	return r.raw
-}
-
-// Nameserver type
-type NameserverType string
+// Whether the zone mode is a regular or CDN/DNS only zone.
+type SettingEditParamsZoneDefaultsZoneMode string
 
 const (
-	NameserverTypeCloudflareStandard       NameserverType = "cloudflare.standard"
-	NameserverTypeCloudflareStandardRandom NameserverType = "cloudflare.standard.random"
-	NameserverTypeCustomAccount            NameserverType = "custom.account"
-	NameserverTypeCustomTenant             NameserverType = "custom.tenant"
-	NameserverTypeCustomZone               NameserverType = "custom.zone"
+	SettingEditParamsZoneDefaultsZoneModeStandard SettingEditParamsZoneDefaultsZoneMode = "standard"
+	SettingEditParamsZoneDefaultsZoneModeCDNOnly  SettingEditParamsZoneDefaultsZoneMode = "cdn_only"
+	SettingEditParamsZoneDefaultsZoneModeDNSOnly  SettingEditParamsZoneDefaultsZoneMode = "dns_only"
 )
 
-func (r NameserverType) IsKnown() bool {
+func (r SettingEditParamsZoneDefaultsZoneMode) IsKnown() bool {
 	switch r {
-	case NameserverTypeCloudflareStandard, NameserverTypeCloudflareStandardRandom, NameserverTypeCustomAccount, NameserverTypeCustomTenant, NameserverTypeCustomZone:
+	case SettingEditParamsZoneDefaultsZoneModeStandard, SettingEditParamsZoneDefaultsZoneModeCDNOnly, SettingEditParamsZoneDefaultsZoneModeDNSOnly:
 		return true
 	}
 	return false
-}
-
-// Settings determining the nameservers through which the zone should be available.
-type NameserverParam struct {
-	// Nameserver type
-	Type param.Field[NameserverType] `json:"type,required"`
-}
-
-func (r NameserverParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SettingEditResponse struct {
-	ZoneDefaults DNSSetting              `json:"zone_defaults"`
-	JSON         settingEditResponseJSON `json:"-"`
-}
-
-// settingEditResponseJSON contains the JSON metadata for the struct
-// [SettingEditResponse]
-type settingEditResponseJSON struct {
-	ZoneDefaults apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *SettingEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingGetResponse struct {
-	ZoneDefaults DNSSetting             `json:"zone_defaults"`
-	JSON         settingGetResponseJSON `json:"-"`
-}
-
-// settingGetResponseJSON contains the JSON metadata for the struct
-// [SettingGetResponse]
-type settingGetResponseJSON struct {
-	ZoneDefaults apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *SettingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingEditParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID       param.Field[string]          `path:"zone_id"`
-	ZoneDefaults param.Field[DNSSettingParam] `json:"zone_defaults"`
-}
-
-func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
 }
 
 type SettingEditResponseEnvelope struct {

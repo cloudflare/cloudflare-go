@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // MonitorService contains methods and other services that help with interacting
@@ -301,9 +301,6 @@ func (r monitorDeleteResponseJSON) RawJSON() string {
 type MonitorNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The expected HTTP response code or code range of the health check. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -319,6 +316,9 @@ type MonitorNewParams struct {
 	// is not found, the origin will be marked as unhealthy. This parameter is only
 	// valid for HTTP and HTTPS monitors.
 	ExpectedBody param.Field[string] `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes"`
 	// Follow redirects if returned by the origin. This parameter is only valid for
 	// HTTP and HTTPS monitors.
 	FollowRedirects param.Field[bool] `json:"follow_redirects"`
@@ -423,9 +423,6 @@ func (r MonitorNewResponseEnvelopeSuccess) IsKnown() bool {
 type MonitorUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The expected HTTP response code or code range of the health check. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -441,6 +438,9 @@ type MonitorUpdateParams struct {
 	// is not found, the origin will be marked as unhealthy. This parameter is only
 	// valid for HTTP and HTTPS monitors.
 	ExpectedBody param.Field[string] `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes"`
 	// Follow redirects if returned by the origin. This parameter is only valid for
 	// HTTP and HTTPS monitors.
 	FollowRedirects param.Field[bool] `json:"follow_redirects"`
@@ -598,9 +598,6 @@ func (r MonitorDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type MonitorEditParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// The expected HTTP response code or code range of the health check. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -616,6 +613,9 @@ type MonitorEditParams struct {
 	// is not found, the origin will be marked as unhealthy. This parameter is only
 	// valid for HTTP and HTTPS monitors.
 	ExpectedBody param.Field[string] `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes"`
 	// Follow redirects if returned by the origin. This parameter is only valid for
 	// HTTP and HTTPS monitors.
 	FollowRedirects param.Field[bool] `json:"follow_redirects"`

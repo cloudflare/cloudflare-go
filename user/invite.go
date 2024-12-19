@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // InviteService contains methods and other services that help with interacting
@@ -60,7 +60,7 @@ func (r *InviteService) ListAutoPaging(ctx context.Context, opts ...option.Reque
 }
 
 // Responds to an invitation.
-func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *InviteEditResponse, err error) {
+func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEditParams, opts ...option.RequestOption) (res *Invite, err error) {
 	var env InviteEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if inviteID == "" {
@@ -77,7 +77,7 @@ func (r *InviteService) Edit(ctx context.Context, inviteID string, body InviteEd
 }
 
 // Gets the details of an invitation.
-func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *InviteGetResponse, err error) {
+func (r *InviteService) Get(ctx context.Context, inviteID string, opts ...option.RequestOption) (res *Invite, err error) {
 	var env InviteGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if inviteID == "" {
@@ -107,11 +107,12 @@ type Invite struct {
 	// Email address of the user to add to the organization.
 	InvitedMemberEmail string `json:"invited_member_email"`
 	// When the invite was sent.
-	InvitedOn time.Time `json:"invited_on" format:"date-time"`
+	InvitedOn                        time.Time `json:"invited_on" format:"date-time"`
+	OrganizationIsEnforcingTwofactor bool      `json:"organization_is_enforcing_twofactor"`
 	// Organization name.
 	OrganizationName string `json:"organization_name"`
-	// Roles to be assigned to this user.
-	Roles []shared.Role `json:"roles"`
+	// List of role names the membership has for this account.
+	Roles []string `json:"roles"`
 	// Current status of the invitation.
 	Status InviteStatus `json:"status"`
 	JSON   inviteJSON   `json:"-"`
@@ -119,18 +120,19 @@ type Invite struct {
 
 // inviteJSON contains the JSON metadata for the struct [Invite]
 type inviteJSON struct {
-	InvitedMemberID    apijson.Field
-	OrganizationID     apijson.Field
-	ID                 apijson.Field
-	ExpiresOn          apijson.Field
-	InvitedBy          apijson.Field
-	InvitedMemberEmail apijson.Field
-	InvitedOn          apijson.Field
-	OrganizationName   apijson.Field
-	Roles              apijson.Field
-	Status             apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	InvitedMemberID                  apijson.Field
+	OrganizationID                   apijson.Field
+	ID                               apijson.Field
+	ExpiresOn                        apijson.Field
+	InvitedBy                        apijson.Field
+	InvitedMemberEmail               apijson.Field
+	InvitedOn                        apijson.Field
+	OrganizationIsEnforcingTwofactor apijson.Field
+	OrganizationName                 apijson.Field
+	Roles                            apijson.Field
+	Status                           apijson.Field
+	raw                              string
+	ExtraFields                      map[string]apijson.Field
 }
 
 func (r *Invite) UnmarshalJSON(data []byte) (err error) {
@@ -158,10 +160,6 @@ func (r InviteStatus) IsKnown() bool {
 	}
 	return false
 }
-
-type InviteEditResponse = interface{}
-
-type InviteGetResponse = interface{}
 
 type InviteEditParams struct {
 	// Status of your response to the invitation (rejected or accepted).
@@ -193,7 +191,7 @@ type InviteEditResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success InviteEditResponseEnvelopeSuccess `json:"success,required"`
-	Result  InviteEditResponse                `json:"result"`
+	Result  Invite                            `json:"result"`
 	JSON    inviteEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -236,7 +234,7 @@ type InviteGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success InviteGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  InviteGetResponse                `json:"result"`
+	Result  Invite                           `json:"result"`
 	JSON    inviteGetResponseEnvelopeJSON    `json:"-"`
 }
 

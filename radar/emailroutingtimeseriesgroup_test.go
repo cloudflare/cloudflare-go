@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestEmailRoutingTimeseriesGroupARCWithOptionalParams(t *testing.T) {
@@ -30,16 +30,16 @@ func TestEmailRoutingTimeseriesGroupARCWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.ARC(context.TODO(), radar.EmailRoutingTimeseriesGroupARCParams{
 		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupARCParamsAggInterval15m),
-		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DKIM:        cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsDKIM{radar.EmailRoutingTimeseriesGroupARCParamsDKIMPass, radar.EmailRoutingTimeseriesGroupARCParamsDKIMNone, radar.EmailRoutingTimeseriesGroupARCParamsDKIMFail}),
-		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsDMARC{radar.EmailRoutingTimeseriesGroupARCParamsDMARCPass, radar.EmailRoutingTimeseriesGroupARCParamsDMARCNone, radar.EmailRoutingTimeseriesGroupARCParamsDMARCFail}),
-		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsEncrypted{radar.EmailRoutingTimeseriesGroupARCParamsEncryptedEncrypted, radar.EmailRoutingTimeseriesGroupARCParamsEncryptedNotEncrypted}),
+		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
+		DateRange:   cloudflare.F([]string{"7d"}),
+		DateStart:   cloudflare.F([]time.Time{time.Now()}),
+		DKIM:        cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsDKIM{radar.EmailRoutingTimeseriesGroupARCParamsDKIMPass}),
+		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsDMARC{radar.EmailRoutingTimeseriesGroupARCParamsDMARCPass}),
+		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsEncrypted{radar.EmailRoutingTimeseriesGroupARCParamsEncryptedEncrypted}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupARCParamsFormatJson),
-		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsIPVersion{radar.EmailRoutingTimeseriesGroupARCParamsIPVersionIPv4, radar.EmailRoutingTimeseriesGroupARCParamsIPVersionIPv6}),
-		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsSPF{radar.EmailRoutingTimeseriesGroupARCParamsSPFPass, radar.EmailRoutingTimeseriesGroupARCParamsSPFNone, radar.EmailRoutingTimeseriesGroupARCParamsSPFFail}),
+		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsIPVersion{radar.EmailRoutingTimeseriesGroupARCParamsIPVersionIPv4}),
+		Name:        cloudflare.F([]string{"string"}),
+		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupARCParamsSPF{radar.EmailRoutingTimeseriesGroupARCParamsSPFPass}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -65,16 +65,16 @@ func TestEmailRoutingTimeseriesGroupDKIMWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.DKIM(context.TODO(), radar.EmailRoutingTimeseriesGroupDKIMParams{
 		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupDKIMParamsAggInterval15m),
-		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsARC{radar.EmailRoutingTimeseriesGroupDKIMParamsARCPass, radar.EmailRoutingTimeseriesGroupDKIMParamsARCNone, radar.EmailRoutingTimeseriesGroupDKIMParamsARCFail}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsDMARC{radar.EmailRoutingTimeseriesGroupDKIMParamsDMARCPass, radar.EmailRoutingTimeseriesGroupDKIMParamsDMARCNone, radar.EmailRoutingTimeseriesGroupDKIMParamsDMARCFail}),
-		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsEncrypted{radar.EmailRoutingTimeseriesGroupDKIMParamsEncryptedEncrypted, radar.EmailRoutingTimeseriesGroupDKIMParamsEncryptedNotEncrypted}),
+		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsARC{radar.EmailRoutingTimeseriesGroupDKIMParamsARCPass}),
+		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
+		DateRange:   cloudflare.F([]string{"7d"}),
+		DateStart:   cloudflare.F([]time.Time{time.Now()}),
+		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsDMARC{radar.EmailRoutingTimeseriesGroupDKIMParamsDMARCPass}),
+		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsEncrypted{radar.EmailRoutingTimeseriesGroupDKIMParamsEncryptedEncrypted}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupDKIMParamsFormatJson),
-		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsIPVersion{radar.EmailRoutingTimeseriesGroupDKIMParamsIPVersionIPv4, radar.EmailRoutingTimeseriesGroupDKIMParamsIPVersionIPv6}),
-		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsSPF{radar.EmailRoutingTimeseriesGroupDKIMParamsSPFPass, radar.EmailRoutingTimeseriesGroupDKIMParamsSPFNone, radar.EmailRoutingTimeseriesGroupDKIMParamsSPFFail}),
+		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsIPVersion{radar.EmailRoutingTimeseriesGroupDKIMParamsIPVersionIPv4}),
+		Name:        cloudflare.F([]string{"string"}),
+		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDKIMParamsSPF{radar.EmailRoutingTimeseriesGroupDKIMParamsSPFPass}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -100,16 +100,16 @@ func TestEmailRoutingTimeseriesGroupDMARCWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.DMARC(context.TODO(), radar.EmailRoutingTimeseriesGroupDMARCParams{
 		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupDMARCParamsAggInterval15m),
-		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsARC{radar.EmailRoutingTimeseriesGroupDMARCParamsARCPass, radar.EmailRoutingTimeseriesGroupDMARCParamsARCNone, radar.EmailRoutingTimeseriesGroupDMARCParamsARCFail}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DKIM:        cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsDKIM{radar.EmailRoutingTimeseriesGroupDMARCParamsDKIMPass, radar.EmailRoutingTimeseriesGroupDMARCParamsDKIMNone, radar.EmailRoutingTimeseriesGroupDMARCParamsDKIMFail}),
-		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsEncrypted{radar.EmailRoutingTimeseriesGroupDMARCParamsEncryptedEncrypted, radar.EmailRoutingTimeseriesGroupDMARCParamsEncryptedNotEncrypted}),
+		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsARC{radar.EmailRoutingTimeseriesGroupDMARCParamsARCPass}),
+		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
+		DateRange:   cloudflare.F([]string{"7d"}),
+		DateStart:   cloudflare.F([]time.Time{time.Now()}),
+		DKIM:        cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsDKIM{radar.EmailRoutingTimeseriesGroupDMARCParamsDKIMPass}),
+		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsEncrypted{radar.EmailRoutingTimeseriesGroupDMARCParamsEncryptedEncrypted}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupDMARCParamsFormatJson),
-		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsIPVersion{radar.EmailRoutingTimeseriesGroupDMARCParamsIPVersionIPv4, radar.EmailRoutingTimeseriesGroupDMARCParamsIPVersionIPv6}),
-		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsSPF{radar.EmailRoutingTimeseriesGroupDMARCParamsSPFPass, radar.EmailRoutingTimeseriesGroupDMARCParamsSPFNone, radar.EmailRoutingTimeseriesGroupDMARCParamsSPFFail}),
+		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsIPVersion{radar.EmailRoutingTimeseriesGroupDMARCParamsIPVersionIPv4}),
+		Name:        cloudflare.F([]string{"string"}),
+		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupDMARCParamsSPF{radar.EmailRoutingTimeseriesGroupDMARCParamsSPFPass}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -135,16 +135,16 @@ func TestEmailRoutingTimeseriesGroupEncryptedWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.Encrypted(context.TODO(), radar.EmailRoutingTimeseriesGroupEncryptedParams{
 		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupEncryptedParamsAggInterval15m),
-		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsARC{radar.EmailRoutingTimeseriesGroupEncryptedParamsARCPass, radar.EmailRoutingTimeseriesGroupEncryptedParamsARCNone, radar.EmailRoutingTimeseriesGroupEncryptedParamsARCFail}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DKIM:        cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsDKIM{radar.EmailRoutingTimeseriesGroupEncryptedParamsDKIMPass, radar.EmailRoutingTimeseriesGroupEncryptedParamsDKIMNone, radar.EmailRoutingTimeseriesGroupEncryptedParamsDKIMFail}),
-		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsDMARC{radar.EmailRoutingTimeseriesGroupEncryptedParamsDMARCPass, radar.EmailRoutingTimeseriesGroupEncryptedParamsDMARCNone, radar.EmailRoutingTimeseriesGroupEncryptedParamsDMARCFail}),
+		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsARC{radar.EmailRoutingTimeseriesGroupEncryptedParamsARCPass}),
+		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
+		DateRange:   cloudflare.F([]string{"7d"}),
+		DateStart:   cloudflare.F([]time.Time{time.Now()}),
+		DKIM:        cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsDKIM{radar.EmailRoutingTimeseriesGroupEncryptedParamsDKIMPass}),
+		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsDMARC{radar.EmailRoutingTimeseriesGroupEncryptedParamsDMARCPass}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupEncryptedParamsFormatJson),
-		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsIPVersion{radar.EmailRoutingTimeseriesGroupEncryptedParamsIPVersionIPv4, radar.EmailRoutingTimeseriesGroupEncryptedParamsIPVersionIPv6}),
-		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsSPF{radar.EmailRoutingTimeseriesGroupEncryptedParamsSPFPass, radar.EmailRoutingTimeseriesGroupEncryptedParamsSPFNone, radar.EmailRoutingTimeseriesGroupEncryptedParamsSPFFail}),
+		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsIPVersion{radar.EmailRoutingTimeseriesGroupEncryptedParamsIPVersionIPv4}),
+		Name:        cloudflare.F([]string{"string"}),
+		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupEncryptedParamsSPF{radar.EmailRoutingTimeseriesGroupEncryptedParamsSPFPass}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -170,16 +170,16 @@ func TestEmailRoutingTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.IPVersion(context.TODO(), radar.EmailRoutingTimeseriesGroupIPVersionParams{
 		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupIPVersionParamsAggInterval15m),
-		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsARC{radar.EmailRoutingTimeseriesGroupIPVersionParamsARCPass, radar.EmailRoutingTimeseriesGroupIPVersionParamsARCNone, radar.EmailRoutingTimeseriesGroupIPVersionParamsARCFail}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DKIM:        cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsDKIM{radar.EmailRoutingTimeseriesGroupIPVersionParamsDKIMPass, radar.EmailRoutingTimeseriesGroupIPVersionParamsDKIMNone, radar.EmailRoutingTimeseriesGroupIPVersionParamsDKIMFail}),
-		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsDMARC{radar.EmailRoutingTimeseriesGroupIPVersionParamsDMARCPass, radar.EmailRoutingTimeseriesGroupIPVersionParamsDMARCNone, radar.EmailRoutingTimeseriesGroupIPVersionParamsDMARCFail}),
-		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsEncrypted{radar.EmailRoutingTimeseriesGroupIPVersionParamsEncryptedEncrypted, radar.EmailRoutingTimeseriesGroupIPVersionParamsEncryptedNotEncrypted}),
+		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsARC{radar.EmailRoutingTimeseriesGroupIPVersionParamsARCPass}),
+		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
+		DateRange:   cloudflare.F([]string{"7d"}),
+		DateStart:   cloudflare.F([]time.Time{time.Now()}),
+		DKIM:        cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsDKIM{radar.EmailRoutingTimeseriesGroupIPVersionParamsDKIMPass}),
+		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsDMARC{radar.EmailRoutingTimeseriesGroupIPVersionParamsDMARCPass}),
+		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsEncrypted{radar.EmailRoutingTimeseriesGroupIPVersionParamsEncryptedEncrypted}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupIPVersionParamsFormatJson),
-		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsSPF{radar.EmailRoutingTimeseriesGroupIPVersionParamsSPFPass, radar.EmailRoutingTimeseriesGroupIPVersionParamsSPFNone, radar.EmailRoutingTimeseriesGroupIPVersionParamsSPFFail}),
+		Name:        cloudflare.F([]string{"string"}),
+		SPF:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupIPVersionParamsSPF{radar.EmailRoutingTimeseriesGroupIPVersionParamsSPFPass}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -205,16 +205,16 @@ func TestEmailRoutingTimeseriesGroupSPFWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.SPF(context.TODO(), radar.EmailRoutingTimeseriesGroupSPFParams{
 		AggInterval: cloudflare.F(radar.EmailRoutingTimeseriesGroupSPFParamsAggInterval15m),
-		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsARC{radar.EmailRoutingTimeseriesGroupSPFParamsARCPass, radar.EmailRoutingTimeseriesGroupSPFParamsARCNone, radar.EmailRoutingTimeseriesGroupSPFParamsARCFail}),
-		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DKIM:        cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsDKIM{radar.EmailRoutingTimeseriesGroupSPFParamsDKIMPass, radar.EmailRoutingTimeseriesGroupSPFParamsDKIMNone, radar.EmailRoutingTimeseriesGroupSPFParamsDKIMFail}),
-		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsDMARC{radar.EmailRoutingTimeseriesGroupSPFParamsDMARCPass, radar.EmailRoutingTimeseriesGroupSPFParamsDMARCNone, radar.EmailRoutingTimeseriesGroupSPFParamsDMARCFail}),
-		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsEncrypted{radar.EmailRoutingTimeseriesGroupSPFParamsEncryptedEncrypted, radar.EmailRoutingTimeseriesGroupSPFParamsEncryptedNotEncrypted}),
+		ARC:         cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsARC{radar.EmailRoutingTimeseriesGroupSPFParamsARCPass}),
+		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
+		DateRange:   cloudflare.F([]string{"7d"}),
+		DateStart:   cloudflare.F([]time.Time{time.Now()}),
+		DKIM:        cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsDKIM{radar.EmailRoutingTimeseriesGroupSPFParamsDKIMPass}),
+		DMARC:       cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsDMARC{radar.EmailRoutingTimeseriesGroupSPFParamsDMARCPass}),
+		Encrypted:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsEncrypted{radar.EmailRoutingTimeseriesGroupSPFParamsEncryptedEncrypted}),
 		Format:      cloudflare.F(radar.EmailRoutingTimeseriesGroupSPFParamsFormatJson),
-		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsIPVersion{radar.EmailRoutingTimeseriesGroupSPFParamsIPVersionIPv4, radar.EmailRoutingTimeseriesGroupSPFParamsIPVersionIPv6}),
-		Name:        cloudflare.F([]string{"string", "string", "string"}),
+		IPVersion:   cloudflare.F([]radar.EmailRoutingTimeseriesGroupSPFParamsIPVersion{radar.EmailRoutingTimeseriesGroupSPFParamsIPVersionIPv4}),
+		Name:        cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

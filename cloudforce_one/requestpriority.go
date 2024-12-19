@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // RequestPriorityService contains methods and other services that help with
@@ -143,7 +143,7 @@ type Priority struct {
 	// Requirement
 	Requirement string `json:"requirement,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp PriorityTlp `json:"tlp,required"`
+	TLP PriorityTLP `json:"tlp,required"`
 	// Priority last updated time
 	Updated time.Time    `json:"updated,required" format:"date-time"`
 	JSON    priorityJSON `json:"-"`
@@ -156,7 +156,7 @@ type priorityJSON struct {
 	Labels      apijson.Field
 	Priority    apijson.Field
 	Requirement apijson.Field
-	Tlp         apijson.Field
+	TLP         apijson.Field
 	Updated     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -171,19 +171,19 @@ func (r priorityJSON) RawJSON() string {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type PriorityTlp string
+type PriorityTLP string
 
 const (
-	PriorityTlpClear       PriorityTlp = "clear"
-	PriorityTlpAmber       PriorityTlp = "amber"
-	PriorityTlpAmberStrict PriorityTlp = "amber-strict"
-	PriorityTlpGreen       PriorityTlp = "green"
-	PriorityTlpRed         PriorityTlp = "red"
+	PriorityTLPClear       PriorityTLP = "clear"
+	PriorityTLPAmber       PriorityTLP = "amber"
+	PriorityTLPAmberStrict PriorityTLP = "amber-strict"
+	PriorityTLPGreen       PriorityTLP = "green"
+	PriorityTLPRed         PriorityTLP = "red"
 )
 
-func (r PriorityTlp) IsKnown() bool {
+func (r PriorityTLP) IsKnown() bool {
 	switch r {
-	case PriorityTlpClear, PriorityTlpAmber, PriorityTlpAmberStrict, PriorityTlpGreen, PriorityTlpRed:
+	case PriorityTLPClear, PriorityTLPAmber, PriorityTLPAmberStrict, PriorityTLPGreen, PriorityTLPRed:
 		return true
 	}
 	return false
@@ -197,7 +197,7 @@ type PriorityEditParam struct {
 	// Requirement
 	Requirement param.Field[string] `json:"requirement,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp param.Field[PriorityEditTlp] `json:"tlp,required"`
+	TLP param.Field[PriorityEditTLP] `json:"tlp,required"`
 }
 
 func (r PriorityEditParam) MarshalJSON() (data []byte, err error) {
@@ -205,19 +205,19 @@ func (r PriorityEditParam) MarshalJSON() (data []byte, err error) {
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type PriorityEditTlp string
+type PriorityEditTLP string
 
 const (
-	PriorityEditTlpClear       PriorityEditTlp = "clear"
-	PriorityEditTlpAmber       PriorityEditTlp = "amber"
-	PriorityEditTlpAmberStrict PriorityEditTlp = "amber-strict"
-	PriorityEditTlpGreen       PriorityEditTlp = "green"
-	PriorityEditTlpRed         PriorityEditTlp = "red"
+	PriorityEditTLPClear       PriorityEditTLP = "clear"
+	PriorityEditTLPAmber       PriorityEditTLP = "amber"
+	PriorityEditTLPAmberStrict PriorityEditTLP = "amber-strict"
+	PriorityEditTLPGreen       PriorityEditTLP = "green"
+	PriorityEditTLPRed         PriorityEditTLP = "red"
 )
 
-func (r PriorityEditTlp) IsKnown() bool {
+func (r PriorityEditTLP) IsKnown() bool {
 	switch r {
-	case PriorityEditTlpClear, PriorityEditTlpAmber, PriorityEditTlpAmberStrict, PriorityEditTlpGreen, PriorityEditTlpRed:
+	case PriorityEditTLPClear, PriorityEditTLPAmber, PriorityEditTLPAmberStrict, PriorityEditTLPGreen, PriorityEditTLPRed:
 		return true
 	}
 	return false

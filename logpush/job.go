@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // JobService contains methods and other services that help with interacting with
@@ -684,6 +684,10 @@ type JobUpdateParams struct {
 	// lines than this. This parameter is not available for jobs with `edge` as its
 	// kind.
 	MaxUploadRecords param.Field[int64] `json:"max_upload_records"`
+	// Optional human readable job name. Not unique. Cloudflare suggests that you set
+	// this to a meaningful string, like the domain name, to make it easier to identify
+	// your job.
+	Name param.Field[string] `json:"name"`
 	// The structured replacement for `logpull_options`. When including this field, the
 	// `logpull_option` field will be ignored.
 	OutputOptions param.Field[OutputOptionsParam] `json:"output_options"`

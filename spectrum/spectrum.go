@@ -5,10 +5,10 @@ package spectrum
 import (
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 	"github.com/tidwall/gjson"
 )
 
@@ -92,12 +92,12 @@ func (r DNSParam) MarshalJSON() (data []byte, err error) {
 type EdgeIPs struct {
 	// The IP versions supported for inbound connections on Spectrum anycast IPs.
 	Connectivity EdgeIPsConnectivity `json:"connectivity"`
+	// This field can have the runtime type of [[]string].
+	IPs interface{} `json:"ips"`
 	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
 	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 	// with CNAME DNS names.
-	Type EdgeIPsType `json:"type"`
-	// This field can have the runtime type of [[]string].
-	IPs   interface{} `json:"ips,required"`
+	Type  EdgeIPsType `json:"type"`
 	JSON  edgeIPsJSON `json:"-"`
 	union EdgeIPsUnion
 }
@@ -105,8 +105,8 @@ type EdgeIPs struct {
 // edgeIPsJSON contains the JSON metadata for the struct [EdgeIPs]
 type edgeIPsJSON struct {
 	Connectivity apijson.Field
-	Type         apijson.Field
 	IPs          apijson.Field
+	Type         apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
@@ -256,11 +256,11 @@ func (r EdgeIPsType) IsKnown() bool {
 type EdgeIPsParam struct {
 	// The IP versions supported for inbound connections on Spectrum anycast IPs.
 	Connectivity param.Field[EdgeIPsConnectivity] `json:"connectivity"`
+	IPs          param.Field[interface{}]         `json:"ips"`
 	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
 	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
 	// with CNAME DNS names.
 	Type param.Field[EdgeIPsType] `json:"type"`
-	IPs  param.Field[interface{}] `json:"ips,required"`
 }
 
 func (r EdgeIPsParam) MarshalJSON() (data []byte, err error) {

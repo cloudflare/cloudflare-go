@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestAccessCertificateNewWithOptionalParams(t *testing.T) {
@@ -32,7 +32,7 @@ func TestAccessCertificateNewWithOptionalParams(t *testing.T) {
 		Certificate:         cloudflare.F("-----BEGIN CERTIFICATE-----\nMIIGAjCCA+qgAwIBAgIJAI7kymlF7CWT...N4RI7KKB7nikiuUf8vhULKy5IX10\nDrUtmu/B\n-----END CERTIFICATE-----"),
 		Name:                cloudflare.F("Allow devs"),
 		AccountID:           cloudflare.F("account_id"),
-		AssociatedHostnames: cloudflare.F([]zero_trust.AssociatedHostnamesParam{"admin.example.com", "admin.example.com", "admin.example.com"}),
+		AssociatedHostnames: cloudflare.F([]zero_trust.AssociatedHostnamesParam{"admin.example.com"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,7 +61,7 @@ func TestAccessCertificateUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.AccessCertificateUpdateParams{
-			AssociatedHostnames: cloudflare.F([]zero_trust.AssociatedHostnamesParam{"admin.example.com", "admin.example.com", "admin.example.com"}),
+			AssociatedHostnames: cloudflare.F([]zero_trust.AssociatedHostnamesParam{"admin.example.com"}),
 			AccountID:           cloudflare.F("account_id"),
 			Name:                cloudflare.F("Allow devs"),
 		},

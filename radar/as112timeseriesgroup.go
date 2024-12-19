@@ -8,11 +8,11 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // AS112TimeseriesGroupService contains methods and other services that help with
@@ -34,7 +34,7 @@ func NewAS112TimeseriesGroupService(opts ...option.RequestOption) (r *AS112Times
 	return
 }
 
-// Percentage distribution of DNS AS112 queries by DNSSEC support over time.
+// Percentage distribution of AS112 DNS queries by DNSSEC support over time.
 func (r *AS112TimeseriesGroupService) DNSSEC(ctx context.Context, query AS112TimeseriesGroupDNSSECParams, opts ...option.RequestOption) (res *AS112TimeseriesGroupDNSSECResponse, err error) {
 	var env AS112TimeseriesGroupDNSSECResponseEnvelope
 	opts = append(r.Options[:], opts...)

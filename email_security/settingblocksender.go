@@ -8,17 +8,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/tidwall/gjson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingBlockSenderService contains methods and other services that help with
@@ -41,7 +39,7 @@ func NewSettingBlockSenderService(opts ...option.RequestOption) (r *SettingBlock
 }
 
 // Create a blocked email sender
-func (r *SettingBlockSenderService) New(ctx context.Context, params SettingBlockSenderNewParams, opts ...option.RequestOption) (res *SettingBlockSenderNewResponseUnion, err error) {
+func (r *SettingBlockSenderService) New(ctx context.Context, params SettingBlockSenderNewParams, opts ...option.RequestOption) (res *SettingBlockSenderNewResponse, err error) {
 	var env SettingBlockSenderNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -135,43 +133,21 @@ func (r *SettingBlockSenderService) Get(ctx context.Context, patternID int64, qu
 	return
 }
 
-// Union satisfied by
-// [email_security.SettingBlockSenderNewResponseEmailSecurityBlockedSender] or
-// [email_security.SettingBlockSenderNewResponseArray].
-type SettingBlockSenderNewResponseUnion interface {
-	implementsEmailSecuritySettingBlockSenderNewResponseUnion()
+type SettingBlockSenderNewResponse struct {
+	// The unique identifier for the allow policy.
+	ID           int64                                    `json:"id,required"`
+	CreatedAt    time.Time                                `json:"created_at,required" format:"date-time"`
+	IsRegex      bool                                     `json:"is_regex,required"`
+	LastModified time.Time                                `json:"last_modified,required" format:"date-time"`
+	Pattern      string                                   `json:"pattern,required"`
+	PatternType  SettingBlockSenderNewResponsePatternType `json:"pattern_type,required"`
+	Comments     string                                   `json:"comments,nullable"`
+	JSON         settingBlockSenderNewResponseJSON        `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SettingBlockSenderNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SettingBlockSenderNewResponseEmailSecurityBlockedSender{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SettingBlockSenderNewResponseArray{}),
-		},
-	)
-}
-
-type SettingBlockSenderNewResponseEmailSecurityBlockedSender struct {
-	ID           int64                                                              `json:"id,required"`
-	CreatedAt    time.Time                                                          `json:"created_at,required" format:"date-time"`
-	IsRegex      bool                                                               `json:"is_regex,required"`
-	LastModified time.Time                                                          `json:"last_modified,required" format:"date-time"`
-	Pattern      string                                                             `json:"pattern,required"`
-	PatternType  SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternType `json:"pattern_type,required"`
-	Comments     string                                                             `json:"comments,nullable"`
-	JSON         settingBlockSenderNewResponseEmailSecurityBlockedSenderJSON        `json:"-"`
-}
-
-// settingBlockSenderNewResponseEmailSecurityBlockedSenderJSON contains the JSON
-// metadata for the struct
-// [SettingBlockSenderNewResponseEmailSecurityBlockedSender]
-type settingBlockSenderNewResponseEmailSecurityBlockedSenderJSON struct {
+// settingBlockSenderNewResponseJSON contains the JSON metadata for the struct
+// [SettingBlockSenderNewResponse]
+type settingBlockSenderNewResponseJSON struct {
 	ID           apijson.Field
 	CreatedAt    apijson.Field
 	IsRegex      apijson.Field
@@ -183,90 +159,33 @@ type settingBlockSenderNewResponseEmailSecurityBlockedSenderJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SettingBlockSenderNewResponseEmailSecurityBlockedSender) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingBlockSenderNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingBlockSenderNewResponseEmailSecurityBlockedSenderJSON) RawJSON() string {
+func (r settingBlockSenderNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r SettingBlockSenderNewResponseEmailSecurityBlockedSender) implementsEmailSecuritySettingBlockSenderNewResponseUnion() {
-}
-
-type SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternType string
+type SettingBlockSenderNewResponsePatternType string
 
 const (
-	SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternTypeEmail   SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternType = "EMAIL"
-	SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternTypeDomain  SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternType = "DOMAIN"
-	SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternTypeIP      SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternType = "IP"
-	SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternTypeUnknown SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternType = "UNKNOWN"
+	SettingBlockSenderNewResponsePatternTypeEmail   SettingBlockSenderNewResponsePatternType = "EMAIL"
+	SettingBlockSenderNewResponsePatternTypeDomain  SettingBlockSenderNewResponsePatternType = "DOMAIN"
+	SettingBlockSenderNewResponsePatternTypeIP      SettingBlockSenderNewResponsePatternType = "IP"
+	SettingBlockSenderNewResponsePatternTypeUnknown SettingBlockSenderNewResponsePatternType = "UNKNOWN"
 )
 
-func (r SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternType) IsKnown() bool {
+func (r SettingBlockSenderNewResponsePatternType) IsKnown() bool {
 	switch r {
-	case SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternTypeEmail, SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternTypeDomain, SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternTypeIP, SettingBlockSenderNewResponseEmailSecurityBlockedSenderPatternTypeUnknown:
-		return true
-	}
-	return false
-}
-
-type SettingBlockSenderNewResponseArray []SettingBlockSenderNewResponseArrayItem
-
-func (r SettingBlockSenderNewResponseArray) implementsEmailSecuritySettingBlockSenderNewResponseUnion() {
-}
-
-type SettingBlockSenderNewResponseArrayItem struct {
-	ID           int64                                         `json:"id,required"`
-	CreatedAt    time.Time                                     `json:"created_at,required" format:"date-time"`
-	IsRegex      bool                                          `json:"is_regex,required"`
-	LastModified time.Time                                     `json:"last_modified,required" format:"date-time"`
-	Pattern      string                                        `json:"pattern,required"`
-	PatternType  SettingBlockSenderNewResponseArrayPatternType `json:"pattern_type,required"`
-	Comments     string                                        `json:"comments,nullable"`
-	JSON         settingBlockSenderNewResponseArrayItemJSON    `json:"-"`
-}
-
-// settingBlockSenderNewResponseArrayItemJSON contains the JSON metadata for the
-// struct [SettingBlockSenderNewResponseArrayItem]
-type settingBlockSenderNewResponseArrayItemJSON struct {
-	ID           apijson.Field
-	CreatedAt    apijson.Field
-	IsRegex      apijson.Field
-	LastModified apijson.Field
-	Pattern      apijson.Field
-	PatternType  apijson.Field
-	Comments     apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *SettingBlockSenderNewResponseArrayItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBlockSenderNewResponseArrayItemJSON) RawJSON() string {
-	return r.raw
-}
-
-type SettingBlockSenderNewResponseArrayPatternType string
-
-const (
-	SettingBlockSenderNewResponseArrayPatternTypeEmail   SettingBlockSenderNewResponseArrayPatternType = "EMAIL"
-	SettingBlockSenderNewResponseArrayPatternTypeDomain  SettingBlockSenderNewResponseArrayPatternType = "DOMAIN"
-	SettingBlockSenderNewResponseArrayPatternTypeIP      SettingBlockSenderNewResponseArrayPatternType = "IP"
-	SettingBlockSenderNewResponseArrayPatternTypeUnknown SettingBlockSenderNewResponseArrayPatternType = "UNKNOWN"
-)
-
-func (r SettingBlockSenderNewResponseArrayPatternType) IsKnown() bool {
-	switch r {
-	case SettingBlockSenderNewResponseArrayPatternTypeEmail, SettingBlockSenderNewResponseArrayPatternTypeDomain, SettingBlockSenderNewResponseArrayPatternTypeIP, SettingBlockSenderNewResponseArrayPatternTypeUnknown:
+	case SettingBlockSenderNewResponsePatternTypeEmail, SettingBlockSenderNewResponsePatternTypeDomain, SettingBlockSenderNewResponsePatternTypeIP, SettingBlockSenderNewResponsePatternTypeUnknown:
 		return true
 	}
 	return false
 }
 
 type SettingBlockSenderListResponse struct {
+	// The unique identifier for the allow policy.
 	ID           int64                                     `json:"id,required"`
 	CreatedAt    time.Time                                 `json:"created_at,required" format:"date-time"`
 	IsRegex      bool                                      `json:"is_regex,required"`
@@ -317,6 +236,7 @@ func (r SettingBlockSenderListResponsePatternType) IsKnown() bool {
 }
 
 type SettingBlockSenderDeleteResponse struct {
+	// The unique identifier for the allow policy.
 	ID   int64                                `json:"id,required"`
 	JSON settingBlockSenderDeleteResponseJSON `json:"-"`
 }
@@ -338,6 +258,7 @@ func (r settingBlockSenderDeleteResponseJSON) RawJSON() string {
 }
 
 type SettingBlockSenderEditResponse struct {
+	// The unique identifier for the allow policy.
 	ID           int64                                     `json:"id,required"`
 	CreatedAt    time.Time                                 `json:"created_at,required" format:"date-time"`
 	IsRegex      bool                                      `json:"is_regex,required"`
@@ -388,6 +309,7 @@ func (r SettingBlockSenderEditResponsePatternType) IsKnown() bool {
 }
 
 type SettingBlockSenderGetResponse struct {
+	// The unique identifier for the allow policy.
 	ID           int64                                    `json:"id,required"`
 	CreatedAt    time.Time                                `json:"created_at,required" format:"date-time"`
 	IsRegex      bool                                     `json:"is_regex,required"`
@@ -439,61 +361,38 @@ func (r SettingBlockSenderGetResponsePatternType) IsKnown() bool {
 
 type SettingBlockSenderNewParams struct {
 	// Account Identifier
-	AccountID param.Field[string]                  `path:"account_id,required"`
-	Body      SettingBlockSenderNewParamsBodyUnion `json:"body,required"`
+	AccountID   param.Field[string]                                 `path:"account_id,required"`
+	IsRegex     param.Field[bool]                                   `json:"is_regex,required"`
+	Pattern     param.Field[string]                                 `json:"pattern,required"`
+	PatternType param.Field[SettingBlockSenderNewParamsPatternType] `json:"pattern_type,required"`
+	Comments    param.Field[string]                                 `json:"comments"`
 }
 
 func (r SettingBlockSenderNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-// Satisfied by
-// [email_security.SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSender],
-// [email_security.SettingBlockSenderNewParamsBodyArray].
-type SettingBlockSenderNewParamsBodyUnion interface {
-	implementsEmailSecuritySettingBlockSenderNewParamsBodyUnion()
-}
-
-type SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSender struct {
-	IsRegex     param.Field[bool]                                                                       `json:"is_regex,required"`
-	Pattern     param.Field[string]                                                                     `json:"pattern,required"`
-	PatternType param.Field[SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternType] `json:"pattern_type,required"`
-	Comments    param.Field[string]                                                                     `json:"comments"`
-}
-
-func (r SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSender) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSender) implementsEmailSecuritySettingBlockSenderNewParamsBodyUnion() {
-}
-
-type SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternType string
+type SettingBlockSenderNewParamsPatternType string
 
 const (
-	SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTypeEmail   SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternType = "EMAIL"
-	SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTypeDomain  SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternType = "DOMAIN"
-	SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTypeIP      SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternType = "IP"
-	SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTypeUnknown SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternType = "UNKNOWN"
+	SettingBlockSenderNewParamsPatternTypeEmail   SettingBlockSenderNewParamsPatternType = "EMAIL"
+	SettingBlockSenderNewParamsPatternTypeDomain  SettingBlockSenderNewParamsPatternType = "DOMAIN"
+	SettingBlockSenderNewParamsPatternTypeIP      SettingBlockSenderNewParamsPatternType = "IP"
+	SettingBlockSenderNewParamsPatternTypeUnknown SettingBlockSenderNewParamsPatternType = "UNKNOWN"
 )
 
-func (r SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternType) IsKnown() bool {
+func (r SettingBlockSenderNewParamsPatternType) IsKnown() bool {
 	switch r {
-	case SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTypeEmail, SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTypeDomain, SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTypeIP, SettingBlockSenderNewParamsBodyEmailSecurityCreateBlockedSenderPatternTypeUnknown:
+	case SettingBlockSenderNewParamsPatternTypeEmail, SettingBlockSenderNewParamsPatternTypeDomain, SettingBlockSenderNewParamsPatternTypeIP, SettingBlockSenderNewParamsPatternTypeUnknown:
 		return true
 	}
 	return false
 }
 
-type SettingBlockSenderNewParamsBodyArray []SettingBlockSenderNewParamsBodyArray
-
-func (r SettingBlockSenderNewParamsBodyArray) implementsEmailSecuritySettingBlockSenderNewParamsBodyUnion() {
-}
-
 type SettingBlockSenderNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                     `json:"errors,required"`
 	Messages []shared.ResponseInfo                     `json:"messages,required"`
-	Result   SettingBlockSenderNewResponseUnion        `json:"result,required"`
+	Result   SettingBlockSenderNewResponse             `json:"result,required"`
 	Success  bool                                      `json:"success,required"`
 	JSON     settingBlockSenderNewResponseEnvelopeJSON `json:"-"`
 }
@@ -524,10 +423,10 @@ type SettingBlockSenderListParams struct {
 	Direction param.Field[SettingBlockSenderListParamsDirection] `query:"direction"`
 	// The field to sort by.
 	Order param.Field[SettingBlockSenderListParamsOrder] `query:"order"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page        param.Field[int64]                                   `query:"page"`
 	PatternType param.Field[SettingBlockSenderListParamsPatternType] `query:"pattern_type"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Allows searching in multiple properties of a record simultaneously. This
 	// parameter is intended for human users, not automation. Its exact behavior is

@@ -8,11 +8,11 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ASNService contains methods and other services that help with interacting with
@@ -36,7 +36,8 @@ func NewASNService(opts ...option.RequestOption) (r *ASNService) {
 	return
 }
 
-// Get ASN Overview
+// Gets an overview of the Autonomous System Number (ASN) and a list of subnets for
+// it.
 func (r *ASNService) Get(ctx context.Context, asn shared.ASNParam, query ASNGetParams, opts ...option.RequestOption) (res *shared.ASN, err error) {
 	var env ASNGetResponseEnvelope
 	opts = append(r.Options[:], opts...)

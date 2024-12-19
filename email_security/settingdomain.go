@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SettingDomainService contains methods and other services that help with
@@ -38,7 +38,7 @@ func NewSettingDomainService(opts ...option.RequestOption) (r *SettingDomainServ
 	return
 }
 
-// List, search, and sort an account's email domains.
+// Lists, searches, and sorts an account’s email domains.
 func (r *SettingDomainService) List(ctx context.Context, params SettingDomainListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[SettingDomainListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
@@ -60,7 +60,7 @@ func (r *SettingDomainService) List(ctx context.Context, params SettingDomainLis
 	return res, nil
 }
 
-// List, search, and sort an account's email domains.
+// Lists, searches, and sorts an account’s email domains.
 func (r *SettingDomainService) ListAutoPaging(ctx context.Context, params SettingDomainListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[SettingDomainListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
@@ -74,6 +74,23 @@ func (r *SettingDomainService) Delete(ctx context.Context, domainID int64, body 
 		return
 	}
 	path := fmt.Sprintf("accounts/%s/email-security/settings/domains/%v", body.AccountID, domainID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Unprotect multiple email domains
+func (r *SettingDomainService) BulkDelete(ctx context.Context, body SettingDomainBulkDeleteParams, opts ...option.RequestOption) (res *[]SettingDomainBulkDeleteResponse, err error) {
+	var env SettingDomainBulkDeleteResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/settings/domains", body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -99,16 +116,40 @@ func (r *SettingDomainService) Edit(ctx context.Context, domainID int64, params 
 	return
 }
 
+// Get an email domain
+func (r *SettingDomainService) Get(ctx context.Context, domainID int64, query SettingDomainGetParams, opts ...option.RequestOption) (res *SettingDomainGetResponse, err error) {
+	var env SettingDomainGetResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/email-security/settings/domains/%v", query.AccountID, domainID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type SettingDomainListResponse struct {
-	// Unique domain identifier
+	// The unique identifier for the domain.
 	ID                   int64                                          `json:"id,required"`
 	AllowedDeliveryModes []SettingDomainListResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
 	CreatedAt            time.Time                                      `json:"created_at,required" format:"date-time"`
 	Domain               string                                         `json:"domain,required"`
+	DropDispositions     []SettingDomainListResponseDropDisposition     `json:"drop_dispositions,required"`
+	IPRestrictions       []string                                       `json:"ip_restrictions,required"`
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
+	Transport            string                                         `json:"transport,required"`
+	Folder               SettingDomainListResponseFolder                `json:"folder,nullable"`
+	InboxProvider        SettingDomainListResponseInboxProvider         `json:"inbox_provider,nullable"`
 	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
 	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
+	RequireTLSInbound    bool                                           `json:"require_tls_inbound,nullable"`
+	RequireTLSOutbound   bool                                           `json:"require_tls_outbound,nullable"`
 	JSON                 settingDomainListResponseJSON                  `json:"-"`
 }
 
@@ -119,10 +160,17 @@ type settingDomainListResponseJSON struct {
 	AllowedDeliveryModes apijson.Field
 	CreatedAt            apijson.Field
 	Domain               apijson.Field
+	DropDispositions     apijson.Field
+	IPRestrictions       apijson.Field
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
+	Transport            apijson.Field
+	Folder               apijson.Field
+	InboxProvider        apijson.Field
 	IntegrationID        apijson.Field
 	O365TenantID         apijson.Field
+	RequireTLSInbound    apijson.Field
+	RequireTLSOutbound   apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -153,8 +201,61 @@ func (r SettingDomainListResponseAllowedDeliveryMode) IsKnown() bool {
 	return false
 }
 
+type SettingDomainListResponseDropDisposition string
+
+const (
+	SettingDomainListResponseDropDispositionMalicious    SettingDomainListResponseDropDisposition = "MALICIOUS"
+	SettingDomainListResponseDropDispositionMaliciousBec SettingDomainListResponseDropDisposition = "MALICIOUS-BEC"
+	SettingDomainListResponseDropDispositionSuspicious   SettingDomainListResponseDropDisposition = "SUSPICIOUS"
+	SettingDomainListResponseDropDispositionSpoof        SettingDomainListResponseDropDisposition = "SPOOF"
+	SettingDomainListResponseDropDispositionSpam         SettingDomainListResponseDropDisposition = "SPAM"
+	SettingDomainListResponseDropDispositionBulk         SettingDomainListResponseDropDisposition = "BULK"
+	SettingDomainListResponseDropDispositionEncrypted    SettingDomainListResponseDropDisposition = "ENCRYPTED"
+	SettingDomainListResponseDropDispositionExternal     SettingDomainListResponseDropDisposition = "EXTERNAL"
+	SettingDomainListResponseDropDispositionUnknown      SettingDomainListResponseDropDisposition = "UNKNOWN"
+	SettingDomainListResponseDropDispositionNone         SettingDomainListResponseDropDisposition = "NONE"
+)
+
+func (r SettingDomainListResponseDropDisposition) IsKnown() bool {
+	switch r {
+	case SettingDomainListResponseDropDispositionMalicious, SettingDomainListResponseDropDispositionMaliciousBec, SettingDomainListResponseDropDispositionSuspicious, SettingDomainListResponseDropDispositionSpoof, SettingDomainListResponseDropDispositionSpam, SettingDomainListResponseDropDispositionBulk, SettingDomainListResponseDropDispositionEncrypted, SettingDomainListResponseDropDispositionExternal, SettingDomainListResponseDropDispositionUnknown, SettingDomainListResponseDropDispositionNone:
+		return true
+	}
+	return false
+}
+
+type SettingDomainListResponseFolder string
+
+const (
+	SettingDomainListResponseFolderAllItems SettingDomainListResponseFolder = "AllItems"
+	SettingDomainListResponseFolderInbox    SettingDomainListResponseFolder = "Inbox"
+)
+
+func (r SettingDomainListResponseFolder) IsKnown() bool {
+	switch r {
+	case SettingDomainListResponseFolderAllItems, SettingDomainListResponseFolderInbox:
+		return true
+	}
+	return false
+}
+
+type SettingDomainListResponseInboxProvider string
+
+const (
+	SettingDomainListResponseInboxProviderMicrosoft SettingDomainListResponseInboxProvider = "Microsoft"
+	SettingDomainListResponseInboxProviderGoogle    SettingDomainListResponseInboxProvider = "Google"
+)
+
+func (r SettingDomainListResponseInboxProvider) IsKnown() bool {
+	switch r {
+	case SettingDomainListResponseInboxProviderMicrosoft, SettingDomainListResponseInboxProviderGoogle:
+		return true
+	}
+	return false
+}
+
 type SettingDomainDeleteResponse struct {
-	// Unique domain identifier
+	// The unique identifier for the domain.
 	ID   int64                           `json:"id,required"`
 	JSON settingDomainDeleteResponseJSON `json:"-"`
 }
@@ -175,16 +276,45 @@ func (r settingDomainDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+type SettingDomainBulkDeleteResponse struct {
+	// The unique identifier for the domain.
+	ID   int64                               `json:"id,required"`
+	JSON settingDomainBulkDeleteResponseJSON `json:"-"`
+}
+
+// settingDomainBulkDeleteResponseJSON contains the JSON metadata for the struct
+// [SettingDomainBulkDeleteResponse]
+type settingDomainBulkDeleteResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingDomainBulkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainBulkDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SettingDomainEditResponse struct {
-	// Unique domain identifier
+	// The unique identifier for the domain.
 	ID                   int64                                          `json:"id,required"`
 	AllowedDeliveryModes []SettingDomainEditResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
 	CreatedAt            time.Time                                      `json:"created_at,required" format:"date-time"`
 	Domain               string                                         `json:"domain,required"`
+	DropDispositions     []SettingDomainEditResponseDropDisposition     `json:"drop_dispositions,required"`
+	IPRestrictions       []string                                       `json:"ip_restrictions,required"`
 	LastModified         time.Time                                      `json:"last_modified,required" format:"date-time"`
 	LookbackHops         int64                                          `json:"lookback_hops,required"`
+	Transport            string                                         `json:"transport,required"`
+	Folder               SettingDomainEditResponseFolder                `json:"folder,nullable"`
+	InboxProvider        SettingDomainEditResponseInboxProvider         `json:"inbox_provider,nullable"`
 	IntegrationID        string                                         `json:"integration_id,nullable" format:"uuid"`
 	O365TenantID         string                                         `json:"o365_tenant_id,nullable"`
+	RequireTLSInbound    bool                                           `json:"require_tls_inbound,nullable"`
+	RequireTLSOutbound   bool                                           `json:"require_tls_outbound,nullable"`
 	JSON                 settingDomainEditResponseJSON                  `json:"-"`
 }
 
@@ -195,10 +325,17 @@ type settingDomainEditResponseJSON struct {
 	AllowedDeliveryModes apijson.Field
 	CreatedAt            apijson.Field
 	Domain               apijson.Field
+	DropDispositions     apijson.Field
+	IPRestrictions       apijson.Field
 	LastModified         apijson.Field
 	LookbackHops         apijson.Field
+	Transport            apijson.Field
+	Folder               apijson.Field
+	InboxProvider        apijson.Field
 	IntegrationID        apijson.Field
 	O365TenantID         apijson.Field
+	RequireTLSInbound    apijson.Field
+	RequireTLSOutbound   apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -229,21 +366,194 @@ func (r SettingDomainEditResponseAllowedDeliveryMode) IsKnown() bool {
 	return false
 }
 
+type SettingDomainEditResponseDropDisposition string
+
+const (
+	SettingDomainEditResponseDropDispositionMalicious    SettingDomainEditResponseDropDisposition = "MALICIOUS"
+	SettingDomainEditResponseDropDispositionMaliciousBec SettingDomainEditResponseDropDisposition = "MALICIOUS-BEC"
+	SettingDomainEditResponseDropDispositionSuspicious   SettingDomainEditResponseDropDisposition = "SUSPICIOUS"
+	SettingDomainEditResponseDropDispositionSpoof        SettingDomainEditResponseDropDisposition = "SPOOF"
+	SettingDomainEditResponseDropDispositionSpam         SettingDomainEditResponseDropDisposition = "SPAM"
+	SettingDomainEditResponseDropDispositionBulk         SettingDomainEditResponseDropDisposition = "BULK"
+	SettingDomainEditResponseDropDispositionEncrypted    SettingDomainEditResponseDropDisposition = "ENCRYPTED"
+	SettingDomainEditResponseDropDispositionExternal     SettingDomainEditResponseDropDisposition = "EXTERNAL"
+	SettingDomainEditResponseDropDispositionUnknown      SettingDomainEditResponseDropDisposition = "UNKNOWN"
+	SettingDomainEditResponseDropDispositionNone         SettingDomainEditResponseDropDisposition = "NONE"
+)
+
+func (r SettingDomainEditResponseDropDisposition) IsKnown() bool {
+	switch r {
+	case SettingDomainEditResponseDropDispositionMalicious, SettingDomainEditResponseDropDispositionMaliciousBec, SettingDomainEditResponseDropDispositionSuspicious, SettingDomainEditResponseDropDispositionSpoof, SettingDomainEditResponseDropDispositionSpam, SettingDomainEditResponseDropDispositionBulk, SettingDomainEditResponseDropDispositionEncrypted, SettingDomainEditResponseDropDispositionExternal, SettingDomainEditResponseDropDispositionUnknown, SettingDomainEditResponseDropDispositionNone:
+		return true
+	}
+	return false
+}
+
+type SettingDomainEditResponseFolder string
+
+const (
+	SettingDomainEditResponseFolderAllItems SettingDomainEditResponseFolder = "AllItems"
+	SettingDomainEditResponseFolderInbox    SettingDomainEditResponseFolder = "Inbox"
+)
+
+func (r SettingDomainEditResponseFolder) IsKnown() bool {
+	switch r {
+	case SettingDomainEditResponseFolderAllItems, SettingDomainEditResponseFolderInbox:
+		return true
+	}
+	return false
+}
+
+type SettingDomainEditResponseInboxProvider string
+
+const (
+	SettingDomainEditResponseInboxProviderMicrosoft SettingDomainEditResponseInboxProvider = "Microsoft"
+	SettingDomainEditResponseInboxProviderGoogle    SettingDomainEditResponseInboxProvider = "Google"
+)
+
+func (r SettingDomainEditResponseInboxProvider) IsKnown() bool {
+	switch r {
+	case SettingDomainEditResponseInboxProviderMicrosoft, SettingDomainEditResponseInboxProviderGoogle:
+		return true
+	}
+	return false
+}
+
+type SettingDomainGetResponse struct {
+	// The unique identifier for the domain.
+	ID                   int64                                         `json:"id,required"`
+	AllowedDeliveryModes []SettingDomainGetResponseAllowedDeliveryMode `json:"allowed_delivery_modes,required"`
+	CreatedAt            time.Time                                     `json:"created_at,required" format:"date-time"`
+	Domain               string                                        `json:"domain,required"`
+	DropDispositions     []SettingDomainGetResponseDropDisposition     `json:"drop_dispositions,required"`
+	IPRestrictions       []string                                      `json:"ip_restrictions,required"`
+	LastModified         time.Time                                     `json:"last_modified,required" format:"date-time"`
+	LookbackHops         int64                                         `json:"lookback_hops,required"`
+	Transport            string                                        `json:"transport,required"`
+	Folder               SettingDomainGetResponseFolder                `json:"folder,nullable"`
+	InboxProvider        SettingDomainGetResponseInboxProvider         `json:"inbox_provider,nullable"`
+	IntegrationID        string                                        `json:"integration_id,nullable" format:"uuid"`
+	O365TenantID         string                                        `json:"o365_tenant_id,nullable"`
+	RequireTLSInbound    bool                                          `json:"require_tls_inbound,nullable"`
+	RequireTLSOutbound   bool                                          `json:"require_tls_outbound,nullable"`
+	JSON                 settingDomainGetResponseJSON                  `json:"-"`
+}
+
+// settingDomainGetResponseJSON contains the JSON metadata for the struct
+// [SettingDomainGetResponse]
+type settingDomainGetResponseJSON struct {
+	ID                   apijson.Field
+	AllowedDeliveryModes apijson.Field
+	CreatedAt            apijson.Field
+	Domain               apijson.Field
+	DropDispositions     apijson.Field
+	IPRestrictions       apijson.Field
+	LastModified         apijson.Field
+	LookbackHops         apijson.Field
+	Transport            apijson.Field
+	Folder               apijson.Field
+	InboxProvider        apijson.Field
+	IntegrationID        apijson.Field
+	O365TenantID         apijson.Field
+	RequireTLSInbound    apijson.Field
+	RequireTLSOutbound   apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *SettingDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingDomainGetResponseAllowedDeliveryMode string
+
+const (
+	SettingDomainGetResponseAllowedDeliveryModeDirect    SettingDomainGetResponseAllowedDeliveryMode = "DIRECT"
+	SettingDomainGetResponseAllowedDeliveryModeBcc       SettingDomainGetResponseAllowedDeliveryMode = "BCC"
+	SettingDomainGetResponseAllowedDeliveryModeJournal   SettingDomainGetResponseAllowedDeliveryMode = "JOURNAL"
+	SettingDomainGetResponseAllowedDeliveryModeAPI       SettingDomainGetResponseAllowedDeliveryMode = "API"
+	SettingDomainGetResponseAllowedDeliveryModeRetroScan SettingDomainGetResponseAllowedDeliveryMode = "RETRO_SCAN"
+)
+
+func (r SettingDomainGetResponseAllowedDeliveryMode) IsKnown() bool {
+	switch r {
+	case SettingDomainGetResponseAllowedDeliveryModeDirect, SettingDomainGetResponseAllowedDeliveryModeBcc, SettingDomainGetResponseAllowedDeliveryModeJournal, SettingDomainGetResponseAllowedDeliveryModeAPI, SettingDomainGetResponseAllowedDeliveryModeRetroScan:
+		return true
+	}
+	return false
+}
+
+type SettingDomainGetResponseDropDisposition string
+
+const (
+	SettingDomainGetResponseDropDispositionMalicious    SettingDomainGetResponseDropDisposition = "MALICIOUS"
+	SettingDomainGetResponseDropDispositionMaliciousBec SettingDomainGetResponseDropDisposition = "MALICIOUS-BEC"
+	SettingDomainGetResponseDropDispositionSuspicious   SettingDomainGetResponseDropDisposition = "SUSPICIOUS"
+	SettingDomainGetResponseDropDispositionSpoof        SettingDomainGetResponseDropDisposition = "SPOOF"
+	SettingDomainGetResponseDropDispositionSpam         SettingDomainGetResponseDropDisposition = "SPAM"
+	SettingDomainGetResponseDropDispositionBulk         SettingDomainGetResponseDropDisposition = "BULK"
+	SettingDomainGetResponseDropDispositionEncrypted    SettingDomainGetResponseDropDisposition = "ENCRYPTED"
+	SettingDomainGetResponseDropDispositionExternal     SettingDomainGetResponseDropDisposition = "EXTERNAL"
+	SettingDomainGetResponseDropDispositionUnknown      SettingDomainGetResponseDropDisposition = "UNKNOWN"
+	SettingDomainGetResponseDropDispositionNone         SettingDomainGetResponseDropDisposition = "NONE"
+)
+
+func (r SettingDomainGetResponseDropDisposition) IsKnown() bool {
+	switch r {
+	case SettingDomainGetResponseDropDispositionMalicious, SettingDomainGetResponseDropDispositionMaliciousBec, SettingDomainGetResponseDropDispositionSuspicious, SettingDomainGetResponseDropDispositionSpoof, SettingDomainGetResponseDropDispositionSpam, SettingDomainGetResponseDropDispositionBulk, SettingDomainGetResponseDropDispositionEncrypted, SettingDomainGetResponseDropDispositionExternal, SettingDomainGetResponseDropDispositionUnknown, SettingDomainGetResponseDropDispositionNone:
+		return true
+	}
+	return false
+}
+
+type SettingDomainGetResponseFolder string
+
+const (
+	SettingDomainGetResponseFolderAllItems SettingDomainGetResponseFolder = "AllItems"
+	SettingDomainGetResponseFolderInbox    SettingDomainGetResponseFolder = "Inbox"
+)
+
+func (r SettingDomainGetResponseFolder) IsKnown() bool {
+	switch r {
+	case SettingDomainGetResponseFolderAllItems, SettingDomainGetResponseFolderInbox:
+		return true
+	}
+	return false
+}
+
+type SettingDomainGetResponseInboxProvider string
+
+const (
+	SettingDomainGetResponseInboxProviderMicrosoft SettingDomainGetResponseInboxProvider = "Microsoft"
+	SettingDomainGetResponseInboxProviderGoogle    SettingDomainGetResponseInboxProvider = "Google"
+)
+
+func (r SettingDomainGetResponseInboxProvider) IsKnown() bool {
+	switch r {
+	case SettingDomainGetResponseInboxProviderMicrosoft, SettingDomainGetResponseInboxProviderGoogle:
+		return true
+	}
+	return false
+}
+
 type SettingDomainListParams struct {
 	// Account Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// If present, the response contains only domains with the provided delivery mode.
+	// Filters response to domains with the provided delivery mode.
 	AllowedDeliveryMode param.Field[SettingDomainListParamsAllowedDeliveryMode] `query:"allowed_delivery_mode"`
 	// The sorting direction.
 	Direction param.Field[SettingDomainListParamsDirection] `query:"direction"`
-	// Filter result by the provided domains. Allows for multiple occurrences, e.g.,
-	// `domain=example.com&domain=example.xyz`.
+	// Filters results by the provided domains, allowing for multiple occurrences.
 	Domain param.Field[[]string] `query:"domain"`
 	// The field to sort by.
 	Order param.Field[SettingDomainListParamsOrder] `query:"order"`
-	// Page number of paginated results.
+	// The page number of paginated results.
 	Page param.Field[int64] `query:"page"`
-	// Number of results to display.
+	// The number of results per page.
 	PerPage param.Field[int64] `query:"per_page"`
 	// Allows searching in multiple properties of a record simultaneously. This
 	// parameter is intended for human users, not automation. Its exact behavior is
@@ -260,7 +570,7 @@ func (r SettingDomainListParams) URLQuery() (v url.Values) {
 	})
 }
 
-// If present, the response contains only domains with the provided delivery mode.
+// Filters response to domains with the provided delivery mode.
 type SettingDomainListParamsAllowedDeliveryMode string
 
 const (
@@ -343,15 +653,92 @@ func (r settingDomainDeleteResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
+type SettingDomainBulkDeleteParams struct {
+	// Account Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type SettingDomainBulkDeleteResponseEnvelope struct {
+	Errors   []shared.ResponseInfo                       `json:"errors,required"`
+	Messages []shared.ResponseInfo                       `json:"messages,required"`
+	Result   []SettingDomainBulkDeleteResponse           `json:"result,required"`
+	Success  bool                                        `json:"success,required"`
+	JSON     settingDomainBulkDeleteResponseEnvelopeJSON `json:"-"`
+}
+
+// settingDomainBulkDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingDomainBulkDeleteResponseEnvelope]
+type settingDomainBulkDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingDomainBulkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainBulkDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SettingDomainEditParams struct {
 	// Account Identifier
-	AccountID    param.Field[string] `path:"account_id,required"`
-	Domain       param.Field[string] `json:"domain"`
-	LookbackHops param.Field[int64]  `json:"lookback_hops"`
+	AccountID          param.Field[string]                                   `path:"account_id,required"`
+	IPRestrictions     param.Field[[]string]                                 `json:"ip_restrictions,required"`
+	Domain             param.Field[string]                                   `json:"domain"`
+	DropDispositions   param.Field[[]SettingDomainEditParamsDropDisposition] `json:"drop_dispositions"`
+	Folder             param.Field[SettingDomainEditParamsFolder]            `json:"folder"`
+	IntegrationID      param.Field[string]                                   `json:"integration_id" format:"uuid"`
+	LookbackHops       param.Field[int64]                                    `json:"lookback_hops"`
+	RequireTLSInbound  param.Field[bool]                                     `json:"require_tls_inbound"`
+	RequireTLSOutbound param.Field[bool]                                     `json:"require_tls_outbound"`
+	Transport          param.Field[string]                                   `json:"transport"`
 }
 
 func (r SettingDomainEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type SettingDomainEditParamsDropDisposition string
+
+const (
+	SettingDomainEditParamsDropDispositionMalicious    SettingDomainEditParamsDropDisposition = "MALICIOUS"
+	SettingDomainEditParamsDropDispositionMaliciousBec SettingDomainEditParamsDropDisposition = "MALICIOUS-BEC"
+	SettingDomainEditParamsDropDispositionSuspicious   SettingDomainEditParamsDropDisposition = "SUSPICIOUS"
+	SettingDomainEditParamsDropDispositionSpoof        SettingDomainEditParamsDropDisposition = "SPOOF"
+	SettingDomainEditParamsDropDispositionSpam         SettingDomainEditParamsDropDisposition = "SPAM"
+	SettingDomainEditParamsDropDispositionBulk         SettingDomainEditParamsDropDisposition = "BULK"
+	SettingDomainEditParamsDropDispositionEncrypted    SettingDomainEditParamsDropDisposition = "ENCRYPTED"
+	SettingDomainEditParamsDropDispositionExternal     SettingDomainEditParamsDropDisposition = "EXTERNAL"
+	SettingDomainEditParamsDropDispositionUnknown      SettingDomainEditParamsDropDisposition = "UNKNOWN"
+	SettingDomainEditParamsDropDispositionNone         SettingDomainEditParamsDropDisposition = "NONE"
+)
+
+func (r SettingDomainEditParamsDropDisposition) IsKnown() bool {
+	switch r {
+	case SettingDomainEditParamsDropDispositionMalicious, SettingDomainEditParamsDropDispositionMaliciousBec, SettingDomainEditParamsDropDispositionSuspicious, SettingDomainEditParamsDropDispositionSpoof, SettingDomainEditParamsDropDispositionSpam, SettingDomainEditParamsDropDispositionBulk, SettingDomainEditParamsDropDispositionEncrypted, SettingDomainEditParamsDropDispositionExternal, SettingDomainEditParamsDropDispositionUnknown, SettingDomainEditParamsDropDispositionNone:
+		return true
+	}
+	return false
+}
+
+type SettingDomainEditParamsFolder string
+
+const (
+	SettingDomainEditParamsFolderAllItems SettingDomainEditParamsFolder = "AllItems"
+	SettingDomainEditParamsFolderInbox    SettingDomainEditParamsFolder = "Inbox"
+)
+
+func (r SettingDomainEditParamsFolder) IsKnown() bool {
+	switch r {
+	case SettingDomainEditParamsFolderAllItems, SettingDomainEditParamsFolderInbox:
+		return true
+	}
+	return false
 }
 
 type SettingDomainEditResponseEnvelope struct {
@@ -378,5 +765,37 @@ func (r *SettingDomainEditResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 func (r settingDomainEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type SettingDomainGetParams struct {
+	// Account Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type SettingDomainGetResponseEnvelope struct {
+	Errors   []shared.ResponseInfo                `json:"errors,required"`
+	Messages []shared.ResponseInfo                `json:"messages,required"`
+	Result   SettingDomainGetResponse             `json:"result,required"`
+	Success  bool                                 `json:"success,required"`
+	JSON     settingDomainGetResponseEnvelopeJSON `json:"-"`
+}
+
+// settingDomainGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingDomainGetResponseEnvelope]
+type settingDomainGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingDomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r settingDomainGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }

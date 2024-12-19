@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // GatewayConfigurationService contains methods and other services that help with
@@ -431,7 +431,7 @@ func (r FipsSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// account settings.
+// Account settings
 type GatewayConfigurationSettings struct {
 	// Activity log settings.
 	ActivityLog ActivityLogSettings `json:"activity_log"`
@@ -455,6 +455,8 @@ type GatewayConfigurationSettings struct {
 	Fips FipsSettings `json:"fips"`
 	// Protocol Detection settings.
 	ProtocolDetection ProtocolDetection `json:"protocol_detection"`
+	// Sandbox settings.
+	Sandbox GatewayConfigurationSettingsSandbox `json:"sandbox"`
 	// TLS interception settings.
 	TLSDecrypt TLSSettings                      `json:"tls_decrypt"`
 	JSON       gatewayConfigurationSettingsJSON `json:"-"`
@@ -473,6 +475,7 @@ type gatewayConfigurationSettingsJSON struct {
 	ExtendedEmailMatching apijson.Field
 	Fips                  apijson.Field
 	ProtocolDetection     apijson.Field
+	Sandbox               apijson.Field
 	TLSDecrypt            apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
@@ -489,8 +492,9 @@ func (r gatewayConfigurationSettingsJSON) RawJSON() string {
 // Certificate settings for Gateway TLS interception. If not specified, the
 // Cloudflare Root CA will be used.
 type GatewayConfigurationSettingsCertificate struct {
-	// UUID of certificate to be used for interception. Certificate must be active on
-	// the edge. A nil UUID will indicate the Cloudflare Root CA should be used.
+	// UUID of certificate to be used for interception. Certificate must be available
+	// (previously called 'active') on the edge. A nil UUID will indicate the
+	// Cloudflare Root CA should be used.
 	ID   string                                      `json:"id,required"`
 	JSON gatewayConfigurationSettingsCertificateJSON `json:"-"`
 }
@@ -511,7 +515,49 @@ func (r gatewayConfigurationSettingsCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
-// account settings.
+// Sandbox settings.
+type GatewayConfigurationSettingsSandbox struct {
+	// Enable sandbox.
+	Enabled bool `json:"enabled"`
+	// Action to take when the file cannot be scanned.
+	FallbackAction GatewayConfigurationSettingsSandboxFallbackAction `json:"fallback_action"`
+	JSON           gatewayConfigurationSettingsSandboxJSON           `json:"-"`
+}
+
+// gatewayConfigurationSettingsSandboxJSON contains the JSON metadata for the
+// struct [GatewayConfigurationSettingsSandbox]
+type gatewayConfigurationSettingsSandboxJSON struct {
+	Enabled        apijson.Field
+	FallbackAction apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *GatewayConfigurationSettingsSandbox) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayConfigurationSettingsSandboxJSON) RawJSON() string {
+	return r.raw
+}
+
+// Action to take when the file cannot be scanned.
+type GatewayConfigurationSettingsSandboxFallbackAction string
+
+const (
+	GatewayConfigurationSettingsSandboxFallbackActionAllow GatewayConfigurationSettingsSandboxFallbackAction = "allow"
+	GatewayConfigurationSettingsSandboxFallbackActionBlock GatewayConfigurationSettingsSandboxFallbackAction = "block"
+)
+
+func (r GatewayConfigurationSettingsSandboxFallbackAction) IsKnown() bool {
+	switch r {
+	case GatewayConfigurationSettingsSandboxFallbackActionAllow, GatewayConfigurationSettingsSandboxFallbackActionBlock:
+		return true
+	}
+	return false
+}
+
+// Account settings
 type GatewayConfigurationSettingsParam struct {
 	// Activity log settings.
 	ActivityLog param.Field[ActivityLogSettingsParam] `json:"activity_log"`
@@ -535,6 +581,8 @@ type GatewayConfigurationSettingsParam struct {
 	Fips param.Field[FipsSettingsParam] `json:"fips"`
 	// Protocol Detection settings.
 	ProtocolDetection param.Field[ProtocolDetectionParam] `json:"protocol_detection"`
+	// Sandbox settings.
+	Sandbox param.Field[GatewayConfigurationSettingsSandboxParam] `json:"sandbox"`
 	// TLS interception settings.
 	TLSDecrypt param.Field[TLSSettingsParam] `json:"tls_decrypt"`
 }
@@ -546,12 +594,25 @@ func (r GatewayConfigurationSettingsParam) MarshalJSON() (data []byte, err error
 // Certificate settings for Gateway TLS interception. If not specified, the
 // Cloudflare Root CA will be used.
 type GatewayConfigurationSettingsCertificateParam struct {
-	// UUID of certificate to be used for interception. Certificate must be active on
-	// the edge. A nil UUID will indicate the Cloudflare Root CA should be used.
+	// UUID of certificate to be used for interception. Certificate must be available
+	// (previously called 'active') on the edge. A nil UUID will indicate the
+	// Cloudflare Root CA should be used.
 	ID param.Field[string] `json:"id,required"`
 }
 
 func (r GatewayConfigurationSettingsCertificateParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Sandbox settings.
+type GatewayConfigurationSettingsSandboxParam struct {
+	// Enable sandbox.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Action to take when the file cannot be scanned.
+	FallbackAction param.Field[GatewayConfigurationSettingsSandboxFallbackAction] `json:"fallback_action"`
+}
+
+func (r GatewayConfigurationSettingsSandboxParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -667,10 +728,10 @@ func (r TLSSettingsParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// account settings.
+// Account settings
 type GatewayConfigurationUpdateResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// account settings.
+	// Account settings
 	Settings  GatewayConfigurationSettings           `json:"settings"`
 	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationUpdateResponseJSON `json:"-"`
@@ -694,10 +755,10 @@ func (r gatewayConfigurationUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// account settings.
+// Account settings
 type GatewayConfigurationEditResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// account settings.
+	// Account settings
 	Settings  GatewayConfigurationSettings         `json:"settings"`
 	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationEditResponseJSON `json:"-"`
@@ -721,10 +782,10 @@ func (r gatewayConfigurationEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// account settings.
+// Account settings
 type GatewayConfigurationGetResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// account settings.
+	// Account settings
 	Settings  GatewayConfigurationSettings        `json:"settings"`
 	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
 	JSON      gatewayConfigurationGetResponseJSON `json:"-"`
@@ -750,7 +811,7 @@ func (r gatewayConfigurationGetResponseJSON) RawJSON() string {
 
 type GatewayConfigurationUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// account settings.
+	// Account settings
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
 
@@ -763,7 +824,7 @@ type GatewayConfigurationUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
-	// account settings.
+	// Account settings
 	Result GatewayConfigurationUpdateResponse             `json:"result"`
 	JSON   gatewayConfigurationUpdateResponseEnvelopeJSON `json:"-"`
 }
@@ -804,7 +865,7 @@ func (r GatewayConfigurationUpdateResponseEnvelopeSuccess) IsKnown() bool {
 
 type GatewayConfigurationEditParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
-	// account settings.
+	// Account settings
 	Settings param.Field[GatewayConfigurationSettingsParam] `json:"settings"`
 }
 
@@ -817,7 +878,7 @@ type GatewayConfigurationEditResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayConfigurationEditResponseEnvelopeSuccess `json:"success,required"`
-	// account settings.
+	// Account settings
 	Result GatewayConfigurationEditResponse             `json:"result"`
 	JSON   gatewayConfigurationEditResponseEnvelopeJSON `json:"-"`
 }
@@ -865,7 +926,7 @@ type GatewayConfigurationGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success GatewayConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
-	// account settings.
+	// Account settings
 	Result GatewayConfigurationGetResponse             `json:"result"`
 	JSON   gatewayConfigurationGetResponseEnvelopeJSON `json:"-"`
 }

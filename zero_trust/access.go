@@ -5,9 +5,9 @@ package zero_trust
 import (
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -19,6 +19,7 @@ import (
 // the [NewAccessService] method instead.
 type AccessService struct {
 	Options        []option.RequestOption
+	GatewayCA      *AccessGatewayCAService
 	Infrastructure *AccessInfrastructureService
 	Applications   *AccessApplicationService
 	Certificates   *AccessCertificateService
@@ -39,6 +40,7 @@ type AccessService struct {
 func NewAccessService(opts ...option.RequestOption) (r *AccessService) {
 	r = &AccessService{}
 	r.Options = opts
+	r.GatewayCA = NewAccessGatewayCAService(opts...)
 	r.Infrastructure = NewAccessInfrastructureService(opts...)
 	r.Applications = NewAccessApplicationService(opts...)
 	r.Certificates = NewAccessCertificateService(opts...)
@@ -120,73 +122,82 @@ func (r AccessDevicePostureRuleDevicePostureParam) MarshalJSON() (data []byte, e
 	return apijson.MarshalRoot(r)
 }
 
-// Matches a specific email.
+// Matches an Access group.
 type AccessRule struct {
-	// This field can have the runtime type of [EmailRuleEmail].
-	Email interface{} `json:"email,required"`
-	// This field can have the runtime type of [EmailListRuleEmailList].
-	EmailList interface{} `json:"email_list,required"`
-	// This field can have the runtime type of [DomainRuleEmailDomain].
-	EmailDomain interface{} `json:"email_domain,required"`
-	// This field can have the runtime type of [interface{}].
-	Everyone interface{} `json:"everyone,required"`
-	// This field can have the runtime type of [IPRuleIP].
-	IP interface{} `json:"ip,required"`
-	// This field can have the runtime type of [IPListRuleIPList].
-	IPList interface{} `json:"ip_list,required"`
-	// This field can have the runtime type of [interface{}].
-	Certificate interface{} `json:"certificate,required"`
-	// This field can have the runtime type of [GroupRuleGroup].
-	Group interface{} `json:"group,required"`
-	// This field can have the runtime type of [AzureGroupRuleAzureAD].
-	AzureAD interface{} `json:"azureAD,required"`
 	// This field can have the runtime type of
-	// [GitHubOrganizationRuleGitHubOrganization].
-	GitHubOrganization interface{} `json:"github-organization,required"`
-	// This field can have the runtime type of [GSuiteGroupRuleGSuite].
-	GSuite interface{} `json:"gsuite,required"`
-	// This field can have the runtime type of [OktaGroupRuleOkta].
-	Okta interface{} `json:"okta,required"`
-	// This field can have the runtime type of [SAMLGroupRuleSAML].
-	SAML interface{} `json:"saml,required"`
-	// This field can have the runtime type of [ServiceTokenRuleServiceToken].
-	ServiceToken interface{} `json:"service_token,required"`
-	// This field can have the runtime type of [interface{}].
-	AnyValidServiceToken interface{} `json:"any_valid_service_token,required"`
+	// [AnyValidServiceTokenRuleAnyValidServiceToken].
+	AnyValidServiceToken interface{} `json:"any_valid_service_token"`
+	// This field can have the runtime type of
+	// [AccessRuleAccessAuthContextRuleAuthContext].
+	AuthContext interface{} `json:"auth_context"`
+	// This field can have the runtime type of [AuthenticationMethodRuleAuthMethod].
+	AuthMethod interface{} `json:"auth_method"`
+	// This field can have the runtime type of [AzureGroupRuleAzureAD].
+	AzureAD interface{} `json:"azureAD"`
+	// This field can have the runtime type of [CertificateRuleCertificate].
+	Certificate interface{} `json:"certificate"`
+	// This field can have the runtime type of
+	// [AccessRuleAccessCommonNameRuleCommonName].
+	CommonName interface{} `json:"common_name"`
+	// This field can have the runtime type of [AccessDevicePostureRuleDevicePosture].
+	DevicePosture interface{} `json:"device_posture"`
+	// This field can have the runtime type of [EmailRuleEmail].
+	Email interface{} `json:"email"`
+	// This field can have the runtime type of [DomainRuleEmailDomain].
+	EmailDomain interface{} `json:"email_domain"`
+	// This field can have the runtime type of [EmailListRuleEmailList].
+	EmailList interface{} `json:"email_list"`
+	// This field can have the runtime type of [EveryoneRuleEveryone].
+	Everyone interface{} `json:"everyone"`
 	// This field can have the runtime type of
 	// [ExternalEvaluationRuleExternalEvaluation].
-	ExternalEvaluation interface{} `json:"external_evaluation,required"`
+	ExternalEvaluation interface{} `json:"external_evaluation"`
 	// This field can have the runtime type of [CountryRuleGeo].
-	Geo interface{} `json:"geo,required"`
-	// This field can have the runtime type of [AuthenticationMethodRuleAuthMethod].
-	AuthMethod interface{} `json:"auth_method,required"`
-	// This field can have the runtime type of [AccessDevicePostureRuleDevicePosture].
-	DevicePosture interface{}    `json:"device_posture,required"`
-	JSON          accessRuleJSON `json:"-"`
-	union         AccessRuleUnion
+	Geo interface{} `json:"geo"`
+	// This field can have the runtime type of
+	// [GitHubOrganizationRuleGitHubOrganization].
+	GitHubOrganization interface{} `json:"github-organization"`
+	// This field can have the runtime type of [GroupRuleGroup].
+	Group interface{} `json:"group"`
+	// This field can have the runtime type of [GSuiteGroupRuleGSuite].
+	GSuite interface{} `json:"gsuite"`
+	// This field can have the runtime type of [IPRuleIP].
+	IP interface{} `json:"ip"`
+	// This field can have the runtime type of [IPListRuleIPList].
+	IPList interface{} `json:"ip_list"`
+	// This field can have the runtime type of [OktaGroupRuleOkta].
+	Okta interface{} `json:"okta"`
+	// This field can have the runtime type of [SAMLGroupRuleSAML].
+	SAML interface{} `json:"saml"`
+	// This field can have the runtime type of [ServiceTokenRuleServiceToken].
+	ServiceToken interface{}    `json:"service_token"`
+	JSON         accessRuleJSON `json:"-"`
+	union        AccessRuleUnion
 }
 
 // accessRuleJSON contains the JSON metadata for the struct [AccessRule]
 type accessRuleJSON struct {
+	AnyValidServiceToken apijson.Field
+	AuthContext          apijson.Field
+	AuthMethod           apijson.Field
+	AzureAD              apijson.Field
+	Certificate          apijson.Field
+	CommonName           apijson.Field
+	DevicePosture        apijson.Field
 	Email                apijson.Field
-	EmailList            apijson.Field
 	EmailDomain          apijson.Field
+	EmailList            apijson.Field
 	Everyone             apijson.Field
+	ExternalEvaluation   apijson.Field
+	Geo                  apijson.Field
+	GitHubOrganization   apijson.Field
+	Group                apijson.Field
+	GSuite               apijson.Field
 	IP                   apijson.Field
 	IPList               apijson.Field
-	Certificate          apijson.Field
-	Group                apijson.Field
-	AzureAD              apijson.Field
-	GitHubOrganization   apijson.Field
-	GSuite               apijson.Field
 	Okta                 apijson.Field
 	SAML                 apijson.Field
 	ServiceToken         apijson.Field
-	AnyValidServiceToken apijson.Field
-	ExternalEvaluation   apijson.Field
-	Geo                  apijson.Field
-	AuthMethod           apijson.Field
-	DevicePosture        apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -207,30 +218,34 @@ func (r *AccessRule) UnmarshalJSON(data []byte) (err error) {
 // AsUnion returns a [AccessRuleUnion] interface which you can cast to the specific
 // types for more type safety.
 //
-// Possible runtime types of the union are [zero_trust.EmailRule],
-// [zero_trust.EmailListRule], [zero_trust.DomainRule], [zero_trust.EveryoneRule],
-// [zero_trust.IPRule], [zero_trust.IPListRule], [zero_trust.CertificateRule],
-// [zero_trust.GroupRule], [zero_trust.AzureGroupRule],
+// Possible runtime types of the union are [zero_trust.GroupRule],
+// [zero_trust.AnyValidServiceTokenRule],
+// [zero_trust.AccessRuleAccessAuthContextRule],
+// [zero_trust.AuthenticationMethodRule], [zero_trust.AzureGroupRule],
+// [zero_trust.CertificateRule], [zero_trust.AccessRuleAccessCommonNameRule],
+// [zero_trust.CountryRule], [zero_trust.AccessDevicePostureRule],
+// [zero_trust.DomainRule], [zero_trust.EmailListRule], [zero_trust.EmailRule],
+// [zero_trust.EveryoneRule], [zero_trust.ExternalEvaluationRule],
 // [zero_trust.GitHubOrganizationRule], [zero_trust.GSuiteGroupRule],
-// [zero_trust.OktaGroupRule], [zero_trust.SAMLGroupRule],
-// [zero_trust.ServiceTokenRule], [zero_trust.AnyValidServiceTokenRule],
-// [zero_trust.ExternalEvaluationRule], [zero_trust.CountryRule],
-// [zero_trust.AuthenticationMethodRule], [zero_trust.AccessDevicePostureRule].
+// [zero_trust.IPListRule], [zero_trust.IPRule], [zero_trust.OktaGroupRule],
+// [zero_trust.SAMLGroupRule], [zero_trust.ServiceTokenRule].
 func (r AccessRule) AsUnion() AccessRuleUnion {
 	return r.union
 }
 
-// Matches a specific email.
+// Matches an Access group.
 //
-// Union satisfied by [zero_trust.EmailRule], [zero_trust.EmailListRule],
-// [zero_trust.DomainRule], [zero_trust.EveryoneRule], [zero_trust.IPRule],
-// [zero_trust.IPListRule], [zero_trust.CertificateRule], [zero_trust.GroupRule],
-// [zero_trust.AzureGroupRule], [zero_trust.GitHubOrganizationRule],
-// [zero_trust.GSuiteGroupRule], [zero_trust.OktaGroupRule],
-// [zero_trust.SAMLGroupRule], [zero_trust.ServiceTokenRule],
-// [zero_trust.AnyValidServiceTokenRule], [zero_trust.ExternalEvaluationRule],
-// [zero_trust.CountryRule], [zero_trust.AuthenticationMethodRule] or
-// [zero_trust.AccessDevicePostureRule].
+// Union satisfied by [zero_trust.GroupRule],
+// [zero_trust.AnyValidServiceTokenRule],
+// [zero_trust.AccessRuleAccessAuthContextRule],
+// [zero_trust.AuthenticationMethodRule], [zero_trust.AzureGroupRule],
+// [zero_trust.CertificateRule], [zero_trust.AccessRuleAccessCommonNameRule],
+// [zero_trust.CountryRule], [zero_trust.AccessDevicePostureRule],
+// [zero_trust.DomainRule], [zero_trust.EmailListRule], [zero_trust.EmailRule],
+// [zero_trust.EveryoneRule], [zero_trust.ExternalEvaluationRule],
+// [zero_trust.GitHubOrganizationRule], [zero_trust.GSuiteGroupRule],
+// [zero_trust.IPListRule], [zero_trust.IPRule], [zero_trust.OktaGroupRule],
+// [zero_trust.SAMLGroupRule] or [zero_trust.ServiceTokenRule].
 type AccessRuleUnion interface {
 	implementsZeroTrustAccessRule()
 }
@@ -241,27 +256,23 @@ func init() {
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EmailRule{}),
+			Type:       reflect.TypeOf(GroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EmailListRule{}),
+			Type:       reflect.TypeOf(AnyValidServiceTokenRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DomainRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessAuthContextRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(EveryoneRule{}),
+			Type:       reflect.TypeOf(AuthenticationMethodRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(IPListRule{}),
+			Type:       reflect.TypeOf(AzureGroupRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -269,11 +280,35 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(GroupRule{}),
+			Type:       reflect.TypeOf(AccessRuleAccessCommonNameRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AzureGroupRule{}),
+			Type:       reflect.TypeOf(CountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AccessDevicePostureRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(DomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(EveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ExternalEvaluationRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -282,6 +317,14 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(GSuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(IPRule{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -295,50 +338,130 @@ func init() {
 			TypeFilter: gjson.JSON,
 			Type:       reflect.TypeOf(ServiceTokenRule{}),
 		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AnyValidServiceTokenRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(ExternalEvaluationRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(CountryRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AuthenticationMethodRule{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AccessDevicePostureRule{}),
-		},
 	)
 }
 
-// Matches a specific email.
+// Matches an Azure Authentication Context. Requires an Azure identity provider.
+type AccessRuleAccessAuthContextRule struct {
+	AuthContext AccessRuleAccessAuthContextRuleAuthContext `json:"auth_context,required"`
+	JSON        accessRuleAccessAuthContextRuleJSON        `json:"-"`
+}
+
+// accessRuleAccessAuthContextRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessAuthContextRule]
+type accessRuleAccessAuthContextRuleJSON struct {
+	AuthContext apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessAuthContextRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessAuthContextRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessAuthContextRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessAuthContextRuleAuthContext struct {
+	// The ID of an Authentication context.
+	ID string `json:"id,required"`
+	// The ACID of an Authentication context.
+	AcID string `json:"ac_id,required"`
+	// The ID of your Azure identity provider.
+	IdentityProviderID string                                         `json:"identity_provider_id,required"`
+	JSON               accessRuleAccessAuthContextRuleAuthContextJSON `json:"-"`
+}
+
+// accessRuleAccessAuthContextRuleAuthContextJSON contains the JSON metadata for
+// the struct [AccessRuleAccessAuthContextRuleAuthContext]
+type accessRuleAccessAuthContextRuleAuthContextJSON struct {
+	ID                 apijson.Field
+	AcID               apijson.Field
+	IdentityProviderID apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessAuthContextRuleAuthContext) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessAuthContextRuleAuthContextJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches a specific common name.
+type AccessRuleAccessCommonNameRule struct {
+	CommonName AccessRuleAccessCommonNameRuleCommonName `json:"common_name,required"`
+	JSON       accessRuleAccessCommonNameRuleJSON       `json:"-"`
+}
+
+// accessRuleAccessCommonNameRuleJSON contains the JSON metadata for the struct
+// [AccessRuleAccessCommonNameRule]
+type accessRuleAccessCommonNameRuleJSON struct {
+	CommonName  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessCommonNameRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessCommonNameRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r AccessRuleAccessCommonNameRule) implementsZeroTrustAccessRule() {}
+
+type AccessRuleAccessCommonNameRuleCommonName struct {
+	// The common name to match.
+	CommonName string                                       `json:"common_name,required"`
+	JSON       accessRuleAccessCommonNameRuleCommonNameJSON `json:"-"`
+}
+
+// accessRuleAccessCommonNameRuleCommonNameJSON contains the JSON metadata for the
+// struct [AccessRuleAccessCommonNameRuleCommonName]
+type accessRuleAccessCommonNameRuleCommonNameJSON struct {
+	CommonName  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessRuleAccessCommonNameRuleCommonName) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessRuleAccessCommonNameRuleCommonNameJSON) RawJSON() string {
+	return r.raw
+}
+
+// Matches an Access group.
 type AccessRuleParam struct {
-	Email                param.Field[interface{}] `json:"email,required"`
-	EmailList            param.Field[interface{}] `json:"email_list,required"`
-	EmailDomain          param.Field[interface{}] `json:"email_domain,required"`
-	Everyone             param.Field[interface{}] `json:"everyone,required"`
-	IP                   param.Field[interface{}] `json:"ip,required"`
-	IPList               param.Field[interface{}] `json:"ip_list,required"`
-	Certificate          param.Field[interface{}] `json:"certificate,required"`
-	Group                param.Field[interface{}] `json:"group,required"`
-	AzureAD              param.Field[interface{}] `json:"azureAD,required"`
-	GitHubOrganization   param.Field[interface{}] `json:"github-organization,required"`
-	GSuite               param.Field[interface{}] `json:"gsuite,required"`
-	Okta                 param.Field[interface{}] `json:"okta,required"`
-	SAML                 param.Field[interface{}] `json:"saml,required"`
-	ServiceToken         param.Field[interface{}] `json:"service_token,required"`
-	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
-	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation,required"`
-	Geo                  param.Field[interface{}] `json:"geo,required"`
-	AuthMethod           param.Field[interface{}] `json:"auth_method,required"`
-	DevicePosture        param.Field[interface{}] `json:"device_posture,required"`
+	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token"`
+	AuthContext          param.Field[interface{}] `json:"auth_context"`
+	AuthMethod           param.Field[interface{}] `json:"auth_method"`
+	AzureAD              param.Field[interface{}] `json:"azureAD"`
+	Certificate          param.Field[interface{}] `json:"certificate"`
+	CommonName           param.Field[interface{}] `json:"common_name"`
+	DevicePosture        param.Field[interface{}] `json:"device_posture"`
+	Email                param.Field[interface{}] `json:"email"`
+	EmailDomain          param.Field[interface{}] `json:"email_domain"`
+	EmailList            param.Field[interface{}] `json:"email_list"`
+	Everyone             param.Field[interface{}] `json:"everyone"`
+	ExternalEvaluation   param.Field[interface{}] `json:"external_evaluation"`
+	Geo                  param.Field[interface{}] `json:"geo"`
+	GitHubOrganization   param.Field[interface{}] `json:"github-organization"`
+	Group                param.Field[interface{}] `json:"group"`
+	GSuite               param.Field[interface{}] `json:"gsuite"`
+	IP                   param.Field[interface{}] `json:"ip"`
+	IPList               param.Field[interface{}] `json:"ip_list"`
+	Okta                 param.Field[interface{}] `json:"okta"`
+	SAML                 param.Field[interface{}] `json:"saml"`
+	ServiceToken         param.Field[interface{}] `json:"service_token"`
 }
 
 func (r AccessRuleParam) MarshalJSON() (data []byte, err error) {
@@ -347,28 +470,74 @@ func (r AccessRuleParam) MarshalJSON() (data []byte, err error) {
 
 func (r AccessRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
 
-// Matches a specific email.
+// Matches an Access group.
 //
-// Satisfied by [zero_trust.EmailRuleParam], [zero_trust.EmailListRuleParam],
-// [zero_trust.DomainRuleParam], [zero_trust.EveryoneRuleParam],
-// [zero_trust.IPRuleParam], [zero_trust.IPListRuleParam],
-// [zero_trust.CertificateRuleParam], [zero_trust.GroupRuleParam],
-// [zero_trust.AzureGroupRuleParam], [zero_trust.GitHubOrganizationRuleParam],
-// [zero_trust.GSuiteGroupRuleParam], [zero_trust.OktaGroupRuleParam],
-// [zero_trust.SAMLGroupRuleParam], [zero_trust.ServiceTokenRuleParam],
+// Satisfied by [zero_trust.GroupRuleParam],
 // [zero_trust.AnyValidServiceTokenRuleParam],
-// [zero_trust.ExternalEvaluationRuleParam], [zero_trust.CountryRuleParam],
-// [zero_trust.AuthenticationMethodRuleParam],
-// [zero_trust.AccessDevicePostureRuleParam], [AccessRuleParam].
+// [zero_trust.AccessRuleAccessAuthContextRuleParam],
+// [zero_trust.AuthenticationMethodRuleParam], [zero_trust.AzureGroupRuleParam],
+// [zero_trust.CertificateRuleParam],
+// [zero_trust.AccessRuleAccessCommonNameRuleParam], [zero_trust.CountryRuleParam],
+// [zero_trust.AccessDevicePostureRuleParam], [zero_trust.DomainRuleParam],
+// [zero_trust.EmailListRuleParam], [zero_trust.EmailRuleParam],
+// [zero_trust.EveryoneRuleParam], [zero_trust.ExternalEvaluationRuleParam],
+// [zero_trust.GitHubOrganizationRuleParam], [zero_trust.GSuiteGroupRuleParam],
+// [zero_trust.IPListRuleParam], [zero_trust.IPRuleParam],
+// [zero_trust.OktaGroupRuleParam], [zero_trust.SAMLGroupRuleParam],
+// [zero_trust.ServiceTokenRuleParam], [AccessRuleParam].
 type AccessRuleUnionParam interface {
 	implementsZeroTrustAccessRuleUnionParam()
+}
+
+// Matches an Azure Authentication Context. Requires an Azure identity provider.
+type AccessRuleAccessAuthContextRuleParam struct {
+	AuthContext param.Field[AccessRuleAccessAuthContextRuleAuthContextParam] `json:"auth_context,required"`
+}
+
+func (r AccessRuleAccessAuthContextRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessAuthContextRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessAuthContextRuleAuthContextParam struct {
+	// The ID of an Authentication context.
+	ID param.Field[string] `json:"id,required"`
+	// The ACID of an Authentication context.
+	AcID param.Field[string] `json:"ac_id,required"`
+	// The ID of your Azure identity provider.
+	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
+}
+
+func (r AccessRuleAccessAuthContextRuleAuthContextParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Matches a specific common name.
+type AccessRuleAccessCommonNameRuleParam struct {
+	CommonName param.Field[AccessRuleAccessCommonNameRuleCommonNameParam] `json:"common_name,required"`
+}
+
+func (r AccessRuleAccessCommonNameRuleParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessRuleAccessCommonNameRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type AccessRuleAccessCommonNameRuleCommonNameParam struct {
+	// The common name to match.
+	CommonName param.Field[string] `json:"common_name,required"`
+}
+
+func (r AccessRuleAccessCommonNameRuleCommonNameParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // Matches any valid Access Service Token
 type AnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
-	AnyValidServiceToken interface{}                  `json:"any_valid_service_token,required"`
-	JSON                 anyValidServiceTokenRuleJSON `json:"-"`
+	AnyValidServiceToken AnyValidServiceTokenRuleAnyValidServiceToken `json:"any_valid_service_token,required"`
+	JSON                 anyValidServiceTokenRuleJSON                 `json:"-"`
 }
 
 // anyValidServiceTokenRuleJSON contains the JSON metadata for the struct
@@ -389,10 +558,30 @@ func (r anyValidServiceTokenRuleJSON) RawJSON() string {
 
 func (r AnyValidServiceTokenRule) implementsZeroTrustAccessRule() {}
 
+// An empty object which matches on all service tokens.
+type AnyValidServiceTokenRuleAnyValidServiceToken struct {
+	JSON anyValidServiceTokenRuleAnyValidServiceTokenJSON `json:"-"`
+}
+
+// anyValidServiceTokenRuleAnyValidServiceTokenJSON contains the JSON metadata for
+// the struct [AnyValidServiceTokenRuleAnyValidServiceToken]
+type anyValidServiceTokenRuleAnyValidServiceTokenJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AnyValidServiceTokenRuleAnyValidServiceToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r anyValidServiceTokenRuleAnyValidServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type AnyValidServiceTokenRuleParam struct {
 	// An empty object which matches on all service tokens.
-	AnyValidServiceToken param.Field[interface{}] `json:"any_valid_service_token,required"`
+	AnyValidServiceToken param.Field[AnyValidServiceTokenRuleAnyValidServiceTokenParam] `json:"any_valid_service_token,required"`
 }
 
 func (r AnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
@@ -400,6 +589,14 @@ func (r AnyValidServiceTokenRuleParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r AnyValidServiceTokenRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+// An empty object which matches on all service tokens.
+type AnyValidServiceTokenRuleAnyValidServiceTokenParam struct {
+}
+
+func (r AnyValidServiceTokenRuleAnyValidServiceTokenParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Enforce different MFA options
 type AuthenticationMethodRule struct {
@@ -541,8 +738,8 @@ func (r AzureGroupRuleAzureADParam) MarshalJSON() (data []byte, err error) {
 
 // Matches any valid client certificate.
 type CertificateRule struct {
-	Certificate interface{}         `json:"certificate,required"`
-	JSON        certificateRuleJSON `json:"-"`
+	Certificate CertificateRuleCertificate `json:"certificate,required"`
+	JSON        certificateRuleJSON        `json:"-"`
 }
 
 // certificateRuleJSON contains the JSON metadata for the struct [CertificateRule]
@@ -562,9 +759,28 @@ func (r certificateRuleJSON) RawJSON() string {
 
 func (r CertificateRule) implementsZeroTrustAccessRule() {}
 
+type CertificateRuleCertificate struct {
+	JSON certificateRuleCertificateJSON `json:"-"`
+}
+
+// certificateRuleCertificateJSON contains the JSON metadata for the struct
+// [CertificateRuleCertificate]
+type certificateRuleCertificateJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateRuleCertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateRuleCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type CertificateRuleParam struct {
-	Certificate param.Field[interface{}] `json:"certificate,required"`
+	Certificate param.Field[CertificateRuleCertificateParam] `json:"certificate,required"`
 }
 
 func (r CertificateRuleParam) MarshalJSON() (data []byte, err error) {
@@ -572,6 +788,13 @@ func (r CertificateRuleParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r CertificateRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+type CertificateRuleCertificateParam struct {
+}
+
+func (r CertificateRuleCertificateParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Matches a specific country
 type CountryRule struct {
@@ -834,8 +1057,8 @@ func (r EmailRuleEmailParam) MarshalJSON() (data []byte, err error) {
 // Matches everyone.
 type EveryoneRule struct {
 	// An empty object which matches on all users.
-	Everyone interface{}      `json:"everyone,required"`
-	JSON     everyoneRuleJSON `json:"-"`
+	Everyone EveryoneRuleEveryone `json:"everyone,required"`
+	JSON     everyoneRuleJSON     `json:"-"`
 }
 
 // everyoneRuleJSON contains the JSON metadata for the struct [EveryoneRule]
@@ -855,10 +1078,30 @@ func (r everyoneRuleJSON) RawJSON() string {
 
 func (r EveryoneRule) implementsZeroTrustAccessRule() {}
 
+// An empty object which matches on all users.
+type EveryoneRuleEveryone struct {
+	JSON everyoneRuleEveryoneJSON `json:"-"`
+}
+
+// everyoneRuleEveryoneJSON contains the JSON metadata for the struct
+// [EveryoneRuleEveryone]
+type everyoneRuleEveryoneJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EveryoneRuleEveryone) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r everyoneRuleEveryoneJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type EveryoneRuleParam struct {
 	// An empty object which matches on all users.
-	Everyone param.Field[interface{}] `json:"everyone,required"`
+	Everyone param.Field[EveryoneRuleEveryoneParam] `json:"everyone,required"`
 }
 
 func (r EveryoneRuleParam) MarshalJSON() (data []byte, err error) {
@@ -866,6 +1109,14 @@ func (r EveryoneRuleParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r EveryoneRuleParam) implementsZeroTrustAccessRuleUnionParam() {}
+
+// An empty object which matches on all users.
+type EveryoneRuleEveryoneParam struct {
+}
+
+func (r EveryoneRuleEveryoneParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
 
 // Create Allow or Block policies which evaluate the user based on custom criteria.
 type ExternalEvaluationRule struct {
@@ -968,7 +1219,9 @@ type GitHubOrganizationRuleGitHubOrganization struct {
 	// The ID of your Github identity provider.
 	IdentityProviderID string `json:"identity_provider_id,required"`
 	// The name of the organization.
-	Name string                                       `json:"name,required"`
+	Name string `json:"name,required"`
+	// The name of the team
+	Team string                                       `json:"team"`
 	JSON githubOrganizationRuleGitHubOrganizationJSON `json:"-"`
 }
 
@@ -977,6 +1230,7 @@ type GitHubOrganizationRuleGitHubOrganization struct {
 type githubOrganizationRuleGitHubOrganizationJSON struct {
 	IdentityProviderID apijson.Field
 	Name               apijson.Field
+	Team               apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -1005,6 +1259,8 @@ type GitHubOrganizationRuleGitHubOrganizationParam struct {
 	IdentityProviderID param.Field[string] `json:"identity_provider_id,required"`
 	// The name of the organization.
 	Name param.Field[string] `json:"name,required"`
+	// The name of the team
+	Team param.Field[string] `json:"team"`
 }
 
 func (r GitHubOrganizationRuleGitHubOrganizationParam) MarshalJSON() (data []byte, err error) {
