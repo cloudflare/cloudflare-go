@@ -92,6 +92,7 @@ func TestJobUpdateWithOptionalParams(t *testing.T) {
 			MaxUploadBytes:           cloudflare.F(int64(5000000)),
 			MaxUploadIntervalSeconds: cloudflare.F(int64(30)),
 			MaxUploadRecords:         cloudflare.F(int64(1000)),
+			Name:                     cloudflare.F("example.com"),
 			OutputOptions: cloudflare.F(logpush.OutputOptionsParam{
 				BatchPrefix:     cloudflare.F("batch_prefix"),
 				BatchSuffix:     cloudflare.F("batch_suffix"),
