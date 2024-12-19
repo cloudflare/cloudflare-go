@@ -404,7 +404,7 @@ func (api *API) CreateListItem(ctx context.Context, rc *ResourceContainer, param
 		return []ListItem{}, err
 	}
 
-	return api.ListListItems(ctx, rc, ListListItemsParams{ID: params.ID})
+	return api.ListListItems(ctx, rc, ListListItemsParams{ID: params.ID, PerPage: 500})
 }
 
 // CreateListItemsAsync bulk creates multiple List Items asynchronously. Users
@@ -448,7 +448,7 @@ func (api *API) CreateListItems(ctx context.Context, rc *ResourceContainer, para
 		return []ListItem{}, err
 	}
 
-	return api.ListListItems(ctx, rc, ListListItemsParams{ID: params.ID})
+	return api.ListListItems(ctx, rc, ListListItemsParams{ID: params.ID, PerPage: 500})
 }
 
 // ReplaceListItemsAsync replaces all List Items asynchronously. Users have to
@@ -493,7 +493,7 @@ func (api *API) ReplaceListItems(ctx context.Context, rc *ResourceContainer, par
 		return []ListItem{}, err
 	}
 
-	return api.ListListItems(ctx, rc, ListListItemsParams{ID: params.ID})
+	return api.ListListItems(ctx, rc, ListListItemsParams{ID: params.ID, PerPage: 500})
 }
 
 // DeleteListItemsAsync removes specific Items of a List by their ID
@@ -537,7 +537,7 @@ func (api *API) DeleteListItems(ctx context.Context, rc *ResourceContainer, para
 		return []ListItem{}, err
 	}
 
-	return api.ListListItems(ctx, AccountIdentifier(rc.Identifier), ListListItemsParams{ID: params.ID})
+	return api.ListListItems(ctx, AccountIdentifier(rc.Identifier), ListListItemsParams{ID: params.ID, PerPage: 500})
 }
 
 // GetListItem returns a single List Item.
