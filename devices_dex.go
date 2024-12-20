@@ -58,7 +58,7 @@ type UpdateDeviceDexTestParams struct {
 
 // ListDexTests returns all Device Dex Tests for a given account.
 //
-// API reference : https://developers.cloudflare.com/api/operations/device-dex-test-details
+// API reference : https://developers.cloudflare.com/api/resources/zero_trust/subresources/devices/subresources/dex_tests/methods/list/
 func (api *API) ListDexTests(ctx context.Context, rc *ResourceContainer, params ListDeviceDexTestParams) (DeviceDexTests, error) {
 	if rc.Level != AccountRouteLevel {
 		return DeviceDexTests{}, ErrRequiredAccountLevelResourceContainer
@@ -82,7 +82,7 @@ func (api *API) ListDexTests(ctx context.Context, rc *ResourceContainer, params 
 
 // CreateDeviceDexTest created a new Device Dex Test
 //
-// API reference: https://developers.cloudflare.com/api/operations/device-dex-test-create-device-dex-test
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/devices/subresources/dex_tests/methods/create/
 func (api *API) CreateDeviceDexTest(ctx context.Context, rc *ResourceContainer, params CreateDeviceDexTestParams) (DeviceDexTest, error) {
 	if rc.Level != AccountRouteLevel {
 		return DeviceDexTest{}, ErrRequiredAccountLevelResourceContainer
@@ -105,7 +105,7 @@ func (api *API) CreateDeviceDexTest(ctx context.Context, rc *ResourceContainer, 
 
 // UpdateDeviceDexTest Updates a Device Dex Test.
 //
-// API reference: https://developers.cloudflare.com/api/operations/device-dex-test-update-device-dex-test
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/devices/subresources/dex_tests/methods/update/
 func (api *API) UpdateDeviceDexTest(ctx context.Context, rc *ResourceContainer, params UpdateDeviceDexTestParams) (DeviceDexTest, error) {
 	if rc.Level != AccountRouteLevel {
 		return DeviceDexTest{}, ErrRequiredAccountLevelResourceContainer
@@ -129,7 +129,7 @@ func (api *API) UpdateDeviceDexTest(ctx context.Context, rc *ResourceContainer, 
 
 // GetDeviceDexTest gets a single Device Dex Test.
 //
-// API reference: https://developers.cloudflare.com/api/operations/device-dex-test-get-device-dex-test
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/devices/subresources/dex_tests/methods/get/
 func (api *API) GetDeviceDexTest(ctx context.Context, rc *ResourceContainer, testID string) (DeviceDexTest, error) {
 	if rc.Level != AccountRouteLevel {
 		return DeviceDexTest{}, ErrRequiredAccountLevelResourceContainer
@@ -152,7 +152,7 @@ func (api *API) GetDeviceDexTest(ctx context.Context, rc *ResourceContainer, tes
 
 // DeleteDexTest deletes a Device Dex Test.
 //
-// API reference: https://developers.cloudflare.com/api/operations/device-dex-test-delete-device-dex-test
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/devices/subresources/dex_tests/methods/delete/
 func (api *API) DeleteDexTest(ctx context.Context, rc *ResourceContainer, testID string) (DeviceDexTests, error) {
 	if rc.Level != AccountRouteLevel {
 		return DeviceDexTests{}, ErrRequiredAccountLevelResourceContainer

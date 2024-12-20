@@ -46,7 +46,7 @@ type ListAccountRolesParams struct {
 
 // ListAccountRoles returns all roles of an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/account-roles-list-roles
+// API reference: https://developers.cloudflare.com/api/resources/accounts/subresources/roles/methods/list/
 func (api *API) ListAccountRoles(ctx context.Context, rc *ResourceContainer, params ListAccountRolesParams) ([]AccountRole, error) {
 	if rc.Identifier == "" {
 		return []AccountRole{}, ErrMissingAccountID
@@ -89,7 +89,7 @@ func (api *API) ListAccountRoles(ctx context.Context, rc *ResourceContainer, par
 
 // GetAccountRole returns the details of a single account role.
 //
-// API reference: https://developers.cloudflare.com/api/operations/account-roles-role-details
+// API reference: https://developers.cloudflare.com/api/resources/accounts/subresources/roles/methods/get/
 func (api *API) GetAccountRole(ctx context.Context, rc *ResourceContainer, roleID string) (AccountRole, error) {
 	if rc.Identifier == "" {
 		return AccountRole{}, ErrMissingAccountID

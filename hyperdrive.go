@@ -76,7 +76,7 @@ type ListHyperdriveConfigParams struct{}
 
 // ListHyperdriveConfigs returns the Hyperdrive configs owned by an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/list-hyperdrive
+// API reference: https://developers.cloudflare.com/api/resources/hyperdrive/subresources/configs/methods/list/
 func (api *API) ListHyperdriveConfigs(ctx context.Context, rc *ResourceContainer, params ListHyperdriveConfigParams) ([]HyperdriveConfig, error) {
 	if rc.Identifier == "" {
 		return []HyperdriveConfig{}, ErrMissingAccountID
@@ -100,7 +100,7 @@ func (api *API) ListHyperdriveConfigs(ctx context.Context, rc *ResourceContainer
 
 // CreateHyperdriveConfig creates a new Hyperdrive config.
 //
-// API reference: https://developers.cloudflare.com/api/operations/create-hyperdrive
+// API reference: https://developers.cloudflare.com/api/resources/hyperdrive/subresources/configs/methods/create/
 func (api *API) CreateHyperdriveConfig(ctx context.Context, rc *ResourceContainer, params CreateHyperdriveConfigParams) (HyperdriveConfig, error) {
 	if rc.Identifier == "" {
 		return HyperdriveConfig{}, ErrMissingAccountID
@@ -128,7 +128,7 @@ func (api *API) CreateHyperdriveConfig(ctx context.Context, rc *ResourceContaine
 
 // DeleteHyperdriveConfig deletes a Hyperdrive config.
 //
-// API reference: https://developers.cloudflare.com/api/operations/delete-hyperdrive
+// API reference: https://developers.cloudflare.com/api/resources/hyperdrive/subresources/configs/methods/delete/
 func (api *API) DeleteHyperdriveConfig(ctx context.Context, rc *ResourceContainer, hyperdriveID string) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID
@@ -148,7 +148,7 @@ func (api *API) DeleteHyperdriveConfig(ctx context.Context, rc *ResourceContaine
 
 // GetHyperdriveConfig returns a single Hyperdrive config based on the ID.
 //
-// API reference: https://developers.cloudflare.com/api/operations/get-hyperdrive
+// API reference: https://developers.cloudflare.com/api/resources/hyperdrive/subresources/configs/methods/get/
 func (api *API) GetHyperdriveConfig(ctx context.Context, rc *ResourceContainer, hyperdriveID string) (HyperdriveConfig, error) {
 	if rc.Identifier == "" {
 		return HyperdriveConfig{}, ErrMissingAccountID
@@ -175,7 +175,7 @@ func (api *API) GetHyperdriveConfig(ctx context.Context, rc *ResourceContainer, 
 
 // UpdateHyperdriveConfig updates a Hyperdrive config.
 //
-// API reference: https://developers.cloudflare.com/api/operations/update-hyperdrive
+// API reference: https://developers.cloudflare.com/api/resources/hyperdrive/subresources/configs/methods/update/
 func (api *API) UpdateHyperdriveConfig(ctx context.Context, rc *ResourceContainer, params UpdateHyperdriveConfigParams) (HyperdriveConfig, error) {
 	if rc.Identifier == "" {
 		return HyperdriveConfig{}, ErrMissingAccountID

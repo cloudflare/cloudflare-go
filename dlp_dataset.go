@@ -43,7 +43,7 @@ type DLPDatasetListResponse struct {
 
 // ListDLPDatasets returns all the DLP datasets associated with an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-read-all
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/dlp/subresources/datasets/methods/list/
 func (api *API) ListDLPDatasets(ctx context.Context, rc *ResourceContainer, params ListDLPDatasetsParams) ([]DLPDataset, error) {
 	if rc.Identifier == "" {
 		return nil, nil
@@ -72,7 +72,7 @@ type DLPDatasetGetResponse struct {
 
 // GetDLPDataset returns a DLP dataset based on the dataset ID.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-read
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/dlp/subresources/datasets/methods/get/
 func (api *API) GetDLPDataset(ctx context.Context, rc *ResourceContainer, datasetID string) (DLPDataset, error) {
 	if rc.Identifier == "" {
 		return DLPDataset{}, nil
@@ -118,7 +118,7 @@ type CreateDLPDatasetResponse struct {
 
 // CreateDLPDataset creates a DLP dataset.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-create
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/dlp/subresources/datasets/methods/create/
 func (api *API) CreateDLPDataset(ctx context.Context, rc *ResourceContainer, params CreateDLPDatasetParams) (CreateDLPDatasetResult, error) {
 	if rc.Identifier == "" {
 		return CreateDLPDatasetResult{}, nil
@@ -142,7 +142,7 @@ func (api *API) CreateDLPDataset(ctx context.Context, rc *ResourceContainer, par
 
 // DeleteDLPDataset deletes a DLP dataset.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-delete
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/dlp/subresources/datasets/methods/delete/
 func (api *API) DeleteDLPDataset(ctx context.Context, rc *ResourceContainer, datasetID string) error {
 	if rc.Identifier == "" {
 		return ErrMissingResourceIdentifier
@@ -170,7 +170,7 @@ type UpdateDLPDatasetResponse struct {
 
 // UpdateDLPDataset updates the details of a DLP dataset.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-update
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/dlp/subresources/datasets/methods/update/
 func (api *API) UpdateDLPDataset(ctx context.Context, rc *ResourceContainer, params UpdateDLPDatasetParams) (DLPDataset, error) {
 	if rc.Identifier == "" {
 		return DLPDataset{}, nil
@@ -212,7 +212,7 @@ type CreateDLPDatasetUploadParams struct {
 
 // CreateDLPDatasetUpload creates a new upload version for the specified DLP dataset.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-create-version
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/dlp/subresources/datasets/methods/create/-version
 func (api *API) CreateDLPDatasetUpload(ctx context.Context, rc *ResourceContainer, params CreateDLPDatasetUploadParams) (CreateDLPDatasetUploadResult, error) {
 	if rc.Identifier == "" {
 		return CreateDLPDatasetUploadResult{}, nil
@@ -251,7 +251,7 @@ type UploadDLPDatasetVersionResponse struct {
 
 // UploadDLPDatasetVersion uploads a new version of the specified DLP dataset.
 //
-// API reference: https://developers.cloudflare.com/api/operations/dlp-datasets-upload-version
+// API reference: https://developers.cloudflare.com/api/resources/zero_trust/subresources/dlp/subresources/datasets/subresources/upload/methods/edit/
 func (api *API) UploadDLPDatasetVersion(ctx context.Context, rc *ResourceContainer, params UploadDLPDatasetVersionParams) (DLPDataset, error) {
 	if rc.Identifier == "" {
 		return DLPDataset{}, nil

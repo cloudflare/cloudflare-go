@@ -32,7 +32,7 @@ type WorkersAccountSettingsResponse struct {
 
 // CreateWorkersAccountSettings sets the account settings for Workers.
 //
-// API reference: https://developers.cloudflare.com/api/operations/worker-account-settings-create-worker-account-settings
+// API reference: https://developers.cloudflare.com/api/resources/workers/subresources/account_settings/methods/update/
 func (api *API) CreateWorkersAccountSettings(ctx context.Context, rc *ResourceContainer, params CreateWorkersAccountSettingsParameters) (WorkersAccountSettings, error) {
 	if rc.Identifier == "" {
 		return WorkersAccountSettings{}, ErrMissingAccountID
@@ -58,7 +58,7 @@ func (api *API) CreateWorkersAccountSettings(ctx context.Context, rc *ResourceCo
 
 // WorkersAccountSettings returns the current account settings for Workers.
 //
-// API reference: https://developers.cloudflare.com/api/operations/worker-account-settings-fetch-worker-account-settings
+// API reference: https://developers.cloudflare.com/api/resources/workers/subresources/account_settings/methods/get/
 func (api *API) WorkersAccountSettings(ctx context.Context, rc *ResourceContainer, params WorkersAccountSettingsParameters) (WorkersAccountSettings, error) {
 	if rc.Identifier == "" {
 		return WorkersAccountSettings{}, ErrMissingAccountID

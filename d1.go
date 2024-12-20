@@ -71,7 +71,7 @@ type QueryD1Response struct {
 
 // ListD1Databases returns all databases for an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/cloudflare-d1-list-databases
+// API reference: https://developers.cloudflare.com/api/resources/d1/subresources/database/methods/list/
 func (api *API) ListD1Databases(ctx context.Context, rc *ResourceContainer, params ListD1DatabasesParams) ([]D1Database, *ResultInfo, error) {
 	if rc.Identifier == "" {
 		return []D1Database{}, &ResultInfo{}, ErrMissingAccountID
@@ -113,7 +113,7 @@ func (api *API) ListD1Databases(ctx context.Context, rc *ResourceContainer, para
 
 // CreateD1Database creates a new database for an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/cloudflare-d1-create-database
+// API reference: https://developers.cloudflare.com/api/resources/d1/subresources/database/methods/create/
 func (api *API) CreateD1Database(ctx context.Context, rc *ResourceContainer, params CreateD1DatabaseParams) (D1Database, error) {
 	if rc.Identifier == "" {
 		return D1Database{}, ErrMissingAccountID
@@ -135,7 +135,7 @@ func (api *API) CreateD1Database(ctx context.Context, rc *ResourceContainer, par
 
 // DeleteD1Database deletes a database for an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/cloudflare-d1-delete-database
+// API reference: https://developers.cloudflare.com/api/resources/d1/subresources/database/methods/delete/
 func (api *API) DeleteD1Database(ctx context.Context, rc *ResourceContainer, databaseID string) error {
 	if rc.Identifier == "" {
 		return ErrMissingAccountID
@@ -153,7 +153,7 @@ func (api *API) DeleteD1Database(ctx context.Context, rc *ResourceContainer, dat
 
 // GetD1Database returns a database for an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/cloudflare-d1-get-database
+// API reference: https://developers.cloudflare.com/api/resources/d1/subresources/database/methods/get/
 func (api *API) GetD1Database(ctx context.Context, rc *ResourceContainer, databaseID string) (D1Database, error) {
 	if rc.Identifier == "" {
 		return D1Database{}, ErrMissingAccountID
@@ -175,7 +175,7 @@ func (api *API) GetD1Database(ctx context.Context, rc *ResourceContainer, databa
 
 // QueryD1Database queries a database for an account.
 //
-// API reference: https://developers.cloudflare.com/api/operations/cloudflare-d1-query-database
+// API reference: https://developers.cloudflare.com/api/resources/d1/subresources/database/methods/query/
 func (api *API) QueryD1Database(ctx context.Context, rc *ResourceContainer, params QueryD1DatabaseParams) ([]D1Result, error) {
 	if rc.Identifier == "" {
 		return []D1Result{}, ErrMissingAccountID

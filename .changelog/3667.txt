@@ -1,0 +1,7 @@
+```release-note:enhancement
+access: Add `DomainType` field to Access applications.
+```
+
+```release-note:breaking-change
+access: Remove the deprecated `SelfHostedDomains` field from Access applications. Use `Destinations` instead.
+```

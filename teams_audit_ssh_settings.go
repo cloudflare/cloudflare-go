@@ -11,10 +11,11 @@ import (
 
 // TeamsList represents a Teams List.
 type AuditSSHSettings struct {
-	PublicKey string     `json:"public_key"`
-	SeedUUID  string     `json:"seed_id"`
-	CreatedAt *time.Time `json:"created_at"`
-	UpdatedAt *time.Time `json:"updated_at"`
+	PublicKey        string     `json:"public_key"`
+	SeedUUID         string     `json:"seed_id"`
+	IsPublicKeyValid bool       `json:"is_public_key_valid,omitempty"`
+	CreatedAt        *time.Time `json:"created_at"`
+	UpdatedAt        *time.Time `json:"updated_at"`
 }
 
 type AuditSSHSettingsResponse struct {

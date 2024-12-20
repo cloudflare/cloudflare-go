@@ -65,7 +65,7 @@ type LeakedCredentialCheckUpdateDetectionResponse struct {
 
 // LeakCredentialCheckGetStatus returns whether Leaked credential check is enabled or not. It is false by default.
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-product-api-leaked-credentials-get-status
+// API reference: https://developers.cloudflare.com/api/resources/leaked_credential_checks/methods/get/
 func (api *API) LeakedCredentialCheckGetStatus(ctx context.Context, rc *ResourceContainer, params LeakedCredentialCheckGetStatusParams) (LeakedCredentialCheckStatus, error) {
 	if rc.Identifier == "" {
 		return LeakedCredentialCheckStatus{}, ErrMissingZoneID
@@ -85,7 +85,7 @@ func (api *API) LeakedCredentialCheckGetStatus(ctx context.Context, rc *Resource
 
 // LeakedCredentialCheckSetStatus enable or disable the Leak Credential Check. Returns the status.
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-product-api-leaked-credentials-set-status
+// API reference: https://developers.cloudflare.com/api/resources/leaked_credential_checks/methods/create/
 func (api *API) LeakedCredentialCheckSetStatus(ctx context.Context, rc *ResourceContainer, params LeakCredentialCheckSetStatusParams) (LeakedCredentialCheckStatus, error) {
 	if rc.Identifier == "" {
 		return LeakedCredentialCheckStatus{}, ErrMissingZoneID
@@ -105,7 +105,7 @@ func (api *API) LeakedCredentialCheckSetStatus(ctx context.Context, rc *Resource
 
 // LeakedCredentialCheckListDetections lists user-defined detection patterns for Leaked Credential Checks.
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-product-api-leaked-credentials-list-detections
+// API reference: https://developers.cloudflare.com/api/resources/leaked_credential_checks/subresources/detections/methods/list/
 func (api *API) LeakedCredentialCheckListDetections(ctx context.Context, rc *ResourceContainer, params LeakedCredentialCheckListDetectionsParams) ([]LeakedCredentialCheckDetectionEntry, error) {
 	if rc.Identifier == "" {
 		return []LeakedCredentialCheckDetectionEntry{}, ErrMissingZoneID
@@ -125,7 +125,7 @@ func (api *API) LeakedCredentialCheckListDetections(ctx context.Context, rc *Res
 
 // LeakedCredentialCheckCreateDetection creates user-defined detection pattern for Leaked Credential Checks
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-product-api-leaked-credentials-create-detection
+// API reference: https://developers.cloudflare.com/api/resources/leaked_credential_checks/subresources/detections/methods/create/
 func (api *API) LeakedCredentialCheckCreateDetection(ctx context.Context, rc *ResourceContainer, params LeakedCredentialCheckCreateDetectionParams) (LeakedCredentialCheckDetectionEntry, error) {
 	if rc.Identifier == "" {
 		return LeakedCredentialCheckDetectionEntry{}, ErrMissingZoneID
@@ -145,7 +145,7 @@ func (api *API) LeakedCredentialCheckCreateDetection(ctx context.Context, rc *Re
 
 // LeakedCredentialCheckDeleteDetection removes user-defined detection pattern for Leaked Credential Checks
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-product-api-leaked-credentials-delete-detection
+// API reference: https://developers.cloudflare.com/api/resources/leaked_credential_checks/subresources/detections/methods/delete/
 func (api *API) LeakedCredentialCheckDeleteDetection(ctx context.Context, rc *ResourceContainer, params LeakedCredentialCheckDeleteDetectionParams) (LeakedCredentialCheckDeleteDetectionResponse, error) {
 	if rc.Identifier == "" {
 		return LeakedCredentialCheckDeleteDetectionResponse{}, ErrMissingZoneID
@@ -168,7 +168,7 @@ func (api *API) LeakedCredentialCheckDeleteDetection(ctx context.Context, rc *Re
 
 // LeakedCredentialCheckUpdateDetection updates user-defined detection pattern for Leaked Credential Checks. Returns updated detection.
 //
-// API reference: https://developers.cloudflare.com/api/operations/waf-product-api-leaked-credentials-update-detection
+// API reference: https://developers.cloudflare.com/api/resources/leaked_credential_checks/subresources/detections/methods/update/
 func (api *API) LeakedCredentialCheckUpdateDetection(ctx context.Context, rc *ResourceContainer, params LeakedCredentialCheckUpdateDetectionParams) (LeakedCredentialCheckDetectionEntry, error) {
 	if rc.Identifier == "" {
 		return LeakedCredentialCheckDetectionEntry{}, ErrMissingZoneID

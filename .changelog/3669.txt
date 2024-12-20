@@ -1,0 +1,3 @@
+```release-note:bug
+snippets_rules: fix upsert request type
+```

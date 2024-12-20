@@ -1,0 +1,3 @@
+```release-note:enhancement
+Adds allow_email_alias connection rule boolean to access infra policy payload
+```

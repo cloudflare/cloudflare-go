@@ -19,7 +19,7 @@ type APIShieldOperation struct {
 
 // GetAPIShieldOperationParams represents the parameters to pass when retrieving an operation.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-an-operation
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/methods/get/
 type GetAPIShieldOperationParams struct {
 	// The Operation ID to retrieve
 	OperationID string `url:"-"`
@@ -30,7 +30,7 @@ type GetAPIShieldOperationParams struct {
 
 // CreateAPIShieldOperationsParams represents the parameters to pass when adding one or more operations.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-add-operations-to-a-zone
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/methods/create/
 type CreateAPIShieldOperationsParams struct {
 	// Operations are a slice of operations to be created in API Shield Endpoint Management
 	Operations []APIShieldBasicOperation `url:"-"`
@@ -45,7 +45,7 @@ type APIShieldBasicOperation struct {
 
 // DeleteAPIShieldOperationParams represents the parameters to pass to delete an operation.
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-delete-an-operation
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/methods/delete/
 type DeleteAPIShieldOperationParams struct {
 	// OperationID is the operation to be deleted
 	OperationID string `url:"-"`
@@ -53,7 +53,7 @@ type DeleteAPIShieldOperationParams struct {
 
 // ListAPIShieldOperationsParams represents the parameters to pass when retrieving operations
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-all-operations-on-a-zone
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/methods/list/
 type ListAPIShieldOperationsParams struct {
 	// Features represents a set of features to return in `features` object when
 	// performing making read requests against an Operation or listing operations.
@@ -70,7 +70,7 @@ type ListAPIShieldOperationsParams struct {
 
 // APIShieldListOperationsFilters represents the filtering query parameters to set when retrieving operations
 //
-// API documentation: https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-all-operations-on-a-zone
+// API documentation: https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/methods/list/
 type APIShieldListOperationsFilters struct {
 	// Hosts filters results to only include the specified hosts.
 	Hosts []string `url:"host,omitempty"`
@@ -101,7 +101,7 @@ type APIShieldDeleteOperationResponse struct {
 
 // GetAPIShieldOperation returns information about an operation
 //
-// API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-an-operation
+// API documentation https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/methods/get/
 func (api *API) GetAPIShieldOperation(ctx context.Context, rc *ResourceContainer, params GetAPIShieldOperationParams) (*APIShieldOperation, error) {
 	path := fmt.Sprintf("/zones/%s/api_gateway/operations/%s", rc.Identifier, params.OperationID)
 
@@ -123,7 +123,7 @@ func (api *API) GetAPIShieldOperation(ctx context.Context, rc *ResourceContainer
 
 // ListAPIShieldOperations retrieve information about all operations on a zone
 //
-// API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-retrieve-information-about-all-operations-on-a-zone
+// API documentation https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/methods/list/
 func (api *API) ListAPIShieldOperations(ctx context.Context, rc *ResourceContainer, params ListAPIShieldOperationsParams) ([]APIShieldOperation, ResultInfo, error) {
 	path := fmt.Sprintf("/zones/%s/api_gateway/operations", rc.Identifier)
 
@@ -145,7 +145,7 @@ func (api *API) ListAPIShieldOperations(ctx context.Context, rc *ResourceContain
 
 // CreateAPIShieldOperations add one or more operations to a zone.
 //
-// API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-add-operations-to-a-zone
+// API documentation https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/methods/create/
 func (api *API) CreateAPIShieldOperations(ctx context.Context, rc *ResourceContainer, params CreateAPIShieldOperationsParams) ([]APIShieldOperation, error) {
 	uri := fmt.Sprintf("/zones/%s/api_gateway/operations", rc.Identifier)
 
@@ -166,7 +166,7 @@ func (api *API) CreateAPIShieldOperations(ctx context.Context, rc *ResourceConta
 
 // DeleteAPIShieldOperation deletes a single operation
 //
-// API documentation https://developers.cloudflare.com/api/operations/api-shield-endpoint-management-delete-an-operation
+// API documentation https://developers.cloudflare.com/api/resources/api_gateway/subresources/operations/methods/delete/
 func (api *API) DeleteAPIShieldOperation(ctx context.Context, rc *ResourceContainer, params DeleteAPIShieldOperationParams) error {
 	uri := fmt.Sprintf("/zones/%s/api_gateway/operations/%s", rc.Identifier, params.OperationID)
 

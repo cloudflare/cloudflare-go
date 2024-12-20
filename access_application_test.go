@@ -34,6 +34,7 @@ func TestAccessApplications(t *testing.T) {
 					"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 					"name": "Admin Site",
 					"domain": "test.example.com/admin",
+					"domain_type": "public",
 					"type": "self_hosted",
 					"session_duration": "24h",
 					"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -93,6 +94,7 @@ func TestAccessApplications(t *testing.T) {
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 		Name:                     "Admin Site",
 		Domain:                   "test.example.com/admin",
+		DomainType:               AccessDestinationPublic,
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AllowedIdps:              []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
@@ -163,7 +165,11 @@ func TestAccessApplication(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
-				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
+				"domain_type": "public",
+				"destinations": [
+					{"type": "public", "uri": "test.example.com/admin"},
+					{"type": "public", "uri": "test.example.com/admin2"}
+				],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -207,13 +213,17 @@ func TestAccessApplication(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
 	want := AccessApplication{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		CreatedAt:                &createdAt,
-		UpdatedAt:                &updatedAt,
-		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		CreatedAt:  &createdAt,
+		UpdatedAt:  &updatedAt,
+		AUD:        "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AllowedIdps:              []string{"f174e90a-fafe-4643-bbbc-4a0ed4fc8415"},
@@ -281,7 +291,11 @@ func TestCreateAccessApplications(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
-				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
+				"domain_type": "public",
+				"destinations": [
+					{"type": "public", "uri": "test.example.com/admin"},
+					{"type": "public", "uri": "test.example.com/admin2"}
+				],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -323,10 +337,14 @@ func TestCreateAccessApplications(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 	fullAccessApplication := AccessApplication{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -366,6 +384,7 @@ func TestCreateAccessApplications(t *testing.T) {
 	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
+		DomainType:      AccessDestinationPublic,
 		SessionDuration: "24h",
 		Policies:        []string{"699d98642c564d2e855e9661899b7252"},
 	})
@@ -379,6 +398,7 @@ func TestCreateAccessApplications(t *testing.T) {
 	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
+		DomainType:      AccessDestinationPublic,
 		SessionDuration: "24h",
 		Policies:        []string{"699d98642c564d2e855e9661899b7252"},
 	})
@@ -406,7 +426,11 @@ func TestUpdateAccessApplication(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
-				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
+				"domain_type": "public",
+				"destinations": [
+					{"type": "public", "uri": "test.example.com/admin"},
+					{"type": "public", "uri": "test.example.com/admin2"}
+				],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -446,10 +470,14 @@ func TestUpdateAccessApplication(t *testing.T) {
 	}
 
 	fullAccessApplication := AccessApplication{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -485,10 +513,14 @@ func TestUpdateAccessApplication(t *testing.T) {
 	}
 
 	params := UpdateAccessApplicationParams{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -519,10 +551,14 @@ func TestUpdateAccessApplication(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
 	actual, err = client.UpdateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), UpdateAccessApplicationParams{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -566,7 +602,11 @@ func TestUpdateAccessApplicationOmitPolicies(t *testing.T) {
 				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 				"name": "Admin Site",
 				"domain": "test.example.com/admin",
-				"self_hosted_domains": ["test.example.com/admin", "test.example.com/admin2"],
+				"domain_type": "public",
+				"destinations": [
+					{"type": "public", "uri": "test.example.com/admin"},
+					{"type": "public", "uri": "test.example.com/admin2"}
+				],
 				"type": "self_hosted",
 				"session_duration": "24h",
 				"allowed_idps": ["f174e90a-fafe-4643-bbbc-4a0ed4fc8415"],
@@ -606,10 +646,14 @@ func TestUpdateAccessApplicationOmitPolicies(t *testing.T) {
 	}
 
 	fullAccessApplication := AccessApplication{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -645,10 +689,14 @@ func TestUpdateAccessApplicationOmitPolicies(t *testing.T) {
 	}
 
 	params := UpdateAccessApplicationParams{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -678,10 +726,14 @@ func TestUpdateAccessApplicationOmitPolicies(t *testing.T) {
 	mux.HandleFunc("/zones/"+testZoneID+"/access/apps/480f4f69-1a28-4fdd-9240-1ed29f0ac1db", handler)
 
 	actual, err = client.UpdateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), UpdateAccessApplicationParams{
-		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
-		Name:                     "Admin Site",
-		Domain:                   "test.example.com/admin",
-		SelfHostedDomains:        []string{"test.example.com/admin", "test.example.com/admin2"},
+		ID:         "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:       "Admin Site",
+		Domain:     "test.example.com/admin",
+		DomainType: AccessDestinationPublic,
+		Destinations: []AccessDestination{
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin"},
+			{Type: AccessDestinationPublic, URI: "test.example.com/admin2"},
+		},
 		Type:                     "self_hosted",
 		SessionDuration:          "24h",
 		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
@@ -789,6 +841,7 @@ func TestAccessApplicationWithCORS(t *testing.T) {
         "aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
         "name": "Admin Site",
         "domain": "test.example.com/admin",
+				"domain_type": "public",
         "type": "self_hosted",
         "session_duration": "24h",
         "cors_headers": {
@@ -816,6 +869,7 @@ func TestAccessApplicationWithCORS(t *testing.T) {
 		AUD:             "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
 		Name:            "Admin Site",
 		Domain:          "test.example.com/admin",
+		DomainType:      AccessDestinationPublic,
 		Type:            "self_hosted",
 		SessionDuration: "24h",
 		CorsHeaders: &AccessApplicationCorsHeaders{
@@ -1525,6 +1579,227 @@ func TestCreateAccessApplicationWithSCIMProvisioning(t *testing.T) {
 				Value: &AccessApplicationScimAuthenticationOauthBearerToken{
 					Token:                  "1234567890",
 					baseScimAuthentication: baseScimAuthentication{Scheme: AccessApplicationScimAuthenticationSchemeOauthBearerToken},
+				},
+			},
+			IdPUID:             "1234567",
+			DeactivateOnDelete: BoolPtr(true),
+			Mappings: []*AccessApplicationScimMapping{
+				{
+					Schema:           "urn:ietf:params:scim:schemas:core:2.0:User",
+					Enabled:          BoolPtr(true),
+					Filter:           "title pr or userType eq \"Intern\"",
+					TransformJsonata: "$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])",
+					Operations: &AccessApplicationScimMappingOperations{
+						Create: BoolPtr(true),
+						Update: BoolPtr(true),
+						Delete: BoolPtr(true),
+					},
+					Strictness: "strict",
+				},
+			},
+		},
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, fullAccessApplication, actual)
+	}
+}
+
+func TestCreateAccessApplicationWithSCIMProvisioningMultiAuthentication(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+				"created_at": "2014-01-01T05:20:00.12345Z",
+				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+				"name": "Admin SCIM App",
+				"domain": "example.cloudflareaccess.com/cdn-cgi/access/sso/oidc/737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+				"type": "saas",
+				"session_duration": "24h",
+				"allowed_idps": [],
+				"auto_redirect_to_identity": false,
+				"enable_binding_cookie": false,
+				"custom_deny_url": "https://www.example.com",
+				"custom_deny_message": "denied!",
+				"logo_url": "https://www.example.com/example.png",
+				"skip_interstitial": true,
+				"app_launcher_visible": true,
+				"service_auth_401_redirect": true,
+				"custom_non_identity_deny_url": "https://blocked.com",
+				"tags": ["engineers"],
+				"scim_config": {
+					"enabled": true,
+					"remote_uri": "https://scim.com",
+					"authentication": [{
+						 "scheme": "oauthbearertoken",
+						 "token": "1234567890"
+					}, {
+						"scheme": "access_service_token",
+						"client_id": "1234",
+						"client_secret": "5678"
+					}],
+					"idp_uid": "1234567",
+					"deactivate_on_delete": true,
+					"mappings": [
+						{
+							"schema": "urn:ietf:params:scim:schemas:core:2.0:User",
+							"enabled": true,
+							"filter": "title pr or userType eq \"Intern\"",
+							"transform_jsonata": "$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])",
+							"operations": {
+								"create": true,
+								"update": true,
+								"delete": true
+							},
+							"strictness": "passthrough"
+						}
+					]
+				}
+			}
+		}
+		`)
+	}
+
+	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+
+	fullAccessApplication := AccessApplication{
+		ID:                       "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:                     "Admin SCIM App",
+		Domain:                   "example.cloudflareaccess.com/cdn-cgi/access/sso/oidc/737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		Type:                     "saas",
+		SessionDuration:          "24h",
+		AUD:                      "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		AllowedIdps:              []string{},
+		AutoRedirectToIdentity:   BoolPtr(false),
+		EnableBindingCookie:      BoolPtr(false),
+		AppLauncherVisible:       BoolPtr(true),
+		ServiceAuth401Redirect:   BoolPtr(true),
+		CustomDenyMessage:        "denied!",
+		CustomDenyURL:            "https://www.example.com",
+		LogoURL:                  "https://www.example.com/example.png",
+		SkipInterstitial:         BoolPtr(true),
+		CreatedAt:                &createdAt,
+		UpdatedAt:                &updatedAt,
+		CustomNonIdentityDenyURL: "https://blocked.com",
+		Tags:                     []string{"engineers"},
+		SCIMConfig: &AccessApplicationSCIMConfig{
+			Enabled:   BoolPtr(true),
+			RemoteURI: "https://scim.com",
+			Authentication: &AccessApplicationScimAuthenticationJson{
+				Value: &AccessApplicationMultipleScimAuthentication{
+					&AccessApplicationScimAuthenticationSingleJSON{
+						Value: &AccessApplicationScimAuthenticationOauthBearerToken{
+							Token:                  "1234567890",
+							baseScimAuthentication: baseScimAuthentication{Scheme: AccessApplicationScimAuthenticationSchemeOauthBearerToken},
+						},
+					},
+					&AccessApplicationScimAuthenticationSingleJSON{
+						Value: &AccessApplicationScimAuthenticationServiceToken{
+							baseScimAuthentication: baseScimAuthentication{Scheme: AccessApplicationScimAuthenticationAccessServiceToken},
+							ClientID:               "1234",
+							ClientSecret:           "5678",
+						},
+					},
+				},
+			},
+			IdPUID:             "1234567",
+			DeactivateOnDelete: BoolPtr(true),
+			Mappings: []*AccessApplicationScimMapping{
+				{
+					Schema:           "urn:ietf:params:scim:schemas:core:2.0:User",
+					Enabled:          BoolPtr(true),
+					Filter:           "title pr or userType eq \"Intern\"",
+					TransformJsonata: "$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])",
+					Operations: &AccessApplicationScimMappingOperations{
+						Create: BoolPtr(true),
+						Update: BoolPtr(true),
+						Delete: BoolPtr(true),
+					},
+					Strictness: "passthrough",
+				},
+			},
+		},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
+
+	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
+		Name: "Admin Saas Site",
+		SCIMConfig: &AccessApplicationSCIMConfig{
+			Enabled:   BoolPtr(true),
+			RemoteURI: "https://scim.com",
+			Authentication: &AccessApplicationScimAuthenticationJson{
+				Value: &AccessApplicationMultipleScimAuthentication{
+					&AccessApplicationScimAuthenticationSingleJSON{
+						Value: &AccessApplicationScimAuthenticationOauthBearerToken{
+							Token:                  "1234567890",
+							baseScimAuthentication: baseScimAuthentication{Scheme: AccessApplicationScimAuthenticationSchemeOauthBearerToken},
+						},
+					},
+					&AccessApplicationScimAuthenticationSingleJSON{
+						Value: &AccessApplicationScimAuthenticationServiceToken{
+							ClientID:               "1234",
+							ClientSecret:           "5678",
+							baseScimAuthentication: baseScimAuthentication{Scheme: AccessApplicationScimAuthenticationAccessServiceToken},
+						},
+					},
+				},
+			},
+			IdPUID:             "1234567",
+			DeactivateOnDelete: BoolPtr(true),
+			Mappings: []*AccessApplicationScimMapping{
+				{
+					Schema:           "urn:ietf:params:scim:schemas:core:2.0:User",
+					Enabled:          BoolPtr(true),
+					Filter:           "title pr or userType eq \"Intern\"",
+					TransformJsonata: "$merge([$, {'userName': $substringBefore($.userName, '@') & '+test@' & $substringAfter($.userName, '@')}])",
+					Operations: &AccessApplicationScimMappingOperations{
+						Create: BoolPtr(true),
+						Update: BoolPtr(true),
+						Delete: BoolPtr(true),
+					},
+					Strictness: "strict",
+				},
+			},
+		},
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, fullAccessApplication, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps", handler)
+
+	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
+		Name: "Admin SCIM Site",
+		SCIMConfig: &AccessApplicationSCIMConfig{
+			Enabled:   BoolPtr(true),
+			RemoteURI: "https://scim.com",
+			Authentication: &AccessApplicationScimAuthenticationJson{
+				Value: &AccessApplicationMultipleScimAuthentication{
+					&AccessApplicationScimAuthenticationSingleJSON{
+						Value: &AccessApplicationScimAuthenticationOauthBearerToken{
+							Token:                  "1234567890",
+							baseScimAuthentication: baseScimAuthentication{Scheme: AccessApplicationScimAuthenticationSchemeOauthBearerToken},
+						},
+					},
+					&AccessApplicationScimAuthenticationSingleJSON{
+						Value: &AccessApplicationScimAuthenticationServiceToken{
+							ClientID:               "1234",
+							ClientSecret:           "5678",
+							baseScimAuthentication: baseScimAuthentication{Scheme: AccessApplicationScimAuthenticationAccessServiceToken},
+						},
+					},
 				},
 			},
 			IdPUID:             "1234567",

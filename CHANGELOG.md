@@ -1,4 +1,46 @@
-## 0.111.0 (Unreleased)
+## 0.113.0 (Unreleased)
+
+## 0.112.0 (December 18th, 2024)
+
+ENHANCEMENTS:
+
+* access_application: support Access service token + multi-valued authentication for SCIM provisioning ([#3708](https://github.com/cloudflare/cloudflare-go/issues/3708))
+* certificate_authorities: add new methods to interact with Certificate Authorities Hostname Associations API ([#3740](https://github.com/cloudflare/cloudflare-go/issues/3740))
+* content_scanning: Add new support for CRUD operations ([#3700](https://github.com/cloudflare/cloudflare-go/issues/3700))
+* teams: sync latest doc changes ([#3743](https://github.com/cloudflare/cloudflare-go/issues/3743))
+* teams_location: add support for `dns_destination_ipv6_block_id` to the location payload ([#3738](https://github.com/cloudflare/cloudflare-go/issues/3738))
+* teams_locations: Add dns_destination_ips_id and ipv4_destination_backup ([#3699](https://github.com/cloudflare/cloudflare-go/issues/3699))
+
+BUG FIXES:
+
+* certificate_authorities: fixes for methods to interact with Certificate Authorities Hostname Associations API ([#3742](https://github.com/cloudflare/cloudflare-go/issues/3742))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/goccy/go-json from 0.10.3 to 0.10.4 ([#3726](https://github.com/cloudflare/cloudflare-go/issues/3726))
+* deps: bumps golang.org/x/crypto from 0.21.0 to 0.31.0 ([#3725](https://github.com/cloudflare/cloudflare-go/issues/3725))
+* deps: bumps golang.org/x/net from 0.31.0 to 0.32.0 ([#3704](https://github.com/cloudflare/cloudflare-go/issues/3704))
+
+## 0.111.0 (December 4th, 2024)
+
+BREAKING CHANGES:
+
+* access: Remove the deprecated `SelfHostedDomains` field from Access applications. Use `Destinations` instead. ([#3667](https://github.com/cloudflare/cloudflare-go/issues/3667))
+
+ENHANCEMENTS:
+
+* Adds allow_email_alias connection rule boolean to access infra policy payload ([#3675](https://github.com/cloudflare/cloudflare-go/issues/3675))
+* access: Add `DomainType` field to Access applications. ([#3667](https://github.com/cloudflare/cloudflare-go/issues/3667))
+* leaked_credential_check: add new methods to interact with leaked credential check cloudfare API ([#3634](https://github.com/cloudflare/cloudflare-go/issues/3634))
+
+BUG FIXES:
+
+* authenticated_origin_pulls_per_hostname: fixes the struct to allow null (nil) values on the `Enabled` property ([#3680](https://github.com/cloudflare/cloudflare-go/issues/3680))
+* snippets_rules: fix upsert request type ([#3669](https://github.com/cloudflare/cloudflare-go/issues/3669))
+
+DEPENDENCIES:
+
+* deps: bumps github.com/stretchr/testify from 1.9.0 to 1.10.0 ([#3672](https://github.com/cloudflare/cloudflare-go/issues/3672))
 
 ## 0.110.0 (November 20th, 2024)
 
@@ -1059,7 +1101,7 @@ BREAKING CHANGES:
 
 NOTES:
 
-- pages: removed the v1 logs endpoint for Pages deployments. Please switch to v2: https://developers.cloudflare.com/api/operations/pages-deployment-get-deployment-logs ([#1135](https://github.com/cloudflare/cloudflare-go/issues/1135))
+- pages: removed the v1 logs endpoint for Pages deployments. Please switch to v2: https://developers.cloudflare.com/api/resources/pages/subresources/projects/subresources/deployments/subresources/history/subresources/logs/methods/get/ ([#1135](https://github.com/cloudflare/cloudflare-go/issues/1135))
 
 ENHANCEMENTS:
 
