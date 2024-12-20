@@ -54,6 +54,8 @@ func TestTeamsLocations(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339, "2020-05-18T22:07:03Z")
 	updatedAt, _ := time.Parse(time.RFC3339, "2020-05-18T22:07:05Z")
 
+	ipv4Id := "9da8e0c9-e9cc-4bbd-85c5-b351fc373354"
+	ipv6Id := "8da8e0c9-e9cc-4bbd-85c5-b351fc373354"
 	want := []TeamsLocation{{
 		ID:                        "0f8185414dec4a5e9034f3d917c17890",
 		Name:                      "home",
@@ -63,8 +65,8 @@ func TestTeamsLocations(t *testing.T) {
 		AnonymizedLogsEnabled:     false,
 		IPv4Destination:           "1.2.3.4",
 		IPv4DestinationBackup:     "1.2.3.5",
-		DNSDestinationIPsID:       "9da8e0c9-e9cc-4bbd-85c5-b351fc373354",
-		DNSDestinationIPv6BlockID: "8da8e0c9-e9cc-4bbd-85c5-b351fc373354",
+		DNSDestinationIPsID:       &ipv4Id,
+		DNSDestinationIPv6BlockID: &ipv6Id,
 		ClientDefault:             false,
 		ECSSupport:                BoolPtr(false),
 		CreatedAt:                 &createdAt,

@@ -32,10 +32,10 @@ type TeamsLocation struct {
 	Ip                        string                 `json:"ip,omitempty"`
 	Subdomain                 string                 `json:"doh_subdomain"`
 	AnonymizedLogsEnabled     bool                   `json:"anonymized_logs_enabled"`
-	IPv4Destination           string                 `json:"ipv4_destination"`
-	IPv4DestinationBackup     string                 `json:"ipv4_destination_backup"`
-	DNSDestinationIPsID       string                 `json:"dns_destination_ips_id"`
-	DNSDestinationIPv6BlockID string                 `json:"dns_destination_ipv6_block_id"`
+	IPv4Destination           string                 `json:"ipv4_destination,omitempty"`
+	IPv4DestinationBackup     string                 `json:"ipv4_destination_backup,omitempty"`
+	DNSDestinationIPsID       *string                `json:"dns_destination_ips_id,omitempty"`
+	DNSDestinationIPv6BlockID *string                `json:"dns_destination_ipv6_block_id,omitempty"`
 	ClientDefault             bool                   `json:"client_default"`
 	ECSSupport                *bool                  `json:"ecs_support,omitempty"`
 	Endpoints                 *LocationEndpoints     `json:"endpoints,omitempty"`
