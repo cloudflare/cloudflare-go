@@ -50,10 +50,10 @@ type TeamsAccountSettings struct {
 	ExtendedEmailMatching *TeamsExtendedEmailMatching `json:"extended_email_matching,omitempty"`
 	CustomCertificate     *TeamsCustomCertificate     `json:"custom_certificate,omitempty"`
 	Certificate           *TeamsCertificateSetting    `json:"certificate,omitempty"`
-	Sandbox               *SandboxAccountSetting      `json:"sandbox,omitempty"`
+	Sandbox               *TeamsSandboxAccountSetting `json:"sandbox,omitempty"`
 }
 
-type SandboxAccountSetting struct {
+type TeamsSandboxAccountSetting struct {
 	Enabled        *bool  `db:"enabled" json:"enabled" validate:"required"`
 	FallbackAction string `db:"fallback_action" json:"fallback_action" validate:"omitempty,oneof=allow block"`
 }
