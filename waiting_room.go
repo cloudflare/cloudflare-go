@@ -41,6 +41,8 @@ type WaitingRoom struct {
 	QueueingStatusCode         int                          `json:"queueing_status_code"`
 	EnabledOriginCommands      []string                     `json:"enabled_origin_commands,omitempty"`
 	CookieAttributes           *WaitingRoomCookieAttributes `json:"cookie_attributes,omitempty"`
+	TurnstileMode              string                       `json:"turnstile_mode,omitempty"`
+	TurnstileAction            string                       `json:"turnstile_action,omitempty"`
 }
 
 // WaitingRoomStatus describes the status of a waiting room.
@@ -70,6 +72,8 @@ type WaitingRoomEvent struct {
 	DisableSessionRenewal *bool      `json:"disable_session_renewal,omitempty"`
 	Suspended             bool       `json:"suspended"`
 	ShuffleAtEventStart   bool       `json:"shuffle_at_event_start"`
+	TurnstileMode         string     `json:"turnstile_mode,omitempty"`
+	TurnstileAction       string     `json:"turnstile_action,omitempty"`
 }
 
 type WaitingRoomRule struct {
