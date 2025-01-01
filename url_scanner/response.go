@@ -3,6 +3,13 @@
 package url_scanner
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-go/v3/internal/param"
+	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
@@ -23,4 +30,27 @@ func NewResponseService(opts ...option.RequestOption) (r *ResponseService) {
 	r = &ResponseService{}
 	r.Options = opts
 	return
+}
+
+// Returns the raw response of the network request. If HTML, a plain text response
+// will be returned.
+func (r *ResponseService) Get(ctx context.Context, responseID string, query ResponseGetParams, opts ...option.RequestOption) (res *string, err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if responseID == "" {
+		err = errors.New("missing required response_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/urlscanner/v2/responses/%s", query.AccountID, responseID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+type ResponseGetParams struct {
+	// Account ID.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
