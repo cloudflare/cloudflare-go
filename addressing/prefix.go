@@ -24,9 +24,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewPrefixService] method instead.
 type PrefixService struct {
-	Options     []option.RequestOption
-	BGP         *PrefixBGPService
-	Delegations *PrefixDelegationService
+	Options         []option.RequestOption
+	ServiceBindings *PrefixServiceBindingService
+	BGP             *PrefixBGPService
+	Delegations     *PrefixDelegationService
 }
 
 // NewPrefixService generates a new service that applies the given options to each
@@ -35,6 +36,7 @@ type PrefixService struct {
 func NewPrefixService(opts ...option.RequestOption) (r *PrefixService) {
 	r = &PrefixService{}
 	r.Options = opts
+	r.ServiceBindings = NewPrefixServiceBindingService(opts...)
 	r.BGP = NewPrefixBGPService(opts...)
 	r.Delegations = NewPrefixDelegationService(opts...)
 	return
