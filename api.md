@@ -3037,12 +3037,7 @@ Response Types:
 Methods:
 
 - <code title="post /accounts/{account_id}/addressing/loa_documents">client.Addressing.LOADocuments.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing#LOADocumentService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing#LOADocumentNewParams">LOADocumentNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing#LOADocumentNewResponse">LOADocumentNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-### Downloads
-
-Methods:
-
-- <code title="get /accounts/{account_id}/addressing/loa_documents/{loa_document_id}/download">client.Addressing.LOADocuments.Downloads.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing#LOADocumentDownloadService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, loaDocumentID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing#LOADocumentDownloadGetParams">LOADocumentDownloadGetParams</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/addressing/loa_documents/{loa_document_id}/download">client.Addressing.LOADocuments.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing#LOADocumentService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, loaDocumentID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing">addressing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/addressing#LOADocumentGetParams">LOADocumentGetParams</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Prefixes
 
