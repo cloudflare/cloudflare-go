@@ -14,7 +14,6 @@ import (
 // the [NewPrefixBGPService] method instead.
 type PrefixBGPService struct {
 	Options  []option.RequestOption
-	Bindings *PrefixBGPBindingService
 	Prefixes *PrefixBGPPrefixService
 	Statuses *PrefixBGPStatusService
 }
@@ -25,7 +24,6 @@ type PrefixBGPService struct {
 func NewPrefixBGPService(opts ...option.RequestOption) (r *PrefixBGPService) {
 	r = &PrefixBGPService{}
 	r.Options = opts
-	r.Bindings = NewPrefixBGPBindingService(opts...)
 	r.Prefixes = NewPrefixBGPPrefixService(opts...)
 	r.Statuses = NewPrefixBGPStatusService(opts...)
 	return

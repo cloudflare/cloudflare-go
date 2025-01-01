@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestPrefixBGPBindingNewWithOptionalParams(t *testing.T) {
+func TestPrefixServiceBindingNewWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,10 @@ func TestPrefixBGPBindingNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Bindings.New(
+	_, err := client.Addressing.Prefixes.ServiceBindings.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		addressing.PrefixBGPBindingNewParams{
+		addressing.PrefixServiceBindingNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			CIDR:      cloudflare.F("192.0.2.0/24"),
 			ServiceID: cloudflare.F("2db684ee7ca04e159946fd05b99e1bcd"),
@@ -45,7 +45,7 @@ func TestPrefixBGPBindingNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPrefixBGPBindingList(t *testing.T) {
+func TestPrefixServiceBindingList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -58,10 +58,10 @@ func TestPrefixBGPBindingList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Bindings.List(
+	_, err := client.Addressing.Prefixes.ServiceBindings.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		addressing.PrefixBGPBindingListParams{
+		addressing.PrefixServiceBindingListParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -74,7 +74,7 @@ func TestPrefixBGPBindingList(t *testing.T) {
 	}
 }
 
-func TestPrefixBGPBindingDelete(t *testing.T) {
+func TestPrefixServiceBindingDelete(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -87,11 +87,11 @@ func TestPrefixBGPBindingDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Bindings.Delete(
+	_, err := client.Addressing.Prefixes.ServiceBindings.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		addressing.PrefixBGPBindingDeleteParams{
+		addressing.PrefixServiceBindingDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
@@ -104,7 +104,7 @@ func TestPrefixBGPBindingDelete(t *testing.T) {
 	}
 }
 
-func TestPrefixBGPBindingGet(t *testing.T) {
+func TestPrefixServiceBindingGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -117,11 +117,11 @@ func TestPrefixBGPBindingGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Bindings.Get(
+	_, err := client.Addressing.Prefixes.ServiceBindings.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		addressing.PrefixBGPBindingGetParams{
+		addressing.PrefixServiceBindingGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

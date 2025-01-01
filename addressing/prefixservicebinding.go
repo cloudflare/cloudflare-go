@@ -16,21 +16,21 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/shared"
 )
 
-// PrefixBGPBindingService contains methods and other services that help with
+// PrefixServiceBindingService contains methods and other services that help with
 // interacting with the cloudflare API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewPrefixBGPBindingService] method instead.
-type PrefixBGPBindingService struct {
+// the [NewPrefixServiceBindingService] method instead.
+type PrefixServiceBindingService struct {
 	Options []option.RequestOption
 }
 
-// NewPrefixBGPBindingService generates a new service that applies the given
+// NewPrefixServiceBindingService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewPrefixBGPBindingService(opts ...option.RequestOption) (r *PrefixBGPBindingService) {
-	r = &PrefixBGPBindingService{}
+func NewPrefixServiceBindingService(opts ...option.RequestOption) (r *PrefixServiceBindingService) {
+	r = &PrefixServiceBindingService{}
 	r.Options = opts
 	return
 }
@@ -39,8 +39,8 @@ func NewPrefixBGPBindingService(opts ...option.RequestOption) (r *PrefixBGPBindi
 // service running on Cloudflare's network. **Note:** This API may only be used on
 // prefixes currently configured with a Magic Transit service binding, and only
 // allows creating service bindings for the Cloudflare CDN or Cloudflare Spectrum.
-func (r *PrefixBGPBindingService) New(ctx context.Context, prefixID string, params PrefixBGPBindingNewParams, opts ...option.RequestOption) (res *ServiceBinding, err error) {
-	var env PrefixBGPBindingNewResponseEnvelope
+func (r *PrefixServiceBindingService) New(ctx context.Context, prefixID string, params PrefixServiceBindingNewParams, opts ...option.RequestOption) (res *ServiceBinding, err error) {
+	var env PrefixServiceBindingNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -65,7 +65,7 @@ func (r *PrefixBGPBindingService) New(ctx context.Context, prefixID string, para
 // `192.0.2.0/24` to Cloudflare Magic Transit and `192.0.2.1/32` to the Cloudflare
 // CDN would route traffic for `192.0.2.1` to the CDN, and traffic for all other
 // IPs in the prefix to Cloudflare Magic Transit.
-func (r *PrefixBGPBindingService) List(ctx context.Context, prefixID string, query PrefixBGPBindingListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ServiceBinding], err error) {
+func (r *PrefixServiceBindingService) List(ctx context.Context, prefixID string, query PrefixServiceBindingListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ServiceBinding], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -96,12 +96,12 @@ func (r *PrefixBGPBindingService) List(ctx context.Context, prefixID string, que
 // `192.0.2.0/24` to Cloudflare Magic Transit and `192.0.2.1/32` to the Cloudflare
 // CDN would route traffic for `192.0.2.1` to the CDN, and traffic for all other
 // IPs in the prefix to Cloudflare Magic Transit.
-func (r *PrefixBGPBindingService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixBGPBindingListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ServiceBinding] {
+func (r *PrefixServiceBindingService) ListAutoPaging(ctx context.Context, prefixID string, query PrefixServiceBindingListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ServiceBinding] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, prefixID, query, opts...))
 }
 
 // Delete a Service Binding
-func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixBGPBindingDeleteParams, opts ...option.RequestOption) (res *PrefixBGPBindingDeleteResponse, err error) {
+func (r *PrefixServiceBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body PrefixServiceBindingDeleteParams, opts ...option.RequestOption) (res *PrefixServiceBindingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -121,8 +121,8 @@ func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, b
 }
 
 // Fetch a single Service Binding
-func (r *PrefixBGPBindingService) Get(ctx context.Context, prefixID string, bindingID string, query PrefixBGPBindingGetParams, opts ...option.RequestOption) (res *ServiceBinding, err error) {
-	var env PrefixBGPBindingGetResponseEnvelope
+func (r *PrefixServiceBindingService) Get(ctx context.Context, prefixID string, bindingID string, query PrefixServiceBindingGetParams, opts ...option.RequestOption) (res *ServiceBinding, err error) {
+	var env PrefixServiceBindingGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -221,17 +221,17 @@ func (r ServiceBindingProvisioningState) IsKnown() bool {
 	return false
 }
 
-type PrefixBGPBindingDeleteResponse struct {
+type PrefixServiceBindingDeleteResponse struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PrefixBGPBindingDeleteResponseSuccess `json:"success,required"`
-	JSON    prefixBGPBindingDeleteResponseJSON    `json:"-"`
+	Success PrefixServiceBindingDeleteResponseSuccess `json:"success,required"`
+	JSON    prefixServiceBindingDeleteResponseJSON    `json:"-"`
 }
 
-// prefixBGPBindingDeleteResponseJSON contains the JSON metadata for the struct
-// [PrefixBGPBindingDeleteResponse]
-type prefixBGPBindingDeleteResponseJSON struct {
+// prefixServiceBindingDeleteResponseJSON contains the JSON metadata for the struct
+// [PrefixServiceBindingDeleteResponse]
+type prefixServiceBindingDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -239,30 +239,30 @@ type prefixBGPBindingDeleteResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PrefixBGPBindingDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PrefixServiceBindingDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r prefixBGPBindingDeleteResponseJSON) RawJSON() string {
+func (r prefixServiceBindingDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PrefixBGPBindingDeleteResponseSuccess bool
+type PrefixServiceBindingDeleteResponseSuccess bool
 
 const (
-	PrefixBGPBindingDeleteResponseSuccessTrue PrefixBGPBindingDeleteResponseSuccess = true
+	PrefixServiceBindingDeleteResponseSuccessTrue PrefixServiceBindingDeleteResponseSuccess = true
 )
 
-func (r PrefixBGPBindingDeleteResponseSuccess) IsKnown() bool {
+func (r PrefixServiceBindingDeleteResponseSuccess) IsKnown() bool {
 	switch r {
-	case PrefixBGPBindingDeleteResponseSuccessTrue:
+	case PrefixServiceBindingDeleteResponseSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type PrefixBGPBindingNewParams struct {
+type PrefixServiceBindingNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
@@ -271,22 +271,22 @@ type PrefixBGPBindingNewParams struct {
 	ServiceID param.Field[string] `json:"service_id"`
 }
 
-func (r PrefixBGPBindingNewParams) MarshalJSON() (data []byte, err error) {
+func (r PrefixServiceBindingNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PrefixBGPBindingNewResponseEnvelope struct {
+type PrefixServiceBindingNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PrefixBGPBindingNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  ServiceBinding                             `json:"result"`
-	JSON    prefixBGPBindingNewResponseEnvelopeJSON    `json:"-"`
+	Success PrefixServiceBindingNewResponseEnvelopeSuccess `json:"success,required"`
+	Result  ServiceBinding                                 `json:"result"`
+	JSON    prefixServiceBindingNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// prefixBGPBindingNewResponseEnvelopeJSON contains the JSON metadata for the
-// struct [PrefixBGPBindingNewResponseEnvelope]
-type prefixBGPBindingNewResponseEnvelopeJSON struct {
+// prefixServiceBindingNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [PrefixServiceBindingNewResponseEnvelope]
+type prefixServiceBindingNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -295,56 +295,56 @@ type prefixBGPBindingNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PrefixBGPBindingNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PrefixServiceBindingNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r prefixBGPBindingNewResponseEnvelopeJSON) RawJSON() string {
+func (r prefixServiceBindingNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PrefixBGPBindingNewResponseEnvelopeSuccess bool
+type PrefixServiceBindingNewResponseEnvelopeSuccess bool
 
 const (
-	PrefixBGPBindingNewResponseEnvelopeSuccessTrue PrefixBGPBindingNewResponseEnvelopeSuccess = true
+	PrefixServiceBindingNewResponseEnvelopeSuccessTrue PrefixServiceBindingNewResponseEnvelopeSuccess = true
 )
 
-func (r PrefixBGPBindingNewResponseEnvelopeSuccess) IsKnown() bool {
+func (r PrefixServiceBindingNewResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PrefixBGPBindingNewResponseEnvelopeSuccessTrue:
+	case PrefixServiceBindingNewResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
 }
 
-type PrefixBGPBindingListParams struct {
+type PrefixServiceBindingListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type PrefixBGPBindingDeleteParams struct {
+type PrefixServiceBindingDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type PrefixBGPBindingGetParams struct {
+type PrefixServiceBindingGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type PrefixBGPBindingGetResponseEnvelope struct {
+type PrefixServiceBindingGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
-	Success PrefixBGPBindingGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ServiceBinding                             `json:"result"`
-	JSON    prefixBGPBindingGetResponseEnvelopeJSON    `json:"-"`
+	Success PrefixServiceBindingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  ServiceBinding                                 `json:"result"`
+	JSON    prefixServiceBindingGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// prefixBGPBindingGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [PrefixBGPBindingGetResponseEnvelope]
-type prefixBGPBindingGetResponseEnvelopeJSON struct {
+// prefixServiceBindingGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [PrefixServiceBindingGetResponseEnvelope]
+type prefixServiceBindingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -353,24 +353,24 @@ type prefixBGPBindingGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PrefixBGPBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PrefixServiceBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r prefixBGPBindingGetResponseEnvelopeJSON) RawJSON() string {
+func (r prefixServiceBindingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type PrefixBGPBindingGetResponseEnvelopeSuccess bool
+type PrefixServiceBindingGetResponseEnvelopeSuccess bool
 
 const (
-	PrefixBGPBindingGetResponseEnvelopeSuccessTrue PrefixBGPBindingGetResponseEnvelopeSuccess = true
+	PrefixServiceBindingGetResponseEnvelopeSuccessTrue PrefixServiceBindingGetResponseEnvelopeSuccess = true
 )
 
-func (r PrefixBGPBindingGetResponseEnvelopeSuccess) IsKnown() bool {
+func (r PrefixServiceBindingGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
-	case PrefixBGPBindingGetResponseEnvelopeSuccessTrue:
+	case PrefixServiceBindingGetResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false
