@@ -26,8 +26,7 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewLOADocumentService] method instead.
 type LOADocumentService struct {
-	Options   []option.RequestOption
-	Downloads *LOADocumentDownloadService
+	Options []option.RequestOption
 }
 
 // NewLOADocumentService generates a new service that applies the given options to
@@ -36,7 +35,6 @@ type LOADocumentService struct {
 func NewLOADocumentService(opts ...option.RequestOption) (r *LOADocumentService) {
 	r = &LOADocumentService{}
 	r.Options = opts
-	r.Downloads = NewLOADocumentDownloadService(opts...)
 	return
 }
 
@@ -54,6 +52,23 @@ func (r *LOADocumentService) New(ctx context.Context, params LOADocumentNewParam
 		return
 	}
 	res = &env.Result
+	return
+}
+
+// Download specified LOA document under the account.
+func (r *LOADocumentService) Get(ctx context.Context, loaDocumentID string, query LOADocumentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/pdf")}, opts...)
+	if query.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if loaDocumentID == "" {
+		err = errors.New("missing required loa_document_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/addressing/loa_documents/%s/download", query.AccountID, loaDocumentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -159,4 +174,9 @@ func (r LOADocumentNewResponseEnvelopeSuccess) IsKnown() bool {
 		return true
 	}
 	return false
+}
+
+type LOADocumentGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
