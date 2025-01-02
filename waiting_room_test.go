@@ -43,7 +43,9 @@ var waitingRoomJSON = fmt.Sprintf(`
       "cookie_suffix": "example_shop",
       "additional_routes": [{"host": "shop2.example.com", "path": "/shop/checkout"}],
       "queueing_status_code": 200,
-      "enabled_origin_commands": ["revoke"]
+      "enabled_origin_commands": ["revoke"],
+      "turnstile_mode": "invisible",
+      "turnstile_action": "log"
     }
    `, waitingRoomID, testTimestampWaitingRoom.Format(time.RFC3339Nano), testTimestampWaitingRoom.Format(time.RFC3339Nano),
 	testTimestampWaitingRoomEventStart.Format(time.RFC3339Nano))
@@ -65,7 +67,9 @@ var waitingRoomEventJSON = fmt.Sprintf(`
       "session_duration": null,
       "disable_session_renewal": null,
       "queueing_method": "random",
-      "custom_page_html": "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}"
+      "custom_page_html": "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}",
+      "turnstile_mode": "invisible",
+      "turnstile_action": "log"
     }
    `, waitingRoomEventID, testTimestampWaitingRoomEvent.Format(time.RFC3339Nano),
 	testTimestampWaitingRoomEvent.Format(time.RFC3339Nano),
@@ -131,6 +135,8 @@ var waitingRoom = WaitingRoom{
 	AdditionalRoutes:           []*WaitingRoomRoute{{Host: "shop2.example.com", Path: "/shop/checkout"}},
 	QueueingStatusCode:         200,
 	EnabledOriginCommands:      []string{"revoke"},
+	TurnstileMode:              "invisible",
+	TurnstileAction:            "log",
 }
 
 var waitingRoomEvent = WaitingRoomEvent{
@@ -150,6 +156,8 @@ var waitingRoomEvent = WaitingRoomEvent{
 	DisableSessionRenewal: nil,
 	QueueingMethod:        "random",
 	CustomPageHTML:        "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}",
+	TurnstileMode:         "invisible",
+	TurnstileAction:       "log",
 }
 
 var waitingRoomStatus = WaitingRoomStatus{
