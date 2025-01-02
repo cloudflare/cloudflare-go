@@ -37,6 +37,9 @@ func NewBucketDomainCustomService(opts ...option.RequestOption) (r *BucketDomain
 // Register a new custom domain for an existing R2 bucket.
 func (r *BucketDomainCustomService) New(ctx context.Context, bucketName string, params BucketDomainCustomNewParams, opts ...option.RequestOption) (res *BucketDomainCustomNewResponse, err error) {
 	var env BucketDomainCustomNewResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -58,6 +61,9 @@ func (r *BucketDomainCustomService) New(ctx context.Context, bucketName string, 
 // Edit the configuration for a custom domain on an existing R2 bucket.
 func (r *BucketDomainCustomService) Update(ctx context.Context, bucketName string, domainName string, params BucketDomainCustomUpdateParams, opts ...option.RequestOption) (res *BucketDomainCustomUpdateResponse, err error) {
 	var env BucketDomainCustomUpdateResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -83,6 +89,9 @@ func (r *BucketDomainCustomService) Update(ctx context.Context, bucketName strin
 // Gets a list of all custom domains registered with an existing R2 bucket.
 func (r *BucketDomainCustomService) List(ctx context.Context, bucketName string, params BucketDomainCustomListParams, opts ...option.RequestOption) (res *BucketDomainCustomListResponse, err error) {
 	var env BucketDomainCustomListResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -104,6 +113,9 @@ func (r *BucketDomainCustomService) List(ctx context.Context, bucketName string,
 // Remove custom domain registration from an existing R2 bucket
 func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName string, domainName string, params BucketDomainCustomDeleteParams, opts ...option.RequestOption) (res *BucketDomainCustomDeleteResponse, err error) {
 	var env BucketDomainCustomDeleteResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -129,6 +141,9 @@ func (r *BucketDomainCustomService) Delete(ctx context.Context, bucketName strin
 // Get the configuration for a custom domain on an existing R2 bucket.
 func (r *BucketDomainCustomService) Get(ctx context.Context, bucketName string, domainName string, params BucketDomainCustomGetParams, opts ...option.RequestOption) (res *BucketDomainCustomGetResponse, err error) {
 	var env BucketDomainCustomGetResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

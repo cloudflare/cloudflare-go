@@ -38,6 +38,9 @@ func NewBucketEventNotificationConfigurationQueueService(opts ...option.RequestO
 // Create event notification rule.
 func (r *BucketEventNotificationConfigurationQueueService) Update(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationConfigurationQueueUpdateParams, opts ...option.RequestOption) (res *BucketEventNotificationConfigurationQueueUpdateResponse, err error) {
 	var env BucketEventNotificationConfigurationQueueUpdateResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -64,6 +67,9 @@ func (r *BucketEventNotificationConfigurationQueueService) Update(ctx context.Co
 // specified queue will be deleted**.
 func (r *BucketEventNotificationConfigurationQueueService) Delete(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationConfigurationQueueDeleteParams, opts ...option.RequestOption) (res *BucketEventNotificationConfigurationQueueDeleteResponse, err error) {
 	var env BucketEventNotificationConfigurationQueueDeleteResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

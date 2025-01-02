@@ -69,6 +69,18 @@ func NewStreamService(opts ...option.RequestOption) (r *StreamService) {
 // where the content should be uploaded. Refer to https://tus.io for protocol
 // details.
 func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ...option.RequestOption) (err error) {
+	if params.TusResumable.Present {
+		opts = append(opts, option.WithHeader("Tus-Resumable", fmt.Sprintf("%s", params.TusResumable)))
+	}
+	if params.UploadLength.Present {
+		opts = append(opts, option.WithHeader("Upload-Length", fmt.Sprintf("%s", params.UploadLength)))
+	}
+	if params.UploadCreator.Present {
+		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%s", params.UploadCreator)))
+	}
+	if params.UploadMetadata.Present {
+		opts = append(opts, option.WithHeader("Upload-Metadata", fmt.Sprintf("%s", params.UploadMetadata)))
+	}
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if params.AccountID.Value == "" {

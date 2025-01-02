@@ -41,6 +41,9 @@ func NewGRETunnelService(opts ...option.RequestOption) (r *GRETunnelService) {
 // parameter to only run validation without persisting changes.
 func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, opts ...option.RequestOption) (res *GRETunnelNewResponse, err error) {
 	var env GRETunnelNewResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -59,6 +62,9 @@ func (r *GRETunnelService) New(ctx context.Context, params GRETunnelNewParams, o
 // parameter to only run validation without persisting changes.
 func (r *GRETunnelService) Update(ctx context.Context, greTunnelID string, params GRETunnelUpdateParams, opts ...option.RequestOption) (res *GRETunnelUpdateResponse, err error) {
 	var env GRETunnelUpdateResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -80,6 +86,9 @@ func (r *GRETunnelService) Update(ctx context.Context, greTunnelID string, param
 // Lists GRE tunnels associated with an account.
 func (r *GRETunnelService) List(ctx context.Context, params GRETunnelListParams, opts ...option.RequestOption) (res *GRETunnelListResponse, err error) {
 	var env GRETunnelListResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -98,6 +107,9 @@ func (r *GRETunnelService) List(ctx context.Context, params GRETunnelListParams,
 // an optional query parameter to only run validation without persisting changes.
 func (r *GRETunnelService) Delete(ctx context.Context, greTunnelID string, params GRETunnelDeleteParams, opts ...option.RequestOption) (res *GRETunnelDeleteResponse, err error) {
 	var env GRETunnelDeleteResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -120,6 +132,9 @@ func (r *GRETunnelService) Delete(ctx context.Context, greTunnelID string, param
 // parameter to only run validation without persisting changes.
 func (r *GRETunnelService) BulkUpdate(ctx context.Context, params GRETunnelBulkUpdateParams, opts ...option.RequestOption) (res *GRETunnelBulkUpdateResponse, err error) {
 	var env GRETunnelBulkUpdateResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -137,6 +152,9 @@ func (r *GRETunnelService) BulkUpdate(ctx context.Context, params GRETunnelBulkU
 // Lists informtion for a specific GRE tunnel.
 func (r *GRETunnelService) Get(ctx context.Context, greTunnelID string, params GRETunnelGetParams, opts ...option.RequestOption) (res *GRETunnelGetResponse, err error) {
 	var env GRETunnelGetResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
