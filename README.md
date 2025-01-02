@@ -69,12 +69,6 @@ Also refer to the
 [API documentation](https://pkg.go.dev/github.com/cloudflare/cloudflare-go) for
 how to use this package in-depth.
 
-## Experimental improvements
-
-This library is starting to ship with experimental improvements that are not yet
-ready for production but will be introduced before the next major version. See
-[experimental README](/docs/experimental.md) for full details.
-
 ## Contributing
 
 Pull Requests are welcome, but please open an issue (or comment in an existing
