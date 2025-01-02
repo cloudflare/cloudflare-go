@@ -41,6 +41,12 @@ func NewDispatchNamespaceScriptContentService(opts ...option.RequestOption) (r *
 // Put script content for a script uploaded to a Workers for Platforms namespace.
 func (r *DispatchNamespaceScriptContentService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptContentUpdateParams, opts ...option.RequestOption) (res *workers.Script, err error) {
 	var env DispatchNamespaceScriptContentUpdateResponseEnvelope
+	if params.CfWorkerBodyPart.Present {
+		opts = append(opts, option.WithHeader("CF-WORKER-BODY-PART", fmt.Sprintf("%s", params.CfWorkerBodyPart)))
+	}
+	if params.CfWorkerMainModulePart.Present {
+		opts = append(opts, option.WithHeader("CF-WORKER-MAIN-MODULE-PART", fmt.Sprintf("%s", params.CfWorkerMainModulePart)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

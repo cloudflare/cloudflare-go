@@ -157,6 +157,9 @@ func (r *SiteService) Edit(ctx context.Context, siteID string, params SiteEditPa
 // Get a specific Site.
 func (r *SiteService) Get(ctx context.Context, siteID string, params SiteGetParams, opts ...option.RequestOption) (res *Site, err error) {
 	var env SiteGetResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

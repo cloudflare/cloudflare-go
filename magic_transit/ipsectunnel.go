@@ -42,6 +42,9 @@ func NewIPSECTunnelService(opts ...option.RequestOption) (r *IPSECTunnelService)
 // changes.
 func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParams, opts ...option.RequestOption) (res *IPSECTunnelNewResponse, err error) {
 	var env IPSECTunnelNewResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -61,6 +64,9 @@ func (r *IPSECTunnelService) New(ctx context.Context, params IPSECTunnelNewParam
 // without persisting changes.
 func (r *IPSECTunnelService) Update(ctx context.Context, ipsecTunnelID string, params IPSECTunnelUpdateParams, opts ...option.RequestOption) (res *IPSECTunnelUpdateResponse, err error) {
 	var env IPSECTunnelUpdateResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -82,6 +88,9 @@ func (r *IPSECTunnelService) Update(ctx context.Context, ipsecTunnelID string, p
 // Lists IPsec tunnels associated with an account.
 func (r *IPSECTunnelService) List(ctx context.Context, params IPSECTunnelListParams, opts ...option.RequestOption) (res *IPSECTunnelListResponse, err error) {
 	var env IPSECTunnelListResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -101,6 +110,9 @@ func (r *IPSECTunnelService) List(ctx context.Context, params IPSECTunnelListPar
 // without persisting changes.
 func (r *IPSECTunnelService) Delete(ctx context.Context, ipsecTunnelID string, params IPSECTunnelDeleteParams, opts ...option.RequestOption) (res *IPSECTunnelDeleteResponse, err error) {
 	var env IPSECTunnelDeleteResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -124,6 +136,9 @@ func (r *IPSECTunnelService) Delete(ctx context.Context, ipsecTunnelID string, p
 // without persisting changes.
 func (r *IPSECTunnelService) BulkUpdate(ctx context.Context, params IPSECTunnelBulkUpdateParams, opts ...option.RequestOption) (res *IPSECTunnelBulkUpdateResponse, err error) {
 	var env IPSECTunnelBulkUpdateResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -141,6 +156,9 @@ func (r *IPSECTunnelService) BulkUpdate(ctx context.Context, params IPSECTunnelB
 // Lists details for a specific IPsec tunnel.
 func (r *IPSECTunnelService) Get(ctx context.Context, ipsecTunnelID string, params IPSECTunnelGetParams, opts ...option.RequestOption) (res *IPSECTunnelGetResponse, err error) {
 	var env IPSECTunnelGetResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

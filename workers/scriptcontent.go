@@ -40,6 +40,12 @@ func NewScriptContentService(opts ...option.RequestOption) (r *ScriptContentServ
 // Put script content without touching config or metadata
 func (r *ScriptContentService) Update(ctx context.Context, scriptName string, params ScriptContentUpdateParams, opts ...option.RequestOption) (res *Script, err error) {
 	var env ScriptContentUpdateResponseEnvelope
+	if params.CfWorkerBodyPart.Present {
+		opts = append(opts, option.WithHeader("CF-WORKER-BODY-PART", fmt.Sprintf("%s", params.CfWorkerBodyPart)))
+	}
+	if params.CfWorkerMainModulePart.Present {
+		opts = append(opts, option.WithHeader("CF-WORKER-MAIN-MODULE-PART", fmt.Sprintf("%s", params.CfWorkerMainModulePart)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

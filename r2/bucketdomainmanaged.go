@@ -37,6 +37,9 @@ func NewBucketDomainManagedService(opts ...option.RequestOption) (r *BucketDomai
 // Updates state of public access over the bucket's R2-managed (r2.dev) domain.
 func (r *BucketDomainManagedService) Update(ctx context.Context, bucketName string, params BucketDomainManagedUpdateParams, opts ...option.RequestOption) (res *BucketDomainManagedUpdateResponse, err error) {
 	var env BucketDomainManagedUpdateResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -58,6 +61,9 @@ func (r *BucketDomainManagedService) Update(ctx context.Context, bucketName stri
 // Gets state of public access over the bucket's R2-managed (r2.dev) domain.
 func (r *BucketDomainManagedService) List(ctx context.Context, bucketName string, params BucketDomainManagedListParams, opts ...option.RequestOption) (res *BucketDomainManagedListResponse, err error) {
 	var env BucketDomainManagedListResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
