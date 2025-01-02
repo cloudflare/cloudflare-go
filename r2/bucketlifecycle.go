@@ -40,6 +40,9 @@ func NewBucketLifecycleService(opts ...option.RequestOption) (r *BucketLifecycle
 // Set the object lifecycle rules for a bucket
 func (r *BucketLifecycleService) Update(ctx context.Context, bucketName string, params BucketLifecycleUpdateParams, opts ...option.RequestOption) (res *BucketLifecycleUpdateResponse, err error) {
 	var env BucketLifecycleUpdateResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -61,6 +64,9 @@ func (r *BucketLifecycleService) Update(ctx context.Context, bucketName string, 
 // Get object lifecycle rules for a bucket
 func (r *BucketLifecycleService) Get(ctx context.Context, bucketName string, params BucketLifecycleGetParams, opts ...option.RequestOption) (res *BucketLifecycleGetResponse, err error) {
 	var env BucketLifecycleGetResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

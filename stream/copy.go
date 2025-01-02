@@ -38,6 +38,12 @@ func NewCopyService(opts ...option.RequestOption) (r *CopyService) {
 // Uploads a video to Stream from a provided URL.
 func (r *CopyService) New(ctx context.Context, params CopyNewParams, opts ...option.RequestOption) (res *Video, err error) {
 	var env CopyNewResponseEnvelope
+	if params.UploadCreator.Present {
+		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%s", params.UploadCreator)))
+	}
+	if params.UploadMetadata.Present {
+		opts = append(opts, option.WithHeader("Upload-Metadata", fmt.Sprintf("%s", params.UploadMetadata)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

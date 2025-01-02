@@ -40,6 +40,9 @@ func NewBucketEventNotificationConfigurationService(opts ...option.RequestOption
 // List all event notification rules for a bucket.
 func (r *BucketEventNotificationConfigurationService) Get(ctx context.Context, bucketName string, params BucketEventNotificationConfigurationGetParams, opts ...option.RequestOption) (res *BucketEventNotificationConfigurationGetResponse, err error) {
 	var env BucketEventNotificationConfigurationGetResponseEnvelope
+	if params.CfR2Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
