@@ -24,8 +24,11 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewAIService] method instead.
 type AIService struct {
-	Options []option.RequestOption
-	Models  *ModelService
+	Options   []option.RequestOption
+	Finetunes *FinetuneService
+	Authors   *AuthorService
+	Tasks     *TaskService
+	Models    *ModelService
 }
 
 // NewAIService generates a new service that applies the given options to each
@@ -34,6 +37,9 @@ type AIService struct {
 func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r = &AIService{}
 	r.Options = opts
+	r.Finetunes = NewFinetuneService(opts...)
+	r.Authors = NewAuthorService(opts...)
+	r.Tasks = NewTaskService(opts...)
 	r.Models = NewModelService(opts...)
 	return
 }
