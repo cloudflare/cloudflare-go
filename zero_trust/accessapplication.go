@@ -20296,7 +20296,7 @@ type AccessApplicationNewParamsBodySelfHostedApplication struct {
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationNewParamsBodySelfHostedApplicationPolicies] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -20358,50 +20358,7 @@ func (r AccessApplicationNewParamsBodySelfHostedApplicationDestinationsType) IsK
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodySelfHostedApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPolicy) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject],
-// [AccessApplicationNewParamsBodySelfHostedApplicationPolicy].
-type AccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationNewParamsBodySelfHostedApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -20409,43 +20366,8 @@ type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyL
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodySelfHostedApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
-}
-
-type AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodySelfHostedApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -20674,8 +20596,8 @@ type AccessApplicationNewParamsBodySaaSApplication struct {
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationNewParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
-	SaaSApp  param.Field[AccessApplicationNewParamsBodySaaSApplicationSaaSAppUnion]  `json:"saas_app"`
+	Policies param.Field[[]AccessApplicationNewParamsBodySaaSApplicationPolicies]   `json:"policies"`
+	SaaSApp  param.Field[AccessApplicationNewParamsBodySaaSApplicationSaaSAppUnion] `json:"saas_app"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationNewParamsBodySaaSApplicationSCIMConfig] `json:"scim_config"`
@@ -20694,50 +20616,7 @@ func (r AccessApplicationNewParamsBodySaaSApplication) implementsZeroTrustAccess
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodySaaSApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodySaaSApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodySaaSApplicationPolicy) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationNewParamsBodySaaSApplicationPoliciesObject],
-// [AccessApplicationNewParamsBodySaaSApplicationPolicy].
-type AccessApplicationNewParamsBodySaaSApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationNewParamsBodySaaSApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -20745,43 +20624,8 @@ type AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink st
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodySaaSApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {
-}
-
-type AccessApplicationNewParamsBodySaaSApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodySaaSApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {
 }
 
 type AccessApplicationNewParamsBodySaaSApplicationSaaSApp struct {
@@ -21130,7 +20974,7 @@ type AccessApplicationNewParamsBodyBrowserSSHApplication struct {
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserSSHApplicationPolicies] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -21192,50 +21036,7 @@ func (r AccessApplicationNewParamsBodyBrowserSSHApplicationDestinationsType) IsK
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject],
-// [AccessApplicationNewParamsBodyBrowserSSHApplicationPolicy].
-type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationNewParamsBodyBrowserSSHApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -21243,43 +21044,8 @@ type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyL
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
-}
-
-type AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserSSHApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -21544,7 +21310,7 @@ type AccessApplicationNewParamsBodyBrowserVNCApplication struct {
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserVNCApplicationPolicies] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -21606,50 +21372,7 @@ func (r AccessApplicationNewParamsBodyBrowserVNCApplicationDestinationsType) IsK
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject],
-// [AccessApplicationNewParamsBodyBrowserVNCApplicationPolicy].
-type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationNewParamsBodyBrowserVNCApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -21657,43 +21380,8 @@ type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyL
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
-}
-
-type AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserVNCApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -21926,7 +21614,7 @@ type AccessApplicationNewParamsBodyAppLauncherApplication struct {
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationNewParamsBodyAppLauncherApplicationPolicies] `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyAppLauncherApplicationSCIMConfig] `json:"scim_config"`
@@ -21975,50 +21663,7 @@ func (r AccessApplicationNewParamsBodyAppLauncherApplicationLandingPageDesign) M
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPolicy) ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject],
-// [AccessApplicationNewParamsBodyAppLauncherApplicationPolicy].
-type AccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationNewParamsBodyAppLauncherApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -22026,43 +21671,8 @@ type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPolicy
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyAppLauncherApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
-}
-
-type AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyAppLauncherApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -22295,7 +21905,7 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplication struct
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicies] `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfig] `json:"scim_config"`
@@ -22344,50 +21954,7 @@ func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationLand
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy) ImplementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject],
-// [AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicy].
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -22395,43 +21962,8 @@ type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicie
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
-}
-
-type AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -22664,7 +22196,7 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplication struct
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicies] `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationSCIMConfig] `json:"scim_config"`
@@ -22713,50 +22245,7 @@ func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationLand
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject],
-// [AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicy].
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -22764,43 +22253,8 @@ type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicie
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
-}
-
-type AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -23517,7 +22971,7 @@ type AccessApplicationUpdateParamsBodySelfHostedApplication struct {
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationUpdateParamsBodySelfHostedApplicationPolicies] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -23579,50 +23033,7 @@ func (r AccessApplicationUpdateParamsBodySelfHostedApplicationDestinationsType) 
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy) ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject],
-// [AccessApplicationUpdateParamsBodySelfHostedApplicationPolicy].
-type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationUpdateParamsBodySelfHostedApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -23630,43 +23041,8 @@ type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPoli
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodySelfHostedApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -23895,8 +23271,8 @@ type AccessApplicationUpdateParamsBodySaaSApplication struct {
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion] `json:"policies"`
-	SaaSApp  param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppUnion]  `json:"saas_app"`
+	Policies param.Field[[]AccessApplicationUpdateParamsBodySaaSApplicationPolicies]   `json:"policies"`
+	SaaSApp  param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSaaSAppUnion] `json:"saas_app"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodySaaSApplicationSCIMConfig] `json:"scim_config"`
@@ -23915,50 +23291,7 @@ func (r AccessApplicationUpdateParamsBodySaaSApplication) implementsZeroTrustAcc
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodySaaSApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPolicy) ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject],
-// [AccessApplicationUpdateParamsBodySaaSApplicationPolicy].
-type AccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationUpdateParamsBodySaaSApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -23966,43 +23299,8 @@ type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyLink
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodySaaSApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodySaaSApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {
 }
 
 type AccessApplicationUpdateParamsBodySaaSApplicationSaaSApp struct {
@@ -24351,7 +23649,7 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplication struct {
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicies] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -24413,50 +23711,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationDestinationsType) 
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject],
-// [AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicy].
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -24464,43 +23719,8 @@ type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppPoli
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserSSHApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -24765,7 +23985,7 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplication struct {
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicies] `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
@@ -24827,50 +24047,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationDestinationsType) 
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject],
-// [AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicy].
-type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -24878,43 +24055,8 @@ type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPoli
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserVNCApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -25147,7 +24289,7 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplication struct {
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicies] `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyAppLauncherApplicationSCIMConfig] `json:"scim_config"`
@@ -25196,50 +24338,7 @@ func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationLandingPageDesign
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy) ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject],
-// [AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicy].
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -25247,43 +24346,8 @@ type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessAppPol
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyAppLauncherApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -25516,7 +24580,7 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplication str
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicies] `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationSCIMConfig] `json:"scim_config"`
@@ -25565,50 +24629,7 @@ func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationL
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicy) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject],
-// [AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicy].
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -25616,43 +24637,8 @@ type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoli
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -25885,7 +24871,7 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplication str
 	// The policies that Access applies to the application, in ascending order of
 	// precedence. Items can reference existing policies or create new policies
 	// exclusive to the application.
-	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion] `json:"policies"`
+	Policies param.Field[[]AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicies] `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig param.Field[AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationSCIMConfig] `json:"scim_config"`
@@ -25934,50 +24920,7 @@ func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationL
 }
 
 // A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicy struct {
-	// The UUID of the policy
-	ID             param.Field[string]      `json:"id"`
-	ApprovalGroups param.Field[interface{}] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicy) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
-}
-
-// A JSON that links a reusable policy to an application.
-//
-// Satisfied by
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink],
-// [shared.UnionString],
-// [zero_trust.AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject],
-// [AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicy].
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion interface {
-	ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion()
-}
-
-// A JSON that links a reusable policy to an application.
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink struct {
+type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicies struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
 	// The order of execution for this policy. Must be unique for each policy within an
@@ -25985,43 +24928,8 @@ type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoli
 	Precedence param.Field[int64] `json:"precedence"`
 }
 
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink) MarshalJSON() (data []byte, err error) {
+func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicies) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesAccessAppPolicyLink) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
-}
-
-type AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject struct {
-	// The UUID of the policy
-	ID param.Field[string] `json:"id"`
-	// Administrators who can approve a temporary authentication request.
-	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
-	// Requires the user to request access from an administrator at the start of each
-	// session.
-	ApprovalRequired param.Field[bool] `json:"approval_required"`
-	// Require this application to be served in an isolated browser for users matching
-	// this policy. 'Client Web Isolation' must be on for the account in order to use
-	// this feature.
-	IsolationRequired param.Field[bool] `json:"isolation_required"`
-	// The order of execution for this policy. Must be unique for each policy within an
-	// app.
-	Precedence param.Field[int64] `json:"precedence"`
-	// A custom message that will appear on the purpose justification screen.
-	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
-	// Require users to enter a justification when they log in to the application.
-	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
-	// The amount of time that tokens issued for the application will be valid. Must be
-	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
-	// m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPoliciesObject) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently

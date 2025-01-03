@@ -36,63 +36,8 @@ func TestScriptUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"this-is_my_script-01",
 		workers.ScriptUpdateParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: workers.ScriptUpdateParamsBodyMetadata{
-				Metadata: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadata{
-					Assets: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataAssets{
-						Config: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataAssetsConfig{
-							HTMLHandling:     cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
-							NotFoundHandling: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingNone),
-							ServeDirectly:    cloudflare.F(true),
-						}),
-						JWT: cloudflare.F("jwt"),
-					}),
-					Bindings: cloudflare.F([]workers.ScriptUpdateParamsBodyMetadataMetadataBinding{{
-						Name: cloudflare.F("MY_ENV_VAR"),
-						Type: cloudflare.F("plain_text"),
-					}}),
-					BodyPart:           cloudflare.F("worker.js"),
-					CompatibilityDate:  cloudflare.F("2021-01-01"),
-					CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
-					KeepAssets:         cloudflare.F(false),
-					KeepBindings:       cloudflare.F([]string{"string"}),
-					Logpush:            cloudflare.F(false),
-					MainModule:         cloudflare.F("worker.js"),
-					Migrations: cloudflare.F[workers.ScriptUpdateParamsBodyMetadataMetadataMigrationsUnion](workers.SingleStepMigrationParam{
-						DeletedClasses:   cloudflare.F([]string{"string"}),
-						NewClasses:       cloudflare.F([]string{"string"}),
-						NewSqliteClasses: cloudflare.F([]string{"string"}),
-						NewTag:           cloudflare.F("v2"),
-						OldTag:           cloudflare.F("v1"),
-						RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
-							From: cloudflare.F("from"),
-							To:   cloudflare.F("to"),
-						}}),
-						TransferredClasses: cloudflare.F([]workers.SingleStepMigrationTransferredClassParam{{
-							From:       cloudflare.F("from"),
-							FromScript: cloudflare.F("from_script"),
-							To:         cloudflare.F("to"),
-						}}),
-					}),
-					Observability: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataObservability{
-						Enabled:          cloudflare.F(true),
-						HeadSamplingRate: cloudflare.F(0.100000),
-					}),
-					Placement: cloudflare.F(workers.PlacementConfigurationParam{
-						Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
-					}),
-					Tags: cloudflare.F([]string{"string"}),
-					TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
-						Service:     cloudflare.F("my-log-consumer"),
-						Environment: cloudflare.F("production"),
-						Namespace:   cloudflare.F("my-namespace"),
-					}}),
-					UsageModel: cloudflare.F(workers.ScriptUpdateParamsBodyMetadataMetadataUsageModelBundled),
-					VersionTags: cloudflare.F(map[string]string{
-						"foo": "string",
-					}),
-				}),
-			},
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:       workers.ScriptUpdateParamsBodyMessage{},
 			RollbackTo: cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 		},
 	)

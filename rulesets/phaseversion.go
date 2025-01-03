@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 	"github.com/tidwall/gjson"
 )
 
@@ -219,8 +220,8 @@ type PhaseVersionGetResponseRule struct {
 	Categories interface{} `json:"categories"`
 	// An informative description of the rule.
 	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
+	// This field can have the runtime type of [bool], [zones.OriginMaxHTTPVersion].
+	Enabled interface{} `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [PhaseVersionGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],

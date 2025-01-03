@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // RiskScoringService contains methods and other services that help with
@@ -117,7 +118,7 @@ type RiskScoringGetResponseEvent struct {
 	Name         string                                `json:"name,required"`
 	RiskLevel    RiskScoringGetResponseEventsRiskLevel `json:"risk_level,required"`
 	Timestamp    time.Time                             `json:"timestamp,required" format:"date-time"`
-	EventDetails interface{}                           `json:"event_details"`
+	EventDetails zones.OriginMaxHTTPVersion            `json:"event_details"`
 	JSON         riskScoringGetResponseEventJSON       `json:"-"`
 }
 

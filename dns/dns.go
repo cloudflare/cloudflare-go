@@ -7,6 +7,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // DNSService contains methods and other services that help with interacting with
@@ -38,7 +39,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 	return
 }
 
-type DNSAnalyticsNominalMetric []interface{}
+type DNSAnalyticsNominalMetric []zones.OriginMaxHTTPVersion
 
 type DNSAnalyticsQuery struct {
 	// Array of dimension names.
