@@ -45,28 +45,54 @@ func (UnionString) ImplementsMagicTransitIPSECTunnelNewParamsHealthCheckTargetUn
 func (UnionString) ImplementsMagicTransitIPSECTunnelUpdateParamsHealthCheckTargetUnion()           {}
 func (UnionString) ImplementsRulesListItemListResponseUnion()                                      {}
 func (UnionString) ImplementsRulesListItemGetResponseUnion()                                       {}
-func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()                     {}
-func (UnionString) ImplementsHostnamesSettingValueUnionParam()                                     {}
-func (UnionString) ImplementsHostnamesSettingValueUnion()                                          {}
-func (UnionString) ImplementsAIGatewayLogListParamsFiltersValueUnion()                             {}
-func (UnionString) ImplementsAIGatewayLogDeleteParamsFiltersValueUnion()                           {}
-func (UnionString) ImplementsAIGatewayLogEditParamsMetadataUnion()                                 {}
-func (UnionString) ImplementsAIGatewayDatasetNewResponseFiltersValueUnion()                        {}
-func (UnionString) ImplementsAIGatewayDatasetUpdateResponseFiltersValueUnion()                     {}
-func (UnionString) ImplementsAIGatewayDatasetListResponseFiltersValueUnion()                       {}
-func (UnionString) ImplementsAIGatewayDatasetDeleteResponseFiltersValueUnion()                     {}
-func (UnionString) ImplementsAIGatewayDatasetGetResponseFiltersValueUnion()                        {}
-func (UnionString) ImplementsAIGatewayDatasetNewParamsFiltersValueUnion()                          {}
-func (UnionString) ImplementsAIGatewayDatasetUpdateParamsFiltersValueUnion()                       {}
-func (UnionString) ImplementsAIGatewayEvaluationNewResponseDatasetsFiltersValueUnion()             {}
-func (UnionString) ImplementsAIGatewayEvaluationListResponseDatasetsFiltersValueUnion()            {}
-func (UnionString) ImplementsAIGatewayEvaluationDeleteResponseDatasetsFiltersValueUnion()          {}
-func (UnionString) ImplementsAIGatewayEvaluationGetResponseDatasetsFiltersValueUnion()             {}
-func (UnionString) ImplementsWorkflowsInstanceGetResponseOutputUnion()                             {}
-func (UnionString) ImplementsWorkflowsInstanceGetResponseStepsObjectConfigRetriesDelayUnion()      {}
-func (UnionString) ImplementsWorkflowsInstanceGetResponseStepsObjectConfigTimeoutUnion()           {}
-func (UnionString) ImplementsAIAIRunResponseUnion()                                                {}
-func (UnionString) ImplementsAIAIRunParamsBodyTextEmbeddingsTextUnion()                            {}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserSSHApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserVNCApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyAppLauncherApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodySelfHostedApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodySaaSApplicationPolicyUnion() {}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserSSHApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserVNCApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyAppLauncherApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyDeviceEnrollmentPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsZeroTrustAccessApplicationUpdateParamsBodyBrowserIsolationPermissionsApplicationPolicyUnion() {
+}
+func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0Union()                {}
+func (UnionString) ImplementsHostnamesSettingValueUnionParam()                                {}
+func (UnionString) ImplementsHostnamesSettingValueUnion()                                     {}
+func (UnionString) ImplementsAIGatewayLogListParamsFiltersValueUnion()                        {}
+func (UnionString) ImplementsAIGatewayLogDeleteParamsFiltersValueUnion()                      {}
+func (UnionString) ImplementsAIGatewayLogEditParamsMetadataUnion()                            {}
+func (UnionString) ImplementsAIGatewayDatasetNewResponseFiltersValueUnion()                   {}
+func (UnionString) ImplementsAIGatewayDatasetUpdateResponseFiltersValueUnion()                {}
+func (UnionString) ImplementsAIGatewayDatasetListResponseFiltersValueUnion()                  {}
+func (UnionString) ImplementsAIGatewayDatasetDeleteResponseFiltersValueUnion()                {}
+func (UnionString) ImplementsAIGatewayDatasetGetResponseFiltersValueUnion()                   {}
+func (UnionString) ImplementsAIGatewayDatasetNewParamsFiltersValueUnion()                     {}
+func (UnionString) ImplementsAIGatewayDatasetUpdateParamsFiltersValueUnion()                  {}
+func (UnionString) ImplementsAIGatewayEvaluationNewResponseDatasetsFiltersValueUnion()        {}
+func (UnionString) ImplementsAIGatewayEvaluationListResponseDatasetsFiltersValueUnion()       {}
+func (UnionString) ImplementsAIGatewayEvaluationDeleteResponseDatasetsFiltersValueUnion()     {}
+func (UnionString) ImplementsAIGatewayEvaluationGetResponseDatasetsFiltersValueUnion()        {}
+func (UnionString) ImplementsWorkflowsInstanceGetResponseOutputUnion()                        {}
+func (UnionString) ImplementsWorkflowsInstanceGetResponseStepsObjectConfigRetriesDelayUnion() {}
+func (UnionString) ImplementsWorkflowsInstanceGetResponseStepsObjectConfigTimeoutUnion()      {}
+func (UnionString) ImplementsAIAIRunResponseUnion()                                           {}
+func (UnionString) ImplementsAIAIRunParamsBodyTextEmbeddingsTextUnion()                       {}
 
 type UnionBool bool
 

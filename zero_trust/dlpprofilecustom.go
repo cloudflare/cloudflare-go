@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
 	"github.com/tidwall/gjson"
 )
 
@@ -259,8 +258,8 @@ type DLPProfileCustomNewResponseCustomProfileEntry struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of [zones.OriginMaxHTTPVersion].
-	WordList zones.OriginMaxHTTPVersion                        `json:"word_list"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}                                       `json:"word_list"`
 	JSON     dlpProfileCustomNewResponseCustomProfileEntryJSON `json:"-"`
 	union    DLPProfileCustomNewResponseCustomProfileEntriesUnion
 }
@@ -582,7 +581,7 @@ type DLPProfileCustomNewResponseCustomProfileEntriesWordListEntry struct {
 	Name      string                                                           `json:"name,required"`
 	Type      DLPProfileCustomNewResponseCustomProfileEntriesWordListEntryType `json:"type,required"`
 	UpdatedAt time.Time                                                        `json:"updated_at,required" format:"date-time"`
-	WordList  zones.OriginMaxHTTPVersion                                       `json:"word_list,required"`
+	WordList  interface{}                                                      `json:"word_list,required"`
 	ProfileID string                                                           `json:"profile_id,nullable" format:"uuid"`
 	JSON      dlpProfileCustomNewResponseCustomProfileEntriesWordListEntryJSON `json:"-"`
 }
@@ -735,8 +734,8 @@ type DLPProfileCustomNewResponsePredefinedProfileEntry struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of [zones.OriginMaxHTTPVersion].
-	WordList zones.OriginMaxHTTPVersion                            `json:"word_list"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}                                           `json:"word_list"`
 	JSON     dlpProfileCustomNewResponsePredefinedProfileEntryJSON `json:"-"`
 	union    DLPProfileCustomNewResponsePredefinedProfileEntriesUnion
 }
@@ -1059,7 +1058,7 @@ type DLPProfileCustomNewResponsePredefinedProfileEntriesWordListEntry struct {
 	Name      string                                                               `json:"name,required"`
 	Type      DLPProfileCustomNewResponsePredefinedProfileEntriesWordListEntryType `json:"type,required"`
 	UpdatedAt time.Time                                                            `json:"updated_at,required" format:"date-time"`
-	WordList  zones.OriginMaxHTTPVersion                                           `json:"word_list,required"`
+	WordList  interface{}                                                          `json:"word_list,required"`
 	ProfileID string                                                               `json:"profile_id,nullable" format:"uuid"`
 	JSON      dlpProfileCustomNewResponsePredefinedProfileEntriesWordListEntryJSON `json:"-"`
 }
@@ -1204,8 +1203,8 @@ type DLPProfileCustomNewResponseIntegrationProfileEntry struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of [zones.OriginMaxHTTPVersion].
-	WordList zones.OriginMaxHTTPVersion                             `json:"word_list"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}                                            `json:"word_list"`
 	JSON     dlpProfileCustomNewResponseIntegrationProfileEntryJSON `json:"-"`
 	union    DLPProfileCustomNewResponseIntegrationProfileEntriesUnion
 }
@@ -1528,7 +1527,7 @@ type DLPProfileCustomNewResponseIntegrationProfileEntriesWordListEntry struct {
 	Name      string                                                                `json:"name,required"`
 	Type      DLPProfileCustomNewResponseIntegrationProfileEntriesWordListEntryType `json:"type,required"`
 	UpdatedAt time.Time                                                             `json:"updated_at,required" format:"date-time"`
-	WordList  zones.OriginMaxHTTPVersion                                            `json:"word_list,required"`
+	WordList  interface{}                                                           `json:"word_list,required"`
 	ProfileID string                                                                `json:"profile_id,nullable" format:"uuid"`
 	JSON      dlpProfileCustomNewResponseIntegrationProfileEntriesWordListEntryJSON `json:"-"`
 }

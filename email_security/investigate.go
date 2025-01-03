@@ -17,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // InvestigateService contains methods and other services that help with
@@ -102,12 +101,12 @@ func (r *InvestigateService) Get(ctx context.Context, postfixID string, query In
 }
 
 type InvestigateListResponse struct {
-	ID                string                     `json:"id,required"`
-	ActionLog         zones.OriginMaxHTTPVersion `json:"action_log,required"`
-	ClientRecipients  []string                   `json:"client_recipients,required"`
-	DetectionReasons  []string                   `json:"detection_reasons,required"`
-	IsPhishSubmission bool                       `json:"is_phish_submission,required"`
-	IsQuarantined     bool                       `json:"is_quarantined,required"`
+	ID                string      `json:"id,required"`
+	ActionLog         interface{} `json:"action_log,required"`
+	ClientRecipients  []string    `json:"client_recipients,required"`
+	DetectionReasons  []string    `json:"detection_reasons,required"`
+	IsPhishSubmission bool        `json:"is_phish_submission,required"`
+	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
 	PostfixID        string                                  `json:"postfix_id,required"`
 	Ts               string                                  `json:"ts,required"`
@@ -292,12 +291,12 @@ func (r InvestigateListResponseValidationSPF) IsKnown() bool {
 }
 
 type InvestigateGetResponse struct {
-	ID                string                     `json:"id,required"`
-	ActionLog         zones.OriginMaxHTTPVersion `json:"action_log,required"`
-	ClientRecipients  []string                   `json:"client_recipients,required"`
-	DetectionReasons  []string                   `json:"detection_reasons,required"`
-	IsPhishSubmission bool                       `json:"is_phish_submission,required"`
-	IsQuarantined     bool                       `json:"is_quarantined,required"`
+	ID                string      `json:"id,required"`
+	ActionLog         interface{} `json:"action_log,required"`
+	ClientRecipients  []string    `json:"client_recipients,required"`
+	DetectionReasons  []string    `json:"detection_reasons,required"`
+	IsPhishSubmission bool        `json:"is_phish_submission,required"`
+	IsQuarantined     bool        `json:"is_quarantined,required"`
 	// The identifier of the message.
 	PostfixID        string                                 `json:"postfix_id,required"`
 	Ts               string                                 `json:"ts,required"`

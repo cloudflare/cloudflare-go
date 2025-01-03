@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
 	"github.com/tidwall/gjson"
 )
 
@@ -192,8 +191,8 @@ type DLPEntryUpdateResponse struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of [zones.OriginMaxHTTPVersion].
-	WordList zones.OriginMaxHTTPVersion `json:"word_list"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}                `json:"word_list"`
 	JSON     dlpEntryUpdateResponseJSON `json:"-"`
 	union    DLPEntryUpdateResponseUnion
 }
@@ -505,7 +504,7 @@ type DLPEntryUpdateResponseWordListEntry struct {
 	Name      string                                  `json:"name,required"`
 	Type      DLPEntryUpdateResponseWordListEntryType `json:"type,required"`
 	UpdatedAt time.Time                               `json:"updated_at,required" format:"date-time"`
-	WordList  zones.OriginMaxHTTPVersion              `json:"word_list,required"`
+	WordList  interface{}                             `json:"word_list,required"`
 	ProfileID string                                  `json:"profile_id,nullable" format:"uuid"`
 	JSON      dlpEntryUpdateResponseWordListEntryJSON `json:"-"`
 }
@@ -580,9 +579,9 @@ type DLPEntryListResponse struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of [zones.OriginMaxHTTPVersion].
-	WordList zones.OriginMaxHTTPVersion `json:"word_list"`
-	JSON     dlpEntryListResponseJSON   `json:"-"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}              `json:"word_list"`
+	JSON     dlpEntryListResponseJSON `json:"-"`
 	union    DLPEntryListResponseUnion
 }
 
@@ -893,7 +892,7 @@ type DLPEntryListResponseWordListEntry struct {
 	Name      string                                `json:"name,required"`
 	Type      DLPEntryListResponseWordListEntryType `json:"type,required"`
 	UpdatedAt time.Time                             `json:"updated_at,required" format:"date-time"`
-	WordList  zones.OriginMaxHTTPVersion            `json:"word_list,required"`
+	WordList  interface{}                           `json:"word_list,required"`
 	ProfileID string                                `json:"profile_id,nullable" format:"uuid"`
 	JSON      dlpEntryListResponseWordListEntryJSON `json:"-"`
 }
@@ -970,9 +969,9 @@ type DLPEntryGetResponse struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of [zones.OriginMaxHTTPVersion].
-	WordList zones.OriginMaxHTTPVersion `json:"word_list"`
-	JSON     dlpEntryGetResponseJSON    `json:"-"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}             `json:"word_list"`
+	JSON     dlpEntryGetResponseJSON `json:"-"`
 	union    DLPEntryGetResponseUnion
 }
 
@@ -1283,7 +1282,7 @@ type DLPEntryGetResponseWordListEntry struct {
 	Name      string                               `json:"name,required"`
 	Type      DLPEntryGetResponseWordListEntryType `json:"type,required"`
 	UpdatedAt time.Time                            `json:"updated_at,required" format:"date-time"`
-	WordList  zones.OriginMaxHTTPVersion           `json:"word_list,required"`
+	WordList  interface{}                          `json:"word_list,required"`
 	ProfileID string                               `json:"profile_id,nullable" format:"uuid"`
 	JSON      dlpEntryGetResponseWordListEntryJSON `json:"-"`
 }
