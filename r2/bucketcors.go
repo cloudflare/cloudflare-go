@@ -37,8 +37,8 @@ func NewBucketCORSService(opts ...option.RequestOption) (r *BucketCORSService) {
 // Set the CORS policy for a bucket
 func (r *BucketCORSService) Update(ctx context.Context, bucketName string, params BucketCORSUpdateParams, opts ...option.RequestOption) (res *BucketCORSUpdateResponse, err error) {
 	var env BucketCORSUpdateResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -61,8 +61,8 @@ func (r *BucketCORSService) Update(ctx context.Context, bucketName string, param
 // Delete the CORS policy for a bucket
 func (r *BucketCORSService) Delete(ctx context.Context, bucketName string, params BucketCORSDeleteParams, opts ...option.RequestOption) (res *BucketCORSDeleteResponse, err error) {
 	var env BucketCORSDeleteResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -85,8 +85,8 @@ func (r *BucketCORSService) Delete(ctx context.Context, bucketName string, param
 // Get the CORS policy for a bucket
 func (r *BucketCORSService) Get(ctx context.Context, bucketName string, params BucketCORSGetParams, opts ...option.RequestOption) (res *BucketCORSGetResponse, err error) {
 	var env BucketCORSGetResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -224,7 +224,7 @@ type BucketCORSUpdateParams struct {
 	AccountID param.Field[string]                       `path:"account_id,required"`
 	Rules     param.Field[[]BucketCORSUpdateParamsRule] `json:"rules"`
 	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[BucketCORSUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketCORSUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketCORSUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -352,7 +352,7 @@ type BucketCORSDeleteParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[BucketCORSDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketCORSDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // The bucket jurisdiction
@@ -419,7 +419,7 @@ type BucketCORSGetParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[BucketCORSGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketCORSGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // The bucket jurisdiction

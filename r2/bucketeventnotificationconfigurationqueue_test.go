@@ -40,7 +40,7 @@ func TestBucketEventNotificationConfigurationQueueUpdateWithOptionalParams(t *te
 				Prefix:      cloudflare.F("img/"),
 				Suffix:      cloudflare.F(".jpeg"),
 			}}),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketEventNotificationConfigurationQueueUpdateParamsCfR2JurisdictionDefault),
+			Jurisdiction: cloudflare.F(r2.BucketEventNotificationConfigurationQueueUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -71,8 +71,8 @@ func TestBucketEventNotificationConfigurationQueueDeleteWithOptionalParams(t *te
 		"example-bucket",
 		"queue_id",
 		r2.BucketEventNotificationConfigurationQueueDeleteParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketEventNotificationConfigurationQueueDeleteParamsCfR2JurisdictionDefault),
+			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Jurisdiction: cloudflare.F(r2.BucketEventNotificationConfigurationQueueDeleteParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {

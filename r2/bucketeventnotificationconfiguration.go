@@ -40,8 +40,8 @@ func NewBucketEventNotificationConfigurationService(opts ...option.RequestOption
 // List all event notification rules for a bucket.
 func (r *BucketEventNotificationConfigurationService) Get(ctx context.Context, bucketName string, params BucketEventNotificationConfigurationGetParams, opts ...option.RequestOption) (res *BucketEventNotificationConfigurationGetResponse, err error) {
 	var env BucketEventNotificationConfigurationGetResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -174,7 +174,7 @@ type BucketEventNotificationConfigurationGetParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[BucketEventNotificationConfigurationGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketEventNotificationConfigurationGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // The bucket jurisdiction

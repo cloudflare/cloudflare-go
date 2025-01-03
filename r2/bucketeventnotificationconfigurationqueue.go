@@ -38,8 +38,8 @@ func NewBucketEventNotificationConfigurationQueueService(opts ...option.RequestO
 // Create event notification rule.
 func (r *BucketEventNotificationConfigurationQueueService) Update(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationConfigurationQueueUpdateParams, opts ...option.RequestOption) (res *BucketEventNotificationConfigurationQueueUpdateResponse, err error) {
 	var env BucketEventNotificationConfigurationQueueUpdateResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -67,8 +67,8 @@ func (r *BucketEventNotificationConfigurationQueueService) Update(ctx context.Co
 // specified queue will be deleted**.
 func (r *BucketEventNotificationConfigurationQueueService) Delete(ctx context.Context, bucketName string, queueID string, params BucketEventNotificationConfigurationQueueDeleteParams, opts ...option.RequestOption) (res *BucketEventNotificationConfigurationQueueDeleteResponse, err error) {
 	var env BucketEventNotificationConfigurationQueueDeleteResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -102,7 +102,7 @@ type BucketEventNotificationConfigurationQueueUpdateParams struct {
 	// Array of rules to drive notifications
 	Rules param.Field[[]BucketEventNotificationConfigurationQueueUpdateParamsRule] `json:"rules"`
 	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[BucketEventNotificationConfigurationQueueUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketEventNotificationConfigurationQueueUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketEventNotificationConfigurationQueueUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -208,7 +208,7 @@ type BucketEventNotificationConfigurationQueueDeleteParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[BucketEventNotificationConfigurationQueueDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketEventNotificationConfigurationQueueDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // The bucket jurisdiction
