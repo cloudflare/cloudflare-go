@@ -29,11 +29,11 @@ func TestBucketNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.R2.Buckets.New(context.TODO(), r2.BucketNewParams{
-		AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Name:             cloudflare.F("example-bucket"),
-		LocationHint:     cloudflare.F(r2.BucketNewParamsLocationHintApac),
-		StorageClass:     cloudflare.F(r2.BucketNewParamsStorageClassStandard),
-		CfR2Jurisdiction: cloudflare.F(r2.BucketNewParamsCfR2JurisdictionDefault),
+		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:         cloudflare.F("example-bucket"),
+		LocationHint: cloudflare.F(r2.BucketNewParamsLocationHintApac),
+		StorageClass: cloudflare.F(r2.BucketNewParamsStorageClassStandard),
+		Jurisdiction: cloudflare.F(r2.BucketNewParamsCfR2JurisdictionDefault),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
