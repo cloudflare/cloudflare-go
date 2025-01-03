@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // ManagedTransformService contains methods and other services that help with
@@ -116,8 +117,8 @@ type ManagedTransformListResponseManagedRequestHeader struct {
 	// Transforms.
 	HasConflict bool `json:"has_conflict,required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
-	ConflictsWith []ManagedTransformListResponseManagedRequestHeadersConflictsWith `json:"conflicts_with"`
-	JSON          managedTransformListResponseManagedRequestHeaderJSON             `json:"-"`
+	ConflictsWith []zones.OriginMaxHTTPVersion                         `json:"conflicts_with"`
+	JSON          managedTransformListResponseManagedRequestHeaderJSON `json:"-"`
 }
 
 // managedTransformListResponseManagedRequestHeaderJSON contains the JSON metadata
@@ -139,27 +140,6 @@ func (r managedTransformListResponseManagedRequestHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-// The human-readable identifier of the Managed Transform.
-type ManagedTransformListResponseManagedRequestHeadersConflictsWith struct {
-	JSON managedTransformListResponseManagedRequestHeadersConflictsWithJSON `json:"-"`
-}
-
-// managedTransformListResponseManagedRequestHeadersConflictsWithJSON contains the
-// JSON metadata for the struct
-// [ManagedTransformListResponseManagedRequestHeadersConflictsWith]
-type managedTransformListResponseManagedRequestHeadersConflictsWithJSON struct {
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ManagedTransformListResponseManagedRequestHeadersConflictsWith) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r managedTransformListResponseManagedRequestHeadersConflictsWithJSON) RawJSON() string {
-	return r.raw
-}
-
 // A Managed Transform object.
 type ManagedTransformListResponseManagedResponseHeader struct {
 	// The human-readable identifier of the Managed Transform.
@@ -170,8 +150,8 @@ type ManagedTransformListResponseManagedResponseHeader struct {
 	// Transforms.
 	HasConflict bool `json:"has_conflict,required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
-	ConflictsWith []ManagedTransformListResponseManagedResponseHeadersConflictsWith `json:"conflicts_with"`
-	JSON          managedTransformListResponseManagedResponseHeaderJSON             `json:"-"`
+	ConflictsWith []zones.OriginMaxHTTPVersion                          `json:"conflicts_with"`
+	JSON          managedTransformListResponseManagedResponseHeaderJSON `json:"-"`
 }
 
 // managedTransformListResponseManagedResponseHeaderJSON contains the JSON metadata
@@ -190,27 +170,6 @@ func (r *ManagedTransformListResponseManagedResponseHeader) UnmarshalJSON(data [
 }
 
 func (r managedTransformListResponseManagedResponseHeaderJSON) RawJSON() string {
-	return r.raw
-}
-
-// The human-readable identifier of the Managed Transform.
-type ManagedTransformListResponseManagedResponseHeadersConflictsWith struct {
-	JSON managedTransformListResponseManagedResponseHeadersConflictsWithJSON `json:"-"`
-}
-
-// managedTransformListResponseManagedResponseHeadersConflictsWithJSON contains the
-// JSON metadata for the struct
-// [ManagedTransformListResponseManagedResponseHeadersConflictsWith]
-type managedTransformListResponseManagedResponseHeadersConflictsWithJSON struct {
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ManagedTransformListResponseManagedResponseHeadersConflictsWith) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r managedTransformListResponseManagedResponseHeadersConflictsWithJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -250,8 +209,8 @@ type ManagedTransformEditResponseManagedRequestHeader struct {
 	// Transforms.
 	HasConflict bool `json:"has_conflict,required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
-	ConflictsWith []ManagedTransformEditResponseManagedRequestHeadersConflictsWith `json:"conflicts_with"`
-	JSON          managedTransformEditResponseManagedRequestHeaderJSON             `json:"-"`
+	ConflictsWith []zones.OriginMaxHTTPVersion                         `json:"conflicts_with"`
+	JSON          managedTransformEditResponseManagedRequestHeaderJSON `json:"-"`
 }
 
 // managedTransformEditResponseManagedRequestHeaderJSON contains the JSON metadata
@@ -273,27 +232,6 @@ func (r managedTransformEditResponseManagedRequestHeaderJSON) RawJSON() string {
 	return r.raw
 }
 
-// The human-readable identifier of the Managed Transform.
-type ManagedTransformEditResponseManagedRequestHeadersConflictsWith struct {
-	JSON managedTransformEditResponseManagedRequestHeadersConflictsWithJSON `json:"-"`
-}
-
-// managedTransformEditResponseManagedRequestHeadersConflictsWithJSON contains the
-// JSON metadata for the struct
-// [ManagedTransformEditResponseManagedRequestHeadersConflictsWith]
-type managedTransformEditResponseManagedRequestHeadersConflictsWithJSON struct {
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ManagedTransformEditResponseManagedRequestHeadersConflictsWith) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r managedTransformEditResponseManagedRequestHeadersConflictsWithJSON) RawJSON() string {
-	return r.raw
-}
-
 // A Managed Transform object.
 type ManagedTransformEditResponseManagedResponseHeader struct {
 	// The human-readable identifier of the Managed Transform.
@@ -304,8 +242,8 @@ type ManagedTransformEditResponseManagedResponseHeader struct {
 	// Transforms.
 	HasConflict bool `json:"has_conflict,required"`
 	// The Managed Transforms that this Managed Transform conflicts with.
-	ConflictsWith []ManagedTransformEditResponseManagedResponseHeadersConflictsWith `json:"conflicts_with"`
-	JSON          managedTransformEditResponseManagedResponseHeaderJSON             `json:"-"`
+	ConflictsWith []zones.OriginMaxHTTPVersion                          `json:"conflicts_with"`
+	JSON          managedTransformEditResponseManagedResponseHeaderJSON `json:"-"`
 }
 
 // managedTransformEditResponseManagedResponseHeaderJSON contains the JSON metadata
@@ -324,27 +262,6 @@ func (r *ManagedTransformEditResponseManagedResponseHeader) UnmarshalJSON(data [
 }
 
 func (r managedTransformEditResponseManagedResponseHeaderJSON) RawJSON() string {
-	return r.raw
-}
-
-// The human-readable identifier of the Managed Transform.
-type ManagedTransformEditResponseManagedResponseHeadersConflictsWith struct {
-	JSON managedTransformEditResponseManagedResponseHeadersConflictsWithJSON `json:"-"`
-}
-
-// managedTransformEditResponseManagedResponseHeadersConflictsWithJSON contains the
-// JSON metadata for the struct
-// [ManagedTransformEditResponseManagedResponseHeadersConflictsWith]
-type managedTransformEditResponseManagedResponseHeadersConflictsWithJSON struct {
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ManagedTransformEditResponseManagedResponseHeadersConflictsWith) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r managedTransformEditResponseManagedResponseHeadersConflictsWithJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -534,14 +451,6 @@ func (r ManagedTransformEditParamsManagedRequestHeader) MarshalJSON() (data []by
 	return apijson.MarshalRoot(r)
 }
 
-// The human-readable identifier of the Managed Transform.
-type ManagedTransformEditParamsManagedRequestHeadersConflictsWith struct {
-}
-
-func (r ManagedTransformEditParamsManagedRequestHeadersConflictsWith) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
 // A Managed Transform object.
 type ManagedTransformEditParamsManagedResponseHeader struct {
 	// The human-readable identifier of the Managed Transform.
@@ -551,14 +460,6 @@ type ManagedTransformEditParamsManagedResponseHeader struct {
 }
 
 func (r ManagedTransformEditParamsManagedResponseHeader) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The human-readable identifier of the Managed Transform.
-type ManagedTransformEditParamsManagedResponseHeadersConflictsWith struct {
-}
-
-func (r ManagedTransformEditParamsManagedResponseHeadersConflictsWith) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

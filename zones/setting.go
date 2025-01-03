@@ -2662,6 +2662,8 @@ func (r OriginErrorPagePassThruParam) ImplementsPageRulesPageRuleUpdateParamsAct
 
 func (r OriginErrorPagePassThruParam) ImplementsPageRulesPageRuleEditParamsActionUnion() {}
 
+type OriginMaxHTTPVersion = interface{}
+
 type Polish struct {
 	// Apply options from the Polish feature of the Cloudflare Speed app.
 	ID PolishID `json:"id"`

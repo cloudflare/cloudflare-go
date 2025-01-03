@@ -17,6 +17,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 	"github.com/tidwall/gjson"
 )
 
@@ -47,7 +48,7 @@ func NewWAFPackageService(opts ...option.RequestOption) (r *WAFPackageService) {
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageService) List(ctx context.Context, params WAFPackageListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[WAFPackageListResponse], err error) {
+func (r *WAFPackageService) List(ctx context.Context, params WAFPackageListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[zones.OriginMaxHTTPVersion], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -72,7 +73,7 @@ func (r *WAFPackageService) List(ctx context.Context, params WAFPackageListParam
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *WAFPackageService) ListAutoPaging(ctx context.Context, params WAFPackageListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[WAFPackageListResponse] {
+func (r *WAFPackageService) ListAutoPaging(ctx context.Context, params WAFPackageListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[zones.OriginMaxHTTPVersion] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -94,8 +95,6 @@ func (r *WAFPackageService) Get(ctx context.Context, packageID string, query WAF
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
-
-type WAFPackageListResponse = interface{}
 
 type WAFPackageGetResponse struct {
 	// This field can have the runtime type of [[]shared.ResponseInfo].

@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // DLPEmailRuleService contains methods and other services that help with
@@ -238,7 +239,7 @@ func (r DLPEmailRuleNewResponseActionAction) IsKnown() bool {
 type DLPEmailRuleNewResponseCondition struct {
 	Operator DLPEmailRuleNewResponseConditionsOperator `json:"operator,required"`
 	Selector DLPEmailRuleNewResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                               `json:"value,required"`
+	Value    zones.OriginMaxHTTPVersion                `json:"value,required"`
 	JSON     dlpEmailRuleNewResponseConditionJSON      `json:"-"`
 }
 
@@ -371,7 +372,7 @@ func (r DLPEmailRuleUpdateResponseActionAction) IsKnown() bool {
 type DLPEmailRuleUpdateResponseCondition struct {
 	Operator DLPEmailRuleUpdateResponseConditionsOperator `json:"operator,required"`
 	Selector DLPEmailRuleUpdateResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                                  `json:"value,required"`
+	Value    zones.OriginMaxHTTPVersion                   `json:"value,required"`
 	JSON     dlpEmailRuleUpdateResponseConditionJSON      `json:"-"`
 }
 
@@ -504,7 +505,7 @@ func (r DLPEmailRuleListResponseActionAction) IsKnown() bool {
 type DLPEmailRuleListResponseCondition struct {
 	Operator DLPEmailRuleListResponseConditionsOperator `json:"operator,required"`
 	Selector DLPEmailRuleListResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                                `json:"value,required"`
+	Value    zones.OriginMaxHTTPVersion                 `json:"value,required"`
 	JSON     dlpEmailRuleListResponseConditionJSON      `json:"-"`
 }
 
@@ -637,7 +638,7 @@ func (r DLPEmailRuleDeleteResponseActionAction) IsKnown() bool {
 type DLPEmailRuleDeleteResponseCondition struct {
 	Operator DLPEmailRuleDeleteResponseConditionsOperator `json:"operator,required"`
 	Selector DLPEmailRuleDeleteResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                                  `json:"value,required"`
+	Value    zones.OriginMaxHTTPVersion                   `json:"value,required"`
 	JSON     dlpEmailRuleDeleteResponseConditionJSON      `json:"-"`
 }
 
@@ -770,7 +771,7 @@ func (r DLPEmailRuleBulkEditResponseActionAction) IsKnown() bool {
 type DLPEmailRuleBulkEditResponseCondition struct {
 	Operator DLPEmailRuleBulkEditResponseConditionsOperator `json:"operator,required"`
 	Selector DLPEmailRuleBulkEditResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                                    `json:"value,required"`
+	Value    zones.OriginMaxHTTPVersion                     `json:"value,required"`
 	JSON     dlpEmailRuleBulkEditResponseConditionJSON      `json:"-"`
 }
 
@@ -903,7 +904,7 @@ func (r DLPEmailRuleGetResponseActionAction) IsKnown() bool {
 type DLPEmailRuleGetResponseCondition struct {
 	Operator DLPEmailRuleGetResponseConditionsOperator `json:"operator,required"`
 	Selector DLPEmailRuleGetResponseConditionsSelector `json:"selector,required"`
-	Value    interface{}                               `json:"value,required"`
+	Value    zones.OriginMaxHTTPVersion                `json:"value,required"`
 	JSON     dlpEmailRuleGetResponseConditionJSON      `json:"-"`
 }
 
@@ -998,7 +999,7 @@ func (r DLPEmailRuleNewParamsActionAction) IsKnown() bool {
 type DLPEmailRuleNewParamsCondition struct {
 	Operator param.Field[DLPEmailRuleNewParamsConditionsOperator] `json:"operator,required"`
 	Selector param.Field[DLPEmailRuleNewParamsConditionsSelector] `json:"selector,required"`
-	Value    param.Field[interface{}]                             `json:"value,required"`
+	Value    param.Field[zones.OriginMaxHTTPVersionParam]         `json:"value,required"`
 }
 
 func (r DLPEmailRuleNewParamsCondition) MarshalJSON() (data []byte, err error) {
@@ -1121,7 +1122,7 @@ func (r DLPEmailRuleUpdateParamsActionAction) IsKnown() bool {
 type DLPEmailRuleUpdateParamsCondition struct {
 	Operator param.Field[DLPEmailRuleUpdateParamsConditionsOperator] `json:"operator,required"`
 	Selector param.Field[DLPEmailRuleUpdateParamsConditionsSelector] `json:"selector,required"`
-	Value    param.Field[interface{}]                                `json:"value,required"`
+	Value    param.Field[zones.OriginMaxHTTPVersionParam]            `json:"value,required"`
 }
 
 func (r DLPEmailRuleUpdateParamsCondition) MarshalJSON() (data []byte, err error) {

@@ -21,6 +21,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // ScriptService contains methods and other services that help with interacting
@@ -534,8 +535,8 @@ type ScriptUpdateParamsBodyMetadataMetadataBinding struct {
 	Name param.Field[string] `json:"name"`
 	// Type of binding. You can find more about bindings on our docs:
 	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
-	Type        param.Field[string]    `json:"type"`
-	ExtraFields map[string]interface{} `json:"-,extras"`
+	Type        param.Field[string]                        `json:"type"`
+	ExtraFields map[string]zones.OriginMaxHTTPVersionParam `json:"-,extras"`
 }
 
 func (r ScriptUpdateParamsBodyMetadataMetadataBinding) MarshalJSON() (data []byte, err error) {
