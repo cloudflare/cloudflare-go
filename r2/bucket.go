@@ -69,8 +69,8 @@ func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ..
 // Lists all R2 buckets on your account
 func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *BucketListResponse, err error) {
 	var env BucketListResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -354,7 +354,7 @@ type BucketListParams struct {
 	// Bucket name to start searching after. Buckets are ordered lexicographically.
 	StartAfter param.Field[string] `query:"start_after"`
 	// Lists buckets in the provided jurisdiction
-	CfR2Jurisdiction param.Field[BucketListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // URLQuery serializes [BucketListParams]'s query parameters as `url.Values`.
