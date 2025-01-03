@@ -37,8 +37,8 @@ func NewBucketDomainManagedService(opts ...option.RequestOption) (r *BucketDomai
 // Updates state of public access over the bucket's R2-managed (r2.dev) domain.
 func (r *BucketDomainManagedService) Update(ctx context.Context, bucketName string, params BucketDomainManagedUpdateParams, opts ...option.RequestOption) (res *BucketDomainManagedUpdateResponse, err error) {
 	var env BucketDomainManagedUpdateResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -61,8 +61,8 @@ func (r *BucketDomainManagedService) Update(ctx context.Context, bucketName stri
 // Gets state of public access over the bucket's R2-managed (r2.dev) domain.
 func (r *BucketDomainManagedService) List(ctx context.Context, bucketName string, params BucketDomainManagedListParams, opts ...option.RequestOption) (res *BucketDomainManagedListResponse, err error) {
 	var env BucketDomainManagedListResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -144,7 +144,7 @@ type BucketDomainManagedUpdateParams struct {
 	// Whether to enable public bucket access at the r2.dev domain
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[BucketDomainManagedUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketDomainManagedUpdateParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketDomainManagedUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -215,7 +215,7 @@ type BucketDomainManagedListParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[BucketDomainManagedListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketDomainManagedListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // The bucket jurisdiction

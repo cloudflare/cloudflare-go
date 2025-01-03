@@ -89,8 +89,8 @@ func (r *BucketService) List(ctx context.Context, params BucketListParams, opts 
 // Deletes an existing R2 bucket.
 func (r *BucketService) Delete(ctx context.Context, bucketName string, params BucketDeleteParams, opts ...option.RequestOption) (res *BucketDeleteResponse, err error) {
 	var env BucketDeleteResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -113,8 +113,8 @@ func (r *BucketService) Delete(ctx context.Context, bucketName string, params Bu
 // Gets metadata for an existing R2 bucket.
 func (r *BucketService) Get(ctx context.Context, bucketName string, params BucketGetParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketGetResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -487,7 +487,7 @@ type BucketDeleteParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[BucketDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // The bucket jurisdiction
@@ -554,7 +554,7 @@ type BucketGetParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The bucket jurisdiction
-	CfR2Jurisdiction param.Field[BucketGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // The bucket jurisdiction

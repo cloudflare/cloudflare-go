@@ -32,9 +32,9 @@ func TestBucketDomainManagedUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketDomainManagedUpdateParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Enabled:          cloudflare.F(true),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketDomainManagedUpdateParamsCfR2JurisdictionDefault),
+			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Enabled:      cloudflare.F(true),
+			Jurisdiction: cloudflare.F(r2.BucketDomainManagedUpdateParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -64,8 +64,8 @@ func TestBucketDomainManagedListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketDomainManagedListParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketDomainManagedListParamsCfR2JurisdictionDefault),
+			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Jurisdiction: cloudflare.F(r2.BucketDomainManagedListParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
