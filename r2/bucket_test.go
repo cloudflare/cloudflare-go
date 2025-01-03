@@ -95,8 +95,8 @@ func TestBucketDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketDeleteParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketDeleteParamsCfR2JurisdictionDefault),
+			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Jurisdiction: cloudflare.F(r2.BucketDeleteParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
@@ -126,8 +126,8 @@ func TestBucketGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"example-bucket",
 		r2.BucketGetParams{
-			AccountID:        cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			CfR2Jurisdiction: cloudflare.F(r2.BucketGetParamsCfR2JurisdictionDefault),
+			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Jurisdiction: cloudflare.F(r2.BucketGetParamsCfR2JurisdictionDefault),
 		},
 	)
 	if err != nil {
