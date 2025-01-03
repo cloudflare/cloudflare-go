@@ -49,8 +49,8 @@ func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 // Creates a new R2 bucket.
 func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketNewResponseEnvelope
-	if params.CfR2Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.CfR2Jurisdiction)))
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -233,7 +233,7 @@ type BucketNewParams struct {
 	// Storage class for newly uploaded objects, unless specified otherwise.
 	StorageClass param.Field[BucketNewParamsStorageClass] `json:"storageClass"`
 	// Creates the bucket in the provided jurisdiction
-	CfR2Jurisdiction param.Field[BucketNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+	Jurisdiction param.Field[BucketNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketNewParams) MarshalJSON() (data []byte, err error) {
