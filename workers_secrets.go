@@ -34,17 +34,20 @@ type WorkersListSecretsResponse struct {
 }
 
 type SetWorkersSecretParams struct {
-	ScriptName string
-	Secret     *WorkersPutSecretRequest
+	ScriptName        string
+	Secret            *WorkersPutSecretRequest
+	DispatchNamespace *string
 }
 
 type DeleteWorkersSecretParams struct {
-	ScriptName string
-	SecretName string
+	ScriptName        string
+	SecretName        string
+	DispatchNamespace *string
 }
 
 type ListWorkersSecretsParams struct {
-	ScriptName string
+	ScriptName        string
+	DispatchNamespace *string
 }
 
 // SetWorkersSecret creates or updates a secret.
@@ -60,6 +63,10 @@ func (api *API) SetWorkersSecret(ctx context.Context, rc *ResourceContainer, par
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets", rc.Identifier, params.ScriptName)
+	if params.DispatchNamespace != nil && *params.DispatchNamespace != "" {
+		uri = fmt.Sprintf("/accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/secrets", rc.Identifier, *params.DispatchNamespace, params.ScriptName)
+	}
+
 	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params.Secret)
 	if err != nil {
 		return WorkersPutSecretResponse{}, err
@@ -86,6 +93,10 @@ func (api *API) DeleteWorkersSecret(ctx context.Context, rc *ResourceContainer, 
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets/%s", rc.Identifier, params.ScriptName, params.SecretName)
+	if params.DispatchNamespace != nil && *params.DispatchNamespace != "" {
+		uri = fmt.Sprintf("/accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/secrets/%s", rc.Identifier, *params.DispatchNamespace, params.ScriptName, params.SecretName)
+	}
+
 	res, err := api.makeRequestContext(ctx, http.MethodDelete, uri, nil)
 	if err != nil {
 		return Response{}, err
@@ -93,9 +104,9 @@ func (api *API) DeleteWorkersSecret(ctx context.Context, rc *ResourceContainer, 
 
 	result := Response{}
 	if err := json.Unmarshal(res, &result); err != nil {
+
 		return result, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
-
 	return result, err
 }
 
@@ -111,6 +122,10 @@ func (api *API) ListWorkersSecrets(ctx context.Context, rc *ResourceContainer, p
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/secrets", rc.Identifier, params.ScriptName)
+	if params.DispatchNamespace != nil && *params.DispatchNamespace != "" {
+		uri = fmt.Sprintf("/accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/secrets", rc.Identifier, *params.DispatchNamespace, params.ScriptName)
+	}
+
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return WorkersListSecretsResponse{}, err
