@@ -38,7 +38,7 @@ func NewBucketCORSService(opts ...option.RequestOption) (r *BucketCORSService) {
 func (r *BucketCORSService) Update(ctx context.Context, bucketName string, params BucketCORSUpdateParams, opts ...option.RequestOption) (res *BucketCORSUpdateResponse, err error) {
 	var env BucketCORSUpdateResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -62,7 +62,7 @@ func (r *BucketCORSService) Update(ctx context.Context, bucketName string, param
 func (r *BucketCORSService) Delete(ctx context.Context, bucketName string, params BucketCORSDeleteParams, opts ...option.RequestOption) (res *BucketCORSDeleteResponse, err error) {
 	var env BucketCORSDeleteResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -86,7 +86,7 @@ func (r *BucketCORSService) Delete(ctx context.Context, bucketName string, param
 func (r *BucketCORSService) Get(ctx context.Context, bucketName string, params BucketCORSGetParams, opts ...option.RequestOption) (res *BucketCORSGetResponse, err error) {
 	var env BucketCORSGetResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {

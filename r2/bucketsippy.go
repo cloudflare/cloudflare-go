@@ -38,7 +38,7 @@ func NewBucketSippyService(opts ...option.RequestOption) (r *BucketSippyService)
 func (r *BucketSippyService) Update(ctx context.Context, bucketName string, params BucketSippyUpdateParams, opts ...option.RequestOption) (res *Sippy, err error) {
 	var env BucketSippyUpdateResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -62,7 +62,7 @@ func (r *BucketSippyService) Update(ctx context.Context, bucketName string, para
 func (r *BucketSippyService) Delete(ctx context.Context, bucketName string, params BucketSippyDeleteParams, opts ...option.RequestOption) (res *BucketSippyDeleteResponse, err error) {
 	var env BucketSippyDeleteResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -86,7 +86,7 @@ func (r *BucketSippyService) Delete(ctx context.Context, bucketName string, para
 func (r *BucketSippyService) Get(ctx context.Context, bucketName string, params BucketSippyGetParams, opts ...option.RequestOption) (res *Sippy, err error) {
 	var env BucketSippyGetResponseEnvelope
 	if params.Jurisdiction.Present {
-		opts = append(opts, option.WithHeader("jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
 	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
