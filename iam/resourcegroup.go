@@ -16,7 +16,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // ResourceGroupService contains methods and other services that help with
@@ -67,7 +66,7 @@ func (r *ResourceGroupService) Update(ctx context.Context, resourceGroupID strin
 }
 
 // List all the resource groups for an account.
-func (r *ResourceGroupService) List(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[zones.OriginMaxHTTPVersion], err error) {
+func (r *ResourceGroupService) List(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[ResourceGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -89,7 +88,7 @@ func (r *ResourceGroupService) List(ctx context.Context, params ResourceGroupLis
 }
 
 // List all the resource groups for an account.
-func (r *ResourceGroupService) ListAutoPaging(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[zones.OriginMaxHTTPVersion] {
+func (r *ResourceGroupService) ListAutoPaging(ctx context.Context, params ResourceGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[ResourceGroupListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -319,6 +318,8 @@ func (r *ResourceGroupUpdateResponseMeta) UnmarshalJSON(data []byte) (err error)
 func (r resourceGroupUpdateResponseMetaJSON) RawJSON() string {
 	return r.raw
 }
+
+type ResourceGroupListResponse = interface{}
 
 type ResourceGroupDeleteResponse struct {
 	// Identifier
