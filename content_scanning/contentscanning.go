@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // ContentScanningService contains methods and other services that help with
@@ -39,7 +40,7 @@ func NewContentScanningService(opts ...option.RequestOption) (r *ContentScanning
 }
 
 // Disable Content Scanning
-func (r *ContentScanningService) Disable(ctx context.Context, body ContentScanningDisableParams, opts ...option.RequestOption) (res *ContentScanningDisableResponse, err error) {
+func (r *ContentScanningService) Disable(ctx context.Context, body ContentScanningDisableParams, opts ...option.RequestOption) (res *zones.OriginMaxHTTPVersion, err error) {
 	var env ContentScanningDisableResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
@@ -56,7 +57,7 @@ func (r *ContentScanningService) Disable(ctx context.Context, body ContentScanni
 }
 
 // Enable Content Scanning
-func (r *ContentScanningService) Enable(ctx context.Context, body ContentScanningEnableParams, opts ...option.RequestOption) (res *ContentScanningEnableResponse, err error) {
+func (r *ContentScanningService) Enable(ctx context.Context, body ContentScanningEnableParams, opts ...option.RequestOption) (res *zones.OriginMaxHTTPVersion, err error) {
 	var env ContentScanningEnableResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
@@ -72,19 +73,15 @@ func (r *ContentScanningService) Enable(ctx context.Context, body ContentScannin
 	return
 }
 
-type ContentScanningDisableResponse = interface{}
-
-type ContentScanningEnableResponse = interface{}
-
 type ContentScanningDisableParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type ContentScanningDisableResponseEnvelope struct {
-	Errors   []shared.ResponseInfo          `json:"errors,required"`
-	Messages []shared.ResponseInfo          `json:"messages,required"`
-	Result   ContentScanningDisableResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   zones.OriginMaxHTTPVersion `json:"result,required"`
 	// Whether the API call was successful
 	Success ContentScanningDisableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    contentScanningDisableResponseEnvelopeJSON    `json:"-"`
@@ -130,9 +127,9 @@ type ContentScanningEnableParams struct {
 }
 
 type ContentScanningEnableResponseEnvelope struct {
-	Errors   []shared.ResponseInfo         `json:"errors,required"`
-	Messages []shared.ResponseInfo         `json:"messages,required"`
-	Result   ContentScanningEnableResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   zones.OriginMaxHTTPVersion `json:"result,required"`
 	// Whether the API call was successful
 	Success ContentScanningEnableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    contentScanningEnableResponseEnvelopeJSON    `json:"-"`

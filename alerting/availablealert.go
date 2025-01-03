@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // AvailableAlertService contains methods and other services that help with
@@ -60,7 +61,7 @@ type AvailableAlertListResponseItem struct {
 	DisplayName string `json:"display_name"`
 	// Format of additional configuration options (filters) for the alert type. Data
 	// type of filters during policy creation: Array of strings.
-	FilterOptions []interface{} `json:"filter_options"`
+	FilterOptions []zones.OriginMaxHTTPVersion `json:"filter_options"`
 	// Use this value when creating and updating a notification policy.
 	Type string                             `json:"type"`
 	JSON availableAlertListResponseItemJSON `json:"-"`

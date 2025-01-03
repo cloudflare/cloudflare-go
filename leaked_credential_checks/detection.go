@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // DetectionService contains methods and other services that help with interacting
@@ -101,7 +102,7 @@ func (r *DetectionService) ListAutoPaging(ctx context.Context, query DetectionLi
 }
 
 // Remove user-defined detection pattern for Leaked Credential Checks
-func (r *DetectionService) Delete(ctx context.Context, detectionID string, body DetectionDeleteParams, opts ...option.RequestOption) (res *DetectionDeleteResponse, err error) {
+func (r *DetectionService) Delete(ctx context.Context, detectionID string, body DetectionDeleteParams, opts ...option.RequestOption) (res *zones.OriginMaxHTTPVersion, err error) {
 	var env DetectionDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.ZoneID.Value == "" {
@@ -210,8 +211,6 @@ func (r *DetectionListResponse) UnmarshalJSON(data []byte) (err error) {
 func (r detectionListResponseJSON) RawJSON() string {
 	return r.raw
 }
-
-type DetectionDeleteResponse = interface{}
 
 type DetectionNewParams struct {
 	// Identifier
@@ -340,9 +339,9 @@ type DetectionDeleteParams struct {
 }
 
 type DetectionDeleteResponseEnvelope struct {
-	Errors   []shared.ResponseInfo   `json:"errors,required"`
-	Messages []shared.ResponseInfo   `json:"messages,required"`
-	Result   DetectionDeleteResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo      `json:"errors,required"`
+	Messages []shared.ResponseInfo      `json:"messages,required"`
+	Result   zones.OriginMaxHTTPVersion `json:"result,required"`
 	// Whether the API call was successful
 	Success DetectionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    detectionDeleteResponseEnvelopeJSON    `json:"-"`
