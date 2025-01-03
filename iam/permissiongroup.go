@@ -15,7 +15,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
 )
 
 // PermissionGroupService contains methods and other services that help with
@@ -38,7 +37,7 @@ func NewPermissionGroupService(opts ...option.RequestOption) (r *PermissionGroup
 }
 
 // List all the permissions groups for an account.
-func (r *PermissionGroupService) List(ctx context.Context, params PermissionGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[zones.OriginMaxHTTPVersion], err error) {
+func (r *PermissionGroupService) List(ctx context.Context, params PermissionGroupListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[PermissionGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -60,7 +59,7 @@ func (r *PermissionGroupService) List(ctx context.Context, params PermissionGrou
 }
 
 // List all the permissions groups for an account.
-func (r *PermissionGroupService) ListAutoPaging(ctx context.Context, params PermissionGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[zones.OriginMaxHTTPVersion] {
+func (r *PermissionGroupService) ListAutoPaging(ctx context.Context, params PermissionGroupListParams, opts ...option.RequestOption) *pagination.V4PagePaginationArrayAutoPager[PermissionGroupListResponse] {
 	return pagination.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -79,6 +78,8 @@ func (r *PermissionGroupService) Get(ctx context.Context, permissionGroupID stri
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
+
+type PermissionGroupListResponse = interface{}
 
 // A named group of permissions that map to a group of operations against
 // resources.

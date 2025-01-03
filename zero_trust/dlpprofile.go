@@ -18,7 +18,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
 	"github.com/tidwall/gjson"
 )
 
@@ -292,8 +291,8 @@ type ProfileCustomProfileEntry struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of [zones.OriginMaxHTTPVersion].
-	WordList zones.OriginMaxHTTPVersion    `json:"word_list"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}                   `json:"word_list"`
 	JSON     profileCustomProfileEntryJSON `json:"-"`
 	union    ProfileCustomProfileEntriesUnion
 }
@@ -605,7 +604,7 @@ type ProfileCustomProfileEntriesWordListEntry struct {
 	Name      string                                       `json:"name,required"`
 	Type      ProfileCustomProfileEntriesWordListEntryType `json:"type,required"`
 	UpdatedAt time.Time                                    `json:"updated_at,required" format:"date-time"`
-	WordList  zones.OriginMaxHTTPVersion                   `json:"word_list,required"`
+	WordList  interface{}                                  `json:"word_list,required"`
 	ProfileID string                                       `json:"profile_id,nullable" format:"uuid"`
 	JSON      profileCustomProfileEntriesWordListEntryJSON `json:"-"`
 }
@@ -755,8 +754,8 @@ type ProfilePredefinedProfileEntry struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of [zones.OriginMaxHTTPVersion].
-	WordList zones.OriginMaxHTTPVersion        `json:"word_list"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}                       `json:"word_list"`
 	JSON     profilePredefinedProfileEntryJSON `json:"-"`
 	union    ProfilePredefinedProfileEntriesUnion
 }
@@ -1073,7 +1072,7 @@ type ProfilePredefinedProfileEntriesWordListEntry struct {
 	Name      string                                           `json:"name,required"`
 	Type      ProfilePredefinedProfileEntriesWordListEntryType `json:"type,required"`
 	UpdatedAt time.Time                                        `json:"updated_at,required" format:"date-time"`
-	WordList  zones.OriginMaxHTTPVersion                       `json:"word_list,required"`
+	WordList  interface{}                                      `json:"word_list,required"`
 	ProfileID string                                           `json:"profile_id,nullable" format:"uuid"`
 	JSON      profilePredefinedProfileEntriesWordListEntryJSON `json:"-"`
 }
@@ -1216,8 +1215,8 @@ type ProfileIntegrationProfileEntry struct {
 	ProfileID  string      `json:"profile_id,nullable" format:"uuid"`
 	Secret     bool        `json:"secret"`
 	UpdatedAt  time.Time   `json:"updated_at" format:"date-time"`
-	// This field can have the runtime type of [zones.OriginMaxHTTPVersion].
-	WordList zones.OriginMaxHTTPVersion         `json:"word_list"`
+	// This field can have the runtime type of [interface{}].
+	WordList interface{}                        `json:"word_list"`
 	JSON     profileIntegrationProfileEntryJSON `json:"-"`
 	union    ProfileIntegrationProfileEntriesUnion
 }
@@ -1534,7 +1533,7 @@ type ProfileIntegrationProfileEntriesWordListEntry struct {
 	Name      string                                            `json:"name,required"`
 	Type      ProfileIntegrationProfileEntriesWordListEntryType `json:"type,required"`
 	UpdatedAt time.Time                                         `json:"updated_at,required" format:"date-time"`
-	WordList  zones.OriginMaxHTTPVersion                        `json:"word_list,required"`
+	WordList  interface{}                                       `json:"word_list,required"`
 	ProfileID string                                            `json:"profile_id,nullable" format:"uuid"`
 	JSON      profileIntegrationProfileEntriesWordListEntryJSON `json:"-"`
 }

@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
 	"github.com/tidwall/gjson"
 )
 
@@ -167,8 +166,8 @@ type PhaseUpdateResponseRule struct {
 	Categories interface{} `json:"categories"`
 	// An informative description of the rule.
 	Description string `json:"description"`
-	// This field can have the runtime type of [bool], [zones.OriginMaxHTTPVersion].
-	Enabled interface{} `json:"enabled"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [PhaseUpdateResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
@@ -801,8 +800,8 @@ type PhaseGetResponseRule struct {
 	Categories interface{} `json:"categories"`
 	// An informative description of the rule.
 	Description string `json:"description"`
-	// This field can have the runtime type of [bool], [zones.OriginMaxHTTPVersion].
-	Enabled interface{} `json:"enabled"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [PhaseGetResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
@@ -1393,8 +1392,9 @@ type PhaseUpdateParamsRule struct {
 	ActionParameters param.Field[interface{}]                  `json:"action_parameters"`
 	Categories       param.Field[interface{}]                  `json:"categories"`
 	// An informative description of the rule.
-	Description            param.Field[string]      `json:"description"`
-	Enabled                param.Field[interface{}] `json:"enabled"`
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled                param.Field[bool]        `json:"enabled"`
 	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`

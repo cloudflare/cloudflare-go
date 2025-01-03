@@ -14,7 +14,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
 	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
 	"github.com/tidwall/gjson"
 )
 
@@ -4633,8 +4632,9 @@ type ScoreRule struct {
 	// The categories of the rule.
 	Categories []string `json:"categories"`
 	// An informative description of the rule.
-	Description string                     `json:"description"`
-	Enabled     zones.OriginMaxHTTPVersion `json:"enabled"`
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck ScoreRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -4836,8 +4836,9 @@ type ScoreRuleParam struct {
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[ScoreRuleActionParametersParam] `json:"action_parameters"`
 	// An informative description of the rule.
-	Description param.Field[string]                          `json:"description"`
-	Enabled     param.Field[zones.OriginMaxHTTPVersionParam] `json:"enabled"`
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[ScoreRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -4931,8 +4932,9 @@ type ServeErrorRule struct {
 	// The categories of the rule.
 	Categories []string `json:"categories"`
 	// An informative description of the rule.
-	Description string                     `json:"description"`
-	Enabled     zones.OriginMaxHTTPVersion `json:"enabled"`
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck ServeErrorRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -5157,8 +5159,9 @@ type ServeErrorRuleParam struct {
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[ServeErrorRuleActionParametersParam] `json:"action_parameters"`
 	// An informative description of the rule.
-	Description param.Field[string]                          `json:"description"`
-	Enabled     param.Field[zones.OriginMaxHTTPVersionParam] `json:"enabled"`
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[ServeErrorRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -5255,8 +5258,9 @@ type SetCacheSettingsRule struct {
 	// The categories of the rule.
 	Categories []string `json:"categories"`
 	// An informative description of the rule.
-	Description string                     `json:"description"`
-	Enabled     zones.OriginMaxHTTPVersion `json:"enabled"`
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck SetCacheSettingsRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -5992,8 +5996,9 @@ type SetCacheSettingsRuleParam struct {
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[SetCacheSettingsRuleActionParametersParam] `json:"action_parameters"`
 	// An informative description of the rule.
-	Description param.Field[string]                          `json:"description"`
-	Enabled     param.Field[zones.OriginMaxHTTPVersionParam] `json:"enabled"`
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[SetCacheSettingsRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -6349,8 +6354,9 @@ type SetConfigRule struct {
 	// The categories of the rule.
 	Categories []string `json:"categories"`
 	// An informative description of the rule.
-	Description string                     `json:"description"`
-	Enabled     zones.OriginMaxHTTPVersion `json:"enabled"`
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck SetConfigRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -6729,8 +6735,9 @@ type SetConfigRuleParam struct {
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[SetConfigRuleActionParametersParam] `json:"action_parameters"`
 	// An informative description of the rule.
-	Description param.Field[string]                          `json:"description"`
-	Enabled     param.Field[zones.OriginMaxHTTPVersionParam] `json:"enabled"`
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[SetConfigRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -6869,8 +6876,9 @@ type SkipRule struct {
 	// The categories of the rule.
 	Categories []string `json:"categories"`
 	// An informative description of the rule.
-	Description string                     `json:"description"`
-	Enabled     zones.OriginMaxHTTPVersion `json:"enabled"`
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck SkipRuleExposedCredentialCheck `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -7124,8 +7132,9 @@ type SkipRuleParam struct {
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[SkipRuleActionParametersParam] `json:"action_parameters"`
 	// An informative description of the rule.
-	Description param.Field[string]                          `json:"description"`
-	Enabled     param.Field[zones.OriginMaxHTTPVersionParam] `json:"enabled"`
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
 	// Configure checks for exposed credentials.
 	ExposedCredentialCheck param.Field[SkipRuleExposedCredentialCheckParam] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
@@ -7280,8 +7289,8 @@ type RuleNewResponseRule struct {
 	Categories interface{} `json:"categories"`
 	// An informative description of the rule.
 	Description string `json:"description"`
-	// This field can have the runtime type of [bool], [zones.OriginMaxHTTPVersion].
-	Enabled interface{} `json:"enabled"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [RuleNewResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
@@ -7912,8 +7921,8 @@ type RuleDeleteResponseRule struct {
 	Categories interface{} `json:"categories"`
 	// An informative description of the rule.
 	Description string `json:"description"`
-	// This field can have the runtime type of [bool], [zones.OriginMaxHTTPVersion].
-	Enabled interface{} `json:"enabled"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [RuleDeleteResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
@@ -8545,8 +8554,8 @@ type RuleEditResponseRule struct {
 	Categories interface{} `json:"categories"`
 	// An informative description of the rule.
 	Description string `json:"description"`
-	// This field can have the runtime type of [bool], [zones.OriginMaxHTTPVersion].
-	Enabled interface{} `json:"enabled"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
 	// This field can have the runtime type of [BlockRuleExposedCredentialCheck],
 	// [RuleEditResponseRulesRulesetsChallengeRuleExposedCredentialCheck],
 	// [CompressResponseRuleExposedCredentialCheck],
@@ -9132,8 +9141,9 @@ type RuleNewParamsBody struct {
 	ActionParameters param.Field[interface{}]             `json:"action_parameters"`
 	Categories       param.Field[interface{}]             `json:"categories"`
 	// An informative description of the rule.
-	Description            param.Field[string]      `json:"description"`
-	Enabled                param.Field[interface{}] `json:"enabled"`
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled                param.Field[bool]        `json:"enabled"`
 	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
@@ -9734,8 +9744,9 @@ type RuleEditParamsBody struct {
 	ActionParameters param.Field[interface{}]              `json:"action_parameters"`
 	Categories       param.Field[interface{}]              `json:"categories"`
 	// An informative description of the rule.
-	Description            param.Field[string]      `json:"description"`
-	Enabled                param.Field[interface{}] `json:"enabled"`
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled                param.Field[bool]        `json:"enabled"`
 	ExposedCredentialCheck param.Field[interface{}] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
