@@ -3,8 +3,8 @@
 package page_rules
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/internal/apierror"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apierror"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 type Error = apierror.Error
