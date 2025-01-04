@@ -35,7 +35,9 @@ func NewDispatchNamespaceScriptAssetUploadService(opts ...option.RequestOption) 
 	return
 }
 
-// Start uploading a collection of assets for use in a Worker version.
+// Start uploading a collection of assets for use in a Worker version. To learn
+// more about the direct uploads of assets, see
+// https://developers.cloudflare.com/workers/static-assets/direct-upload/
 func (r *DispatchNamespaceScriptAssetUploadService) New(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptAssetUploadNewParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptAssetUploadNewResponse, err error) {
 	var env DispatchNamespaceScriptAssetUploadNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
