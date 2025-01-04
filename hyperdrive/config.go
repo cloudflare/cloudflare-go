@@ -8,12 +8,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // ConfigService contains methods and other services that help with interacting
@@ -101,7 +101,7 @@ func (r *ConfigService) ListAutoPaging(ctx context.Context, query ConfigListPara
 }
 
 // Deletes the specified Hyperdrive.
-func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body ConfigDeleteParams, opts ...option.RequestOption) (res *interface{}, err error) {
+func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body ConfigDeleteParams, opts ...option.RequestOption) (res *ConfigDeleteResponse, err error) {
 	var env ConfigDeleteResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if body.AccountID.Value == "" {
@@ -121,8 +121,8 @@ func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body Co
 	return
 }
 
-// Patches and returns the specified Hyperdrive configuration. Updates to the
-// origin and caching settings are applied with an all-or-nothing approach.
+// Patches and returns the specified Hyperdrive configuration. Custom caching
+// settings are not kept if caching is disabled.
 func (r *ConfigService) Edit(ctx context.Context, hyperdriveID string, params ConfigEditParams, opts ...option.RequestOption) (res *Hyperdrive, err error) {
 	var env ConfigEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -164,6 +164,8 @@ func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query Conf
 	return
 }
 
+type ConfigDeleteResponse = interface{}
+
 type ConfigNewParams struct {
 	// Identifier
 	AccountID  param.Field[string] `path:"account_id,required"`
@@ -177,7 +179,7 @@ func (r ConfigNewParams) MarshalJSON() (data []byte, err error) {
 type ConfigNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required,nullable"`
+	Result   Hyperdrive            `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configNewResponseEnvelopeJSON    `json:"-"`
@@ -230,7 +232,7 @@ func (r ConfigUpdateParams) MarshalJSON() (data []byte, err error) {
 type ConfigUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required,nullable"`
+	Result   Hyperdrive            `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configUpdateResponseEnvelopeJSON    `json:"-"`
@@ -283,7 +285,7 @@ type ConfigDeleteParams struct {
 type ConfigDeleteResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   ConfigDeleteResponse  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success ConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configDeleteResponseEnvelopeJSON    `json:"-"`
@@ -325,18 +327,192 @@ func (r ConfigDeleteResponseEnvelopeSuccess) IsKnown() bool {
 
 type ConfigEditParams struct {
 	// Identifier
-	AccountID  param.Field[string] `path:"account_id,required"`
-	Hyperdrive HyperdriveParam     `json:"hyperdrive,required"`
+	AccountID param.Field[string]                       `path:"account_id,required"`
+	Caching   param.Field[ConfigEditParamsCachingUnion] `json:"caching"`
+	Name      param.Field[string]                       `json:"name"`
+	Origin    param.Field[ConfigEditParamsOriginUnion]  `json:"origin"`
 }
 
 func (r ConfigEditParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Hyperdrive)
+	return apijson.MarshalRoot(r)
+}
+
+type ConfigEditParamsCaching struct {
+	// When set to true, disables the caching of SQL responses. (Default: false)
+	Disabled param.Field[bool] `json:"disabled"`
+	// When present, specifies max duration for which items should persist in the
+	// cache. Not returned if set to default. (Default: 60)
+	MaxAge param.Field[int64] `json:"max_age"`
+	// When present, indicates the number of seconds cache may serve the response after
+	// it becomes stale. Not returned if set to default. (Default: 15)
+	StaleWhileRevalidate param.Field[int64] `json:"stale_while_revalidate"`
+}
+
+func (r ConfigEditParamsCaching) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsCaching) implementsHyperdriveConfigEditParamsCachingUnion() {}
+
+// Satisfied by
+// [hyperdrive.ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon],
+// [hyperdrive.ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled],
+// [ConfigEditParamsCaching].
+type ConfigEditParamsCachingUnion interface {
+	implementsHyperdriveConfigEditParamsCachingUnion()
+}
+
+type ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon struct {
+	// When set to true, disables the caching of SQL responses. (Default: false)
+	Disabled param.Field[bool] `json:"disabled"`
+}
+
+func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingCommon) implementsHyperdriveConfigEditParamsCachingUnion() {
+}
+
+type ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled struct {
+	// When set to true, disables the caching of SQL responses. (Default: false)
+	Disabled param.Field[bool] `json:"disabled"`
+	// When present, specifies max duration for which items should persist in the
+	// cache. Not returned if set to default. (Default: 60)
+	MaxAge param.Field[int64] `json:"max_age"`
+	// When present, indicates the number of seconds cache may serve the response after
+	// it becomes stale. Not returned if set to default. (Default: 15)
+	StaleWhileRevalidate param.Field[int64] `json:"stale_while_revalidate"`
+}
+
+func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsCachingHyperdriveHyperdriveCachingEnabled) implementsHyperdriveConfigEditParamsCachingUnion() {
+}
+
+type ConfigEditParamsOrigin struct {
+	// The Client ID of the Access token to use when connecting to the origin database
+	AccessClientID param.Field[string] `json:"access_client_id"`
+	// The Client Secret of the Access token to use when connecting to the origin
+	// database. This value is write-only and never returned by the API.
+	AccessClientSecret param.Field[string] `json:"access_client_secret"`
+	// The name of your origin database.
+	Database param.Field[string] `json:"database"`
+	// The host (hostname or IP) of your origin database.
+	Host param.Field[string] `json:"host"`
+	// The password required to access your origin database. This value is write-only
+	// and never returned by the API.
+	Password param.Field[string] `json:"password"`
+	// The port (default: 5432 for Postgres) of your origin database.
+	Port param.Field[int64] `json:"port"`
+	// Specifies the URL scheme used to connect to your origin database.
+	Scheme param.Field[ConfigEditParamsOriginScheme] `json:"scheme"`
+	// The user of your origin database.
+	User param.Field[string] `json:"user"`
+}
+
+func (r ConfigEditParamsOrigin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsOrigin) implementsHyperdriveConfigEditParamsOriginUnion() {}
+
+// Satisfied by [hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveDatabase],
+// [hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveInternetOrigin],
+// [hyperdrive.ConfigEditParamsOriginHyperdriveHyperdriveOverAccessOrigin],
+// [ConfigEditParamsOrigin].
+type ConfigEditParamsOriginUnion interface {
+	implementsHyperdriveConfigEditParamsOriginUnion()
+}
+
+type ConfigEditParamsOriginHyperdriveHyperdriveDatabase struct {
+	// The name of your origin database.
+	Database param.Field[string] `json:"database"`
+	// The password required to access your origin database. This value is write-only
+	// and never returned by the API.
+	Password param.Field[string] `json:"password"`
+	// Specifies the URL scheme used to connect to your origin database.
+	Scheme param.Field[ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme] `json:"scheme"`
+	// The user of your origin database.
+	User param.Field[string] `json:"user"`
+}
+
+func (r ConfigEditParamsOriginHyperdriveHyperdriveDatabase) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsOriginHyperdriveHyperdriveDatabase) implementsHyperdriveConfigEditParamsOriginUnion() {
+}
+
+// Specifies the URL scheme used to connect to your origin database.
+type ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme string
+
+const (
+	ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgres   ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme = "postgres"
+	ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgresql ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme = "postgresql"
+)
+
+func (r ConfigEditParamsOriginHyperdriveHyperdriveDatabaseScheme) IsKnown() bool {
+	switch r {
+	case ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgres, ConfigEditParamsOriginHyperdriveHyperdriveDatabaseSchemePostgresql:
+		return true
+	}
+	return false
+}
+
+type ConfigEditParamsOriginHyperdriveHyperdriveInternetOrigin struct {
+	// The host (hostname or IP) of your origin database.
+	Host param.Field[string] `json:"host,required"`
+	// The port (default: 5432 for Postgres) of your origin database.
+	Port param.Field[int64] `json:"port,required"`
+}
+
+func (r ConfigEditParamsOriginHyperdriveHyperdriveInternetOrigin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsOriginHyperdriveHyperdriveInternetOrigin) implementsHyperdriveConfigEditParamsOriginUnion() {
+}
+
+type ConfigEditParamsOriginHyperdriveHyperdriveOverAccessOrigin struct {
+	// The Client ID of the Access token to use when connecting to the origin database
+	AccessClientID param.Field[string] `json:"access_client_id,required"`
+	// The Client Secret of the Access token to use when connecting to the origin
+	// database. This value is write-only and never returned by the API.
+	AccessClientSecret param.Field[string] `json:"access_client_secret,required"`
+	// The host (hostname or IP) of your origin database.
+	Host param.Field[string] `json:"host,required"`
+}
+
+func (r ConfigEditParamsOriginHyperdriveHyperdriveOverAccessOrigin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ConfigEditParamsOriginHyperdriveHyperdriveOverAccessOrigin) implementsHyperdriveConfigEditParamsOriginUnion() {
+}
+
+// Specifies the URL scheme used to connect to your origin database.
+type ConfigEditParamsOriginScheme string
+
+const (
+	ConfigEditParamsOriginSchemePostgres   ConfigEditParamsOriginScheme = "postgres"
+	ConfigEditParamsOriginSchemePostgresql ConfigEditParamsOriginScheme = "postgresql"
+)
+
+func (r ConfigEditParamsOriginScheme) IsKnown() bool {
+	switch r {
+	case ConfigEditParamsOriginSchemePostgres, ConfigEditParamsOriginSchemePostgresql:
+		return true
+	}
+	return false
 }
 
 type ConfigEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required,nullable"`
+	Result   Hyperdrive            `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configEditResponseEnvelopeJSON    `json:"-"`
@@ -384,7 +560,7 @@ type ConfigGetParams struct {
 type ConfigGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   Hyperdrive            `json:"result,required,nullable"`
+	Result   Hyperdrive            `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configGetResponseEnvelopeJSON    `json:"-"`

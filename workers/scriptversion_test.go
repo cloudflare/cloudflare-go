@@ -3,17 +3,15 @@
 package workers_test
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	"io"
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/workers"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
 )
 
 func TestScriptVersionNewWithOptionalParams(t *testing.T) {
@@ -34,22 +32,20 @@ func TestScriptVersionNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"this-is_my_script-01",
 		workers.ScriptVersionNewParams{
-			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Metadata: cloudflare.F(workers.ScriptVersionNewParamsMetadata{
+				MainModule: cloudflare.F("worker.js"),
 				Annotations: cloudflare.F(workers.ScriptVersionNewParamsMetadataAnnotations{
 					WorkersMessage: cloudflare.F("Fixed worker code."),
 					WorkersTag:     cloudflare.F("workers/tag"),
 				}),
-				Bindings: cloudflare.F([]interface{}{map[string]interface{}{
-					"name": "MY_ENV_VAR",
-					"text": "my_data",
-					"type": "plain_text",
+				Bindings: cloudflare.F([]workers.ScriptVersionNewParamsMetadataBindingUnion{workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindAny{
+					Name: cloudflare.F("MY_ENV_VAR"),
+					Type: cloudflare.F("plain_text"),
 				}}),
-				CompatibilityDate:  cloudflare.F("2023-07-25"),
-				CompatibilityFlags: cloudflare.F([]string{"string", "string", "string"}),
-				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
-				MainModule:         cloudflare.F("worker.js"),
+				CompatibilityDate:  cloudflare.F("2021-01-01"),
+				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
+				KeepBindings:       cloudflare.F([]string{"string"}),
 				UsageModel:         cloudflare.F(workers.ScriptVersionNewParamsMetadataUsageModelStandard),
 			}),
 		},

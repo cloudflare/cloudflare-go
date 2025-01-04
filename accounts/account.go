@@ -10,13 +10,13 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // AccountService contains methods and other services that help with interacting
@@ -30,6 +30,8 @@ type AccountService struct {
 	Members       *MemberService
 	Roles         *RoleService
 	Subscriptions *SubscriptionService
+	Tokens        *TokenService
+	Logs          *LogService
 }
 
 // NewAccountService generates a new service that applies the given options to each
@@ -41,6 +43,8 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r.Members = NewMemberService(opts...)
 	r.Roles = NewRoleService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
+	r.Tokens = NewTokenService(opts...)
+	r.Logs = NewLogService(opts...)
 	return
 }
 
@@ -177,6 +181,9 @@ type AccountSettings struct {
 	// See
 	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
 	// for more information.
+	//
+	// Deprecated in favor of
+	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
 	DefaultNameservers AccountSettingsDefaultNameservers `json:"default_nameservers"`
 	// Indicates whether membership in this account requires that Two-Factor
 	// Authentication is enabled
@@ -184,7 +191,8 @@ type AccountSettings struct {
 	// Indicates whether new zones should use the account-level custom nameservers by
 	// default.
 	//
-	// Deprecated in favor of `default_nameservers`.
+	// Deprecated in favor of
+	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
 	UseAccountCustomNSByDefault bool                `json:"use_account_custom_ns_by_default"`
 	JSON                        accountSettingsJSON `json:"-"`
 }
@@ -217,6 +225,9 @@ func (r accountSettingsJSON) RawJSON() string {
 // See
 // [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
 // for more information.
+//
+// Deprecated in favor of
+// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
 type AccountSettingsDefaultNameservers string
 
 const (
@@ -258,6 +269,9 @@ type AccountSettingsParam struct {
 	// See
 	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
 	// for more information.
+	//
+	// Deprecated in favor of
+	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
 	DefaultNameservers param.Field[AccountSettingsDefaultNameservers] `json:"default_nameservers"`
 	// Indicates whether membership in this account requires that Two-Factor
 	// Authentication is enabled
@@ -265,7 +279,8 @@ type AccountSettingsParam struct {
 	// Indicates whether new zones should use the account-level custom nameservers by
 	// default.
 	//
-	// Deprecated in favor of `default_nameservers`.
+	// Deprecated in favor of
+	// [DNS Settings](https://developers.cloudflare.com/api/operations/dns-settings-for-an-account-update-dns-settings).
 	UseAccountCustomNSByDefault param.Field[bool] `json:"use_account_custom_ns_by_default"`
 }
 

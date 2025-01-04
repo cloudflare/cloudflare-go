@@ -9,11 +9,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // DirectUploadService contains methods and other services that help with
@@ -38,6 +38,9 @@ func NewDirectUploadService(opts ...option.RequestOption) (r *DirectUploadServic
 // Creates a direct upload that allows video uploads without an API key.
 func (r *DirectUploadService) New(ctx context.Context, params DirectUploadNewParams, opts ...option.RequestOption) (res *DirectUploadNewResponse, err error) {
 	var env DirectUploadNewResponseEnvelope
+	if params.UploadCreator.Present {
+		opts = append(opts, option.WithHeader("Upload-Creator", fmt.Sprintf("%s", params.UploadCreator)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")

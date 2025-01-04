@@ -3,18 +3,16 @@
 package workers_for_platforms_test
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	"io"
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/workers"
-	"github.com/cloudflare/cloudflare-go/v3/workers_for_platforms"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/workers"
+	"github.com/cloudflare/cloudflare-go/v4/workers_for_platforms"
 )
 
 func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
@@ -37,72 +35,57 @@ func TestDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 		"this-is_my_script-01",
 		workers_for_platforms.DispatchNamespaceScriptUpdateParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body: workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObject{
-				AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
-				Metadata: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadata{
-					Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataBinding{{
-						Name: cloudflare.F("MY_ENV_VAR"),
-						Type: cloudflare.F("plain_text"),
-					}}),
-					BodyPart:           cloudflare.F("worker.js"),
-					CompatibilityDate:  cloudflare.F("2023-07-25"),
-					CompatibilityFlags: cloudflare.F([]string{"string", "string", "string"}),
-					KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
-					Logpush:            cloudflare.F(false),
-					MainModule:         cloudflare.F("worker.js"),
-					Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataMigrationsUnion](workers.SingleStepMigrationParam{
-						DeletedClasses:   cloudflare.F([]string{"string", "string", "string"}),
-						NewClasses:       cloudflare.F([]string{"string", "string", "string"}),
-						NewSqliteClasses: cloudflare.F([]string{"string", "string", "string"}),
-						NewTag:           cloudflare.F("v2"),
-						OldTag:           cloudflare.F("v1"),
-						RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
-							From: cloudflare.F("from"),
-							To:   cloudflare.F("to"),
-						}, {
-							From: cloudflare.F("from"),
-							To:   cloudflare.F("to"),
-						}, {
-							From: cloudflare.F("from"),
-							To:   cloudflare.F("to"),
-						}}),
-						TransferredClasses: cloudflare.F([]workers.SingleStepMigrationTransferredClassParam{{
-							From:       cloudflare.F("from"),
-							FromScript: cloudflare.F("from_script"),
-							To:         cloudflare.F("to"),
-						}, {
-							From:       cloudflare.F("from"),
-							FromScript: cloudflare.F("from_script"),
-							To:         cloudflare.F("to"),
-						}, {
-							From:       cloudflare.F("from"),
-							FromScript: cloudflare.F("from_script"),
-							To:         cloudflare.F("to"),
-						}}),
+			Metadata: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadata{
+				Assets: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssets{
+					Config: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfig{
+						HTMLHandling:     cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash),
+						NotFoundHandling: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingNone),
+						ServeDirectly:    cloudflare.F(true),
 					}),
-					Placement: cloudflare.F(workers.PlacementConfigurationParam{
-						Mode: cloudflare.F(workers.PlacementConfigurationModeSmart),
-					}),
-					Tags: cloudflare.F([]string{"string", "string", "string"}),
-					TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
-						Service:     cloudflare.F("my-log-consumer"),
-						Environment: cloudflare.F("production"),
-						Namespace:   cloudflare.F("my-namespace"),
-					}, {
-						Service:     cloudflare.F("my-log-consumer"),
-						Environment: cloudflare.F("production"),
-						Namespace:   cloudflare.F("my-namespace"),
-					}, {
-						Service:     cloudflare.F("my-log-consumer"),
-						Environment: cloudflare.F("production"),
-						Namespace:   cloudflare.F("my-namespace"),
-					}}),
-					UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsBodyObjectMetadataUsageModelBundled),
-					VersionTags: cloudflare.F(map[string]string{
-						"foo": "string",
-					}),
+					JWT: cloudflare.F("jwt"),
 				}),
-			},
+				Bindings: cloudflare.F([]workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingUnion{workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataBindingsWorkersBindingKindAny{
+					Name: cloudflare.F("MY_ENV_VAR"),
+					Type: cloudflare.F("plain_text"),
+				}}),
+				BodyPart:           cloudflare.F("worker.js"),
+				CompatibilityDate:  cloudflare.F("2021-01-01"),
+				CompatibilityFlags: cloudflare.F([]string{"nodejs_compat"}),
+				KeepAssets:         cloudflare.F(false),
+				KeepBindings:       cloudflare.F([]string{"string"}),
+				Logpush:            cloudflare.F(false),
+				MainModule:         cloudflare.F("worker.js"),
+				Migrations: cloudflare.F[workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataMigrationsUnion](workers.SingleStepMigrationParam{
+					DeletedClasses:   cloudflare.F([]string{"string"}),
+					NewClasses:       cloudflare.F([]string{"string"}),
+					NewSqliteClasses: cloudflare.F([]string{"string"}),
+					NewTag:           cloudflare.F("v2"),
+					OldTag:           cloudflare.F("v1"),
+					RenamedClasses: cloudflare.F([]workers.SingleStepMigrationRenamedClassParam{{
+						From: cloudflare.F("from"),
+						To:   cloudflare.F("to"),
+					}}),
+					TransferredClasses: cloudflare.F([]workers.SingleStepMigrationTransferredClassParam{{
+						From:       cloudflare.F("from"),
+						FromScript: cloudflare.F("from_script"),
+						To:         cloudflare.F("to"),
+					}}),
+				}),
+				Observability: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataObservability{
+					Enabled:          cloudflare.F(true),
+					HeadSamplingRate: cloudflare.F(0.100000),
+				}),
+				Placement: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacement{
+					Mode: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataPlacementModeSmart),
+				}),
+				Tags: cloudflare.F([]string{"string"}),
+				TailConsumers: cloudflare.F([]workers.ConsumerScriptParam{{
+					Service:     cloudflare.F("my-log-consumer"),
+					Environment: cloudflare.F("production"),
+					Namespace:   cloudflare.F("my-namespace"),
+				}}),
+				UsageModel: cloudflare.F(workers_for_platforms.DispatchNamespaceScriptUpdateParamsMetadataUsageModelStandard),
+			}),
 		},
 	)
 	if err != nil {

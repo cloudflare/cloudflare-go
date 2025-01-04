@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/waiting_rooms"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/waiting_rooms"
 )
 
 func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
@@ -35,12 +35,6 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 			NewUsersPerMinute: cloudflare.F(int64(200)),
 			TotalActiveUsers:  cloudflare.F(int64(200)),
 			AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
-				Host: cloudflare.F("shop2.example.com"),
-				Path: cloudflare.F("/shop2/checkout"),
-			}, {
-				Host: cloudflare.F("shop2.example.com"),
-				Path: cloudflare.F("/shop2/checkout"),
-			}, {
 				Host: cloudflare.F("shop2.example.com"),
 				Path: cloudflare.F("/shop2/checkout"),
 			}}),
@@ -96,12 +90,6 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 				NewUsersPerMinute: cloudflare.F(int64(200)),
 				TotalActiveUsers:  cloudflare.F(int64(200)),
 				AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
-					Host: cloudflare.F("shop2.example.com"),
-					Path: cloudflare.F("/shop2/checkout"),
-				}, {
-					Host: cloudflare.F("shop2.example.com"),
-					Path: cloudflare.F("/shop2/checkout"),
-				}, {
 					Host: cloudflare.F("shop2.example.com"),
 					Path: cloudflare.F("/shop2/checkout"),
 				}}),
@@ -214,12 +202,6 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 				NewUsersPerMinute: cloudflare.F(int64(200)),
 				TotalActiveUsers:  cloudflare.F(int64(200)),
 				AdditionalRoutes: cloudflare.F([]waiting_rooms.AdditionalRoutesParam{{
-					Host: cloudflare.F("shop2.example.com"),
-					Path: cloudflare.F("/shop2/checkout"),
-				}, {
-					Host: cloudflare.F("shop2.example.com"),
-					Path: cloudflare.F("/shop2/checkout"),
-				}, {
 					Host: cloudflare.F("shop2.example.com"),
 					Path: cloudflare.F("/shop2/checkout"),
 				}}),

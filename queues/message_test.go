@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/queues"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/queues"
 )
 
 func TestMessageAckWithOptionalParams(t *testing.T) {
@@ -34,18 +34,8 @@ func TestMessageAckWithOptionalParams(t *testing.T) {
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Acks: cloudflare.F([]queues.MessageAckParamsAck{{
 				LeaseID: cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
-			}, {
-				LeaseID: cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
-			}, {
-				LeaseID: cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
 			}}),
 			Retries: cloudflare.F([]queues.MessageAckParamsRetry{{
-				DelaySeconds: cloudflare.F(10.000000),
-				LeaseID:      cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
-			}, {
-				DelaySeconds: cloudflare.F(10.000000),
-				LeaseID:      cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
-			}, {
 				DelaySeconds: cloudflare.F(10.000000),
 				LeaseID:      cloudflare.F("eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIn0..Q8p21d7dceR6vUfwftONdQ.JVqZgAS-Zk7MqmqccYtTHeeMElNHaOMigeWdb8LyMOg.T2_HV99CYzGaQuhTyW8RsgbnpTRZHRM6N7UoSaAKeK0"),
 			}}),
@@ -77,9 +67,9 @@ func TestMessagePullWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		queues.MessagePullParams{
-			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			BatchSize:         cloudflare.F(50.000000),
-			VisibilityTimeout: cloudflare.F(6000.000000),
+			AccountID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			BatchSize:           cloudflare.F(50.000000),
+			VisibilityTimeoutMs: cloudflare.F(6000.000000),
 		},
 	)
 	if err != nil {

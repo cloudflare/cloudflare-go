@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // GatewayRuleService contains methods and other services that help with
@@ -136,6 +136,31 @@ func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query Gatew
 	}
 	path := fmt.Sprintf("accounts/%s/gateway/rules/%s", query.AccountID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Resets the expiration of a Zero Trust Gateway Rule if its duration has elapsed
+// and it has a default duration.
+//
+// The Zero Trust Gateway Rule must have values for both `expiration.expires_at`
+// and `expiration.duration`.
+func (r *GatewayRuleService) ResetExpiration(ctx context.Context, ruleID string, body GatewayRuleResetExpirationParams, opts ...option.RequestOption) (res *GatewayRule, err error) {
+	var env GatewayRuleResetExpirationResponseEnvelope
+	opts = append(r.Options[:], opts...)
+	if body.AccountID.Value == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if ruleID == "" {
+		err = errors.New("missing required rule_id parameter")
+		return
+	}
+	path := fmt.Sprintf("accounts/%s/gateway/rules/%s/reset_expiration", body.AccountID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -276,6 +301,11 @@ type GatewayRule struct {
 	DevicePosture string `json:"device_posture"`
 	// True if the rule is enabled.
 	Enabled bool `json:"enabled"`
+	// The expiration time stamp and default duration of a DNS policy. Takes precedence
+	// over the policy's `schedule` configuration, if any.
+	//
+	// This does not apply to HTTP or network policies.
+	Expiration GatewayRuleExpiration `json:"expiration"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
 	Filters []GatewayFilter `json:"filters"`
@@ -293,9 +323,11 @@ type GatewayRule struct {
 	// policies.
 	Schedule Schedule `json:"schedule"`
 	// The wirefilter expression used for traffic matching.
-	Traffic   string          `json:"traffic"`
-	UpdatedAt time.Time       `json:"updated_at" format:"date-time"`
-	JSON      gatewayRuleJSON `json:"-"`
+	Traffic   string    `json:"traffic"`
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// version number of the rule
+	Version int64           `json:"version"`
+	JSON    gatewayRuleJSON `json:"-"`
 }
 
 // gatewayRuleJSON contains the JSON metadata for the struct [GatewayRule]
@@ -307,6 +339,7 @@ type gatewayRuleJSON struct {
 	Description   apijson.Field
 	DevicePosture apijson.Field
 	Enabled       apijson.Field
+	Expiration    apijson.Field
 	Filters       apijson.Field
 	Identity      apijson.Field
 	Name          apijson.Field
@@ -315,6 +348,7 @@ type gatewayRuleJSON struct {
 	Schedule      apijson.Field
 	Traffic       apijson.Field
 	UpdatedAt     apijson.Field
+	Version       apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
@@ -345,16 +379,57 @@ const (
 	GatewayRuleActionOverride     GatewayRuleAction = "override"
 	GatewayRuleActionL4Override   GatewayRuleAction = "l4_override"
 	GatewayRuleActionEgress       GatewayRuleAction = "egress"
-	GatewayRuleActionAuditSSH     GatewayRuleAction = "audit_ssh"
 	GatewayRuleActionResolve      GatewayRuleAction = "resolve"
+	GatewayRuleActionQuarantine   GatewayRuleAction = "quarantine"
 )
 
 func (r GatewayRuleAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionAuditSSH, GatewayRuleActionResolve:
+	case GatewayRuleActionOn, GatewayRuleActionOff, GatewayRuleActionAllow, GatewayRuleActionBlock, GatewayRuleActionScan, GatewayRuleActionNoscan, GatewayRuleActionSafesearch, GatewayRuleActionYtrestricted, GatewayRuleActionIsolate, GatewayRuleActionNoisolate, GatewayRuleActionOverride, GatewayRuleActionL4Override, GatewayRuleActionEgress, GatewayRuleActionResolve, GatewayRuleActionQuarantine:
 		return true
 	}
 	return false
+}
+
+// The expiration time stamp and default duration of a DNS policy. Takes precedence
+// over the policy's `schedule` configuration, if any.
+//
+// This does not apply to HTTP or network policies.
+type GatewayRuleExpiration struct {
+	// The time stamp at which the policy will expire and cease to be applied.
+	//
+	// Must adhere to RFC 3339 and include a UTC offset. Non-zero offsets are accepted
+	// but will be converted to the equivalent value with offset zero (UTC+00:00) and
+	// will be returned as time stamps with offset zero denoted by a trailing 'Z'.
+	//
+	// Policies with an expiration do not consider the timezone of clients they are
+	// applied to, and expire "globally" at the point given by their `expires_at`
+	// value.
+	ExpiresAt time.Time `json:"expires_at,required" format:"date-time"`
+	// The default duration a policy will be active in minutes. Must be set in order to
+	// use the `reset_expiration` endpoint on this rule.
+	Duration int64 `json:"duration"`
+	// Whether the policy has expired.
+	Expired bool                      `json:"expired"`
+	JSON    gatewayRuleExpirationJSON `json:"-"`
+}
+
+// gatewayRuleExpirationJSON contains the JSON metadata for the struct
+// [GatewayRuleExpiration]
+type gatewayRuleExpirationJSON struct {
+	ExpiresAt   apijson.Field
+	Duration    apijson.Field
+	Expired     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleExpiration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayRuleExpirationJSON) RawJSON() string {
+	return r.raw
 }
 
 // Additional settings that modify the rule's action.
@@ -409,6 +484,8 @@ type RuleSetting struct {
 	OverrideIPs []string `json:"override_ips"`
 	// Configure DLP payload logging.
 	PayloadLog RuleSettingPayloadLog `json:"payload_log"`
+	// Settings that apply to quarantine rules
+	Quarantine RuleSettingQuarantine `json:"quarantine"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
 	// rule's action is set to 'resolve'.
@@ -439,6 +516,7 @@ type ruleSettingJSON struct {
 	OverrideHost                    apijson.Field
 	OverrideIPs                     apijson.Field
 	PayloadLog                      apijson.Field
+	Quarantine                      apijson.Field
 	ResolveDNSThroughCloudflare     apijson.Field
 	UntrustedCERT                   apijson.Field
 	raw                             string
@@ -677,6 +755,55 @@ func (r ruleSettingPayloadLogJSON) RawJSON() string {
 	return r.raw
 }
 
+// Settings that apply to quarantine rules
+type RuleSettingQuarantine struct {
+	// Types of files to sandbox.
+	FileTypes []RuleSettingQuarantineFileType `json:"file_types"`
+	JSON      ruleSettingQuarantineJSON       `json:"-"`
+}
+
+// ruleSettingQuarantineJSON contains the JSON metadata for the struct
+// [RuleSettingQuarantine]
+type ruleSettingQuarantineJSON struct {
+	FileTypes   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleSettingQuarantine) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleSettingQuarantineJSON) RawJSON() string {
+	return r.raw
+}
+
+type RuleSettingQuarantineFileType string
+
+const (
+	RuleSettingQuarantineFileTypeExe  RuleSettingQuarantineFileType = "exe"
+	RuleSettingQuarantineFileTypePdf  RuleSettingQuarantineFileType = "pdf"
+	RuleSettingQuarantineFileTypeDoc  RuleSettingQuarantineFileType = "doc"
+	RuleSettingQuarantineFileTypeDocm RuleSettingQuarantineFileType = "docm"
+	RuleSettingQuarantineFileTypeDocx RuleSettingQuarantineFileType = "docx"
+	RuleSettingQuarantineFileTypeRtf  RuleSettingQuarantineFileType = "rtf"
+	RuleSettingQuarantineFileTypePpt  RuleSettingQuarantineFileType = "ppt"
+	RuleSettingQuarantineFileTypePptx RuleSettingQuarantineFileType = "pptx"
+	RuleSettingQuarantineFileTypeXls  RuleSettingQuarantineFileType = "xls"
+	RuleSettingQuarantineFileTypeXlsm RuleSettingQuarantineFileType = "xlsm"
+	RuleSettingQuarantineFileTypeXlsx RuleSettingQuarantineFileType = "xlsx"
+	RuleSettingQuarantineFileTypeZip  RuleSettingQuarantineFileType = "zip"
+	RuleSettingQuarantineFileTypeRar  RuleSettingQuarantineFileType = "rar"
+)
+
+func (r RuleSettingQuarantineFileType) IsKnown() bool {
+	switch r {
+	case RuleSettingQuarantineFileTypeExe, RuleSettingQuarantineFileTypePdf, RuleSettingQuarantineFileTypeDoc, RuleSettingQuarantineFileTypeDocm, RuleSettingQuarantineFileTypeDocx, RuleSettingQuarantineFileTypeRtf, RuleSettingQuarantineFileTypePpt, RuleSettingQuarantineFileTypePptx, RuleSettingQuarantineFileTypeXls, RuleSettingQuarantineFileTypeXlsm, RuleSettingQuarantineFileTypeXlsx, RuleSettingQuarantineFileTypeZip, RuleSettingQuarantineFileTypeRar:
+		return true
+	}
+	return false
+}
+
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
 type RuleSettingUntrustedCERT struct {
 	// The action performed when an untrusted certificate is seen. The default action
@@ -771,6 +898,8 @@ type RuleSettingParam struct {
 	OverrideIPs param.Field[[]string] `json:"override_ips"`
 	// Configure DLP payload logging.
 	PayloadLog param.Field[RuleSettingPayloadLogParam] `json:"payload_log"`
+	// Settings that apply to quarantine rules
+	Quarantine param.Field[RuleSettingQuarantineParam] `json:"quarantine"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when dns_resolvers are specified. Only valid when a
 	// rule's action is set to 'resolve'.
@@ -889,6 +1018,16 @@ type RuleSettingPayloadLogParam struct {
 }
 
 func (r RuleSettingPayloadLogParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Settings that apply to quarantine rules
+type RuleSettingQuarantineParam struct {
+	// Types of files to sandbox.
+	FileTypes param.Field[[]RuleSettingQuarantineFileType] `json:"file_types"`
+}
+
+func (r RuleSettingQuarantineParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1027,6 +1166,11 @@ type GatewayRuleNewParams struct {
 	DevicePosture param.Field[string] `json:"device_posture"`
 	// True if the rule is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// The expiration time stamp and default duration of a DNS policy. Takes precedence
+	// over the policy's `schedule` configuration, if any.
+	//
+	// This does not apply to HTTP or network policies.
+	Expiration param.Field[GatewayRuleNewParamsExpiration] `json:"expiration"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
@@ -1067,16 +1211,42 @@ const (
 	GatewayRuleNewParamsActionOverride     GatewayRuleNewParamsAction = "override"
 	GatewayRuleNewParamsActionL4Override   GatewayRuleNewParamsAction = "l4_override"
 	GatewayRuleNewParamsActionEgress       GatewayRuleNewParamsAction = "egress"
-	GatewayRuleNewParamsActionAuditSSH     GatewayRuleNewParamsAction = "audit_ssh"
 	GatewayRuleNewParamsActionResolve      GatewayRuleNewParamsAction = "resolve"
+	GatewayRuleNewParamsActionQuarantine   GatewayRuleNewParamsAction = "quarantine"
 )
 
 func (r GatewayRuleNewParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionAuditSSH, GatewayRuleNewParamsActionResolve:
+	case GatewayRuleNewParamsActionOn, GatewayRuleNewParamsActionOff, GatewayRuleNewParamsActionAllow, GatewayRuleNewParamsActionBlock, GatewayRuleNewParamsActionScan, GatewayRuleNewParamsActionNoscan, GatewayRuleNewParamsActionSafesearch, GatewayRuleNewParamsActionYtrestricted, GatewayRuleNewParamsActionIsolate, GatewayRuleNewParamsActionNoisolate, GatewayRuleNewParamsActionOverride, GatewayRuleNewParamsActionL4Override, GatewayRuleNewParamsActionEgress, GatewayRuleNewParamsActionResolve, GatewayRuleNewParamsActionQuarantine:
 		return true
 	}
 	return false
+}
+
+// The expiration time stamp and default duration of a DNS policy. Takes precedence
+// over the policy's `schedule` configuration, if any.
+//
+// This does not apply to HTTP or network policies.
+type GatewayRuleNewParamsExpiration struct {
+	// The time stamp at which the policy will expire and cease to be applied.
+	//
+	// Must adhere to RFC 3339 and include a UTC offset. Non-zero offsets are accepted
+	// but will be converted to the equivalent value with offset zero (UTC+00:00) and
+	// will be returned as time stamps with offset zero denoted by a trailing 'Z'.
+	//
+	// Policies with an expiration do not consider the timezone of clients they are
+	// applied to, and expire "globally" at the point given by their `expires_at`
+	// value.
+	ExpiresAt param.Field[time.Time] `json:"expires_at,required" format:"date-time"`
+	// The default duration a policy will be active in minutes. Must be set in order to
+	// use the `reset_expiration` endpoint on this rule.
+	Duration param.Field[int64] `json:"duration"`
+	// Whether the policy has expired.
+	Expired param.Field[bool] `json:"expired"`
+}
+
+func (r GatewayRuleNewParamsExpiration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type GatewayRuleNewResponseEnvelope struct {
@@ -1135,6 +1305,11 @@ type GatewayRuleUpdateParams struct {
 	DevicePosture param.Field[string] `json:"device_posture"`
 	// True if the rule is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// The expiration time stamp and default duration of a DNS policy. Takes precedence
+	// over the policy's `schedule` configuration, if any.
+	//
+	// This does not apply to HTTP or network policies.
+	Expiration param.Field[GatewayRuleUpdateParamsExpiration] `json:"expiration"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
 	Filters param.Field[[]GatewayFilter] `json:"filters"`
@@ -1175,16 +1350,42 @@ const (
 	GatewayRuleUpdateParamsActionOverride     GatewayRuleUpdateParamsAction = "override"
 	GatewayRuleUpdateParamsActionL4Override   GatewayRuleUpdateParamsAction = "l4_override"
 	GatewayRuleUpdateParamsActionEgress       GatewayRuleUpdateParamsAction = "egress"
-	GatewayRuleUpdateParamsActionAuditSSH     GatewayRuleUpdateParamsAction = "audit_ssh"
 	GatewayRuleUpdateParamsActionResolve      GatewayRuleUpdateParamsAction = "resolve"
+	GatewayRuleUpdateParamsActionQuarantine   GatewayRuleUpdateParamsAction = "quarantine"
 )
 
 func (r GatewayRuleUpdateParamsAction) IsKnown() bool {
 	switch r {
-	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionAuditSSH, GatewayRuleUpdateParamsActionResolve:
+	case GatewayRuleUpdateParamsActionOn, GatewayRuleUpdateParamsActionOff, GatewayRuleUpdateParamsActionAllow, GatewayRuleUpdateParamsActionBlock, GatewayRuleUpdateParamsActionScan, GatewayRuleUpdateParamsActionNoscan, GatewayRuleUpdateParamsActionSafesearch, GatewayRuleUpdateParamsActionYtrestricted, GatewayRuleUpdateParamsActionIsolate, GatewayRuleUpdateParamsActionNoisolate, GatewayRuleUpdateParamsActionOverride, GatewayRuleUpdateParamsActionL4Override, GatewayRuleUpdateParamsActionEgress, GatewayRuleUpdateParamsActionResolve, GatewayRuleUpdateParamsActionQuarantine:
 		return true
 	}
 	return false
+}
+
+// The expiration time stamp and default duration of a DNS policy. Takes precedence
+// over the policy's `schedule` configuration, if any.
+//
+// This does not apply to HTTP or network policies.
+type GatewayRuleUpdateParamsExpiration struct {
+	// The time stamp at which the policy will expire and cease to be applied.
+	//
+	// Must adhere to RFC 3339 and include a UTC offset. Non-zero offsets are accepted
+	// but will be converted to the equivalent value with offset zero (UTC+00:00) and
+	// will be returned as time stamps with offset zero denoted by a trailing 'Z'.
+	//
+	// Policies with an expiration do not consider the timezone of clients they are
+	// applied to, and expire "globally" at the point given by their `expires_at`
+	// value.
+	ExpiresAt param.Field[time.Time] `json:"expires_at,required" format:"date-time"`
+	// The default duration a policy will be active in minutes. Must be set in order to
+	// use the `reset_expiration` endpoint on this rule.
+	Duration param.Field[int64] `json:"duration"`
+	// Whether the policy has expired.
+	Expired param.Field[bool] `json:"expired"`
+}
+
+func (r GatewayRuleUpdateParamsExpiration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 type GatewayRuleUpdateResponseEnvelope struct {
@@ -1323,6 +1524,53 @@ const (
 func (r GatewayRuleGetResponseEnvelopeSuccess) IsKnown() bool {
 	switch r {
 	case GatewayRuleGetResponseEnvelopeSuccessTrue:
+		return true
+	}
+	return false
+}
+
+type GatewayRuleResetExpirationParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type GatewayRuleResetExpirationResponseEnvelope struct {
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
+	// Whether the API call was successful
+	Success GatewayRuleResetExpirationResponseEnvelopeSuccess `json:"success,required"`
+	Result  GatewayRule                                       `json:"result"`
+	JSON    gatewayRuleResetExpirationResponseEnvelopeJSON    `json:"-"`
+}
+
+// gatewayRuleResetExpirationResponseEnvelopeJSON contains the JSON metadata for
+// the struct [GatewayRuleResetExpirationResponseEnvelope]
+type gatewayRuleResetExpirationResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleResetExpirationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r gatewayRuleResetExpirationResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type GatewayRuleResetExpirationResponseEnvelopeSuccess bool
+
+const (
+	GatewayRuleResetExpirationResponseEnvelopeSuccessTrue GatewayRuleResetExpirationResponseEnvelopeSuccess = true
+)
+
+func (r GatewayRuleResetExpirationResponseEnvelopeSuccess) IsKnown() bool {
+	switch r {
+	case GatewayRuleResetExpirationResponseEnvelopeSuccessTrue:
 		return true
 	}
 	return false

@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
+	"github.com/cloudflare/cloudflare-go/v4/zones"
 )
 
 func TestSubscriptionNewWithOptionalParams(t *testing.T) {
@@ -41,7 +41,7 @@ func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 					IsContract:        cloudflare.F(false),
 					PublicName:        cloudflare.F("Business Plan"),
 					Scope:             cloudflare.F("zone"),
-					Sets:              cloudflare.F([]string{"string", "string", "string"}),
+					Sets:              cloudflare.F([]string{"string"}),
 				}),
 			},
 		},
@@ -81,7 +81,7 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 					IsContract:        cloudflare.F(false),
 					PublicName:        cloudflare.F("Business Plan"),
 					Scope:             cloudflare.F("zone"),
-					Sets:              cloudflare.F([]string{"string", "string", "string"}),
+					Sets:              cloudflare.F([]string{"string"}),
 				}),
 			},
 		},

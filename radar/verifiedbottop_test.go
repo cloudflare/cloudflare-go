@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestVerifiedBotTopBotsWithOptionalParams(t *testing.T) {
@@ -29,15 +29,15 @@ func TestVerifiedBotTopBotsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.VerifiedBots.Top.Bots(context.TODO(), radar.VerifiedBotTopBotsParams{
-		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:       cloudflare.F([]string{"string"}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+		DateRange: cloudflare.F([]string{"7d"}),
+		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.VerifiedBotTopBotsParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -62,15 +62,15 @@ func TestVerifiedBotTopCategoriesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.VerifiedBots.Top.Categories(context.TODO(), radar.VerifiedBotTopCategoriesParams{
-		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:       cloudflare.F([]string{"string"}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+		DateRange: cloudflare.F([]string{"7d"}),
+		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.VerifiedBotTopCategoriesParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

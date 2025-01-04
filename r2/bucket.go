@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // BucketService contains methods and other services that help with interacting
@@ -24,7 +24,12 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewBucketService] method instead.
 type BucketService struct {
-	Options []option.RequestOption
+	Options            []option.RequestOption
+	Lifecycle          *BucketLifecycleService
+	CORS               *BucketCORSService
+	Domains            *BucketDomainService
+	EventNotifications *BucketEventNotificationService
+	Sippy              *BucketSippyService
 }
 
 // NewBucketService generates a new service that applies the given options to each
@@ -33,12 +38,20 @@ type BucketService struct {
 func NewBucketService(opts ...option.RequestOption) (r *BucketService) {
 	r = &BucketService{}
 	r.Options = opts
+	r.Lifecycle = NewBucketLifecycleService(opts...)
+	r.CORS = NewBucketCORSService(opts...)
+	r.Domains = NewBucketDomainService(opts...)
+	r.EventNotifications = NewBucketEventNotificationService(opts...)
+	r.Sippy = NewBucketSippyService(opts...)
 	return
 }
 
 // Creates a new R2 bucket.
 func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketNewResponseEnvelope
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -56,6 +69,9 @@ func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ..
 // Lists all R2 buckets on your account
 func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *BucketListResponse, err error) {
 	var env BucketListResponseEnvelope
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
@@ -71,10 +87,13 @@ func (r *BucketService) List(ctx context.Context, params BucketListParams, opts 
 }
 
 // Deletes an existing R2 bucket.
-func (r *BucketService) Delete(ctx context.Context, bucketName string, body BucketDeleteParams, opts ...option.RequestOption) (res *BucketDeleteResponse, err error) {
+func (r *BucketService) Delete(ctx context.Context, bucketName string, params BucketDeleteParams, opts ...option.RequestOption) (res *BucketDeleteResponse, err error) {
 	var env BucketDeleteResponseEnvelope
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
-	if body.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -82,7 +101,7 @@ func (r *BucketService) Delete(ctx context.Context, bucketName string, body Buck
 		err = errors.New("missing required bucket_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", body.AccountID, bucketName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -92,10 +111,13 @@ func (r *BucketService) Delete(ctx context.Context, bucketName string, body Buck
 }
 
 // Gets metadata for an existing R2 bucket.
-func (r *BucketService) Get(ctx context.Context, bucketName string, query BucketGetParams, opts ...option.RequestOption) (res *Bucket, err error) {
+func (r *BucketService) Get(ctx context.Context, bucketName string, params BucketGetParams, opts ...option.RequestOption) (res *Bucket, err error) {
 	var env BucketGetResponseEnvelope
+	if params.Jurisdiction.Present {
+		opts = append(opts, option.WithHeader("cf-r2-jurisdiction", fmt.Sprintf("%s", params.Jurisdiction)))
+	}
 	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -103,7 +125,7 @@ func (r *BucketService) Get(ctx context.Context, bucketName string, query Bucket
 		err = errors.New("missing required bucket_name parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", query.AccountID, bucketName)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", params.AccountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -210,6 +232,8 @@ type BucketNewParams struct {
 	LocationHint param.Field[BucketNewParamsLocationHint] `json:"locationHint"`
 	// Storage class for newly uploaded objects, unless specified otherwise.
 	StorageClass param.Field[BucketNewParamsStorageClass] `json:"storageClass"`
+	// Creates the bucket in the provided jurisdiction
+	Jurisdiction param.Field[BucketNewParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 func (r BucketNewParams) MarshalJSON() (data []byte, err error) {
@@ -246,6 +270,23 @@ const (
 func (r BucketNewParamsStorageClass) IsKnown() bool {
 	switch r {
 	case BucketNewParamsStorageClassStandard, BucketNewParamsStorageClassInfrequentAccess:
+		return true
+	}
+	return false
+}
+
+// Creates the bucket in the provided jurisdiction
+type BucketNewParamsCfR2Jurisdiction string
+
+const (
+	BucketNewParamsCfR2JurisdictionDefault BucketNewParamsCfR2Jurisdiction = "default"
+	BucketNewParamsCfR2JurisdictionEu      BucketNewParamsCfR2Jurisdiction = "eu"
+	BucketNewParamsCfR2JurisdictionFedramp BucketNewParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r BucketNewParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case BucketNewParamsCfR2JurisdictionDefault, BucketNewParamsCfR2JurisdictionEu, BucketNewParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -312,6 +353,8 @@ type BucketListParams struct {
 	PerPage param.Field[float64] `query:"per_page"`
 	// Bucket name to start searching after. Buckets are ordered lexicographically.
 	StartAfter param.Field[string] `query:"start_after"`
+	// Lists buckets in the provided jurisdiction
+	Jurisdiction param.Field[BucketListParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
 }
 
 // URLQuery serializes [BucketListParams]'s query parameters as `url.Values`.
@@ -348,6 +391,23 @@ const (
 func (r BucketListParamsOrder) IsKnown() bool {
 	switch r {
 	case BucketListParamsOrderName:
+		return true
+	}
+	return false
+}
+
+// Lists buckets in the provided jurisdiction
+type BucketListParamsCfR2Jurisdiction string
+
+const (
+	BucketListParamsCfR2JurisdictionDefault BucketListParamsCfR2Jurisdiction = "default"
+	BucketListParamsCfR2JurisdictionEu      BucketListParamsCfR2Jurisdiction = "eu"
+	BucketListParamsCfR2JurisdictionFedramp BucketListParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r BucketListParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case BucketListParamsCfR2JurisdictionDefault, BucketListParamsCfR2JurisdictionEu, BucketListParamsCfR2JurisdictionFedramp:
 		return true
 	}
 	return false
@@ -426,6 +486,25 @@ func (r bucketListResponseEnvelopeResultInfoJSON) RawJSON() string {
 type BucketDeleteParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+	// The bucket jurisdiction
+	Jurisdiction param.Field[BucketDeleteParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+}
+
+// The bucket jurisdiction
+type BucketDeleteParamsCfR2Jurisdiction string
+
+const (
+	BucketDeleteParamsCfR2JurisdictionDefault BucketDeleteParamsCfR2Jurisdiction = "default"
+	BucketDeleteParamsCfR2JurisdictionEu      BucketDeleteParamsCfR2Jurisdiction = "eu"
+	BucketDeleteParamsCfR2JurisdictionFedramp BucketDeleteParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r BucketDeleteParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case BucketDeleteParamsCfR2JurisdictionDefault, BucketDeleteParamsCfR2JurisdictionEu, BucketDeleteParamsCfR2JurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type BucketDeleteResponseEnvelope struct {
@@ -474,6 +553,25 @@ func (r BucketDeleteResponseEnvelopeSuccess) IsKnown() bool {
 type BucketGetParams struct {
 	// Account ID
 	AccountID param.Field[string] `path:"account_id,required"`
+	// The bucket jurisdiction
+	Jurisdiction param.Field[BucketGetParamsCfR2Jurisdiction] `header:"cf-r2-jurisdiction"`
+}
+
+// The bucket jurisdiction
+type BucketGetParamsCfR2Jurisdiction string
+
+const (
+	BucketGetParamsCfR2JurisdictionDefault BucketGetParamsCfR2Jurisdiction = "default"
+	BucketGetParamsCfR2JurisdictionEu      BucketGetParamsCfR2Jurisdiction = "eu"
+	BucketGetParamsCfR2JurisdictionFedramp BucketGetParamsCfR2Jurisdiction = "fedramp"
+)
+
+func (r BucketGetParamsCfR2Jurisdiction) IsKnown() bool {
+	switch r {
+	case BucketGetParamsCfR2JurisdictionDefault, BucketGetParamsCfR2JurisdictionEu, BucketGetParamsCfR2JurisdictionFedramp:
+		return true
+	}
+	return false
 }
 
 type BucketGetResponseEnvelope struct {

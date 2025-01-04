@@ -9,13 +9,13 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // SiteService contains methods and other services that help with interacting with
@@ -155,10 +155,13 @@ func (r *SiteService) Edit(ctx context.Context, siteID string, params SiteEditPa
 }
 
 // Get a specific Site.
-func (r *SiteService) Get(ctx context.Context, siteID string, query SiteGetParams, opts ...option.RequestOption) (res *Site, err error) {
+func (r *SiteService) Get(ctx context.Context, siteID string, params SiteGetParams, opts ...option.RequestOption) (res *Site, err error) {
 	var env SiteGetResponseEnvelope
+	if params.XMagicNewHcTarget.Present {
+		opts = append(opts, option.WithHeader("x-magic-new-hc-target", fmt.Sprintf("%s", params.XMagicNewHcTarget)))
+	}
 	opts = append(r.Options[:], opts...)
-	if query.AccountID.Value == "" {
+	if params.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -166,7 +169,7 @@ func (r *SiteService) Get(ctx context.Context, siteID string, query SiteGetParam
 		err = errors.New("missing required site_id parameter")
 		return
 	}
-	path := fmt.Sprintf("accounts/%s/magic/sites/%s", query.AccountID, siteID)
+	path := fmt.Sprintf("accounts/%s/magic/sites/%s", params.AccountID, siteID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -502,7 +505,8 @@ func (r SiteEditResponseEnvelopeSuccess) IsKnown() bool {
 
 type SiteGetParams struct {
 	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID         param.Field[string] `path:"account_id,required"`
+	XMagicNewHcTarget param.Field[bool]   `header:"x-magic-new-hc-target"`
 }
 
 type SiteGetResponseEnvelope struct {

@@ -1,0 +1,135 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+package addressing_test
+
+import (
+	"context"
+	"errors"
+	"os"
+	"testing"
+
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/addressing"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+)
+
+func TestPrefixServiceBindingNewWithOptionalParams(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Addressing.Prefixes.ServiceBindings.New(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		addressing.PrefixServiceBindingNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			CIDR:      cloudflare.F("192.0.2.0/24"),
+			ServiceID: cloudflare.F("2db684ee7ca04e159946fd05b99e1bcd"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestPrefixServiceBindingList(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Addressing.Prefixes.ServiceBindings.List(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		addressing.PrefixServiceBindingListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestPrefixServiceBindingDelete(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Addressing.Prefixes.ServiceBindings.Delete(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		addressing.PrefixServiceBindingDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestPrefixServiceBindingGet(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.Addressing.Prefixes.ServiceBindings.Get(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		addressing.PrefixServiceBindingGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}

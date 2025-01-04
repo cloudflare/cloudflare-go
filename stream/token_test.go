@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/stream"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/stream"
 )
 
 func TestTokenNewWithOptionalParams(t *testing.T) {
@@ -36,17 +36,17 @@ func TestTokenNewWithOptionalParams(t *testing.T) {
 			AccessRules: cloudflare.F([]stream.TokenNewParamsAccessRule{{
 				Action:  cloudflare.F(stream.TokenNewParamsAccessRulesActionAllow),
 				Country: cloudflare.F([]string{"US", "MX"}),
-				IP:      cloudflare.F([]string{"string", "string", "string"}),
+				IP:      cloudflare.F([]string{"string"}),
 				Type:    cloudflare.F(stream.TokenNewParamsAccessRulesTypeAny),
 			}, {
 				Action:  cloudflare.F(stream.TokenNewParamsAccessRulesActionAllow),
-				Country: cloudflare.F([]string{"string", "string", "string"}),
+				Country: cloudflare.F([]string{"string"}),
 				IP:      cloudflare.F([]string{"93.184.216.0/24", "2400:cb00::/32"}),
 				Type:    cloudflare.F(stream.TokenNewParamsAccessRulesTypeAny),
 			}, {
 				Action:  cloudflare.F(stream.TokenNewParamsAccessRulesActionAllow),
-				Country: cloudflare.F([]string{"string", "string", "string"}),
-				IP:      cloudflare.F([]string{"string", "string", "string"}),
+				Country: cloudflare.F([]string{"string"}),
+				IP:      cloudflare.F([]string{"string"}),
 				Type:    cloudflare.F(stream.TokenNewParamsAccessRulesTypeAny),
 			}}),
 			Downloadable: cloudflare.F(true),

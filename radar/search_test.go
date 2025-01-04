@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestSearchGlobalWithOptionalParams(t *testing.T) {
@@ -29,9 +29,9 @@ func TestSearchGlobalWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Search.Global(context.TODO(), radar.SearchGlobalParams{
 		Query:         cloudflare.F("United"),
-		Exclude:       cloudflare.F([]radar.SearchGlobalParamsExclude{radar.SearchGlobalParamsExcludeSpecialEvents, radar.SearchGlobalParamsExcludeNotebooks, radar.SearchGlobalParamsExcludeLocations}),
+		Exclude:       cloudflare.F([]radar.SearchGlobalParamsExclude{radar.SearchGlobalParamsExcludeSpecialEvents}),
 		Format:        cloudflare.F(radar.SearchGlobalParamsFormatJson),
-		Include:       cloudflare.F([]radar.SearchGlobalParamsInclude{radar.SearchGlobalParamsIncludeSpecialEvents, radar.SearchGlobalParamsIncludeNotebooks, radar.SearchGlobalParamsIncludeLocations}),
+		Include:       cloudflare.F([]radar.SearchGlobalParamsInclude{radar.SearchGlobalParamsIncludeSpecialEvents}),
 		Limit:         cloudflare.F(int64(5)),
 		LimitPerGroup: cloudflare.F(0.000000),
 	})

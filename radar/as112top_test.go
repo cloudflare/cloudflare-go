@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/radar"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/radar"
 )
 
 func TestAS112TopDNSSECWithOptionalParams(t *testing.T) {
@@ -32,15 +32,15 @@ func TestAS112TopDNSSECWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		radar.AS112TopDNSSECParamsDNSSECSupported,
 		radar.AS112TopDNSSECParams{
-			ASN:       cloudflare.F([]string{"string", "string", "string"}),
-			Continent: cloudflare.F([]string{"string", "string", "string"}),
-			DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-			DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+			ASN:       cloudflare.F([]string{"string"}),
+			Continent: cloudflare.F([]string{"string"}),
+			DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+			DateRange: cloudflare.F([]string{"7d"}),
+			DateStart: cloudflare.F([]time.Time{time.Now()}),
 			Format:    cloudflare.F(radar.AS112TopDNSSECParamsFormatJson),
 			Limit:     cloudflare.F(int64(5)),
-			Location:  cloudflare.F([]string{"string", "string", "string"}),
-			Name:      cloudflare.F([]string{"string", "string", "string"}),
+			Location:  cloudflare.F([]string{"string"}),
+			Name:      cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {
@@ -69,15 +69,15 @@ func TestAS112TopEdnsWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		radar.AS112TopEdnsParamsEdnsSupported,
 		radar.AS112TopEdnsParams{
-			ASN:       cloudflare.F([]string{"string", "string", "string"}),
-			Continent: cloudflare.F([]string{"string", "string", "string"}),
-			DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-			DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+			ASN:       cloudflare.F([]string{"string"}),
+			Continent: cloudflare.F([]string{"string"}),
+			DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+			DateRange: cloudflare.F([]string{"7d"}),
+			DateStart: cloudflare.F([]time.Time{time.Now()}),
 			Format:    cloudflare.F(radar.AS112TopEdnsParamsFormatJson),
 			Limit:     cloudflare.F(int64(5)),
-			Location:  cloudflare.F([]string{"string", "string", "string"}),
-			Name:      cloudflare.F([]string{"string", "string", "string"}),
+			Location:  cloudflare.F([]string{"string"}),
+			Name:      cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {
@@ -106,15 +106,15 @@ func TestAS112TopIPVersionWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		radar.AS112TopIPVersionParamsIPVersionIPv4,
 		radar.AS112TopIPVersionParams{
-			ASN:       cloudflare.F([]string{"string", "string", "string"}),
-			Continent: cloudflare.F([]string{"string", "string", "string"}),
-			DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-			DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+			ASN:       cloudflare.F([]string{"string"}),
+			Continent: cloudflare.F([]string{"string"}),
+			DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+			DateRange: cloudflare.F([]string{"7d"}),
+			DateStart: cloudflare.F([]time.Time{time.Now()}),
 			Format:    cloudflare.F(radar.AS112TopIPVersionParamsFormatJson),
 			Limit:     cloudflare.F(int64(5)),
-			Location:  cloudflare.F([]string{"string", "string", "string"}),
-			Name:      cloudflare.F([]string{"string", "string", "string"}),
+			Location:  cloudflare.F([]string{"string"}),
+			Name:      cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {
@@ -140,15 +140,15 @@ func TestAS112TopLocationsWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Top.Locations(context.TODO(), radar.AS112TopLocationsParams{
-		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]string{"7d", "7d", "7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		ASN:       cloudflare.F([]string{"string"}),
+		Continent: cloudflare.F([]string{"string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
+		DateRange: cloudflare.F([]string{"7d"}),
+		DateStart: cloudflare.F([]time.Time{time.Now()}),
 		Format:    cloudflare.F(radar.AS112TopLocationsParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
-		Name:      cloudflare.F([]string{"string", "string", "string"}),
+		Location:  cloudflare.F([]string{"string"}),
+		Name:      cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

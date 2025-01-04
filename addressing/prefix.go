@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/v3/internal/pagination"
-	"github.com/cloudflare/cloudflare-go/v3/internal/param"
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/shared"
+	"github.com/cloudflare/cloudflare-go/v4/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v4/internal/param"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/packages/pagination"
+	"github.com/cloudflare/cloudflare-go/v4/shared"
 )
 
 // PrefixService contains methods and other services that help with interacting
@@ -24,9 +24,10 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewPrefixService] method instead.
 type PrefixService struct {
-	Options     []option.RequestOption
-	BGP         *PrefixBGPService
-	Delegations *PrefixDelegationService
+	Options         []option.RequestOption
+	ServiceBindings *PrefixServiceBindingService
+	BGP             *PrefixBGPService
+	Delegations     *PrefixDelegationService
 }
 
 // NewPrefixService generates a new service that applies the given options to each
@@ -35,6 +36,7 @@ type PrefixService struct {
 func NewPrefixService(opts ...option.RequestOption) (r *PrefixService) {
 	r = &PrefixService{}
 	r.Options = opts
+	r.ServiceBindings = NewPrefixServiceBindingService(opts...)
 	r.BGP = NewPrefixBGPService(opts...)
 	r.Delegations = NewPrefixDelegationService(opts...)
 	return

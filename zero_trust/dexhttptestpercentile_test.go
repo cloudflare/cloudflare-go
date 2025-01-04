@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zero_trust"
 )
 
 func TestDEXHTTPTestPercentileGetWithOptionalParams(t *testing.T) {
@@ -35,7 +35,7 @@ func TestDEXHTTPTestPercentileGetWithOptionalParams(t *testing.T) {
 			From:      cloudflare.F("2023-09-20T17:00:00Z"),
 			To:        cloudflare.F("2023-09-20T17:00:00Z"),
 			Colo:      cloudflare.F("colo"),
-			DeviceID:  cloudflare.F([]string{"string", "string", "string"}),
+			DeviceID:  cloudflare.F([]string{"string"}),
 		},
 	)
 	if err != nil {
