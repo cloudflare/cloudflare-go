@@ -34,7 +34,9 @@ func NewScriptAssetUploadService(opts ...option.RequestOption) (r *ScriptAssetUp
 	return
 }
 
-// Start uploading a collection of assets for use in a Worker version.
+// Start uploading a collection of assets for use in a Worker version. To learn
+// more about the direct uploads of assets, see
+// https://developers.cloudflare.com/workers/static-assets/direct-upload/
 func (r *ScriptAssetUploadService) New(ctx context.Context, scriptName string, params ScriptAssetUploadNewParams, opts ...option.RequestOption) (res *ScriptAssetUploadNewResponse, err error) {
 	var env ScriptAssetUploadNewResponseEnvelope
 	opts = append(r.Options[:], opts...)

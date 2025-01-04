@@ -3,17 +3,13 @@
 package workers
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
-	"io"
-	"mime/multipart"
 	"net/http"
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/apiform"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v3/internal/param"
@@ -127,9 +123,9 @@ func (r *ScriptService) Delete(ctx context.Context, scriptName string, params Sc
 
 // Fetch raw script content for your worker. Note this is the original script
 // content, not JSON encoded.
-func (r *ScriptService) Get(ctx context.Context, scriptName string, query ScriptGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
+func (r *ScriptService) Get(ctx context.Context, scriptName string, query ScriptGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "undefined")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/javascript")}, opts...)
 	if query.AccountID.Value == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -158,8 +154,15 @@ type Script struct {
 	Logpush bool `json:"logpush"`
 	// When the script was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Specifies the placement mode for the Worker (e.g. 'smart').
-	PlacementMode string `json:"placement_mode"`
+	// Configuration for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Placement ScriptPlacement `json:"placement"`
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	PlacementMode ScriptPlacementMode `json:"placement_mode"`
+	// Status of
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	PlacementStatus ScriptPlacementStatus `json:"placement_status"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
 	// Usage model for the Worker invocations.
@@ -169,18 +172,20 @@ type Script struct {
 
 // scriptJSON contains the JSON metadata for the struct [Script]
 type scriptJSON struct {
-	ID            apijson.Field
-	CreatedOn     apijson.Field
-	Etag          apijson.Field
-	HasAssets     apijson.Field
-	HasModules    apijson.Field
-	Logpush       apijson.Field
-	ModifiedOn    apijson.Field
-	PlacementMode apijson.Field
-	TailConsumers apijson.Field
-	UsageModel    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID              apijson.Field
+	CreatedOn       apijson.Field
+	Etag            apijson.Field
+	HasAssets       apijson.Field
+	HasModules      apijson.Field
+	Logpush         apijson.Field
+	ModifiedOn      apijson.Field
+	Placement       apijson.Field
+	PlacementMode   apijson.Field
+	PlacementStatus apijson.Field
+	TailConsumers   apijson.Field
+	UsageModel      apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *Script) UnmarshalJSON(data []byte) (err error) {
@@ -191,17 +196,81 @@ func (r scriptJSON) RawJSON() string {
 	return r.raw
 }
 
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptPlacement struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode ScriptPlacementMode `json:"mode"`
+	// Status of
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Status ScriptPlacementStatus `json:"status"`
+	JSON   scriptPlacementJSON   `json:"-"`
+}
+
+// scriptPlacementJSON contains the JSON metadata for the struct [ScriptPlacement]
+type scriptPlacementJSON struct {
+	Mode        apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptPlacement) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptPlacementJSON) RawJSON() string {
+	return r.raw
+}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptPlacementMode string
+
+const (
+	ScriptPlacementModeSmart ScriptPlacementMode = "smart"
+)
+
+func (r ScriptPlacementMode) IsKnown() bool {
+	switch r {
+	case ScriptPlacementModeSmart:
+		return true
+	}
+	return false
+}
+
+// Status of
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptPlacementStatus string
+
+const (
+	ScriptPlacementStatusSuccess                 ScriptPlacementStatus = "SUCCESS"
+	ScriptPlacementStatusNoValidHosts            ScriptPlacementStatus = "NO_VALID_HOSTS"
+	ScriptPlacementStatusNoValidBindings         ScriptPlacementStatus = "NO_VALID_BINDINGS"
+	ScriptPlacementStatusUnsupportedApplication  ScriptPlacementStatus = "UNSUPPORTED_APPLICATION"
+	ScriptPlacementStatusInsufficientInvocations ScriptPlacementStatus = "INSUFFICIENT_INVOCATIONS"
+	ScriptPlacementStatusInsufficientSubrequests ScriptPlacementStatus = "INSUFFICIENT_SUBREQUESTS"
+)
+
+func (r ScriptPlacementStatus) IsKnown() bool {
+	switch r {
+	case ScriptPlacementStatusSuccess, ScriptPlacementStatusNoValidHosts, ScriptPlacementStatusNoValidBindings, ScriptPlacementStatusUnsupportedApplication, ScriptPlacementStatusInsufficientInvocations, ScriptPlacementStatusInsufficientSubrequests:
+		return true
+	}
+	return false
+}
+
 // Usage model for the Worker invocations.
 type ScriptUsageModel string
 
 const (
-	ScriptUsageModelBundled ScriptUsageModel = "bundled"
-	ScriptUsageModelUnbound ScriptUsageModel = "unbound"
+	ScriptUsageModelStandard ScriptUsageModel = "standard"
 )
 
 func (r ScriptUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUsageModelBundled, ScriptUsageModelUnbound:
+	case ScriptUsageModelStandard:
 		return true
 	}
 	return false
@@ -302,9 +371,16 @@ type ScriptUpdateResponse struct {
 	Logpush bool `json:"logpush"`
 	// When the script was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Specifies the placement mode for the Worker (e.g. 'smart').
-	PlacementMode string `json:"placement_mode"`
-	StartupTimeMs int64  `json:"startup_time_ms"`
+	// Configuration for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Placement ScriptUpdateResponsePlacement `json:"placement"`
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	PlacementMode ScriptUpdateResponsePlacementMode `json:"placement_mode"`
+	// Status of
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	PlacementStatus ScriptUpdateResponsePlacementStatus `json:"placement_status"`
+	StartupTimeMs   int64                               `json:"startup_time_ms"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers []ConsumerScript `json:"tail_consumers"`
 	// Usage model for the Worker invocations.
@@ -315,19 +391,21 @@ type ScriptUpdateResponse struct {
 // scriptUpdateResponseJSON contains the JSON metadata for the struct
 // [ScriptUpdateResponse]
 type scriptUpdateResponseJSON struct {
-	ID            apijson.Field
-	CreatedOn     apijson.Field
-	Etag          apijson.Field
-	HasAssets     apijson.Field
-	HasModules    apijson.Field
-	Logpush       apijson.Field
-	ModifiedOn    apijson.Field
-	PlacementMode apijson.Field
-	StartupTimeMs apijson.Field
-	TailConsumers apijson.Field
-	UsageModel    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+	ID              apijson.Field
+	CreatedOn       apijson.Field
+	Etag            apijson.Field
+	HasAssets       apijson.Field
+	HasModules      apijson.Field
+	Logpush         apijson.Field
+	ModifiedOn      apijson.Field
+	Placement       apijson.Field
+	PlacementMode   apijson.Field
+	PlacementStatus apijson.Field
+	StartupTimeMs   apijson.Field
+	TailConsumers   apijson.Field
+	UsageModel      apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *ScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
@@ -338,17 +416,82 @@ func (r scriptUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptUpdateResponsePlacement struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode ScriptUpdateResponsePlacementMode `json:"mode"`
+	// Status of
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Status ScriptUpdateResponsePlacementStatus `json:"status"`
+	JSON   scriptUpdateResponsePlacementJSON   `json:"-"`
+}
+
+// scriptUpdateResponsePlacementJSON contains the JSON metadata for the struct
+// [ScriptUpdateResponsePlacement]
+type scriptUpdateResponsePlacementJSON struct {
+	Mode        apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ScriptUpdateResponsePlacement) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r scriptUpdateResponsePlacementJSON) RawJSON() string {
+	return r.raw
+}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptUpdateResponsePlacementMode string
+
+const (
+	ScriptUpdateResponsePlacementModeSmart ScriptUpdateResponsePlacementMode = "smart"
+)
+
+func (r ScriptUpdateResponsePlacementMode) IsKnown() bool {
+	switch r {
+	case ScriptUpdateResponsePlacementModeSmart:
+		return true
+	}
+	return false
+}
+
+// Status of
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptUpdateResponsePlacementStatus string
+
+const (
+	ScriptUpdateResponsePlacementStatusSuccess                 ScriptUpdateResponsePlacementStatus = "SUCCESS"
+	ScriptUpdateResponsePlacementStatusNoValidHosts            ScriptUpdateResponsePlacementStatus = "NO_VALID_HOSTS"
+	ScriptUpdateResponsePlacementStatusNoValidBindings         ScriptUpdateResponsePlacementStatus = "NO_VALID_BINDINGS"
+	ScriptUpdateResponsePlacementStatusUnsupportedApplication  ScriptUpdateResponsePlacementStatus = "UNSUPPORTED_APPLICATION"
+	ScriptUpdateResponsePlacementStatusInsufficientInvocations ScriptUpdateResponsePlacementStatus = "INSUFFICIENT_INVOCATIONS"
+	ScriptUpdateResponsePlacementStatusInsufficientSubrequests ScriptUpdateResponsePlacementStatus = "INSUFFICIENT_SUBREQUESTS"
+)
+
+func (r ScriptUpdateResponsePlacementStatus) IsKnown() bool {
+	switch r {
+	case ScriptUpdateResponsePlacementStatusSuccess, ScriptUpdateResponsePlacementStatusNoValidHosts, ScriptUpdateResponsePlacementStatusNoValidBindings, ScriptUpdateResponsePlacementStatusUnsupportedApplication, ScriptUpdateResponsePlacementStatusInsufficientInvocations, ScriptUpdateResponsePlacementStatusInsufficientSubrequests:
+		return true
+	}
+	return false
+}
+
 // Usage model for the Worker invocations.
 type ScriptUpdateResponseUsageModel string
 
 const (
-	ScriptUpdateResponseUsageModelBundled ScriptUpdateResponseUsageModel = "bundled"
-	ScriptUpdateResponseUsageModelUnbound ScriptUpdateResponseUsageModel = "unbound"
+	ScriptUpdateResponseUsageModelStandard ScriptUpdateResponseUsageModel = "standard"
 )
 
 func (r ScriptUpdateResponseUsageModel) IsKnown() bool {
 	switch r {
-	case ScriptUpdateResponseUsageModelBundled, ScriptUpdateResponseUsageModelUnbound:
+	case ScriptUpdateResponseUsageModelStandard:
 		return true
 	}
 	return false
@@ -356,74 +499,23 @@ func (r ScriptUpdateResponseUsageModel) IsKnown() bool {
 
 type ScriptUpdateParams struct {
 	// Identifier
-	AccountID param.Field[string]         `path:"account_id,required"`
-	Body      ScriptUpdateParamsBodyUnion `json:"body,required"`
-	// Rollback to provided deployment based on deployment ID. Request body will only
-	// parse a "message" part. You can learn more about deployments
-	// [here](https://developers.cloudflare.com/workers/platform/deployments/).
-	RollbackTo param.Field[string] `query:"rollback_to"`
-}
-
-func (r ScriptUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
-	buf := bytes.NewBuffer(nil)
-	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
-	if err != nil {
-		writer.Close()
-		return nil, "", err
-	}
-	err = writer.Close()
-	if err != nil {
-		return nil, "", err
-	}
-	return buf.Bytes(), writer.FormDataContentType(), nil
-}
-
-// URLQuery serializes [ScriptUpdateParams]'s query parameters as `url.Values`.
-func (r ScriptUpdateParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatDots,
-	})
-}
-
-type ScriptUpdateParamsBody struct {
-	// Rollback message to be associated with this deployment. Only parsed when query
-	// param `"rollback_to"` is present.
-	Message  param.Field[string]      `json:"message"`
-	Metadata param.Field[interface{}] `json:"metadata"`
-}
-
-func (r ScriptUpdateParamsBody) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r ScriptUpdateParamsBody) implementsWorkersScriptUpdateParamsBodyUnion() {}
-
-// Satisfied by [workers.ScriptUpdateParamsBodyMetadata],
-// [workers.ScriptUpdateParamsBodyMessage], [ScriptUpdateParamsBody].
-type ScriptUpdateParamsBodyUnion interface {
-	implementsWorkersScriptUpdateParamsBodyUnion()
-}
-
-type ScriptUpdateParamsBodyMetadata struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata    param.Field[ScriptUpdateParamsBodyMetadataMetadata] `json:"metadata,required"`
-	ExtraFields map[string][]io.Reader                              `json:"-,extras"`
+	Metadata param.Field[ScriptUpdateParamsMetadata] `json:"metadata,required"`
 }
 
-func (r ScriptUpdateParamsBodyMetadata) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r ScriptUpdateParamsBodyMetadata) implementsWorkersScriptUpdateParamsBodyUnion() {}
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
-type ScriptUpdateParamsBodyMetadataMetadata struct {
+type ScriptUpdateParamsMetadata struct {
 	// Configuration for assets within a Worker
-	Assets param.Field[ScriptUpdateParamsBodyMetadataMetadataAssets] `json:"assets"`
-	// List of bindings available to the worker.
-	Bindings param.Field[[]ScriptUpdateParamsBodyMetadataMetadataBinding] `json:"bindings"`
+	Assets param.Field[ScriptUpdateParamsMetadataAssets] `json:"assets"`
+	// List of bindings attached to a Worker. You can find more about bindings on our
+	// docs:
+	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
+	Bindings param.Field[[]ScriptUpdateParamsMetadataBindingUnion] `json:"bindings"`
 	// Name of the part in the multipart request that contains the script (e.g. the
 	// file adding a listener to the `fetch` event). Indicates a
 	// `service worker syntax` Worker.
@@ -446,66 +538,66 @@ type ScriptUpdateParamsBodyMetadataMetadata struct {
 	// the file exporting a `fetch` handler). Indicates a `module syntax` Worker.
 	MainModule param.Field[string] `json:"main_module"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations param.Field[ScriptUpdateParamsBodyMetadataMetadataMigrationsUnion] `json:"migrations"`
+	Migrations param.Field[ScriptUpdateParamsMetadataMigrationsUnion] `json:"migrations"`
 	// Observability settings for the Worker.
-	Observability param.Field[ScriptUpdateParamsBodyMetadataMetadataObservability] `json:"observability"`
-	Placement     param.Field[PlacementConfigurationParam]                         `json:"placement"`
+	Observability param.Field[ScriptUpdateParamsMetadataObservability] `json:"observability"`
+	// Configuration for
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Placement param.Field[ScriptUpdateParamsMetadataPlacement] `json:"placement"`
 	// List of strings to use as tags for this Worker.
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
 	TailConsumers param.Field[[]ConsumerScriptParam] `json:"tail_consumers"`
 	// Usage model for the Worker invocations.
-	UsageModel param.Field[ScriptUpdateParamsBodyMetadataMetadataUsageModel] `json:"usage_model"`
-	// Key-value pairs to use as tags for this version of this Worker.
-	VersionTags param.Field[map[string]string] `json:"version_tags"`
+	UsageModel param.Field[ScriptUpdateParamsMetadataUsageModel] `json:"usage_model"`
 }
 
-func (r ScriptUpdateParamsBodyMetadataMetadata) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configuration for assets within a Worker
-type ScriptUpdateParamsBodyMetadataMetadataAssets struct {
+type ScriptUpdateParamsMetadataAssets struct {
 	// Configuration for assets within a Worker.
-	Config param.Field[ScriptUpdateParamsBodyMetadataMetadataAssetsConfig] `json:"config"`
+	Config param.Field[ScriptUpdateParamsMetadataAssetsConfig] `json:"config"`
 	// Token provided upon successful upload of all files from a registered manifest.
 	JWT param.Field[string] `json:"jwt"`
 }
 
-func (r ScriptUpdateParamsBodyMetadataMetadataAssets) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataAssets) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configuration for assets within a Worker.
-type ScriptUpdateParamsBodyMetadataMetadataAssetsConfig struct {
+type ScriptUpdateParamsMetadataAssetsConfig struct {
 	// Determines the redirects and rewrites of requests for HTML content.
-	HTMLHandling param.Field[ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
+	HTMLHandling param.Field[ScriptUpdateParamsMetadataAssetsConfigHTMLHandling] `json:"html_handling"`
 	// Determines the response when a request does not match a static asset, and there
 	// is no Worker script.
-	NotFoundHandling param.Field[ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
+	NotFoundHandling param.Field[ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling] `json:"not_found_handling"`
 	// When true and the incoming request matches an asset, that will be served instead
 	// of invoking the Worker script. When false, requests will always invoke the
 	// Worker script.
 	ServeDirectly param.Field[bool] `json:"serve_directly"`
 }
 
-func (r ScriptUpdateParamsBodyMetadataMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataAssetsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Determines the redirects and rewrites of requests for HTML content.
-type ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling string
+type ScriptUpdateParamsMetadataAssetsConfigHTMLHandling string
 
 const (
-	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingAutoTrailingSlash  ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "auto-trailing-slash"
-	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingForceTrailingSlash ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "force-trailing-slash"
-	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingDropTrailingSlash  ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "drop-trailing-slash"
-	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingNone               ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling = "none"
+	ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash  ScriptUpdateParamsMetadataAssetsConfigHTMLHandling = "auto-trailing-slash"
+	ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingForceTrailingSlash ScriptUpdateParamsMetadataAssetsConfigHTMLHandling = "force-trailing-slash"
+	ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingDropTrailingSlash  ScriptUpdateParamsMetadataAssetsConfigHTMLHandling = "drop-trailing-slash"
+	ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingNone               ScriptUpdateParamsMetadataAssetsConfigHTMLHandling = "none"
 )
 
-func (r ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataAssetsConfigHTMLHandling) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingAutoTrailingSlash, ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingForceTrailingSlash, ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingDropTrailingSlash, ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandlingNone:
+	case ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingAutoTrailingSlash, ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingForceTrailingSlash, ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingDropTrailingSlash, ScriptUpdateParamsMetadataAssetsConfigHTMLHandlingNone:
 		return true
 	}
 	return false
@@ -513,37 +605,728 @@ func (r ScriptUpdateParamsBodyMetadataMetadataAssetsConfigHTMLHandling) IsKnown(
 
 // Determines the response when a request does not match a static asset, and there
 // is no Worker script.
-type ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling string
+type ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling string
 
 const (
-	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingNone                  ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling = "none"
-	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling404Page               ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling = "404-page"
-	ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingSinglePageApplication ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling = "single-page-application"
+	ScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingNone                  ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling = "none"
+	ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page               ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling = "404-page"
+	ScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingSinglePageApplication ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling = "single-page-application"
 )
 
-func (r ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingNone, ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandling404Page, ScriptUpdateParamsBodyMetadataMetadataAssetsConfigNotFoundHandlingSinglePageApplication:
+	case ScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingNone, ScriptUpdateParamsMetadataAssetsConfigNotFoundHandling404Page, ScriptUpdateParamsMetadataAssetsConfigNotFoundHandlingSinglePageApplication:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsBodyMetadataMetadataBinding struct {
-	// Name of the binding variable.
-	Name param.Field[string] `json:"name"`
-	// Type of binding. You can find more about bindings on our docs:
-	// https://developers.cloudflare.com/workers/configuration/multipart-upload-metadata/#bindings.
-	Type        param.Field[string]    `json:"type"`
-	ExtraFields map[string]interface{} `json:"-,extras"`
+// A binding to allow the Worker to communicate with resources
+type ScriptUpdateParamsMetadataBinding struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[string] `json:"type,required"`
+	// Identifier of the D1 database to bind to.
+	ID param.Field[string] `json:"id"`
+	// R2 bucket to bind to.
+	BucketName param.Field[string] `json:"bucket_name"`
+	// Identifier of the certificate to bind to.
+	CertificateID param.Field[string] `json:"certificate_id"`
+	// The exported class name of the Durable Object.
+	ClassName param.Field[string] `json:"class_name"`
+	// The dataset name to bind to.
+	Dataset param.Field[string] `json:"dataset"`
+	// The environment of the script_name to bind to.
+	Environment param.Field[string] `json:"environment"`
+	// Name of the Vectorize index to bind to.
+	IndexName param.Field[string] `json:"index_name"`
+	// JSON data to use.
+	Json param.Field[string] `json:"json"`
+	// Namespace to bind to.
+	Namespace param.Field[string] `json:"namespace"`
+	// Namespace identifier tag.
+	NamespaceID param.Field[string]      `json:"namespace_id"`
+	Outbound    param.Field[interface{}] `json:"outbound"`
+	// Name of the Queue to bind to.
+	QueueName param.Field[string] `json:"queue_name"`
+	// The script where the Durable Object is defined, if it is external to this
+	// Worker.
+	ScriptName param.Field[string] `json:"script_name"`
+	// Name of Worker to bind to.
+	Service param.Field[string] `json:"service"`
+	// The text value to use.
+	Text param.Field[string] `json:"text"`
 }
 
-func (r ScriptUpdateParamsBodyMetadataMetadataBinding) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+func (r ScriptUpdateParamsMetadataBinding) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// A binding to allow the Worker to communicate with resources
+//
+// Satisfied by [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAny],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindDo],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERT],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecret],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindService],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize],
+// [workers.ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata],
+// [ScriptUpdateParamsMetadataBinding].
+type ScriptUpdateParamsMetadataBindingUnion interface {
+	implementsWorkersScriptUpdateParamsMetadataBindingUnion()
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAny struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type        param.Field[string]    `json:"type,required"`
+	ExtraFields map[string]interface{} `json:"-,extras"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAny) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAny) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAI) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType = "ai"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAIType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindAITypeAI:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine struct {
+	// The dataset name to bind to.
+	Dataset param.Field[string] `json:"dataset,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngine) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType = "analytics_engine"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindAnalyticsEngineTypeAnalyticsEngine:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssets) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType = "assets"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindAssetsTypeAssets:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRendering) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType = "browser_rendering"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindBrowserRenderingTypeBrowserRendering:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1 struct {
+	// Identifier of the D1 database to bind to.
+	ID param.Field[string] `json:"id,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeD1 ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type = "d1"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1Type) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindD1TypeD1:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Namespace to bind to.
+	Namespace param.Field[string] `json:"namespace,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType] `json:"type,required"`
+	// Outbound worker.
+	Outbound param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutbound] `json:"outbound"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespace) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType = "dispatch_namespace"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceTypeDispatchNamespace:
+		return true
+	}
+	return false
+}
+
+// Outbound worker.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutbound struct {
+	// Pass information from the Dispatch Worker to the Outbound Worker through the
+	// parameters.
+	Params param.Field[[]string] `json:"params"`
+	// Outbound worker.
+	Worker param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutboundWorker] `json:"worker"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutbound) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Outbound worker.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutboundWorker struct {
+	// Environment of the outbound worker.
+	Environment param.Field[string] `json:"environment"`
+	// Name of the outbound worker.
+	Service param.Field[string] `json:"service"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDispatchNamespaceOutboundWorker) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDo struct {
+	// The exported class name of the Durable Object.
+	ClassName param.Field[string] `json:"class_name,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindDoType] `json:"type,required"`
+	// The environment of the script_name to bind to.
+	Environment param.Field[string] `json:"environment"`
+	// Namespace identifier tag.
+	NamespaceID param.Field[string] `json:"namespace_id"`
+	// The script where the Durable Object is defined, if it is external to this
+	// Worker.
+	ScriptName param.Field[string] `json:"script_name"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDo) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDo) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindDoType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindDoTypeDurableObjectNamespace ScriptUpdateParamsMetadataBindingsWorkersBindingKindDoType = "durable_object_namespace"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindDoType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindDoTypeDurableObjectNamespace:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive struct {
+	// Identifier of the Hyperdrive connection to bind to.
+	ID param.Field[string] `json:"id,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdrive) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType = "hyperdrive"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindHyperdriveTypeHyperdrive:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson struct {
+	// JSON data to use.
+	Json param.Field[string] `json:"json,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJson) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeJson ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType = "json"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindJsonTypeJson:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Namespace identifier tag.
+	NamespaceID param.Field[string] `json:"namespace_id,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespace) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType = "kv_namespace"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindKVNamespaceTypeKVNamespace:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERT struct {
+	// Identifier of the certificate to bind to.
+	CertificateID param.Field[string] `json:"certificate_id,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERTType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERT) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERT) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERTType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERTTypeMTLSCertificate ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERTType = "mtls_certificate"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERTType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindMTLSCERTTypeMTLSCertificate:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The text value to use.
+	Text param.Field[string] `json:"text,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainText) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType = "plain_text"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindPlainTextTypePlainText:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Name of the Queue to bind to.
+	QueueName param.Field[string] `json:"queue_name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueue) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeQueue ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType = "queue"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindQueueTypeQueue:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2 struct {
+	// R2 bucket to bind to.
+	BucketName param.Field[string] `json:"bucket_name,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Type] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Type string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2TypeR2Bucket ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Type = "r2_bucket"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2Type) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindR2TypeR2Bucket:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecret struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The secret value to use.
+	Text param.Field[string] `json:"text,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecret) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecret) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTypeSecretText ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretType = "secret_text"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindSecretTypeSecretText:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindService struct {
+	// Optional environment if the Worker utilizes one.
+	Environment param.Field[string] `json:"environment,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Name of Worker to bind to.
+	Service param.Field[string] `json:"service,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindService) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindService) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeService ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType = "service"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindServiceTypeService:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// Name of Tail Worker to bind to.
+	Service param.Field[string] `json:"service,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumer) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType = "tail_consumer"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindTailConsumerTypeTailConsumer:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize struct {
+	// Name of the Vectorize index to bind to.
+	IndexName param.Field[string] `json:"index_name,required"`
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorize) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType = "vectorize"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindVectorizeTypeVectorize:
+		return true
+	}
+	return false
+}
+
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata struct {
+	// A JavaScript variable name for the binding.
+	Name param.Field[string] `json:"name,required"`
+	// The kind of resource that the binding provides.
+	Type param.Field[ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType] `json:"type,required"`
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadata) implementsWorkersScriptUpdateParamsMetadataBindingUnion() {
+}
+
+// The kind of resource that the binding provides.
+type ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType string
+
+const (
+	ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType = "version_metadata"
+)
+
+func (r ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataType) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataBindingsWorkersBindingKindVersionMetadataTypeVersionMetadata:
+		return true
+	}
+	return false
+}
+
 // Migrations to apply for Durable Objects associated with this Worker.
-type ScriptUpdateParamsBodyMetadataMetadataMigrations struct {
+type ScriptUpdateParamsMetadataMigrations struct {
 	DeletedClasses   param.Field[interface{}] `json:"deleted_classes"`
 	NewClasses       param.Field[interface{}] `json:"new_classes"`
 	NewSqliteClasses param.Field[interface{}] `json:"new_sqlite_classes"`
@@ -557,23 +1340,23 @@ type ScriptUpdateParamsBodyMetadataMetadataMigrations struct {
 	TransferredClasses param.Field[interface{}] `json:"transferred_classes"`
 }
 
-func (r ScriptUpdateParamsBodyMetadataMetadataMigrations) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsBodyMetadataMetadataMigrations) implementsWorkersScriptUpdateParamsBodyMetadataMetadataMigrationsUnion() {
+func (r ScriptUpdateParamsMetadataMigrations) implementsWorkersScriptUpdateParamsMetadataMigrationsUnion() {
 }
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by [workers.SingleStepMigrationParam],
-// [workers.ScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations],
-// [ScriptUpdateParamsBodyMetadataMetadataMigrations].
-type ScriptUpdateParamsBodyMetadataMetadataMigrationsUnion interface {
-	implementsWorkersScriptUpdateParamsBodyMetadataMetadataMigrationsUnion()
+// [workers.ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations],
+// [ScriptUpdateParamsMetadataMigrations].
+type ScriptUpdateParamsMetadataMigrationsUnion interface {
+	implementsWorkersScriptUpdateParamsMetadataMigrationsUnion()
 }
 
-type ScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations struct {
+type ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations struct {
 	// Tag to set as the latest migration tag.
 	NewTag param.Field[string] `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
@@ -583,15 +1366,15 @@ type ScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigratio
 	Steps param.Field[[]MigrationStepParam] `json:"steps"`
 }
 
-func (r ScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptUpdateParamsBodyMetadataMetadataMigrationsWorkersMultipleStepMigrations) implementsWorkersScriptUpdateParamsBodyMetadataMetadataMigrationsUnion() {
+func (r ScriptUpdateParamsMetadataMigrationsWorkersMultipleStepMigrations) implementsWorkersScriptUpdateParamsMetadataMigrationsUnion() {
 }
 
 // Observability settings for the Worker.
-type ScriptUpdateParamsBodyMetadataMetadataObservability struct {
+type ScriptUpdateParamsMetadataObservability struct {
 	// Whether observability is enabled for the Worker.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// The sampling rate for incoming requests. From 0 to 1 (1 = 100%, 0.1 = 10%).
@@ -599,37 +1382,73 @@ type ScriptUpdateParamsBodyMetadataMetadataObservability struct {
 	HeadSamplingRate param.Field[float64] `json:"head_sampling_rate"`
 }
 
-func (r ScriptUpdateParamsBodyMetadataMetadataObservability) MarshalJSON() (data []byte, err error) {
+func (r ScriptUpdateParamsMetadataObservability) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Usage model for the Worker invocations.
-type ScriptUpdateParamsBodyMetadataMetadataUsageModel string
+// Configuration for
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptUpdateParamsMetadataPlacement struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	Mode param.Field[ScriptUpdateParamsMetadataPlacementMode] `json:"mode"`
+}
+
+func (r ScriptUpdateParamsMetadataPlacement) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptUpdateParamsMetadataPlacementMode string
 
 const (
-	ScriptUpdateParamsBodyMetadataMetadataUsageModelBundled ScriptUpdateParamsBodyMetadataMetadataUsageModel = "bundled"
-	ScriptUpdateParamsBodyMetadataMetadataUsageModelUnbound ScriptUpdateParamsBodyMetadataMetadataUsageModel = "unbound"
+	ScriptUpdateParamsMetadataPlacementModeSmart ScriptUpdateParamsMetadataPlacementMode = "smart"
 )
 
-func (r ScriptUpdateParamsBodyMetadataMetadataUsageModel) IsKnown() bool {
+func (r ScriptUpdateParamsMetadataPlacementMode) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsBodyMetadataMetadataUsageModelBundled, ScriptUpdateParamsBodyMetadataMetadataUsageModelUnbound:
+	case ScriptUpdateParamsMetadataPlacementModeSmart:
 		return true
 	}
 	return false
 }
 
-type ScriptUpdateParamsBodyMessage struct {
-	// Rollback message to be associated with this deployment. Only parsed when query
-	// param `"rollback_to"` is present.
-	Message param.Field[string] `json:"message"`
+// Status of
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+type ScriptUpdateParamsMetadataPlacementStatus string
+
+const (
+	ScriptUpdateParamsMetadataPlacementStatusSuccess                 ScriptUpdateParamsMetadataPlacementStatus = "SUCCESS"
+	ScriptUpdateParamsMetadataPlacementStatusNoValidHosts            ScriptUpdateParamsMetadataPlacementStatus = "NO_VALID_HOSTS"
+	ScriptUpdateParamsMetadataPlacementStatusNoValidBindings         ScriptUpdateParamsMetadataPlacementStatus = "NO_VALID_BINDINGS"
+	ScriptUpdateParamsMetadataPlacementStatusUnsupportedApplication  ScriptUpdateParamsMetadataPlacementStatus = "UNSUPPORTED_APPLICATION"
+	ScriptUpdateParamsMetadataPlacementStatusInsufficientInvocations ScriptUpdateParamsMetadataPlacementStatus = "INSUFFICIENT_INVOCATIONS"
+	ScriptUpdateParamsMetadataPlacementStatusInsufficientSubrequests ScriptUpdateParamsMetadataPlacementStatus = "INSUFFICIENT_SUBREQUESTS"
+)
+
+func (r ScriptUpdateParamsMetadataPlacementStatus) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataPlacementStatusSuccess, ScriptUpdateParamsMetadataPlacementStatusNoValidHosts, ScriptUpdateParamsMetadataPlacementStatusNoValidBindings, ScriptUpdateParamsMetadataPlacementStatusUnsupportedApplication, ScriptUpdateParamsMetadataPlacementStatusInsufficientInvocations, ScriptUpdateParamsMetadataPlacementStatusInsufficientSubrequests:
+		return true
+	}
+	return false
 }
 
-func (r ScriptUpdateParamsBodyMessage) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
+// Usage model for the Worker invocations.
+type ScriptUpdateParamsMetadataUsageModel string
 
-func (r ScriptUpdateParamsBodyMessage) implementsWorkersScriptUpdateParamsBodyUnion() {}
+const (
+	ScriptUpdateParamsMetadataUsageModelStandard ScriptUpdateParamsMetadataUsageModel = "standard"
+)
+
+func (r ScriptUpdateParamsMetadataUsageModel) IsKnown() bool {
+	switch r {
+	case ScriptUpdateParamsMetadataUsageModelStandard:
+		return true
+	}
+	return false
+}
 
 type ScriptUpdateResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`

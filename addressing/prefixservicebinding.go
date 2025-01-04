@@ -178,8 +178,6 @@ func (r serviceBindingJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r ServiceBinding) implementsWorkersBinding() {}
-
 // Status of a Service Binding's deployment to the Cloudflare network
 type ServiceBindingProvisioning struct {
 	// When a binding has been deployed to a majority of Cloudflare datacenters, the
