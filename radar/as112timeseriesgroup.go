@@ -814,6 +814,9 @@ type AS112TimeseriesGroupQueryTypeParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AS112TimeseriesGroupQueryTypeParamsFormat] `query:"format"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -913,6 +916,9 @@ type AS112TimeseriesGroupResponseCodesParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[AS112TimeseriesGroupResponseCodesParamsFormat] `query:"format"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
