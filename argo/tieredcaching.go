@@ -35,7 +35,17 @@ func NewTieredCachingService(opts ...option.RequestOption) (r *TieredCachingServ
 	return
 }
 
-// Updates enablement of Tiered Caching
+// Tiered Cache works by dividing Cloudflare's data centers into a hierarchy of
+// lower-tiers and upper-tiers. If content is not cached in lower-tier data centers
+// (generally the ones closest to a visitor), the lower-tier must ask an upper-tier
+// to see if it has the content. If the upper-tier does not have the content, only
+// the upper-tier can ask the origin for content. This practice improves bandwidth
+// efficiency by limiting the number of data centers that can ask the origin for
+// content, which reduces origin load and makes websites more cost-effective to
+// operate. Additionally, Tiered Cache concentrates connections to origin servers
+// so they come from a small number of data centers rather than the full set of
+// network locations. This results in fewer open connections using server
+// resources.
 func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEditParams, opts ...option.RequestOption) (res *TieredCachingEditResponse, err error) {
 	var env TieredCachingEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -52,7 +62,17 @@ func (r *TieredCachingService) Edit(ctx context.Context, params TieredCachingEdi
 	return
 }
 
-// Get Tiered Caching setting
+// Tiered Cache works by dividing Cloudflare's data centers into a hierarchy of
+// lower-tiers and upper-tiers. If content is not cached in lower-tier data centers
+// (generally the ones closest to a visitor), the lower-tier must ask an upper-tier
+// to see if it has the content. If the upper-tier does not have the content, only
+// the upper-tier can ask the origin for content. This practice improves bandwidth
+// efficiency by limiting the number of data centers that can ask the origin for
+// content, which reduces origin load and makes websites more cost-effective to
+// operate. Additionally, Tiered Cache concentrates connections to origin servers
+// so they come from a small number of data centers rather than the full set of
+// network locations. This results in fewer open connections using server
+// resources.
 func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetParams, opts ...option.RequestOption) (res *TieredCachingGetResponse, err error) {
 	var env TieredCachingGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -70,15 +90,15 @@ func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetPa
 }
 
 type TieredCachingEditResponse struct {
-	// The identifier of the caching setting
-	ID string `json:"id,required"`
+	// ID of the zone setting.
+	ID TieredCachingEditResponseID `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
-	// The time when the setting was last modified
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The status of the feature being on / off
+	// The value of the feature
 	Value TieredCachingEditResponseValue `json:"value,required"`
-	JSON  tieredCachingEditResponseJSON  `json:"-"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       tieredCachingEditResponseJSON `json:"-"`
 }
 
 // tieredCachingEditResponseJSON contains the JSON metadata for the struct
@@ -86,8 +106,8 @@ type TieredCachingEditResponse struct {
 type tieredCachingEditResponseJSON struct {
 	ID          apijson.Field
 	Editable    apijson.Field
-	ModifiedOn  apijson.Field
 	Value       apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -100,7 +120,22 @@ func (r tieredCachingEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the feature being on / off
+// ID of the zone setting.
+type TieredCachingEditResponseID string
+
+const (
+	TieredCachingEditResponseIDTieredCaching TieredCachingEditResponseID = "tiered_caching"
+)
+
+func (r TieredCachingEditResponseID) IsKnown() bool {
+	switch r {
+	case TieredCachingEditResponseIDTieredCaching:
+		return true
+	}
+	return false
+}
+
+// The value of the feature
 type TieredCachingEditResponseValue string
 
 const (
@@ -117,15 +152,15 @@ func (r TieredCachingEditResponseValue) IsKnown() bool {
 }
 
 type TieredCachingGetResponse struct {
-	// The identifier of the caching setting
-	ID string `json:"id,required"`
+	// ID of the zone setting.
+	ID TieredCachingGetResponseID `json:"id,required"`
 	// Whether the setting is editable
 	Editable bool `json:"editable,required"`
-	// The time when the setting was last modified
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The status of the feature being on / off
+	// The value of the feature
 	Value TieredCachingGetResponseValue `json:"value,required"`
-	JSON  tieredCachingGetResponseJSON  `json:"-"`
+	// Last time this setting was modified.
+	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       tieredCachingGetResponseJSON `json:"-"`
 }
 
 // tieredCachingGetResponseJSON contains the JSON metadata for the struct
@@ -133,8 +168,8 @@ type TieredCachingGetResponse struct {
 type tieredCachingGetResponseJSON struct {
 	ID          apijson.Field
 	Editable    apijson.Field
-	ModifiedOn  apijson.Field
 	Value       apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -147,7 +182,22 @@ func (r tieredCachingGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// The status of the feature being on / off
+// ID of the zone setting.
+type TieredCachingGetResponseID string
+
+const (
+	TieredCachingGetResponseIDTieredCaching TieredCachingGetResponseID = "tiered_caching"
+)
+
+func (r TieredCachingGetResponseID) IsKnown() bool {
+	switch r {
+	case TieredCachingGetResponseIDTieredCaching:
+		return true
+	}
+	return false
+}
+
+// The value of the feature
 type TieredCachingGetResponseValue string
 
 const (
@@ -191,11 +241,11 @@ func (r TieredCachingEditParamsValue) IsKnown() bool {
 }
 
 type TieredCachingEditResponseEnvelope struct {
-	Errors   []shared.ResponseInfo     `json:"errors,required"`
-	Messages []shared.ResponseInfo     `json:"messages,required"`
-	Result   TieredCachingEditResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TieredCachingEditResponseEnvelopeSuccess `json:"success,required"`
+	Result  TieredCachingEditResponse                `json:"result"`
 	JSON    tieredCachingEditResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -204,8 +254,8 @@ type TieredCachingEditResponseEnvelope struct {
 type tieredCachingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -239,11 +289,11 @@ type TieredCachingGetParams struct {
 }
 
 type TieredCachingGetResponseEnvelope struct {
-	Errors   []shared.ResponseInfo    `json:"errors,required"`
-	Messages []shared.ResponseInfo    `json:"messages,required"`
-	Result   TieredCachingGetResponse `json:"result,required"`
+	Errors   []shared.ResponseInfo `json:"errors,required"`
+	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success TieredCachingGetResponseEnvelopeSuccess `json:"success,required"`
+	Result  TieredCachingGetResponse                `json:"result"`
 	JSON    tieredCachingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -252,8 +302,8 @@ type TieredCachingGetResponseEnvelope struct {
 type tieredCachingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
