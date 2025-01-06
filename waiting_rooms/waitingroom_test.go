@@ -55,6 +55,8 @@ func TestWaitingRoomNewWithOptionalParams(t *testing.T) {
 			QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode200),
 			SessionDuration:         cloudflare.F(int64(1)),
 			Suspended:               cloudflare.F(true),
+			TurnstileAction:         cloudflare.F(waiting_rooms.QueryTurnstileActionLog),
+			TurnstileMode:           cloudflare.F(waiting_rooms.QueryTurnstileModeOff),
 		},
 	})
 	if err != nil {
@@ -110,6 +112,8 @@ func TestWaitingRoomUpdateWithOptionalParams(t *testing.T) {
 				QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode200),
 				SessionDuration:         cloudflare.F(int64(1)),
 				Suspended:               cloudflare.F(true),
+				TurnstileAction:         cloudflare.F(waiting_rooms.QueryTurnstileActionLog),
+				TurnstileMode:           cloudflare.F(waiting_rooms.QueryTurnstileModeOff),
 			},
 		},
 	)
@@ -222,6 +226,8 @@ func TestWaitingRoomEditWithOptionalParams(t *testing.T) {
 				QueueingStatusCode:      cloudflare.F(waiting_rooms.QueryQueueingStatusCode200),
 				SessionDuration:         cloudflare.F(int64(1)),
 				Suspended:               cloudflare.F(true),
+				TurnstileAction:         cloudflare.F(waiting_rooms.QueryTurnstileActionLog),
+				TurnstileMode:           cloudflare.F(waiting_rooms.QueryTurnstileModeOff),
 			},
 		},
 	)
