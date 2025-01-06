@@ -29,15 +29,15 @@ func TestRuleUpdate(t *testing.T) {
 	)
 	_, err := client.CloudConnector.Rules.Update(context.TODO(), cloud_connector.RuleUpdateParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Body: []cloud_connector.RuleUpdateParamsBody{{
+		Rules: []cloud_connector.RuleUpdateParamsRule{{
 			ID:          cloudflare.F("95c365e17e1b46599cd99e5b231fac4e"),
 			Description: cloudflare.F("Rule description"),
 			Enabled:     cloudflare.F(true),
 			Expression:  cloudflare.F("http.cookie eq \"a=b\""),
-			Parameters: cloudflare.F(cloud_connector.RuleUpdateParamsBodyParameters{
+			Parameters: cloudflare.F(cloud_connector.RuleUpdateParamsRulesParameters{
 				Host: cloudflare.F("examplebucket.s3.eu-north-1.amazonaws.com"),
 			}),
-			Provider: cloudflare.F(cloud_connector.RuleUpdateParamsBodyProviderAwsS3),
+			Provider: cloudflare.F(cloud_connector.RuleUpdateParamsRulesProviderAwsS3),
 		}},
 	})
 	if err != nil {
