@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/v3/internal/apiquery"
@@ -156,9 +157,11 @@ func (r rankingDomainGetResponseDetails0TopLocationJSON) RawJSON() string {
 
 type RankingDomainGetParams struct {
 	// Array of dates to filter the ranking.
-	Date param.Field[[]string] `query:"date"`
+	Date param.Field[[]time.Time] `query:"date" format:"date"`
 	// Format results are returned in.
 	Format param.Field[RankingDomainGetParamsFormat] `query:"format"`
+	// Include top locations in the response.
+	IncludeTopLocations param.Field[bool] `query:"includeTopLocations"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of names that will be used to name the series in responses.

@@ -157,14 +157,15 @@ func TestAS112SummaryQueryTypeWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.QueryType(context.TODO(), radar.AS112SummaryQueryTypeParams{
-		ASN:       cloudflare.F([]string{"string"}),
-		Continent: cloudflare.F([]string{"string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
-		DateRange: cloudflare.F([]string{"7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.AS112SummaryQueryTypeParamsFormatJson),
-		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		ASN:           cloudflare.F([]string{"string"}),
+		Continent:     cloudflare.F([]string{"string"}),
+		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+		DateRange:     cloudflare.F([]string{"7d"}),
+		DateStart:     cloudflare.F([]time.Time{time.Now()}),
+		Format:        cloudflare.F(radar.AS112SummaryQueryTypeParamsFormatJson),
+		LimitPerGroup: cloudflare.F(int64(10)),
+		Location:      cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -189,14 +190,15 @@ func TestAS112SummaryResponseCodesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.ResponseCodes(context.TODO(), radar.AS112SummaryResponseCodesParams{
-		ASN:       cloudflare.F([]string{"string"}),
-		Continent: cloudflare.F([]string{"string"}),
-		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
-		DateRange: cloudflare.F([]string{"7d"}),
-		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.AS112SummaryResponseCodesParamsFormatJson),
-		Location:  cloudflare.F([]string{"string"}),
-		Name:      cloudflare.F([]string{"string"}),
+		ASN:           cloudflare.F([]string{"string"}),
+		Continent:     cloudflare.F([]string{"string"}),
+		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
+		DateRange:     cloudflare.F([]string{"7d"}),
+		DateStart:     cloudflare.F([]time.Time{time.Now()}),
+		Format:        cloudflare.F(radar.AS112SummaryResponseCodesParamsFormatJson),
+		LimitPerGroup: cloudflare.F(int64(10)),
+		Location:      cloudflare.F([]string{"string"}),
+		Name:          cloudflare.F([]string{"string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
