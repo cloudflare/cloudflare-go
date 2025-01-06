@@ -82,7 +82,7 @@ func (r DevicePolicyDefaultCertificateEditParams) MarshalJSON() (data []byte, er
 type DevicePolicyDefaultCertificateEditResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyDefaultCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyDefaultCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -129,7 +129,7 @@ type DevicePolicyDefaultCertificateGetParams struct {
 type DevicePolicyDefaultCertificateGetResponseEnvelope struct {
 	Errors   []shared.ResponseInfo `json:"errors,required"`
 	Messages []shared.ResponseInfo `json:"messages,required"`
-	Result   interface{}           `json:"result,required"`
+	Result   interface{}           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success DevicePolicyDefaultCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    devicePolicyDefaultCertificateGetResponseEnvelopeJSON    `json:"-"`
