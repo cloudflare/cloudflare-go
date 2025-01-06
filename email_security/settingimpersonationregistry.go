@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-go/v3/internal/apijson"
@@ -18,7 +17,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 	"github.com/cloudflare/cloudflare-go/v3/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v3/shared"
-	"github.com/tidwall/gjson"
 )
 
 // SettingImpersonationRegistryService contains methods and other services that
@@ -41,7 +39,7 @@ func NewSettingImpersonationRegistryService(opts ...option.RequestOption) (r *Se
 }
 
 // Create an entry in impersonation registry
-func (r *SettingImpersonationRegistryService) New(ctx context.Context, params SettingImpersonationRegistryNewParams, opts ...option.RequestOption) (res *SettingImpersonationRegistryNewResponseUnion, err error) {
+func (r *SettingImpersonationRegistryService) New(ctx context.Context, params SettingImpersonationRegistryNewParams, opts ...option.RequestOption) (res *SettingImpersonationRegistryNewResponse, err error) {
 	var env SettingImpersonationRegistryNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.AccountID.Value == "" {
@@ -135,129 +133,57 @@ func (r *SettingImpersonationRegistryService) Get(ctx context.Context, displayNa
 	return
 }
 
-// Union satisfied by
-// [email_security.SettingImpersonationRegistryNewResponseEmailSecurityDisplayName]
-// or [email_security.SettingImpersonationRegistryNewResponseArray].
-type SettingImpersonationRegistryNewResponseUnion interface {
-	implementsEmailSecuritySettingImpersonationRegistryNewResponseUnion()
+type SettingImpersonationRegistryNewResponse struct {
+	ID                      int64                                       `json:"id,required"`
+	CreatedAt               time.Time                                   `json:"created_at,required" format:"date-time"`
+	Email                   string                                      `json:"email,required"`
+	IsEmailRegex            bool                                        `json:"is_email_regex,required"`
+	LastModified            time.Time                                   `json:"last_modified,required" format:"date-time"`
+	Name                    string                                      `json:"name,required"`
+	Comments                string                                      `json:"comments,nullable"`
+	DirectoryID             int64                                       `json:"directory_id,nullable"`
+	DirectoryNodeID         int64                                       `json:"directory_node_id,nullable"`
+	ExternalDirectoryNodeID string                                      `json:"external_directory_node_id,nullable"`
+	Provenance              string                                      `json:"provenance,nullable"`
+	JSON                    settingImpersonationRegistryNewResponseJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SettingImpersonationRegistryNewResponseUnion)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SettingImpersonationRegistryNewResponseEmailSecurityDisplayName{}),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SettingImpersonationRegistryNewResponseArray{}),
-		},
-	)
-}
-
-type SettingImpersonationRegistryNewResponseEmailSecurityDisplayName struct {
-	ID                      int64                                                               `json:"id,required"`
-	CreatedAt               time.Time                                                           `json:"created_at,required" format:"date-time"`
-	IsEmailRegex            bool                                                                `json:"is_email_regex,required"`
-	LastModified            time.Time                                                           `json:"last_modified,required" format:"date-time"`
-	Name                    string                                                              `json:"name,required"`
-	Comments                string                                                              `json:"comments,nullable"`
-	DirectoryID             int64                                                               `json:"directory_id,nullable"`
-	DirectoryNodeID         int64                                                               `json:"directory_node_id,nullable"`
-	Email                   string                                                              `json:"email,nullable"`
-	ExternalDirectoryNodeID string                                                              `json:"external_directory_node_id,nullable"`
-	Provenance              string                                                              `json:"provenance,nullable"`
-	JSON                    settingImpersonationRegistryNewResponseEmailSecurityDisplayNameJSON `json:"-"`
-}
-
-// settingImpersonationRegistryNewResponseEmailSecurityDisplayNameJSON contains the
-// JSON metadata for the struct
-// [SettingImpersonationRegistryNewResponseEmailSecurityDisplayName]
-type settingImpersonationRegistryNewResponseEmailSecurityDisplayNameJSON struct {
+// settingImpersonationRegistryNewResponseJSON contains the JSON metadata for the
+// struct [SettingImpersonationRegistryNewResponse]
+type settingImpersonationRegistryNewResponseJSON struct {
 	ID                      apijson.Field
 	CreatedAt               apijson.Field
+	Email                   apijson.Field
 	IsEmailRegex            apijson.Field
 	LastModified            apijson.Field
 	Name                    apijson.Field
 	Comments                apijson.Field
 	DirectoryID             apijson.Field
 	DirectoryNodeID         apijson.Field
-	Email                   apijson.Field
 	ExternalDirectoryNodeID apijson.Field
 	Provenance              apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *SettingImpersonationRegistryNewResponseEmailSecurityDisplayName) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingImpersonationRegistryNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingImpersonationRegistryNewResponseEmailSecurityDisplayNameJSON) RawJSON() string {
-	return r.raw
-}
-
-func (r SettingImpersonationRegistryNewResponseEmailSecurityDisplayName) implementsEmailSecuritySettingImpersonationRegistryNewResponseUnion() {
-}
-
-type SettingImpersonationRegistryNewResponseArray []SettingImpersonationRegistryNewResponseArrayItem
-
-func (r SettingImpersonationRegistryNewResponseArray) implementsEmailSecuritySettingImpersonationRegistryNewResponseUnion() {
-}
-
-type SettingImpersonationRegistryNewResponseArrayItem struct {
-	ID                      int64                                                `json:"id,required"`
-	CreatedAt               time.Time                                            `json:"created_at,required" format:"date-time"`
-	IsEmailRegex            bool                                                 `json:"is_email_regex,required"`
-	LastModified            time.Time                                            `json:"last_modified,required" format:"date-time"`
-	Name                    string                                               `json:"name,required"`
-	Comments                string                                               `json:"comments,nullable"`
-	DirectoryID             int64                                                `json:"directory_id,nullable"`
-	DirectoryNodeID         int64                                                `json:"directory_node_id,nullable"`
-	Email                   string                                               `json:"email,nullable"`
-	ExternalDirectoryNodeID string                                               `json:"external_directory_node_id,nullable"`
-	Provenance              string                                               `json:"provenance,nullable"`
-	JSON                    settingImpersonationRegistryNewResponseArrayItemJSON `json:"-"`
-}
-
-// settingImpersonationRegistryNewResponseArrayItemJSON contains the JSON metadata
-// for the struct [SettingImpersonationRegistryNewResponseArrayItem]
-type settingImpersonationRegistryNewResponseArrayItemJSON struct {
-	ID                      apijson.Field
-	CreatedAt               apijson.Field
-	IsEmailRegex            apijson.Field
-	LastModified            apijson.Field
-	Name                    apijson.Field
-	Comments                apijson.Field
-	DirectoryID             apijson.Field
-	DirectoryNodeID         apijson.Field
-	Email                   apijson.Field
-	ExternalDirectoryNodeID apijson.Field
-	Provenance              apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *SettingImpersonationRegistryNewResponseArrayItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingImpersonationRegistryNewResponseArrayItemJSON) RawJSON() string {
+func (r settingImpersonationRegistryNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 type SettingImpersonationRegistryListResponse struct {
 	ID                      int64                                        `json:"id,required"`
 	CreatedAt               time.Time                                    `json:"created_at,required" format:"date-time"`
+	Email                   string                                       `json:"email,required"`
 	IsEmailRegex            bool                                         `json:"is_email_regex,required"`
 	LastModified            time.Time                                    `json:"last_modified,required" format:"date-time"`
 	Name                    string                                       `json:"name,required"`
 	Comments                string                                       `json:"comments,nullable"`
 	DirectoryID             int64                                        `json:"directory_id,nullable"`
 	DirectoryNodeID         int64                                        `json:"directory_node_id,nullable"`
-	Email                   string                                       `json:"email,nullable"`
 	ExternalDirectoryNodeID string                                       `json:"external_directory_node_id,nullable"`
 	Provenance              string                                       `json:"provenance,nullable"`
 	JSON                    settingImpersonationRegistryListResponseJSON `json:"-"`
@@ -268,13 +194,13 @@ type SettingImpersonationRegistryListResponse struct {
 type settingImpersonationRegistryListResponseJSON struct {
 	ID                      apijson.Field
 	CreatedAt               apijson.Field
+	Email                   apijson.Field
 	IsEmailRegex            apijson.Field
 	LastModified            apijson.Field
 	Name                    apijson.Field
 	Comments                apijson.Field
 	DirectoryID             apijson.Field
 	DirectoryNodeID         apijson.Field
-	Email                   apijson.Field
 	ExternalDirectoryNodeID apijson.Field
 	Provenance              apijson.Field
 	raw                     string
@@ -313,13 +239,13 @@ func (r settingImpersonationRegistryDeleteResponseJSON) RawJSON() string {
 type SettingImpersonationRegistryEditResponse struct {
 	ID                      int64                                        `json:"id,required"`
 	CreatedAt               time.Time                                    `json:"created_at,required" format:"date-time"`
+	Email                   string                                       `json:"email,required"`
 	IsEmailRegex            bool                                         `json:"is_email_regex,required"`
 	LastModified            time.Time                                    `json:"last_modified,required" format:"date-time"`
 	Name                    string                                       `json:"name,required"`
 	Comments                string                                       `json:"comments,nullable"`
 	DirectoryID             int64                                        `json:"directory_id,nullable"`
 	DirectoryNodeID         int64                                        `json:"directory_node_id,nullable"`
-	Email                   string                                       `json:"email,nullable"`
 	ExternalDirectoryNodeID string                                       `json:"external_directory_node_id,nullable"`
 	Provenance              string                                       `json:"provenance,nullable"`
 	JSON                    settingImpersonationRegistryEditResponseJSON `json:"-"`
@@ -330,13 +256,13 @@ type SettingImpersonationRegistryEditResponse struct {
 type settingImpersonationRegistryEditResponseJSON struct {
 	ID                      apijson.Field
 	CreatedAt               apijson.Field
+	Email                   apijson.Field
 	IsEmailRegex            apijson.Field
 	LastModified            apijson.Field
 	Name                    apijson.Field
 	Comments                apijson.Field
 	DirectoryID             apijson.Field
 	DirectoryNodeID         apijson.Field
-	Email                   apijson.Field
 	ExternalDirectoryNodeID apijson.Field
 	Provenance              apijson.Field
 	raw                     string
@@ -354,13 +280,13 @@ func (r settingImpersonationRegistryEditResponseJSON) RawJSON() string {
 type SettingImpersonationRegistryGetResponse struct {
 	ID                      int64                                       `json:"id,required"`
 	CreatedAt               time.Time                                   `json:"created_at,required" format:"date-time"`
+	Email                   string                                      `json:"email,required"`
 	IsEmailRegex            bool                                        `json:"is_email_regex,required"`
 	LastModified            time.Time                                   `json:"last_modified,required" format:"date-time"`
 	Name                    string                                      `json:"name,required"`
 	Comments                string                                      `json:"comments,nullable"`
 	DirectoryID             int64                                       `json:"directory_id,nullable"`
 	DirectoryNodeID         int64                                       `json:"directory_node_id,nullable"`
-	Email                   string                                      `json:"email,nullable"`
 	ExternalDirectoryNodeID string                                      `json:"external_directory_node_id,nullable"`
 	Provenance              string                                      `json:"provenance,nullable"`
 	JSON                    settingImpersonationRegistryGetResponseJSON `json:"-"`
@@ -371,13 +297,13 @@ type SettingImpersonationRegistryGetResponse struct {
 type settingImpersonationRegistryGetResponseJSON struct {
 	ID                      apijson.Field
 	CreatedAt               apijson.Field
+	Email                   apijson.Field
 	IsEmailRegex            apijson.Field
 	LastModified            apijson.Field
 	Name                    apijson.Field
 	Comments                apijson.Field
 	DirectoryID             apijson.Field
 	DirectoryNodeID         apijson.Field
-	Email                   apijson.Field
 	ExternalDirectoryNodeID apijson.Field
 	Provenance              apijson.Field
 	raw                     string
@@ -394,53 +320,20 @@ func (r settingImpersonationRegistryGetResponseJSON) RawJSON() string {
 
 type SettingImpersonationRegistryNewParams struct {
 	// Account Identifier
-	AccountID param.Field[string]                            `path:"account_id,required"`
-	Body      SettingImpersonationRegistryNewParamsBodyUnion `json:"body,required"`
+	AccountID    param.Field[string] `path:"account_id,required"`
+	Email        param.Field[string] `json:"email,required"`
+	IsEmailRegex param.Field[bool]   `json:"is_email_regex,required"`
+	Name         param.Field[string] `json:"name,required"`
 }
 
 func (r SettingImpersonationRegistryNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-// Satisfied by
-// [email_security.SettingImpersonationRegistryNewParamsBodyEmailSecurityCreateDisplayName],
-// [email_security.SettingImpersonationRegistryNewParamsBodyArray].
-type SettingImpersonationRegistryNewParamsBodyUnion interface {
-	implementsEmailSecuritySettingImpersonationRegistryNewParamsBodyUnion()
-}
-
-type SettingImpersonationRegistryNewParamsBodyEmailSecurityCreateDisplayName struct {
-	Email        param.Field[string] `json:"email,required"`
-	IsEmailRegex param.Field[bool]   `json:"is_email_regex,required"`
-	Name         param.Field[string] `json:"name,required"`
-}
-
-func (r SettingImpersonationRegistryNewParamsBodyEmailSecurityCreateDisplayName) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SettingImpersonationRegistryNewParamsBodyEmailSecurityCreateDisplayName) implementsEmailSecuritySettingImpersonationRegistryNewParamsBodyUnion() {
-}
-
-type SettingImpersonationRegistryNewParamsBodyArray []SettingImpersonationRegistryNewParamsBodyArrayItem
-
-func (r SettingImpersonationRegistryNewParamsBodyArray) implementsEmailSecuritySettingImpersonationRegistryNewParamsBodyUnion() {
-}
-
-type SettingImpersonationRegistryNewParamsBodyArrayItem struct {
-	Email        param.Field[string] `json:"email,required"`
-	IsEmailRegex param.Field[bool]   `json:"is_email_regex,required"`
-	Name         param.Field[string] `json:"name,required"`
-}
-
-func (r SettingImpersonationRegistryNewParamsBodyArrayItem) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type SettingImpersonationRegistryNewResponseEnvelope struct {
 	Errors   []shared.ResponseInfo                               `json:"errors,required"`
 	Messages []shared.ResponseInfo                               `json:"messages,required"`
-	Result   SettingImpersonationRegistryNewResponseUnion        `json:"result,required"`
+	Result   SettingImpersonationRegistryNewResponse             `json:"result,required"`
 	Success  bool                                                `json:"success,required"`
 	JSON     settingImpersonationRegistryNewResponseEnvelopeJSON `json:"-"`
 }
