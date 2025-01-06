@@ -62,7 +62,7 @@ func TestRankingTopWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Ranking.Top(context.TODO(), radar.RankingTopParams{
-		Date:        cloudflare.F([]string{"string"}),
+		Date:        cloudflare.F([]time.Time{time.Now()}),
 		Format:      cloudflare.F(radar.RankingTopParamsFormatJson),
 		Limit:       cloudflare.F(int64(5)),
 		Location:    cloudflare.F([]string{"string"}),

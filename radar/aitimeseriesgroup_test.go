@@ -36,7 +36,7 @@ func TestAITimeseriesGroupUserAgentWithOptionalParams(t *testing.T) {
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
 		Format:        cloudflare.F(radar.AITimeseriesGroupUserAgentParamsFormatJson),
-		LimitPerGroup: cloudflare.F(int64(4)),
+		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"string"}),
 	})
