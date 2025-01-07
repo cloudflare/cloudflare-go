@@ -1463,13 +1463,13 @@ func (r HTTPSummaryBotClassParamsDeviceType) IsKnown() bool {
 type HTTPSummaryBotClassParamsFormat string
 
 const (
-	HTTPSummaryBotClassParamsFormatJSON HTTPSummaryBotClassParamsFormat = "JSON"
+	HTTPSummaryBotClassParamsFormatJson HTTPSummaryBotClassParamsFormat = "JSON"
 	HTTPSummaryBotClassParamsFormatCsv  HTTPSummaryBotClassParamsFormat = "CSV"
 )
 
 func (r HTTPSummaryBotClassParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPSummaryBotClassParamsFormatJSON, HTTPSummaryBotClassParamsFormatCsv:
+	case HTTPSummaryBotClassParamsFormatJson, HTTPSummaryBotClassParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1650,13 +1650,13 @@ func (r HTTPSummaryDeviceTypeParamsBotClass) IsKnown() bool {
 type HTTPSummaryDeviceTypeParamsFormat string
 
 const (
-	HTTPSummaryDeviceTypeParamsFormatJSON HTTPSummaryDeviceTypeParamsFormat = "JSON"
+	HTTPSummaryDeviceTypeParamsFormatJson HTTPSummaryDeviceTypeParamsFormat = "JSON"
 	HTTPSummaryDeviceTypeParamsFormatCsv  HTTPSummaryDeviceTypeParamsFormat = "CSV"
 )
 
 func (r HTTPSummaryDeviceTypeParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPSummaryDeviceTypeParamsFormatJSON, HTTPSummaryDeviceTypeParamsFormatCsv:
+	case HTTPSummaryDeviceTypeParamsFormatJson, HTTPSummaryDeviceTypeParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1853,13 +1853,13 @@ func (r HTTPSummaryHTTPProtocolParamsDeviceType) IsKnown() bool {
 type HTTPSummaryHTTPProtocolParamsFormat string
 
 const (
-	HTTPSummaryHTTPProtocolParamsFormatJSON HTTPSummaryHTTPProtocolParamsFormat = "JSON"
+	HTTPSummaryHTTPProtocolParamsFormatJson HTTPSummaryHTTPProtocolParamsFormat = "JSON"
 	HTTPSummaryHTTPProtocolParamsFormatCsv  HTTPSummaryHTTPProtocolParamsFormat = "CSV"
 )
 
 func (r HTTPSummaryHTTPProtocolParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPSummaryHTTPProtocolParamsFormatJSON, HTTPSummaryHTTPProtocolParamsFormatCsv:
+	case HTTPSummaryHTTPProtocolParamsFormatJson, HTTPSummaryHTTPProtocolParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2041,13 +2041,13 @@ func (r HTTPSummaryHTTPVersionParamsDeviceType) IsKnown() bool {
 type HTTPSummaryHTTPVersionParamsFormat string
 
 const (
-	HTTPSummaryHTTPVersionParamsFormatJSON HTTPSummaryHTTPVersionParamsFormat = "JSON"
+	HTTPSummaryHTTPVersionParamsFormatJson HTTPSummaryHTTPVersionParamsFormat = "JSON"
 	HTTPSummaryHTTPVersionParamsFormatCsv  HTTPSummaryHTTPVersionParamsFormat = "CSV"
 )
 
 func (r HTTPSummaryHTTPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPSummaryHTTPVersionParamsFormatJSON, HTTPSummaryHTTPVersionParamsFormatCsv:
+	case HTTPSummaryHTTPVersionParamsFormatJson, HTTPSummaryHTTPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2228,13 +2228,13 @@ func (r HTTPSummaryIPVersionParamsDeviceType) IsKnown() bool {
 type HTTPSummaryIPVersionParamsFormat string
 
 const (
-	HTTPSummaryIPVersionParamsFormatJSON HTTPSummaryIPVersionParamsFormat = "JSON"
+	HTTPSummaryIPVersionParamsFormatJson HTTPSummaryIPVersionParamsFormat = "JSON"
 	HTTPSummaryIPVersionParamsFormatCsv  HTTPSummaryIPVersionParamsFormat = "CSV"
 )
 
 func (r HTTPSummaryIPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPSummaryIPVersionParamsFormatJSON, HTTPSummaryIPVersionParamsFormatCsv:
+	case HTTPSummaryIPVersionParamsFormatJson, HTTPSummaryIPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2415,13 +2415,13 @@ func (r HTTPSummaryOSParamsDeviceType) IsKnown() bool {
 type HTTPSummaryOSParamsFormat string
 
 const (
-	HTTPSummaryOSParamsFormatJSON HTTPSummaryOSParamsFormat = "JSON"
+	HTTPSummaryOSParamsFormatJson HTTPSummaryOSParamsFormat = "JSON"
 	HTTPSummaryOSParamsFormatCsv  HTTPSummaryOSParamsFormat = "CSV"
 )
 
 func (r HTTPSummaryOSParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPSummaryOSParamsFormatJSON, HTTPSummaryOSParamsFormatCsv:
+	case HTTPSummaryOSParamsFormatJson, HTTPSummaryOSParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2600,13 +2600,13 @@ func (r HTTPSummaryPostQuantumParamsDeviceType) IsKnown() bool {
 type HTTPSummaryPostQuantumParamsFormat string
 
 const (
-	HTTPSummaryPostQuantumParamsFormatJSON HTTPSummaryPostQuantumParamsFormat = "JSON"
+	HTTPSummaryPostQuantumParamsFormatJson HTTPSummaryPostQuantumParamsFormat = "JSON"
 	HTTPSummaryPostQuantumParamsFormatCsv  HTTPSummaryPostQuantumParamsFormat = "CSV"
 )
 
 func (r HTTPSummaryPostQuantumParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPSummaryPostQuantumParamsFormatJSON, HTTPSummaryPostQuantumParamsFormatCsv:
+	case HTTPSummaryPostQuantumParamsFormatJson, HTTPSummaryPostQuantumParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2803,13 +2803,13 @@ func (r HTTPSummaryTLSVersionParamsDeviceType) IsKnown() bool {
 type HTTPSummaryTLSVersionParamsFormat string
 
 const (
-	HTTPSummaryTLSVersionParamsFormatJSON HTTPSummaryTLSVersionParamsFormat = "JSON"
+	HTTPSummaryTLSVersionParamsFormatJson HTTPSummaryTLSVersionParamsFormat = "JSON"
 	HTTPSummaryTLSVersionParamsFormatCsv  HTTPSummaryTLSVersionParamsFormat = "CSV"
 )
 
 func (r HTTPSummaryTLSVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPSummaryTLSVersionParamsFormatJSON, HTTPSummaryTLSVersionParamsFormatCsv:
+	case HTTPSummaryTLSVersionParamsFormatJson, HTTPSummaryTLSVersionParamsFormatCsv:
 		return true
 	}
 	return false

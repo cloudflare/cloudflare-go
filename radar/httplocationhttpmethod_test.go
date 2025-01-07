@@ -40,7 +40,7 @@ func TestHTTPLocationHTTPMethodGetWithOptionalParams(t *testing.T) {
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
 			DeviceType:    cloudflare.F([]radar.HTTPLocationHTTPMethodGetParamsDeviceType{radar.HTTPLocationHTTPMethodGetParamsDeviceTypeDesktop}),
-			Format:        cloudflare.F(radar.HTTPLocationHTTPMethodGetParamsFormatJSON),
+			Format:        cloudflare.F(radar.HTTPLocationHTTPMethodGetParamsFormatJson),
 			HTTPProtocol:  cloudflare.F([]radar.HTTPLocationHTTPMethodGetParamsHTTPProtocol{radar.HTTPLocationHTTPMethodGetParamsHTTPProtocolHTTP}),
 			IPVersion:     cloudflare.F([]radar.HTTPLocationHTTPMethodGetParamsIPVersion{radar.HTTPLocationHTTPMethodGetParamsIPVersionIPv4}),
 			Limit:         cloudflare.F(int64(5)),

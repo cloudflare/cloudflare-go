@@ -405,13 +405,13 @@ func (r EmailRoutingTimeseriesGroupARCParamsEncrypted) IsKnown() bool {
 type EmailRoutingTimeseriesGroupARCParamsFormat string
 
 const (
-	EmailRoutingTimeseriesGroupARCParamsFormatJSON EmailRoutingTimeseriesGroupARCParamsFormat = "JSON"
+	EmailRoutingTimeseriesGroupARCParamsFormatJson EmailRoutingTimeseriesGroupARCParamsFormat = "JSON"
 	EmailRoutingTimeseriesGroupARCParamsFormatCsv  EmailRoutingTimeseriesGroupARCParamsFormat = "CSV"
 )
 
 func (r EmailRoutingTimeseriesGroupARCParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupARCParamsFormatJSON, EmailRoutingTimeseriesGroupARCParamsFormatCsv:
+	case EmailRoutingTimeseriesGroupARCParamsFormatJson, EmailRoutingTimeseriesGroupARCParamsFormatCsv:
 		return true
 	}
 	return false
@@ -580,13 +580,13 @@ func (r EmailRoutingTimeseriesGroupDKIMParamsEncrypted) IsKnown() bool {
 type EmailRoutingTimeseriesGroupDKIMParamsFormat string
 
 const (
-	EmailRoutingTimeseriesGroupDKIMParamsFormatJSON EmailRoutingTimeseriesGroupDKIMParamsFormat = "JSON"
+	EmailRoutingTimeseriesGroupDKIMParamsFormatJson EmailRoutingTimeseriesGroupDKIMParamsFormat = "JSON"
 	EmailRoutingTimeseriesGroupDKIMParamsFormatCsv  EmailRoutingTimeseriesGroupDKIMParamsFormat = "CSV"
 )
 
 func (r EmailRoutingTimeseriesGroupDKIMParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupDKIMParamsFormatJSON, EmailRoutingTimeseriesGroupDKIMParamsFormatCsv:
+	case EmailRoutingTimeseriesGroupDKIMParamsFormatJson, EmailRoutingTimeseriesGroupDKIMParamsFormatCsv:
 		return true
 	}
 	return false
@@ -755,13 +755,13 @@ func (r EmailRoutingTimeseriesGroupDMARCParamsEncrypted) IsKnown() bool {
 type EmailRoutingTimeseriesGroupDMARCParamsFormat string
 
 const (
-	EmailRoutingTimeseriesGroupDMARCParamsFormatJSON EmailRoutingTimeseriesGroupDMARCParamsFormat = "JSON"
+	EmailRoutingTimeseriesGroupDMARCParamsFormatJson EmailRoutingTimeseriesGroupDMARCParamsFormat = "JSON"
 	EmailRoutingTimeseriesGroupDMARCParamsFormatCsv  EmailRoutingTimeseriesGroupDMARCParamsFormat = "CSV"
 )
 
 func (r EmailRoutingTimeseriesGroupDMARCParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupDMARCParamsFormatJSON, EmailRoutingTimeseriesGroupDMARCParamsFormatCsv:
+	case EmailRoutingTimeseriesGroupDMARCParamsFormatJson, EmailRoutingTimeseriesGroupDMARCParamsFormatCsv:
 		return true
 	}
 	return false
@@ -931,13 +931,13 @@ func (r EmailRoutingTimeseriesGroupEncryptedParamsDMARC) IsKnown() bool {
 type EmailRoutingTimeseriesGroupEncryptedParamsFormat string
 
 const (
-	EmailRoutingTimeseriesGroupEncryptedParamsFormatJSON EmailRoutingTimeseriesGroupEncryptedParamsFormat = "JSON"
+	EmailRoutingTimeseriesGroupEncryptedParamsFormatJson EmailRoutingTimeseriesGroupEncryptedParamsFormat = "JSON"
 	EmailRoutingTimeseriesGroupEncryptedParamsFormatCsv  EmailRoutingTimeseriesGroupEncryptedParamsFormat = "CSV"
 )
 
 func (r EmailRoutingTimeseriesGroupEncryptedParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupEncryptedParamsFormatJSON, EmailRoutingTimeseriesGroupEncryptedParamsFormatCsv:
+	case EmailRoutingTimeseriesGroupEncryptedParamsFormatJson, EmailRoutingTimeseriesGroupEncryptedParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1122,13 +1122,13 @@ func (r EmailRoutingTimeseriesGroupIPVersionParamsEncrypted) IsKnown() bool {
 type EmailRoutingTimeseriesGroupIPVersionParamsFormat string
 
 const (
-	EmailRoutingTimeseriesGroupIPVersionParamsFormatJSON EmailRoutingTimeseriesGroupIPVersionParamsFormat = "JSON"
+	EmailRoutingTimeseriesGroupIPVersionParamsFormatJson EmailRoutingTimeseriesGroupIPVersionParamsFormat = "JSON"
 	EmailRoutingTimeseriesGroupIPVersionParamsFormatCsv  EmailRoutingTimeseriesGroupIPVersionParamsFormat = "CSV"
 )
 
 func (r EmailRoutingTimeseriesGroupIPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupIPVersionParamsFormatJSON, EmailRoutingTimeseriesGroupIPVersionParamsFormatCsv:
+	case EmailRoutingTimeseriesGroupIPVersionParamsFormatJson, EmailRoutingTimeseriesGroupIPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1298,13 +1298,13 @@ func (r EmailRoutingTimeseriesGroupSPFParamsEncrypted) IsKnown() bool {
 type EmailRoutingTimeseriesGroupSPFParamsFormat string
 
 const (
-	EmailRoutingTimeseriesGroupSPFParamsFormatJSON EmailRoutingTimeseriesGroupSPFParamsFormat = "JSON"
+	EmailRoutingTimeseriesGroupSPFParamsFormatJson EmailRoutingTimeseriesGroupSPFParamsFormat = "JSON"
 	EmailRoutingTimeseriesGroupSPFParamsFormatCsv  EmailRoutingTimeseriesGroupSPFParamsFormat = "CSV"
 )
 
 func (r EmailRoutingTimeseriesGroupSPFParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingTimeseriesGroupSPFParamsFormatJSON, EmailRoutingTimeseriesGroupSPFParamsFormatCsv:
+	case EmailRoutingTimeseriesGroupSPFParamsFormatJson, EmailRoutingTimeseriesGroupSPFParamsFormatCsv:
 		return true
 	}
 	return false

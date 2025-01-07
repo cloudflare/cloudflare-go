@@ -323,13 +323,13 @@ func (r HTTPTimeseriesParamsDeviceType) IsKnown() bool {
 type HTTPTimeseriesParamsFormat string
 
 const (
-	HTTPTimeseriesParamsFormatJSON HTTPTimeseriesParamsFormat = "JSON"
+	HTTPTimeseriesParamsFormatJson HTTPTimeseriesParamsFormat = "JSON"
 	HTTPTimeseriesParamsFormatCsv  HTTPTimeseriesParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesParamsFormatJSON, HTTPTimeseriesParamsFormatCsv:
+	case HTTPTimeseriesParamsFormatJson, HTTPTimeseriesParamsFormatCsv:
 		return true
 	}
 	return false

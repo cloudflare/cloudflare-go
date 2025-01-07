@@ -1034,13 +1034,13 @@ func (r AS112SummaryDNSSECParams) URLQuery() (v url.Values) {
 type AS112SummaryDNSSECParamsFormat string
 
 const (
-	AS112SummaryDNSSECParamsFormatJSON AS112SummaryDNSSECParamsFormat = "JSON"
+	AS112SummaryDNSSECParamsFormatJson AS112SummaryDNSSECParamsFormat = "JSON"
 	AS112SummaryDNSSECParamsFormatCsv  AS112SummaryDNSSECParamsFormat = "CSV"
 )
 
 func (r AS112SummaryDNSSECParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112SummaryDNSSECParamsFormatJSON, AS112SummaryDNSSECParamsFormatCsv:
+	case AS112SummaryDNSSECParamsFormatJson, AS112SummaryDNSSECParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1108,13 +1108,13 @@ func (r AS112SummaryEdnsParams) URLQuery() (v url.Values) {
 type AS112SummaryEdnsParamsFormat string
 
 const (
-	AS112SummaryEdnsParamsFormatJSON AS112SummaryEdnsParamsFormat = "JSON"
+	AS112SummaryEdnsParamsFormatJson AS112SummaryEdnsParamsFormat = "JSON"
 	AS112SummaryEdnsParamsFormatCsv  AS112SummaryEdnsParamsFormat = "CSV"
 )
 
 func (r AS112SummaryEdnsParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112SummaryEdnsParamsFormatJSON, AS112SummaryEdnsParamsFormatCsv:
+	case AS112SummaryEdnsParamsFormatJson, AS112SummaryEdnsParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1183,13 +1183,13 @@ func (r AS112SummaryIPVersionParams) URLQuery() (v url.Values) {
 type AS112SummaryIPVersionParamsFormat string
 
 const (
-	AS112SummaryIPVersionParamsFormatJSON AS112SummaryIPVersionParamsFormat = "JSON"
+	AS112SummaryIPVersionParamsFormatJson AS112SummaryIPVersionParamsFormat = "JSON"
 	AS112SummaryIPVersionParamsFormatCsv  AS112SummaryIPVersionParamsFormat = "CSV"
 )
 
 func (r AS112SummaryIPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112SummaryIPVersionParamsFormatJSON, AS112SummaryIPVersionParamsFormatCsv:
+	case AS112SummaryIPVersionParamsFormatJson, AS112SummaryIPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1258,13 +1258,13 @@ func (r AS112SummaryProtocolParams) URLQuery() (v url.Values) {
 type AS112SummaryProtocolParamsFormat string
 
 const (
-	AS112SummaryProtocolParamsFormatJSON AS112SummaryProtocolParamsFormat = "JSON"
+	AS112SummaryProtocolParamsFormatJson AS112SummaryProtocolParamsFormat = "JSON"
 	AS112SummaryProtocolParamsFormatCsv  AS112SummaryProtocolParamsFormat = "CSV"
 )
 
 func (r AS112SummaryProtocolParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112SummaryProtocolParamsFormatJSON, AS112SummaryProtocolParamsFormatCsv:
+	case AS112SummaryProtocolParamsFormatJson, AS112SummaryProtocolParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1336,13 +1336,13 @@ func (r AS112SummaryQueryTypeParams) URLQuery() (v url.Values) {
 type AS112SummaryQueryTypeParamsFormat string
 
 const (
-	AS112SummaryQueryTypeParamsFormatJSON AS112SummaryQueryTypeParamsFormat = "JSON"
+	AS112SummaryQueryTypeParamsFormatJson AS112SummaryQueryTypeParamsFormat = "JSON"
 	AS112SummaryQueryTypeParamsFormatCsv  AS112SummaryQueryTypeParamsFormat = "CSV"
 )
 
 func (r AS112SummaryQueryTypeParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112SummaryQueryTypeParamsFormatJSON, AS112SummaryQueryTypeParamsFormatCsv:
+	case AS112SummaryQueryTypeParamsFormatJson, AS112SummaryQueryTypeParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1414,13 +1414,13 @@ func (r AS112SummaryResponseCodesParams) URLQuery() (v url.Values) {
 type AS112SummaryResponseCodesParamsFormat string
 
 const (
-	AS112SummaryResponseCodesParamsFormatJSON AS112SummaryResponseCodesParamsFormat = "JSON"
+	AS112SummaryResponseCodesParamsFormatJson AS112SummaryResponseCodesParamsFormat = "JSON"
 	AS112SummaryResponseCodesParamsFormatCsv  AS112SummaryResponseCodesParamsFormat = "CSV"
 )
 
 func (r AS112SummaryResponseCodesParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112SummaryResponseCodesParamsFormatJSON, AS112SummaryResponseCodesParamsFormatCsv:
+	case AS112SummaryResponseCodesParamsFormatJson, AS112SummaryResponseCodesParamsFormatCsv:
 		return true
 	}
 	return false

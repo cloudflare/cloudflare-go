@@ -200,13 +200,13 @@ func (r BGPIPTimeseriesParams) URLQuery() (v url.Values) {
 type BgpipTimeseriesParamsFormat string
 
 const (
-	BgpipTimeseriesParamsFormatJSON BgpipTimeseriesParamsFormat = "JSON"
+	BgpipTimeseriesParamsFormatJson BgpipTimeseriesParamsFormat = "JSON"
 	BgpipTimeseriesParamsFormatCsv  BgpipTimeseriesParamsFormat = "CSV"
 )
 
 func (r BgpipTimeseriesParamsFormat) IsKnown() bool {
 	switch r {
-	case BgpipTimeseriesParamsFormatJSON, BgpipTimeseriesParamsFormatCsv:
+	case BgpipTimeseriesParamsFormatJson, BgpipTimeseriesParamsFormatCsv:
 		return true
 	}
 	return false

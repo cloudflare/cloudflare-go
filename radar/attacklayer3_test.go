@@ -36,7 +36,7 @@ func TestAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
 		Direction:     cloudflare.F(radar.AttackLayer3TimeseriesParamsDirectionOrigin),
-		Format:        cloudflare.F(radar.AttackLayer3TimeseriesParamsFormatJSON),
+		Format:        cloudflare.F(radar.AttackLayer3TimeseriesParamsFormatJson),
 		IPVersion:     cloudflare.F([]radar.AttackLayer3TimeseriesParamsIPVersion{radar.AttackLayer3TimeseriesParamsIPVersionIPv4}),
 		Location:      cloudflare.F([]string{"string"}),
 		Metric:        cloudflare.F(radar.AttackLayer3TimeseriesParamsMetricBytes),

@@ -1534,13 +1534,13 @@ func (r EmailSecuritySummaryARCParamsDMARC) IsKnown() bool {
 type EmailSecuritySummaryARCParamsFormat string
 
 const (
-	EmailSecuritySummaryARCParamsFormatJSON EmailSecuritySummaryARCParamsFormat = "JSON"
+	EmailSecuritySummaryARCParamsFormatJson EmailSecuritySummaryARCParamsFormat = "JSON"
 	EmailSecuritySummaryARCParamsFormatCsv  EmailSecuritySummaryARCParamsFormat = "CSV"
 )
 
 func (r EmailSecuritySummaryARCParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecuritySummaryARCParamsFormatJSON, EmailSecuritySummaryARCParamsFormatCsv:
+	case EmailSecuritySummaryARCParamsFormatJson, EmailSecuritySummaryARCParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1670,13 +1670,13 @@ func (r EmailSecuritySummaryDKIMParamsDMARC) IsKnown() bool {
 type EmailSecuritySummaryDKIMParamsFormat string
 
 const (
-	EmailSecuritySummaryDKIMParamsFormatJSON EmailSecuritySummaryDKIMParamsFormat = "JSON"
+	EmailSecuritySummaryDKIMParamsFormatJson EmailSecuritySummaryDKIMParamsFormat = "JSON"
 	EmailSecuritySummaryDKIMParamsFormatCsv  EmailSecuritySummaryDKIMParamsFormat = "CSV"
 )
 
 func (r EmailSecuritySummaryDKIMParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecuritySummaryDKIMParamsFormatJSON, EmailSecuritySummaryDKIMParamsFormatCsv:
+	case EmailSecuritySummaryDKIMParamsFormatJson, EmailSecuritySummaryDKIMParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1806,13 +1806,13 @@ func (r EmailSecuritySummaryDMARCParamsDKIM) IsKnown() bool {
 type EmailSecuritySummaryDMARCParamsFormat string
 
 const (
-	EmailSecuritySummaryDMARCParamsFormatJSON EmailSecuritySummaryDMARCParamsFormat = "JSON"
+	EmailSecuritySummaryDMARCParamsFormatJson EmailSecuritySummaryDMARCParamsFormat = "JSON"
 	EmailSecuritySummaryDMARCParamsFormatCsv  EmailSecuritySummaryDMARCParamsFormat = "CSV"
 )
 
 func (r EmailSecuritySummaryDMARCParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecuritySummaryDMARCParamsFormatJSON, EmailSecuritySummaryDMARCParamsFormatCsv:
+	case EmailSecuritySummaryDMARCParamsFormatJson, EmailSecuritySummaryDMARCParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1960,13 +1960,13 @@ func (r EmailSecuritySummaryMaliciousParamsDMARC) IsKnown() bool {
 type EmailSecuritySummaryMaliciousParamsFormat string
 
 const (
-	EmailSecuritySummaryMaliciousParamsFormatJSON EmailSecuritySummaryMaliciousParamsFormat = "JSON"
+	EmailSecuritySummaryMaliciousParamsFormatJson EmailSecuritySummaryMaliciousParamsFormat = "JSON"
 	EmailSecuritySummaryMaliciousParamsFormatCsv  EmailSecuritySummaryMaliciousParamsFormat = "CSV"
 )
 
 func (r EmailSecuritySummaryMaliciousParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecuritySummaryMaliciousParamsFormatJSON, EmailSecuritySummaryMaliciousParamsFormatCsv:
+	case EmailSecuritySummaryMaliciousParamsFormatJson, EmailSecuritySummaryMaliciousParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2114,13 +2114,13 @@ func (r EmailSecuritySummarySpamParamsDMARC) IsKnown() bool {
 type EmailSecuritySummarySpamParamsFormat string
 
 const (
-	EmailSecuritySummarySpamParamsFormatJSON EmailSecuritySummarySpamParamsFormat = "JSON"
+	EmailSecuritySummarySpamParamsFormatJson EmailSecuritySummarySpamParamsFormat = "JSON"
 	EmailSecuritySummarySpamParamsFormatCsv  EmailSecuritySummarySpamParamsFormat = "CSV"
 )
 
 func (r EmailSecuritySummarySpamParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecuritySummarySpamParamsFormatJSON, EmailSecuritySummarySpamParamsFormatCsv:
+	case EmailSecuritySummarySpamParamsFormatJson, EmailSecuritySummarySpamParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2266,13 +2266,13 @@ func (r EmailSecuritySummarySPFParamsDMARC) IsKnown() bool {
 type EmailSecuritySummarySPFParamsFormat string
 
 const (
-	EmailSecuritySummarySPFParamsFormatJSON EmailSecuritySummarySPFParamsFormat = "JSON"
+	EmailSecuritySummarySPFParamsFormatJson EmailSecuritySummarySPFParamsFormat = "JSON"
 	EmailSecuritySummarySPFParamsFormatCsv  EmailSecuritySummarySPFParamsFormat = "CSV"
 )
 
 func (r EmailSecuritySummarySPFParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecuritySummarySPFParamsFormatJSON, EmailSecuritySummarySPFParamsFormatCsv:
+	case EmailSecuritySummarySPFParamsFormatJson, EmailSecuritySummarySPFParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2404,13 +2404,13 @@ func (r EmailSecuritySummarySpoofParamsDMARC) IsKnown() bool {
 type EmailSecuritySummarySpoofParamsFormat string
 
 const (
-	EmailSecuritySummarySpoofParamsFormatJSON EmailSecuritySummarySpoofParamsFormat = "JSON"
+	EmailSecuritySummarySpoofParamsFormatJson EmailSecuritySummarySpoofParamsFormat = "JSON"
 	EmailSecuritySummarySpoofParamsFormatCsv  EmailSecuritySummarySpoofParamsFormat = "CSV"
 )
 
 func (r EmailSecuritySummarySpoofParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecuritySummarySpoofParamsFormatJSON, EmailSecuritySummarySpoofParamsFormatCsv:
+	case EmailSecuritySummarySpoofParamsFormatJson, EmailSecuritySummarySpoofParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2558,13 +2558,13 @@ func (r EmailSecuritySummaryThreatCategoryParamsDMARC) IsKnown() bool {
 type EmailSecuritySummaryThreatCategoryParamsFormat string
 
 const (
-	EmailSecuritySummaryThreatCategoryParamsFormatJSON EmailSecuritySummaryThreatCategoryParamsFormat = "JSON"
+	EmailSecuritySummaryThreatCategoryParamsFormatJson EmailSecuritySummaryThreatCategoryParamsFormat = "JSON"
 	EmailSecuritySummaryThreatCategoryParamsFormatCsv  EmailSecuritySummaryThreatCategoryParamsFormat = "CSV"
 )
 
 func (r EmailSecuritySummaryThreatCategoryParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecuritySummaryThreatCategoryParamsFormatJSON, EmailSecuritySummaryThreatCategoryParamsFormatCsv:
+	case EmailSecuritySummaryThreatCategoryParamsFormatJson, EmailSecuritySummaryThreatCategoryParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2710,13 +2710,13 @@ func (r EmailSecuritySummaryTLSVersionParamsDMARC) IsKnown() bool {
 type EmailSecuritySummaryTLSVersionParamsFormat string
 
 const (
-	EmailSecuritySummaryTLSVersionParamsFormatJSON EmailSecuritySummaryTLSVersionParamsFormat = "JSON"
+	EmailSecuritySummaryTLSVersionParamsFormatJson EmailSecuritySummaryTLSVersionParamsFormat = "JSON"
 	EmailSecuritySummaryTLSVersionParamsFormatCsv  EmailSecuritySummaryTLSVersionParamsFormat = "CSV"
 )
 
 func (r EmailSecuritySummaryTLSVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecuritySummaryTLSVersionParamsFormatJSON, EmailSecuritySummaryTLSVersionParamsFormatCsv:
+	case EmailSecuritySummaryTLSVersionParamsFormatJson, EmailSecuritySummaryTLSVersionParamsFormatCsv:
 		return true
 	}
 	return false

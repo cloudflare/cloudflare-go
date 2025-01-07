@@ -483,13 +483,13 @@ func (r BGPRouteAsesParams) URLQuery() (v url.Values) {
 type BGPRouteAsesParamsFormat string
 
 const (
-	BGPRouteAsesParamsFormatJSON BGPRouteAsesParamsFormat = "JSON"
+	BGPRouteAsesParamsFormatJson BGPRouteAsesParamsFormat = "JSON"
 	BGPRouteAsesParamsFormatCsv  BGPRouteAsesParamsFormat = "CSV"
 )
 
 func (r BGPRouteAsesParamsFormat) IsKnown() bool {
 	switch r {
-	case BGPRouteAsesParamsFormatJSON, BGPRouteAsesParamsFormatCsv:
+	case BGPRouteAsesParamsFormatJson, BGPRouteAsesParamsFormatCsv:
 		return true
 	}
 	return false
@@ -578,13 +578,13 @@ func (r BGPRouteMoasParams) URLQuery() (v url.Values) {
 type BGPRouteMoasParamsFormat string
 
 const (
-	BGPRouteMoasParamsFormatJSON BGPRouteMoasParamsFormat = "JSON"
+	BGPRouteMoasParamsFormatJson BGPRouteMoasParamsFormat = "JSON"
 	BGPRouteMoasParamsFormatCsv  BGPRouteMoasParamsFormat = "CSV"
 )
 
 func (r BGPRouteMoasParamsFormat) IsKnown() bool {
 	switch r {
-	case BGPRouteMoasParamsFormatJSON, BGPRouteMoasParamsFormatCsv:
+	case BGPRouteMoasParamsFormatJson, BGPRouteMoasParamsFormatCsv:
 		return true
 	}
 	return false
@@ -639,13 +639,13 @@ func (r BGPRoutePfx2asParams) URLQuery() (v url.Values) {
 type BGPRoutePfx2asParamsFormat string
 
 const (
-	BGPRoutePfx2asParamsFormatJSON BGPRoutePfx2asParamsFormat = "JSON"
+	BGPRoutePfx2asParamsFormatJson BGPRoutePfx2asParamsFormat = "JSON"
 	BGPRoutePfx2asParamsFormatCsv  BGPRoutePfx2asParamsFormat = "CSV"
 )
 
 func (r BGPRoutePfx2asParamsFormat) IsKnown() bool {
 	switch r {
-	case BGPRoutePfx2asParamsFormatJSON, BGPRoutePfx2asParamsFormatCsv:
+	case BGPRoutePfx2asParamsFormatJson, BGPRoutePfx2asParamsFormatCsv:
 		return true
 	}
 	return false
@@ -712,13 +712,13 @@ func (r BGPRouteStatsParams) URLQuery() (v url.Values) {
 type BGPRouteStatsParamsFormat string
 
 const (
-	BGPRouteStatsParamsFormatJSON BGPRouteStatsParamsFormat = "JSON"
+	BGPRouteStatsParamsFormatJson BGPRouteStatsParamsFormat = "JSON"
 	BGPRouteStatsParamsFormatCsv  BGPRouteStatsParamsFormat = "CSV"
 )
 
 func (r BGPRouteStatsParamsFormat) IsKnown() bool {
 	switch r {
-	case BGPRouteStatsParamsFormatJSON, BGPRouteStatsParamsFormatCsv:
+	case BGPRouteStatsParamsFormatJson, BGPRouteStatsParamsFormatCsv:
 		return true
 	}
 	return false

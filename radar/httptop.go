@@ -473,13 +473,13 @@ func (r HTTPTopBrowserParamsDeviceType) IsKnown() bool {
 type HTTPTopBrowserParamsFormat string
 
 const (
-	HTTPTopBrowserParamsFormatJSON HTTPTopBrowserParamsFormat = "JSON"
+	HTTPTopBrowserParamsFormatJson HTTPTopBrowserParamsFormat = "JSON"
 	HTTPTopBrowserParamsFormatCsv  HTTPTopBrowserParamsFormat = "CSV"
 )
 
 func (r HTTPTopBrowserParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTopBrowserParamsFormatJSON, HTTPTopBrowserParamsFormatCsv:
+	case HTTPTopBrowserParamsFormatJson, HTTPTopBrowserParamsFormatCsv:
 		return true
 	}
 	return false
@@ -699,13 +699,13 @@ func (r HTTPTopBrowserFamilyParamsDeviceType) IsKnown() bool {
 type HTTPTopBrowserFamilyParamsFormat string
 
 const (
-	HTTPTopBrowserFamilyParamsFormatJSON HTTPTopBrowserFamilyParamsFormat = "JSON"
+	HTTPTopBrowserFamilyParamsFormatJson HTTPTopBrowserFamilyParamsFormat = "JSON"
 	HTTPTopBrowserFamilyParamsFormatCsv  HTTPTopBrowserFamilyParamsFormat = "CSV"
 )
 
 func (r HTTPTopBrowserFamilyParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTopBrowserFamilyParamsFormatJSON, HTTPTopBrowserFamilyParamsFormatCsv:
+	case HTTPTopBrowserFamilyParamsFormatJson, HTTPTopBrowserFamilyParamsFormatCsv:
 		return true
 	}
 	return false

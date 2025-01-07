@@ -1035,13 +1035,13 @@ func (r EmailRoutingSummaryARCParamsEncrypted) IsKnown() bool {
 type EmailRoutingSummaryARCParamsFormat string
 
 const (
-	EmailRoutingSummaryARCParamsFormatJSON EmailRoutingSummaryARCParamsFormat = "JSON"
+	EmailRoutingSummaryARCParamsFormatJson EmailRoutingSummaryARCParamsFormat = "JSON"
 	EmailRoutingSummaryARCParamsFormatCsv  EmailRoutingSummaryARCParamsFormat = "CSV"
 )
 
 func (r EmailRoutingSummaryARCParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingSummaryARCParamsFormatJSON, EmailRoutingSummaryARCParamsFormatCsv:
+	case EmailRoutingSummaryARCParamsFormatJson, EmailRoutingSummaryARCParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1186,13 +1186,13 @@ func (r EmailRoutingSummaryDKIMParamsEncrypted) IsKnown() bool {
 type EmailRoutingSummaryDKIMParamsFormat string
 
 const (
-	EmailRoutingSummaryDKIMParamsFormatJSON EmailRoutingSummaryDKIMParamsFormat = "JSON"
+	EmailRoutingSummaryDKIMParamsFormatJson EmailRoutingSummaryDKIMParamsFormat = "JSON"
 	EmailRoutingSummaryDKIMParamsFormatCsv  EmailRoutingSummaryDKIMParamsFormat = "CSV"
 )
 
 func (r EmailRoutingSummaryDKIMParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingSummaryDKIMParamsFormatJSON, EmailRoutingSummaryDKIMParamsFormatCsv:
+	case EmailRoutingSummaryDKIMParamsFormatJson, EmailRoutingSummaryDKIMParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1337,13 +1337,13 @@ func (r EmailRoutingSummaryDMARCParamsEncrypted) IsKnown() bool {
 type EmailRoutingSummaryDMARCParamsFormat string
 
 const (
-	EmailRoutingSummaryDMARCParamsFormatJSON EmailRoutingSummaryDMARCParamsFormat = "JSON"
+	EmailRoutingSummaryDMARCParamsFormatJson EmailRoutingSummaryDMARCParamsFormat = "JSON"
 	EmailRoutingSummaryDMARCParamsFormatCsv  EmailRoutingSummaryDMARCParamsFormat = "CSV"
 )
 
 func (r EmailRoutingSummaryDMARCParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingSummaryDMARCParamsFormatJSON, EmailRoutingSummaryDMARCParamsFormatCsv:
+	case EmailRoutingSummaryDMARCParamsFormatJson, EmailRoutingSummaryDMARCParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1489,13 +1489,13 @@ func (r EmailRoutingSummaryEncryptedParamsDMARC) IsKnown() bool {
 type EmailRoutingSummaryEncryptedParamsFormat string
 
 const (
-	EmailRoutingSummaryEncryptedParamsFormatJSON EmailRoutingSummaryEncryptedParamsFormat = "JSON"
+	EmailRoutingSummaryEncryptedParamsFormatJson EmailRoutingSummaryEncryptedParamsFormat = "JSON"
 	EmailRoutingSummaryEncryptedParamsFormatCsv  EmailRoutingSummaryEncryptedParamsFormat = "CSV"
 )
 
 func (r EmailRoutingSummaryEncryptedParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingSummaryEncryptedParamsFormatJSON, EmailRoutingSummaryEncryptedParamsFormatCsv:
+	case EmailRoutingSummaryEncryptedParamsFormatJson, EmailRoutingSummaryEncryptedParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1656,13 +1656,13 @@ func (r EmailRoutingSummaryIPVersionParamsEncrypted) IsKnown() bool {
 type EmailRoutingSummaryIPVersionParamsFormat string
 
 const (
-	EmailRoutingSummaryIPVersionParamsFormatJSON EmailRoutingSummaryIPVersionParamsFormat = "JSON"
+	EmailRoutingSummaryIPVersionParamsFormatJson EmailRoutingSummaryIPVersionParamsFormat = "JSON"
 	EmailRoutingSummaryIPVersionParamsFormatCsv  EmailRoutingSummaryIPVersionParamsFormat = "CSV"
 )
 
 func (r EmailRoutingSummaryIPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingSummaryIPVersionParamsFormatJSON, EmailRoutingSummaryIPVersionParamsFormatCsv:
+	case EmailRoutingSummaryIPVersionParamsFormatJson, EmailRoutingSummaryIPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1808,13 +1808,13 @@ func (r EmailRoutingSummarySPFParamsEncrypted) IsKnown() bool {
 type EmailRoutingSummarySPFParamsFormat string
 
 const (
-	EmailRoutingSummarySPFParamsFormatJSON EmailRoutingSummarySPFParamsFormat = "JSON"
+	EmailRoutingSummarySPFParamsFormatJson EmailRoutingSummarySPFParamsFormat = "JSON"
 	EmailRoutingSummarySPFParamsFormatCsv  EmailRoutingSummarySPFParamsFormat = "CSV"
 )
 
 func (r EmailRoutingSummarySPFParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailRoutingSummarySPFParamsFormatJSON, EmailRoutingSummarySPFParamsFormatCsv:
+	case EmailRoutingSummarySPFParamsFormatJson, EmailRoutingSummarySPFParamsFormatCsv:
 		return true
 	}
 	return false

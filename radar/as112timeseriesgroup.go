@@ -459,13 +459,13 @@ func (r AS112TimeseriesGroupDNSSECParamsAggInterval) IsKnown() bool {
 type AS112TimeseriesGroupDNSSECParamsFormat string
 
 const (
-	AS112TimeseriesGroupDNSSECParamsFormatJSON AS112TimeseriesGroupDNSSECParamsFormat = "JSON"
+	AS112TimeseriesGroupDNSSECParamsFormatJson AS112TimeseriesGroupDNSSECParamsFormat = "JSON"
 	AS112TimeseriesGroupDNSSECParamsFormatCsv  AS112TimeseriesGroupDNSSECParamsFormat = "CSV"
 )
 
 func (r AS112TimeseriesGroupDNSSECParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TimeseriesGroupDNSSECParamsFormatJSON, AS112TimeseriesGroupDNSSECParamsFormatCsv:
+	case AS112TimeseriesGroupDNSSECParamsFormatJson, AS112TimeseriesGroupDNSSECParamsFormatCsv:
 		return true
 	}
 	return false
@@ -558,13 +558,13 @@ func (r AS112TimeseriesGroupEdnsParamsAggInterval) IsKnown() bool {
 type AS112TimeseriesGroupEdnsParamsFormat string
 
 const (
-	AS112TimeseriesGroupEdnsParamsFormatJSON AS112TimeseriesGroupEdnsParamsFormat = "JSON"
+	AS112TimeseriesGroupEdnsParamsFormatJson AS112TimeseriesGroupEdnsParamsFormat = "JSON"
 	AS112TimeseriesGroupEdnsParamsFormatCsv  AS112TimeseriesGroupEdnsParamsFormat = "CSV"
 )
 
 func (r AS112TimeseriesGroupEdnsParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TimeseriesGroupEdnsParamsFormatJSON, AS112TimeseriesGroupEdnsParamsFormatCsv:
+	case AS112TimeseriesGroupEdnsParamsFormatJson, AS112TimeseriesGroupEdnsParamsFormatCsv:
 		return true
 	}
 	return false
@@ -657,13 +657,13 @@ func (r AS112TimeseriesGroupIPVersionParamsAggInterval) IsKnown() bool {
 type AS112TimeseriesGroupIPVersionParamsFormat string
 
 const (
-	AS112TimeseriesGroupIPVersionParamsFormatJSON AS112TimeseriesGroupIPVersionParamsFormat = "JSON"
+	AS112TimeseriesGroupIPVersionParamsFormatJson AS112TimeseriesGroupIPVersionParamsFormat = "JSON"
 	AS112TimeseriesGroupIPVersionParamsFormatCsv  AS112TimeseriesGroupIPVersionParamsFormat = "CSV"
 )
 
 func (r AS112TimeseriesGroupIPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TimeseriesGroupIPVersionParamsFormatJSON, AS112TimeseriesGroupIPVersionParamsFormatCsv:
+	case AS112TimeseriesGroupIPVersionParamsFormatJson, AS112TimeseriesGroupIPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -756,13 +756,13 @@ func (r AS112TimeseriesGroupProtocolParamsAggInterval) IsKnown() bool {
 type AS112TimeseriesGroupProtocolParamsFormat string
 
 const (
-	AS112TimeseriesGroupProtocolParamsFormatJSON AS112TimeseriesGroupProtocolParamsFormat = "JSON"
+	AS112TimeseriesGroupProtocolParamsFormatJson AS112TimeseriesGroupProtocolParamsFormat = "JSON"
 	AS112TimeseriesGroupProtocolParamsFormatCsv  AS112TimeseriesGroupProtocolParamsFormat = "CSV"
 )
 
 func (r AS112TimeseriesGroupProtocolParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TimeseriesGroupProtocolParamsFormatJSON, AS112TimeseriesGroupProtocolParamsFormatCsv:
+	case AS112TimeseriesGroupProtocolParamsFormatJson, AS112TimeseriesGroupProtocolParamsFormatCsv:
 		return true
 	}
 	return false
@@ -858,13 +858,13 @@ func (r AS112TimeseriesGroupQueryTypeParamsAggInterval) IsKnown() bool {
 type AS112TimeseriesGroupQueryTypeParamsFormat string
 
 const (
-	AS112TimeseriesGroupQueryTypeParamsFormatJSON AS112TimeseriesGroupQueryTypeParamsFormat = "JSON"
+	AS112TimeseriesGroupQueryTypeParamsFormatJson AS112TimeseriesGroupQueryTypeParamsFormat = "JSON"
 	AS112TimeseriesGroupQueryTypeParamsFormatCsv  AS112TimeseriesGroupQueryTypeParamsFormat = "CSV"
 )
 
 func (r AS112TimeseriesGroupQueryTypeParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TimeseriesGroupQueryTypeParamsFormatJSON, AS112TimeseriesGroupQueryTypeParamsFormatCsv:
+	case AS112TimeseriesGroupQueryTypeParamsFormatJson, AS112TimeseriesGroupQueryTypeParamsFormatCsv:
 		return true
 	}
 	return false
@@ -960,13 +960,13 @@ func (r AS112TimeseriesGroupResponseCodesParamsAggInterval) IsKnown() bool {
 type AS112TimeseriesGroupResponseCodesParamsFormat string
 
 const (
-	AS112TimeseriesGroupResponseCodesParamsFormatJSON AS112TimeseriesGroupResponseCodesParamsFormat = "JSON"
+	AS112TimeseriesGroupResponseCodesParamsFormatJson AS112TimeseriesGroupResponseCodesParamsFormat = "JSON"
 	AS112TimeseriesGroupResponseCodesParamsFormatCsv  AS112TimeseriesGroupResponseCodesParamsFormat = "CSV"
 )
 
 func (r AS112TimeseriesGroupResponseCodesParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TimeseriesGroupResponseCodesParamsFormatJSON, AS112TimeseriesGroupResponseCodesParamsFormatCsv:
+	case AS112TimeseriesGroupResponseCodesParamsFormatJson, AS112TimeseriesGroupResponseCodesParamsFormatCsv:
 		return true
 	}
 	return false

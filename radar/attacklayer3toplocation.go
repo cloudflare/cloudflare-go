@@ -418,13 +418,13 @@ func (r AttackLayer3TopLocationOriginParams) URLQuery() (v url.Values) {
 type AttackLayer3TopLocationOriginParamsFormat string
 
 const (
-	AttackLayer3TopLocationOriginParamsFormatJSON AttackLayer3TopLocationOriginParamsFormat = "JSON"
+	AttackLayer3TopLocationOriginParamsFormatJson AttackLayer3TopLocationOriginParamsFormat = "JSON"
 	AttackLayer3TopLocationOriginParamsFormatCsv  AttackLayer3TopLocationOriginParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TopLocationOriginParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopLocationOriginParamsFormatJSON, AttackLayer3TopLocationOriginParamsFormatCsv:
+	case AttackLayer3TopLocationOriginParamsFormatJson, AttackLayer3TopLocationOriginParamsFormatCsv:
 		return true
 	}
 	return false
@@ -527,13 +527,13 @@ func (r AttackLayer3TopLocationTargetParams) URLQuery() (v url.Values) {
 type AttackLayer3TopLocationTargetParamsFormat string
 
 const (
-	AttackLayer3TopLocationTargetParamsFormatJSON AttackLayer3TopLocationTargetParamsFormat = "JSON"
+	AttackLayer3TopLocationTargetParamsFormatJson AttackLayer3TopLocationTargetParamsFormat = "JSON"
 	AttackLayer3TopLocationTargetParamsFormatCsv  AttackLayer3TopLocationTargetParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TopLocationTargetParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopLocationTargetParamsFormatJSON, AttackLayer3TopLocationTargetParamsFormatCsv:
+	case AttackLayer3TopLocationTargetParamsFormatJson, AttackLayer3TopLocationTargetParamsFormatCsv:
 		return true
 	}
 	return false
