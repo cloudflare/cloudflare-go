@@ -241,13 +241,13 @@ func (r AnnotationListParams) URLQuery() (v url.Values) {
 type AnnotationListParamsFormat string
 
 const (
-	AnnotationListParamsFormatJson AnnotationListParamsFormat = "JSON"
+	AnnotationListParamsFormatJSON AnnotationListParamsFormat = "JSON"
 	AnnotationListParamsFormatCsv  AnnotationListParamsFormat = "CSV"
 )
 
 func (r AnnotationListParamsFormat) IsKnown() bool {
 	switch r {
-	case AnnotationListParamsFormatJson, AnnotationListParamsFormatCsv:
+	case AnnotationListParamsFormatJSON, AnnotationListParamsFormatCsv:
 		return true
 	}
 	return false

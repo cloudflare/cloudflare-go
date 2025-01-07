@@ -177,13 +177,13 @@ func (r BGPTopPrefixesParams) URLQuery() (v url.Values) {
 type BGPTopPrefixesParamsFormat string
 
 const (
-	BGPTopPrefixesParamsFormatJson BGPTopPrefixesParamsFormat = "JSON"
+	BGPTopPrefixesParamsFormatJSON BGPTopPrefixesParamsFormat = "JSON"
 	BGPTopPrefixesParamsFormatCsv  BGPTopPrefixesParamsFormat = "CSV"
 )
 
 func (r BGPTopPrefixesParamsFormat) IsKnown() bool {
 	switch r {
-	case BGPTopPrefixesParamsFormatJson, BGPTopPrefixesParamsFormatCsv:
+	case BGPTopPrefixesParamsFormatJSON, BGPTopPrefixesParamsFormatCsv:
 		return true
 	}
 	return false

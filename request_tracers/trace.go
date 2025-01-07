@@ -154,7 +154,7 @@ type TraceNewParamsBody struct {
 	// Base64 encoded request body
 	Base64 param.Field[string] `json:"base64"`
 	// Arbitrary json as request body
-	Json param.Field[interface{}] `json:"json"`
+	JSON param.Field[interface{}] `json:"json"`
 	// Request body as plain text
 	PlainText param.Field[string] `json:"plain_text"`
 }

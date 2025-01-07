@@ -40,7 +40,7 @@ func TestHTTPLocationTLSVersionGetWithOptionalParams(t *testing.T) {
 			DateRange:     cloudflare.F([]string{"7d"}),
 			DateStart:     cloudflare.F([]time.Time{time.Now()}),
 			DeviceType:    cloudflare.F([]radar.HTTPLocationTLSVersionGetParamsDeviceType{radar.HTTPLocationTLSVersionGetParamsDeviceTypeDesktop}),
-			Format:        cloudflare.F(radar.HTTPLocationTLSVersionGetParamsFormatJson),
+			Format:        cloudflare.F(radar.HTTPLocationTLSVersionGetParamsFormatJSON),
 			HTTPProtocol:  cloudflare.F([]radar.HTTPLocationTLSVersionGetParamsHTTPProtocol{radar.HTTPLocationTLSVersionGetParamsHTTPProtocolHTTP}),
 			HTTPVersion:   cloudflare.F([]radar.HTTPLocationTLSVersionGetParamsHTTPVersion{radar.HTTPLocationTLSVersionGetParamsHTTPVersionHttPv1}),
 			IPVersion:     cloudflare.F([]radar.HTTPLocationTLSVersionGetParamsIPVersion{radar.HTTPLocationTLSVersionGetParamsIPVersionIPv4}),

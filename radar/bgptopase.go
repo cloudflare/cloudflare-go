@@ -271,13 +271,13 @@ func (r BGPTopAseGetParams) URLQuery() (v url.Values) {
 type BGPTopAseGetParamsFormat string
 
 const (
-	BGPTopAseGetParamsFormatJson BGPTopAseGetParamsFormat = "JSON"
+	BGPTopAseGetParamsFormatJSON BGPTopAseGetParamsFormat = "JSON"
 	BGPTopAseGetParamsFormatCsv  BGPTopAseGetParamsFormat = "CSV"
 )
 
 func (r BGPTopAseGetParamsFormat) IsKnown() bool {
 	switch r {
-	case BGPTopAseGetParamsFormatJson, BGPTopAseGetParamsFormatCsv:
+	case BGPTopAseGetParamsFormatJSON, BGPTopAseGetParamsFormatCsv:
 		return true
 	}
 	return false
@@ -343,13 +343,13 @@ func (r BGPTopAsePrefixesParams) URLQuery() (v url.Values) {
 type BGPTopAsePrefixesParamsFormat string
 
 const (
-	BGPTopAsePrefixesParamsFormatJson BGPTopAsePrefixesParamsFormat = "JSON"
+	BGPTopAsePrefixesParamsFormatJSON BGPTopAsePrefixesParamsFormat = "JSON"
 	BGPTopAsePrefixesParamsFormatCsv  BGPTopAsePrefixesParamsFormat = "CSV"
 )
 
 func (r BGPTopAsePrefixesParamsFormat) IsKnown() bool {
 	switch r {
-	case BGPTopAsePrefixesParamsFormatJson, BGPTopAsePrefixesParamsFormatCsv:
+	case BGPTopAsePrefixesParamsFormatJSON, BGPTopAsePrefixesParamsFormatCsv:
 		return true
 	}
 	return false

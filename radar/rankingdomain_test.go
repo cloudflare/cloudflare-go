@@ -33,7 +33,7 @@ func TestRankingDomainGetWithOptionalParams(t *testing.T) {
 		"google.com",
 		radar.RankingDomainGetParams{
 			Date:                cloudflare.F([]time.Time{time.Now()}),
-			Format:              cloudflare.F(radar.RankingDomainGetParamsFormatJson),
+			Format:              cloudflare.F(radar.RankingDomainGetParamsFormatJSON),
 			IncludeTopLocations: cloudflare.F(true),
 			Limit:               cloudflare.F(int64(5)),
 			Name:                cloudflare.F([]string{"string"}),

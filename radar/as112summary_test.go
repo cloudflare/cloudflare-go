@@ -34,7 +34,7 @@ func TestAS112SummaryDNSSECWithOptionalParams(t *testing.T) {
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.AS112SummaryDNSSECParamsFormatJson),
+		Format:    cloudflare.F(radar.AS112SummaryDNSSECParamsFormatJSON),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"string"}),
 	})
@@ -66,7 +66,7 @@ func TestAS112SummaryEdnsWithOptionalParams(t *testing.T) {
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.AS112SummaryEdnsParamsFormatJson),
+		Format:    cloudflare.F(radar.AS112SummaryEdnsParamsFormatJSON),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"string"}),
 	})
@@ -98,7 +98,7 @@ func TestAS112SummaryIPVersionWithOptionalParams(t *testing.T) {
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.AS112SummaryIPVersionParamsFormatJson),
+		Format:    cloudflare.F(radar.AS112SummaryIPVersionParamsFormatJSON),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"string"}),
 	})
@@ -130,7 +130,7 @@ func TestAS112SummaryProtocolWithOptionalParams(t *testing.T) {
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.AS112SummaryProtocolParamsFormatJson),
+		Format:    cloudflare.F(radar.AS112SummaryProtocolParamsFormatJSON),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"string"}),
 	})
@@ -162,7 +162,7 @@ func TestAS112SummaryQueryTypeWithOptionalParams(t *testing.T) {
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
-		Format:        cloudflare.F(radar.AS112SummaryQueryTypeParamsFormatJson),
+		Format:        cloudflare.F(radar.AS112SummaryQueryTypeParamsFormatJSON),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"string"}),
@@ -195,7 +195,7 @@ func TestAS112SummaryResponseCodesWithOptionalParams(t *testing.T) {
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
-		Format:        cloudflare.F(radar.AS112SummaryResponseCodesParamsFormatJson),
+		Format:        cloudflare.F(radar.AS112SummaryResponseCodesParamsFormatJSON),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"string"}),

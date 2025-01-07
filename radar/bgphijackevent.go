@@ -235,13 +235,13 @@ func (r BGPHijackEventListParams) URLQuery() (v url.Values) {
 type BGPHijackEventListParamsFormat string
 
 const (
-	BGPHijackEventListParamsFormatJson BGPHijackEventListParamsFormat = "JSON"
+	BGPHijackEventListParamsFormatJSON BGPHijackEventListParamsFormat = "JSON"
 	BGPHijackEventListParamsFormatCsv  BGPHijackEventListParamsFormat = "CSV"
 )
 
 func (r BGPHijackEventListParamsFormat) IsKnown() bool {
 	switch r {
-	case BGPHijackEventListParamsFormatJson, BGPHijackEventListParamsFormatCsv:
+	case BGPHijackEventListParamsFormatJSON, BGPHijackEventListParamsFormatCsv:
 		return true
 	}
 	return false

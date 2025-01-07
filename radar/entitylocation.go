@@ -193,13 +193,13 @@ func (r EntityLocationListParams) URLQuery() (v url.Values) {
 type EntityLocationListParamsFormat string
 
 const (
-	EntityLocationListParamsFormatJson EntityLocationListParamsFormat = "JSON"
+	EntityLocationListParamsFormatJSON EntityLocationListParamsFormat = "JSON"
 	EntityLocationListParamsFormatCsv  EntityLocationListParamsFormat = "CSV"
 )
 
 func (r EntityLocationListParamsFormat) IsKnown() bool {
 	switch r {
-	case EntityLocationListParamsFormatJson, EntityLocationListParamsFormatCsv:
+	case EntityLocationListParamsFormatJSON, EntityLocationListParamsFormatCsv:
 		return true
 	}
 	return false
@@ -246,13 +246,13 @@ func (r EntityLocationGetParams) URLQuery() (v url.Values) {
 type EntityLocationGetParamsFormat string
 
 const (
-	EntityLocationGetParamsFormatJson EntityLocationGetParamsFormat = "JSON"
+	EntityLocationGetParamsFormatJSON EntityLocationGetParamsFormat = "JSON"
 	EntityLocationGetParamsFormatCsv  EntityLocationGetParamsFormat = "CSV"
 )
 
 func (r EntityLocationGetParamsFormat) IsKnown() bool {
 	switch r {
-	case EntityLocationGetParamsFormatJson, EntityLocationGetParamsFormatCsv:
+	case EntityLocationGetParamsFormatJSON, EntityLocationGetParamsFormatCsv:
 		return true
 	}
 	return false

@@ -33,7 +33,7 @@ func TestBGPTopAseGetWithOptionalParams(t *testing.T) {
 		DateEnd:    cloudflare.F([]time.Time{time.Now()}),
 		DateRange:  cloudflare.F([]string{"7d"}),
 		DateStart:  cloudflare.F([]time.Time{time.Now()}),
-		Format:     cloudflare.F(radar.BGPTopAseGetParamsFormatJson),
+		Format:     cloudflare.F(radar.BGPTopAseGetParamsFormatJSON),
 		Limit:      cloudflare.F(int64(5)),
 		Name:       cloudflare.F([]string{"string"}),
 		Prefix:     cloudflare.F([]string{"1.1.1.0/24"}),
@@ -63,7 +63,7 @@ func TestBGPTopAsePrefixesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.BGP.Top.Ases.Prefixes(context.TODO(), radar.BGPTopAsePrefixesParams{
 		Country: cloudflare.F("NZ"),
-		Format:  cloudflare.F(radar.BGPTopAsePrefixesParamsFormatJson),
+		Format:  cloudflare.F(radar.BGPTopAsePrefixesParamsFormatJSON),
 		Limit:   cloudflare.F(int64(10)),
 	})
 	if err != nil {
