@@ -37,7 +37,7 @@ func TestHTTPTimeseriesWithOptionalParams(t *testing.T) {
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
 		DeviceType:    cloudflare.F([]radar.HTTPTimeseriesParamsDeviceType{radar.HTTPTimeseriesParamsDeviceTypeDesktop}),
-		Format:        cloudflare.F(radar.HTTPTimeseriesParamsFormatJson),
+		Format:        cloudflare.F(radar.HTTPTimeseriesParamsFormatJSON),
 		HTTPProtocol:  cloudflare.F([]radar.HTTPTimeseriesParamsHTTPProtocol{radar.HTTPTimeseriesParamsHTTPProtocolHTTP}),
 		HTTPVersion:   cloudflare.F([]radar.HTTPTimeseriesParamsHTTPVersion{radar.HTTPTimeseriesParamsHTTPVersionHttPv1}),
 		IPVersion:     cloudflare.F([]radar.HTTPTimeseriesParamsIPVersion{radar.HTTPTimeseriesParamsIPVersionIPv4}),

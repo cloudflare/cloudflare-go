@@ -591,13 +591,13 @@ func (r AttackLayer3TopAttacksParams) URLQuery() (v url.Values) {
 type AttackLayer3TopAttacksParamsFormat string
 
 const (
-	AttackLayer3TopAttacksParamsFormatJson AttackLayer3TopAttacksParamsFormat = "JSON"
+	AttackLayer3TopAttacksParamsFormatJSON AttackLayer3TopAttacksParamsFormat = "JSON"
 	AttackLayer3TopAttacksParamsFormatCsv  AttackLayer3TopAttacksParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TopAttacksParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopAttacksParamsFormatJson, AttackLayer3TopAttacksParamsFormatCsv:
+	case AttackLayer3TopAttacksParamsFormatJSON, AttackLayer3TopAttacksParamsFormatCsv:
 		return true
 	}
 	return false
@@ -735,13 +735,13 @@ func (r AttackLayer3TopIndustryParams) URLQuery() (v url.Values) {
 type AttackLayer3TopIndustryParamsFormat string
 
 const (
-	AttackLayer3TopIndustryParamsFormatJson AttackLayer3TopIndustryParamsFormat = "JSON"
+	AttackLayer3TopIndustryParamsFormatJSON AttackLayer3TopIndustryParamsFormat = "JSON"
 	AttackLayer3TopIndustryParamsFormatCsv  AttackLayer3TopIndustryParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TopIndustryParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopIndustryParamsFormatJson, AttackLayer3TopIndustryParamsFormatCsv:
+	case AttackLayer3TopIndustryParamsFormatJSON, AttackLayer3TopIndustryParamsFormatCsv:
 		return true
 	}
 	return false
@@ -844,13 +844,13 @@ func (r AttackLayer3TopVerticalParams) URLQuery() (v url.Values) {
 type AttackLayer3TopVerticalParamsFormat string
 
 const (
-	AttackLayer3TopVerticalParamsFormatJson AttackLayer3TopVerticalParamsFormat = "JSON"
+	AttackLayer3TopVerticalParamsFormatJSON AttackLayer3TopVerticalParamsFormat = "JSON"
 	AttackLayer3TopVerticalParamsFormatCsv  AttackLayer3TopVerticalParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TopVerticalParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TopVerticalParamsFormatJson, AttackLayer3TopVerticalParamsFormatCsv:
+	case AttackLayer3TopVerticalParamsFormatJSON, AttackLayer3TopVerticalParamsFormatCsv:
 		return true
 	}
 	return false

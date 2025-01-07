@@ -182,13 +182,13 @@ func (r RankingDomainGetParams) URLQuery() (v url.Values) {
 type RankingDomainGetParamsFormat string
 
 const (
-	RankingDomainGetParamsFormatJson RankingDomainGetParamsFormat = "JSON"
+	RankingDomainGetParamsFormatJSON RankingDomainGetParamsFormat = "JSON"
 	RankingDomainGetParamsFormatCsv  RankingDomainGetParamsFormat = "CSV"
 )
 
 func (r RankingDomainGetParamsFormat) IsKnown() bool {
 	switch r {
-	case RankingDomainGetParamsFormatJson, RankingDomainGetParamsFormatCsv:
+	case RankingDomainGetParamsFormatJSON, RankingDomainGetParamsFormatCsv:
 		return true
 	}
 	return false

@@ -33,7 +33,7 @@ func TestAttackLayer7TopAseOriginWithOptionalParams(t *testing.T) {
 		DateEnd:           cloudflare.F([]time.Time{time.Now()}),
 		DateRange:         cloudflare.F([]string{"7d"}),
 		DateStart:         cloudflare.F([]time.Time{time.Now()}),
-		Format:            cloudflare.F(radar.AttackLayer7TopAseOriginParamsFormatJson),
+		Format:            cloudflare.F(radar.AttackLayer7TopAseOriginParamsFormatJSON),
 		HTTPMethod:        cloudflare.F([]radar.AttackLayer7TopAseOriginParamsHTTPMethod{radar.AttackLayer7TopAseOriginParamsHTTPMethodGet}),
 		HTTPVersion:       cloudflare.F([]radar.AttackLayer7TopAseOriginParamsHTTPVersion{radar.AttackLayer7TopAseOriginParamsHTTPVersionHttPv1}),
 		IPVersion:         cloudflare.F([]radar.AttackLayer7TopAseOriginParamsIPVersion{radar.AttackLayer7TopAseOriginParamsIPVersionIPv4}),

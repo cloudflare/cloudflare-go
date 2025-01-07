@@ -33,7 +33,7 @@ func TestBGPIPTimeseriesWithOptionalParams(t *testing.T) {
 		DateEnd:      cloudflare.F([]time.Time{time.Now()}),
 		DateRange:    cloudflare.F([]string{"7d"}),
 		DateStart:    cloudflare.F([]time.Time{time.Now()}),
-		Format:       cloudflare.F(radar.BgpipTimeseriesParamsFormatJson),
+		Format:       cloudflare.F(radar.BgpipTimeseriesParamsFormatJSON),
 		IncludeDelay: cloudflare.F(true),
 		IPVersion:    cloudflare.F([]radar.BgpipTimeseriesParamsIPVersion{radar.BgpipTimeseriesParamsIPVersionIPv4}),
 		Location:     cloudflare.F([]string{"string"}),

@@ -169,7 +169,7 @@ type DispatchNamespaceScriptSettingEditResponseBinding struct {
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// JSON data to use.
-	Json string `json:"json"`
+	JSON string `json:"json"`
 	// Namespace to bind to.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
@@ -202,7 +202,7 @@ type dispatchNamespaceScriptSettingEditResponseBindingJSON struct {
 	Dataset       apijson.Field
 	Environment   apijson.Field
 	IndexName     apijson.Field
-	Json          apijson.Field
+	JSON          apijson.Field
 	Namespace     apijson.Field
 	NamespaceID   apijson.Field
 	Outbound      apijson.Field
@@ -240,7 +240,7 @@ func (r *DispatchNamespaceScriptSettingEditResponseBinding) UnmarshalJSON(data [
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDo],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSON],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCERT],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText],
@@ -267,7 +267,7 @@ func (r DispatchNamespaceScriptSettingEditResponseBinding) AsUnion() DispatchNam
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDispatchNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindDo],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSON],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindMTLSCERT],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindPlainText],
@@ -325,7 +325,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson{}),
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSON{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -835,48 +835,48 @@ func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindHype
 	return false
 }
 
-type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson struct {
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSON struct {
 	// JSON data to use.
-	Json string `json:"json,required"`
+	JSON string `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonType `json:"type,required"`
-	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonJSON `json:"-"`
+	Type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSONType `json:"type,required"`
+	JSON dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSONJSON `json:"-"`
 }
 
-// dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonJSON
+// dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSONJSON
 // contains the JSON metadata for the struct
-// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson]
-type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonJSON struct {
-	Json        apijson.Field
+// [DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSON]
+type dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSONJSON struct {
+	JSON        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson) UnmarshalJSON(data []byte) (err error) {
+func (r *DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSON) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonJSON) RawJSON() string {
+func (r dispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSONJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJson) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSON) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
-type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonType string
+type DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSONType string
 
 const (
-	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonTypeJson DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonType = "json"
+	DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSONTypeJSON DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSONType = "json"
 )
 
-func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonType) IsKnown() bool {
+func (r DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSONType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJsonTypeJson:
+	case DispatchNamespaceScriptSettingEditResponseBindingsWorkersBindingKindJSONTypeJSON:
 		return true
 	}
 	return false
@@ -1656,7 +1656,7 @@ type DispatchNamespaceScriptSettingGetResponseBinding struct {
 	// Name of the Vectorize index to bind to.
 	IndexName string `json:"index_name"`
 	// JSON data to use.
-	Json string `json:"json"`
+	JSON string `json:"json"`
 	// Namespace to bind to.
 	Namespace string `json:"namespace"`
 	// Namespace identifier tag.
@@ -1689,7 +1689,7 @@ type dispatchNamespaceScriptSettingGetResponseBindingJSON struct {
 	Dataset       apijson.Field
 	Environment   apijson.Field
 	IndexName     apijson.Field
-	Json          apijson.Field
+	JSON          apijson.Field
 	Namespace     apijson.Field
 	NamespaceID   apijson.Field
 	Outbound      apijson.Field
@@ -1727,7 +1727,7 @@ func (r *DispatchNamespaceScriptSettingGetResponseBinding) UnmarshalJSON(data []
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDo],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson],
+// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSON],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCERT],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText],
@@ -1754,7 +1754,7 @@ func (r DispatchNamespaceScriptSettingGetResponseBinding) AsUnion() DispatchName
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDispatchNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindDo],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson],
+// [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSON],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindMTLSCERT],
 // [workers_for_platforms.DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindPlainText],
@@ -1812,7 +1812,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson{}),
+			Type:       reflect.TypeOf(DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSON{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -2322,48 +2322,48 @@ func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindHyper
 	return false
 }
 
-type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson struct {
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSON struct {
 	// JSON data to use.
-	Json string `json:"json,required"`
+	JSON string `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonType `json:"type,required"`
-	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonJSON `json:"-"`
+	Type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSONType `json:"type,required"`
+	JSON dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSONJSON `json:"-"`
 }
 
-// dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonJSON
+// dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSONJSON
 // contains the JSON metadata for the struct
-// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson]
-type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonJSON struct {
-	Json        apijson.Field
+// [DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSON]
+type dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSONJSON struct {
+	JSON        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson) UnmarshalJSON(data []byte) (err error) {
+func (r *DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSON) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonJSON) RawJSON() string {
+func (r dispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSONJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJson) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSON) implementsWorkersForPlatformsDispatchNamespaceScriptSettingGetResponseBinding() {
 }
 
 // The kind of resource that the binding provides.
-type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonType string
+type DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSONType string
 
 const (
-	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonTypeJson DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonType = "json"
+	DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSONTypeJSON DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSONType = "json"
 )
 
-func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonType) IsKnown() bool {
+func (r DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSONType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJsonTypeJson:
+	case DispatchNamespaceScriptSettingGetResponseBindingsWorkersBindingKindJSONTypeJSON:
 		return true
 	}
 	return false
@@ -3140,7 +3140,7 @@ type DispatchNamespaceScriptSettingEditParamsSettingsBinding struct {
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// JSON data to use.
-	Json param.Field[string] `json:"json"`
+	JSON param.Field[string] `json:"json"`
 	// Namespace to bind to.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
@@ -3176,7 +3176,7 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBinding) implementsWorke
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDispatchNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindDo],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindHyperdrive],
-// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJson],
+// [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJSON],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindKVNamespace],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindMTLSCERT],
 // [workers_for_platforms.DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindPlainText],
@@ -3483,32 +3483,32 @@ func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKi
 	return false
 }
 
-type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJson struct {
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJSON struct {
 	// JSON data to use.
-	Json param.Field[string] `json:"json,required"`
+	JSON param.Field[string] `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJsonType] `json:"type,required"`
+	Type param.Field[DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJSONType] `json:"type,required"`
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJson) MarshalJSON() (data []byte, err error) {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJSON) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJson) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJSON) implementsWorkersForPlatformsDispatchNamespaceScriptSettingEditParamsSettingsBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJsonType string
+type DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJSONType string
 
 const (
-	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeJson DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJsonType = "json"
+	DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJSONTypeJSON DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJSONType = "json"
 )
 
-func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJsonType) IsKnown() bool {
+func (r DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJSONType) IsKnown() bool {
 	switch r {
-	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJsonTypeJson:
+	case DispatchNamespaceScriptSettingEditParamsSettingsBindingsWorkersBindingKindJSONTypeJSON:
 		return true
 	}
 	return false

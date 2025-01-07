@@ -327,13 +327,13 @@ func (r QualityIQISummaryParamsMetric) IsKnown() bool {
 type QualityIQISummaryParamsFormat string
 
 const (
-	QualityIQISummaryParamsFormatJson QualityIQISummaryParamsFormat = "JSON"
+	QualityIQISummaryParamsFormatJSON QualityIQISummaryParamsFormat = "JSON"
 	QualityIQISummaryParamsFormatCsv  QualityIQISummaryParamsFormat = "CSV"
 )
 
 func (r QualityIQISummaryParamsFormat) IsKnown() bool {
 	switch r {
-	case QualityIQISummaryParamsFormatJson, QualityIQISummaryParamsFormatCsv:
+	case QualityIQISummaryParamsFormatJSON, QualityIQISummaryParamsFormatCsv:
 		return true
 	}
 	return false
@@ -447,13 +447,13 @@ func (r QualityIQITimeseriesGroupsParamsAggInterval) IsKnown() bool {
 type QualityIQITimeseriesGroupsParamsFormat string
 
 const (
-	QualityIQITimeseriesGroupsParamsFormatJson QualityIQITimeseriesGroupsParamsFormat = "JSON"
+	QualityIQITimeseriesGroupsParamsFormatJSON QualityIQITimeseriesGroupsParamsFormat = "JSON"
 	QualityIQITimeseriesGroupsParamsFormatCsv  QualityIQITimeseriesGroupsParamsFormat = "CSV"
 )
 
 func (r QualityIQITimeseriesGroupsParamsFormat) IsKnown() bool {
 	switch r {
-	case QualityIQITimeseriesGroupsParamsFormatJson, QualityIQITimeseriesGroupsParamsFormatCsv:
+	case QualityIQITimeseriesGroupsParamsFormatJSON, QualityIQITimeseriesGroupsParamsFormatCsv:
 		return true
 	}
 	return false

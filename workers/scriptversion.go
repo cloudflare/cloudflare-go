@@ -282,7 +282,7 @@ type ScriptVersionNewParamsMetadataBinding struct {
 	// Name of the Vectorize index to bind to.
 	IndexName param.Field[string] `json:"index_name"`
 	// JSON data to use.
-	Json param.Field[string] `json:"json"`
+	JSON param.Field[string] `json:"json"`
 	// Namespace to bind to.
 	Namespace param.Field[string] `json:"namespace"`
 	// Namespace identifier tag.
@@ -318,7 +318,7 @@ func (r ScriptVersionNewParamsMetadataBinding) implementsWorkersScriptVersionNew
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDispatchNamespace],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindDo],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdrive],
-// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson],
+// [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJSON],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindKVNamespace],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindMTLSCERT],
 // [workers.ScriptVersionNewParamsMetadataBindingsWorkersBindingKindPlainText],
@@ -625,32 +625,32 @@ func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindHyperdriveType) 
 	return false
 }
 
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson struct {
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJSON struct {
 	// JSON data to use.
-	Json param.Field[string] `json:"json,required"`
+	JSON param.Field[string] `json:"json,required"`
 	// A JavaScript variable name for the binding.
 	Name param.Field[string] `json:"name,required"`
 	// The kind of resource that the binding provides.
-	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType] `json:"type,required"`
+	Type param.Field[ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJSONType] `json:"type,required"`
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson) MarshalJSON() (data []byte, err error) {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJSON) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJson) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJSON) implementsWorkersScriptVersionNewParamsMetadataBindingUnion() {
 }
 
 // The kind of resource that the binding provides.
-type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType string
+type ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJSONType string
 
 const (
-	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeJson ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType = "json"
+	ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJSONTypeJSON ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJSONType = "json"
 )
 
-func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonType) IsKnown() bool {
+func (r ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJSONType) IsKnown() bool {
 	switch r {
-	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJsonTypeJson:
+	case ScriptVersionNewParamsMetadataBindingsWorkersBindingKindJSONTypeJSON:
 		return true
 	}
 	return false

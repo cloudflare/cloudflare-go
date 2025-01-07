@@ -328,13 +328,13 @@ func (r HTTPAseTLSVersionGetParamsDeviceType) IsKnown() bool {
 type HTTPAseTLSVersionGetParamsFormat string
 
 const (
-	HTTPAseTLSVersionGetParamsFormatJson HTTPAseTLSVersionGetParamsFormat = "JSON"
+	HTTPAseTLSVersionGetParamsFormatJSON HTTPAseTLSVersionGetParamsFormat = "JSON"
 	HTTPAseTLSVersionGetParamsFormatCsv  HTTPAseTLSVersionGetParamsFormat = "CSV"
 )
 
 func (r HTTPAseTLSVersionGetParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPAseTLSVersionGetParamsFormatJson, HTTPAseTLSVersionGetParamsFormatCsv:
+	case HTTPAseTLSVersionGetParamsFormatJSON, HTTPAseTLSVersionGetParamsFormatCsv:
 		return true
 	}
 	return false

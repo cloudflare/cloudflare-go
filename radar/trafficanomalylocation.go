@@ -123,13 +123,13 @@ func (r TrafficAnomalyLocationGetParams) URLQuery() (v url.Values) {
 type TrafficAnomalyLocationGetParamsFormat string
 
 const (
-	TrafficAnomalyLocationGetParamsFormatJson TrafficAnomalyLocationGetParamsFormat = "JSON"
+	TrafficAnomalyLocationGetParamsFormatJSON TrafficAnomalyLocationGetParamsFormat = "JSON"
 	TrafficAnomalyLocationGetParamsFormatCsv  TrafficAnomalyLocationGetParamsFormat = "CSV"
 )
 
 func (r TrafficAnomalyLocationGetParamsFormat) IsKnown() bool {
 	switch r {
-	case TrafficAnomalyLocationGetParamsFormatJson, TrafficAnomalyLocationGetParamsFormatCsv:
+	case TrafficAnomalyLocationGetParamsFormatJSON, TrafficAnomalyLocationGetParamsFormatCsv:
 		return true
 	}
 	return false

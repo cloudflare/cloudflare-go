@@ -28,7 +28,7 @@ func TestBGPRouteAsesWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Ases(context.TODO(), radar.BGPRouteAsesParams{
-		Format:    cloudflare.F(radar.BGPRouteAsesParamsFormatJson),
+		Format:    cloudflare.F(radar.BGPRouteAsesParamsFormatJSON),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F("US"),
 		SortBy:    cloudflare.F(radar.BGPRouteAsesParamsSortByCone),
@@ -57,7 +57,7 @@ func TestBGPRouteMoasWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Moas(context.TODO(), radar.BGPRouteMoasParams{
-		Format:      cloudflare.F(radar.BGPRouteMoasParamsFormatJson),
+		Format:      cloudflare.F(radar.BGPRouteMoasParamsFormatJSON),
 		InvalidOnly: cloudflare.F(true),
 		Origin:      cloudflare.F(int64(0)),
 		Prefix:      cloudflare.F("1.1.1.0/24"),
@@ -85,7 +85,7 @@ func TestBGPRoutePfx2asWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Pfx2as(context.TODO(), radar.BGPRoutePfx2asParams{
-		Format:             cloudflare.F(radar.BGPRoutePfx2asParamsFormatJson),
+		Format:             cloudflare.F(radar.BGPRoutePfx2asParamsFormatJSON),
 		LongestPrefixMatch: cloudflare.F(true),
 		Origin:             cloudflare.F(int64(0)),
 		Prefix:             cloudflare.F("1.1.1.0/24"),
@@ -115,7 +115,7 @@ func TestBGPRouteStatsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.BGP.Routes.Stats(context.TODO(), radar.BGPRouteStatsParams{
 		ASN:      cloudflare.F(int64(174)),
-		Format:   cloudflare.F(radar.BGPRouteStatsParamsFormatJson),
+		Format:   cloudflare.F(radar.BGPRouteStatsParamsFormatJSON),
 		Location: cloudflare.F("US"),
 	})
 	if err != nil {

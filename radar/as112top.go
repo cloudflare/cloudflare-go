@@ -761,13 +761,13 @@ func (r AS112TopDNSSECParamsDNSSEC) IsKnown() bool {
 type AS112TopDNSSECParamsFormat string
 
 const (
-	AS112TopDNSSECParamsFormatJson AS112TopDNSSECParamsFormat = "JSON"
+	AS112TopDNSSECParamsFormatJSON AS112TopDNSSECParamsFormat = "JSON"
 	AS112TopDNSSECParamsFormatCsv  AS112TopDNSSECParamsFormat = "CSV"
 )
 
 func (r AS112TopDNSSECParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TopDNSSECParamsFormatJson, AS112TopDNSSECParamsFormatCsv:
+	case AS112TopDNSSECParamsFormatJSON, AS112TopDNSSECParamsFormatCsv:
 		return true
 	}
 	return false
@@ -853,13 +853,13 @@ func (r AS112TopEdnsParamsEdns) IsKnown() bool {
 type AS112TopEdnsParamsFormat string
 
 const (
-	AS112TopEdnsParamsFormatJson AS112TopEdnsParamsFormat = "JSON"
+	AS112TopEdnsParamsFormatJSON AS112TopEdnsParamsFormat = "JSON"
 	AS112TopEdnsParamsFormatCsv  AS112TopEdnsParamsFormat = "CSV"
 )
 
 func (r AS112TopEdnsParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TopEdnsParamsFormatJson, AS112TopEdnsParamsFormatCsv:
+	case AS112TopEdnsParamsFormatJSON, AS112TopEdnsParamsFormatCsv:
 		return true
 	}
 	return false
@@ -946,13 +946,13 @@ func (r AS112TopIPVersionParamsIPVersion) IsKnown() bool {
 type AS112TopIPVersionParamsFormat string
 
 const (
-	AS112TopIPVersionParamsFormatJson AS112TopIPVersionParamsFormat = "JSON"
+	AS112TopIPVersionParamsFormatJSON AS112TopIPVersionParamsFormat = "JSON"
 	AS112TopIPVersionParamsFormatCsv  AS112TopIPVersionParamsFormat = "CSV"
 )
 
 func (r AS112TopIPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TopIPVersionParamsFormatJson, AS112TopIPVersionParamsFormatCsv:
+	case AS112TopIPVersionParamsFormatJSON, AS112TopIPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1023,13 +1023,13 @@ func (r AS112TopLocationsParams) URLQuery() (v url.Values) {
 type AS112TopLocationsParamsFormat string
 
 const (
-	AS112TopLocationsParamsFormatJson AS112TopLocationsParamsFormat = "JSON"
+	AS112TopLocationsParamsFormatJSON AS112TopLocationsParamsFormat = "JSON"
 	AS112TopLocationsParamsFormatCsv  AS112TopLocationsParamsFormat = "CSV"
 )
 
 func (r AS112TopLocationsParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TopLocationsParamsFormatJson, AS112TopLocationsParamsFormatCsv:
+	case AS112TopLocationsParamsFormatJSON, AS112TopLocationsParamsFormatCsv:
 		return true
 	}
 	return false

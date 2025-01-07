@@ -432,13 +432,13 @@ func (r TCPResetsTimeoutSummaryParams) URLQuery() (v url.Values) {
 type TCPResetsTimeoutSummaryParamsFormat string
 
 const (
-	TCPResetsTimeoutSummaryParamsFormatJson TCPResetsTimeoutSummaryParamsFormat = "JSON"
+	TCPResetsTimeoutSummaryParamsFormatJSON TCPResetsTimeoutSummaryParamsFormat = "JSON"
 	TCPResetsTimeoutSummaryParamsFormatCsv  TCPResetsTimeoutSummaryParamsFormat = "CSV"
 )
 
 func (r TCPResetsTimeoutSummaryParamsFormat) IsKnown() bool {
 	switch r {
-	case TCPResetsTimeoutSummaryParamsFormatJson, TCPResetsTimeoutSummaryParamsFormatCsv:
+	case TCPResetsTimeoutSummaryParamsFormatJSON, TCPResetsTimeoutSummaryParamsFormatCsv:
 		return true
 	}
 	return false
@@ -531,13 +531,13 @@ func (r TCPResetsTimeoutTimeseriesGroupsParamsAggInterval) IsKnown() bool {
 type TCPResetsTimeoutTimeseriesGroupsParamsFormat string
 
 const (
-	TCPResetsTimeoutTimeseriesGroupsParamsFormatJson TCPResetsTimeoutTimeseriesGroupsParamsFormat = "JSON"
+	TCPResetsTimeoutTimeseriesGroupsParamsFormatJSON TCPResetsTimeoutTimeseriesGroupsParamsFormat = "JSON"
 	TCPResetsTimeoutTimeseriesGroupsParamsFormatCsv  TCPResetsTimeoutTimeseriesGroupsParamsFormat = "CSV"
 )
 
 func (r TCPResetsTimeoutTimeseriesGroupsParamsFormat) IsKnown() bool {
 	switch r {
-	case TCPResetsTimeoutTimeseriesGroupsParamsFormatJson, TCPResetsTimeoutTimeseriesGroupsParamsFormatCsv:
+	case TCPResetsTimeoutTimeseriesGroupsParamsFormatJSON, TCPResetsTimeoutTimeseriesGroupsParamsFormatCsv:
 		return true
 	}
 	return false

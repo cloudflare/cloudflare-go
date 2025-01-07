@@ -159,13 +159,13 @@ func (r AITimeseriesGroupUserAgentParamsAggInterval) IsKnown() bool {
 type AITimeseriesGroupUserAgentParamsFormat string
 
 const (
-	AITimeseriesGroupUserAgentParamsFormatJson AITimeseriesGroupUserAgentParamsFormat = "JSON"
+	AITimeseriesGroupUserAgentParamsFormatJSON AITimeseriesGroupUserAgentParamsFormat = "JSON"
 	AITimeseriesGroupUserAgentParamsFormatCsv  AITimeseriesGroupUserAgentParamsFormat = "CSV"
 )
 
 func (r AITimeseriesGroupUserAgentParamsFormat) IsKnown() bool {
 	switch r {
-	case AITimeseriesGroupUserAgentParamsFormatJson, AITimeseriesGroupUserAgentParamsFormatCsv:
+	case AITimeseriesGroupUserAgentParamsFormatJSON, AITimeseriesGroupUserAgentParamsFormatCsv:
 		return true
 	}
 	return false

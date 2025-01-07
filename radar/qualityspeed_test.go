@@ -33,7 +33,7 @@ func TestQualitySpeedHistogramWithOptionalParams(t *testing.T) {
 		BucketSize:  cloudflare.F(int64(0)),
 		Continent:   cloudflare.F([]string{"string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.QualitySpeedHistogramParamsFormatJson),
+		Format:      cloudflare.F(radar.QualitySpeedHistogramParamsFormatJSON),
 		Location:    cloudflare.F([]string{"string"}),
 		MetricGroup: cloudflare.F(radar.QualitySpeedHistogramParamsMetricGroupBandwidth),
 		Name:        cloudflare.F([]string{"string"}),
@@ -64,7 +64,7 @@ func TestQualitySpeedSummaryWithOptionalParams(t *testing.T) {
 		ASN:       cloudflare.F([]string{"string"}),
 		Continent: cloudflare.F([]string{"string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.QualitySpeedSummaryParamsFormatJson),
+		Format:    cloudflare.F(radar.QualitySpeedSummaryParamsFormatJSON),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"string"}),
 	})
