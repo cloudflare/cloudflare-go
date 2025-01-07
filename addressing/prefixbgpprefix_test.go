@@ -27,7 +27,7 @@ func TestPrefixBGPPrefixNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Prefixes.New(
+	_, err := client.Addressing.Prefixes.BGPPrefixes.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.PrefixBGPPrefixNewParams{
@@ -57,7 +57,7 @@ func TestPrefixBGPPrefixList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Prefixes.List(
+	_, err := client.Addressing.Prefixes.BGPPrefixes.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.PrefixBGPPrefixListParams{
@@ -86,7 +86,7 @@ func TestPrefixBGPPrefixEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Prefixes.Edit(
+	_, err := client.Addressing.Prefixes.BGPPrefixes.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
@@ -119,7 +119,7 @@ func TestPrefixBGPPrefixGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Prefixes.Get(
+	_, err := client.Addressing.Prefixes.BGPPrefixes.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
