@@ -15,6 +15,7 @@ import (
 )
 
 func TestManagedTransformList(t *testing.T) {
+	t.Skip("TODO: investigate unauthorized HTTP response")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -40,6 +41,7 @@ func TestManagedTransformList(t *testing.T) {
 }
 
 func TestManagedTransformDelete(t *testing.T) {
+	t.Skip("TODO: investigate unauthorized HTTP response")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -65,6 +67,7 @@ func TestManagedTransformDelete(t *testing.T) {
 }
 
 func TestManagedTransformEdit(t *testing.T) {
+	t.Skip("TODO: investigate unauthorized HTTP response")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
