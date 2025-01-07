@@ -541,13 +541,13 @@ func (r EntityASNListParams) URLQuery() (v url.Values) {
 type EntityASNListParamsFormat string
 
 const (
-	EntityASNListParamsFormatJSON EntityASNListParamsFormat = "JSON"
+	EntityASNListParamsFormatJson EntityASNListParamsFormat = "JSON"
 	EntityASNListParamsFormatCsv  EntityASNListParamsFormat = "CSV"
 )
 
 func (r EntityASNListParamsFormat) IsKnown() bool {
 	switch r {
-	case EntityASNListParamsFormatJSON, EntityASNListParamsFormatCsv:
+	case EntityASNListParamsFormatJson, EntityASNListParamsFormatCsv:
 		return true
 	}
 	return false
@@ -609,13 +609,13 @@ func (r EntityASNGetParams) URLQuery() (v url.Values) {
 type EntityASNGetParamsFormat string
 
 const (
-	EntityASNGetParamsFormatJSON EntityASNGetParamsFormat = "JSON"
+	EntityASNGetParamsFormatJson EntityASNGetParamsFormat = "JSON"
 	EntityASNGetParamsFormatCsv  EntityASNGetParamsFormat = "CSV"
 )
 
 func (r EntityASNGetParamsFormat) IsKnown() bool {
 	switch r {
-	case EntityASNGetParamsFormatJSON, EntityASNGetParamsFormatCsv:
+	case EntityASNGetParamsFormatJson, EntityASNGetParamsFormatCsv:
 		return true
 	}
 	return false
@@ -663,13 +663,13 @@ func (r EntityASNIPParams) URLQuery() (v url.Values) {
 type EntityAsnipParamsFormat string
 
 const (
-	EntityAsnipParamsFormatJSON EntityAsnipParamsFormat = "JSON"
+	EntityAsnipParamsFormatJson EntityAsnipParamsFormat = "JSON"
 	EntityAsnipParamsFormatCsv  EntityAsnipParamsFormat = "CSV"
 )
 
 func (r EntityAsnipParamsFormat) IsKnown() bool {
 	switch r {
-	case EntityAsnipParamsFormatJSON, EntityAsnipParamsFormatCsv:
+	case EntityAsnipParamsFormatJson, EntityAsnipParamsFormatCsv:
 		return true
 	}
 	return false
@@ -717,13 +717,13 @@ func (r EntityASNRelParams) URLQuery() (v url.Values) {
 type EntityASNRelParamsFormat string
 
 const (
-	EntityASNRelParamsFormatJSON EntityASNRelParamsFormat = "JSON"
+	EntityASNRelParamsFormatJson EntityASNRelParamsFormat = "JSON"
 	EntityASNRelParamsFormatCsv  EntityASNRelParamsFormat = "CSV"
 )
 
 func (r EntityASNRelParamsFormat) IsKnown() bool {
 	switch r {
-	case EntityASNRelParamsFormatJSON, EntityASNRelParamsFormatCsv:
+	case EntityASNRelParamsFormatJson, EntityASNRelParamsFormatCsv:
 		return true
 	}
 	return false

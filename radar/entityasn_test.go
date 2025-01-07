@@ -29,7 +29,7 @@ func TestEntityASNListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Entities.ASNs.List(context.TODO(), radar.EntityASNListParams{
 		ASN:      cloudflare.F("174,7922"),
-		Format:   cloudflare.F(radar.EntityASNListParamsFormatJSON),
+		Format:   cloudflare.F(radar.EntityASNListParamsFormatJson),
 		Limit:    cloudflare.F(int64(5)),
 		Location: cloudflare.F("US"),
 		Offset:   cloudflare.F(int64(0)),
@@ -61,7 +61,7 @@ func TestEntityASNGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		int64(3),
 		radar.EntityASNGetParams{
-			Format: cloudflare.F(radar.EntityASNGetParamsFormatJSON),
+			Format: cloudflare.F(radar.EntityASNGetParamsFormatJson),
 		},
 	)
 	if err != nil {
@@ -88,7 +88,7 @@ func TestEntityASNIPWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Entities.ASNs.IP(context.TODO(), radar.EntityASNIPParams{
 		IP:     cloudflare.F("8.8.8.8"),
-		Format: cloudflare.F(radar.EntityAsnipParamsFormatJSON),
+		Format: cloudflare.F(radar.EntityAsnipParamsFormatJson),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -117,7 +117,7 @@ func TestEntityASNRelWithOptionalParams(t *testing.T) {
 		int64(3),
 		radar.EntityASNRelParams{
 			Asn2:   cloudflare.F(int64(0)),
-			Format: cloudflare.F(radar.EntityASNRelParamsFormatJSON),
+			Format: cloudflare.F(radar.EntityASNRelParamsFormatJson),
 		},
 	)
 	if err != nil {

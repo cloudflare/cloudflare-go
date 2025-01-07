@@ -223,13 +223,13 @@ func (r AIBotSummaryUserAgentParams) URLQuery() (v url.Values) {
 type AIBotSummaryUserAgentParamsFormat string
 
 const (
-	AIBotSummaryUserAgentParamsFormatJSON AIBotSummaryUserAgentParamsFormat = "JSON"
+	AIBotSummaryUserAgentParamsFormatJson AIBotSummaryUserAgentParamsFormat = "JSON"
 	AIBotSummaryUserAgentParamsFormatCsv  AIBotSummaryUserAgentParamsFormat = "CSV"
 )
 
 func (r AIBotSummaryUserAgentParamsFormat) IsKnown() bool {
 	switch r {
-	case AIBotSummaryUserAgentParamsFormatJSON, AIBotSummaryUserAgentParamsFormatCsv:
+	case AIBotSummaryUserAgentParamsFormatJson, AIBotSummaryUserAgentParamsFormatCsv:
 		return true
 	}
 	return false

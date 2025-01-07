@@ -35,7 +35,7 @@ func TestAS112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesGroupDNSSECParamsFormatJSON),
+		Format:      cloudflare.F(radar.AS112TimeseriesGroupDNSSECParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
 		Name:        cloudflare.F([]string{"string"}),
 	})
@@ -68,7 +68,7 @@ func TestAS112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesGroupEdnsParamsFormatJSON),
+		Format:      cloudflare.F(radar.AS112TimeseriesGroupEdnsParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
 		Name:        cloudflare.F([]string{"string"}),
 	})
@@ -101,7 +101,7 @@ func TestAS112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesGroupIPVersionParamsFormatJSON),
+		Format:      cloudflare.F(radar.AS112TimeseriesGroupIPVersionParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
 		Name:        cloudflare.F([]string{"string"}),
 	})
@@ -134,7 +134,7 @@ func TestAS112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.AS112TimeseriesGroupProtocolParamsFormatJSON),
+		Format:      cloudflare.F(radar.AS112TimeseriesGroupProtocolParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
 		Name:        cloudflare.F([]string{"string"}),
 	})
@@ -167,7 +167,7 @@ func TestAS112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
-		Format:        cloudflare.F(radar.AS112TimeseriesGroupQueryTypeParamsFormatJSON),
+		Format:        cloudflare.F(radar.AS112TimeseriesGroupQueryTypeParamsFormatJson),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"string"}),
@@ -201,7 +201,7 @@ func TestAS112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) {
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
-		Format:        cloudflare.F(radar.AS112TimeseriesGroupResponseCodesParamsFormatJSON),
+		Format:        cloudflare.F(radar.AS112TimeseriesGroupResponseCodesParamsFormatJson),
 		LimitPerGroup: cloudflare.F(int64(10)),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"string"}),

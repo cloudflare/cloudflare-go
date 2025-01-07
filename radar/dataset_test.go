@@ -29,7 +29,7 @@ func TestDatasetListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Datasets.List(context.TODO(), radar.DatasetListParams{
 		DatasetType: cloudflare.F(radar.DatasetListParamsDatasetTypeRankingBucket),
-		Format:      cloudflare.F(radar.DatasetListParamsFormatJSON),
+		Format:      cloudflare.F(radar.DatasetListParamsFormatJson),
 		Limit:       cloudflare.F(int64(5)),
 		Offset:      cloudflare.F(int64(0)),
 	})
@@ -57,7 +57,7 @@ func TestDatasetDownloadWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Datasets.Download(context.TODO(), radar.DatasetDownloadParams{
 		DatasetID: cloudflare.F(int64(3)),
-		Format:    cloudflare.F(radar.DatasetDownloadParamsFormatJSON),
+		Format:    cloudflare.F(radar.DatasetDownloadParamsFormatJson),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

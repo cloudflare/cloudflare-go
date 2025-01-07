@@ -574,13 +574,13 @@ func (r EmailSecurityTimeseriesGroupARCParamsDMARC) IsKnown() bool {
 type EmailSecurityTimeseriesGroupARCParamsFormat string
 
 const (
-	EmailSecurityTimeseriesGroupARCParamsFormatJSON EmailSecurityTimeseriesGroupARCParamsFormat = "JSON"
+	EmailSecurityTimeseriesGroupARCParamsFormatJson EmailSecurityTimeseriesGroupARCParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupARCParamsFormatCsv  EmailSecurityTimeseriesGroupARCParamsFormat = "CSV"
 )
 
 func (r EmailSecurityTimeseriesGroupARCParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTimeseriesGroupARCParamsFormatJSON, EmailSecurityTimeseriesGroupARCParamsFormatCsv:
+	case EmailSecurityTimeseriesGroupARCParamsFormatJson, EmailSecurityTimeseriesGroupARCParamsFormatCsv:
 		return true
 	}
 	return false
@@ -734,13 +734,13 @@ func (r EmailSecurityTimeseriesGroupDKIMParamsDMARC) IsKnown() bool {
 type EmailSecurityTimeseriesGroupDKIMParamsFormat string
 
 const (
-	EmailSecurityTimeseriesGroupDKIMParamsFormatJSON EmailSecurityTimeseriesGroupDKIMParamsFormat = "JSON"
+	EmailSecurityTimeseriesGroupDKIMParamsFormatJson EmailSecurityTimeseriesGroupDKIMParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupDKIMParamsFormatCsv  EmailSecurityTimeseriesGroupDKIMParamsFormat = "CSV"
 )
 
 func (r EmailSecurityTimeseriesGroupDKIMParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTimeseriesGroupDKIMParamsFormatJSON, EmailSecurityTimeseriesGroupDKIMParamsFormatCsv:
+	case EmailSecurityTimeseriesGroupDKIMParamsFormatJson, EmailSecurityTimeseriesGroupDKIMParamsFormatCsv:
 		return true
 	}
 	return false
@@ -894,13 +894,13 @@ func (r EmailSecurityTimeseriesGroupDMARCParamsDKIM) IsKnown() bool {
 type EmailSecurityTimeseriesGroupDMARCParamsFormat string
 
 const (
-	EmailSecurityTimeseriesGroupDMARCParamsFormatJSON EmailSecurityTimeseriesGroupDMARCParamsFormat = "JSON"
+	EmailSecurityTimeseriesGroupDMARCParamsFormatJson EmailSecurityTimeseriesGroupDMARCParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupDMARCParamsFormatCsv  EmailSecurityTimeseriesGroupDMARCParamsFormat = "CSV"
 )
 
 func (r EmailSecurityTimeseriesGroupDMARCParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTimeseriesGroupDMARCParamsFormatJSON, EmailSecurityTimeseriesGroupDMARCParamsFormatCsv:
+	case EmailSecurityTimeseriesGroupDMARCParamsFormatJson, EmailSecurityTimeseriesGroupDMARCParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1072,13 +1072,13 @@ func (r EmailSecurityTimeseriesGroupMaliciousParamsDMARC) IsKnown() bool {
 type EmailSecurityTimeseriesGroupMaliciousParamsFormat string
 
 const (
-	EmailSecurityTimeseriesGroupMaliciousParamsFormatJSON EmailSecurityTimeseriesGroupMaliciousParamsFormat = "JSON"
+	EmailSecurityTimeseriesGroupMaliciousParamsFormatJson EmailSecurityTimeseriesGroupMaliciousParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupMaliciousParamsFormatCsv  EmailSecurityTimeseriesGroupMaliciousParamsFormat = "CSV"
 )
 
 func (r EmailSecurityTimeseriesGroupMaliciousParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTimeseriesGroupMaliciousParamsFormatJSON, EmailSecurityTimeseriesGroupMaliciousParamsFormatCsv:
+	case EmailSecurityTimeseriesGroupMaliciousParamsFormatJson, EmailSecurityTimeseriesGroupMaliciousParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1250,13 +1250,13 @@ func (r EmailSecurityTimeseriesGroupSpamParamsDMARC) IsKnown() bool {
 type EmailSecurityTimeseriesGroupSpamParamsFormat string
 
 const (
-	EmailSecurityTimeseriesGroupSpamParamsFormatJSON EmailSecurityTimeseriesGroupSpamParamsFormat = "JSON"
+	EmailSecurityTimeseriesGroupSpamParamsFormatJson EmailSecurityTimeseriesGroupSpamParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupSpamParamsFormatCsv  EmailSecurityTimeseriesGroupSpamParamsFormat = "CSV"
 )
 
 func (r EmailSecurityTimeseriesGroupSpamParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTimeseriesGroupSpamParamsFormatJSON, EmailSecurityTimeseriesGroupSpamParamsFormatCsv:
+	case EmailSecurityTimeseriesGroupSpamParamsFormatJson, EmailSecurityTimeseriesGroupSpamParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1426,13 +1426,13 @@ func (r EmailSecurityTimeseriesGroupSPFParamsDMARC) IsKnown() bool {
 type EmailSecurityTimeseriesGroupSPFParamsFormat string
 
 const (
-	EmailSecurityTimeseriesGroupSPFParamsFormatJSON EmailSecurityTimeseriesGroupSPFParamsFormat = "JSON"
+	EmailSecurityTimeseriesGroupSPFParamsFormatJson EmailSecurityTimeseriesGroupSPFParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupSPFParamsFormatCsv  EmailSecurityTimeseriesGroupSPFParamsFormat = "CSV"
 )
 
 func (r EmailSecurityTimeseriesGroupSPFParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTimeseriesGroupSPFParamsFormatJSON, EmailSecurityTimeseriesGroupSPFParamsFormatCsv:
+	case EmailSecurityTimeseriesGroupSPFParamsFormatJson, EmailSecurityTimeseriesGroupSPFParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1588,13 +1588,13 @@ func (r EmailSecurityTimeseriesGroupSpoofParamsDMARC) IsKnown() bool {
 type EmailSecurityTimeseriesGroupSpoofParamsFormat string
 
 const (
-	EmailSecurityTimeseriesGroupSpoofParamsFormatJSON EmailSecurityTimeseriesGroupSpoofParamsFormat = "JSON"
+	EmailSecurityTimeseriesGroupSpoofParamsFormatJson EmailSecurityTimeseriesGroupSpoofParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupSpoofParamsFormatCsv  EmailSecurityTimeseriesGroupSpoofParamsFormat = "CSV"
 )
 
 func (r EmailSecurityTimeseriesGroupSpoofParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTimeseriesGroupSpoofParamsFormatJSON, EmailSecurityTimeseriesGroupSpoofParamsFormatCsv:
+	case EmailSecurityTimeseriesGroupSpoofParamsFormatJson, EmailSecurityTimeseriesGroupSpoofParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1766,13 +1766,13 @@ func (r EmailSecurityTimeseriesGroupThreatCategoryParamsDMARC) IsKnown() bool {
 type EmailSecurityTimeseriesGroupThreatCategoryParamsFormat string
 
 const (
-	EmailSecurityTimeseriesGroupThreatCategoryParamsFormatJSON EmailSecurityTimeseriesGroupThreatCategoryParamsFormat = "JSON"
+	EmailSecurityTimeseriesGroupThreatCategoryParamsFormatJson EmailSecurityTimeseriesGroupThreatCategoryParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupThreatCategoryParamsFormatCsv  EmailSecurityTimeseriesGroupThreatCategoryParamsFormat = "CSV"
 )
 
 func (r EmailSecurityTimeseriesGroupThreatCategoryParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTimeseriesGroupThreatCategoryParamsFormatJSON, EmailSecurityTimeseriesGroupThreatCategoryParamsFormatCsv:
+	case EmailSecurityTimeseriesGroupThreatCategoryParamsFormatJson, EmailSecurityTimeseriesGroupThreatCategoryParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1943,13 +1943,13 @@ func (r EmailSecurityTimeseriesGroupTLSVersionParamsDMARC) IsKnown() bool {
 type EmailSecurityTimeseriesGroupTLSVersionParamsFormat string
 
 const (
-	EmailSecurityTimeseriesGroupTLSVersionParamsFormatJSON EmailSecurityTimeseriesGroupTLSVersionParamsFormat = "JSON"
+	EmailSecurityTimeseriesGroupTLSVersionParamsFormatJson EmailSecurityTimeseriesGroupTLSVersionParamsFormat = "JSON"
 	EmailSecurityTimeseriesGroupTLSVersionParamsFormatCsv  EmailSecurityTimeseriesGroupTLSVersionParamsFormat = "CSV"
 )
 
 func (r EmailSecurityTimeseriesGroupTLSVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTimeseriesGroupTLSVersionParamsFormatJSON, EmailSecurityTimeseriesGroupTLSVersionParamsFormatCsv:
+	case EmailSecurityTimeseriesGroupTLSVersionParamsFormatJson, EmailSecurityTimeseriesGroupTLSVersionParamsFormatCsv:
 		return true
 	}
 	return false

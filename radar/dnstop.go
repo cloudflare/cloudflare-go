@@ -408,13 +408,13 @@ func (r DNSTopAsesParams) URLQuery() (v url.Values) {
 type DNSTopAsesParamsFormat string
 
 const (
-	DNSTopAsesParamsFormatJSON DNSTopAsesParamsFormat = "JSON"
+	DNSTopAsesParamsFormatJson DNSTopAsesParamsFormat = "JSON"
 	DNSTopAsesParamsFormatCsv  DNSTopAsesParamsFormat = "CSV"
 )
 
 func (r DNSTopAsesParamsFormat) IsKnown() bool {
 	switch r {
-	case DNSTopAsesParamsFormatJSON, DNSTopAsesParamsFormatCsv:
+	case DNSTopAsesParamsFormatJson, DNSTopAsesParamsFormatCsv:
 		return true
 	}
 	return false
@@ -486,13 +486,13 @@ func (r DNSTopLocationsParams) URLQuery() (v url.Values) {
 type DNSTopLocationsParamsFormat string
 
 const (
-	DNSTopLocationsParamsFormatJSON DNSTopLocationsParamsFormat = "JSON"
+	DNSTopLocationsParamsFormatJson DNSTopLocationsParamsFormat = "JSON"
 	DNSTopLocationsParamsFormatCsv  DNSTopLocationsParamsFormat = "CSV"
 )
 
 func (r DNSTopLocationsParamsFormat) IsKnown() bool {
 	switch r {
-	case DNSTopLocationsParamsFormatJSON, DNSTopLocationsParamsFormatCsv:
+	case DNSTopLocationsParamsFormatJson, DNSTopLocationsParamsFormatCsv:
 		return true
 	}
 	return false

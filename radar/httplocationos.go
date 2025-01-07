@@ -329,13 +329,13 @@ func (r HTTPLocationOSGetParamsDeviceType) IsKnown() bool {
 type HTTPLocationOSGetParamsFormat string
 
 const (
-	HTTPLocationOSGetParamsFormatJSON HTTPLocationOSGetParamsFormat = "JSON"
+	HTTPLocationOSGetParamsFormatJson HTTPLocationOSGetParamsFormat = "JSON"
 	HTTPLocationOSGetParamsFormatCsv  HTTPLocationOSGetParamsFormat = "CSV"
 )
 
 func (r HTTPLocationOSGetParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPLocationOSGetParamsFormatJSON, HTTPLocationOSGetParamsFormatCsv:
+	case HTTPLocationOSGetParamsFormatJson, HTTPLocationOSGetParamsFormatCsv:
 		return true
 	}
 	return false
