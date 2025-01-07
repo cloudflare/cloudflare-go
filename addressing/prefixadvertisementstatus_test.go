@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v3/option"
 )
 
-func TestPrefixBGPStatusEdit(t *testing.T) {
+func TestPrefixAdvertisementStatusEdit(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,10 +27,10 @@ func TestPrefixBGPStatusEdit(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Statuses.Edit(
+	_, err := client.Addressing.Prefixes.AdvertisementStatus.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		addressing.PrefixBGPStatusEditParams{
+		addressing.PrefixAdvertisementStatusEditParams{
 			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Advertised: cloudflare.F(true),
 		},
@@ -44,7 +44,7 @@ func TestPrefixBGPStatusEdit(t *testing.T) {
 	}
 }
 
-func TestPrefixBGPStatusGet(t *testing.T) {
+func TestPrefixAdvertisementStatusGet(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -57,10 +57,10 @@ func TestPrefixBGPStatusGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.Prefixes.BGP.Statuses.Get(
+	_, err := client.Addressing.Prefixes.AdvertisementStatus.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		addressing.PrefixBGPStatusGetParams{
+		addressing.PrefixAdvertisementStatusGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
