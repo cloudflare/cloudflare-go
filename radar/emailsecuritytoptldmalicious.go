@@ -308,13 +308,13 @@ func (r EmailSecurityTopTldMaliciousGetParamsDMARC) IsKnown() bool {
 type EmailSecurityTopTldMaliciousGetParamsFormat string
 
 const (
-	EmailSecurityTopTldMaliciousGetParamsFormatJSON EmailSecurityTopTldMaliciousGetParamsFormat = "JSON"
+	EmailSecurityTopTldMaliciousGetParamsFormatJson EmailSecurityTopTldMaliciousGetParamsFormat = "JSON"
 	EmailSecurityTopTldMaliciousGetParamsFormatCsv  EmailSecurityTopTldMaliciousGetParamsFormat = "CSV"
 )
 
 func (r EmailSecurityTopTldMaliciousGetParamsFormat) IsKnown() bool {
 	switch r {
-	case EmailSecurityTopTldMaliciousGetParamsFormatJSON, EmailSecurityTopTldMaliciousGetParamsFormatCsv:
+	case EmailSecurityTopTldMaliciousGetParamsFormatJson, EmailSecurityTopTldMaliciousGetParamsFormatCsv:
 		return true
 	}
 	return false

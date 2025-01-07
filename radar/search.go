@@ -136,13 +136,13 @@ func (r SearchGlobalParamsExclude) IsKnown() bool {
 type SearchGlobalParamsFormat string
 
 const (
-	SearchGlobalParamsFormatJSON SearchGlobalParamsFormat = "JSON"
+	SearchGlobalParamsFormatJson SearchGlobalParamsFormat = "JSON"
 	SearchGlobalParamsFormatCsv  SearchGlobalParamsFormat = "CSV"
 )
 
 func (r SearchGlobalParamsFormat) IsKnown() bool {
 	switch r {
-	case SearchGlobalParamsFormatJSON, SearchGlobalParamsFormatCsv:
+	case SearchGlobalParamsFormatJson, SearchGlobalParamsFormatCsv:
 		return true
 	}
 	return false

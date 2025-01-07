@@ -34,7 +34,7 @@ func TestNetflowSummaryWithOptionalParams(t *testing.T) {
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.NetflowSummaryParamsFormatJSON),
+		Format:    cloudflare.F(radar.NetflowSummaryParamsFormatJson),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"string"}),
 	})
@@ -67,7 +67,7 @@ func TestNetflowTimeseriesWithOptionalParams(t *testing.T) {
 		DateEnd:       cloudflare.F([]time.Time{time.Now()}),
 		DateRange:     cloudflare.F([]string{"7d"}),
 		DateStart:     cloudflare.F([]time.Time{time.Now()}),
-		Format:        cloudflare.F(radar.NetflowTimeseriesParamsFormatJSON),
+		Format:        cloudflare.F(radar.NetflowTimeseriesParamsFormatJson),
 		Location:      cloudflare.F([]string{"string"}),
 		Name:          cloudflare.F([]string{"string"}),
 		Normalization: cloudflare.F(radar.NetflowTimeseriesParamsNormalizationPercentageChange),

@@ -300,13 +300,13 @@ func (r AnnotationOutageGetParams) URLQuery() (v url.Values) {
 type AnnotationOutageGetParamsFormat string
 
 const (
-	AnnotationOutageGetParamsFormatJSON AnnotationOutageGetParamsFormat = "JSON"
+	AnnotationOutageGetParamsFormatJson AnnotationOutageGetParamsFormat = "JSON"
 	AnnotationOutageGetParamsFormatCsv  AnnotationOutageGetParamsFormat = "CSV"
 )
 
 func (r AnnotationOutageGetParamsFormat) IsKnown() bool {
 	switch r {
-	case AnnotationOutageGetParamsFormatJSON, AnnotationOutageGetParamsFormatCsv:
+	case AnnotationOutageGetParamsFormatJson, AnnotationOutageGetParamsFormatCsv:
 		return true
 	}
 	return false
@@ -362,13 +362,13 @@ func (r AnnotationOutageLocationsParams) URLQuery() (v url.Values) {
 type AnnotationOutageLocationsParamsFormat string
 
 const (
-	AnnotationOutageLocationsParamsFormatJSON AnnotationOutageLocationsParamsFormat = "JSON"
+	AnnotationOutageLocationsParamsFormatJson AnnotationOutageLocationsParamsFormat = "JSON"
 	AnnotationOutageLocationsParamsFormatCsv  AnnotationOutageLocationsParamsFormat = "CSV"
 )
 
 func (r AnnotationOutageLocationsParamsFormat) IsKnown() bool {
 	switch r {
-	case AnnotationOutageLocationsParamsFormatJSON, AnnotationOutageLocationsParamsFormatCsv:
+	case AnnotationOutageLocationsParamsFormatJson, AnnotationOutageLocationsParamsFormatCsv:
 		return true
 	}
 	return false

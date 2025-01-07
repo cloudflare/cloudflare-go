@@ -440,13 +440,13 @@ func (r QualitySpeedTopAsesParams) URLQuery() (v url.Values) {
 type QualitySpeedTopAsesParamsFormat string
 
 const (
-	QualitySpeedTopAsesParamsFormatJSON QualitySpeedTopAsesParamsFormat = "JSON"
+	QualitySpeedTopAsesParamsFormatJson QualitySpeedTopAsesParamsFormat = "JSON"
 	QualitySpeedTopAsesParamsFormatCsv  QualitySpeedTopAsesParamsFormat = "CSV"
 )
 
 func (r QualitySpeedTopAsesParamsFormat) IsKnown() bool {
 	switch r {
-	case QualitySpeedTopAsesParamsFormatJSON, QualitySpeedTopAsesParamsFormatCsv:
+	case QualitySpeedTopAsesParamsFormatJson, QualitySpeedTopAsesParamsFormatCsv:
 		return true
 	}
 	return false
@@ -535,13 +535,13 @@ func (r QualitySpeedTopLocationsParams) URLQuery() (v url.Values) {
 type QualitySpeedTopLocationsParamsFormat string
 
 const (
-	QualitySpeedTopLocationsParamsFormatJSON QualitySpeedTopLocationsParamsFormat = "JSON"
+	QualitySpeedTopLocationsParamsFormatJson QualitySpeedTopLocationsParamsFormat = "JSON"
 	QualitySpeedTopLocationsParamsFormatCsv  QualitySpeedTopLocationsParamsFormat = "CSV"
 )
 
 func (r QualitySpeedTopLocationsParamsFormat) IsKnown() bool {
 	switch r {
-	case QualitySpeedTopLocationsParamsFormatJSON, QualitySpeedTopLocationsParamsFormatCsv:
+	case QualitySpeedTopLocationsParamsFormatJson, QualitySpeedTopLocationsParamsFormatCsv:
 		return true
 	}
 	return false

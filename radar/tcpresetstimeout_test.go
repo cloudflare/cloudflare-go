@@ -34,7 +34,7 @@ func TestTCPResetsTimeoutSummaryWithOptionalParams(t *testing.T) {
 		DateEnd:   cloudflare.F([]time.Time{time.Now()}),
 		DateRange: cloudflare.F([]string{"7d"}),
 		DateStart: cloudflare.F([]time.Time{time.Now()}),
-		Format:    cloudflare.F(radar.TCPResetsTimeoutSummaryParamsFormatJSON),
+		Format:    cloudflare.F(radar.TCPResetsTimeoutSummaryParamsFormatJson),
 		Location:  cloudflare.F([]string{"string"}),
 		Name:      cloudflare.F([]string{"string"}),
 	})
@@ -67,7 +67,7 @@ func TestTCPResetsTimeoutTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		DateEnd:     cloudflare.F([]time.Time{time.Now()}),
 		DateRange:   cloudflare.F([]string{"7d"}),
 		DateStart:   cloudflare.F([]time.Time{time.Now()}),
-		Format:      cloudflare.F(radar.TCPResetsTimeoutTimeseriesGroupsParamsFormatJSON),
+		Format:      cloudflare.F(radar.TCPResetsTimeoutTimeseriesGroupsParamsFormatJson),
 		Location:    cloudflare.F([]string{"string"}),
 		Name:        cloudflare.F([]string{"string"}),
 	})

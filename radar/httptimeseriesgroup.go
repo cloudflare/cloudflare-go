@@ -745,13 +745,13 @@ func (r HTTPTimeseriesGroupBotClassParamsDeviceType) IsKnown() bool {
 type HTTPTimeseriesGroupBotClassParamsFormat string
 
 const (
-	HTTPTimeseriesGroupBotClassParamsFormatJSON HTTPTimeseriesGroupBotClassParamsFormat = "JSON"
+	HTTPTimeseriesGroupBotClassParamsFormatJson HTTPTimeseriesGroupBotClassParamsFormat = "JSON"
 	HTTPTimeseriesGroupBotClassParamsFormatCsv  HTTPTimeseriesGroupBotClassParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesGroupBotClassParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupBotClassParamsFormatJSON, HTTPTimeseriesGroupBotClassParamsFormatCsv:
+	case HTTPTimeseriesGroupBotClassParamsFormatJson, HTTPTimeseriesGroupBotClassParamsFormatCsv:
 		return true
 	}
 	return false
@@ -977,13 +977,13 @@ func (r HTTPTimeseriesGroupBrowserParamsDeviceType) IsKnown() bool {
 type HTTPTimeseriesGroupBrowserParamsFormat string
 
 const (
-	HTTPTimeseriesGroupBrowserParamsFormatJSON HTTPTimeseriesGroupBrowserParamsFormat = "JSON"
+	HTTPTimeseriesGroupBrowserParamsFormatJson HTTPTimeseriesGroupBrowserParamsFormat = "JSON"
 	HTTPTimeseriesGroupBrowserParamsFormatCsv  HTTPTimeseriesGroupBrowserParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesGroupBrowserParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupBrowserParamsFormatJSON, HTTPTimeseriesGroupBrowserParamsFormatCsv:
+	case HTTPTimeseriesGroupBrowserParamsFormatJson, HTTPTimeseriesGroupBrowserParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1209,13 +1209,13 @@ func (r HTTPTimeseriesGroupBrowserFamilyParamsDeviceType) IsKnown() bool {
 type HTTPTimeseriesGroupBrowserFamilyParamsFormat string
 
 const (
-	HTTPTimeseriesGroupBrowserFamilyParamsFormatJSON HTTPTimeseriesGroupBrowserFamilyParamsFormat = "JSON"
+	HTTPTimeseriesGroupBrowserFamilyParamsFormatJson HTTPTimeseriesGroupBrowserFamilyParamsFormat = "JSON"
 	HTTPTimeseriesGroupBrowserFamilyParamsFormatCsv  HTTPTimeseriesGroupBrowserFamilyParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesGroupBrowserFamilyParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupBrowserFamilyParamsFormatJSON, HTTPTimeseriesGroupBrowserFamilyParamsFormatCsv:
+	case HTTPTimeseriesGroupBrowserFamilyParamsFormatJson, HTTPTimeseriesGroupBrowserFamilyParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1420,13 +1420,13 @@ func (r HTTPTimeseriesGroupDeviceTypeParamsBotClass) IsKnown() bool {
 type HTTPTimeseriesGroupDeviceTypeParamsFormat string
 
 const (
-	HTTPTimeseriesGroupDeviceTypeParamsFormatJSON HTTPTimeseriesGroupDeviceTypeParamsFormat = "JSON"
+	HTTPTimeseriesGroupDeviceTypeParamsFormatJson HTTPTimeseriesGroupDeviceTypeParamsFormat = "JSON"
 	HTTPTimeseriesGroupDeviceTypeParamsFormatCsv  HTTPTimeseriesGroupDeviceTypeParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesGroupDeviceTypeParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupDeviceTypeParamsFormatJSON, HTTPTimeseriesGroupDeviceTypeParamsFormatCsv:
+	case HTTPTimeseriesGroupDeviceTypeParamsFormatJson, HTTPTimeseriesGroupDeviceTypeParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1647,13 +1647,13 @@ func (r HTTPTimeseriesGroupHTTPProtocolParamsDeviceType) IsKnown() bool {
 type HTTPTimeseriesGroupHTTPProtocolParamsFormat string
 
 const (
-	HTTPTimeseriesGroupHTTPProtocolParamsFormatJSON HTTPTimeseriesGroupHTTPProtocolParamsFormat = "JSON"
+	HTTPTimeseriesGroupHTTPProtocolParamsFormatJson HTTPTimeseriesGroupHTTPProtocolParamsFormat = "JSON"
 	HTTPTimeseriesGroupHTTPProtocolParamsFormatCsv  HTTPTimeseriesGroupHTTPProtocolParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesGroupHTTPProtocolParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupHTTPProtocolParamsFormatJSON, HTTPTimeseriesGroupHTTPProtocolParamsFormatCsv:
+	case HTTPTimeseriesGroupHTTPProtocolParamsFormatJson, HTTPTimeseriesGroupHTTPProtocolParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1859,13 +1859,13 @@ func (r HTTPTimeseriesGroupHTTPVersionParamsDeviceType) IsKnown() bool {
 type HTTPTimeseriesGroupHTTPVersionParamsFormat string
 
 const (
-	HTTPTimeseriesGroupHTTPVersionParamsFormatJSON HTTPTimeseriesGroupHTTPVersionParamsFormat = "JSON"
+	HTTPTimeseriesGroupHTTPVersionParamsFormatJson HTTPTimeseriesGroupHTTPVersionParamsFormat = "JSON"
 	HTTPTimeseriesGroupHTTPVersionParamsFormatCsv  HTTPTimeseriesGroupHTTPVersionParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesGroupHTTPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupHTTPVersionParamsFormatJSON, HTTPTimeseriesGroupHTTPVersionParamsFormatCsv:
+	case HTTPTimeseriesGroupHTTPVersionParamsFormatJson, HTTPTimeseriesGroupHTTPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2070,13 +2070,13 @@ func (r HTTPTimeseriesGroupIPVersionParamsDeviceType) IsKnown() bool {
 type HTTPTimeseriesGroupIPVersionParamsFormat string
 
 const (
-	HTTPTimeseriesGroupIPVersionParamsFormatJSON HTTPTimeseriesGroupIPVersionParamsFormat = "JSON"
+	HTTPTimeseriesGroupIPVersionParamsFormatJson HTTPTimeseriesGroupIPVersionParamsFormat = "JSON"
 	HTTPTimeseriesGroupIPVersionParamsFormatCsv  HTTPTimeseriesGroupIPVersionParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesGroupIPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupIPVersionParamsFormatJSON, HTTPTimeseriesGroupIPVersionParamsFormatCsv:
+	case HTTPTimeseriesGroupIPVersionParamsFormatJson, HTTPTimeseriesGroupIPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2282,13 +2282,13 @@ func (r HTTPTimeseriesGroupOSParamsDeviceType) IsKnown() bool {
 type HTTPTimeseriesGroupOSParamsFormat string
 
 const (
-	HTTPTimeseriesGroupOSParamsFormatJSON HTTPTimeseriesGroupOSParamsFormat = "JSON"
+	HTTPTimeseriesGroupOSParamsFormatJson HTTPTimeseriesGroupOSParamsFormat = "JSON"
 	HTTPTimeseriesGroupOSParamsFormatCsv  HTTPTimeseriesGroupOSParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesGroupOSParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupOSParamsFormatJSON, HTTPTimeseriesGroupOSParamsFormatCsv:
+	case HTTPTimeseriesGroupOSParamsFormatJson, HTTPTimeseriesGroupOSParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2491,13 +2491,13 @@ func (r HTTPTimeseriesGroupPostQuantumParamsDeviceType) IsKnown() bool {
 type HTTPTimeseriesGroupPostQuantumParamsFormat string
 
 const (
-	HTTPTimeseriesGroupPostQuantumParamsFormatJSON HTTPTimeseriesGroupPostQuantumParamsFormat = "JSON"
+	HTTPTimeseriesGroupPostQuantumParamsFormatJson HTTPTimeseriesGroupPostQuantumParamsFormat = "JSON"
 	HTTPTimeseriesGroupPostQuantumParamsFormatCsv  HTTPTimeseriesGroupPostQuantumParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesGroupPostQuantumParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupPostQuantumParamsFormatJSON, HTTPTimeseriesGroupPostQuantumParamsFormatCsv:
+	case HTTPTimeseriesGroupPostQuantumParamsFormatJson, HTTPTimeseriesGroupPostQuantumParamsFormatCsv:
 		return true
 	}
 	return false
@@ -2718,13 +2718,13 @@ func (r HTTPTimeseriesGroupTLSVersionParamsDeviceType) IsKnown() bool {
 type HTTPTimeseriesGroupTLSVersionParamsFormat string
 
 const (
-	HTTPTimeseriesGroupTLSVersionParamsFormatJSON HTTPTimeseriesGroupTLSVersionParamsFormat = "JSON"
+	HTTPTimeseriesGroupTLSVersionParamsFormatJson HTTPTimeseriesGroupTLSVersionParamsFormat = "JSON"
 	HTTPTimeseriesGroupTLSVersionParamsFormatCsv  HTTPTimeseriesGroupTLSVersionParamsFormat = "CSV"
 )
 
 func (r HTTPTimeseriesGroupTLSVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case HTTPTimeseriesGroupTLSVersionParamsFormatJSON, HTTPTimeseriesGroupTLSVersionParamsFormatCsv:
+	case HTTPTimeseriesGroupTLSVersionParamsFormatJson, HTTPTimeseriesGroupTLSVersionParamsFormatCsv:
 		return true
 	}
 	return false

@@ -39,7 +39,7 @@ func TestHTTPAseBrowserFamilyGetWithOptionalParams(t *testing.T) {
 			DateRange:    cloudflare.F([]string{"7d"}),
 			DateStart:    cloudflare.F([]time.Time{time.Now()}),
 			DeviceType:   cloudflare.F([]radar.HTTPAseBrowserFamilyGetParamsDeviceType{radar.HTTPAseBrowserFamilyGetParamsDeviceTypeDesktop}),
-			Format:       cloudflare.F(radar.HTTPAseBrowserFamilyGetParamsFormatJSON),
+			Format:       cloudflare.F(radar.HTTPAseBrowserFamilyGetParamsFormatJson),
 			HTTPProtocol: cloudflare.F([]radar.HTTPAseBrowserFamilyGetParamsHTTPProtocol{radar.HTTPAseBrowserFamilyGetParamsHTTPProtocolHTTP}),
 			HTTPVersion:  cloudflare.F([]radar.HTTPAseBrowserFamilyGetParamsHTTPVersion{radar.HTTPAseBrowserFamilyGetParamsHTTPVersionHttPv1}),
 			IPVersion:    cloudflare.F([]radar.HTTPAseBrowserFamilyGetParamsIPVersion{radar.HTTPAseBrowserFamilyGetParamsIPVersionIPv4}),
