@@ -5043,7 +5043,7 @@ func (r serveErrorRuleActionParametersJSON) RawJSON() string {
 type ServeErrorRuleActionParametersContentType string
 
 const (
-	ServeErrorRuleActionParametersContentTypeApplicationJson ServeErrorRuleActionParametersContentType = "application/json"
+	ServeErrorRuleActionParametersContentTypeApplicationJSON ServeErrorRuleActionParametersContentType = "application/json"
 	ServeErrorRuleActionParametersContentTypeTextXml         ServeErrorRuleActionParametersContentType = "text/xml"
 	ServeErrorRuleActionParametersContentTypeTextPlain       ServeErrorRuleActionParametersContentType = "text/plain"
 	ServeErrorRuleActionParametersContentTypeTextHTML        ServeErrorRuleActionParametersContentType = "text/html"
@@ -5051,7 +5051,7 @@ const (
 
 func (r ServeErrorRuleActionParametersContentType) IsKnown() bool {
 	switch r {
-	case ServeErrorRuleActionParametersContentTypeApplicationJson, ServeErrorRuleActionParametersContentTypeTextXml, ServeErrorRuleActionParametersContentTypeTextPlain, ServeErrorRuleActionParametersContentTypeTextHTML:
+	case ServeErrorRuleActionParametersContentTypeApplicationJSON, ServeErrorRuleActionParametersContentTypeTextXml, ServeErrorRuleActionParametersContentTypeTextPlain, ServeErrorRuleActionParametersContentTypeTextHTML:
 		return true
 	}
 	return false

@@ -209,13 +209,13 @@ func (r DatasetListParamsDatasetType) IsKnown() bool {
 type DatasetListParamsFormat string
 
 const (
-	DatasetListParamsFormatJson DatasetListParamsFormat = "JSON"
+	DatasetListParamsFormatJSON DatasetListParamsFormat = "JSON"
 	DatasetListParamsFormatCsv  DatasetListParamsFormat = "CSV"
 )
 
 func (r DatasetListParamsFormat) IsKnown() bool {
 	switch r {
-	case DatasetListParamsFormatJson, DatasetListParamsFormatCsv:
+	case DatasetListParamsFormatJSON, DatasetListParamsFormatCsv:
 		return true
 	}
 	return false
@@ -266,13 +266,13 @@ func (r DatasetDownloadParams) URLQuery() (v url.Values) {
 type DatasetDownloadParamsFormat string
 
 const (
-	DatasetDownloadParamsFormatJson DatasetDownloadParamsFormat = "JSON"
+	DatasetDownloadParamsFormatJSON DatasetDownloadParamsFormat = "JSON"
 	DatasetDownloadParamsFormatCsv  DatasetDownloadParamsFormat = "CSV"
 )
 
 func (r DatasetDownloadParamsFormat) IsKnown() bool {
 	switch r {
-	case DatasetDownloadParamsFormatJson, DatasetDownloadParamsFormatCsv:
+	case DatasetDownloadParamsFormatJSON, DatasetDownloadParamsFormatCsv:
 		return true
 	}
 	return false

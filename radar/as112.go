@@ -270,13 +270,13 @@ func (r AS112TimeseriesParamsAggInterval) IsKnown() bool {
 type AS112TimeseriesParamsFormat string
 
 const (
-	AS112TimeseriesParamsFormatJson AS112TimeseriesParamsFormat = "JSON"
+	AS112TimeseriesParamsFormatJSON AS112TimeseriesParamsFormat = "JSON"
 	AS112TimeseriesParamsFormatCsv  AS112TimeseriesParamsFormat = "CSV"
 )
 
 func (r AS112TimeseriesParamsFormat) IsKnown() bool {
 	switch r {
-	case AS112TimeseriesParamsFormatJson, AS112TimeseriesParamsFormatCsv:
+	case AS112TimeseriesParamsFormatJSON, AS112TimeseriesParamsFormatCsv:
 		return true
 	}
 	return false

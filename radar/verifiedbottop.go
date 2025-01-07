@@ -408,13 +408,13 @@ func (r VerifiedBotTopBotsParams) URLQuery() (v url.Values) {
 type VerifiedBotTopBotsParamsFormat string
 
 const (
-	VerifiedBotTopBotsParamsFormatJson VerifiedBotTopBotsParamsFormat = "JSON"
+	VerifiedBotTopBotsParamsFormatJSON VerifiedBotTopBotsParamsFormat = "JSON"
 	VerifiedBotTopBotsParamsFormatCsv  VerifiedBotTopBotsParamsFormat = "CSV"
 )
 
 func (r VerifiedBotTopBotsParamsFormat) IsKnown() bool {
 	switch r {
-	case VerifiedBotTopBotsParamsFormatJson, VerifiedBotTopBotsParamsFormatCsv:
+	case VerifiedBotTopBotsParamsFormatJSON, VerifiedBotTopBotsParamsFormatCsv:
 		return true
 	}
 	return false
@@ -485,13 +485,13 @@ func (r VerifiedBotTopCategoriesParams) URLQuery() (v url.Values) {
 type VerifiedBotTopCategoriesParamsFormat string
 
 const (
-	VerifiedBotTopCategoriesParamsFormatJson VerifiedBotTopCategoriesParamsFormat = "JSON"
+	VerifiedBotTopCategoriesParamsFormatJSON VerifiedBotTopCategoriesParamsFormat = "JSON"
 	VerifiedBotTopCategoriesParamsFormatCsv  VerifiedBotTopCategoriesParamsFormat = "CSV"
 )
 
 func (r VerifiedBotTopCategoriesParamsFormat) IsKnown() bool {
 	switch r {
-	case VerifiedBotTopCategoriesParamsFormatJson, VerifiedBotTopCategoriesParamsFormatCsv:
+	case VerifiedBotTopCategoriesParamsFormatJSON, VerifiedBotTopCategoriesParamsFormatCsv:
 		return true
 	}
 	return false

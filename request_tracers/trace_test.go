@@ -33,7 +33,7 @@ func TestTraceNewWithOptionalParams(t *testing.T) {
 		URL:       cloudflare.F("https://some.zone/some_path"),
 		Body: cloudflare.F(request_tracers.TraceNewParamsBody{
 			Base64:    cloudflare.F("c29tZV9yZXF1ZXN0X2JvZHk="),
-			Json:      cloudflare.F[any](map[string]interface{}{}),
+			JSON:      cloudflare.F[any](map[string]interface{}{}),
 			PlainText: cloudflare.F("plain_text"),
 		}),
 		Context: cloudflare.F(request_tracers.TraceNewParamsContext{

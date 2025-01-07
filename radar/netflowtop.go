@@ -195,13 +195,13 @@ func (r NetflowTopAsesParams) URLQuery() (v url.Values) {
 type NetflowTopAsesParamsFormat string
 
 const (
-	NetflowTopAsesParamsFormatJson NetflowTopAsesParamsFormat = "JSON"
+	NetflowTopAsesParamsFormatJSON NetflowTopAsesParamsFormat = "JSON"
 	NetflowTopAsesParamsFormatCsv  NetflowTopAsesParamsFormat = "CSV"
 )
 
 func (r NetflowTopAsesParamsFormat) IsKnown() bool {
 	switch r {
-	case NetflowTopAsesParamsFormatJson, NetflowTopAsesParamsFormatCsv:
+	case NetflowTopAsesParamsFormatJSON, NetflowTopAsesParamsFormatCsv:
 		return true
 	}
 	return false
@@ -272,13 +272,13 @@ func (r NetflowTopLocationsParams) URLQuery() (v url.Values) {
 type NetflowTopLocationsParamsFormat string
 
 const (
-	NetflowTopLocationsParamsFormatJson NetflowTopLocationsParamsFormat = "JSON"
+	NetflowTopLocationsParamsFormatJSON NetflowTopLocationsParamsFormat = "JSON"
 	NetflowTopLocationsParamsFormatCsv  NetflowTopLocationsParamsFormat = "CSV"
 )
 
 func (r NetflowTopLocationsParamsFormat) IsKnown() bool {
 	switch r {
-	case NetflowTopLocationsParamsFormatJson, NetflowTopLocationsParamsFormatCsv:
+	case NetflowTopLocationsParamsFormatJSON, NetflowTopLocationsParamsFormatCsv:
 		return true
 	}
 	return false

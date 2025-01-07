@@ -733,13 +733,13 @@ func (r AttackLayer3TimeseriesGroupBitrateParamsDirection) IsKnown() bool {
 type AttackLayer3TimeseriesGroupBitrateParamsFormat string
 
 const (
-	AttackLayer3TimeseriesGroupBitrateParamsFormatJson AttackLayer3TimeseriesGroupBitrateParamsFormat = "JSON"
+	AttackLayer3TimeseriesGroupBitrateParamsFormatJSON AttackLayer3TimeseriesGroupBitrateParamsFormat = "JSON"
 	AttackLayer3TimeseriesGroupBitrateParamsFormatCsv  AttackLayer3TimeseriesGroupBitrateParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TimeseriesGroupBitrateParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupBitrateParamsFormatJson, AttackLayer3TimeseriesGroupBitrateParamsFormatCsv:
+	case AttackLayer3TimeseriesGroupBitrateParamsFormatJSON, AttackLayer3TimeseriesGroupBitrateParamsFormatCsv:
 		return true
 	}
 	return false
@@ -904,13 +904,13 @@ func (r AttackLayer3TimeseriesGroupDurationParamsDirection) IsKnown() bool {
 type AttackLayer3TimeseriesGroupDurationParamsFormat string
 
 const (
-	AttackLayer3TimeseriesGroupDurationParamsFormatJson AttackLayer3TimeseriesGroupDurationParamsFormat = "JSON"
+	AttackLayer3TimeseriesGroupDurationParamsFormatJSON AttackLayer3TimeseriesGroupDurationParamsFormat = "JSON"
 	AttackLayer3TimeseriesGroupDurationParamsFormatCsv  AttackLayer3TimeseriesGroupDurationParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TimeseriesGroupDurationParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupDurationParamsFormatJson, AttackLayer3TimeseriesGroupDurationParamsFormatCsv:
+	case AttackLayer3TimeseriesGroupDurationParamsFormatJSON, AttackLayer3TimeseriesGroupDurationParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1052,13 +1052,13 @@ func (r AttackLayer3TimeseriesGroupGetParamsAggInterval) IsKnown() bool {
 type AttackLayer3TimeseriesGroupGetParamsFormat string
 
 const (
-	AttackLayer3TimeseriesGroupGetParamsFormatJson AttackLayer3TimeseriesGroupGetParamsFormat = "JSON"
+	AttackLayer3TimeseriesGroupGetParamsFormatJSON AttackLayer3TimeseriesGroupGetParamsFormat = "JSON"
 	AttackLayer3TimeseriesGroupGetParamsFormatCsv  AttackLayer3TimeseriesGroupGetParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TimeseriesGroupGetParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupGetParamsFormatJson, AttackLayer3TimeseriesGroupGetParamsFormatCsv:
+	case AttackLayer3TimeseriesGroupGetParamsFormatJSON, AttackLayer3TimeseriesGroupGetParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1177,13 +1177,13 @@ func (r AttackLayer3TimeseriesGroupIndustryParamsDirection) IsKnown() bool {
 type AttackLayer3TimeseriesGroupIndustryParamsFormat string
 
 const (
-	AttackLayer3TimeseriesGroupIndustryParamsFormatJson AttackLayer3TimeseriesGroupIndustryParamsFormat = "JSON"
+	AttackLayer3TimeseriesGroupIndustryParamsFormatJSON AttackLayer3TimeseriesGroupIndustryParamsFormat = "JSON"
 	AttackLayer3TimeseriesGroupIndustryParamsFormatCsv  AttackLayer3TimeseriesGroupIndustryParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TimeseriesGroupIndustryParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupIndustryParamsFormatJson, AttackLayer3TimeseriesGroupIndustryParamsFormatCsv:
+	case AttackLayer3TimeseriesGroupIndustryParamsFormatJSON, AttackLayer3TimeseriesGroupIndustryParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1346,13 +1346,13 @@ func (r AttackLayer3TimeseriesGroupIPVersionParamsDirection) IsKnown() bool {
 type AttackLayer3TimeseriesGroupIPVersionParamsFormat string
 
 const (
-	AttackLayer3TimeseriesGroupIPVersionParamsFormatJson AttackLayer3TimeseriesGroupIPVersionParamsFormat = "JSON"
+	AttackLayer3TimeseriesGroupIPVersionParamsFormatJSON AttackLayer3TimeseriesGroupIPVersionParamsFormat = "JSON"
 	AttackLayer3TimeseriesGroupIPVersionParamsFormatCsv  AttackLayer3TimeseriesGroupIPVersionParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TimeseriesGroupIPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupIPVersionParamsFormatJson, AttackLayer3TimeseriesGroupIPVersionParamsFormatCsv:
+	case AttackLayer3TimeseriesGroupIPVersionParamsFormatJSON, AttackLayer3TimeseriesGroupIPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1500,13 +1500,13 @@ func (r AttackLayer3TimeseriesGroupProtocolParamsDirection) IsKnown() bool {
 type AttackLayer3TimeseriesGroupProtocolParamsFormat string
 
 const (
-	AttackLayer3TimeseriesGroupProtocolParamsFormatJson AttackLayer3TimeseriesGroupProtocolParamsFormat = "JSON"
+	AttackLayer3TimeseriesGroupProtocolParamsFormatJSON AttackLayer3TimeseriesGroupProtocolParamsFormat = "JSON"
 	AttackLayer3TimeseriesGroupProtocolParamsFormatCsv  AttackLayer3TimeseriesGroupProtocolParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TimeseriesGroupProtocolParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupProtocolParamsFormatJson, AttackLayer3TimeseriesGroupProtocolParamsFormatCsv:
+	case AttackLayer3TimeseriesGroupProtocolParamsFormatJSON, AttackLayer3TimeseriesGroupProtocolParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1657,13 +1657,13 @@ func (r AttackLayer3TimeseriesGroupVectorParamsDirection) IsKnown() bool {
 type AttackLayer3TimeseriesGroupVectorParamsFormat string
 
 const (
-	AttackLayer3TimeseriesGroupVectorParamsFormatJson AttackLayer3TimeseriesGroupVectorParamsFormat = "JSON"
+	AttackLayer3TimeseriesGroupVectorParamsFormatJSON AttackLayer3TimeseriesGroupVectorParamsFormat = "JSON"
 	AttackLayer3TimeseriesGroupVectorParamsFormatCsv  AttackLayer3TimeseriesGroupVectorParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TimeseriesGroupVectorParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupVectorParamsFormatJson, AttackLayer3TimeseriesGroupVectorParamsFormatCsv:
+	case AttackLayer3TimeseriesGroupVectorParamsFormatJSON, AttackLayer3TimeseriesGroupVectorParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1831,13 +1831,13 @@ func (r AttackLayer3TimeseriesGroupVerticalParamsDirection) IsKnown() bool {
 type AttackLayer3TimeseriesGroupVerticalParamsFormat string
 
 const (
-	AttackLayer3TimeseriesGroupVerticalParamsFormatJson AttackLayer3TimeseriesGroupVerticalParamsFormat = "JSON"
+	AttackLayer3TimeseriesGroupVerticalParamsFormatJSON AttackLayer3TimeseriesGroupVerticalParamsFormat = "JSON"
 	AttackLayer3TimeseriesGroupVerticalParamsFormatCsv  AttackLayer3TimeseriesGroupVerticalParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TimeseriesGroupVerticalParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesGroupVerticalParamsFormatJson, AttackLayer3TimeseriesGroupVerticalParamsFormatCsv:
+	case AttackLayer3TimeseriesGroupVerticalParamsFormatJSON, AttackLayer3TimeseriesGroupVerticalParamsFormatCsv:
 		return true
 	}
 	return false

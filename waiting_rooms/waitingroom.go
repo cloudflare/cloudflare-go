@@ -526,7 +526,7 @@ type QueryParam struct {
 	//			"shuffleAtEventStart": true
 	//		}
 	//	}.
-	JsonResponseEnabled param.Field[bool] `json:"json_response_enabled"`
+	JSONResponseEnabled param.Field[bool] `json:"json_response_enabled"`
 	// Sets the path within the host to enable the waiting room on. The waiting room
 	// will be enabled for all subpaths as well. If there are two waiting rooms on the
 	// same subpath, the waiting room for the most specific path will be chosen.
@@ -960,7 +960,7 @@ type WaitingRoom struct {
 	//			"shuffleAtEventStart": true
 	//		}
 	//	}.
-	JsonResponseEnabled bool      `json:"json_response_enabled"`
+	JSONResponseEnabled bool      `json:"json_response_enabled"`
 	ModifiedOn          time.Time `json:"modified_on" format:"date-time"`
 	// A unique name to identify the waiting room. Only alphanumeric characters,
 	// hyphens and underscores are allowed.
@@ -1055,7 +1055,7 @@ type waitingRoomJSON struct {
 	DisableSessionRenewal      apijson.Field
 	EnabledOriginCommands      apijson.Field
 	Host                       apijson.Field
-	JsonResponseEnabled        apijson.Field
+	JSONResponseEnabled        apijson.Field
 	ModifiedOn                 apijson.Field
 	Name                       apijson.Field
 	NewUsersPerMinute          apijson.Field

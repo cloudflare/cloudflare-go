@@ -192,13 +192,13 @@ func (r AttackLayer3TimeseriesParamsDirection) IsKnown() bool {
 type AttackLayer3TimeseriesParamsFormat string
 
 const (
-	AttackLayer3TimeseriesParamsFormatJson AttackLayer3TimeseriesParamsFormat = "JSON"
+	AttackLayer3TimeseriesParamsFormatJSON AttackLayer3TimeseriesParamsFormat = "JSON"
 	AttackLayer3TimeseriesParamsFormatCsv  AttackLayer3TimeseriesParamsFormat = "CSV"
 )
 
 func (r AttackLayer3TimeseriesParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3TimeseriesParamsFormatJson, AttackLayer3TimeseriesParamsFormatCsv:
+	case AttackLayer3TimeseriesParamsFormatJSON, AttackLayer3TimeseriesParamsFormatCsv:
 		return true
 	}
 	return false

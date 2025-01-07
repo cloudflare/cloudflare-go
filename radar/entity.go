@@ -125,13 +125,13 @@ func (r EntityGetParams) URLQuery() (v url.Values) {
 type EntityGetParamsFormat string
 
 const (
-	EntityGetParamsFormatJson EntityGetParamsFormat = "JSON"
+	EntityGetParamsFormatJSON EntityGetParamsFormat = "JSON"
 	EntityGetParamsFormatCsv  EntityGetParamsFormat = "CSV"
 )
 
 func (r EntityGetParamsFormat) IsKnown() bool {
 	switch r {
-	case EntityGetParamsFormatJson, EntityGetParamsFormatCsv:
+	case EntityGetParamsFormatJSON, EntityGetParamsFormatCsv:
 		return true
 	}
 	return false

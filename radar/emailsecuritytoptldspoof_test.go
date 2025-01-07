@@ -38,7 +38,7 @@ func TestEmailSecurityTopTldSpoofGetWithOptionalParams(t *testing.T) {
 			DateStart:   cloudflare.F([]time.Time{time.Now()}),
 			DKIM:        cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsDKIM{radar.EmailSecurityTopTldSpoofGetParamsDKIMPass}),
 			DMARC:       cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsDMARC{radar.EmailSecurityTopTldSpoofGetParamsDMARCPass}),
-			Format:      cloudflare.F(radar.EmailSecurityTopTldSpoofGetParamsFormatJson),
+			Format:      cloudflare.F(radar.EmailSecurityTopTldSpoofGetParamsFormatJSON),
 			Limit:       cloudflare.F(int64(5)),
 			Name:        cloudflare.F([]string{"string"}),
 			SPF:         cloudflare.F([]radar.EmailSecurityTopTldSpoofGetParamsSPF{radar.EmailSecurityTopTldSpoofGetParamsSPFPass}),

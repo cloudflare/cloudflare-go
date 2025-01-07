@@ -315,13 +315,13 @@ func (r QualitySpeedHistogramParams) URLQuery() (v url.Values) {
 type QualitySpeedHistogramParamsFormat string
 
 const (
-	QualitySpeedHistogramParamsFormatJson QualitySpeedHistogramParamsFormat = "JSON"
+	QualitySpeedHistogramParamsFormatJSON QualitySpeedHistogramParamsFormat = "JSON"
 	QualitySpeedHistogramParamsFormatCsv  QualitySpeedHistogramParamsFormat = "CSV"
 )
 
 func (r QualitySpeedHistogramParamsFormat) IsKnown() bool {
 	switch r {
-	case QualitySpeedHistogramParamsFormatJson, QualitySpeedHistogramParamsFormatCsv:
+	case QualitySpeedHistogramParamsFormatJSON, QualitySpeedHistogramParamsFormatCsv:
 		return true
 	}
 	return false
@@ -401,13 +401,13 @@ func (r QualitySpeedSummaryParams) URLQuery() (v url.Values) {
 type QualitySpeedSummaryParamsFormat string
 
 const (
-	QualitySpeedSummaryParamsFormatJson QualitySpeedSummaryParamsFormat = "JSON"
+	QualitySpeedSummaryParamsFormatJSON QualitySpeedSummaryParamsFormat = "JSON"
 	QualitySpeedSummaryParamsFormatCsv  QualitySpeedSummaryParamsFormat = "CSV"
 )
 
 func (r QualitySpeedSummaryParamsFormat) IsKnown() bool {
 	switch r {
-	case QualitySpeedSummaryParamsFormatJson, QualitySpeedSummaryParamsFormatCsv:
+	case QualitySpeedSummaryParamsFormatJSON, QualitySpeedSummaryParamsFormatCsv:
 		return true
 	}
 	return false

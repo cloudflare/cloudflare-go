@@ -272,13 +272,13 @@ func (r BGPTimeseriesParamsAggInterval) IsKnown() bool {
 type BGPTimeseriesParamsFormat string
 
 const (
-	BGPTimeseriesParamsFormatJson BGPTimeseriesParamsFormat = "JSON"
+	BGPTimeseriesParamsFormatJSON BGPTimeseriesParamsFormat = "JSON"
 	BGPTimeseriesParamsFormatCsv  BGPTimeseriesParamsFormat = "CSV"
 )
 
 func (r BGPTimeseriesParamsFormat) IsKnown() bool {
 	switch r {
-	case BGPTimeseriesParamsFormatJson, BGPTimeseriesParamsFormatCsv:
+	case BGPTimeseriesParamsFormatJSON, BGPTimeseriesParamsFormatCsv:
 		return true
 	}
 	return false

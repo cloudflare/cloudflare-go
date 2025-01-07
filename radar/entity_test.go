@@ -29,7 +29,7 @@ func TestEntityGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Entities.Get(context.TODO(), radar.EntityGetParams{
 		IP:     cloudflare.F("8.8.8.8"),
-		Format: cloudflare.F(radar.EntityGetParamsFormatJson),
+		Format: cloudflare.F(radar.EntityGetParamsFormatJSON),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

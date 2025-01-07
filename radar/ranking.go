@@ -333,13 +333,13 @@ func (r RankingTimeseriesGroupsParams) URLQuery() (v url.Values) {
 type RankingTimeseriesGroupsParamsFormat string
 
 const (
-	RankingTimeseriesGroupsParamsFormatJson RankingTimeseriesGroupsParamsFormat = "JSON"
+	RankingTimeseriesGroupsParamsFormatJSON RankingTimeseriesGroupsParamsFormat = "JSON"
 	RankingTimeseriesGroupsParamsFormatCsv  RankingTimeseriesGroupsParamsFormat = "CSV"
 )
 
 func (r RankingTimeseriesGroupsParamsFormat) IsKnown() bool {
 	switch r {
-	case RankingTimeseriesGroupsParamsFormatJson, RankingTimeseriesGroupsParamsFormatCsv:
+	case RankingTimeseriesGroupsParamsFormatJSON, RankingTimeseriesGroupsParamsFormatCsv:
 		return true
 	}
 	return false
@@ -412,13 +412,13 @@ func (r RankingTopParams) URLQuery() (v url.Values) {
 type RankingTopParamsFormat string
 
 const (
-	RankingTopParamsFormatJson RankingTopParamsFormat = "JSON"
+	RankingTopParamsFormatJSON RankingTopParamsFormat = "JSON"
 	RankingTopParamsFormatCsv  RankingTopParamsFormat = "CSV"
 )
 
 func (r RankingTopParamsFormat) IsKnown() bool {
 	switch r {
-	case RankingTopParamsFormatJson, RankingTopParamsFormatCsv:
+	case RankingTopParamsFormatJSON, RankingTopParamsFormatCsv:
 		return true
 	}
 	return false

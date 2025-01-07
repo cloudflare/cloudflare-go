@@ -407,13 +407,13 @@ func (r NetflowSummaryParams) URLQuery() (v url.Values) {
 type NetflowSummaryParamsFormat string
 
 const (
-	NetflowSummaryParamsFormatJson NetflowSummaryParamsFormat = "JSON"
+	NetflowSummaryParamsFormatJSON NetflowSummaryParamsFormat = "JSON"
 	NetflowSummaryParamsFormatCsv  NetflowSummaryParamsFormat = "CSV"
 )
 
 func (r NetflowSummaryParamsFormat) IsKnown() bool {
 	switch r {
-	case NetflowSummaryParamsFormatJson, NetflowSummaryParamsFormatCsv:
+	case NetflowSummaryParamsFormatJSON, NetflowSummaryParamsFormatCsv:
 		return true
 	}
 	return false
@@ -511,13 +511,13 @@ func (r NetflowTimeseriesParamsAggInterval) IsKnown() bool {
 type NetflowTimeseriesParamsFormat string
 
 const (
-	NetflowTimeseriesParamsFormatJson NetflowTimeseriesParamsFormat = "JSON"
+	NetflowTimeseriesParamsFormatJSON NetflowTimeseriesParamsFormat = "JSON"
 	NetflowTimeseriesParamsFormatCsv  NetflowTimeseriesParamsFormat = "CSV"
 )
 
 func (r NetflowTimeseriesParamsFormat) IsKnown() bool {
 	switch r {
-	case NetflowTimeseriesParamsFormatJson, NetflowTimeseriesParamsFormatCsv:
+	case NetflowTimeseriesParamsFormatJSON, NetflowTimeseriesParamsFormatCsv:
 		return true
 	}
 	return false

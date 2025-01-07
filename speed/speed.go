@@ -101,7 +101,7 @@ type LighthouseReport struct {
 	// First Contentful Paint.
 	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
-	JsonReportURL string `json:"jsonReportUrl"`
+	JSONReportURL string `json:"jsonReportUrl"`
 	// Largest Contentful Paint.
 	Lcp float64 `json:"lcp"`
 	// The Lighthouse performance score.
@@ -126,7 +126,7 @@ type lighthouseReportJSON struct {
 	DeviceType       apijson.Field
 	Error            apijson.Field
 	Fcp              apijson.Field
-	JsonReportURL    apijson.Field
+	JSONReportURL    apijson.Field
 	Lcp              apijson.Field
 	PerformanceScore apijson.Field
 	Si               apijson.Field

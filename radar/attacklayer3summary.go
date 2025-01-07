@@ -1098,13 +1098,13 @@ func (r AttackLayer3SummaryBitrateParamsDirection) IsKnown() bool {
 type AttackLayer3SummaryBitrateParamsFormat string
 
 const (
-	AttackLayer3SummaryBitrateParamsFormatJson AttackLayer3SummaryBitrateParamsFormat = "JSON"
+	AttackLayer3SummaryBitrateParamsFormatJSON AttackLayer3SummaryBitrateParamsFormat = "JSON"
 	AttackLayer3SummaryBitrateParamsFormatCsv  AttackLayer3SummaryBitrateParamsFormat = "CSV"
 )
 
 func (r AttackLayer3SummaryBitrateParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3SummaryBitrateParamsFormatJson, AttackLayer3SummaryBitrateParamsFormatCsv:
+	case AttackLayer3SummaryBitrateParamsFormatJSON, AttackLayer3SummaryBitrateParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1225,13 +1225,13 @@ func (r AttackLayer3SummaryDurationParamsDirection) IsKnown() bool {
 type AttackLayer3SummaryDurationParamsFormat string
 
 const (
-	AttackLayer3SummaryDurationParamsFormatJson AttackLayer3SummaryDurationParamsFormat = "JSON"
+	AttackLayer3SummaryDurationParamsFormatJSON AttackLayer3SummaryDurationParamsFormat = "JSON"
 	AttackLayer3SummaryDurationParamsFormatCsv  AttackLayer3SummaryDurationParamsFormat = "CSV"
 )
 
 func (r AttackLayer3SummaryDurationParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3SummaryDurationParamsFormatJson, AttackLayer3SummaryDurationParamsFormatCsv:
+	case AttackLayer3SummaryDurationParamsFormatJSON, AttackLayer3SummaryDurationParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1332,13 +1332,13 @@ func (r AttackLayer3SummaryGetParams) URLQuery() (v url.Values) {
 type AttackLayer3SummaryGetParamsFormat string
 
 const (
-	AttackLayer3SummaryGetParamsFormatJson AttackLayer3SummaryGetParamsFormat = "JSON"
+	AttackLayer3SummaryGetParamsFormatJSON AttackLayer3SummaryGetParamsFormat = "JSON"
 	AttackLayer3SummaryGetParamsFormatCsv  AttackLayer3SummaryGetParamsFormat = "CSV"
 )
 
 func (r AttackLayer3SummaryGetParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3SummaryGetParamsFormatJson, AttackLayer3SummaryGetParamsFormatCsv:
+	case AttackLayer3SummaryGetParamsFormatJSON, AttackLayer3SummaryGetParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1425,13 +1425,13 @@ func (r AttackLayer3SummaryIPVersionParamsDirection) IsKnown() bool {
 type AttackLayer3SummaryIPVersionParamsFormat string
 
 const (
-	AttackLayer3SummaryIPVersionParamsFormatJson AttackLayer3SummaryIPVersionParamsFormat = "JSON"
+	AttackLayer3SummaryIPVersionParamsFormatJSON AttackLayer3SummaryIPVersionParamsFormat = "JSON"
 	AttackLayer3SummaryIPVersionParamsFormatCsv  AttackLayer3SummaryIPVersionParamsFormat = "CSV"
 )
 
 func (r AttackLayer3SummaryIPVersionParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3SummaryIPVersionParamsFormatJson, AttackLayer3SummaryIPVersionParamsFormatCsv:
+	case AttackLayer3SummaryIPVersionParamsFormatJSON, AttackLayer3SummaryIPVersionParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1535,13 +1535,13 @@ func (r AttackLayer3SummaryProtocolParamsDirection) IsKnown() bool {
 type AttackLayer3SummaryProtocolParamsFormat string
 
 const (
-	AttackLayer3SummaryProtocolParamsFormatJson AttackLayer3SummaryProtocolParamsFormat = "JSON"
+	AttackLayer3SummaryProtocolParamsFormatJSON AttackLayer3SummaryProtocolParamsFormat = "JSON"
 	AttackLayer3SummaryProtocolParamsFormatCsv  AttackLayer3SummaryProtocolParamsFormat = "CSV"
 )
 
 func (r AttackLayer3SummaryProtocolParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3SummaryProtocolParamsFormatJson, AttackLayer3SummaryProtocolParamsFormatCsv:
+	case AttackLayer3SummaryProtocolParamsFormatJSON, AttackLayer3SummaryProtocolParamsFormatCsv:
 		return true
 	}
 	return false
@@ -1648,13 +1648,13 @@ func (r AttackLayer3SummaryVectorParamsDirection) IsKnown() bool {
 type AttackLayer3SummaryVectorParamsFormat string
 
 const (
-	AttackLayer3SummaryVectorParamsFormatJson AttackLayer3SummaryVectorParamsFormat = "JSON"
+	AttackLayer3SummaryVectorParamsFormatJSON AttackLayer3SummaryVectorParamsFormat = "JSON"
 	AttackLayer3SummaryVectorParamsFormatCsv  AttackLayer3SummaryVectorParamsFormat = "CSV"
 )
 
 func (r AttackLayer3SummaryVectorParamsFormat) IsKnown() bool {
 	switch r {
-	case AttackLayer3SummaryVectorParamsFormatJson, AttackLayer3SummaryVectorParamsFormatCsv:
+	case AttackLayer3SummaryVectorParamsFormatJSON, AttackLayer3SummaryVectorParamsFormatCsv:
 		return true
 	}
 	return false
