@@ -43,8 +43,6 @@ func (UnionString) ImplementsMagicTransitIPSECTunnelBulkUpdateResponseModifiedIP
 func (UnionString) ImplementsMagicTransitIPSECTunnelGetResponseIPSECTunnelHealthCheckTargetUnion() {}
 func (UnionString) ImplementsMagicTransitIPSECTunnelNewParamsHealthCheckTargetUnion()              {}
 func (UnionString) ImplementsMagicTransitIPSECTunnelUpdateParamsHealthCheckTargetUnion()           {}
-func (UnionString) ImplementsRulesListItemListResponseUnion()                                      {}
-func (UnionString) ImplementsRulesListItemGetResponseUnion()                                       {}
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySelfHostedApplicationPolicyUnion() {
 }
 func (UnionString) ImplementsZeroTrustAccessApplicationNewParamsBodySaaSApplicationPolicyUnion() {}
@@ -121,8 +119,6 @@ func (UnionInt) ImplementsPageRulesPageRuleUpdateParamsActionsCacheTTLByStatusVa
 func (UnionInt) ImplementsPageRulesPageRuleEditParamsActionsCacheTTLByStatusValueUnion()   {}
 func (UnionInt) ImplementsSpectrumOriginPortUnionParam()                                   {}
 func (UnionInt) ImplementsSpectrumOriginPortUnion()                                        {}
-func (UnionInt) ImplementsRulesListItemListResponseUnion()                                 {}
-func (UnionInt) ImplementsRulesListItemGetResponseUnion()                                  {}
 
 type UnionFloat float64
 

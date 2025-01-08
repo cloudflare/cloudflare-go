@@ -208,9 +208,8 @@ type CustomHostnameNewResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
-	// SSL properties for the custom hostname.
-	SSL CustomHostnameNewResponseSSL `json:"ssl,required"`
+	Hostname string                       `json:"hostname,required"`
+	SSL      CustomHostnameNewResponseSSL `json:"ssl,required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
@@ -263,7 +262,6 @@ func (r customHostnameNewResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL properties for the custom hostname.
 type CustomHostnameNewResponseSSL struct {
 	// Custom hostname SSL identifier tag.
 	ID string `json:"id"`
@@ -289,9 +287,8 @@ type CustomHostnameNewResponseSSL struct {
 	// Domain control validation (DCV) method used for this hostname.
 	Method DCVMethod `json:"method"`
 	// The serial number on a custom uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// SSL specific settings.
-	Settings CustomHostnameNewResponseSSLSettings `json:"settings"`
+	SerialNumber string                               `json:"serial_number"`
+	Settings     CustomHostnameNewResponseSSLSettings `json:"settings"`
 	// The signature on a custom uploaded certificate.
 	Signature string `json:"signature"`
 	// Status of the hostname's SSL certificates.
@@ -344,7 +341,6 @@ func (r customHostnameNewResponseSSLJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL specific settings.
 type CustomHostnameNewResponseSSLSettings struct {
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
@@ -503,7 +499,6 @@ func (r customHostnameNewResponseSSLValidationErrorJSON) RawJSON() string {
 	return r.raw
 }
 
-// Certificate's required validation record.
 type CustomHostnameNewResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
@@ -648,9 +643,8 @@ type CustomHostnameListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
-	// SSL properties for the custom hostname.
-	SSL CustomHostnameListResponseSSL `json:"ssl,required"`
+	Hostname string                        `json:"hostname,required"`
+	SSL      CustomHostnameListResponseSSL `json:"ssl,required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
@@ -703,7 +697,6 @@ func (r customHostnameListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL properties for the custom hostname.
 type CustomHostnameListResponseSSL struct {
 	// Custom hostname SSL identifier tag.
 	ID string `json:"id"`
@@ -729,9 +722,8 @@ type CustomHostnameListResponseSSL struct {
 	// Domain control validation (DCV) method used for this hostname.
 	Method DCVMethod `json:"method"`
 	// The serial number on a custom uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// SSL specific settings.
-	Settings CustomHostnameListResponseSSLSettings `json:"settings"`
+	SerialNumber string                                `json:"serial_number"`
+	Settings     CustomHostnameListResponseSSLSettings `json:"settings"`
 	// The signature on a custom uploaded certificate.
 	Signature string `json:"signature"`
 	// Status of the hostname's SSL certificates.
@@ -784,7 +776,6 @@ func (r customHostnameListResponseSSLJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL specific settings.
 type CustomHostnameListResponseSSLSettings struct {
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
@@ -943,7 +934,6 @@ func (r customHostnameListResponseSSLValidationErrorJSON) RawJSON() string {
 	return r.raw
 }
 
-// Certificate's required validation record.
 type CustomHostnameListResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
@@ -1110,9 +1100,8 @@ type CustomHostnameEditResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
-	// SSL properties for the custom hostname.
-	SSL CustomHostnameEditResponseSSL `json:"ssl,required"`
+	Hostname string                        `json:"hostname,required"`
+	SSL      CustomHostnameEditResponseSSL `json:"ssl,required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
@@ -1165,7 +1154,6 @@ func (r customHostnameEditResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL properties for the custom hostname.
 type CustomHostnameEditResponseSSL struct {
 	// Custom hostname SSL identifier tag.
 	ID string `json:"id"`
@@ -1191,9 +1179,8 @@ type CustomHostnameEditResponseSSL struct {
 	// Domain control validation (DCV) method used for this hostname.
 	Method DCVMethod `json:"method"`
 	// The serial number on a custom uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// SSL specific settings.
-	Settings CustomHostnameEditResponseSSLSettings `json:"settings"`
+	SerialNumber string                                `json:"serial_number"`
+	Settings     CustomHostnameEditResponseSSLSettings `json:"settings"`
 	// The signature on a custom uploaded certificate.
 	Signature string `json:"signature"`
 	// Status of the hostname's SSL certificates.
@@ -1246,7 +1233,6 @@ func (r customHostnameEditResponseSSLJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL specific settings.
 type CustomHostnameEditResponseSSLSettings struct {
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
@@ -1405,7 +1391,6 @@ func (r customHostnameEditResponseSSLValidationErrorJSON) RawJSON() string {
 	return r.raw
 }
 
-// Certificate's required validation record.
 type CustomHostnameEditResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.
@@ -1550,9 +1535,8 @@ type CustomHostnameGetResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
-	// SSL properties for the custom hostname.
-	SSL CustomHostnameGetResponseSSL `json:"ssl,required"`
+	Hostname string                       `json:"hostname,required"`
+	SSL      CustomHostnameGetResponseSSL `json:"ssl,required"`
 	// This is the time the hostname was created.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Unique key/value metadata for this hostname. These are per-hostname (customer)
@@ -1605,7 +1589,6 @@ func (r customHostnameGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL properties for the custom hostname.
 type CustomHostnameGetResponseSSL struct {
 	// Custom hostname SSL identifier tag.
 	ID string `json:"id"`
@@ -1631,9 +1614,8 @@ type CustomHostnameGetResponseSSL struct {
 	// Domain control validation (DCV) method used for this hostname.
 	Method DCVMethod `json:"method"`
 	// The serial number on a custom uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// SSL specific settings.
-	Settings CustomHostnameGetResponseSSLSettings `json:"settings"`
+	SerialNumber string                               `json:"serial_number"`
+	Settings     CustomHostnameGetResponseSSLSettings `json:"settings"`
 	// The signature on a custom uploaded certificate.
 	Signature string `json:"signature"`
 	// Status of the hostname's SSL certificates.
@@ -1686,7 +1668,6 @@ func (r customHostnameGetResponseSSLJSON) RawJSON() string {
 	return r.raw
 }
 
-// SSL specific settings.
 type CustomHostnameGetResponseSSLSettings struct {
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
@@ -1845,7 +1826,6 @@ func (r customHostnameGetResponseSSLValidationErrorJSON) RawJSON() string {
 	return r.raw
 }
 
-// Certificate's required validation record.
 type CustomHostnameGetResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
 	// complete domain validation.

@@ -207,19 +207,22 @@ func TestRecordBatchWithOptionalParams(t *testing.T) {
 		Deletes: cloudflare.F([]dns.RecordBatchParamsDelete{{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}}),
-		Patches: cloudflare.F([]dns.BatchPatchUnionParam{dns.ARecordParam{
-			Comment: cloudflare.F("Domain verification record"),
-			Content: cloudflare.F("198.51.100.4"),
-			Name:    cloudflare.F("example.com"),
-			Proxied: cloudflare.F(true),
-			Settings: cloudflare.F(dns.ARecordSettingsParam{
-				IPV4Only: cloudflare.F(true),
-				IPV6Only: cloudflare.F(true),
-			}),
-			Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
-			TTL:  cloudflare.F(dns.TTL1),
-			Type: cloudflare.F(dns.ARecordTypeA),
-		}}),
+		Patches: cloudflare.F([]dns.BatchPatchUnionParam{dns.BatchPatchARecordParam(dns.BatchPatchARecordParam{
+			ARecordParam: dns.ARecordParam{
+				Comment: cloudflare.F("Domain verification record"),
+				Content: cloudflare.F("198.51.100.4"),
+				Name:    cloudflare.F("example.com"),
+				Proxied: cloudflare.F(true),
+				Settings: cloudflare.F(dns.ARecordSettingsParam{
+					IPV4Only: cloudflare.F(true),
+					IPV6Only: cloudflare.F(true),
+				}),
+				Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
+				TTL:  cloudflare.F(dns.TTL1),
+				Type: cloudflare.F(dns.ARecordTypeA),
+			},
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		})}),
 		Posts: cloudflare.F([]dns.RecordUnionParam{dns.ARecordParam{
 			Comment: cloudflare.F("Domain verification record"),
 			Content: cloudflare.F("198.51.100.4"),
@@ -233,19 +236,22 @@ func TestRecordBatchWithOptionalParams(t *testing.T) {
 			TTL:  cloudflare.F(dns.TTL1),
 			Type: cloudflare.F(dns.ARecordTypeA),
 		}}),
-		Puts: cloudflare.F([]dns.BatchPutUnionParam{dns.ARecordParam{
-			Comment: cloudflare.F("Domain verification record"),
-			Content: cloudflare.F("198.51.100.4"),
-			Name:    cloudflare.F("example.com"),
-			Proxied: cloudflare.F(true),
-			Settings: cloudflare.F(dns.ARecordSettingsParam{
-				IPV4Only: cloudflare.F(true),
-				IPV6Only: cloudflare.F(true),
-			}),
-			Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
-			TTL:  cloudflare.F(dns.TTL1),
-			Type: cloudflare.F(dns.ARecordTypeA),
-		}}),
+		Puts: cloudflare.F([]dns.BatchPutUnionParam{dns.BatchPutARecordParam(dns.BatchPutARecordParam{
+			ARecordParam: dns.ARecordParam{
+				Comment: cloudflare.F("Domain verification record"),
+				Content: cloudflare.F("198.51.100.4"),
+				Name:    cloudflare.F("example.com"),
+				Proxied: cloudflare.F(true),
+				Settings: cloudflare.F(dns.ARecordSettingsParam{
+					IPV4Only: cloudflare.F(true),
+					IPV6Only: cloudflare.F(true),
+				}),
+				Tags: cloudflare.F([]dns.RecordTagsParam{"owner:dns-team"}),
+				TTL:  cloudflare.F(dns.TTL1),
+				Type: cloudflare.F(dns.ARecordTypeA),
+			},
+			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		})}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

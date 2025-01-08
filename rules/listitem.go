@@ -91,7 +91,7 @@ func (r *ListItemService) Update(ctx context.Context, listID string, params List
 }
 
 // Fetches all the items in the list.
-func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[ListItemListResponseUnion], err error) {
+func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *pagination.CursorPagination[ListItemListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -117,7 +117,7 @@ func (r *ListItemService) List(ctx context.Context, listID string, params ListIt
 }
 
 // Fetches all the items in the list.
-func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[ListItemListResponseUnion] {
+func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) *pagination.CursorPaginationAutoPager[ListItemListResponse] {
 	return pagination.NewCursorPaginationAutoPager(r.List(ctx, listID, params, opts...))
 }
 
@@ -147,7 +147,7 @@ func (r *ListItemService) Delete(ctx context.Context, listID string, body ListIt
 }
 
 // Fetches a list item in the list.
-func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, listID string, itemID string, opts ...option.RequestOption) (res *ListItemGetResponseUnion, err error) {
+func (r *ListItemService) Get(ctx context.Context, accountIdentifier string, listID string, itemID string, opts ...option.RequestOption) (res *ListItemGetResponse, err error) {
 	var env ListItemGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if accountIdentifier == "" {
@@ -239,11 +239,93 @@ func (r listItemUpdateResponseJSON) RawJSON() string {
 
 // An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 // maximum of /64.
+type ListItemListResponse struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname          Hostname `json:"hostname"`
+	IncludeSubdomains bool     `json:"include_subdomains"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn          string `json:"modified_on"`
+	PreservePathSuffix  bool   `json:"preserve_path_suffix"`
+	PreserveQueryString bool   `json:"preserve_query_string"`
+	// The definition of the redirect.
+	Redirect        Redirect                       `json:"redirect"`
+	SourceURL       string                         `json:"source_url"`
+	StatusCode      ListItemListResponseStatusCode `json:"status_code"`
+	SubpathMatching bool                           `json:"subpath_matching"`
+	TargetURL       string                         `json:"target_url"`
+	URLHostname     string                         `json:"url_hostname"`
+	JSON            listItemListResponseJSON       `json:"-"`
+	union           ListItemListResponseUnion
+}
+
+// listItemListResponseJSON contains the JSON metadata for the struct
+// [ListItemListResponse]
+type listItemListResponseJSON struct {
+	ID                  apijson.Field
+	ASN                 apijson.Field
+	Comment             apijson.Field
+	CreatedOn           apijson.Field
+	Hostname            apijson.Field
+	IncludeSubdomains   apijson.Field
+	IP                  apijson.Field
+	ModifiedOn          apijson.Field
+	PreservePathSuffix  apijson.Field
+	PreserveQueryString apijson.Field
+	Redirect            apijson.Field
+	SourceURL           apijson.Field
+	StatusCode          apijson.Field
+	SubpathMatching     apijson.Field
+	TargetURL           apijson.Field
+	URLHostname         apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r listItemListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ListItemListResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = ListItemListResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ListItemListResponseUnion] interface which you can cast to
+// the specific types for more type safety.
 //
-// Union satisfied by [shared.UnionString], [rules.Redirect], [rules.Hostname] or
-// [shared.UnionInt].
+// Possible runtime types of the union are [rules.ListItemListResponseObject],
+// [rules.ListItemListResponseRulesListsRedirect],
+// [rules.ListItemListResponseRulesListsHostname],
+// [rules.ListItemListResponseObject].
+func (r ListItemListResponse) AsUnion() ListItemListResponseUnion {
+	return r.union
+}
+
+// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+// maximum of /64.
+//
+// Union satisfied by [rules.ListItemListResponseObject],
+// [rules.ListItemListResponseRulesListsRedirect],
+// [rules.ListItemListResponseRulesListsHostname] or
+// [rules.ListItemListResponseObject].
 type ListItemListResponseUnion interface {
-	ImplementsRulesListItemListResponseUnion()
+	implementsRulesListItemListResponse()
 }
 
 func init() {
@@ -251,22 +333,161 @@ func init() {
 		reflect.TypeOf((*ListItemListResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemListResponseObject{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(Redirect{}),
+			Type:       reflect.TypeOf(ListItemListResponseRulesListsRedirect{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(Hostname{}),
+			Type:       reflect.TypeOf(ListItemListResponseRulesListsHostname{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionInt(0)),
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemListResponseObject{}),
 		},
 	)
+}
+
+// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+// maximum of /64.
+type ListItemListResponseObject struct {
+	JSON listItemListResponseObjectJSON `json:"-"`
+}
+
+// listItemListResponseObjectJSON contains the JSON metadata for the struct
+// [ListItemListResponseObject]
+type listItemListResponseObjectJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemListResponseObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemListResponseObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemListResponseObject) implementsRulesListItemListResponse() {}
+
+// The definition of the redirect.
+type ListItemListResponseRulesListsRedirect struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect Redirect                                   `json:"redirect"`
+	JSON     listItemListResponseRulesListsRedirectJSON `json:"-"`
+	Redirect
+}
+
+// listItemListResponseRulesListsRedirectJSON contains the JSON metadata for the
+// struct [ListItemListResponseRulesListsRedirect]
+type listItemListResponseRulesListsRedirectJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemListResponseRulesListsRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemListResponseRulesListsRedirectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemListResponseRulesListsRedirect) implementsRulesListItemListResponse() {}
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type ListItemListResponseRulesListsHostname struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect Redirect                                   `json:"redirect"`
+	JSON     listItemListResponseRulesListsHostnameJSON `json:"-"`
+	Hostname
+}
+
+// listItemListResponseRulesListsHostnameJSON contains the JSON metadata for the
+// struct [ListItemListResponseRulesListsHostname]
+type listItemListResponseRulesListsHostnameJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemListResponseRulesListsHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemListResponseRulesListsHostnameJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemListResponseRulesListsHostname) implementsRulesListItemListResponse() {}
+
+type ListItemListResponseStatusCode int64
+
+const (
+	ListItemListResponseStatusCode301 ListItemListResponseStatusCode = 301
+	ListItemListResponseStatusCode302 ListItemListResponseStatusCode = 302
+	ListItemListResponseStatusCode307 ListItemListResponseStatusCode = 307
+	ListItemListResponseStatusCode308 ListItemListResponseStatusCode = 308
+)
+
+func (r ListItemListResponseStatusCode) IsKnown() bool {
+	switch r {
+	case ListItemListResponseStatusCode301, ListItemListResponseStatusCode302, ListItemListResponseStatusCode307, ListItemListResponseStatusCode308:
+		return true
+	}
+	return false
 }
 
 type ListItemDeleteResponse struct {
@@ -293,11 +514,93 @@ func (r listItemDeleteResponseJSON) RawJSON() string {
 
 // An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 // maximum of /64.
+type ListItemGetResponse struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname          Hostname `json:"hostname"`
+	IncludeSubdomains bool     `json:"include_subdomains"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn          string `json:"modified_on"`
+	PreservePathSuffix  bool   `json:"preserve_path_suffix"`
+	PreserveQueryString bool   `json:"preserve_query_string"`
+	// The definition of the redirect.
+	Redirect        Redirect                      `json:"redirect"`
+	SourceURL       string                        `json:"source_url"`
+	StatusCode      ListItemGetResponseStatusCode `json:"status_code"`
+	SubpathMatching bool                          `json:"subpath_matching"`
+	TargetURL       string                        `json:"target_url"`
+	URLHostname     string                        `json:"url_hostname"`
+	JSON            listItemGetResponseJSON       `json:"-"`
+	union           ListItemGetResponseUnion
+}
+
+// listItemGetResponseJSON contains the JSON metadata for the struct
+// [ListItemGetResponse]
+type listItemGetResponseJSON struct {
+	ID                  apijson.Field
+	ASN                 apijson.Field
+	Comment             apijson.Field
+	CreatedOn           apijson.Field
+	Hostname            apijson.Field
+	IncludeSubdomains   apijson.Field
+	IP                  apijson.Field
+	ModifiedOn          apijson.Field
+	PreservePathSuffix  apijson.Field
+	PreserveQueryString apijson.Field
+	Redirect            apijson.Field
+	SourceURL           apijson.Field
+	StatusCode          apijson.Field
+	SubpathMatching     apijson.Field
+	TargetURL           apijson.Field
+	URLHostname         apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r listItemGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r *ListItemGetResponse) UnmarshalJSON(data []byte) (err error) {
+	*r = ListItemGetResponse{}
+	err = apijson.UnmarshalRoot(data, &r.union)
+	if err != nil {
+		return err
+	}
+	return apijson.Port(r.union, &r)
+}
+
+// AsUnion returns a [ListItemGetResponseUnion] interface which you can cast to the
+// specific types for more type safety.
 //
-// Union satisfied by [shared.UnionString], [rules.Redirect], [rules.Hostname] or
-// [shared.UnionInt].
+// Possible runtime types of the union are [rules.ListItemGetResponseObject],
+// [rules.ListItemGetResponseRulesListsRedirect],
+// [rules.ListItemGetResponseRulesListsHostname],
+// [rules.ListItemGetResponseObject].
+func (r ListItemGetResponse) AsUnion() ListItemGetResponseUnion {
+	return r.union
+}
+
+// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+// maximum of /64.
+//
+// Union satisfied by [rules.ListItemGetResponseObject],
+// [rules.ListItemGetResponseRulesListsRedirect],
+// [rules.ListItemGetResponseRulesListsHostname] or
+// [rules.ListItemGetResponseObject].
 type ListItemGetResponseUnion interface {
-	ImplementsRulesListItemGetResponseUnion()
+	implementsRulesListItemGetResponse()
 }
 
 func init() {
@@ -305,22 +608,161 @@ func init() {
 		reflect.TypeOf((*ListItemGetResponseUnion)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemGetResponseObject{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(Redirect{}),
+			Type:       reflect.TypeOf(ListItemGetResponseRulesListsRedirect{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(Hostname{}),
+			Type:       reflect.TypeOf(ListItemGetResponseRulesListsHostname{}),
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionInt(0)),
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ListItemGetResponseObject{}),
 		},
 	)
+}
+
+// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+// maximum of /64.
+type ListItemGetResponseObject struct {
+	JSON listItemGetResponseObjectJSON `json:"-"`
+}
+
+// listItemGetResponseObjectJSON contains the JSON metadata for the struct
+// [ListItemGetResponseObject]
+type listItemGetResponseObjectJSON struct {
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemGetResponseObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemGetResponseObjectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemGetResponseObject) implementsRulesListItemGetResponse() {}
+
+// The definition of the redirect.
+type ListItemGetResponseRulesListsRedirect struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect Redirect                                  `json:"redirect"`
+	JSON     listItemGetResponseRulesListsRedirectJSON `json:"-"`
+	Redirect
+}
+
+// listItemGetResponseRulesListsRedirectJSON contains the JSON metadata for the
+// struct [ListItemGetResponseRulesListsRedirect]
+type listItemGetResponseRulesListsRedirectJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemGetResponseRulesListsRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemGetResponseRulesListsRedirectJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemGetResponseRulesListsRedirect) implementsRulesListItemGetResponse() {}
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type ListItemGetResponseRulesListsHostname struct {
+	// The unique ID of the list.
+	ID string `json:"id"`
+	// A non-negative 32 bit integer
+	ASN int64 `json:"asn"`
+	// An informative summary of the list item.
+	Comment string `json:"comment"`
+	// The RFC 3339 timestamp of when the item was created.
+	CreatedOn string `json:"created_on"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname Hostname `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP string `json:"ip"`
+	// The RFC 3339 timestamp of when the item was last modified.
+	ModifiedOn string `json:"modified_on"`
+	// The definition of the redirect.
+	Redirect Redirect                                  `json:"redirect"`
+	JSON     listItemGetResponseRulesListsHostnameJSON `json:"-"`
+	Hostname
+}
+
+// listItemGetResponseRulesListsHostnameJSON contains the JSON metadata for the
+// struct [ListItemGetResponseRulesListsHostname]
+type listItemGetResponseRulesListsHostnameJSON struct {
+	ID          apijson.Field
+	ASN         apijson.Field
+	Comment     apijson.Field
+	CreatedOn   apijson.Field
+	Hostname    apijson.Field
+	IP          apijson.Field
+	ModifiedOn  apijson.Field
+	Redirect    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ListItemGetResponseRulesListsHostname) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r listItemGetResponseRulesListsHostnameJSON) RawJSON() string {
+	return r.raw
+}
+
+func (r ListItemGetResponseRulesListsHostname) implementsRulesListItemGetResponse() {}
+
+type ListItemGetResponseStatusCode int64
+
+const (
+	ListItemGetResponseStatusCode301 ListItemGetResponseStatusCode = 301
+	ListItemGetResponseStatusCode302 ListItemGetResponseStatusCode = 302
+	ListItemGetResponseStatusCode307 ListItemGetResponseStatusCode = 307
+	ListItemGetResponseStatusCode308 ListItemGetResponseStatusCode = 308
+)
+
+func (r ListItemGetResponseStatusCode) IsKnown() bool {
+	switch r {
+	case ListItemGetResponseStatusCode301, ListItemGetResponseStatusCode302, ListItemGetResponseStatusCode307, ListItemGetResponseStatusCode308:
+		return true
+	}
+	return false
 }
 
 type ListItemNewParams struct {
@@ -545,7 +987,7 @@ type ListItemGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 	// maximum of /64.
-	Result ListItemGetResponseUnion `json:"result,required"`
+	Result ListItemGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success ListItemGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    listItemGetResponseEnvelopeJSON    `json:"-"`
