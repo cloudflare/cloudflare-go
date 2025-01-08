@@ -168,10 +168,6 @@ func (r hostnameJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Hostname) ImplementsRulesListItemListResponseUnion() {}
-
-func (r Hostname) ImplementsRulesListItemGetResponseUnion() {}
-
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 // 0 to 9, wildcards (\*), and the hyphen (-).
 type HostnameParam struct {
@@ -276,10 +272,6 @@ func (r *Redirect) UnmarshalJSON(data []byte) (err error) {
 func (r redirectJSON) RawJSON() string {
 	return r.raw
 }
-
-func (r Redirect) ImplementsRulesListItemListResponseUnion() {}
-
-func (r Redirect) ImplementsRulesListItemGetResponseUnion() {}
 
 type RedirectStatusCode int64
 

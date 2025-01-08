@@ -39,7 +39,7 @@ func NewAccessApplicationPolicyService(opts ...option.RequestOption) (r *AccessA
 // users or groups who can reach it. We recommend creating a reusable policy
 // instead and subsequently referencing its ID in the application's 'policies'
 // array.
-func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *ApplicationPolicy, err error) {
+func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *AccessApplicationPolicyNewResponse, err error) {
 	var env AccessApplicationPolicyNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -75,7 +75,7 @@ func (r *AccessApplicationPolicyService) New(ctx context.Context, appID string, 
 
 // Updates an Access policy specific to an application. To update a reusable
 // policy, use the /account or zones/{account or zone_id}/policies/{uid} endpoint.
-func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID string, policyID string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *ApplicationPolicy, err error) {
+func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID string, policyID string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *AccessApplicationPolicyUpdateResponse, err error) {
 	var env AccessApplicationPolicyUpdateResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -115,7 +115,7 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, appID strin
 
 // Lists Access policies configured for an application. Returns both exclusively
 // scoped and reusable policies used by the application.
-func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[ApplicationPolicy], err error) {
+func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *pagination.SinglePage[AccessApplicationPolicyListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -156,7 +156,7 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, appID string,
 
 // Lists Access policies configured for an application. Returns both exclusively
 // scoped and reusable policies used by the application.
-func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[ApplicationPolicy] {
+func (r *AccessApplicationPolicyService) ListAutoPaging(ctx context.Context, appID string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) *pagination.SinglePageAutoPager[AccessApplicationPolicyListResponse] {
 	return pagination.NewSinglePageAutoPager(r.List(ctx, appID, query, opts...))
 }
 
@@ -202,7 +202,7 @@ func (r *AccessApplicationPolicyService) Delete(ctx context.Context, appID strin
 
 // Fetches a single Access policy configured for an application. Returns both
 // exclusively owned and reusable policies used by the application.
-func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, policyID string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *ApplicationPolicy, err error) {
+func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, policyID string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *AccessApplicationPolicyGetResponse, err error) {
 	var env AccessApplicationPolicyGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	var accountOrZone string
@@ -240,6 +240,78 @@ func (r *AccessApplicationPolicyService) Get(ctx context.Context, appID string, 
 	return
 }
 
+type AccessApplicationPolicyNewResponse struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                  `json:"precedence"`
+	JSON       accessApplicationPolicyNewResponseJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationPolicyNewResponseJSON contains the JSON metadata for the struct
+// [AccessApplicationPolicyNewResponse]
+type accessApplicationPolicyNewResponseJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyUpdateResponse struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                     `json:"precedence"`
+	JSON       accessApplicationPolicyUpdateResponseJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationPolicyUpdateResponseJSON contains the JSON metadata for the
+// struct [AccessApplicationPolicyUpdateResponse]
+type accessApplicationPolicyUpdateResponseJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyListResponse struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                   `json:"precedence"`
+	JSON       accessApplicationPolicyListResponseJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationPolicyListResponseJSON contains the JSON metadata for the
+// struct [AccessApplicationPolicyListResponse]
+type accessApplicationPolicyListResponseJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccessApplicationPolicyDeleteResponse struct {
 	// UUID
 	ID   string                                    `json:"id"`
@@ -259,6 +331,30 @@ func (r *AccessApplicationPolicyDeleteResponse) UnmarshalJSON(data []byte) (err 
 }
 
 func (r accessApplicationPolicyDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationPolicyGetResponse struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                  `json:"precedence"`
+	JSON       accessApplicationPolicyGetResponseJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationPolicyGetResponseJSON contains the JSON metadata for the struct
+// [AccessApplicationPolicyGetResponse]
+type accessApplicationPolicyGetResponseJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationPolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationPolicyGetResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -298,7 +394,7 @@ type AccessApplicationPolicyNewResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyNewResponseEnvelopeSuccess `json:"success,required"`
-	Result  ApplicationPolicy                                 `json:"result"`
+	Result  AccessApplicationPolicyNewResponse                `json:"result"`
 	JSON    accessApplicationPolicyNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -372,7 +468,7 @@ type AccessApplicationPolicyUpdateResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
-	Result  ApplicationPolicy                                    `json:"result"`
+	Result  AccessApplicationPolicyUpdateResponse                `json:"result"`
 	JSON    accessApplicationPolicyUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -479,7 +575,7 @@ type AccessApplicationPolicyGetResponseEnvelope struct {
 	Messages []shared.ResponseInfo `json:"messages,required"`
 	// Whether the API call was successful
 	Success AccessApplicationPolicyGetResponseEnvelopeSuccess `json:"success,required"`
-	Result  ApplicationPolicy                                 `json:"result"`
+	Result  AccessApplicationPolicyGetResponse                `json:"result"`
 	JSON    accessApplicationPolicyGetResponseEnvelopeJSON    `json:"-"`
 }
 

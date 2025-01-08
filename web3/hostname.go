@@ -185,10 +185,6 @@ func (r hostnameJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r Hostname) ImplementsRulesListItemListResponseUnion() {}
-
-func (r Hostname) ImplementsRulesListItemGetResponseUnion() {}
-
 // Status of the hostname's activation.
 type HostnameStatus string
 

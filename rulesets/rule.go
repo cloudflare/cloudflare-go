@@ -421,10 +421,6 @@ func (r BlockRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r BlockRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
-func (r BlockRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r BlockRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
-
 // The parameters configuring the rule's action.
 type BlockRuleActionParametersParam struct {
 	// The response to show when the block is applied.
@@ -776,10 +772,6 @@ func (r CompressResponseRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnio
 
 func (r CompressResponseRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
-func (r CompressResponseRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r CompressResponseRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
-
 // The parameters configuring the rule's action.
 type CompressResponseRuleActionParametersParam struct {
 	// Custom order for compression algorithms.
@@ -1060,10 +1052,6 @@ func (r DDoSDynamicRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
 func (r DDoSDynamicRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r DDoSDynamicRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
-
-func (r DDoSDynamicRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r DDoSDynamicRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // Configure checks for exposed credentials.
 type DDoSDynamicRuleExposedCredentialCheckParam struct {
@@ -1539,10 +1527,6 @@ func (r ExecuteRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ExecuteRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
-func (r ExecuteRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r ExecuteRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
-
 // The parameters configuring the rule's action.
 type ExecuteRuleActionParametersParam struct {
 	// The ID of the ruleset to execute.
@@ -1884,10 +1868,6 @@ func (r ForceConnectionCloseRuleParam) implementsRulesetsRulesetNewParamsRuleUni
 func (r ForceConnectionCloseRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ForceConnectionCloseRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
-
-func (r ForceConnectionCloseRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r ForceConnectionCloseRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // Configure checks for exposed credentials.
 type ForceConnectionCloseRuleExposedCredentialCheckParam struct {
@@ -2249,10 +2229,6 @@ func (r LogCustomFieldRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion(
 
 func (r LogCustomFieldRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
-func (r LogCustomFieldRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r LogCustomFieldRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
-
 // The parameters configuring the rule's action.
 type LogCustomFieldRuleActionParametersParam struct {
 	// The cookie fields to log.
@@ -2558,10 +2534,6 @@ func (r LogRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r LogRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
-func (r LogRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r LogRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
-
 // Configure checks for exposed credentials.
 type LogRuleExposedCredentialCheckParam struct {
 	// Expression that selects the password used in the credentials check.
@@ -2855,10 +2827,6 @@ func (r ManagedChallengeRuleParam) implementsRulesetsRulesetNewParamsRuleUnion()
 func (r ManagedChallengeRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ManagedChallengeRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
-
-func (r ManagedChallengeRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r ManagedChallengeRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // Configure checks for exposed credentials.
 type ManagedChallengeRuleExposedCredentialCheckParam struct {
@@ -3338,10 +3306,6 @@ func (r RedirectRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
 func (r RedirectRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r RedirectRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
-
-func (r RedirectRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r RedirectRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // The parameters configuring the rule's action.
 type RedirectRuleActionParametersParam struct {
@@ -3954,10 +3918,6 @@ func (r RewriteRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r RewriteRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
-func (r RewriteRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r RewriteRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
-
 // The parameters configuring the rule's action.
 type RewriteRuleActionParametersParam struct {
 	// Map of request headers to modify.
@@ -4536,10 +4496,6 @@ func (r RouteRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r RouteRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
-func (r RouteRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r RouteRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
-
 // The parameters configuring the rule's action.
 type RouteRuleActionParametersParam struct {
 	// Rewrite the HTTP Host header.
@@ -4861,10 +4817,6 @@ func (r ScoreRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ScoreRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
-func (r ScoreRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r ScoreRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
-
 // The parameters configuring the rule's action.
 type ScoreRuleActionParametersParam struct {
 	// Increment contains the delta to change the score and can be either positive or
@@ -5183,10 +5135,6 @@ func (r ServeErrorRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
 func (r ServeErrorRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r ServeErrorRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
-
-func (r ServeErrorRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r ServeErrorRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // The parameters configuring the rule's action.
 type ServeErrorRuleActionParametersParam struct {
@@ -6021,10 +5969,6 @@ func (r SetCacheSettingsRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnio
 
 func (r SetCacheSettingsRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
-func (r SetCacheSettingsRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r SetCacheSettingsRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
-
 // The parameters configuring the rule's action.
 type SetCacheSettingsRuleActionParametersParam struct {
 	// List of additional ports that caching can be enabled on.
@@ -6760,10 +6704,6 @@ func (r SetConfigRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r SetConfigRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
 
-func (r SetConfigRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r SetConfigRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
-
 // The parameters configuring the rule's action.
 type SetConfigRuleActionParametersParam struct {
 	// Turn on or off Automatic HTTPS Rewrites.
@@ -7156,10 +7096,6 @@ func (r SkipRuleParam) implementsRulesetsRulesetNewParamsRuleUnion() {}
 func (r SkipRuleParam) implementsRulesetsRulesetUpdateParamsRuleUnion() {}
 
 func (r SkipRuleParam) implementsRulesetsPhaseUpdateParamsRuleUnion() {}
-
-func (r SkipRuleParam) implementsRulesetsRuleNewParamsBodyUnion() {}
-
-func (r SkipRuleParam) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // The parameters configuring the rule's action.
 type SkipRuleActionParametersParam struct {
@@ -9149,6 +9085,7 @@ type RuleNewParamsBody struct {
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging   param.Field[LoggingParam] `json:"logging"`
+	Position  param.Field[interface{}]  `json:"position"`
 	Ratelimit param.Field[interface{}]  `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
@@ -9160,26 +9097,113 @@ func (r RuleNewParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r RuleNewParamsBody) implementsRulesetsRuleNewParamsBodyUnion() {}
 
-// Satisfied by [rulesets.BlockRuleParam],
-// [rulesets.RuleNewParamsBodyRulesetsChallengeRule],
-// [rulesets.CompressResponseRuleParam], [rulesets.ExecuteRuleParam],
-// [rulesets.RuleNewParamsBodyRulesetsJSChallengeRule], [rulesets.LogRuleParam],
-// [rulesets.ManagedChallengeRuleParam], [rulesets.RedirectRuleParam],
-// [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
-// [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
-// [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam],
-// [rulesets.SetCacheSettingsRuleParam], [rulesets.LogCustomFieldRuleParam],
-// [rulesets.DDoSDynamicRuleParam], [rulesets.ForceConnectionCloseRuleParam],
-// [RuleNewParamsBody].
+// Satisfied by [rulesets.RuleNewParamsBodyBlockRule],
+// [rulesets.RuleNewParamsBodyChallengeRule],
+// [rulesets.RuleNewParamsBodyCompressionRule],
+// [rulesets.RuleNewParamsBodyExecuteRule],
+// [rulesets.RuleNewParamsBodyJavascriptChallengeRule],
+// [rulesets.RuleNewParamsBodyLogRule],
+// [rulesets.RuleNewParamsBodyManagedChallengeRule],
+// [rulesets.RuleNewParamsBodyRedirectRule],
+// [rulesets.RuleNewParamsBodyRewriteRule], [rulesets.RuleNewParamsBodyOriginRule],
+// [rulesets.RuleNewParamsBodyScoreRule],
+// [rulesets.RuleNewParamsBodyServeErrorRule],
+// [rulesets.RuleNewParamsBodySetConfigRule], [rulesets.RuleNewParamsBodySkipRule],
+// [rulesets.RuleNewParamsBodySetCacheSettingsRule],
+// [rulesets.RuleNewParamsBodyLogCustomFieldRule],
+// [rulesets.RuleNewParamsBodyDDoSDynamicRule],
+// [rulesets.RuleNewParamsBodyForceConnectionCloseRule], [RuleNewParamsBody].
 type RuleNewParamsBodyUnion interface {
 	implementsRulesetsRuleNewParamsBodyUnion()
 }
 
-type RuleNewParamsBodyRulesetsChallengeRule struct {
+type RuleNewParamsBodyBlockRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyBlockRulePositionUnion] `json:"position"`
+	BlockRuleParam
+}
+
+func (r RuleNewParamsBodyBlockRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyBlockRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyBlockRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyBlockRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyBlockRulePosition) implementsRulesetsRuleNewParamsBodyBlockRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyBlockRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyBlockRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyBlockRulePositionIndexPosition],
+// [RuleNewParamsBodyBlockRulePosition].
+type RuleNewParamsBodyBlockRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyBlockRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyBlockRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyBlockRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyBlockRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyBlockRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyBlockRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyBlockRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyBlockRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyBlockRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyBlockRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyBlockRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyBlockRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyBlockRulePositionUnion() {
+}
+
+type RuleNewParamsBodyChallengeRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleNewParamsBodyRulesetsChallengeRuleAction] `json:"action"`
+	Action param.Field[RuleNewParamsBodyChallengeRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[interface{}] `json:"action_parameters"`
 	// An informative description of the rule.
@@ -9187,57 +9211,129 @@ type RuleNewParamsBodyRulesetsChallengeRule struct {
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
 	// Configure checks for exposed credentials.
-	ExposedCredentialCheck param.Field[RuleNewParamsBodyRulesetsChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	ExposedCredentialCheck param.Field[RuleNewParamsBodyChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyChallengeRulePositionUnion] `json:"position"`
 	// An object configuring the rule's ratelimit behavior.
-	Ratelimit param.Field[RuleNewParamsBodyRulesetsChallengeRuleRatelimit] `json:"ratelimit"`
+	Ratelimit param.Field[RuleNewParamsBodyChallengeRuleRatelimit] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleNewParamsBodyRulesetsChallengeRule) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBodyChallengeRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRulesetsChallengeRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyChallengeRule) implementsRulesetsRuleNewParamsBodyUnion() {}
 
 // The action to perform when the rule matches.
-type RuleNewParamsBodyRulesetsChallengeRuleAction string
+type RuleNewParamsBodyChallengeRuleAction string
 
 const (
-	RuleNewParamsBodyRulesetsChallengeRuleActionChallenge RuleNewParamsBodyRulesetsChallengeRuleAction = "challenge"
+	RuleNewParamsBodyChallengeRuleActionChallenge RuleNewParamsBodyChallengeRuleAction = "challenge"
 )
 
-func (r RuleNewParamsBodyRulesetsChallengeRuleAction) IsKnown() bool {
+func (r RuleNewParamsBodyChallengeRuleAction) IsKnown() bool {
 	switch r {
-	case RuleNewParamsBodyRulesetsChallengeRuleActionChallenge:
+	case RuleNewParamsBodyChallengeRuleActionChallenge:
 		return true
 	}
 	return false
 }
 
 // Configure checks for exposed credentials.
-type RuleNewParamsBodyRulesetsChallengeRuleExposedCredentialCheck struct {
+type RuleNewParamsBodyChallengeRuleExposedCredentialCheck struct {
 	// Expression that selects the password used in the credentials check.
 	PasswordExpression param.Field[string] `json:"password_expression,required"`
 	// Expression that selects the user ID used in the credentials check.
 	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
-func (r RuleNewParamsBodyRulesetsChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBodyChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyChallengeRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyChallengeRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyChallengeRulePosition) implementsRulesetsRuleNewParamsBodyChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyChallengeRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyChallengeRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyChallengeRulePositionIndexPosition],
+// [RuleNewParamsBodyChallengeRulePosition].
+type RuleNewParamsBodyChallengeRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyChallengeRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyChallengeRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyChallengeRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyChallengeRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyChallengeRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyChallengeRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyChallengeRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyChallengeRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyChallengeRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyChallengeRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyChallengeRulePositionUnion() {
+}
+
 // An object configuring the rule's ratelimit behavior.
-type RuleNewParamsBodyRulesetsChallengeRuleRatelimit struct {
+type RuleNewParamsBodyChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the ratelimiter counter will be
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod] `json:"period,required"`
+	Period param.Field[RuleNewParamsBodyChallengeRuleRatelimitPeriod] `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -9257,33 +9353,197 @@ type RuleNewParamsBodyRulesetsChallengeRuleRatelimit struct {
 	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
-func (r RuleNewParamsBodyRulesetsChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBodyChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Period in seconds over which the counter is being incremented.
-type RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod int64
+type RuleNewParamsBodyChallengeRuleRatelimitPeriod int64
 
 const (
-	RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod10   RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod = 10
-	RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod60   RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod = 60
-	RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod600  RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod = 600
-	RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod3600 RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod = 3600
+	RuleNewParamsBodyChallengeRuleRatelimitPeriod10   RuleNewParamsBodyChallengeRuleRatelimitPeriod = 10
+	RuleNewParamsBodyChallengeRuleRatelimitPeriod60   RuleNewParamsBodyChallengeRuleRatelimitPeriod = 60
+	RuleNewParamsBodyChallengeRuleRatelimitPeriod600  RuleNewParamsBodyChallengeRuleRatelimitPeriod = 600
+	RuleNewParamsBodyChallengeRuleRatelimitPeriod3600 RuleNewParamsBodyChallengeRuleRatelimitPeriod = 3600
 )
 
-func (r RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
+func (r RuleNewParamsBodyChallengeRuleRatelimitPeriod) IsKnown() bool {
 	switch r {
-	case RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod10, RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod60, RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod600, RuleNewParamsBodyRulesetsChallengeRuleRatelimitPeriod3600:
+	case RuleNewParamsBodyChallengeRuleRatelimitPeriod10, RuleNewParamsBodyChallengeRuleRatelimitPeriod60, RuleNewParamsBodyChallengeRuleRatelimitPeriod600, RuleNewParamsBodyChallengeRuleRatelimitPeriod3600:
 		return true
 	}
 	return false
 }
 
-type RuleNewParamsBodyRulesetsJSChallengeRule struct {
+type RuleNewParamsBodyCompressionRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyCompressionRulePositionUnion] `json:"position"`
+	CompressResponseRuleParam
+}
+
+func (r RuleNewParamsBodyCompressionRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyCompressionRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyCompressionRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyCompressionRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyCompressionRulePosition) implementsRulesetsRuleNewParamsBodyCompressionRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyCompressionRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyCompressionRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyCompressionRulePositionIndexPosition],
+// [RuleNewParamsBodyCompressionRulePosition].
+type RuleNewParamsBodyCompressionRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyCompressionRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyCompressionRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyCompressionRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyCompressionRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyCompressionRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyCompressionRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyCompressionRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyCompressionRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyCompressionRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyCompressionRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyCompressionRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyCompressionRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyCompressionRulePositionUnion() {
+}
+
+type RuleNewParamsBodyExecuteRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyExecuteRulePositionUnion] `json:"position"`
+	ExecuteRuleParam
+}
+
+func (r RuleNewParamsBodyExecuteRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyExecuteRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyExecuteRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyExecuteRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyExecuteRulePosition) implementsRulesetsRuleNewParamsBodyExecuteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyExecuteRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyExecuteRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyExecuteRulePositionIndexPosition],
+// [RuleNewParamsBodyExecuteRulePosition].
+type RuleNewParamsBodyExecuteRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyExecuteRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyExecuteRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyExecuteRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyExecuteRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyExecuteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyExecuteRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyExecuteRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyExecuteRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyExecuteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyExecuteRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyExecuteRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyExecuteRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyExecuteRulePositionUnion() {
+}
+
+type RuleNewParamsBodyJavascriptChallengeRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleNewParamsBodyRulesetsJSChallengeRuleAction] `json:"action"`
+	Action param.Field[RuleNewParamsBodyJavascriptChallengeRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[interface{}] `json:"action_parameters"`
 	// An informative description of the rule.
@@ -9291,57 +9551,130 @@ type RuleNewParamsBodyRulesetsJSChallengeRule struct {
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
 	// Configure checks for exposed credentials.
-	ExposedCredentialCheck param.Field[RuleNewParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	ExposedCredentialCheck param.Field[RuleNewParamsBodyJavascriptChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyJavascriptChallengeRulePositionUnion] `json:"position"`
 	// An object configuring the rule's ratelimit behavior.
-	Ratelimit param.Field[RuleNewParamsBodyRulesetsJSChallengeRuleRatelimit] `json:"ratelimit"`
+	Ratelimit param.Field[RuleNewParamsBodyJavascriptChallengeRuleRatelimit] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleNewParamsBodyRulesetsJSChallengeRule) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBodyJavascriptChallengeRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleNewParamsBodyRulesetsJSChallengeRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+func (r RuleNewParamsBodyJavascriptChallengeRule) implementsRulesetsRuleNewParamsBodyUnion() {}
 
 // The action to perform when the rule matches.
-type RuleNewParamsBodyRulesetsJSChallengeRuleAction string
+type RuleNewParamsBodyJavascriptChallengeRuleAction string
 
 const (
-	RuleNewParamsBodyRulesetsJSChallengeRuleActionJSChallenge RuleNewParamsBodyRulesetsJSChallengeRuleAction = "js_challenge"
+	RuleNewParamsBodyJavascriptChallengeRuleActionJSChallenge RuleNewParamsBodyJavascriptChallengeRuleAction = "js_challenge"
 )
 
-func (r RuleNewParamsBodyRulesetsJSChallengeRuleAction) IsKnown() bool {
+func (r RuleNewParamsBodyJavascriptChallengeRuleAction) IsKnown() bool {
 	switch r {
-	case RuleNewParamsBodyRulesetsJSChallengeRuleActionJSChallenge:
+	case RuleNewParamsBodyJavascriptChallengeRuleActionJSChallenge:
 		return true
 	}
 	return false
 }
 
 // Configure checks for exposed credentials.
-type RuleNewParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck struct {
+type RuleNewParamsBodyJavascriptChallengeRuleExposedCredentialCheck struct {
 	// Expression that selects the password used in the credentials check.
 	PasswordExpression param.Field[string] `json:"password_expression,required"`
 	// Expression that selects the user ID used in the credentials check.
 	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
-func (r RuleNewParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBodyJavascriptChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyJavascriptChallengeRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyJavascriptChallengeRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyJavascriptChallengeRulePosition) implementsRulesetsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodyJavascriptChallengeRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyJavascriptChallengeRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyJavascriptChallengeRulePositionIndexPosition],
+// [RuleNewParamsBodyJavascriptChallengeRulePosition].
+type RuleNewParamsBodyJavascriptChallengeRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyJavascriptChallengeRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyJavascriptChallengeRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyJavascriptChallengeRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyJavascriptChallengeRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyJavascriptChallengeRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyJavascriptChallengeRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyJavascriptChallengeRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyJavascriptChallengeRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyJavascriptChallengeRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyJavascriptChallengeRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyJavascriptChallengeRulePositionUnion() {
+}
+
 // An object configuring the rule's ratelimit behavior.
-type RuleNewParamsBodyRulesetsJSChallengeRuleRatelimit struct {
+type RuleNewParamsBodyJavascriptChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the ratelimiter counter will be
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod] `json:"period,required"`
+	Period param.Field[RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod] `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -9361,26 +9694,1095 @@ type RuleNewParamsBodyRulesetsJSChallengeRuleRatelimit struct {
 	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
-func (r RuleNewParamsBodyRulesetsJSChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
+func (r RuleNewParamsBodyJavascriptChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Period in seconds over which the counter is being incremented.
-type RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod int64
+type RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod int64
 
 const (
-	RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod10   RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 10
-	RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod60   RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 60
-	RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod600  RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 600
-	RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod3600 RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 3600
+	RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod10   RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod = 10
+	RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod60   RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod = 60
+	RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod600  RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod = 600
+	RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod3600 RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod = 3600
 )
 
-func (r RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
+func (r RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod) IsKnown() bool {
 	switch r {
-	case RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod10, RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod60, RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod600, RuleNewParamsBodyRulesetsJSChallengeRuleRatelimitPeriod3600:
+	case RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod10, RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod60, RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod600, RuleNewParamsBodyJavascriptChallengeRuleRatelimitPeriod3600:
 		return true
 	}
 	return false
+}
+
+type RuleNewParamsBodyLogRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyLogRulePositionUnion] `json:"position"`
+	LogRuleParam
+}
+
+func (r RuleNewParamsBodyLogRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyLogRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyLogRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyLogRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyLogRulePosition) implementsRulesetsRuleNewParamsBodyLogRulePositionUnion() {}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyLogRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyLogRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyLogRulePositionIndexPosition],
+// [RuleNewParamsBodyLogRulePosition].
+type RuleNewParamsBodyLogRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyLogRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyLogRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyLogRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyLogRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyLogRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyLogRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyLogRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyLogRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyLogRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyLogRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyLogRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyLogRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyLogRulePositionUnion() {
+}
+
+type RuleNewParamsBodyManagedChallengeRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyManagedChallengeRulePositionUnion] `json:"position"`
+	ManagedChallengeRuleParam
+}
+
+func (r RuleNewParamsBodyManagedChallengeRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyManagedChallengeRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyManagedChallengeRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyManagedChallengeRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyManagedChallengeRulePosition) implementsRulesetsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodyManagedChallengeRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyManagedChallengeRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyManagedChallengeRulePositionIndexPosition],
+// [RuleNewParamsBodyManagedChallengeRulePosition].
+type RuleNewParamsBodyManagedChallengeRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyManagedChallengeRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyManagedChallengeRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyManagedChallengeRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyManagedChallengeRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyManagedChallengeRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyManagedChallengeRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyManagedChallengeRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyManagedChallengeRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyManagedChallengeRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyManagedChallengeRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyManagedChallengeRulePositionUnion() {
+}
+
+type RuleNewParamsBodyRedirectRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyRedirectRulePositionUnion] `json:"position"`
+	RedirectRuleParam
+}
+
+func (r RuleNewParamsBodyRedirectRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyRedirectRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyRedirectRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyRedirectRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyRedirectRulePosition) implementsRulesetsRuleNewParamsBodyRedirectRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyRedirectRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyRedirectRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyRedirectRulePositionIndexPosition],
+// [RuleNewParamsBodyRedirectRulePosition].
+type RuleNewParamsBodyRedirectRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyRedirectRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyRedirectRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyRedirectRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyRedirectRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyRedirectRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyRedirectRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyRedirectRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyRedirectRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyRedirectRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyRedirectRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyRedirectRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyRedirectRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyRedirectRulePositionUnion() {
+}
+
+type RuleNewParamsBodyRewriteRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyRewriteRulePositionUnion] `json:"position"`
+	RewriteRuleParam
+}
+
+func (r RuleNewParamsBodyRewriteRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyRewriteRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyRewriteRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyRewriteRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyRewriteRulePosition) implementsRulesetsRuleNewParamsBodyRewriteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyRewriteRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyRewriteRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyRewriteRulePositionIndexPosition],
+// [RuleNewParamsBodyRewriteRulePosition].
+type RuleNewParamsBodyRewriteRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyRewriteRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyRewriteRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyRewriteRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyRewriteRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyRewriteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyRewriteRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyRewriteRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyRewriteRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyRewriteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyRewriteRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyRewriteRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyRewriteRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyRewriteRulePositionUnion() {
+}
+
+type RuleNewParamsBodyOriginRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyOriginRulePositionUnion] `json:"position"`
+	RouteRuleParam
+}
+
+func (r RuleNewParamsBodyOriginRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyOriginRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyOriginRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyOriginRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyOriginRulePosition) implementsRulesetsRuleNewParamsBodyOriginRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyOriginRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyOriginRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyOriginRulePositionIndexPosition],
+// [RuleNewParamsBodyOriginRulePosition].
+type RuleNewParamsBodyOriginRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyOriginRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyOriginRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyOriginRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyOriginRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyOriginRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyOriginRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyOriginRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyOriginRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyOriginRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyOriginRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyOriginRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyOriginRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyOriginRulePositionUnion() {
+}
+
+type RuleNewParamsBodyScoreRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyScoreRulePositionUnion] `json:"position"`
+	ScoreRuleParam
+}
+
+func (r RuleNewParamsBodyScoreRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyScoreRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyScoreRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyScoreRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyScoreRulePosition) implementsRulesetsRuleNewParamsBodyScoreRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyScoreRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyScoreRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyScoreRulePositionIndexPosition],
+// [RuleNewParamsBodyScoreRulePosition].
+type RuleNewParamsBodyScoreRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyScoreRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyScoreRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyScoreRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyScoreRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyScoreRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyScoreRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyScoreRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyScoreRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyScoreRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyScoreRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyScoreRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyScoreRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyScoreRulePositionUnion() {
+}
+
+type RuleNewParamsBodyServeErrorRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyServeErrorRulePositionUnion] `json:"position"`
+	ServeErrorRuleParam
+}
+
+func (r RuleNewParamsBodyServeErrorRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyServeErrorRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyServeErrorRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyServeErrorRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyServeErrorRulePosition) implementsRulesetsRuleNewParamsBodyServeErrorRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyServeErrorRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyServeErrorRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyServeErrorRulePositionIndexPosition],
+// [RuleNewParamsBodyServeErrorRulePosition].
+type RuleNewParamsBodyServeErrorRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyServeErrorRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyServeErrorRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyServeErrorRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyServeErrorRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyServeErrorRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyServeErrorRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyServeErrorRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyServeErrorRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyServeErrorRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyServeErrorRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyServeErrorRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyServeErrorRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyServeErrorRulePositionUnion() {
+}
+
+type RuleNewParamsBodySetConfigRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodySetConfigRulePositionUnion] `json:"position"`
+	SetConfigRuleParam
+}
+
+func (r RuleNewParamsBodySetConfigRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetConfigRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetConfigRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodySetConfigRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetConfigRulePosition) implementsRulesetsRuleNewParamsBodySetConfigRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodySetConfigRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodySetConfigRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodySetConfigRulePositionIndexPosition],
+// [RuleNewParamsBodySetConfigRulePosition].
+type RuleNewParamsBodySetConfigRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodySetConfigRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetConfigRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodySetConfigRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetConfigRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodySetConfigRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetConfigRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodySetConfigRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetConfigRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodySetConfigRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetConfigRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodySetConfigRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetConfigRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodySetConfigRulePositionUnion() {
+}
+
+type RuleNewParamsBodySkipRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodySkipRulePositionUnion] `json:"position"`
+	SkipRuleParam
+}
+
+func (r RuleNewParamsBodySkipRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySkipRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySkipRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodySkipRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySkipRulePosition) implementsRulesetsRuleNewParamsBodySkipRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodySkipRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodySkipRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodySkipRulePositionIndexPosition],
+// [RuleNewParamsBodySkipRulePosition].
+type RuleNewParamsBodySkipRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodySkipRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySkipRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodySkipRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySkipRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodySkipRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySkipRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodySkipRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySkipRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodySkipRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySkipRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodySkipRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySkipRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodySkipRulePositionUnion() {
+}
+
+type RuleNewParamsBodySetCacheSettingsRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodySetCacheSettingsRulePositionUnion] `json:"position"`
+	SetCacheSettingsRuleParam
+}
+
+func (r RuleNewParamsBodySetCacheSettingsRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheSettingsRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheSettingsRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodySetCacheSettingsRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheSettingsRulePosition) implementsRulesetsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodySetCacheSettingsRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodySetCacheSettingsRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodySetCacheSettingsRulePositionIndexPosition],
+// [RuleNewParamsBodySetCacheSettingsRulePosition].
+type RuleNewParamsBodySetCacheSettingsRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodySetCacheSettingsRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheSettingsRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodySetCacheSettingsRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheSettingsRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheSettingsRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodySetCacheSettingsRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheSettingsRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodySetCacheSettingsRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodySetCacheSettingsRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodySetCacheSettingsRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodySetCacheSettingsRulePositionUnion() {
+}
+
+type RuleNewParamsBodyLogCustomFieldRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyLogCustomFieldRulePositionUnion] `json:"position"`
+	LogCustomFieldRuleParam
+}
+
+func (r RuleNewParamsBodyLogCustomFieldRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyLogCustomFieldRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyLogCustomFieldRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyLogCustomFieldRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyLogCustomFieldRulePosition) implementsRulesetsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodyLogCustomFieldRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyLogCustomFieldRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyLogCustomFieldRulePositionIndexPosition],
+// [RuleNewParamsBodyLogCustomFieldRulePosition].
+type RuleNewParamsBodyLogCustomFieldRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyLogCustomFieldRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyLogCustomFieldRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyLogCustomFieldRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyLogCustomFieldRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyLogCustomFieldRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyLogCustomFieldRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyLogCustomFieldRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyLogCustomFieldRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyLogCustomFieldRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyLogCustomFieldRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyLogCustomFieldRulePositionUnion() {
+}
+
+type RuleNewParamsBodyDDoSDynamicRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyDDoSDynamicRulePositionUnion] `json:"position"`
+	DDoSDynamicRuleParam
+}
+
+func (r RuleNewParamsBodyDDoSDynamicRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyDDoSDynamicRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyDDoSDynamicRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyDDoSDynamicRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyDDoSDynamicRulePosition) implementsRulesetsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleNewParamsBodyDDoSDynamicRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyDDoSDynamicRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyDDoSDynamicRulePositionIndexPosition],
+// [RuleNewParamsBodyDDoSDynamicRulePosition].
+type RuleNewParamsBodyDDoSDynamicRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyDDoSDynamicRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyDDoSDynamicRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyDDoSDynamicRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyDDoSDynamicRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyDDoSDynamicRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyDDoSDynamicRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyDDoSDynamicRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyDDoSDynamicRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyDDoSDynamicRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyDDoSDynamicRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyDDoSDynamicRulePositionUnion() {
+}
+
+type RuleNewParamsBodyForceConnectionCloseRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleNewParamsBodyForceConnectionCloseRulePositionUnion] `json:"position"`
+	ForceConnectionCloseRuleParam
+}
+
+func (r RuleNewParamsBodyForceConnectionCloseRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyForceConnectionCloseRule) implementsRulesetsRuleNewParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyForceConnectionCloseRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyForceConnectionCloseRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyForceConnectionCloseRulePosition) implementsRulesetsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleNewParamsBodyForceConnectionCloseRulePositionBeforePosition],
+// [rulesets.RuleNewParamsBodyForceConnectionCloseRulePositionAfterPosition],
+// [rulesets.RuleNewParamsBodyForceConnectionCloseRulePositionIndexPosition],
+// [RuleNewParamsBodyForceConnectionCloseRulePosition].
+type RuleNewParamsBodyForceConnectionCloseRulePositionUnion interface {
+	implementsRulesetsRuleNewParamsBodyForceConnectionCloseRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyForceConnectionCloseRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleNewParamsBodyForceConnectionCloseRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyForceConnectionCloseRulePositionBeforePosition) implementsRulesetsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyForceConnectionCloseRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleNewParamsBodyForceConnectionCloseRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyForceConnectionCloseRulePositionAfterPosition) implementsRulesetsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleNewParamsBodyForceConnectionCloseRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleNewParamsBodyForceConnectionCloseRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleNewParamsBodyForceConnectionCloseRulePositionIndexPosition) implementsRulesetsRuleNewParamsBodyForceConnectionCloseRulePositionUnion() {
 }
 
 // The action to perform when the rule matches.
@@ -9752,6 +11154,7 @@ type RuleEditParamsBody struct {
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging   param.Field[LoggingParam] `json:"logging"`
+	Position  param.Field[interface{}]  `json:"position"`
 	Ratelimit param.Field[interface{}]  `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
@@ -9763,26 +11166,114 @@ func (r RuleEditParamsBody) MarshalJSON() (data []byte, err error) {
 
 func (r RuleEditParamsBody) implementsRulesetsRuleEditParamsBodyUnion() {}
 
-// Satisfied by [rulesets.BlockRuleParam],
-// [rulesets.RuleEditParamsBodyRulesetsChallengeRule],
-// [rulesets.CompressResponseRuleParam], [rulesets.ExecuteRuleParam],
-// [rulesets.RuleEditParamsBodyRulesetsJSChallengeRule], [rulesets.LogRuleParam],
-// [rulesets.ManagedChallengeRuleParam], [rulesets.RedirectRuleParam],
-// [rulesets.RewriteRuleParam], [rulesets.RouteRuleParam],
-// [rulesets.ScoreRuleParam], [rulesets.ServeErrorRuleParam],
-// [rulesets.SetConfigRuleParam], [rulesets.SkipRuleParam],
-// [rulesets.SetCacheSettingsRuleParam], [rulesets.LogCustomFieldRuleParam],
-// [rulesets.DDoSDynamicRuleParam], [rulesets.ForceConnectionCloseRuleParam],
-// [RuleEditParamsBody].
+// Satisfied by [rulesets.RuleEditParamsBodyBlockRule],
+// [rulesets.RuleEditParamsBodyChallengeRule],
+// [rulesets.RuleEditParamsBodyCompressionRule],
+// [rulesets.RuleEditParamsBodyExecuteRule],
+// [rulesets.RuleEditParamsBodyJavascriptChallengeRule],
+// [rulesets.RuleEditParamsBodyLogRule],
+// [rulesets.RuleEditParamsBodyManagedChallengeRule],
+// [rulesets.RuleEditParamsBodyRedirectRule],
+// [rulesets.RuleEditParamsBodyRewriteRule],
+// [rulesets.RuleEditParamsBodyOriginRule], [rulesets.RuleEditParamsBodyScoreRule],
+// [rulesets.RuleEditParamsBodyServeErrorRule],
+// [rulesets.RuleEditParamsBodySetConfigRule],
+// [rulesets.RuleEditParamsBodySkipRule],
+// [rulesets.RuleEditParamsBodySetCacheSettingsRule],
+// [rulesets.RuleEditParamsBodyLogCustomFieldRule],
+// [rulesets.RuleEditParamsBodyDDoSDynamicRule],
+// [rulesets.RuleEditParamsBodyForceConnectionCloseRule], [RuleEditParamsBody].
 type RuleEditParamsBodyUnion interface {
 	implementsRulesetsRuleEditParamsBodyUnion()
 }
 
-type RuleEditParamsBodyRulesetsChallengeRule struct {
+type RuleEditParamsBodyBlockRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyBlockRulePositionUnion] `json:"position"`
+	BlockRuleParam
+}
+
+func (r RuleEditParamsBodyBlockRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyBlockRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyBlockRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyBlockRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyBlockRulePosition) implementsRulesetsRuleEditParamsBodyBlockRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyBlockRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyBlockRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyBlockRulePositionIndexPosition],
+// [RuleEditParamsBodyBlockRulePosition].
+type RuleEditParamsBodyBlockRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyBlockRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyBlockRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyBlockRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyBlockRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyBlockRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyBlockRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyBlockRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyBlockRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyBlockRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyBlockRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyBlockRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyBlockRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyBlockRulePositionUnion() {
+}
+
+type RuleEditParamsBodyChallengeRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleEditParamsBodyRulesetsChallengeRuleAction] `json:"action"`
+	Action param.Field[RuleEditParamsBodyChallengeRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[interface{}] `json:"action_parameters"`
 	// An informative description of the rule.
@@ -9790,57 +11281,129 @@ type RuleEditParamsBodyRulesetsChallengeRule struct {
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
 	// Configure checks for exposed credentials.
-	ExposedCredentialCheck param.Field[RuleEditParamsBodyRulesetsChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	ExposedCredentialCheck param.Field[RuleEditParamsBodyChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyChallengeRulePositionUnion] `json:"position"`
 	// An object configuring the rule's ratelimit behavior.
-	Ratelimit param.Field[RuleEditParamsBodyRulesetsChallengeRuleRatelimit] `json:"ratelimit"`
+	Ratelimit param.Field[RuleEditParamsBodyChallengeRuleRatelimit] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleEditParamsBodyRulesetsChallengeRule) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBodyChallengeRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRulesetsChallengeRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyChallengeRule) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // The action to perform when the rule matches.
-type RuleEditParamsBodyRulesetsChallengeRuleAction string
+type RuleEditParamsBodyChallengeRuleAction string
 
 const (
-	RuleEditParamsBodyRulesetsChallengeRuleActionChallenge RuleEditParamsBodyRulesetsChallengeRuleAction = "challenge"
+	RuleEditParamsBodyChallengeRuleActionChallenge RuleEditParamsBodyChallengeRuleAction = "challenge"
 )
 
-func (r RuleEditParamsBodyRulesetsChallengeRuleAction) IsKnown() bool {
+func (r RuleEditParamsBodyChallengeRuleAction) IsKnown() bool {
 	switch r {
-	case RuleEditParamsBodyRulesetsChallengeRuleActionChallenge:
+	case RuleEditParamsBodyChallengeRuleActionChallenge:
 		return true
 	}
 	return false
 }
 
 // Configure checks for exposed credentials.
-type RuleEditParamsBodyRulesetsChallengeRuleExposedCredentialCheck struct {
+type RuleEditParamsBodyChallengeRuleExposedCredentialCheck struct {
 	// Expression that selects the password used in the credentials check.
 	PasswordExpression param.Field[string] `json:"password_expression,required"`
 	// Expression that selects the user ID used in the credentials check.
 	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
-func (r RuleEditParamsBodyRulesetsChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBodyChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyChallengeRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyChallengeRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyChallengeRulePosition) implementsRulesetsRuleEditParamsBodyChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyChallengeRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyChallengeRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyChallengeRulePositionIndexPosition],
+// [RuleEditParamsBodyChallengeRulePosition].
+type RuleEditParamsBodyChallengeRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyChallengeRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyChallengeRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyChallengeRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyChallengeRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyChallengeRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyChallengeRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyChallengeRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyChallengeRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyChallengeRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyChallengeRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyChallengeRulePositionUnion() {
+}
+
 // An object configuring the rule's ratelimit behavior.
-type RuleEditParamsBodyRulesetsChallengeRuleRatelimit struct {
+type RuleEditParamsBodyChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the ratelimiter counter will be
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod] `json:"period,required"`
+	Period param.Field[RuleEditParamsBodyChallengeRuleRatelimitPeriod] `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -9860,33 +11423,197 @@ type RuleEditParamsBodyRulesetsChallengeRuleRatelimit struct {
 	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
-func (r RuleEditParamsBodyRulesetsChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBodyChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Period in seconds over which the counter is being incremented.
-type RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod int64
+type RuleEditParamsBodyChallengeRuleRatelimitPeriod int64
 
 const (
-	RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod10   RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod = 10
-	RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod60   RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod = 60
-	RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod600  RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod = 600
-	RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod3600 RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod = 3600
+	RuleEditParamsBodyChallengeRuleRatelimitPeriod10   RuleEditParamsBodyChallengeRuleRatelimitPeriod = 10
+	RuleEditParamsBodyChallengeRuleRatelimitPeriod60   RuleEditParamsBodyChallengeRuleRatelimitPeriod = 60
+	RuleEditParamsBodyChallengeRuleRatelimitPeriod600  RuleEditParamsBodyChallengeRuleRatelimitPeriod = 600
+	RuleEditParamsBodyChallengeRuleRatelimitPeriod3600 RuleEditParamsBodyChallengeRuleRatelimitPeriod = 3600
 )
 
-func (r RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod) IsKnown() bool {
+func (r RuleEditParamsBodyChallengeRuleRatelimitPeriod) IsKnown() bool {
 	switch r {
-	case RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod10, RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod60, RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod600, RuleEditParamsBodyRulesetsChallengeRuleRatelimitPeriod3600:
+	case RuleEditParamsBodyChallengeRuleRatelimitPeriod10, RuleEditParamsBodyChallengeRuleRatelimitPeriod60, RuleEditParamsBodyChallengeRuleRatelimitPeriod600, RuleEditParamsBodyChallengeRuleRatelimitPeriod3600:
 		return true
 	}
 	return false
 }
 
-type RuleEditParamsBodyRulesetsJSChallengeRule struct {
+type RuleEditParamsBodyCompressionRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyCompressionRulePositionUnion] `json:"position"`
+	CompressResponseRuleParam
+}
+
+func (r RuleEditParamsBodyCompressionRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyCompressionRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyCompressionRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyCompressionRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyCompressionRulePosition) implementsRulesetsRuleEditParamsBodyCompressionRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyCompressionRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyCompressionRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyCompressionRulePositionIndexPosition],
+// [RuleEditParamsBodyCompressionRulePosition].
+type RuleEditParamsBodyCompressionRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyCompressionRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyCompressionRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyCompressionRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyCompressionRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyCompressionRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyCompressionRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyCompressionRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyCompressionRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyCompressionRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyCompressionRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyCompressionRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyCompressionRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyCompressionRulePositionUnion() {
+}
+
+type RuleEditParamsBodyExecuteRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyExecuteRulePositionUnion] `json:"position"`
+	ExecuteRuleParam
+}
+
+func (r RuleEditParamsBodyExecuteRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyExecuteRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyExecuteRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyExecuteRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyExecuteRulePosition) implementsRulesetsRuleEditParamsBodyExecuteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyExecuteRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyExecuteRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyExecuteRulePositionIndexPosition],
+// [RuleEditParamsBodyExecuteRulePosition].
+type RuleEditParamsBodyExecuteRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyExecuteRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyExecuteRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyExecuteRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyExecuteRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyExecuteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyExecuteRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyExecuteRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyExecuteRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyExecuteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyExecuteRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyExecuteRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyExecuteRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyExecuteRulePositionUnion() {
+}
+
+type RuleEditParamsBodyJavascriptChallengeRule struct {
 	// The unique ID of the rule.
 	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action param.Field[RuleEditParamsBodyRulesetsJSChallengeRuleAction] `json:"action"`
+	Action param.Field[RuleEditParamsBodyJavascriptChallengeRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
 	ActionParameters param.Field[interface{}] `json:"action_parameters"`
 	// An informative description of the rule.
@@ -9894,57 +11621,130 @@ type RuleEditParamsBodyRulesetsJSChallengeRule struct {
 	// Whether the rule should be executed.
 	Enabled param.Field[bool] `json:"enabled"`
 	// Configure checks for exposed credentials.
-	ExposedCredentialCheck param.Field[RuleEditParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
+	ExposedCredentialCheck param.Field[RuleEditParamsBodyJavascriptChallengeRuleExposedCredentialCheck] `json:"exposed_credential_check"`
 	// The expression defining which traffic will match the rule.
 	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
 	Logging param.Field[LoggingParam] `json:"logging"`
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyJavascriptChallengeRulePositionUnion] `json:"position"`
 	// An object configuring the rule's ratelimit behavior.
-	Ratelimit param.Field[RuleEditParamsBodyRulesetsJSChallengeRuleRatelimit] `json:"ratelimit"`
+	Ratelimit param.Field[RuleEditParamsBodyJavascriptChallengeRuleRatelimit] `json:"ratelimit"`
 	// The reference of the rule (the rule ID by default).
 	Ref param.Field[string] `json:"ref"`
 }
 
-func (r RuleEditParamsBodyRulesetsJSChallengeRule) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBodyJavascriptChallengeRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RuleEditParamsBodyRulesetsJSChallengeRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+func (r RuleEditParamsBodyJavascriptChallengeRule) implementsRulesetsRuleEditParamsBodyUnion() {}
 
 // The action to perform when the rule matches.
-type RuleEditParamsBodyRulesetsJSChallengeRuleAction string
+type RuleEditParamsBodyJavascriptChallengeRuleAction string
 
 const (
-	RuleEditParamsBodyRulesetsJSChallengeRuleActionJSChallenge RuleEditParamsBodyRulesetsJSChallengeRuleAction = "js_challenge"
+	RuleEditParamsBodyJavascriptChallengeRuleActionJSChallenge RuleEditParamsBodyJavascriptChallengeRuleAction = "js_challenge"
 )
 
-func (r RuleEditParamsBodyRulesetsJSChallengeRuleAction) IsKnown() bool {
+func (r RuleEditParamsBodyJavascriptChallengeRuleAction) IsKnown() bool {
 	switch r {
-	case RuleEditParamsBodyRulesetsJSChallengeRuleActionJSChallenge:
+	case RuleEditParamsBodyJavascriptChallengeRuleActionJSChallenge:
 		return true
 	}
 	return false
 }
 
 // Configure checks for exposed credentials.
-type RuleEditParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck struct {
+type RuleEditParamsBodyJavascriptChallengeRuleExposedCredentialCheck struct {
 	// Expression that selects the password used in the credentials check.
 	PasswordExpression param.Field[string] `json:"password_expression,required"`
 	// Expression that selects the user ID used in the credentials check.
 	UsernameExpression param.Field[string] `json:"username_expression,required"`
 }
 
-func (r RuleEditParamsBodyRulesetsJSChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBodyJavascriptChallengeRuleExposedCredentialCheck) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyJavascriptChallengeRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyJavascriptChallengeRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyJavascriptChallengeRulePosition) implementsRulesetsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodyJavascriptChallengeRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyJavascriptChallengeRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyJavascriptChallengeRulePositionIndexPosition],
+// [RuleEditParamsBodyJavascriptChallengeRulePosition].
+type RuleEditParamsBodyJavascriptChallengeRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyJavascriptChallengeRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyJavascriptChallengeRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyJavascriptChallengeRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyJavascriptChallengeRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyJavascriptChallengeRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyJavascriptChallengeRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyJavascriptChallengeRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyJavascriptChallengeRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyJavascriptChallengeRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyJavascriptChallengeRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyJavascriptChallengeRulePositionUnion() {
+}
+
 // An object configuring the rule's ratelimit behavior.
-type RuleEditParamsBodyRulesetsJSChallengeRuleRatelimit struct {
+type RuleEditParamsBodyJavascriptChallengeRuleRatelimit struct {
 	// Characteristics of the request on which the ratelimiter counter will be
 	// incremented.
 	Characteristics param.Field[[]string] `json:"characteristics,required"`
 	// Period in seconds over which the counter is being incremented.
-	Period param.Field[RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod] `json:"period,required"`
+	Period param.Field[RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod] `json:"period,required"`
 	// Defines when the ratelimit counter should be incremented. It is optional and
 	// defaults to the same as the rule's expression.
 	CountingExpression param.Field[string] `json:"counting_expression"`
@@ -9964,26 +11764,1096 @@ type RuleEditParamsBodyRulesetsJSChallengeRuleRatelimit struct {
 	ScoreResponseHeaderName param.Field[string] `json:"score_response_header_name"`
 }
 
-func (r RuleEditParamsBodyRulesetsJSChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
+func (r RuleEditParamsBodyJavascriptChallengeRuleRatelimit) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Period in seconds over which the counter is being incremented.
-type RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod int64
+type RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod int64
 
 const (
-	RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod10   RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 10
-	RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod60   RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 60
-	RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod600  RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 600
-	RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod3600 RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod = 3600
+	RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod10   RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod = 10
+	RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod60   RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod = 60
+	RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod600  RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod = 600
+	RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod3600 RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod = 3600
 )
 
-func (r RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod) IsKnown() bool {
+func (r RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod) IsKnown() bool {
 	switch r {
-	case RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod10, RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod60, RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod600, RuleEditParamsBodyRulesetsJSChallengeRuleRatelimitPeriod3600:
+	case RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod10, RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod60, RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod600, RuleEditParamsBodyJavascriptChallengeRuleRatelimitPeriod3600:
 		return true
 	}
 	return false
+}
+
+type RuleEditParamsBodyLogRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyLogRulePositionUnion] `json:"position"`
+	LogRuleParam
+}
+
+func (r RuleEditParamsBodyLogRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyLogRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyLogRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyLogRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyLogRulePosition) implementsRulesetsRuleEditParamsBodyLogRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyLogRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyLogRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyLogRulePositionIndexPosition],
+// [RuleEditParamsBodyLogRulePosition].
+type RuleEditParamsBodyLogRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyLogRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyLogRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyLogRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyLogRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyLogRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyLogRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyLogRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyLogRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyLogRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyLogRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyLogRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyLogRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyLogRulePositionUnion() {
+}
+
+type RuleEditParamsBodyManagedChallengeRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyManagedChallengeRulePositionUnion] `json:"position"`
+	ManagedChallengeRuleParam
+}
+
+func (r RuleEditParamsBodyManagedChallengeRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyManagedChallengeRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyManagedChallengeRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyManagedChallengeRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyManagedChallengeRulePosition) implementsRulesetsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodyManagedChallengeRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyManagedChallengeRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyManagedChallengeRulePositionIndexPosition],
+// [RuleEditParamsBodyManagedChallengeRulePosition].
+type RuleEditParamsBodyManagedChallengeRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyManagedChallengeRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyManagedChallengeRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyManagedChallengeRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyManagedChallengeRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyManagedChallengeRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyManagedChallengeRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyManagedChallengeRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyManagedChallengeRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyManagedChallengeRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyManagedChallengeRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyManagedChallengeRulePositionUnion() {
+}
+
+type RuleEditParamsBodyRedirectRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyRedirectRulePositionUnion] `json:"position"`
+	RedirectRuleParam
+}
+
+func (r RuleEditParamsBodyRedirectRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyRedirectRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyRedirectRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyRedirectRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyRedirectRulePosition) implementsRulesetsRuleEditParamsBodyRedirectRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyRedirectRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyRedirectRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyRedirectRulePositionIndexPosition],
+// [RuleEditParamsBodyRedirectRulePosition].
+type RuleEditParamsBodyRedirectRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyRedirectRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyRedirectRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyRedirectRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyRedirectRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyRedirectRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyRedirectRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyRedirectRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyRedirectRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyRedirectRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyRedirectRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyRedirectRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyRedirectRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyRedirectRulePositionUnion() {
+}
+
+type RuleEditParamsBodyRewriteRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyRewriteRulePositionUnion] `json:"position"`
+	RewriteRuleParam
+}
+
+func (r RuleEditParamsBodyRewriteRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyRewriteRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyRewriteRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyRewriteRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyRewriteRulePosition) implementsRulesetsRuleEditParamsBodyRewriteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyRewriteRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyRewriteRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyRewriteRulePositionIndexPosition],
+// [RuleEditParamsBodyRewriteRulePosition].
+type RuleEditParamsBodyRewriteRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyRewriteRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyRewriteRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyRewriteRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyRewriteRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyRewriteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyRewriteRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyRewriteRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyRewriteRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyRewriteRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyRewriteRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyRewriteRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyRewriteRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyRewriteRulePositionUnion() {
+}
+
+type RuleEditParamsBodyOriginRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyOriginRulePositionUnion] `json:"position"`
+	RouteRuleParam
+}
+
+func (r RuleEditParamsBodyOriginRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyOriginRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyOriginRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyOriginRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyOriginRulePosition) implementsRulesetsRuleEditParamsBodyOriginRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyOriginRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyOriginRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyOriginRulePositionIndexPosition],
+// [RuleEditParamsBodyOriginRulePosition].
+type RuleEditParamsBodyOriginRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyOriginRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyOriginRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyOriginRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyOriginRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyOriginRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyOriginRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyOriginRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyOriginRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyOriginRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyOriginRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyOriginRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyOriginRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyOriginRulePositionUnion() {
+}
+
+type RuleEditParamsBodyScoreRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyScoreRulePositionUnion] `json:"position"`
+	ScoreRuleParam
+}
+
+func (r RuleEditParamsBodyScoreRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyScoreRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyScoreRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyScoreRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyScoreRulePosition) implementsRulesetsRuleEditParamsBodyScoreRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyScoreRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyScoreRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyScoreRulePositionIndexPosition],
+// [RuleEditParamsBodyScoreRulePosition].
+type RuleEditParamsBodyScoreRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyScoreRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyScoreRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyScoreRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyScoreRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyScoreRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyScoreRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyScoreRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyScoreRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyScoreRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyScoreRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyScoreRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyScoreRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyScoreRulePositionUnion() {
+}
+
+type RuleEditParamsBodyServeErrorRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyServeErrorRulePositionUnion] `json:"position"`
+	ServeErrorRuleParam
+}
+
+func (r RuleEditParamsBodyServeErrorRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyServeErrorRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyServeErrorRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyServeErrorRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyServeErrorRulePosition) implementsRulesetsRuleEditParamsBodyServeErrorRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyServeErrorRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyServeErrorRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyServeErrorRulePositionIndexPosition],
+// [RuleEditParamsBodyServeErrorRulePosition].
+type RuleEditParamsBodyServeErrorRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyServeErrorRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyServeErrorRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyServeErrorRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyServeErrorRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyServeErrorRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyServeErrorRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyServeErrorRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyServeErrorRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyServeErrorRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyServeErrorRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyServeErrorRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyServeErrorRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyServeErrorRulePositionUnion() {
+}
+
+type RuleEditParamsBodySetConfigRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodySetConfigRulePositionUnion] `json:"position"`
+	SetConfigRuleParam
+}
+
+func (r RuleEditParamsBodySetConfigRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetConfigRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetConfigRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodySetConfigRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetConfigRulePosition) implementsRulesetsRuleEditParamsBodySetConfigRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodySetConfigRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodySetConfigRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodySetConfigRulePositionIndexPosition],
+// [RuleEditParamsBodySetConfigRulePosition].
+type RuleEditParamsBodySetConfigRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodySetConfigRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetConfigRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodySetConfigRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetConfigRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodySetConfigRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetConfigRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodySetConfigRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetConfigRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodySetConfigRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetConfigRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodySetConfigRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetConfigRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodySetConfigRulePositionUnion() {
+}
+
+type RuleEditParamsBodySkipRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodySkipRulePositionUnion] `json:"position"`
+	SkipRuleParam
+}
+
+func (r RuleEditParamsBodySkipRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySkipRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySkipRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodySkipRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySkipRulePosition) implementsRulesetsRuleEditParamsBodySkipRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodySkipRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodySkipRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodySkipRulePositionIndexPosition],
+// [RuleEditParamsBodySkipRulePosition].
+type RuleEditParamsBodySkipRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodySkipRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySkipRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodySkipRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySkipRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodySkipRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySkipRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodySkipRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySkipRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodySkipRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySkipRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodySkipRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySkipRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodySkipRulePositionUnion() {
+}
+
+type RuleEditParamsBodySetCacheSettingsRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodySetCacheSettingsRulePositionUnion] `json:"position"`
+	SetCacheSettingsRuleParam
+}
+
+func (r RuleEditParamsBodySetCacheSettingsRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheSettingsRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheSettingsRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodySetCacheSettingsRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheSettingsRulePosition) implementsRulesetsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodySetCacheSettingsRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodySetCacheSettingsRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodySetCacheSettingsRulePositionIndexPosition],
+// [RuleEditParamsBodySetCacheSettingsRulePosition].
+type RuleEditParamsBodySetCacheSettingsRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodySetCacheSettingsRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheSettingsRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodySetCacheSettingsRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheSettingsRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheSettingsRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodySetCacheSettingsRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheSettingsRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodySetCacheSettingsRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodySetCacheSettingsRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodySetCacheSettingsRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodySetCacheSettingsRulePositionUnion() {
+}
+
+type RuleEditParamsBodyLogCustomFieldRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyLogCustomFieldRulePositionUnion] `json:"position"`
+	LogCustomFieldRuleParam
+}
+
+func (r RuleEditParamsBodyLogCustomFieldRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyLogCustomFieldRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyLogCustomFieldRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyLogCustomFieldRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyLogCustomFieldRulePosition) implementsRulesetsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodyLogCustomFieldRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyLogCustomFieldRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyLogCustomFieldRulePositionIndexPosition],
+// [RuleEditParamsBodyLogCustomFieldRulePosition].
+type RuleEditParamsBodyLogCustomFieldRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyLogCustomFieldRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyLogCustomFieldRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyLogCustomFieldRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyLogCustomFieldRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyLogCustomFieldRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyLogCustomFieldRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyLogCustomFieldRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyLogCustomFieldRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyLogCustomFieldRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyLogCustomFieldRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyLogCustomFieldRulePositionUnion() {
+}
+
+type RuleEditParamsBodyDDoSDynamicRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyDDoSDynamicRulePositionUnion] `json:"position"`
+	DDoSDynamicRuleParam
+}
+
+func (r RuleEditParamsBodyDDoSDynamicRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyDDoSDynamicRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyDDoSDynamicRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyDDoSDynamicRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyDDoSDynamicRulePosition) implementsRulesetsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by [rulesets.RuleEditParamsBodyDDoSDynamicRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyDDoSDynamicRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyDDoSDynamicRulePositionIndexPosition],
+// [RuleEditParamsBodyDDoSDynamicRulePosition].
+type RuleEditParamsBodyDDoSDynamicRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyDDoSDynamicRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyDDoSDynamicRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyDDoSDynamicRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyDDoSDynamicRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyDDoSDynamicRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyDDoSDynamicRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyDDoSDynamicRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyDDoSDynamicRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyDDoSDynamicRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyDDoSDynamicRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyDDoSDynamicRulePositionUnion() {
+}
+
+type RuleEditParamsBodyForceConnectionCloseRule struct {
+	// An object configuring where the rule will be placed.
+	Position param.Field[RuleEditParamsBodyForceConnectionCloseRulePositionUnion] `json:"position"`
+	ForceConnectionCloseRuleParam
+}
+
+func (r RuleEditParamsBodyForceConnectionCloseRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyForceConnectionCloseRule) implementsRulesetsRuleEditParamsBodyUnion() {}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyForceConnectionCloseRulePosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyForceConnectionCloseRulePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyForceConnectionCloseRulePosition) implementsRulesetsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+//
+// Satisfied by
+// [rulesets.RuleEditParamsBodyForceConnectionCloseRulePositionBeforePosition],
+// [rulesets.RuleEditParamsBodyForceConnectionCloseRulePositionAfterPosition],
+// [rulesets.RuleEditParamsBodyForceConnectionCloseRulePositionIndexPosition],
+// [RuleEditParamsBodyForceConnectionCloseRulePosition].
+type RuleEditParamsBodyForceConnectionCloseRulePositionUnion interface {
+	implementsRulesetsRuleEditParamsBodyForceConnectionCloseRulePositionUnion()
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyForceConnectionCloseRulePositionBeforePosition struct {
+	// The ID of another rule to place the rule before. An empty value causes the rule
+	// to be placed at the top.
+	Before param.Field[string] `json:"before"`
+}
+
+func (r RuleEditParamsBodyForceConnectionCloseRulePositionBeforePosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyForceConnectionCloseRulePositionBeforePosition) implementsRulesetsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyForceConnectionCloseRulePositionAfterPosition struct {
+	// The ID of another rule to place the rule after. An empty value causes the rule
+	// to be placed at the bottom.
+	After param.Field[string] `json:"after"`
+}
+
+func (r RuleEditParamsBodyForceConnectionCloseRulePositionAfterPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyForceConnectionCloseRulePositionAfterPosition) implementsRulesetsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
+}
+
+// An object configuring where the rule will be placed.
+type RuleEditParamsBodyForceConnectionCloseRulePositionIndexPosition struct {
+	// An index at which to place the rule, where index 1 is the first rule.
+	Index param.Field[float64] `json:"index"`
+}
+
+func (r RuleEditParamsBodyForceConnectionCloseRulePositionIndexPosition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RuleEditParamsBodyForceConnectionCloseRulePositionIndexPosition) implementsRulesetsRuleEditParamsBodyForceConnectionCloseRulePositionUnion() {
 }
 
 // The action to perform when the rule matches.
