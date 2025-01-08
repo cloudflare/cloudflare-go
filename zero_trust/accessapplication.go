@@ -298,8 +298,13 @@ type AppIDParam = string
 
 type ApplicationPolicy struct {
 	// The UUID of the policy
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ID string `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups []ApprovalGroup `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired bool      `json:"approval_required"`
+	CreatedAt        time.Time `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -309,28 +314,46 @@ type ApplicationPolicy struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include []AccessRule `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired bool `json:"isolation_required"`
 	// The name of the Access policy.
 	Name string `json:"name"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt string `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired bool `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
-	Require   []AccessRule          `json:"require"`
-	UpdatedAt time.Time             `json:"updated_at" format:"date-time"`
-	JSON      applicationPolicyJSON `json:"-"`
+	Require []AccessRule `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration string                `json:"session_duration"`
+	UpdatedAt       time.Time             `json:"updated_at" format:"date-time"`
+	JSON            applicationPolicyJSON `json:"-"`
 }
 
 // applicationPolicyJSON contains the JSON metadata for the struct
 // [ApplicationPolicy]
 type applicationPolicyJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Decision    apijson.Field
-	Exclude     apijson.Field
-	Include     apijson.Field
-	Name        apijson.Field
-	Require     apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID                           apijson.Field
+	ApprovalGroups               apijson.Field
+	ApprovalRequired             apijson.Field
+	CreatedAt                    apijson.Field
+	Decision                     apijson.Field
+	Exclude                      apijson.Field
+	Include                      apijson.Field
+	IsolationRequired            apijson.Field
+	Name                         apijson.Field
+	PurposeJustificationPrompt   apijson.Field
+	PurposeJustificationRequired apijson.Field
+	Require                      apijson.Field
+	SessionDuration              apijson.Field
+	UpdatedAt                    apijson.Field
+	raw                          string
+	ExtraFields                  map[string]apijson.Field
 }
 
 func (r *ApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -344,6 +367,11 @@ func (r applicationPolicyJSON) RawJSON() string {
 type ApplicationPolicyParam struct {
 	// The UUID of the policy
 	ID param.Field[string] `json:"id"`
+	// Administrators who can approve a temporary authentication request.
+	ApprovalGroups param.Field[[]ApprovalGroupParam] `json:"approval_groups"`
+	// Requires the user to request access from an administrator at the start of each
+	// session.
+	ApprovalRequired param.Field[bool] `json:"approval_required"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision param.Field[Decision] `json:"decision"`
@@ -353,11 +381,23 @@ type ApplicationPolicyParam struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
 	// the Include rules.
 	Include param.Field[[]AccessRuleUnionParam] `json:"include"`
+	// Require this application to be served in an isolated browser for users matching
+	// this policy. 'Client Web Isolation' must be on for the account in order to use
+	// this feature.
+	IsolationRequired param.Field[bool] `json:"isolation_required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name"`
+	// A custom message that will appear on the purpose justification screen.
+	PurposeJustificationPrompt param.Field[string] `json:"purpose_justification_prompt"`
+	// Require users to enter a justification when they log in to the application.
+	PurposeJustificationRequired param.Field[bool] `json:"purpose_justification_required"`
 	// Rules evaluated with an AND logical operator. To match the policy, a user must
 	// meet all of the Require rules.
 	Require param.Field[[]AccessRuleUnionParam] `json:"require"`
+	// The amount of time that tokens issued for the application will be valid. Must be
+	// in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s,
+	// m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
 }
 
 func (r ApplicationPolicyParam) MarshalJSON() (data []byte, err error) {
@@ -2400,7 +2440,14 @@ type AccessApplicationNewResponse struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
-	// This field can have the runtime type of [[]ApplicationPolicy],
+	// This field can have the runtime type of
+	// [[]AccessApplicationNewResponseSelfHostedApplicationPolicy],
+	// [[]AccessApplicationNewResponseSaaSApplicationPolicy],
+	// [[]AccessApplicationNewResponseBrowserSSHApplicationPolicy],
+	// [[]AccessApplicationNewResponseBrowserVNCApplicationPolicy],
+	// [[]AccessApplicationNewResponseAppLauncherApplicationPolicy],
+	// [[]AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy],
+	// [[]AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy],
 	// [[]AccessApplicationNewResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies"`
 	// This field can have the runtime type of
@@ -2631,8 +2678,8 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationNewResponseSelfHostedApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -2749,6 +2796,31 @@ func (r AccessApplicationNewResponseSelfHostedApplicationDestinationsType) IsKno
 		return true
 	}
 	return false
+}
+
+type AccessApplicationNewResponseSelfHostedApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                       `json:"precedence"`
+	JSON       accessApplicationNewResponseSelfHostedApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationNewResponseSelfHostedApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationNewResponseSelfHostedApplicationPolicy]
+type accessApplicationNewResponseSelfHostedApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSelfHostedApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSelfHostedApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -3085,9 +3157,9 @@ type AccessApplicationNewResponseSaaSApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
-	Name     string                                             `json:"name"`
-	Policies []ApplicationPolicy                                `json:"policies"`
-	SaaSApp  AccessApplicationNewResponseSaaSApplicationSaaSApp `json:"saas_app"`
+	Name     string                                              `json:"name"`
+	Policies []AccessApplicationNewResponseSaaSApplicationPolicy `json:"policies"`
+	SaaSApp  AccessApplicationNewResponseSaaSApplicationSaaSApp  `json:"saas_app"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseSaaSApplicationSCIMConfig `json:"scim_config"`
@@ -3131,6 +3203,30 @@ func (r accessApplicationNewResponseSaaSApplicationJSON) RawJSON() string {
 }
 
 func (r AccessApplicationNewResponseSaaSApplication) implementsZeroTrustAccessApplicationNewResponse() {
+}
+
+type AccessApplicationNewResponseSaaSApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                 `json:"precedence"`
+	JSON       accessApplicationNewResponseSaaSApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationNewResponseSaaSApplicationPolicyJSON contains the JSON metadata
+// for the struct [AccessApplicationNewResponseSaaSApplicationPolicy]
+type accessApplicationNewResponseSaaSApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseSaaSApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseSaaSApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationNewResponseSaaSApplicationSaaSApp struct {
@@ -3658,8 +3754,8 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationNewResponseBrowserSSHApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -3776,6 +3872,31 @@ func (r AccessApplicationNewResponseBrowserSSHApplicationDestinationsType) IsKno
 		return true
 	}
 	return false
+}
+
+type AccessApplicationNewResponseBrowserSSHApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                       `json:"precedence"`
+	JSON       accessApplicationNewResponseBrowserSSHApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationNewResponseBrowserSSHApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationNewResponseBrowserSSHApplicationPolicy]
+type accessApplicationNewResponseBrowserSSHApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserSSHApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserSSHApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -4148,8 +4269,8 @@ type AccessApplicationNewResponseBrowserVNCApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationNewResponseBrowserVNCApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -4266,6 +4387,31 @@ func (r AccessApplicationNewResponseBrowserVNCApplicationDestinationsType) IsKno
 		return true
 	}
 	return false
+}
+
+type AccessApplicationNewResponseBrowserVNCApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                       `json:"precedence"`
+	JSON       accessApplicationNewResponseBrowserVNCApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationNewResponseBrowserVNCApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationNewResponseBrowserVNCApplicationPolicy]
+type accessApplicationNewResponseBrowserVNCApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserVNCApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserVNCApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -4611,8 +4757,8 @@ type AccessApplicationNewResponseAppLauncherApplication struct {
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                     `json:"name"`
+	Policies []AccessApplicationNewResponseAppLauncherApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseAppLauncherApplicationSCIMConfig `json:"scim_config"`
@@ -4721,6 +4867,31 @@ func (r *AccessApplicationNewResponseAppLauncherApplicationLandingPageDesign) Un
 }
 
 func (r accessApplicationNewResponseAppLauncherApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseAppLauncherApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                        `json:"precedence"`
+	JSON       accessApplicationNewResponseAppLauncherApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationNewResponseAppLauncherApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationNewResponseAppLauncherApplicationPolicy]
+type accessApplicationNewResponseAppLauncherApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseAppLauncherApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseAppLauncherApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -5067,8 +5238,8 @@ type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplication struct {
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                                     `json:"name"`
+	Policies []AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationSCIMConfig `json:"scim_config"`
@@ -5178,6 +5349,31 @@ func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandi
 }
 
 func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                                        `json:"precedence"`
+	JSON       accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy]
+type accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseDeviceEnrollmentPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -5524,8 +5720,8 @@ type AccessApplicationNewResponseBrowserIsolationPermissionsApplication struct {
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                                     `json:"name"`
+	Policies []AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationNewResponseBrowserIsolationPermissionsApplicationSCIMConfig `json:"scim_config"`
@@ -5635,6 +5831,31 @@ func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationLandi
 }
 
 func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                                        `json:"precedence"`
+	JSON       accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy]
+type accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6416,8 +6637,11 @@ func (r AccessApplicationNewResponseInfrastructureApplicationTargetCriteriaProto
 
 type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
 	// The UUID of the policy
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ID string `json:"id"`
+	// The rules that define how users may connect to the targets secured by your
+	// application.
+	ConnectionRules AccessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                                                                    `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -6440,16 +6664,17 @@ type AccessApplicationNewResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationNewResponseInfrastructureApplicationPolicy]
 type accessApplicationNewResponseInfrastructureApplicationPolicyJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Decision    apijson.Field
-	Exclude     apijson.Field
-	Include     apijson.Field
-	Name        apijson.Field
-	Require     apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID              apijson.Field
+	ConnectionRules apijson.Field
+	CreatedAt       apijson.Field
+	Decision        apijson.Field
+	Exclude         apijson.Field
+	Include         apijson.Field
+	Name            apijson.Field
+	Require         apijson.Field
+	UpdatedAt       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationNewResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -6457,6 +6682,60 @@ func (r *AccessApplicationNewResponseInfrastructureApplicationPolicy) UnmarshalJ
 }
 
 func (r accessApplicationNewResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// The rules that define how users may connect to the targets secured by your
+// application.
+type AccessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRules struct {
+	// The SSH-specific rules that define how users may connect to the targets secured
+	// by your application.
+	SSH  AccessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSH  `json:"ssh"`
+	JSON accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRules]
+type accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesJSON struct {
+	SSH         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRules) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesJSON) RawJSON() string {
+	return r.raw
+}
+
+// The SSH-specific rules that define how users may connect to the targets secured
+// by your application.
+type AccessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSH struct {
+	// Contains the Unix usernames that may be used when connecting over SSH.
+	Usernames []string `json:"usernames,required"`
+	// Enables using Identity Provider email alias as SSH username.
+	AllowEmailAlias bool                                                                                `json:"allow_email_alias"`
+	JSON            accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON `json:"-"`
+}
+
+// accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSH]
+type accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON struct {
+	Usernames       apijson.Field
+	AllowEmailAlias apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSH) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationNewResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -6845,7 +7124,14 @@ type AccessApplicationUpdateResponse struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
-	// This field can have the runtime type of [[]ApplicationPolicy],
+	// This field can have the runtime type of
+	// [[]AccessApplicationUpdateResponseSelfHostedApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseSaaSApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseBrowserSSHApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseBrowserVNCApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseAppLauncherApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy],
+	// [[]AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy],
 	// [[]AccessApplicationUpdateResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies"`
 	// This field can have the runtime type of
@@ -7076,8 +7362,8 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                         `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationUpdateResponseSelfHostedApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -7194,6 +7480,31 @@ func (r AccessApplicationUpdateResponseSelfHostedApplicationDestinationsType) Is
 		return true
 	}
 	return false
+}
+
+type AccessApplicationUpdateResponseSelfHostedApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                          `json:"precedence"`
+	JSON       accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationUpdateResponseSelfHostedApplicationPolicy]
+type accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSelfHostedApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSelfHostedApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -7530,9 +7841,9 @@ type AccessApplicationUpdateResponseSaaSApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
-	Name     string                                                `json:"name"`
-	Policies []ApplicationPolicy                                   `json:"policies"`
-	SaaSApp  AccessApplicationUpdateResponseSaaSApplicationSaaSApp `json:"saas_app"`
+	Name     string                                                 `json:"name"`
+	Policies []AccessApplicationUpdateResponseSaaSApplicationPolicy `json:"policies"`
+	SaaSApp  AccessApplicationUpdateResponseSaaSApplicationSaaSApp  `json:"saas_app"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseSaaSApplicationSCIMConfig `json:"scim_config"`
@@ -7576,6 +7887,30 @@ func (r accessApplicationUpdateResponseSaaSApplicationJSON) RawJSON() string {
 }
 
 func (r AccessApplicationUpdateResponseSaaSApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
+}
+
+type AccessApplicationUpdateResponseSaaSApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                    `json:"precedence"`
+	JSON       accessApplicationUpdateResponseSaaSApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationUpdateResponseSaaSApplicationPolicyJSON contains the JSON
+// metadata for the struct [AccessApplicationUpdateResponseSaaSApplicationPolicy]
+type accessApplicationUpdateResponseSaaSApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseSaaSApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseSaaSApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationUpdateResponseSaaSApplicationSaaSApp struct {
@@ -8104,8 +8439,8 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                         `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationUpdateResponseBrowserSSHApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -8222,6 +8557,31 @@ func (r AccessApplicationUpdateResponseBrowserSSHApplicationDestinationsType) Is
 		return true
 	}
 	return false
+}
+
+type AccessApplicationUpdateResponseBrowserSSHApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                          `json:"precedence"`
+	JSON       accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationUpdateResponseBrowserSSHApplicationPolicy]
+type accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserSSHApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserSSHApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -8594,8 +8954,8 @@ type AccessApplicationUpdateResponseBrowserVNCApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                         `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationUpdateResponseBrowserVNCApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -8712,6 +9072,31 @@ func (r AccessApplicationUpdateResponseBrowserVNCApplicationDestinationsType) Is
 		return true
 	}
 	return false
+}
+
+type AccessApplicationUpdateResponseBrowserVNCApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                          `json:"precedence"`
+	JSON       accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationUpdateResponseBrowserVNCApplicationPolicy]
+type accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserVNCApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserVNCApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -9057,8 +9442,8 @@ type AccessApplicationUpdateResponseAppLauncherApplication struct {
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                        `json:"name"`
+	Policies []AccessApplicationUpdateResponseAppLauncherApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseAppLauncherApplicationSCIMConfig `json:"scim_config"`
@@ -9167,6 +9552,31 @@ func (r *AccessApplicationUpdateResponseAppLauncherApplicationLandingPageDesign)
 }
 
 func (r accessApplicationUpdateResponseAppLauncherApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseAppLauncherApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                           `json:"precedence"`
+	JSON       accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON contains the
+// JSON metadata for the struct
+// [AccessApplicationUpdateResponseAppLauncherApplicationPolicy]
+type accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseAppLauncherApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseAppLauncherApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -9513,8 +9923,8 @@ type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication struc
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                                        `json:"name"`
+	Policies []AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationSCIMConfig `json:"scim_config"`
@@ -9624,6 +10034,31 @@ func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLa
 }
 
 func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                                           `json:"precedence"`
+	JSON       accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy]
+type accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -9970,8 +10405,8 @@ type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplication struc
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                                        `json:"name"`
+	Policies []AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationSCIMConfig `json:"scim_config"`
@@ -10081,6 +10516,31 @@ func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLa
 }
 
 func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                                           `json:"precedence"`
+	JSON       accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy]
+type accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -10863,8 +11323,11 @@ func (r AccessApplicationUpdateResponseInfrastructureApplicationTargetCriteriaPr
 
 type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
 	// The UUID of the policy
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ID string `json:"id"`
+	// The rules that define how users may connect to the targets secured by your
+	// application.
+	ConnectionRules AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                                                                       `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -10887,16 +11350,17 @@ type AccessApplicationUpdateResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationUpdateResponseInfrastructureApplicationPolicy]
 type accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Decision    apijson.Field
-	Exclude     apijson.Field
-	Include     apijson.Field
-	Name        apijson.Field
-	Require     apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID              apijson.Field
+	ConnectionRules apijson.Field
+	CreatedAt       apijson.Field
+	Decision        apijson.Field
+	Exclude         apijson.Field
+	Include         apijson.Field
+	Name            apijson.Field
+	Require         apijson.Field
+	UpdatedAt       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationUpdateResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -10904,6 +11368,60 @@ func (r *AccessApplicationUpdateResponseInfrastructureApplicationPolicy) Unmarsh
 }
 
 func (r accessApplicationUpdateResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// The rules that define how users may connect to the targets secured by your
+// application.
+type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRules struct {
+	// The SSH-specific rules that define how users may connect to the targets secured
+	// by your application.
+	SSH  AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSH  `json:"ssh"`
+	JSON accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRules]
+type accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesJSON struct {
+	SSH         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRules) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesJSON) RawJSON() string {
+	return r.raw
+}
+
+// The SSH-specific rules that define how users may connect to the targets secured
+// by your application.
+type AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSH struct {
+	// Contains the Unix usernames that may be used when connecting over SSH.
+	Usernames []string `json:"usernames,required"`
+	// Enables using Identity Provider email alias as SSH username.
+	AllowEmailAlias bool                                                                                   `json:"allow_email_alias"`
+	JSON            accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON `json:"-"`
+}
+
+// accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSH]
+type accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON struct {
+	Usernames       apijson.Field
+	AllowEmailAlias apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSH) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationUpdateResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -11292,7 +11810,14 @@ type AccessApplicationListResponse struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
-	// This field can have the runtime type of [[]ApplicationPolicy],
+	// This field can have the runtime type of
+	// [[]AccessApplicationListResponseSelfHostedApplicationPolicy],
+	// [[]AccessApplicationListResponseSaaSApplicationPolicy],
+	// [[]AccessApplicationListResponseBrowserSSHApplicationPolicy],
+	// [[]AccessApplicationListResponseBrowserVNCApplicationPolicy],
+	// [[]AccessApplicationListResponseAppLauncherApplicationPolicy],
+	// [[]AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy],
+	// [[]AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy],
 	// [[]AccessApplicationListResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies"`
 	// This field can have the runtime type of
@@ -11523,8 +12048,8 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                       `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationListResponseSelfHostedApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -11641,6 +12166,31 @@ func (r AccessApplicationListResponseSelfHostedApplicationDestinationsType) IsKn
 		return true
 	}
 	return false
+}
+
+type AccessApplicationListResponseSelfHostedApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                        `json:"precedence"`
+	JSON       accessApplicationListResponseSelfHostedApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationListResponseSelfHostedApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationListResponseSelfHostedApplicationPolicy]
+type accessApplicationListResponseSelfHostedApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSelfHostedApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSelfHostedApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -11977,9 +12527,9 @@ type AccessApplicationListResponseSaaSApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
-	Name     string                                              `json:"name"`
-	Policies []ApplicationPolicy                                 `json:"policies"`
-	SaaSApp  AccessApplicationListResponseSaaSApplicationSaaSApp `json:"saas_app"`
+	Name     string                                               `json:"name"`
+	Policies []AccessApplicationListResponseSaaSApplicationPolicy `json:"policies"`
+	SaaSApp  AccessApplicationListResponseSaaSApplicationSaaSApp  `json:"saas_app"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseSaaSApplicationSCIMConfig `json:"scim_config"`
@@ -12023,6 +12573,30 @@ func (r accessApplicationListResponseSaaSApplicationJSON) RawJSON() string {
 }
 
 func (r AccessApplicationListResponseSaaSApplication) implementsZeroTrustAccessApplicationListResponse() {
+}
+
+type AccessApplicationListResponseSaaSApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                  `json:"precedence"`
+	JSON       accessApplicationListResponseSaaSApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationListResponseSaaSApplicationPolicyJSON contains the JSON
+// metadata for the struct [AccessApplicationListResponseSaaSApplicationPolicy]
+type accessApplicationListResponseSaaSApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseSaaSApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseSaaSApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationListResponseSaaSApplicationSaaSApp struct {
@@ -12550,8 +13124,8 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                       `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationListResponseBrowserSSHApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -12668,6 +13242,31 @@ func (r AccessApplicationListResponseBrowserSSHApplicationDestinationsType) IsKn
 		return true
 	}
 	return false
+}
+
+type AccessApplicationListResponseBrowserSSHApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                        `json:"precedence"`
+	JSON       accessApplicationListResponseBrowserSSHApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationListResponseBrowserSSHApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationListResponseBrowserSSHApplicationPolicy]
+type accessApplicationListResponseBrowserSSHApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserSSHApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserSSHApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -13040,8 +13639,8 @@ type AccessApplicationListResponseBrowserVNCApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                       `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationListResponseBrowserVNCApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -13158,6 +13757,31 @@ func (r AccessApplicationListResponseBrowserVNCApplicationDestinationsType) IsKn
 		return true
 	}
 	return false
+}
+
+type AccessApplicationListResponseBrowserVNCApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                        `json:"precedence"`
+	JSON       accessApplicationListResponseBrowserVNCApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationListResponseBrowserVNCApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationListResponseBrowserVNCApplicationPolicy]
+type accessApplicationListResponseBrowserVNCApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserVNCApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserVNCApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -13503,8 +14127,8 @@ type AccessApplicationListResponseAppLauncherApplication struct {
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationListResponseAppLauncherApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                      `json:"name"`
+	Policies []AccessApplicationListResponseAppLauncherApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseAppLauncherApplicationSCIMConfig `json:"scim_config"`
@@ -13613,6 +14237,31 @@ func (r *AccessApplicationListResponseAppLauncherApplicationLandingPageDesign) U
 }
 
 func (r accessApplicationListResponseAppLauncherApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseAppLauncherApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                         `json:"precedence"`
+	JSON       accessApplicationListResponseAppLauncherApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationListResponseAppLauncherApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationListResponseAppLauncherApplicationPolicy]
+type accessApplicationListResponseAppLauncherApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseAppLauncherApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseAppLauncherApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -13959,8 +14608,8 @@ type AccessApplicationListResponseDeviceEnrollmentPermissionsApplication struct 
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                                      `json:"name"`
+	Policies []AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationSCIMConfig `json:"scim_config"`
@@ -14070,6 +14719,31 @@ func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationLand
 }
 
 func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                                         `json:"precedence"`
+	JSON       accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy]
+type accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseDeviceEnrollmentPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -14416,8 +15090,8 @@ type AccessApplicationListResponseBrowserIsolationPermissionsApplication struct 
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                                      `json:"name"`
+	Policies []AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationListResponseBrowserIsolationPermissionsApplicationSCIMConfig `json:"scim_config"`
@@ -14527,6 +15201,31 @@ func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationLand
 }
 
 func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                                         `json:"precedence"`
+	JSON       accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy]
+type accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseBrowserIsolationPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -15308,8 +16007,11 @@ func (r AccessApplicationListResponseInfrastructureApplicationTargetCriteriaProt
 
 type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
 	// The UUID of the policy
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ID string `json:"id"`
+	// The rules that define how users may connect to the targets secured by your
+	// application.
+	ConnectionRules AccessApplicationListResponseInfrastructureApplicationPoliciesConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                                                                     `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -15332,16 +16034,17 @@ type AccessApplicationListResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationListResponseInfrastructureApplicationPolicy]
 type accessApplicationListResponseInfrastructureApplicationPolicyJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Decision    apijson.Field
-	Exclude     apijson.Field
-	Include     apijson.Field
-	Name        apijson.Field
-	Require     apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID              apijson.Field
+	ConnectionRules apijson.Field
+	CreatedAt       apijson.Field
+	Decision        apijson.Field
+	Exclude         apijson.Field
+	Include         apijson.Field
+	Name            apijson.Field
+	Require         apijson.Field
+	UpdatedAt       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationListResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -15349,6 +16052,60 @@ func (r *AccessApplicationListResponseInfrastructureApplicationPolicy) Unmarshal
 }
 
 func (r accessApplicationListResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// The rules that define how users may connect to the targets secured by your
+// application.
+type AccessApplicationListResponseInfrastructureApplicationPoliciesConnectionRules struct {
+	// The SSH-specific rules that define how users may connect to the targets secured
+	// by your application.
+	SSH  AccessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSH  `json:"ssh"`
+	JSON accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationPoliciesConnectionRules]
+type accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesJSON struct {
+	SSH         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationPoliciesConnectionRules) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesJSON) RawJSON() string {
+	return r.raw
+}
+
+// The SSH-specific rules that define how users may connect to the targets secured
+// by your application.
+type AccessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSH struct {
+	// Contains the Unix usernames that may be used when connecting over SSH.
+	Usernames []string `json:"usernames,required"`
+	// Enables using Identity Provider email alias as SSH username.
+	AllowEmailAlias bool                                                                                 `json:"allow_email_alias"`
+	JSON            accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON `json:"-"`
+}
+
+// accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSH]
+type accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON struct {
+	Usernames       apijson.Field
+	AllowEmailAlias apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSH) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationListResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -15759,7 +16516,14 @@ type AccessApplicationGetResponse struct {
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
 	PathCookieAttribute bool `json:"path_cookie_attribute"`
-	// This field can have the runtime type of [[]ApplicationPolicy],
+	// This field can have the runtime type of
+	// [[]AccessApplicationGetResponseSelfHostedApplicationPolicy],
+	// [[]AccessApplicationGetResponseSaaSApplicationPolicy],
+	// [[]AccessApplicationGetResponseBrowserSSHApplicationPolicy],
+	// [[]AccessApplicationGetResponseBrowserVNCApplicationPolicy],
+	// [[]AccessApplicationGetResponseAppLauncherApplicationPolicy],
+	// [[]AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy],
+	// [[]AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy],
 	// [[]AccessApplicationGetResponseInfrastructureApplicationPolicy].
 	Policies interface{} `json:"policies"`
 	// This field can have the runtime type of
@@ -15990,8 +16754,8 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationGetResponseSelfHostedApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -16108,6 +16872,31 @@ func (r AccessApplicationGetResponseSelfHostedApplicationDestinationsType) IsKno
 		return true
 	}
 	return false
+}
+
+type AccessApplicationGetResponseSelfHostedApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                       `json:"precedence"`
+	JSON       accessApplicationGetResponseSelfHostedApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationGetResponseSelfHostedApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationGetResponseSelfHostedApplicationPolicy]
+type accessApplicationGetResponseSelfHostedApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSelfHostedApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSelfHostedApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -16444,9 +17233,9 @@ type AccessApplicationGetResponseSaaSApplication struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the application.
-	Name     string                                             `json:"name"`
-	Policies []ApplicationPolicy                                `json:"policies"`
-	SaaSApp  AccessApplicationGetResponseSaaSApplicationSaaSApp `json:"saas_app"`
+	Name     string                                              `json:"name"`
+	Policies []AccessApplicationGetResponseSaaSApplicationPolicy `json:"policies"`
+	SaaSApp  AccessApplicationGetResponseSaaSApplicationSaaSApp  `json:"saas_app"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseSaaSApplicationSCIMConfig `json:"scim_config"`
@@ -16490,6 +17279,30 @@ func (r accessApplicationGetResponseSaaSApplicationJSON) RawJSON() string {
 }
 
 func (r AccessApplicationGetResponseSaaSApplication) implementsZeroTrustAccessApplicationGetResponse() {
+}
+
+type AccessApplicationGetResponseSaaSApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                 `json:"precedence"`
+	JSON       accessApplicationGetResponseSaaSApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationGetResponseSaaSApplicationPolicyJSON contains the JSON metadata
+// for the struct [AccessApplicationGetResponseSaaSApplicationPolicy]
+type accessApplicationGetResponseSaaSApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseSaaSApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseSaaSApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessApplicationGetResponseSaaSApplicationSaaSApp struct {
@@ -17017,8 +17830,8 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationGetResponseBrowserSSHApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -17135,6 +17948,31 @@ func (r AccessApplicationGetResponseBrowserSSHApplicationDestinationsType) IsKno
 		return true
 	}
 	return false
+}
+
+type AccessApplicationGetResponseBrowserSSHApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                       `json:"precedence"`
+	JSON       accessApplicationGetResponseBrowserSSHApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationGetResponseBrowserSSHApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationGetResponseBrowserSSHApplicationPolicy]
+type accessApplicationGetResponseBrowserSSHApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserSSHApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserSSHApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -17507,8 +18345,8 @@ type AccessApplicationGetResponseBrowserVNCApplication struct {
 	OptionsPreflightBypass bool `json:"options_preflight_bypass"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool                `json:"path_cookie_attribute"`
-	Policies            []ApplicationPolicy `json:"policies"`
+	PathCookieAttribute bool                                                      `json:"path_cookie_attribute"`
+	Policies            []AccessApplicationGetResponseBrowserVNCApplicationPolicy `json:"policies"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
 	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
@@ -17625,6 +18463,31 @@ func (r AccessApplicationGetResponseBrowserVNCApplicationDestinationsType) IsKno
 		return true
 	}
 	return false
+}
+
+type AccessApplicationGetResponseBrowserVNCApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                       `json:"precedence"`
+	JSON       accessApplicationGetResponseBrowserVNCApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationGetResponseBrowserVNCApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationGetResponseBrowserVNCApplicationPolicy]
+type accessApplicationGetResponseBrowserVNCApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserVNCApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserVNCApplicationPolicyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configuration for provisioning to this application via SCIM. This is currently
@@ -17970,8 +18833,8 @@ type AccessApplicationGetResponseAppLauncherApplication struct {
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                     `json:"name"`
+	Policies []AccessApplicationGetResponseAppLauncherApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseAppLauncherApplicationSCIMConfig `json:"scim_config"`
@@ -18080,6 +18943,31 @@ func (r *AccessApplicationGetResponseAppLauncherApplicationLandingPageDesign) Un
 }
 
 func (r accessApplicationGetResponseAppLauncherApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseAppLauncherApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                        `json:"precedence"`
+	JSON       accessApplicationGetResponseAppLauncherApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationGetResponseAppLauncherApplicationPolicyJSON contains the JSON
+// metadata for the struct
+// [AccessApplicationGetResponseAppLauncherApplicationPolicy]
+type accessApplicationGetResponseAppLauncherApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseAppLauncherApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseAppLauncherApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -18426,8 +19314,8 @@ type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplication struct {
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                                     `json:"name"`
+	Policies []AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationSCIMConfig `json:"scim_config"`
@@ -18537,6 +19425,31 @@ func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandi
 }
 
 func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                                        `json:"precedence"`
+	JSON       accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy]
+type accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseDeviceEnrollmentPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -18883,8 +19796,8 @@ type AccessApplicationGetResponseBrowserIsolationPermissionsApplication struct {
 	// The design of the App Launcher landing page shown to users when they log in.
 	LandingPageDesign AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesign `json:"landing_page_design"`
 	// The name of the application.
-	Name     string              `json:"name"`
-	Policies []ApplicationPolicy `json:"policies"`
+	Name     string                                                                     `json:"name"`
+	Policies []AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy `json:"policies"`
 	// Configuration for provisioning to this application via SCIM. This is currently
 	// in closed beta.
 	SCIMConfig AccessApplicationGetResponseBrowserIsolationPermissionsApplicationSCIMConfig `json:"scim_config"`
@@ -18994,6 +19907,31 @@ func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationLandi
 }
 
 func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationLandingPageDesignJSON) RawJSON() string {
+	return r.raw
+}
+
+type AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy struct {
+	// The order of execution for this policy. Must be unique for each policy within an
+	// app.
+	Precedence int64                                                                        `json:"precedence"`
+	JSON       accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON `json:"-"`
+	ApplicationPolicy
+}
+
+// accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy]
+type accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON struct {
+	Precedence  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseBrowserIsolationPermissionsApplicationPolicyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -19775,8 +20713,11 @@ func (r AccessApplicationGetResponseInfrastructureApplicationTargetCriteriaProto
 
 type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
 	// The UUID of the policy
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	ID string `json:"id"`
+	// The rules that define how users may connect to the targets secured by your
+	// application.
+	ConnectionRules AccessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRules `json:"connection_rules"`
+	CreatedAt       time.Time                                                                    `json:"created_at" format:"date-time"`
 	// The action Access will take if a user matches this policy. Infrastructure
 	// application policies can only use the Allow action.
 	Decision Decision `json:"decision"`
@@ -19799,16 +20740,17 @@ type AccessApplicationGetResponseInfrastructureApplicationPolicy struct {
 // JSON metadata for the struct
 // [AccessApplicationGetResponseInfrastructureApplicationPolicy]
 type accessApplicationGetResponseInfrastructureApplicationPolicyJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Decision    apijson.Field
-	Exclude     apijson.Field
-	Include     apijson.Field
-	Name        apijson.Field
-	Require     apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	ID              apijson.Field
+	ConnectionRules apijson.Field
+	CreatedAt       apijson.Field
+	Decision        apijson.Field
+	Exclude         apijson.Field
+	Include         apijson.Field
+	Name            apijson.Field
+	Require         apijson.Field
+	UpdatedAt       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
 func (r *AccessApplicationGetResponseInfrastructureApplicationPolicy) UnmarshalJSON(data []byte) (err error) {
@@ -19816,6 +20758,60 @@ func (r *AccessApplicationGetResponseInfrastructureApplicationPolicy) UnmarshalJ
 }
 
 func (r accessApplicationGetResponseInfrastructureApplicationPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+// The rules that define how users may connect to the targets secured by your
+// application.
+type AccessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRules struct {
+	// The SSH-specific rules that define how users may connect to the targets secured
+	// by your application.
+	SSH  AccessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSH  `json:"ssh"`
+	JSON accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRules]
+type accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesJSON struct {
+	SSH         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRules) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesJSON) RawJSON() string {
+	return r.raw
+}
+
+// The SSH-specific rules that define how users may connect to the targets secured
+// by your application.
+type AccessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSH struct {
+	// Contains the Unix usernames that may be used when connecting over SSH.
+	Usernames []string `json:"usernames,required"`
+	// Enables using Identity Provider email alias as SSH username.
+	AllowEmailAlias bool                                                                                `json:"allow_email_alias"`
+	JSON            accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON `json:"-"`
+}
+
+// accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON
+// contains the JSON metadata for the struct
+// [AccessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSH]
+type accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON struct {
+	Usernames       apijson.Field
+	AllowEmailAlias apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSH) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessApplicationGetResponseInfrastructureApplicationPoliciesConnectionRulesSSHJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -23300,6 +24296,9 @@ type AccessApplicationNewParamsBodyInfrastructureApplicationPolicy struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The rules that define how users may connect to the targets secured by your
+	// application.
+	ConnectionRules param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -23309,6 +24308,31 @@ type AccessApplicationNewParamsBodyInfrastructureApplicationPolicy struct {
 }
 
 func (r AccessApplicationNewParamsBodyInfrastructureApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The rules that define how users may connect to the targets secured by your
+// application.
+type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRules struct {
+	// The SSH-specific rules that define how users may connect to the targets secured
+	// by your application.
+	SSH param.Field[AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH] `json:"ssh"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRules) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The SSH-specific rules that define how users may connect to the targets secured
+// by your application.
+type AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH struct {
+	// Contains the Unix usernames that may be used when connecting over SSH.
+	Usernames param.Field[[]string] `json:"usernames,required"`
+	// Enables using Identity Provider email alias as SSH username.
+	AllowEmailAlias param.Field[bool] `json:"allow_email_alias"`
+}
+
+func (r AccessApplicationNewParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -26521,6 +27545,9 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy struct {
 	Include param.Field[[]AccessRuleUnionParam] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The rules that define how users may connect to the targets secured by your
+	// application.
+	ConnectionRules param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectionRules] `json:"connection_rules"`
 	// Rules evaluated with a NOT logical operator. To match the policy, a user cannot
 	// meet any of the Exclude rules.
 	Exclude param.Field[[]AccessRuleUnionParam] `json:"exclude"`
@@ -26530,6 +27557,31 @@ type AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy struct {
 }
 
 func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The rules that define how users may connect to the targets secured by your
+// application.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectionRules struct {
+	// The SSH-specific rules that define how users may connect to the targets secured
+	// by your application.
+	SSH param.Field[AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH] `json:"ssh"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectionRules) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The SSH-specific rules that define how users may connect to the targets secured
+// by your application.
+type AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH struct {
+	// Contains the Unix usernames that may be used when connecting over SSH.
+	Usernames param.Field[[]string] `json:"usernames,required"`
+	// Enables using Identity Provider email alias as SSH username.
+	AllowEmailAlias param.Field[bool] `json:"allow_email_alias"`
+}
+
+func (r AccessApplicationUpdateParamsBodyInfrastructureApplicationPoliciesConnectionRulesSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
