@@ -223,7 +223,7 @@ func (r addressMapIPDeleteResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapIPUpdateParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	Body      interface{}         `json:"body,required"`
 }
@@ -233,6 +233,6 @@ func (r AddressMapIPUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AddressMapIPDeleteParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

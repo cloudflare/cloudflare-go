@@ -7077,12 +7077,10 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption">origin_post_quantum_encryption</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption#OriginPostQuantumEncryptionEditResponse">OriginPostQuantumEncryptionEditResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption">origin_post_quantum_encryption</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption#OriginPostQuantumEncryptionGetResponse">OriginPostQuantumEncryptionGetResponse</a>
 
 Methods:
 
-- <code title="patch /zones/{zone_id}/cache/origin_post_quantum_encryption">client.OriginPostQuantumEncryption.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption#OriginPostQuantumEncryptionService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption">origin_post_quantum_encryption</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption#OriginPostQuantumEncryptionEditParams">OriginPostQuantumEncryptionEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption">origin_post_quantum_encryption</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption#OriginPostQuantumEncryptionEditResponse">OriginPostQuantumEncryptionEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/cache/origin_post_quantum_encryption">client.OriginPostQuantumEncryption.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption#OriginPostQuantumEncryptionService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption">origin_post_quantum_encryption</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption#OriginPostQuantumEncryptionGetParams">OriginPostQuantumEncryptionGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption">origin_post_quantum_encryption</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/origin_post_quantum_encryption#OriginPostQuantumEncryptionGetResponse">OriginPostQuantumEncryptionGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Speed
@@ -7659,10 +7657,6 @@ Methods:
 - <code title="get /zones/{zone_id}/content-upload-scan/settings">client.ContentScanning.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/content_scanning#SettingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/content_scanning">content_scanning</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/content_scanning#SettingGetParams">SettingGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/content_scanning">content_scanning</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/content_scanning#SettingGetResponse">SettingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # AbuseReports
-
-Methods:
-
-- <code title="post /accounts/{account_id}/v1/abuse-reports/{report_type}">client.AbuseReports.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports#AbuseReportService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, reportType <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports#AbuseReportNewParamsReportType">AbuseReportNewParamsReportType</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports">abuse_reports</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/abuse_reports#AbuseReportNewParams">AbuseReportNewParams</a>) (<a href="https://pkg.go.dev/builtin#string">string</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # AI
 

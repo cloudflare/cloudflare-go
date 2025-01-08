@@ -148,7 +148,7 @@ func (r *PrefixBGPPrefixService) Get(ctx context.Context, prefixID string, bgpPr
 }
 
 type BGPPrefix struct {
-	// Identifier
+	// Identifier of BGP Prefix.
 	ID string `json:"id"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	ASN           int64                  `json:"asn,nullable"`
@@ -245,7 +245,7 @@ func (r bgpPrefixOnDemandJSON) RawJSON() string {
 }
 
 type PrefixBGPPrefixNewParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	CIDR param.Field[string] `json:"cidr"`
@@ -299,12 +299,12 @@ func (r PrefixBGPPrefixNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixBGPPrefixListParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PrefixBGPPrefixEditParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string]                            `path:"account_id,required"`
 	OnDemand  param.Field[PrefixBGPPrefixEditParamsOnDemand] `json:"on_demand"`
 }
@@ -365,7 +365,7 @@ func (r PrefixBGPPrefixEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixBGPPrefixGetParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
