@@ -41,19 +41,19 @@ func NewOperationService(opts ...option.RequestOption) (r *OperationService) {
 	return
 }
 
-// Add one or more operations to a zone. Endpoints can contain path variables.
-// Host, method, endpoint will be normalized to a canoncial form when creating an
-// operation and must be unique on the zone. Inserting an operation that matches an
-// existing one will return the record of the already existing operation and update
-// its last_updated date.
-func (r *OperationService) New(ctx context.Context, params OperationNewParams, opts ...option.RequestOption) (res *[]OperationNewResponse, err error) {
+// Add one operation to a zone. Endpoints can contain path variables. Host, method,
+// endpoint will be normalized to a canoncial form when creating an operation and
+// must be unique on the zone. Inserting an operation that matches an existing one
+// will return the record of the already existing operation and update its
+// last_updated date.
+func (r *OperationService) New(ctx context.Context, params OperationNewParams, opts ...option.RequestOption) (res *OperationNewResponse, err error) {
 	var env OperationNewResponseEnvelope
 	opts = append(r.Options[:], opts...)
 	if params.ZoneID.Value == "" {
 		err = errors.New("missing required zone_id parameter")
 		return
 	}
-	path := fmt.Sprintf("zones/%s/api_gateway/operations", params.ZoneID)
+	path := fmt.Sprintf("zones/%s/api_gateway/operations/item", params.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -2157,15 +2157,7 @@ func (r OperationGetResponseFeaturesAPIShieldOperationFeatureSchemaInfoSchemaInf
 
 type OperationNewParams struct {
 	// Identifier
-	ZoneID     param.Field[string]           `path:"zone_id,required"`
-	Operations []OperationNewParamsOperation `json:"operations,required"`
-}
-
-func (r OperationNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Operations)
-}
-
-type OperationNewParamsOperation struct {
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The endpoint which can contain path parameter templates in curly braces, each
 	// will be replaced from left to right with {varN}, starting with {var1}, during
 	// insertion. This will further be Cloudflare-normalized upon insertion. See:
@@ -2174,40 +2166,40 @@ type OperationNewParamsOperation struct {
 	// RFC3986-compliant host.
 	Host param.Field[string] `json:"host,required" format:"hostname"`
 	// The HTTP method used to access the endpoint.
-	Method param.Field[OperationNewParamsOperationsMethod] `json:"method,required"`
+	Method param.Field[OperationNewParamsMethod] `json:"method,required"`
 }
 
-func (r OperationNewParamsOperation) MarshalJSON() (data []byte, err error) {
+func (r OperationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The HTTP method used to access the endpoint.
-type OperationNewParamsOperationsMethod string
+type OperationNewParamsMethod string
 
 const (
-	OperationNewParamsOperationsMethodGet     OperationNewParamsOperationsMethod = "GET"
-	OperationNewParamsOperationsMethodPost    OperationNewParamsOperationsMethod = "POST"
-	OperationNewParamsOperationsMethodHead    OperationNewParamsOperationsMethod = "HEAD"
-	OperationNewParamsOperationsMethodOptions OperationNewParamsOperationsMethod = "OPTIONS"
-	OperationNewParamsOperationsMethodPut     OperationNewParamsOperationsMethod = "PUT"
-	OperationNewParamsOperationsMethodDelete  OperationNewParamsOperationsMethod = "DELETE"
-	OperationNewParamsOperationsMethodConnect OperationNewParamsOperationsMethod = "CONNECT"
-	OperationNewParamsOperationsMethodPatch   OperationNewParamsOperationsMethod = "PATCH"
-	OperationNewParamsOperationsMethodTrace   OperationNewParamsOperationsMethod = "TRACE"
+	OperationNewParamsMethodGet     OperationNewParamsMethod = "GET"
+	OperationNewParamsMethodPost    OperationNewParamsMethod = "POST"
+	OperationNewParamsMethodHead    OperationNewParamsMethod = "HEAD"
+	OperationNewParamsMethodOptions OperationNewParamsMethod = "OPTIONS"
+	OperationNewParamsMethodPut     OperationNewParamsMethod = "PUT"
+	OperationNewParamsMethodDelete  OperationNewParamsMethod = "DELETE"
+	OperationNewParamsMethodConnect OperationNewParamsMethod = "CONNECT"
+	OperationNewParamsMethodPatch   OperationNewParamsMethod = "PATCH"
+	OperationNewParamsMethodTrace   OperationNewParamsMethod = "TRACE"
 )
 
-func (r OperationNewParamsOperationsMethod) IsKnown() bool {
+func (r OperationNewParamsMethod) IsKnown() bool {
 	switch r {
-	case OperationNewParamsOperationsMethodGet, OperationNewParamsOperationsMethodPost, OperationNewParamsOperationsMethodHead, OperationNewParamsOperationsMethodOptions, OperationNewParamsOperationsMethodPut, OperationNewParamsOperationsMethodDelete, OperationNewParamsOperationsMethodConnect, OperationNewParamsOperationsMethodPatch, OperationNewParamsOperationsMethodTrace:
+	case OperationNewParamsMethodGet, OperationNewParamsMethodPost, OperationNewParamsMethodHead, OperationNewParamsMethodOptions, OperationNewParamsMethodPut, OperationNewParamsMethodDelete, OperationNewParamsMethodConnect, OperationNewParamsMethodPatch, OperationNewParamsMethodTrace:
 		return true
 	}
 	return false
 }
 
 type OperationNewResponseEnvelope struct {
-	Errors   Message                `json:"errors,required"`
-	Messages Message                `json:"messages,required"`
-	Result   []OperationNewResponse `json:"result,required"`
+	Errors   Message              `json:"errors,required"`
+	Messages Message              `json:"messages,required"`
+	Result   OperationNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success OperationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    operationNewResponseEnvelopeJSON    `json:"-"`
