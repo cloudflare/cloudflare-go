@@ -33,7 +33,7 @@ func TestLOADocumentNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.LOADocuments.New(context.TODO(), addressing.LOADocumentNewParams{
-		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AccountID:   cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 		LOADocument: cloudflare.F("@document.pdf"),
 	})
 	if err != nil {
@@ -62,7 +62,7 @@ func TestLOADocumentGet(t *testing.T) {
 		context.TODO(),
 		"d933b1530bc56c9953cf8ce166da8004",
 		addressing.LOADocumentGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
 		},
 	)
 	if err != nil {
