@@ -27,6 +27,8 @@ import (
 // the [NewDEXCommandService] method instead.
 type DEXCommandService struct {
 	Options   []option.RequestOption
+	Users     *DEXCommandUserService
+	Devices   *DEXCommandDeviceService
 	Downloads *DEXCommandDownloadService
 	Quota     *DEXCommandQuotaService
 }
@@ -37,6 +39,8 @@ type DEXCommandService struct {
 func NewDEXCommandService(opts ...option.RequestOption) (r *DEXCommandService) {
 	r = &DEXCommandService{}
 	r.Options = opts
+	r.Users = NewDEXCommandUserService(opts...)
+	r.Devices = NewDEXCommandDeviceService(opts...)
 	r.Downloads = NewDEXCommandDownloadService(opts...)
 	r.Quota = NewDEXCommandQuotaService(opts...)
 	return
