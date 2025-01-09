@@ -114,7 +114,7 @@ func (r *PrefixDelegationService) Delete(ctx context.Context, prefixID string, d
 }
 
 type Delegations struct {
-	// Identifier of a Delegation.
+	// Delegation identifier tag.
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	CIDR      string    `json:"cidr"`
@@ -122,7 +122,7 @@ type Delegations struct {
 	// Account identifier for the account to which prefix is being delegated.
 	DelegatedAccountID string    `json:"delegated_account_id"`
 	ModifiedAt         time.Time `json:"modified_at" format:"date-time"`
-	// Identifier of an IP Prefix.
+	// Identifier
 	ParentPrefixID string          `json:"parent_prefix_id"`
 	JSON           delegationsJSON `json:"-"`
 }
@@ -148,7 +148,7 @@ func (r delegationsJSON) RawJSON() string {
 }
 
 type PrefixDelegationDeleteResponse struct {
-	// Identifier of a Delegation.
+	// Delegation identifier tag.
 	ID   string                             `json:"id"`
 	JSON prefixDelegationDeleteResponseJSON `json:"-"`
 }
@@ -170,7 +170,7 @@ func (r prefixDelegationDeleteResponseJSON) RawJSON() string {
 }
 
 type PrefixDelegationNewParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	CIDR param.Field[string] `json:"cidr,required"`
@@ -226,12 +226,12 @@ func (r PrefixDelegationNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixDelegationListParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PrefixDelegationDeleteParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
