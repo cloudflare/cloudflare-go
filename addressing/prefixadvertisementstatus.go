@@ -35,10 +35,7 @@ func NewPrefixAdvertisementStatusService(opts ...option.RequestOption) (r *Prefi
 	return
 }
 
-// Advertise or withdraw the BGP route for a prefix.
-//
-// **Deprecated:** Prefer the BGP Prefixes endpoints, which additionally allow for
-// advertising and withdrawing subnets of an IP prefix.
+// Advertise or withdraw BGP route for a prefix.
 func (r *PrefixAdvertisementStatusService) Edit(ctx context.Context, prefixID string, params PrefixAdvertisementStatusEditParams, opts ...option.RequestOption) (res *PrefixAdvertisementStatusEditResponse, err error) {
 	var env PrefixAdvertisementStatusEditResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -59,10 +56,7 @@ func (r *PrefixAdvertisementStatusService) Edit(ctx context.Context, prefixID st
 	return
 }
 
-// View the current advertisement state for a prefix.
-//
-// **Deprecated:** Prefer the BGP Prefixes endpoints, which additionally allow for
-// advertising and withdrawing subnets of an IP prefix.
+// List the current advertisement state for a prefix.
 func (r *PrefixAdvertisementStatusService) Get(ctx context.Context, prefixID string, query PrefixAdvertisementStatusGetParams, opts ...option.RequestOption) (res *PrefixAdvertisementStatusGetResponse, err error) {
 	var env PrefixAdvertisementStatusGetResponseEnvelope
 	opts = append(r.Options[:], opts...)
@@ -84,8 +78,7 @@ func (r *PrefixAdvertisementStatusService) Get(ctx context.Context, prefixID str
 }
 
 type PrefixAdvertisementStatusEditResponse struct {
-	// Advertisement status of the prefix. If `true`, the BGP route for the prefix is
-	// advertised to the Internet. If `false`, the BGP route is withdrawn.
+	// Enablement of prefix advertisement to the Internet.
 	Advertised bool `json:"advertised"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
@@ -111,8 +104,7 @@ func (r prefixAdvertisementStatusEditResponseJSON) RawJSON() string {
 }
 
 type PrefixAdvertisementStatusGetResponse struct {
-	// Advertisement status of the prefix. If `true`, the BGP route for the prefix is
-	// advertised to the Internet. If `false`, the BGP route is withdrawn.
+	// Enablement of prefix advertisement to the Internet.
 	Advertised bool `json:"advertised"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
@@ -138,10 +130,9 @@ func (r prefixAdvertisementStatusGetResponseJSON) RawJSON() string {
 }
 
 type PrefixAdvertisementStatusEditParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
-	// Advertisement status of the prefix. If `true`, the BGP route for the prefix is
-	// advertised to the Internet. If `false`, the BGP route is withdrawn.
+	// Enablement of prefix advertisement to the Internet.
 	Advertised param.Field[bool] `json:"advertised,required"`
 }
 
@@ -193,7 +184,7 @@ func (r PrefixAdvertisementStatusEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixAdvertisementStatusGetParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
