@@ -888,41 +888,6 @@ func (r BatchPatchURIRecordParam) MarshalJSON() (data []byte, err error) {
 
 func (r BatchPatchURIRecordParam) implementsDNSBatchPatchUnionParam() {}
 
-// Record type.
-type BatchPatchType string
-
-const (
-	BatchPatchTypeA          BatchPatchType = "A"
-	BatchPatchTypeAAAA       BatchPatchType = "AAAA"
-	BatchPatchTypeCAA        BatchPatchType = "CAA"
-	BatchPatchTypeCERT       BatchPatchType = "CERT"
-	BatchPatchTypeCNAME      BatchPatchType = "CNAME"
-	BatchPatchTypeDNSKEY     BatchPatchType = "DNSKEY"
-	BatchPatchTypeDS         BatchPatchType = "DS"
-	BatchPatchTypeHTTPS      BatchPatchType = "HTTPS"
-	BatchPatchTypeLOC        BatchPatchType = "LOC"
-	BatchPatchTypeMX         BatchPatchType = "MX"
-	BatchPatchTypeNAPTR      BatchPatchType = "NAPTR"
-	BatchPatchTypeNS         BatchPatchType = "NS"
-	BatchPatchTypeOpenpgpkey BatchPatchType = "OPENPGPKEY"
-	BatchPatchTypePTR        BatchPatchType = "PTR"
-	BatchPatchTypeSMIMEA     BatchPatchType = "SMIMEA"
-	BatchPatchTypeSRV        BatchPatchType = "SRV"
-	BatchPatchTypeSSHFP      BatchPatchType = "SSHFP"
-	BatchPatchTypeSVCB       BatchPatchType = "SVCB"
-	BatchPatchTypeTLSA       BatchPatchType = "TLSA"
-	BatchPatchTypeTXT        BatchPatchType = "TXT"
-	BatchPatchTypeURI        BatchPatchType = "URI"
-)
-
-func (r BatchPatchType) IsKnown() bool {
-	switch r {
-	case BatchPatchTypeA, BatchPatchTypeAAAA, BatchPatchTypeCAA, BatchPatchTypeCERT, BatchPatchTypeCNAME, BatchPatchTypeDNSKEY, BatchPatchTypeDS, BatchPatchTypeHTTPS, BatchPatchTypeLOC, BatchPatchTypeMX, BatchPatchTypeNAPTR, BatchPatchTypeNS, BatchPatchTypeOpenpgpkey, BatchPatchTypePTR, BatchPatchTypeSMIMEA, BatchPatchTypeSRV, BatchPatchTypeSSHFP, BatchPatchTypeSVCB, BatchPatchTypeTLSA, BatchPatchTypeTXT, BatchPatchTypeURI:
-		return true
-	}
-	return false
-}
-
 // Satisfied by [dns.BatchPutARecordParam], [dns.BatchPutAAAARecordParam],
 // [dns.BatchPutCAARecordParam], [dns.BatchPutCERTRecordParam],
 // [dns.BatchPutCNAMERecordParam], [dns.BatchPutDNSKEYRecordParam],
@@ -1241,41 +1206,6 @@ func (r BatchPutURIRecordParam) MarshalJSON() (data []byte, err error) {
 }
 
 func (r BatchPutURIRecordParam) implementsDNSBatchPutUnionParam() {}
-
-// Record type.
-type BatchPutType string
-
-const (
-	BatchPutTypeA          BatchPutType = "A"
-	BatchPutTypeAAAA       BatchPutType = "AAAA"
-	BatchPutTypeCAA        BatchPutType = "CAA"
-	BatchPutTypeCERT       BatchPutType = "CERT"
-	BatchPutTypeCNAME      BatchPutType = "CNAME"
-	BatchPutTypeDNSKEY     BatchPutType = "DNSKEY"
-	BatchPutTypeDS         BatchPutType = "DS"
-	BatchPutTypeHTTPS      BatchPutType = "HTTPS"
-	BatchPutTypeLOC        BatchPutType = "LOC"
-	BatchPutTypeMX         BatchPutType = "MX"
-	BatchPutTypeNAPTR      BatchPutType = "NAPTR"
-	BatchPutTypeNS         BatchPutType = "NS"
-	BatchPutTypeOpenpgpkey BatchPutType = "OPENPGPKEY"
-	BatchPutTypePTR        BatchPutType = "PTR"
-	BatchPutTypeSMIMEA     BatchPutType = "SMIMEA"
-	BatchPutTypeSRV        BatchPutType = "SRV"
-	BatchPutTypeSSHFP      BatchPutType = "SSHFP"
-	BatchPutTypeSVCB       BatchPutType = "SVCB"
-	BatchPutTypeTLSA       BatchPutType = "TLSA"
-	BatchPutTypeTXT        BatchPutType = "TXT"
-	BatchPutTypeURI        BatchPutType = "URI"
-)
-
-func (r BatchPutType) IsKnown() bool {
-	switch r {
-	case BatchPutTypeA, BatchPutTypeAAAA, BatchPutTypeCAA, BatchPutTypeCERT, BatchPutTypeCNAME, BatchPutTypeDNSKEY, BatchPutTypeDS, BatchPutTypeHTTPS, BatchPutTypeLOC, BatchPutTypeMX, BatchPutTypeNAPTR, BatchPutTypeNS, BatchPutTypeOpenpgpkey, BatchPutTypePTR, BatchPutTypeSMIMEA, BatchPutTypeSRV, BatchPutTypeSSHFP, BatchPutTypeSVCB, BatchPutTypeTLSA, BatchPutTypeTXT, BatchPutTypeURI:
-		return true
-	}
-	return false
-}
 
 type CAARecord struct {
 	// Comments or notes about the DNS record. This field has no effect on DNS
