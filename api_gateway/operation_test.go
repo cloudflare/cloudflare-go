@@ -28,12 +28,10 @@ func TestOperationNew(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.APIGateway.Operations.New(context.TODO(), api_gateway.OperationNewParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Operations: []api_gateway.OperationNewParamsOperation{{
-			Endpoint: cloudflare.F("/api/v1/users/{var1}"),
-			Host:     cloudflare.F("www.example.com"),
-			Method:   cloudflare.F(api_gateway.OperationNewParamsOperationsMethodGet),
-		}},
+		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Endpoint: cloudflare.F("/api/v1/users/{var1}"),
+		Host:     cloudflare.F("www.example.com"),
+		Method:   cloudflare.F(api_gateway.OperationNewParamsMethodGet),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
