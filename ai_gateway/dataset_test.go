@@ -105,12 +105,14 @@ func TestDatasetListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"my-gateway",
 		ai_gateway.DatasetListParams{
-			AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
-			Enable:    cloudflare.F(true),
-			Name:      cloudflare.F("name"),
-			Page:      cloudflare.F(int64(1)),
-			PerPage:   cloudflare.F(int64(1)),
-			Search:    cloudflare.F("search"),
+			AccountID:        cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
+			Enable:           cloudflare.F(true),
+			Name:             cloudflare.F("name"),
+			OrderBy:          cloudflare.F("order_by"),
+			OrderByDirection: cloudflare.F(ai_gateway.DatasetListParamsOrderByDirectionAsc),
+			Page:             cloudflare.F(int64(1)),
+			PerPage:          cloudflare.F(int64(1)),
+			Search:           cloudflare.F("search"),
 		},
 	)
 	if err != nil {
