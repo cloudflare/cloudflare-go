@@ -75,7 +75,7 @@ func (r *LOADocumentService) Get(ctx context.Context, loaDocumentID string, quer
 type LOADocumentNewResponse struct {
 	// Identifier for the uploaded LOA document.
 	ID string `json:"id,nullable"`
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID string    `json:"account_id"`
 	Created   time.Time `json:"created" format:"date-time"`
 	// Name of LOA document. Max file size 10MB, and supported filetype is pdf.
@@ -112,7 +112,7 @@ func (r loaDocumentNewResponseJSON) RawJSON() string {
 }
 
 type LOADocumentNewParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// LOA document to upload.
 	LOADocument param.Field[string] `json:"loa_document,required"`
@@ -177,6 +177,6 @@ func (r LOADocumentNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type LOADocumentGetParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }
