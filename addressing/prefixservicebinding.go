@@ -146,14 +146,13 @@ func (r *PrefixServiceBindingService) Get(ctx context.Context, prefixID string, 
 }
 
 type ServiceBinding struct {
-	// Identifier of a Service Binding.
+	// Identifier
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	CIDR string `json:"cidr"`
 	// Status of a Service Binding's deployment to the Cloudflare network
 	Provisioning ServiceBindingProvisioning `json:"provisioning"`
-	// Identifier of a Service on the Cloudflare network. Available services and their
-	// IDs may be found in the **List Services** endpoint.
+	// Identifier
 	ServiceID string `json:"service_id"`
 	// Name of a service running on the Cloudflare network
 	ServiceName string             `json:"service_name"`
@@ -262,12 +261,11 @@ func (r PrefixServiceBindingDeleteResponseSuccess) IsKnown() bool {
 }
 
 type PrefixServiceBindingNewParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	CIDR param.Field[string] `json:"cidr"`
-	// Identifier of a Service on the Cloudflare network. Available services and their
-	// IDs may be found in the **List Services** endpoint.
+	// Identifier
 	ServiceID param.Field[string] `json:"service_id"`
 }
 
@@ -319,17 +317,17 @@ func (r PrefixServiceBindingNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixServiceBindingListParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PrefixServiceBindingDeleteParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PrefixServiceBindingGetParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

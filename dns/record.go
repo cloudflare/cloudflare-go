@@ -1702,7 +1702,7 @@ func (r cnameRecordJSON) RawJSON() string {
 type CNAMERecordSettings struct {
 	// If enabled, causes the CNAME record to be resolved externally and the resulting
 	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting is unavailable for proxied records, since they are always
+	// itself. This setting has no effect on proxied records, which are always
 	// flattened.
 	FlattenCNAME bool `json:"flatten_cname"`
 	// When enabled, only A records will be generated, and AAAA records will not be
@@ -1784,7 +1784,7 @@ func (r CNAMERecordParam) implementsDNSRecordUnionParam() {}
 type CNAMERecordSettingsParam struct {
 	// If enabled, causes the CNAME record to be resolved externally and the resulting
 	// address records (e.g., A and AAAA) to be returned instead of the CNAME record
-	// itself. This setting is unavailable for proxied records, since they are always
+	// itself. This setting has no effect on proxied records, which are always
 	// flattened.
 	FlattenCNAME param.Field[bool] `json:"flatten_cname"`
 	// When enabled, only A records will be generated, and AAAA records will not be

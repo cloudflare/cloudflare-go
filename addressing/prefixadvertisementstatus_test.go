@@ -29,9 +29,9 @@ func TestPrefixAdvertisementStatusEdit(t *testing.T) {
 	)
 	_, err := client.Addressing.Prefixes.AdvertisementStatus.Edit(
 		context.TODO(),
-		"2af39739cc4e3b5910c918468bb89828",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.PrefixAdvertisementStatusEditParams{
-			AccountID:  cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Advertised: cloudflare.F(true),
 		},
 	)
@@ -59,9 +59,9 @@ func TestPrefixAdvertisementStatusGet(t *testing.T) {
 	)
 	_, err := client.Addressing.Prefixes.AdvertisementStatus.Get(
 		context.TODO(),
-		"2af39739cc4e3b5910c918468bb89828",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.PrefixAdvertisementStatusGetParams{
-			AccountID: cloudflare.F("258def64c72dae45f3e4c8516e2111f2"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)
 	if err != nil {
