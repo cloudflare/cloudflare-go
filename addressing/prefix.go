@@ -147,9 +147,9 @@ func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGe
 }
 
 type Prefix struct {
-	// Identifier of an IP Prefix.
+	// Identifier
 	ID string `json:"id"`
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID string `json:"account_id"`
 	// Prefix advertisement status to the Internet. This field is only not 'null' if on
 	// demand is enabled.
@@ -280,7 +280,7 @@ func (r prefixDeleteResponseResultInfoJSON) RawJSON() string {
 }
 
 type PrefixNewParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	ASN param.Field[int64] `json:"asn,required"`
@@ -338,17 +338,17 @@ func (r PrefixNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixListParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PrefixDeleteParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PrefixEditParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Description of the prefix.
 	Description param.Field[string] `json:"description,required"`
@@ -402,7 +402,7 @@ func (r PrefixEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type PrefixGetParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 

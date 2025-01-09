@@ -146,7 +146,7 @@ func (r *AddressMapService) Get(ctx context.Context, addressMapID string, query 
 }
 
 type AddressMap struct {
-	// Identifier of an Address Map.
+	// Identifier
 	ID string `json:"id"`
 	// If set to false, then the Address Map cannot be deleted via API. This is true
 	// for Cloudflare-managed maps.
@@ -210,7 +210,7 @@ func (r Kind) IsKnown() bool {
 }
 
 type AddressMapNewResponse struct {
-	// Identifier of an Address Map.
+	// Identifier
 	ID string `json:"id"`
 	// If set to false, then the Address Map cannot be deleted via API. This is true
 	// for Cloudflare-managed maps.
@@ -394,7 +394,7 @@ func (r addressMapDeleteResponseResultInfoJSON) RawJSON() string {
 }
 
 type AddressMapGetResponse struct {
-	// Identifier of an Address Map.
+	// Identifier
 	ID string `json:"id"`
 	// If set to false, then the Address Map cannot be deleted via API. This is true
 	// for Cloudflare-managed maps.
@@ -504,7 +504,7 @@ func (r addressMapGetResponseMembershipJSON) RawJSON() string {
 }
 
 type AddressMapNewParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
@@ -577,17 +577,17 @@ func (r AddressMapNewResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AddressMapListParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressMapDeleteParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressMapEditParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// If you have legacy TLS clients which do not send the TLS server name indicator,
 	// then you can specify one default SNI on the map. If Cloudflare receives a TLS
@@ -651,7 +651,7 @@ func (r AddressMapEditResponseEnvelopeSuccess) IsKnown() bool {
 }
 
 type AddressMapGetParams struct {
-	// Identifier of a Cloudflare account.
+	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
