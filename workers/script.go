@@ -246,13 +246,16 @@ type ScriptPlacementStatus string
 
 const (
 	ScriptPlacementStatusSuccess                 ScriptPlacementStatus = "SUCCESS"
+	ScriptPlacementStatusNoValidHosts            ScriptPlacementStatus = "NO_VALID_HOSTS"
+	ScriptPlacementStatusNoValidBindings         ScriptPlacementStatus = "NO_VALID_BINDINGS"
 	ScriptPlacementStatusUnsupportedApplication  ScriptPlacementStatus = "UNSUPPORTED_APPLICATION"
 	ScriptPlacementStatusInsufficientInvocations ScriptPlacementStatus = "INSUFFICIENT_INVOCATIONS"
+	ScriptPlacementStatusInsufficientSubrequests ScriptPlacementStatus = "INSUFFICIENT_SUBREQUESTS"
 )
 
 func (r ScriptPlacementStatus) IsKnown() bool {
 	switch r {
-	case ScriptPlacementStatusSuccess, ScriptPlacementStatusUnsupportedApplication, ScriptPlacementStatusInsufficientInvocations:
+	case ScriptPlacementStatusSuccess, ScriptPlacementStatusNoValidHosts, ScriptPlacementStatusNoValidBindings, ScriptPlacementStatusUnsupportedApplication, ScriptPlacementStatusInsufficientInvocations, ScriptPlacementStatusInsufficientSubrequests:
 		return true
 	}
 	return false
@@ -464,13 +467,16 @@ type ScriptUpdateResponsePlacementStatus string
 
 const (
 	ScriptUpdateResponsePlacementStatusSuccess                 ScriptUpdateResponsePlacementStatus = "SUCCESS"
+	ScriptUpdateResponsePlacementStatusNoValidHosts            ScriptUpdateResponsePlacementStatus = "NO_VALID_HOSTS"
+	ScriptUpdateResponsePlacementStatusNoValidBindings         ScriptUpdateResponsePlacementStatus = "NO_VALID_BINDINGS"
 	ScriptUpdateResponsePlacementStatusUnsupportedApplication  ScriptUpdateResponsePlacementStatus = "UNSUPPORTED_APPLICATION"
 	ScriptUpdateResponsePlacementStatusInsufficientInvocations ScriptUpdateResponsePlacementStatus = "INSUFFICIENT_INVOCATIONS"
+	ScriptUpdateResponsePlacementStatusInsufficientSubrequests ScriptUpdateResponsePlacementStatus = "INSUFFICIENT_SUBREQUESTS"
 )
 
 func (r ScriptUpdateResponsePlacementStatus) IsKnown() bool {
 	switch r {
-	case ScriptUpdateResponsePlacementStatusSuccess, ScriptUpdateResponsePlacementStatusUnsupportedApplication, ScriptUpdateResponsePlacementStatusInsufficientInvocations:
+	case ScriptUpdateResponsePlacementStatusSuccess, ScriptUpdateResponsePlacementStatusNoValidHosts, ScriptUpdateResponsePlacementStatusNoValidBindings, ScriptUpdateResponsePlacementStatusUnsupportedApplication, ScriptUpdateResponsePlacementStatusInsufficientInvocations, ScriptUpdateResponsePlacementStatusInsufficientSubrequests:
 		return true
 	}
 	return false
@@ -1414,13 +1420,16 @@ type ScriptUpdateParamsMetadataPlacementStatus string
 
 const (
 	ScriptUpdateParamsMetadataPlacementStatusSuccess                 ScriptUpdateParamsMetadataPlacementStatus = "SUCCESS"
+	ScriptUpdateParamsMetadataPlacementStatusNoValidHosts            ScriptUpdateParamsMetadataPlacementStatus = "NO_VALID_HOSTS"
+	ScriptUpdateParamsMetadataPlacementStatusNoValidBindings         ScriptUpdateParamsMetadataPlacementStatus = "NO_VALID_BINDINGS"
 	ScriptUpdateParamsMetadataPlacementStatusUnsupportedApplication  ScriptUpdateParamsMetadataPlacementStatus = "UNSUPPORTED_APPLICATION"
 	ScriptUpdateParamsMetadataPlacementStatusInsufficientInvocations ScriptUpdateParamsMetadataPlacementStatus = "INSUFFICIENT_INVOCATIONS"
+	ScriptUpdateParamsMetadataPlacementStatusInsufficientSubrequests ScriptUpdateParamsMetadataPlacementStatus = "INSUFFICIENT_SUBREQUESTS"
 )
 
 func (r ScriptUpdateParamsMetadataPlacementStatus) IsKnown() bool {
 	switch r {
-	case ScriptUpdateParamsMetadataPlacementStatusSuccess, ScriptUpdateParamsMetadataPlacementStatusUnsupportedApplication, ScriptUpdateParamsMetadataPlacementStatusInsufficientInvocations:
+	case ScriptUpdateParamsMetadataPlacementStatusSuccess, ScriptUpdateParamsMetadataPlacementStatusNoValidHosts, ScriptUpdateParamsMetadataPlacementStatusNoValidBindings, ScriptUpdateParamsMetadataPlacementStatusUnsupportedApplication, ScriptUpdateParamsMetadataPlacementStatusInsufficientInvocations, ScriptUpdateParamsMetadataPlacementStatusInsufficientSubrequests:
 		return true
 	}
 	return false
