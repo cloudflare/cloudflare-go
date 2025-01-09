@@ -68,7 +68,8 @@ func (r *ServiceService) ListAutoPaging(ctx context.Context, query ServiceListPa
 }
 
 type ServiceListResponse struct {
-	// Identifier
+	// Identifier of a Service on the Cloudflare network. Available services and their
+	// IDs may be found in the **List Services** endpoint.
 	ID string `json:"id"`
 	// Name of a service running on the Cloudflare network
 	Name string                  `json:"name"`
@@ -93,6 +94,6 @@ func (r serviceListResponseJSON) RawJSON() string {
 }
 
 type ServiceListParams struct {
-	// Identifier
+	// Identifier of a Cloudflare account.
 	AccountID param.Field[string] `path:"account_id,required"`
 }

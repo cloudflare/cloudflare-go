@@ -99,12 +99,10 @@ func TestAIGatewayListWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.AIGateway.List(context.TODO(), ai_gateway.AIGatewayListParams{
-		AccountID:        cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
-		OrderBy:          cloudflare.F("order_by"),
-		OrderByDirection: cloudflare.F(ai_gateway.AIGatewayListParamsOrderByDirectionAsc),
-		Page:             cloudflare.F(int64(1)),
-		PerPage:          cloudflare.F(int64(1)),
-		Search:           cloudflare.F("search"),
+		AccountID: cloudflare.F("3ebbcb006d4d46d7bb6a8c7f14676cb0"),
+		Page:      cloudflare.F(int64(1)),
+		PerPage:   cloudflare.F(int64(1)),
+		Search:    cloudflare.F("search"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
