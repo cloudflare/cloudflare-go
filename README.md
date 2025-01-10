@@ -1,11 +1,9 @@
 # Cloudflare Go API Library
 
-<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v3.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v3.svg" alt="Go Reference"></a>
 
 The Cloudflare Go library provides convenient access to [the Cloudflare REST
 API](https://developers.cloudflare.com/api) from applications written in Go. The full API of this library can be found in [api.md](api.md).
-
-It is generated with [Stainless](https://www.stainlessapi.com/).
 
 ## Installation
 
@@ -13,7 +11,7 @@ It is generated with [Stainless](https://www.stainlessapi.com/).
 
 ```go
 import (
-	"github.com/cloudflare/cloudflare-go/v3" // imported as cloudflare
+	"github.com/cloudflare/cloudflare-go/v4" // imported as cloudflare
 )
 ```
 
@@ -24,7 +22,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go/v3@v3.1.0'
+go get -u 'github.com/cloudflare/cloudflare-go/v3@v4.0.0'
 ```
 
 <!-- x-release-please-end -->
@@ -44,9 +42,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/cloudflare/cloudflare-go/v3"
-	"github.com/cloudflare/cloudflare-go/v3/option"
-	"github.com/cloudflare/cloudflare-go/v3/zones"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/option"
+	"github.com/cloudflare/cloudflare-go/v4/zones"
 )
 
 func main() {
@@ -371,12 +369,9 @@ middleware has been applied.
 
 This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
 
-1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_
-2. Changes that we do not expect to impact the vast majority of users in practice.
-
-We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
-
-We are keen for your feedback; please open an [issue](https://www.github.com/cloudflare/cloudflare-go/issues) with questions, bugs, or suggestions.
+1. Changes that only affect static types, without breaking runtime behavior.
+1. Changes to library internals which are technically public but not intended or documented for external use. 
+1. Changes that we do not expect to impact the vast majority of users in practice.
 
 ## Contributing
 
