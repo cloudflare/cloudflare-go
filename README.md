@@ -1,6 +1,6 @@
 # Cloudflare Go API Library
 
-<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v3.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v4.svg" alt="Go Reference"></a>
 
 The Cloudflare Go library provides convenient access to [the Cloudflare REST
 API](https://developers.cloudflare.com/api) from applications written in Go. The full API of this library can be found in [api.md](api.md).
@@ -22,7 +22,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go/v3@v4.0.0'
+go get -u 'github.com/cloudflare/cloudflare-go/v4@v4.0.0'
 ```
 
 <!-- x-release-please-end -->
@@ -159,7 +159,7 @@ client.Zones.New(context.TODO(), ...,
 )
 ```
 
-See the [full list of request options](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v3/option).
+See the [full list of request options](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v4/option).
 
 ### Pagination
 
