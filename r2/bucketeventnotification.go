@@ -3,7 +3,7 @@
 package r2
 
 import (
-	"github.com/cloudflare/cloudflare-go/v3/option"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 )
 
 // BucketEventNotificationService contains methods and other services that help
