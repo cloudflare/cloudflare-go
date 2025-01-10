@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/v3/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v4/internal/requestconfig"
 	"github.com/tidwall/sjson"
 )
 
